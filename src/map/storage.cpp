@@ -226,6 +226,7 @@ static enum e_storage_add storage_canAddItem(struct s_storage *stor, int idx, st
  * @return @see enum e_storage_add
  **/
 static enum e_storage_add storage_canGetItem(struct s_storage *stor, int idx, int amount) {
+
 	// If last index check is sd->storage_size, if player isn't VIP anymore but there's item, player can't take it
 	// Example the storage size when not VIP anymore is 350/300, player still can take the 301st~349th item.
 	if( idx < 0 || idx >= ARRAYLENGTH(stor->u.items_storage) )
@@ -251,7 +252,11 @@ static enum e_storage_add storage_canGetItem(struct s_storage *stor, int idx, in
  * @param amount : quantity of items
  * @return 0:success, 1:failed, 2:failed because of room or stack checks
  */
-static int storage_additem(struct map_session_data* sd, struct s_storage *stor, struct item *it, int amount)
+
+// [GonBee]
+//static int storage_additem(struct map_session_data* sd, struct s_storage *stor, struct item *it, int amount)
+int storage_additem(struct map_session_data* sd, struct s_storage *stor, struct item *it, int amount)
+
 {
 	struct item_data *data;
 	int i;

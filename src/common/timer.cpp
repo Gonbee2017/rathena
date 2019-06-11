@@ -360,6 +360,7 @@ t_tick do_timer(t_tick tick)
 		diff = DIFF_TICK(timer_data[tid].tick, tick);
 		if( diff > 0 )
 			break; // no more expired timers to process
+//ShowDebug("begin [%s:%d]\n", search_timer_func_list(timer_data[tid].func), tid);
 
 		// remove timer
 		BHEAP_POP(timer_heap, DIFFTICK_MINTOPCMP, SWAP);
@@ -400,6 +401,7 @@ t_tick do_timer(t_tick tick)
 			break;
 			}
 		}
+//ShowDebug("end [%s:%d]\n", search_timer_func_list(timer_data[tid].func), tid);
 	}
 
 	return cap_value(diff, TIMER_MIN_INTERVAL, TIMER_MAX_INTERVAL);

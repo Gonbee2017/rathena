@@ -9,3 +9,6 @@
  **/
 
 //ACMD_DEF(newcommand),
+
+// [GonBee]
+ACMD_DEF(bot),

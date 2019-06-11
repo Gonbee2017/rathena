@@ -23,6 +23,9 @@ extern int runflag;
 extern char *SERVER_NAME;
 extern char db_path[12]; /// relative path for db from servers
 
+// [GonBee]
+extern int exitcode;
+
 enum {
 	ATHENA_SERVER_NONE = 0,	// not defined
 	ATHENA_SERVER_LOGIN	= 1,	// login server

@@ -492,6 +492,11 @@
 	export_parameter("BaseLevel",SP_BASELEVEL);
 	export_parameter("SkillPoint",SP_SKILLPOINT);
 	export_parameter("Class",SP_CLASS);
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、Jobパラメータを追加。
+	export_parameter("Job",SP_CLASS);
+
 	export_parameter("Upper",SP_UPPER);
 	export_parameter("Zeny",SP_ZENY);
 	export_parameter("Sex",SP_SEX);

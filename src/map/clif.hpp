@@ -639,7 +639,12 @@ void clif_wedding_effect(struct block_list *bl);
 void clif_divorced(struct map_session_data* sd, const char* name);
 void clif_callpartner(struct map_session_data *sd);
 void clif_playBGM(struct map_session_data* sd, const char* name);
-void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type);
+
+// [GonBee]
+// Aurigaスクリプトとの互換性のために、間隔時間を指定できるようにする。
+//void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type);
+void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type, int interval = 0);
+
 void clif_soundeffectall(struct block_list* bl, const char* name, int type, enum send_target coverage);
 void clif_parse_ActionRequest_sub(struct map_session_data *sd, int action_type, int target_id, t_tick tick);
 void clif_parse_LoadEndAck(int fd,struct map_session_data *sd);
@@ -1112,5 +1117,8 @@ void clif_equipswitch_list( struct map_session_data* sd );
 void clif_equipswitch_add( struct map_session_data* sd,uint16 index, uint32 pos, bool failed );
 void clif_equipswitch_remove( struct map_session_data* sd, uint16 index, uint32 pos, bool failed );
 void clif_equipswitch_reply( struct map_session_data* sd, bool failed );
+
+// [GonBee]
+void clif_parse_AutoRevive(int fd, struct map_session_data *sd);
 
 #endif /* CLIF_HPP */

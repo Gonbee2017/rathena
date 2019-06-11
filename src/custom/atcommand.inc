@@ -17,3 +17,9 @@
 //	clif_specialeffect(&sd->bl, EF_HEARTCASTING, AREA);
 //	return 0;
 //}
+
+// [GonBee]
+// BOT‚ğŠÇ—‚·‚éB
+ACMD_FUNC(bot) {
+	return pybot::command_bot(fd, sd, message);
+}

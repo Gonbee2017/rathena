@@ -25,6 +25,9 @@
 #include "pc.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 struct s_homunculus_db homunculus_db[MAX_HOMUNCULUS_CLASS];	//[orn]
 struct homun_skill_tree_entry hskill_tree[MAX_HOMUNCULUS_CLASS][MAX_HOM_SKILL_TREE];
 
@@ -724,6 +727,10 @@ int hom_increase_intimacy(struct homun_data * hd, unsigned int value)
 	if (battle_config.homunculus_friendly_rate != 100)
 		value = (value * battle_config.homunculus_friendly_rate) / 100;
 
+	// [GonBee]
+	// ホムンクルスの親密度上昇にジョブレベル倍率をかける。
+	value += int(pybot::job_level_rate(hd->master, &hd->bl));
+
 	if (hd->homunculus.intimacy + value <= 100000)
 		hd->homunculus.intimacy += value;
 	else
@@ -938,6 +945,14 @@ int hom_change_name(struct map_session_data *sd,char *name)
 		return 1;
 
 	for (i = 0; i < NAME_LENGTH && name[i];i++) {
+
+		// [GonBee]
+		// 日本語名を無効にしない。
+		if (pybot::letter_is_jlead(name[i])) {
+			++i;
+			continue;
+		}
+
 		if (!(name[i]&0xe0) || name[i] == 0x7f)
 			return 1;
 	}

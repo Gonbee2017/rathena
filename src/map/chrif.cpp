@@ -33,6 +33,9 @@
 #include "script.hpp" // script_config
 #include "storage.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 static TIMER_FUNC(check_connect_char_server);
 
 static struct eri *auth_db_ers; //For reutilizing player login structures.
@@ -341,7 +344,14 @@ int chrif_save(struct map_session_data *sd, int flag) {
 	WFIFOB(char_fd,12) = (flag&CSAVE_QUIT) ? 1 : 0; //Flag to tell char-server this character is quitting.
 
 	// If the user is on a instance map, we have to fake his current position
-	if( map_getmapdata(sd->bl.m)->instance_id ){
+
+	// [GonBee]
+	// Botは位置を保存しない。
+	//if( map_getmapdata(sd->bl.m)->instance_id ){
+	if (map_getmapdata(sd->bl.m)->instance_id ||
+		pybot::char_is_bot(sd->status.char_id)
+	) {
+
 		struct mmo_charstatus status;
 
 		// Copy the whole status
@@ -1876,9 +1886,18 @@ int send_users_tochar(void) {
 	iter = mapit_getallusers();
 
 	for( sd = (TBL_PC*)mapit_first(iter); mapit_exists(iter); sd = (TBL_PC*)mapit_next(iter) ) {
+
+		// [GonBee]
+		// Botはユーザーに含めない。
+		if (!pybot::char_is_bot(sd->status.char_id)) {
+
 		WFIFOL(char_fd,6+8*i) = sd->status.account_id;
 		WFIFOL(char_fd,6+8*i+4) = sd->status.char_id;
 		i++;
+
+		// [GonBee]
+		}
+
 	}
 
 	mapit_free(iter);

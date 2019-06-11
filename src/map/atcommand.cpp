@@ -50,6 +50,13 @@
 #include "storage.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+#include <clocale>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #define ATCOMMAND_LENGTH 50
 #define ACMD_FUNC(x) static int atcommand_ ## x (const int fd, struct map_session_data* sd, const char* command, const char* message)
 
@@ -3586,6 +3593,14 @@ ACMD_FUNC(mapexit)
 {
 	nullpo_retr(-1, sd);
 
+	// [GonBee]
+	// 終了コードを設定する。
+	int cod;
+	if (message &&
+		*message &&
+		sscanf(message, "%d", &cod) >= 1
+	) exitcode = cod;
+
 	do_shutdown();
 	return 0;
 }
@@ -4700,6 +4715,24 @@ char* txt_time(t_tick duration_)
 	minutes = duration / 60;
 	seconds = duration - (60 * minutes);
 
+	// [GonBee]
+	// ロジックがおかしいので修正。
+	//if (days == 1)
+	//	sprintf(temp, msg_txt(NULL,219), days); // %d day
+	//else if (days > 1)
+	//	sprintf(temp, msg_txt(NULL,220), days); // %d days
+	//if (hours == 1)
+	//	sprintf(temp1, msg_txt(NULL,221), temp, hours); // %s %d hour
+	//else if (hours > 1)
+	//	sprintf(temp1, msg_txt(NULL,222), temp, hours); // %s %d hours
+	//if (minutes < 2)
+	//	sprintf(temp, msg_txt(NULL,223), temp1, minutes); // %s %d minute
+	//else
+	//	sprintf(temp, msg_txt(NULL,224), temp1, minutes); // %s %d minutes
+	//if (seconds == 1)
+	//	sprintf(temp1, msg_txt(NULL,225), temp, seconds); // %s and %d second
+	//else if (seconds > 1)
+	//	sprintf(temp1, msg_txt(NULL,226), temp, seconds); // %s and %d seconds
 	if (days == 1)
 		sprintf(temp, msg_txt(NULL,219), days); // %d day
 	else if (days > 1)
@@ -4708,14 +4741,17 @@ char* txt_time(t_tick duration_)
 		sprintf(temp1, msg_txt(NULL,221), temp, hours); // %s %d hour
 	else if (hours > 1)
 		sprintf(temp1, msg_txt(NULL,222), temp, hours); // %s %d hours
-	if (minutes < 2)
+	else memcpy(temp1, temp, sizeof(temp));
+	if (minutes == 1)
 		sprintf(temp, msg_txt(NULL,223), temp1, minutes); // %s %d minute
-	else
+	else if (minutes > 1)
 		sprintf(temp, msg_txt(NULL,224), temp1, minutes); // %s %d minutes
+	else memcpy(temp, temp1, sizeof(temp));
 	if (seconds == 1)
 		sprintf(temp1, msg_txt(NULL,225), temp, seconds); // %s and %d second
 	else if (seconds > 1)
 		sprintf(temp1, msg_txt(NULL,226), temp, seconds); // %s and %d seconds
+	else memcpy(temp1, temp, sizeof(temp));
 
 	return temp1;
 }
@@ -4733,6 +4769,10 @@ ACMD_FUNC(servertime)
 	nullpo_retr(-1, sd);
 
 	memset(temp, '\0', sizeof(temp));
+
+	// [GonBee]
+	// 時間のロケールを日本語に設定。
+	std::setlocale(LC_TIME, "JPN");
 
 	time(&time_server);  // get time in seconds since 1/1/1970
 	datetime = localtime(&time_server); // convert seconds in structure
@@ -4762,32 +4802,49 @@ ACMD_FUNC(servertime)
 		} else
 			clif_displaymessage(fd, msg_txt(sd,232)); // Game time: The game is in permanent night.
 	else {
-		const struct TimerData * timer_data2;
-		if (night_flag == 0) {
-			timer_data = get_timer(night_timer_tid);
-			timer_data2 = get_timer(day_timer_tid);
-			sprintf(temp, msg_txt(sd,235), txt_time(DIFF_TICK(timer_data->tick,gettick())/1000)); // Game time: The game is in daylight for %s.
+		// [GonBee]
+		// ロジックがおかしいので修正。
+		//const struct TimerData * timer_data2;
+		//if (night_flag == 0) {
+		//	timer_data = get_timer(night_timer_tid);
+		//	timer_data2 = get_timer(day_timer_tid);
+		//	sprintf(temp, msg_txt(sd,235), txt_time(DIFF_TICK(timer_data->tick,gettick())/1000)); // Game time: The game is in daylight for %s.
+		//	clif_displaymessage(fd, temp);
+		//	if (DIFF_TICK(timer_data->tick, timer_data2->tick) > 0)
+		//		sprintf(temp, msg_txt(sd,237), txt_time(DIFF_TICK(timer_data->interval,DIFF_TICK(timer_data->tick,timer_data2->tick)) / 1000)); // Game time: After, the game will be in night for %s.
+		//	else
+		//		sprintf(temp, msg_txt(sd,237), txt_time(DIFF_TICK(timer_data2->tick,timer_data->tick)/1000)); // Game time: After, the game will be in night for %s.
+		//	clif_displaymessage(fd, temp);
+		//	sprintf(temp, msg_txt(sd,238), txt_time(timer_data->interval / 1000)); // Game time: A day cycle has a normal duration of %s.
+		//	clif_displaymessage(fd, temp);
+		//} else {
+		//	timer_data = get_timer(day_timer_tid);
+		//	timer_data2 = get_timer(night_timer_tid);
+		//	sprintf(temp, msg_txt(sd,233), txt_time(DIFF_TICK(timer_data->tick,gettick()) / 1000)); // Game time: The game is in night for %s.
+		//	clif_displaymessage(fd, temp);
+		//	if (DIFF_TICK(timer_data->tick,timer_data2->tick) > 0)
+		//		sprintf(temp, msg_txt(sd,239), txt_time((timer_data->interval - DIFF_TICK(timer_data->tick, timer_data2->tick)) / 1000)); // Game time: After, the game will be in daylight for %s.
+		//	else
+		//		sprintf(temp, msg_txt(sd,239), txt_time(DIFF_TICK(timer_data2->tick, timer_data->tick) / 1000)); // Game time: After, the game will be in daylight for %s.
+		//	clif_displaymessage(fd, temp);
+		//	sprintf(temp, msg_txt(sd,238), txt_time(timer_data->interval / 1000)); // Game time: A day cycle has a normal duration of %s.
+		//	clif_displaymessage(fd, temp);
+		//}
+		const struct TimerData * day_td = get_timer(day_timer_tid);
+		const struct TimerData * nig_td = get_timer(night_timer_tid);
+		if (night_flag) {
+			sprintf(temp, msg_txt(sd,233), txt_time(DIFF_TICK(day_td->tick, gettick()) / 1000)); // Game time: The game is in night for %s.
 			clif_displaymessage(fd, temp);
-			if (DIFF_TICK(timer_data->tick, timer_data2->tick) > 0)
-				sprintf(temp, msg_txt(sd,237), txt_time(DIFF_TICK(timer_data->interval,DIFF_TICK(timer_data->tick,timer_data2->tick)) / 1000)); // Game time: After, the game will be in night for %s.
-			else
-				sprintf(temp, msg_txt(sd,237), txt_time(DIFF_TICK(timer_data2->tick,timer_data->tick)/1000)); // Game time: After, the game will be in night for %s.
-			clif_displaymessage(fd, temp);
-			sprintf(temp, msg_txt(sd,238), txt_time(timer_data->interval / 1000)); // Game time: A day cycle has a normal duration of %s.
+			sprintf(temp, msg_txt(sd,239), txt_time(battle_config.day_duration / 1000)); // Game time: After, the game will be in daylight for %s.
 			clif_displaymessage(fd, temp);
 		} else {
-			timer_data = get_timer(day_timer_tid);
-			timer_data2 = get_timer(night_timer_tid);
-			sprintf(temp, msg_txt(sd,233), txt_time(DIFF_TICK(timer_data->tick,gettick()) / 1000)); // Game time: The game is in night for %s.
+			sprintf(temp, msg_txt(sd,235), txt_time(DIFF_TICK(nig_td->tick, gettick()) / 1000)); // Game time: The game is in daylight for %s.
 			clif_displaymessage(fd, temp);
-			if (DIFF_TICK(timer_data->tick,timer_data2->tick) > 0)
-				sprintf(temp, msg_txt(sd,239), txt_time((timer_data->interval - DIFF_TICK(timer_data->tick, timer_data2->tick)) / 1000)); // Game time: After, the game will be in daylight for %s.
-			else
-				sprintf(temp, msg_txt(sd,239), txt_time(DIFF_TICK(timer_data2->tick, timer_data->tick) / 1000)); // Game time: After, the game will be in daylight for %s.
-			clif_displaymessage(fd, temp);
-			sprintf(temp, msg_txt(sd,238), txt_time(timer_data->interval / 1000)); // Game time: A day cycle has a normal duration of %s.
+			sprintf(temp, msg_txt(sd,237), txt_time(battle_config.night_duration / 1000)); // Game time: After, the game will be in night for %s.
 			clif_displaymessage(fd, temp);
 		}
+		sprintf(temp, msg_txt(sd,238), txt_time((battle_config.day_duration + battle_config.night_duration) / 1000)); // Game time: A day cycle has a normal duration of %s.
+		clif_displaymessage(fd, temp);
 	}
 
 	return 0;
@@ -9042,6 +9099,10 @@ static void atcommand_commands_sub(struct map_session_data* sd, const int fd, At
 
 	clif_displaymessage(fd, msg_txt(sd,273)); // "Commands available:"
 
+	// [GonBee]
+	// 1行につきコマンドを1個ずつ表示するように変更。
+	// また別名を表示する。
+
 	for (cmd = (AtCommandInfo*)dbi_first(iter); dbi_exists(iter); cmd = (AtCommandInfo*)dbi_next(iter)) {
 		unsigned int slen = 0;
 
@@ -9058,50 +9119,74 @@ static void atcommand_commands_sub(struct map_session_data* sd, const int fd, At
 				continue;
 		}
 
-
-		slen = strlen(cmd->command);
-
-		// flush the text buffer if this command won't fit into it
-		if (slen + cur - line_buff >= CHATBOX_SIZE) {
-			clif_displaymessage(fd,line_buff);
-			cur = line_buff;
-			memset(line_buff,' ',CHATBOX_SIZE);
-			line_buff[CHATBOX_SIZE-1] = 0;
+		// [GonBee]
+		//slen = strlen(cmd->command);
+		//
+		//// flush the text buffer if this command won't fit into it
+		//if (slen + cur - line_buff >= CHATBOX_SIZE) {
+		//	clif_displaymessage(fd,line_buff);
+		//	cur = line_buff;
+		//	memset(line_buff,' ',CHATBOX_SIZE);
+		//	line_buff[CHATBOX_SIZE-1] = 0;
+		//}
+		//
+		//memcpy(cur,cmd->command,slen);
+		//cur += slen+(10-slen%10);
+		std::stringstream lin_buf;
+		lin_buf << cmd->command;
+		std::vector<std::string> alis;
+		DBIterator* ali_ite = db_iterator(atcommand_alias_db);
+		for (AliasInfo* ali_inf = (AliasInfo*)dbi_first(ali_ite); dbi_exists(ali_ite); ali_inf = (AliasInfo*)dbi_next(ali_ite)) {
+			if (ali_inf->command == cmd) alis.push_back(ali_inf->alias);
 		}
-
-		memcpy(cur,cmd->command,slen);
-		cur += slen+(10-slen%10);
+		dbi_destroy(ali_ite);
+		std::stringstream alis_buf;
+		for (const std::string& ali : alis) {
+			if (alis_buf.tellp()) alis_buf << "|";
+			alis_buf << ali;
+		}
+		if (alis_buf.tellp()) lin_buf << " (" << alis_buf.str() << ")";
+		clif_displaymessage(fd, lin_buf.str().c_str());
 
 		count++;
 	}
 	dbi_destroy(iter);
-	clif_displaymessage(fd,line_buff);
+
+	// [GonBee]
+	//clif_displaymessage(fd,line_buff);
 
 	if ( atcmd_binding_count ) {
 		int i, count_bind, gm_lvl = pc_get_group_level(sd);
 		for( i = count_bind = 0; i < atcmd_binding_count; i++ ) {
 			if ( gm_lvl >= ( (type - 1) ? atcmd_binding[i]->level2 : atcmd_binding[i]->level ) ) {
-				unsigned int slen = strlen(atcmd_binding[i]->command);
-				if ( count_bind == 0 ) {
-					cur = line_buff;
-					memset(line_buff,' ',CHATBOX_SIZE);
-					line_buff[CHATBOX_SIZE-1] = 0;
-					clif_displaymessage(fd, "-----------------");
-					clif_displaymessage(fd, msg_txt(sd,509)); // Script-bound commands:
-				}
-				if (slen + cur - line_buff >= CHATBOX_SIZE) {
-					clif_displaymessage(fd,line_buff);
-					cur = line_buff;
-					memset(line_buff,' ',CHATBOX_SIZE);
-					line_buff[CHATBOX_SIZE-1] = 0;
-				}
-				memcpy(cur,atcmd_binding[i]->command,slen);
-				cur += slen+(10-slen%10);
+
+				// [GonBee]
+				//unsigned int slen = strlen(atcmd_binding[i]->command);
+				//if ( count_bind == 0 ) {
+				//	cur = line_buff;
+				//	memset(line_buff,' ',CHATBOX_SIZE);
+				//	line_buff[CHATBOX_SIZE-1] = 0;
+				//	clif_displaymessage(fd, "-----------------");
+				//	clif_displaymessage(fd, msg_txt(sd,509)); // Script-bound commands:
+				//}
+				//if (slen + cur - line_buff >= CHATBOX_SIZE) {
+				//	clif_displaymessage(fd,line_buff);
+				//	cur = line_buff;
+				//	memset(line_buff,' ',CHATBOX_SIZE);
+				//	line_buff[CHATBOX_SIZE-1] = 0;
+				//}
+				//memcpy(cur,atcmd_binding[i]->command,slen);
+				//cur += slen+(10-slen%10);
+				clif_displaymessage(fd, atcmd_binding[i]->command);
+
 				count_bind++;
 			}
 		}
-		if ( count_bind )
-			clif_displaymessage(fd,line_buff);// last one
+
+		// [GonBee]
+		//if ( count_bind )
+		//	clif_displaymessage(fd,line_buff);// last one
+
 		count += count_bind;
 		
 	}

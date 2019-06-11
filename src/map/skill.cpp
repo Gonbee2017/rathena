@@ -44,6 +44,9 @@
 #include "status.hpp"
 #include "unit.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 #define SKILLUNITTIMER_INTERVAL	100
 #define TIMERSKILL_INTERVAL	150
 
@@ -132,8 +135,11 @@ static char dir_ka = -1; // Holds temporary direction to the target for SR_KNUCK
 //Early declaration
 bool skill_strip_equip(struct block_list *src, struct block_list *target, uint16 skill_id, uint16 skill_lv);
 int skill_block_check(struct block_list *bl, enum sc_type type, uint16 skill_id);
-static int skill_check_unit_range (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv);
-static int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC);
+
+// [GonBee]
+//static int skill_check_unit_range (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv);
+//static int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC);
+
 static int skill_destroy_trap( struct block_list *bl, va_list ap );
 static int skill_check_condition_mob_master_sub (struct block_list *bl, va_list ap);
 static bool skill_check_condition_sc_required(struct map_session_data *sd, unsigned short skill_id, struct skill_condition *require);
@@ -3736,6 +3742,14 @@ int64 skill_attack (int attack_type, struct block_list* src, struct block_list *
 
 	map_freeblock_unlock();
 
+	// [GonBee]
+	// ペットは主人がスキルでダメージを与えた相手をターゲットする。
+	if (sd &&
+		sd->status.pet_id > 0 &&
+		sd->pd &&
+		battle_config.pet_attack_support
+	) pet_target_check(sd->pd, bl, 0);
+
 	if ((flag&0x1000000) && rmdamage == 1)
 		return 0; //Should return 0 when damage was reflected
 
@@ -3759,8 +3773,12 @@ int skill_area_sub(struct block_list *bl, va_list ap)
 	nullpo_ret(bl);
 
 	src = va_arg(ap,struct block_list *);
-	skill_id = va_arg(ap,int);
-	skill_lv = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	//skill_lv = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
+	skill_lv = va_arg(ap,uint16);
 	tick = va_arg(ap,t_tick);
 	flag = va_arg(ap,int);
 	func = va_arg(ap,SkillFunc);
@@ -3794,13 +3812,20 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap)
 	if(!unit->alive)
 		return 0;
 
-	skill_id = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
 	g_skill_id = unit->group->skill_id;
 
 	switch (skill_id) {
 		case AL_PNEUMA: //Pneuma doesn't work even if just one cell overlaps with Land Protector
-			if(g_skill_id == SA_LANDPROTECTOR)
-				break;
+
+			// [GonBee]
+			// ニューマをランドプロテクター上に設置できるようにする。
+			//if(g_skill_id == SA_LANDPROTECTOR)
+			//	break;
+
 			//Fall through
 		case MH_STEINWAND:
 		case MG_SAFETYWALL:
@@ -3852,7 +3877,9 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap)
 	return 1;
 }
 
-static int skill_check_unit_range (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv)
+// [GonBee]
+//static int skill_check_unit_range (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv)
+int skill_check_unit_range (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv)
 {
 	//Non players do not check for the skill's splash-trigger area.
 	int range = bl->type==BL_PC?skill_get_unit_range(skill_id, skill_lv):0;
@@ -3873,7 +3900,10 @@ static int skill_check_unit_range2_sub (struct block_list *bl, va_list ap)
 	if(bl->prev == NULL)
 		return 0;
 
-	skill_id = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
 
 	if( status_isdead(bl) && skill_id != AL_WARP )
 		return 0;
@@ -3896,7 +3926,11 @@ static int skill_check_unit_range2_sub (struct block_list *bl, va_list ap)
  * @param isNearNPC 'true' means, check the range between target and nearer NPC by using npc_isnear and range calculation [Cydh]
  * @return 0: No object (BL_CHAR or BL_PC) within the range. If 'isNearNPC' the target oject is BL_NPC
  */
-static int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC)
+
+// [GonBee]
+//static int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC)
+int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC)
+
 {
 	int range = 0, type;
 
@@ -3955,7 +3989,11 @@ static int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 
  * &1: finished casting the skill (invoke hp/sp/item consumption)
  * &2: picked menu entry (Warp Portal, Teleport and other menu based skills)
  *------------------------------------------*/
-static int skill_check_condition_mercenary(struct block_list *bl, uint16 skill_id, uint16 skill_lv, int type)
+
+// [GonBee]
+//static int skill_check_condition_mercenary(struct block_list *bl, uint16 skill_id, uint16 skill_lv, int type)
+int skill_check_condition_mercenary(struct block_list *bl, uint16 skill_id, uint16 skill_lv, int type)
+
 {
 	struct status_data *status;
 	struct map_session_data *sd = NULL;
@@ -8311,9 +8349,11 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			if(md->db->skill[md->skill_idx].val[4] && tsce)
 				status_change_end(bl, type, INVALID_TIMER);
 
-			//If mode gets set by NPC_EMOTION then the target should be reset [Playtester]
-			if(skill_id == NPC_EMOTION && md->db->skill[md->skill_idx].val[1])
-				mob_unlocktarget(md,tick);
+			// [GonBee]
+			// エモーションを出してもターゲットをアンロックしない。
+			////If mode gets set by NPC_EMOTION then the target should be reset [Playtester]
+			//if(skill_id == NPC_EMOTION && md->db->skill[md->skill_idx].val[1])
+			//	mob_unlocktarget(md,tick);
 
 			if(md->db->skill[md->skill_idx].val[1] || md->db->skill[md->skill_idx].val[2])
 				sc_start4(src,src, type, 100, skill_lv,
@@ -8892,7 +8932,12 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case GS_GLITTERING:
 		if(sd) {
 			clif_skill_nodamage(src,bl,skill_id,skill_lv,1);
-			if(rnd()%100 < (20+10*skill_lv))
+
+			// [GonBee]
+			// フリップザコインの確率を変更。
+			//if(rnd()%100 < (20+10*skill_lv))
+			if (rnd() % 100 < (25 + 15 * skill_lv))
+
 				pc_addspiritball(sd,skill_get_time(skill_id,skill_lv),10);
 			else if(sd->spiritball > 0 && !pc_checkskill(sd,RL_RICHS_COIN))
 				pc_delspiritball(sd,1,0);
@@ -10152,7 +10197,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		break;
 
 	case WM_SATURDAY_NIGHT_FEVER:
-		if( flag&1 ) {	// Affect to all targets arround the caster and caster too.
+		if( flag&1 ) {	// Affect to all targets around the caster and caster too.
 			if (tsc && ((tsc->option&(OPTION_HIDE|OPTION_CLOAK|OPTION_CHASEWALK)) || tsc->data[SC_CAMOUFLAGE] || tsc->data[SC_STEALTHFIELD] || tsc->data[SC__SHADOWFORM]))
 				break;
 			sc_start(src,bl, type, 100, skill_lv,skill_get_time(skill_id, skill_lv));
@@ -10197,7 +10242,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case WM_BEYOND_OF_WARCRY:
 		if( flag&1 ) {
 			sc_start2(src,bl,type,100,skill_lv,battle_calc_chorusbonus(sd),skill_get_time(skill_id,skill_lv));
-		} else {	// These affect to all targets arround the caster.
+		} else {	// These affect to all targets around the caster.
 			if( rnd()%100 < 15 + 5 * skill_lv * 5 * battle_calc_chorusbonus(sd) ) {
 				map_foreachinallrange(skill_area_sub, src, skill_get_splash(skill_id,skill_lv),BL_PC, src, skill_id, skill_lv, tick, flag|BCT_ENEMY|1, skill_castend_nodamage_id);
 				clif_skill_nodamage(src,bl,skill_id,skill_lv,1);
@@ -13364,7 +13409,11 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 
 	tstatus = status_get_status_data(bl);
 
-	if( (skill_get_type(sg->skill_id) == BF_MAGIC && map_getcell(unit->bl.m, unit->bl.x, unit->bl.y, CELL_CHKLANDPROTECTOR) && sg->skill_id != SA_LANDPROTECTOR) ||
+	// [GonBee]
+	// ランドプロテクター上に設置できるようにする。
+	//if( (skill_get_type(sg->skill_id) == BF_MAGIC && map_getcell(unit->bl.m, unit->bl.x, unit->bl.y, CELL_CHKLANDPROTECTOR) && sg->skill_id != SA_LANDPROTECTOR) ||
+	if( (skill_get_type(sg->skill_id) == BF_MAGIC && map_getcell(unit->bl.m, unit->bl.x, unit->bl.y, CELL_CHKLANDPROTECTOR) && sg->skill_id != SA_LANDPROTECTOR && !pybot::skill_is_layable_on_lp(e_skill(sg->skill_id))) ||
+
 		map_getcell(bl->m, bl->x, bl->y, CELL_CHKMAELSTROM) )
 		return 0; //AoE skills are ineffective. [Skotlex]
 
@@ -13477,7 +13526,6 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 						working = 1;/* we break it because officials break it, lovely stuff. */
 
 					sg->val1 = (count<<16)|working;
-
 					if (pc_job_can_entermap((enum e_job)sd->status.class_, map_mapindex2mapid(m), sd->group_level))
 						pc_setpos(sd,m,x,y,CLR_TELEPORT);
 				}
@@ -14706,7 +14754,10 @@ int skill_check_condition_char_sub (struct block_list *bl, va_list ap)
 
 	c=va_arg(ap,int *);
 	p_sd = va_arg(ap, int *);
-	skill_id = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
 	inf2 = skill_get_inf2(skill_id);
 
 	if (skill_id == PR_BENEDICTIO) {
@@ -14739,10 +14790,24 @@ int skill_check_condition_char_sub (struct block_list *bl, va_list ap)
 
 		switch(skill_id) {
 			case PR_BENEDICTIO: {
-				uint8 dir = map_calc_dir(&sd->bl,tsd->bl.x,tsd->bl.y);
-				dir = (unit_getdir(&sd->bl) + dir)%8; //This adjusts dir to account for the direction the sd is facing.
-				if ((tsd->class_&MAPID_BASEMASK) == MAPID_ACOLYTE && (dir == 2 || dir == 6) //Must be standing to the left/right of Priest.
-					&& sd->status.sp >= 10)
+
+				// [GonBee]
+				// 聖体降福のパートナーの条件を変更。
+				//uint8 dir = map_calc_dir(&sd->bl,tsd->bl.x,tsd->bl.y);
+				//dir = (unit_getdir(&sd->bl) + dir)%8; //This adjusts dir to account for the direction the sd is facing.
+				//if ((tsd->class_&MAPID_BASEMASK) == MAPID_ACOLYTE && (dir == 2 || dir == 6) //Must be standing to the left/right of Priest.
+				//	&& sd->status.sp >= 10)
+				if (((tsd->class_ & MAPID_BASEMASK) == MAPID_ACOLYTE ||
+						(tsd->class_ & MAPID_UPPERMASK) == MAPID_CRUSADER ||
+						(tsd->class_ & MAPID_UPPERMASK) == MAPID_SUPER_NOVICE
+					) && ((sd->status.party_id &&
+							tsd->status.party_id == sd->status.party_id
+						) || (sd->status.guild_id &&
+							tsd->status.guild_id == sd->status.guild_id
+						)
+					) && sd->status.sp >= 10
+				)
+
 					p_sd[(*c)++]=tsd->bl.id;
 				return 1;
 			}
@@ -15070,11 +15135,28 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		}
 	}
 	else if(inf2&INF2_ENSEMBLE_SKILL) {
-	    if (skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0) < 1) {
+
+		// [GonBee]
+		// 聖体降福のパートナーチェックは後で行う。
+		if (skill_id != PR_BENEDICTIO) {
+
+		// [GonBee]
+		// 合奏は展開するスキルユニット上にパートナーがいればよいことにする。
+	    //if (skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0) < 1) {
+		int ran = 1;
+		int lay = skill_get_unit_layout_type(skill_id, skill_lv);
+		if (lay >= 1) ran = lay;
+	    if (skill_check_pc_partner(sd, skill_id, &skill_lv, ran, 0) < 1) {
+
 		    clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 		    return false;
 	    }
+
+		// [GonBee]
+		}
+
 	}
+
 	// perform skill-specific checks (and actions)
 	switch( skill_id ) {
 		case RG_GRAFFITI:
@@ -15247,7 +15329,12 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 			}
 			break;
 		case PR_BENEDICTIO:
-			if (skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0) < 2) {
+
+			// [GonBee]
+			// 聖体降福のパートナーチェックは全画面に変更。
+//			if (skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0) < 2) {
+			if (skill_check_pc_partner(sd, skill_id, &skill_lv, AREA_SIZE, 0) < 2) {
+
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 				return false;
 			}
@@ -17144,11 +17231,19 @@ int skill_frostjoke_scream(struct block_list *bl, va_list ap)
 	nullpo_ret(bl);
 	nullpo_ret(src = va_arg(ap,struct block_list*));
 
-	skill_id = va_arg(ap,int);
-	skill_lv = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズが間違っているので修正。
+	//skill_id = va_arg(ap,int);
+	//skill_lv = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
+	skill_lv = va_arg(ap,uint16);
 	if(!skill_lv)
 		return 0;
-	tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズが間違っているので修正。
+	//tick = va_arg(ap,unsigned int);
+	tick = va_arg(ap,t_tick);
 
 	if (src == bl || status_isdead(bl))
 		return 0;
@@ -17204,9 +17299,16 @@ int skill_attack_area(struct block_list *bl, va_list ap)
 	atk_type = va_arg(ap,int);
 	src = va_arg(ap,struct block_list*);
 	dsrc = va_arg(ap,struct block_list*);
-	skill_id = va_arg(ap,int);
-	skill_lv = va_arg(ap,int);
-	tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズが間違っているので修正。
+	//skill_id = va_arg(ap,int);
+	//skill_lv = va_arg(ap,int);
+	//tick = va_arg(ap,unsigned int);
+	skill_id = va_arg(ap,uint16);
+	skill_lv = va_arg(ap,uint16);
+	tick = va_arg(ap,t_tick);
+
 	flag = va_arg(ap,int);
 	type = va_arg(ap,int);
 
@@ -17470,7 +17572,10 @@ static int skill_cell_overlap(struct block_list *bl, va_list ap)
 	int *alive;
 	struct skill_unit *unit;
 
-	skill_id = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
 	alive = va_arg(ap,int *);
 	unit = (struct skill_unit *)bl;
 
@@ -17488,7 +17593,12 @@ static int skill_cell_overlap(struct block_list *bl, va_list ap)
 				return 1;
 			}
 			//It deletes everything except traps and barriers
-			if ((!(skill_get_inf2(unit->group->skill_id)&(INF2_TRAP)) && !(skill_get_inf3(unit->group->skill_id)&(INF3_NOLP))) || unit->group->skill_id == WZ_FIREPILLAR || unit->group->skill_id == GN_HELLS_PLANT) {
+
+			// [GonBee]
+			// ランドプロテクター上に設置できるようにする。
+			//if ((!(skill_get_inf2(unit->group->skill_id)&(INF2_TRAP)) && !(skill_get_inf3(unit->group->skill_id)&(INF3_NOLP))) || unit->group->skill_id == WZ_FIREPILLAR || unit->group->skill_id == GN_HELLS_PLANT) {
+			if ((!(skill_get_inf2(unit->group->skill_id)&(INF2_TRAP)) && !(skill_get_inf3(unit->group->skill_id)&(INF3_NOLP)) && !pybot::skill_is_layable_on_lp(e_skill(unit->group->skill_id))) || unit->group->skill_id == WZ_FIREPILLAR || unit->group->skill_id == GN_HELLS_PLANT) {
+
 				if (skill_get_unit_flag(unit->group->skill_id)&UF_RANGEDSINGLEUNIT) {
 					if (unit->val2&UF_RANGEDSINGLEUNIT)
 						skill_delunitgroup(unit->group);
@@ -17575,7 +17685,11 @@ static int skill_cell_overlap(struct block_list *bl, va_list ap)
 			break;
 	}
 
-	if (unit->group->skill_id == SA_LANDPROTECTOR && !(skill_get_inf2(skill_id)&(INF2_TRAP)) && !(skill_get_inf3(skill_id)&(INF3_NOLP) ) ) { //It deletes everything except traps and barriers
+	// [GonBee]
+	// ランドプロテクター上に設置できるようにする。
+	//if (unit->group->skill_id == SA_LANDPROTECTOR && !(skill_get_inf2(skill_id)&(INF2_TRAP)) && !(skill_get_inf3(skill_id)&(INF3_NOLP) ) ) { //It deletes everything except traps and barriers
+	if (unit->group->skill_id == SA_LANDPROTECTOR && !(skill_get_inf2(skill_id)&(INF2_TRAP)) && !(skill_get_inf3(skill_id)&(INF3_NOLP) ) && !pybot::skill_is_layable_on_lp(e_skill(skill_id))) { //It deletes everything except traps and barriers
+
 		(*alive) = 0;
 		return 1;
 	}
@@ -17720,8 +17834,12 @@ int skill_maelstrom_suction(struct block_list *bl, va_list ap)
 
 	nullpo_ret(bl);
 
-	skill_id = va_arg(ap,int);
-	skill_lv = va_arg(ap,int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//skill_id = va_arg(ap,int);
+	//skill_lv = va_arg(ap,int);
+	skill_id = va_arg(ap,uint16);
+	skill_lv = va_arg(ap,uint16);
 	unit = (struct skill_unit *)bl;
 
 	if( unit == NULL || unit->group == NULL )
@@ -18445,7 +18563,11 @@ int skill_unit_timer_sub_onplace(struct block_list* bl, va_list ap)
 {
 	struct skill_unit* unit = va_arg(ap,struct skill_unit *);
 	struct skill_unit_group* group = NULL;
-	t_tick tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズを間違えていたので修正。
+	//t_tick tick = va_arg(ap,unsigned int);
+	t_tick tick = va_arg(ap,t_tick);
 
 	nullpo_ret(unit);
 
@@ -18472,7 +18594,12 @@ static int skill_unit_timer_sub(DBKey key, DBData *data, va_list ap)
 {
 	struct skill_unit* unit = (struct skill_unit*)db_data2ptr(data);
 	struct skill_unit_group* group = NULL;
-	t_tick tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズを間違えていたので修正。
+	//t_tick tick = va_arg(ap,unsigned int);
+	t_tick tick = va_arg(ap,t_tick);
+
 	bool dissonance;
 	struct block_list* bl = &unit->bl;
 
@@ -18755,7 +18882,12 @@ int skill_unit_move_sub(struct block_list* bl, va_list ap)
 	struct skill_unit_group* group = NULL;
 
 	struct block_list* target = va_arg(ap,struct block_list*);
-	t_tick tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズを間違えていたので修正。
+	//t_tick tick = va_arg(ap,unsigned int);
+	t_tick tick = va_arg(ap,t_tick);
+
 	int flag = va_arg(ap,int);
 	bool dissonance;
 	uint16 skill_id;
@@ -20090,7 +20222,10 @@ static int skill_destroy_trap(struct block_list *bl, va_list ap)
 
 	nullpo_ret(su);
 
-	tick = va_arg(ap, unsigned int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//tick = va_arg(ap, unsigned int);
+	tick = va_arg(ap,t_tick);
 
 	if (su->alive && (sg = su->group) && skill_get_inf2(sg->skill_id)&INF2_TRAP) {
 		switch( sg->unit_id ) {

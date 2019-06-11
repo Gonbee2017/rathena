@@ -58,6 +58,9 @@
 #include "unit.hpp" // unit_stop_attack(), unit_stop_walking()
 #include "vending.hpp" // struct s_vending
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 using namespace rathena;
 
 int pc_split_atoui(char* str, unsigned int* val, char sep, int max);
@@ -4776,10 +4779,22 @@ bool pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem)
 		}
 	}
 
+	// [GonBee]
+	// Botは無視アイテムを拾わない。
+	map_session_data* lea_sd = pybot::get_leader(sd->status.char_id);
+	if (lea_sd &&
+		pybot::flooritem_to_be_ignored(lea_sd, fitem)
+	) return false;
+
 	//This function takes care of giving the item to whoever should have it, considering party-share options.
 	if ((flag = party_share_loot(p,sd,&fitem->item, fitem->first_get_charid))) {
 		clif_additem(sd,0,0,flag);
-		return true;
+
+		// [GonBee]
+		// 戻り値を間違えていたので修正。
+		//return true;
+		return false;
+
 	}
 
 	//Display pickup animation.
@@ -5320,7 +5335,12 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	sd_status= status_get_status_data(&sd->bl);
 	md_status= status_get_status_data(bl);
 
-	if (md->master_id || status_has_mode(md_status, MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE ||
+	// [GonBee]
+	// 状態異常耐性モンスターからもスティールできるようにする。
+	//if (md->master_id || status_has_mode(md_status, MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE ||
+	if (md->master_id ||
+		status_get_race2(&md->bl) == RC2_TREASURE ||
+
 		map_getmapflag(bl->m, MF_NOMOBLOOT) || // check noloot map flag [Lorky]
 		(battle_config.skill_steal_max_tries && //Reached limit of steal attempts. [Lupus]
 			md->state.steal_flag++ >= battle_config.skill_steal_max_tries)
@@ -5333,6 +5353,10 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	rate = (sd_status->dex - md_status->dex)/2 + skill_lv*6 + 4;
 	rate += sd->bonus.add_steal_rate;
 
+	// [GonBee]
+	// スティール成功率にジョブレベル倍率をかける。
+	rate = int(rate * pybot::job_level_rate(sd, &md->bl));
+
 	if( rate < 1
 #ifdef RENEWAL
 		|| rnd()%100 >= rate
@@ -5340,17 +5364,26 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	)
 		return false;
 
+	// [GonBee]
+	// ドロップテーブル探索を逆順にする。
 	// Try dropping one item, in the order from first to last possible slot.
 	// Droprate is affected by the skill success rate.
-	for( i = 0; i < MAX_STEAL_DROP; i++ )
-		if( md->db->dropitem[i].nameid > 0 && !md->db->dropitem[i].steal_protected && itemdb_exists(md->db->dropitem[i].nameid) && rnd() % 10000 < md->db->dropitem[i].p
+	//for( i = 0; i < MAX_STEAL_DROP; i++ )
+	//	if( md->db->dropitem[i].nameid > 0 && !md->db->dropitem[i].steal_protected && itemdb_exists(md->db->dropitem[i].nameid) && rnd() % 10000 < md->db->dropitem[i].p * rate/100. )
+	//		break;
+	//if( i == MAX_STEAL_DROP )
+	//	return 0;
+	for (i = MAX_STEAL_DROP - 1; i >= 0; --i) {
+		if (md->db->dropitem[i].nameid > 0 &&
+			!md->db->dropitem[i].steal_protected &&
+			itemdb_exists(md->db->dropitem[i].nameid) &&
+			rnd() % 10000 < md->db->dropitem[i].p
 #ifndef RENEWAL
-		* rate/100.
+				* rate / 100.
 #endif
-		)
-			break;
-	if( i == MAX_STEAL_DROP )
-		return false;
+		) break;
+	}
+	if (i < 0) return false;
 
 	itemid = md->db->dropitem[i].nameid;
 	memset(&tmp_item,0,sizeof(tmp_item));
@@ -5358,7 +5391,14 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	tmp_item.amount = 1;
 	tmp_item.identify = itemdb_isidentified(itemid);
 	mob_setdropitem_option(&tmp_item, &md->db->dropitem[i]);
-	flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
+
+	// [GonBee]
+	// Botはスティールに成功するとそのアイテムを即座にドロップする。
+	//flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
+	if (pybot::char_is_bot(sd->status.char_id)) {
+		map_addflooritem(&tmp_item, tmp_item.amount, sd->bl.m, sd->bl.x, sd->bl.y, 0, 0, 0, 2, 0);
+		flag = 4;
+	} else flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
 
 	//TODO: Should we disable stealing when the item you stole couldn't be added to your inventory? Perhaps players will figure out a way to exploit this behaviour otherwise?
 	md->state.steal_flag = UCHAR_MAX; //you can't steal from this mob any more
@@ -5403,16 +5443,25 @@ int pc_steal_coin(struct map_session_data *sd,struct block_list *target)
 	md = (TBL_MOB*)target;
 	target_lv = status_get_lv(target);
 
-	if (md->state.steal_coin_flag || md->sc.data[SC_STONE] || md->sc.data[SC_FREEZE] || status_bl_has_mode(target,MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE)
+	// [GonBee]
+	// 状態異常耐性モンスターからもスティールコインできるようにする。
+	//if (md->state.steal_coin_flag || md->sc.data[SC_STONE] || md->sc.data[SC_FREEZE] || status_bl_has_mode(target,MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE)
+	if (md->state.steal_coin_flag || md->sc.data[SC_STONE] || md->sc.data[SC_FREEZE] || status_get_race2(&md->bl) == RC2_TREASURE)
 		return 0;
 
 	rate = sd->battle_status.dex / 2 + 2 * (sd->status.base_level - target_lv) + (10 * pc_checkskill(sd, RG_STEALCOIN)) + sd->battle_status.luk / 2;
+
 	if(rnd()%1000 < rate)
 	{
 		// Zeny Steal Amount: (rnd() % (10 * target_lv + 1 - 8 * target_lv)) + 8 * target_lv
 		int amount = (rnd() % (2 * target_lv + 1)) + 8 * target_lv; // Reduced formula
 
+		// [GonBee]
+		// スティールコインで獲得するZenyにジョブレベル倍率をかける。
+		amount = int(amount * pybot::job_level_rate(sd, &md->bl));
+
 		pc_getzeny(sd, amount, LOG_TYPE_STEAL, NULL);
+
 		md->state.steal_coin_flag = 1;
 		return 1;
 	}
@@ -5650,10 +5699,15 @@ char pc_randomwarp(struct map_session_data *sd, clr_type type)
 	if (mapdata->flag[MF_NOTELEPORT]) //Teleport forbidden
 		return 3;
 
-	do {
-		x = rnd()%(mapdata->xs-2)+1;
-		y = rnd()%(mapdata->ys-2)+1;
-	} while((map_getcell(sd->bl.m,x,y,CELL_CHKNOPASS) || (!battle_config.teleport_on_portal && npc_check_areanpc(1,sd->bl.m,x,y,1))) && (i++) < 1000);
+	// [GonBee]
+	// 現在のマップの初期位置に移動する。
+	//do {
+	//	x = rnd()%(mapdata->xs-2)+1;
+	//	y = rnd()%(mapdata->ys-2)+1;
+	//} while((map_getcell(sd->bl.m,x,y,CELL_CHKNOPASS) || (!battle_config.teleport_on_portal && npc_check_areanpc(1,sd->bl.m,x,y,1))) && (i++) < 1000);
+	block_list* pos = pybot::get_map_initial_position(sd);
+	x = pos->x;
+	y = pos->y;
 
 	if (i < 1000)
 		return pc_setpos(sd,mapdata->index,x,y,type);
@@ -6181,6 +6235,30 @@ int pc_mapid2jobid(unsigned short class_, int sex)
 		default:
 			return -1;
 	}
+}
+
+// [GonBee]
+// 職業から性別を取得する。
+int // 取得した性別。男女両方が就ける場合は男性。
+pc_jobid2sex(
+	int job // 職業。
+) {
+	int sex;
+	switch (job) {
+	case JOB_OBORO:
+	case JOB_DANCER:
+	case JOB_GYPSY:
+	case JOB_BABY_OBORO:
+	case JOB_BABY_DANCER:
+	case JOB_WANDERER:
+	case JOB_WANDERER_T:
+	case JOB_BABY_WANDERER:
+		sex = SEX_FEMALE;
+		break;
+	default:
+		sex = SEX_MALE;
+	};
+	return sex;
 }
 
 /*====================================================
@@ -6731,6 +6809,16 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 		((pc_is_maxbaselv(sd)) ? 4 : 0) |
 		((pc_is_maxjoblv(sd)) ? 8 : 0);
 
+	// [GonBee]
+	// モンスターから取得した経験値にレベル倍率をかける。
+	if (src &&
+		src->type == BL_MOB
+	) {
+		mob_data* md = BL_CAST(BL_MOB, src);
+		base_exp = int(base_exp * pybot::base_level_rate(&sd->bl, md));
+		job_exp = int(job_exp * pybot::job_level_rate(sd, &md->bl));
+	}
+
 	if (!(exp_flag&2))
 		pc_calcexp(sd, &base_exp, &job_exp, src);
 
@@ -6907,7 +6995,11 @@ unsigned int pc_nextjobexp(struct map_session_data *sd){
 }
 
 /// Returns the value of the specified stat.
-static int pc_getstat(struct map_session_data* sd, int type)
+
+// [GonBee]
+//static int pc_getstat(struct map_session_data* sd, int type)
+int pc_getstat(struct map_session_data* sd, int type)
+
 {
 	nullpo_retr(-1, sd);
 
@@ -7992,6 +8084,11 @@ int pc_dead(struct map_session_data *sd,struct block_list *src)
 			}
 		}
 	}
+
+	// [GonBee]
+	// Botは死亡すると即座に蘇生しようとする。
+	if (pybot::char_is_bot(sd->status.char_id)) clif_parse_AutoRevive(sd->fd, sd);
+
 	// pvp
 	// disable certain pvp functions on pk_mode [Valaris]
 	if( !battle_config.pk_mode && mapdata->flag[MF_PVP] && !mapdata->flag[MF_PVP_NOCALCRANK] ) {
@@ -9136,6 +9233,10 @@ bool pc_can_attack( struct map_session_data *sd, int target_id ) {
 		sd->sc.data[SC_KINGS_GRACE] )
 			return false;
 
+	// [GonBee]
+	// 追加。
+	if (sd->sc.data[SC_AUTOCOUNTER]) return false;
+
 	return true;
 }
 
@@ -10227,6 +10328,10 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 		status_change_end(&sd->bl, SC_P_ALTER, INVALID_TIMER);
 
 	pc_unequipitem_sub(sd, n, flag);
+
+	// [GonBee]
+	// Botは戦闘中に装備が外れると武具一式をリロードする。
+	if (pybot::char_is_bot(sd->status.char_id)) pybot::reload_equipset_in_battle(sd->status.char_id);
 
 	return true;
 }

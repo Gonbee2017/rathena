@@ -28,6 +28,9 @@
 #include "storage.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 static DBMap* guild_db; // int guild_id -> struct guild*
 static DBMap* castle_db; // int castle_id -> struct guild_castle*
 static DBMap* guild_expcache_db; // uint32 char_id -> struct guild_expcache*
@@ -611,6 +614,22 @@ int guild_invite(struct map_session_data *sd, struct map_session_data *tsd) {
 
 	if (!tsd->fd) { //You can't invite someone who has already disconnected.
 		clif_guild_inviteack(sd,1);
+		return 0;
+	}
+
+	// [GonBee]
+	// Botはリーダーが加入しているギルドからの加入要請を受諾する。
+	map_session_data* lea_sd = pybot::get_leader(tsd->status.char_id);
+	if (lea_sd) {
+		if (sd->status.guild_id != lea_sd->status.guild_id) {
+			clif_guild_inviteack(sd, 0);
+			return 0;
+		}
+		if (tsd->status.guild_id > 0)
+			guild_leave(tsd, tsd->status.guild_id, tsd->status.account_id, tsd->status.char_id, "");
+		tsd->guild_invite = sd->status.guild_id;
+		tsd->guild_invite_account = sd->status.account_id;
+		guild_reply_invite(tsd, tsd->guild_invite, 1);
 		return 0;
 	}
 

@@ -12382,8 +12382,13 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 		case SC_CHANGE:
 			if (tid == INVALID_TIMER)
 		 		break;
+
 			// "lose almost all their HP and SP" on natural expiration.
-			status_set_hp(bl, 10, 0);
+
+			// [GonBee]
+			// メンタルチェンジの解除後ペナルティーをSPのみに変更。
+			//status_set_hp(bl, 10, 0);
+
 			status_set_sp(bl, 10, 0);
 			break;
 		case SC_AUTOTRADE:
@@ -13786,7 +13791,11 @@ int status_change_timer_sub(struct block_list* bl, va_list ap)
 	struct block_list* src = va_arg(ap,struct block_list*);
 	struct status_change_entry* sce = va_arg(ap,struct status_change_entry*);
 	enum sc_type type = (sc_type)va_arg(ap,int); // gcc: enum args get promoted to int
-	t_tick tick = va_arg(ap,unsigned int);
+
+	// [GonBee]
+	// 可変長引数のサイズを間違えていたので修正。
+	//t_tick tick = va_arg(ap,unsigned int);
+	t_tick tick = va_arg(ap,t_tick);
 
 	if (status_isdead(bl))
 		return 0;

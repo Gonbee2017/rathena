@@ -9,6 +9,10 @@
  * For detailed guidance on these check http://rathena.org/wiki/SRC/config/
  **/
 
-
+// [GonBee]
+// PyBotはPre-Renewalにのみ対応。
+// パケットは公式サポートの中で最も古い2012年4月10日版にのみ対応。
+#define PRERE
+#define PACKETVER 20120410
 
 #endif /* CONFIG_CUSTOM_DEFINES_PRE_HPP */

@@ -57,6 +57,9 @@
 #include "unit.hpp"
 #include "vending.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 static inline uint32 client_tick( t_tick tick ){
 	return (uint32)tick;
 }
@@ -9280,7 +9283,12 @@ void clif_playBGM(struct map_session_data* sd, const char* name)
 /// npc id:
 ///     The accustic direction of the sound is determined by the
 ///     relative position of the NPC to the player (3D sound).
-void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type)
+
+// [GonBee]
+// Aurigaスクリプトとの互換性のために、間隔時間を指定できるようにする。
+//void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type)
+void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const char* name, int type, int interval)
+
 {
 	int fd;
 
@@ -9292,7 +9300,12 @@ void clif_soundeffect(struct map_session_data* sd, struct block_list* bl, const 
 	WFIFOW(fd,0) = 0x1d3;
 	safestrncpy(WFIFOCP(fd,2), name, NAME_LENGTH);
 	WFIFOB(fd,26) = type;
-	WFIFOL(fd,27) = 0;
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、間隔時間を指定できるようにする。
+	//WFIFOL(fd,27) = 0;
+	WFIFOL(fd,27) = interval;
+
 	WFIFOL(fd,31) = bl->id;
 	WFIFOSET(fd,packet_len(0x1d3));
 }
@@ -10368,6 +10381,10 @@ void clif_parse_LoadEndAck(int fd,struct map_session_data *sd)
 	if(map_addblock(&sd->bl))
 		return;
 	clif_spawn(&sd->bl);
+
+	// [GonBee]
+	// 現在のマップの初期位置を保存する。
+	pybot::set_map_initial_position(sd);
 
 	// Party
 	// (needs to go after clif_spawn() to show hp bars correctly)
@@ -16653,7 +16670,14 @@ void clif_parse_ViewPlayerEquip(int fd, struct map_session_data* sd)
 	if (!tsd)
 		return;
 
-	if( tsd->status.show_equip || pc_has_permission(sd, PC_PERM_VIEW_EQUIPMENT) )
+	// [GonBee]
+	// Botはリーダーに装備閲覧を許す。
+	//if( tsd->status.show_equip || pc_has_permission(sd, PC_PERM_VIEW_EQUIPMENT) )
+	if (tsd->status.show_equip ||
+		pc_has_permission(sd, PC_PERM_VIEW_EQUIPMENT) ||
+		pybot::get_leader(tsd->status.char_id) == sd
+	)
+
 		clif_viewequip_ack(sd, tsd);
 	else
 		clif_msg(sd, VIEW_EQUIP_FAIL);

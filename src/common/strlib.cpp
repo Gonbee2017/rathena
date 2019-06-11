@@ -198,6 +198,23 @@ char* normalize_name(char* str,const char* delims)
 			*out = *in;
 			++out;
 			++in;
+
+			// [GonBee]
+			// ‘SŠp•¶Žš‚Ì2ƒoƒCƒg–Ú‚ðŽæ‚èœ‚©‚È‚¢‚æ‚¤‚É‚·‚éB
+			uint8 pre_ch = *(in - 1);
+			if (*in &&
+				((pre_ch >= 0x81 &&
+						pre_ch <= 0x9F
+					) || (pre_ch >= 0xE0 &&
+						pre_ch <= 0xFC
+					)
+				)
+			) {
+				*out = *in;
+				++out;
+				++in;
+			}
+
 		}
 		// skip trim characters
 		while( *in && strchr(delims,*in) )
@@ -351,7 +368,7 @@ int e_mail_check(char* email)
 
 //--------------------------------------------------
 // Return numerical value of a switch configuration
-// on/off, english, franï¿½ais, deutsch, espaï¿½ol, portuguese
+// on/off, english, fran?ais, deutsch, espa?ol, portuguese
 //--------------------------------------------------
 int config_switch(const char* str)
 {
@@ -638,7 +655,11 @@ int sv_parse_next(struct s_svstate* sv)
 /// @param npos Size of the pos array
 /// @param opt Options that determine the parsing behaviour
 /// @return Number of fields found in the string or -1 if an error occured
-int sv_parse(const char* str, int len, int startoff, char delim, int* out_pos, int npos, enum e_svopt opt)
+
+// [GonBee]
+//int sv_parse(const char* str, int len, int startoff, char delim, int* out_pos, int npos, enum e_svopt opt)
+int sv_parse(const char* str, int len, int startoff, char delim, int* out_pos, int npos, enum e_svopt opt, bool allow_empty)
+
 {
 	struct s_svstate sv;
 	int count;
@@ -662,6 +683,15 @@ int sv_parse(const char* str, int len, int startoff, char delim, int* out_pos, i
 		++count;
 		if( sv_parse_next(&sv) <= 0 )
 			return -1;// error
+
+		// [GonBee]
+		if (!allow_empty &&
+			sv.start == sv.end
+		) {
+			--count;
+			continue;
+		}
+
 		if( npos > count*2 ) out_pos[count*2] = sv.start;
 		if( npos > count*2+1 ) out_pos[count*2+1] = sv.end;
 	}

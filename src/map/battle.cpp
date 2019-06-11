@@ -402,7 +402,25 @@ int battle_attr_ratio(int atk_elem, int def_type, int def_lv)
 	if (!CHK_ELEMENT(atk_elem) || !CHK_ELEMENT(def_type) || !CHK_ELEMENT_LEVEL(def_lv))
 		return 100;
 
-	return attr_fix_table[def_lv-1][atk_elem][def_type];
+	// [GonBee]
+	// 昼は聖属性、夜は闇属性が打たれ弱くなくなる。
+	// 夜は聖属性、昼は闇属性が打たれ強くなくなる。
+	//return attr_fix_table[def_lv-1][atk_elem][def_type];
+	int rat = attr_fix_table[def_lv-1][atk_elem][def_type];
+	if (night_flag) {
+		if (def_type == ELE_HOLY) {
+			if (rat < 100) rat += 25;
+		} else if (def_type == ELE_DARK) {
+			if (rat > 100) rat -= 25;
+		}
+	} else {
+		if (def_type == ELE_HOLY) {
+			if (rat > 100) rat -= 25;
+		} else if (def_type == ELE_DARK) {
+			if (rat < 100) rat += 25;
+		}
+	}
+	return rat;
 }
 
 /**
@@ -433,7 +451,10 @@ int64 battle_attr_fix(struct block_list *src, struct block_list *target, int64 d
 		return damage;
 	}
 
-	ratio = attr_fix_table[def_lv-1][atk_elem][def_type];
+	// [GonBee]
+	//ratio = attr_fix_table[def_lv-1][atk_elem][def_type];
+	ratio = battle_attr_ratio(atk_elem, def_type, def_lv);
+
 	if (sc && sc->count) { //increase dmg by src status
 		switch(atk_elem){
 			case ELE_FIRE:
@@ -7093,7 +7114,10 @@ int battle_damage_area(struct block_list *bl, va_list ap) {
 
 	nullpo_ret(bl);
 
-	tick = va_arg(ap, unsigned int);
+	// [GonBee]
+	// 可変長引数のサイズを間違えているので修正。
+	//tick = va_arg(ap, unsigned int);
+	tick = va_arg(ap,t_tick);
 	src = va_arg(ap,struct block_list *);
 	amotion = va_arg(ap,int);
 	dmotion = va_arg(ap,int);

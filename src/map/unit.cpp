@@ -37,6 +37,9 @@
 #include "storage.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 // Directions values
 // 1 0 7
 // 2 . 6
@@ -98,21 +101,54 @@ int unit_walktoxy_sub(struct block_list *bl)
 
 	memcpy(&ud->walkpath,&wpd,sizeof(wpd));
 
-	if (ud->target_to && ud->chaserange>1) {
-		// Generally speaking, the walk path is already to an adjacent tile
-		// so we only need to shorten the path if the range is greater than 1.
-		// Trim the last part of the path to account for range,
-		// but always move at least one cell when requested to move.
-		for (i = (ud->chaserange*10)-10; i > 0 && ud->walkpath.path_len>1;) {
-			ud->walkpath.path_len--;
-			enum directions dir = ud->walkpath.path[ud->walkpath.path_len];
-			if( direction_diagonal( dir ) )
-				i -= MOVE_COST*20; //When chasing, units will target a diamond-shaped area in range [Playtester]
-			else
-				i -= MOVE_COST;
-			ud->to_x -= dirx[dir];
-			ud->to_y -= diry[dir];
+	// [GonBee]
+	// 斜めのコストが正しく機能するように修正。
+	// 目標地点に視線が通らなければ打ち切る。
+	//if (ud->target_to && ud->chaserange>1) {
+	//	// Generally speaking, the walk path is already to an adjacent tile
+	//	// so we only need to shorten the path if the range is greater than 1.
+	//	// Trim the last part of the path to account for range,
+	//	// but always move at least one cell when requested to move.
+	//	for (i = (ud->chaserange*10)-10; i > 0 && ud->walkpath.path_len>1;) {
+	//		ud->walkpath.path_len--;
+	//		enum directions dir = ud->walkpath.path[ud->walkpath.path_len];
+	//		if( direction_diagonal( dir ) )
+	//			i -= MOVE_COST*20; //When chasing, units will target a diamond-shaped area in range [Playtester]
+	//		else
+	//			i -= MOVE_COST;
+	//		ud->to_x -= dirx[dir];
+	//		ud->to_y -= diry[dir];
+	//	}
+	//}
+	if (ud->target_to &&
+		ud->chaserange >= 1 &&
+		ud->walkpath.path_len > 1
+	) {
+		int cli_ran = ud->chaserange * ud->chaserange + 1;
+		int sho_x = ud->to_x;
+		int sho_y = ud->to_y;
+		int sho_len = ud->walkpath.path_len;
+		int x = sho_x;
+		int y = sho_y;
+		for (int len = ud->walkpath.path_len - 1; len > 0; --len) {
+			directions dir = ud->walkpath.path[len];
+			x -= dirx[dir];
+			y -= diry[dir];
+			if ((bl->type == BL_PC &&
+					distance_client_xy(x, y, ud->to_x, ud->to_y) > cli_ran
+				) || (bl->type != BL_PC &&
+					!check_distance_xy(x, y, ud->to_x, ud->to_y, ud->chaserange)
+				)
+			) break;
+			if (path_search_long(NULL, bl->m, x, y, ud->to_x, ud->to_y, CELL_CHKWALL)) {
+				sho_x = x;
+				sho_y = y;
+				sho_len = len;
+			}
 		}
+		ud->to_x = sho_x;
+		ud->to_y = sho_y;
+		ud->walkpath.path_len = sho_len;
 	}
 
 	ud->state.change_walk_target=0;
@@ -768,9 +804,15 @@ int unit_walktobl(struct block_list *bl, struct block_list *tbl, int range, unsi
 		ud->to_x = bl->x;
 		ud->to_y = bl->y;
 		ud->target_to = 0;
-
+	
 		return 0;
-	} else if (range == 0) {
+
+	// [GonBee]
+	// ud->to_xとud->to_yをtblよりrangeだけ手前にする処理は、
+	// unit_can_reach_blではなくunit_walktoxy_subで行う。
+	//} else if (range == 0) {
+	} else {
+
 		//Should walk on the same cell as target (for looters)
 		ud->to_x = tbl->x;
 		ud->to_y = tbl->y;
@@ -1215,6 +1257,17 @@ int unit_warp(struct block_list *bl,short m,short x,short y,clr_type type)
 	}
 
 	if (x < 0 || y < 0) { // Random map position.
+
+		// [GonBee]
+		// PCなら現在のマップの初期位置に移動する。
+		map_session_data* sd = BL_CAST(BL_PC, bl);
+		if (sd) {
+			block_list* pos = pybot::get_map_initial_position(sd);
+			x = pos->x;
+			y = pos->y;
+		}
+		else
+
 		if (!map_search_freecell(NULL, m, &x, &y, -1, -1, 1)) {
 			ShowWarning("unit_warp failed. Unit Id:%d/Type:%d, target position map %d (%s) at [%d,%d]\n", bl->id, bl->type, m, map[m].name, x, y);
 			return 2;
@@ -2561,7 +2614,11 @@ static int unit_attack_timer_sub(struct block_list* src, int tid, t_tick tick)
 	}
 
 	if( ud->skilltimer != INVALID_TIMER && !(sd && pc_checkskill(sd,SA_FREECAST) > 0) )
-		return 0; // Can't attack while casting
+
+		// [GonBee]
+		// モンスターは詠唱中でもターゲットをアンロックしない。
+		//return 0; // Can't attack while casting
+		return md ? 1 : 0;
 
 	if( !battle_config.sdelay_attack_enable && DIFF_TICK(ud->canact_tick,tick) > 0 && !(sd && pc_checkskill(sd,SA_FREECAST) > 0) ) {
 		// Attacking when under cast delay has restrictions:
@@ -2569,7 +2626,11 @@ static int unit_attack_timer_sub(struct block_list* src, int tid, t_tick tick)
 			if(sd)
 				clif_skill_fail(sd,1,USESKILL_FAIL_SKILLINTERVAL,0);
 
-			return 0;
+			// [GonBee]
+			// モンスターはディレイ中でもターゲットをアンロックしない。
+			//return 0;
+			return md ? 1 : 0;
+
 		}
 
 		// Otherwise, we are in a combo-attack, delay this until your canact time is over. [Skotlex]

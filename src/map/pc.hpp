@@ -1207,6 +1207,9 @@ bool pc_can_attack(struct map_session_data *sd, int target_id);
 int pc_jobid2mapid(unsigned short b_class);	// Skotlex
 int pc_mapid2jobid(unsigned short class_, int sex);	// Skotlex
 
+// [GonBee]
+int pc_jobid2sex(int job);
+
 const char * job_name(int class_);
 
 struct skill_tree_entry {
@@ -1330,5 +1333,9 @@ int pc_level_penalty_mod(int level_diff, uint32 mob_class, enum e_mode mode, int
 bool pc_attendance_enabled();
 int32 pc_attendance_counter( struct map_session_data* sd );
 void pc_attendance_claim_reward( struct map_session_data* sd );
+
+// [GonBee]
+int pc_getstat(struct map_session_data* sd, int type);
+bool pc_isUseitem(struct map_session_data *sd,int n);
 
 #endif /* PC_HPP */

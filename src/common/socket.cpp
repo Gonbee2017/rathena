@@ -211,6 +211,9 @@ char* sErr(int code)
 #endif
 /////////////////////////////////////////////////////////////////////
 
+// [GonBee]
+static int pybot_bot_send(int fd); // BOT用の送信ハンドラ。
+
 #ifndef MSG_NOSIGNAL
 	#define MSG_NOSIGNAL 0
 #endif
@@ -1007,6 +1010,13 @@ int do_sockets(t_tick next)
 		if(!session[i])
 			continue;
 
+		// [GonBee]
+		// BOTの受信は処理しない。
+		if (!sock_arr[i]) {
+			session[i]->rdata_size = session[i]->rdata_pos = 0;
+			continue;
+		}
+
 		if (session[i]->rdata_tick && DIFF_TICK(last_tick, session[i]->rdata_tick) > stall_time) {
 			if( session[i]->flag.server ) {/* server is special */
 				if( session[i]->flag.ping != 2 )/* only update if necessary otherwise it'd resend the ping unnecessarily */
@@ -1420,6 +1430,13 @@ void do_close(int fd)
 	if( fd <= 0 ||fd >= FD_SETSIZE )
 		return;// invalid
 
+	// [GonBee]
+	// BOTはソケットを閉じない。
+	if (!sock_arr[fd]) {
+		delete_session(fd);
+		return;
+	}
+
 	flush_fifo(fd); // Try to send what's left (although it might not succeed since it's a nonblocking socket)
 
 #ifndef SOCKET_EPOLL
@@ -1735,3 +1752,38 @@ void send_shortlist_do_sends()
 	}
 }
 #endif
+
+// [GonBee]
+// BOT用の接続。
+int pybot_connect_bot() {
+	// 空いているFDを探す。
+	int fd;
+	for (fd = 1; fd < sock_arr_len; ++fd) {
+		if (sock_arr[fd] == INVALID_SOCKET) break;
+	}
+
+	// 空きがない。
+	if (fd == ARRAYLENGTH(sock_arr)) {
+		WSASetLastError(WSAEMFILE);
+		return -1;
+	}
+
+	// BOTのソケットは0にする。
+	sock_arr[fd] = 0;
+	if (sock_arr_len <= fd)
+		sock_arr_len = fd + 1;
+	if (fd_max <= fd)
+		fd_max = fd + 1;
+
+	// ソケットデータを作成。
+	// 送受信ハンドラにはダミーを設定。
+	create_session(fd, null_recv, pybot_bot_send, null_parse);
+	return fd;
+}
+
+// [GonBee]
+// BOT用のダミー送信ハンドラ。
+int pybot_bot_send(int fd) {
+	session[fd]->wdata_size = 0;
+	return 0;
+}

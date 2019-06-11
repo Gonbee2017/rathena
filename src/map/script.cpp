@@ -61,6 +61,11 @@
 #include "quest.hpp"
 #include "storage.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+#include <sstream>
+#include <ctime>
+
 struct eri *array_ers;
 DBMap *st_db;
 unsigned int active_scripts;
@@ -183,6 +188,28 @@ static bool script_rid2bl_(struct script_state *st, uint8 loc, struct block_list
 #define script_mapid2sd(loc,sd) script_mapid2sd_(st,(loc),&(sd),__FUNCTION__)
 #define script_rid2sd(sd) script_rid2sd_(st,&(sd),__FUNCTION__)
 #define script_rid2bl(loc,bl) script_rid2bl_(st,(loc),&(bl),__FUNCTION__)
+
+// [GonBee]
+// マップ名からマップIDを取得する。
+// thisを考慮する。
+static int // 取得したマップID。
+script_mapname2mapid(
+	script_state* st,   // スクリプト状態。
+	const char* mapname // マップ名。
+) {
+	int m = -1;
+	if (!std::strcmp(mapname, "this")) {
+		npc_data* nd = map_id2nd(st->oid);
+		if(nd &&
+			nd->bl.id != fake_nd->bl.id
+		) m = nd->bl.m;
+		else {
+			map_session_data* sd;
+			if (script_rid2sd(sd)) m = sd->bl.m;
+		}
+	} else m = map_mapname2mapid(mapname);
+	return m;
+}
 
 /// temporary buffer for passing around compiled bytecode
 /// @see add_scriptb, set_label, parse_script
@@ -3790,19 +3817,49 @@ void op_2(struct script_state *st, int op)
 	get_val(st, left);
 	get_val(st, right);
 
-	// automatic conversions
-	switch( op )
-	{
-		case C_ADD:
-			if( data_isint(left) && data_isstring(right) )
-			{// convert int-string to string-string
-				conv_str(st, left);
-			}
-			else if( data_isstring(left) && data_isint(right) )
-			{// convert string-int to string-string
-				conv_str(st, right);
-			}
-			break;
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、
+	// 数値オペランドと文字列オペランドを二項演算できるようにする。
+	// 文字列オペランドの書式が数値なら、文字列オペランドを数値型に変換する。
+	// そうではないなら、数値オペランドを文字列型に変換する。
+	// 2つのオペランドの型を合わせたあとで二項演算を行う。
+	//// automatic conversions
+	//switch( op )
+	//{
+	//	case C_ADD:
+	//		if( data_isint(left) && data_isstring(right) )
+	//		{// convert int-string to string-string
+	//			conv_str(st, left);
+	//		}
+	//		else if( data_isstring(left) && data_isint(right) )
+	//		{// convert string-int to string-string
+	//			conv_str(st, right);
+	//		}
+	//		break;
+	//}
+	if ((data_isint(left) &&
+			data_isstring(right)
+		) || (data_isstring(left) &&
+			data_isint(right)
+		)
+	) {
+		script_data* num_dat, * str_dat;
+		if (data_isint(left)) {
+			num_dat = left;
+			str_dat = right;
+		} else {
+			num_dat = right;
+			str_dat = left;
+		}
+		bool is_num = false;
+		try {
+			std::string str(str_dat->u.str);
+			std::string::size_type pos;
+			std::stoi(str, &pos);
+			is_num = pos == str.length();
+		} catch (...) {}
+		if (is_num) conv_num(st, str_dat);
+		else conv_str(st, num_dat);
 	}
 
 	if( data_isstring(left) && data_isstring(right) )
@@ -5427,6 +5484,26 @@ BUILDIN_FUNC(warp)
 	const char* str;
 	struct map_session_data* sd;
 
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、
+	// モンスターをワープできるようにする。
+	block_list* bl = map_id2bl(st->rid);
+	if (bl &&
+		bl->type == BL_MOB
+	) {
+		int m = -1;
+		int x2 = -1;
+		int y2 = -1;
+		const char* str2 = script_getstr(st, 2);
+		if (strcmp(str2, "Random")) {
+			m = map_mapindex2mapid(mapindex_name2id(str2));
+			x2 = script_getnum(st, 3);
+			y2 = script_getnum(st, 4);
+		}
+		unit_warp(bl, m, x2, y2, CLR_TELEPORT);
+		return SCRIPT_CMD_SUCCESS;
+	}
+
 	if(!script_charid2sd(5, sd))
 		return SCRIPT_CMD_SUCCESS;
 
@@ -5515,8 +5592,11 @@ BUILDIN_FUNC(areawarp)
 		}
 	}
 
-	if( (m = map_mapname2mapid(mapname)) < 0 )
-		return SCRIPT_CMD_FAILURE;
+	// [GonBee]
+	//if( (m = map_mapname2mapid(mapname)) < 0 )
+	//	return SCRIPT_CMD_FAILURE;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_FAILURE;
 
 	if( strcmp(str,"Random") == 0 )
 		index = 0;
@@ -5553,8 +5633,11 @@ BUILDIN_FUNC(areapercentheal)
 	hp=script_getnum(st,7);
 	sp=script_getnum(st,8);
 
-	if( (m=map_mapname2mapid(mapname))< 0)
-		return SCRIPT_CMD_FAILURE;
+	// [GonBee]
+	//if( (m=map_mapname2mapid(mapname))< 0)
+	//	return SCRIPT_CMD_FAILURE;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_FAILURE;
 
 	map_foreachinallarea(buildin_areapercentheal_sub,m,x0,y0,x1,y1,BL_PC,hp,sp);
 	return SCRIPT_CMD_SUCCESS;
@@ -7581,13 +7664,15 @@ BUILDIN_FUNC(makeitem) {
 	x = script_getnum(st,5);
 	y = script_getnum(st,6);
 
-	if(strcmp(mapname,"this")==0) {
-		TBL_PC *sd;
-		if (!script_rid2sd(sd))
-			return SCRIPT_CMD_SUCCESS; //Failed...
-		m = sd->bl.m;
-	} else
-		m = map_mapname2mapid(mapname);
+	// [GonBee]
+	//if(strcmp(mapname,"this")==0) {
+	//	TBL_PC *sd;
+	//	if (!script_rid2sd(sd))
+	//		return SCRIPT_CMD_SUCCESS; //Failed...
+	//	m = sd->bl.m;
+	//} else
+	//	m = map_mapname2mapid(mapname);
+	m = script_mapname2mapid(st, mapname);
 
 	if(nameid<0) {
 		nameid = -nameid;
@@ -7641,14 +7726,16 @@ BUILDIN_FUNC(makeitem2) {
 	x = script_getnum(st,5);
 	y = script_getnum(st,6);
 
-	if (strcmp(mapname,"this")==0) {
-		TBL_PC *sd;
-		if (!script_rid2sd(sd))
-			return SCRIPT_CMD_SUCCESS; //Failed...
-		m = sd->bl.m;
-	}
-	else
-		m = map_mapname2mapid(mapname);
+	// [GonBee]
+	//if (strcmp(mapname,"this")==0) {
+	//	TBL_PC *sd;
+	//	if (!script_rid2sd(sd))
+	//		return SCRIPT_CMD_SUCCESS; //Failed...
+	//	m = sd->bl.m;
+	//}
+	//else
+	//	m = map_mapname2mapid(mapname);
+	m = script_mapname2mapid(st, mapname);
 	
 	if ((id = itemdb_search(nameid))) {
 		char iden, ref, attr;
@@ -7996,11 +8083,16 @@ BUILDIN_FUNC(delitem)
 		return SCRIPT_CMD_SUCCESS;
 	}
 
-	ShowError("buildin_%s: failed to delete %d items (AID=%d item_id=%hu).\n", command, it.amount, sd->status.account_id, it.nameid);
-	st->state = END;
-	st->mes_active = 0;
-	clif_scriptclose(sd, st->oid);
-	return SCRIPT_CMD_FAILURE;
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、
+	// 削除できなくてもスクリプトの実行を継続する。
+	//ShowError("buildin_%s: failed to delete %d items (AID=%d item_id=%hu).\n", command, it.amount, sd->status.account_id, it.nameid);
+	//st->state = END;
+	//st->mes_active = 0;
+	//clif_scriptclose(sd, st->oid);
+	//return SCRIPT_CMD_FAILURE;
+	return SCRIPT_CMD_SUCCESS;
+
 }
 
 /// Deletes items from the target/attached player.
@@ -10212,7 +10304,15 @@ BUILDIN_FUNC(monster)
 	int x				= script_getnum(st,3);
 	int y				= script_getnum(st,4);
 	const char* str		= script_getstr(st,5);
-	int class_			= script_getnum(st,6);
+
+	// [GonBee]
+	// モンスターIDにモンスター名を指定できるように変更。
+	//int class_			= script_getnum(st,6);
+	int class_;
+	if (script_isstring(st, 6))
+		class_ = mobdb_searchname(script_getstr(st, 6));
+	else class_ = script_getnum(st, 6);
+
 	int amount			= script_getnum(st,7);
 	const char* event	= "";
 	unsigned int size	= SZ_SMALL;
@@ -10250,10 +10350,12 @@ BUILDIN_FUNC(monster)
 
 	sd = map_id2sd(st->rid);
 
-	if (sd && strcmp(mapn, "this") == 0)
-		m = sd->bl.m;
-	else
-		m = map_mapname2mapid(mapn);
+	// [GonBee]
+	//if (sd && strcmp(mapn, "this") == 0)
+	//	m = sd->bl.m;
+	//else
+	//	m = map_mapname2mapid(mapn);
+	m = script_mapname2mapid(st, mapn);
 
 	for(i = 0; i < amount; i++) { //not optimised
 		int mobid = mob_once_spawn(sd, m, x, y, str, class_, 1, event, size, ai);
@@ -10346,10 +10448,12 @@ BUILDIN_FUNC(areamonster)
 
 	sd = map_id2sd(st->rid);
 
-	if (sd && strcmp(mapn, "this") == 0)
-		m = sd->bl.m;
-	else
-		m = map_mapname2mapid(mapn);
+	// [GonBee]
+	//if (sd && strcmp(mapn, "this") == 0)
+	//	m = sd->bl.m;
+	//else
+	//	m = map_mapname2mapid(mapn);
+	m = script_mapname2mapid(st, mapn);
 
 	for(i = 0; i < amount; i++) { //not optimised
 		int mobid = mob_once_spawn_area(sd, m, x0, y0, x1, y1, str, class_, 1, event, size, ai);
@@ -10410,8 +10514,11 @@ BUILDIN_FUNC(killmonster)
 	else
 		check_event(st, event);
 
-	if( (m=map_mapname2mapid(mapname))<0 )
-		return SCRIPT_CMD_SUCCESS;
+	// [GonBee]
+	//if( (m=map_mapname2mapid(mapname))<0 )
+	//	return SCRIPT_CMD_SUCCESS;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_SUCCESS;
 
 	if( script_hasdata(st,4) ) {
 		if ( script_getnum(st,4) == 1 ) {
@@ -10448,8 +10555,11 @@ BUILDIN_FUNC(killmonsterall)
 	int16 m;
 	mapname=script_getstr(st,2);
 
-	if( (m = map_mapname2mapid(mapname))<0 )
-		return SCRIPT_CMD_SUCCESS;
+	// [GonBee]
+	//if( (m = map_mapname2mapid(mapname))<0 )
+	//	return SCRIPT_CMD_SUCCESS;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_SUCCESS;
 
 	if( script_hasdata(st,3) ) {
 		if ( script_getnum(st,3) == 1 ) {
@@ -10496,7 +10606,10 @@ BUILDIN_FUNC(clone)
 
 	check_event(st, event);
 
-	m = map_mapname2mapid(mapname);
+	// [GonBee]
+	//m = map_mapname2mapid(mapname);
+	m = script_mapname2mapid(st, mapname);
+
 	if (m < 0)
 		return SCRIPT_CMD_SUCCESS;
 
@@ -10985,8 +11098,11 @@ BUILDIN_FUNC(mapannounce)
 	int         fontY     = script_hasdata(st,9) ? script_getnum(st,9) : 0;     // default fontY
 	int16 m;
 
-	if ((m = map_mapname2mapid(mapname)) < 0)
-		return SCRIPT_CMD_SUCCESS;
+	// [GonBee]
+	//if ((m = map_mapname2mapid(mapname)) < 0)
+	//	return SCRIPT_CMD_SUCCESS;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_SUCCESS;
 
 	map_foreachinmap(buildin_announce_sub, m, BL_PC,
 			mes, strlen(mes)+1, flag&BC_COLOR_MASK, fontColor, fontType, fontSize, fontAlign, fontY);
@@ -11011,8 +11127,11 @@ BUILDIN_FUNC(areaannounce)
 	int         fontY     = script_hasdata(st,13) ? script_getnum(st,13) : 0;     // default fontY
 	int16 m;
 
-	if ((m = map_mapname2mapid(mapname)) < 0)
-		return SCRIPT_CMD_SUCCESS;
+	// [GonBee]
+	//if ((m = map_mapname2mapid(mapname)) < 0)
+	//	return SCRIPT_CMD_SUCCESS;
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) return SCRIPT_CMD_SUCCESS;
 
 	map_foreachinallarea(buildin_announce_sub, m, x0, y0, x1, y1, BL_PC,
 		mes, strlen(mes)+1, flag&BC_COLOR_MASK, fontColor, fontType, fontSize, fontAlign, fontY);
@@ -11071,10 +11190,16 @@ BUILDIN_FUNC(getmapguildusers)
 	struct guild *g = NULL;
 	str=script_getstr(st,2);
 	gid=script_getnum(st,3);
-	if ((m = map_mapname2mapid(str)) < 0) { // map id on this server (m == -1 if not in actual map-server)
+
+	// [GonBee]
+	//if ((m = map_mapname2mapid(str)) < 0) { // map id on this server (m == -1 if not in actual map-server)
+	m = script_mapname2mapid(st, str);
+	if (m < 0) {
+
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
+
 	g = guild_search(gid);
 
 	if (g){
@@ -11097,7 +11222,12 @@ BUILDIN_FUNC(getmapusers)
 	const char *str;
 	int16 m;
 	str=script_getstr(st,2);
-	if( (m=map_mapname2mapid(str))< 0){
+
+	// [GonBee]
+	//if( (m=map_mapname2mapid(str))< 0){
+	m = script_mapname2mapid(st, str);
+	if (m < 0) {
+
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
@@ -11122,7 +11252,12 @@ BUILDIN_FUNC(getareausers)
 	y0=script_getnum(st,4);
 	x1=script_getnum(st,5);
 	y1=script_getnum(st,6);
-	if( (m=map_mapname2mapid(str))< 0){
+
+	// [GonBee]
+	//if( (m=map_mapname2mapid(str))< 0){
+	m = script_mapname2mapid(st, str);
+	if (m < 0) {
+
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
@@ -11154,7 +11289,12 @@ BUILDIN_FUNC(getunits)
 	if (!strcmp(command, "getmapunits"))
 	{
 		str = script_getstr(st, 3);
-		if ((m = map_mapname2mapid(str)) < 0) {
+
+		// [GonBee]
+		//if ((m = map_mapname2mapid(str)) < 0) {
+		m = script_mapname2mapid(st, str);
+		if (m < 0) {
+
 			script_pushint(st, -1);
 			st->state = END;
 			ShowWarning("buildin_%s: Unknown map '%s'.\n", command, str);
@@ -11166,7 +11306,12 @@ BUILDIN_FUNC(getunits)
 	else if (!strcmp(command, "getareaunits"))
 	{
 		str = script_getstr(st, 3);
-		if ((m = map_mapname2mapid(str)) < 0) {
+
+		// [GonBee]
+		//if ((m = map_mapname2mapid(str)) < 0) {
+		m = script_mapname2mapid(st, str);
+		if (m < 0) {
+
 			script_pushint(st, -1);
 			st->state = END;
 			ShowWarning("buildin_%s: Unknown map '%s'.\n", command, str);
@@ -11253,7 +11398,11 @@ BUILDIN_FUNC(getareadropitem)
 	}else
 		nameid=conv_num(st,data);
 
-	if( (m=map_mapname2mapid(str))< 0){
+	// [GonBee]
+	//if( (m=map_mapname2mapid(str))< 0){
+	m = script_mapname2mapid(st, str);
+	if (m < 0) {
+
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
@@ -11268,7 +11417,17 @@ BUILDIN_FUNC(getareadropitem)
 BUILDIN_FUNC(enablenpc)
 {
 	const char *str;
-	str=script_getstr(st,2);
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を省略できるようにする。
+	//str=script_getstr(st,2);
+	if (script_hasdata(st, 2)) str = script_getstr(st, 2);
+	else {
+		npc_data* nd = map_id2nd(st->oid);
+		if (!nd) return SCRIPT_CMD_SUCCESS;
+		str = nd->exname;
+	}
+
 	npc_enable(str,1);
 	return SCRIPT_CMD_SUCCESS;
 }
@@ -11278,7 +11437,17 @@ BUILDIN_FUNC(enablenpc)
 BUILDIN_FUNC(disablenpc)
 {
 	const char *str;
-	str=script_getstr(st,2);
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を省略できるようにする。
+	//str=script_getstr(st,2);
+	if (script_hasdata(st, 2)) str = script_getstr(st, 2);
+	else {
+		npc_data* nd = map_id2nd(st->oid);
+		if (!nd) return SCRIPT_CMD_SUCCESS;
+		str = nd->exname;
+	}
+
 	npc_enable(str,0);
 	return SCRIPT_CMD_SUCCESS;
 }
@@ -11288,7 +11457,17 @@ BUILDIN_FUNC(disablenpc)
 BUILDIN_FUNC(hideoffnpc)
 {
 	const char *str;
-	str=script_getstr(st,2);
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を省略できるようにする。
+	//str=script_getstr(st,2);
+	if (script_hasdata(st, 2)) str = script_getstr(st, 2);
+	else {
+		npc_data* nd = map_id2nd(st->oid);
+		if (!nd) return SCRIPT_CMD_SUCCESS;
+		str = nd->exname;
+	}
+
 	npc_enable(str,2);
 	return SCRIPT_CMD_SUCCESS;
 }
@@ -11297,7 +11476,17 @@ BUILDIN_FUNC(hideoffnpc)
 BUILDIN_FUNC(hideonnpc)
 {
 	const char *str;
-	str=script_getstr(st,2);
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を省略できるようにする。
+	//str=script_getstr(st,2);
+	if (script_hasdata(st, 2)) str = script_getstr(st, 2);
+	else {
+		npc_data* nd = map_id2nd(st->oid);
+		if (!nd) return SCRIPT_CMD_SUCCESS;
+		str = nd->exname;
+	}
+
 	npc_enable(str,4);
 	return SCRIPT_CMD_SUCCESS;
 }
@@ -12300,11 +12489,19 @@ BUILDIN_FUNC(addrid)
 				script_pushint(st, 0);
 				return SCRIPT_CMD_FAILURE;
 			}
-			if (map_mapname2mapid(script_getstr(st, 4)) < 0) {
+
+			// [GonBee]
+			//if (map_mapname2mapid(script_getstr(st, 4)) < 0) {
+			if (script_mapname2mapid(st, script_getstr(st, 4)) < 0) {
+
 				script_pushint(st, 0);
 				return SCRIPT_CMD_FAILURE;
 			}
-			map_foreachinmap(buildin_addrid_sub, map_mapname2mapid(script_getstr(st, 4)), BL_PC, st, script_getnum(st, 3));
+
+			// [GonBee]
+			//map_foreachinmap(buildin_addrid_sub, map_mapname2mapid(script_getstr(st, 4)), BL_PC, st, script_getnum(st, 3));
+			map_foreachinmap(buildin_addrid_sub, script_mapname2mapid(st, script_getstr(st, 4)), BL_PC, st, script_getnum(st, 3));
+
 			break;
 		default:
 			if((map_id2sd(script_getnum(st,2))) == NULL) { // Player not found.
@@ -12337,7 +12534,6 @@ BUILDIN_FUNC(attachrid)
 	}
 
 	struct map_session_data* sd = map_id2sd(rid);
-
 	if( sd != NULL && ( !sd->npc_id || force ) ){
 		script_detach_rid(st);
 
@@ -12386,7 +12582,11 @@ BUILDIN_FUNC(setmapflagnosave)
 	str2=script_getstr(st,3);
 	x=script_getnum(st,4);
 	y=script_getnum(st,5);
-	m = map_mapname2mapid(str);
+
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
+
 	mapindex = mapindex_name2id(str2);
 
 	if(m < 0) {
@@ -12410,7 +12610,10 @@ BUILDIN_FUNC(getmapflag)
 
 	str=script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
+
 	if (m < 0) {
 		ShowWarning("buildin_getmapflag: Invalid map name %s.\n", str);
 		return SCRIPT_CMD_FAILURE;
@@ -12443,7 +12646,10 @@ BUILDIN_FUNC(setmapflag)
 
 	str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
+
 	if (m < 0) {
 		ShowWarning("buildin_setmapflag: Invalid map name %s.\n", str);
 		return SCRIPT_CMD_FAILURE;
@@ -12509,7 +12715,10 @@ BUILDIN_FUNC(removemapflag)
 	union u_mapflag_args args = {};
 
 	str = script_getstr(st, 2);
-	m = map_mapname2mapid(str);
+
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0) {
 		ShowWarning("buildin_removemapflag: Invalid map name %s.\n", str);
@@ -12535,7 +12744,9 @@ BUILDIN_FUNC(pvpon)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0 || map_getmapflag(m, MF_PVP))
 		return SCRIPT_CMD_FAILURE;
@@ -12550,7 +12761,9 @@ BUILDIN_FUNC(pvpoff)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if(m < 0 || !map_getmapflag(m, MF_PVP))
 		return SCRIPT_CMD_FAILURE;
@@ -12565,7 +12778,9 @@ BUILDIN_FUNC(gvgon)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0 || map_getmapflag(m, MF_GVG))
 		return SCRIPT_CMD_FAILURE;
@@ -12580,7 +12795,9 @@ BUILDIN_FUNC(gvgoff)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0 || !map_getmapflag(m, MF_GVG))
 		return SCRIPT_CMD_FAILURE;
@@ -12594,7 +12811,9 @@ BUILDIN_FUNC(gvgon3)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0 || map_getmapflag(m, MF_GVG_TE))
 		return SCRIPT_CMD_FAILURE;
@@ -12609,7 +12828,9 @@ BUILDIN_FUNC(gvgoff3)
 	int16 m;
 	const char *str = script_getstr(st,2);
 
-	m = map_mapname2mapid(str);
+	// [GonBee]
+	//m = map_mapname2mapid(str);
+	m = script_mapname2mapid(st, str);
 
 	if (m < 0 || !map_getmapflag(m, MF_GVG_TE))
 		return SCRIPT_CMD_FAILURE;
@@ -12633,10 +12854,23 @@ BUILDIN_FUNC(emotion)
 		return SCRIPT_CMD_FAILURE;
 	}
 
-	if (script_hasdata(st, 3) && !script_rid2bl(3, bl)) {
-		ShowWarning("buildin_emotion: Unknown game ID supplied %d.\n", script_getnum(st, 3));
-		return SCRIPT_CMD_FAILURE;
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のため、第二引数が文字列の場合はNPC名とする。
+	//if (script_hasdata(st, 3) && !script_rid2bl(3, bl)) {
+	//	ShowWarning("buildin_emotion: Unknown game ID supplied %d.\n", script_getnum(st, 3));
+	//	return SCRIPT_CMD_FAILURE;
+	//}
+	if (script_hasdata(st, 3)) {
+		script_data* tar = script_getdata(st, 3);
+		if (data_isstring(tar)) {
+			npc_data* nd = npc_name2id(conv_str(st, tar));
+			if (nd) bl = &nd->bl;
+		} else if (!script_rid2bl(3, bl)) {
+			ShowWarning("buildin_emotion: Unknown game ID supplied %d.\n", script_getnum(st, 3));
+			return SCRIPT_CMD_FAILURE;
+		}
 	}
+
 	if (!bl)
 		bl = map_id2bl(st->oid);
 
@@ -12686,7 +12920,9 @@ BUILDIN_FUNC(maprespawnguildid)
 	int g_id=script_getnum(st,3);
 	int flag=script_getnum(st,4);
 
-	int16 m=map_mapname2mapid(mapname);
+	// [GonBee]
+	//int16 m=map_mapname2mapid(mapname);
+	int16 m = script_mapname2mapid(st, mapname);
 
 	if(m == -1)
 		return SCRIPT_CMD_SUCCESS;
@@ -13130,7 +13366,11 @@ BUILDIN_FUNC(mapwarp)	// Added by RoVeRT
 		check_ID=script_getnum(st,7);
 	}
 
-	if((m=map_mapname2mapid(mapname))< 0)
+	// [GonBee]
+	//if((m=map_mapname2mapid(mapname))< 0)
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0)
+
 		return SCRIPT_CMD_SUCCESS;
 
 	if(!(index=mapindex_name2id(str)))
@@ -13186,16 +13426,22 @@ BUILDIN_FUNC(mobcount)	// Added by RoVeRT
 	else
 		check_event(st, event);
 
-	if( strcmp(mapname, "this") == 0 ) {
-		struct map_session_data *sd;
-		if( script_rid2sd(sd) )
-			m = sd->bl.m;
-		else {
-			script_pushint(st,-1);
-			return SCRIPT_CMD_SUCCESS;
-		}
-	}
-	else if( (m = map_mapname2mapid(mapname)) < 0 ) {
+	// [GonBee]
+	//if( strcmp(mapname, "this") == 0 ) {
+	//	struct map_session_data *sd;
+	//	if( script_rid2sd(sd) )
+	//		m = sd->bl.m;
+	//	else {
+	//		script_pushint(st,-1);
+	//		return SCRIPT_CMD_SUCCESS;
+	//	}
+	//}
+	//else if( (m = map_mapname2mapid(mapname)) < 0 ) {
+	//	script_pushint(st,-1);
+	//	return SCRIPT_CMD_SUCCESS;
+	//}
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0) {
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
@@ -13447,7 +13693,11 @@ BUILDIN_FUNC(setwall)
 	shootable = script_getnum(st,7) != 0;
 	name = script_getstr(st,8);
 
-	if( (m = map_mapname2mapid(mapname)) < 0 )
+	// [GonBee]
+	//if( (m = map_mapname2mapid(mapname)) < 0 )
+	m = script_mapname2mapid(st, mapname);
+	if (m < 0)
+
 		return SCRIPT_CMD_SUCCESS; // Invalid Map
 
 	map_iwall_set(m, x, y, size, dir, shootable, name);
@@ -13718,7 +13968,15 @@ BUILDIN_FUNC(petskillbonus)
 		pd->state.skillbonus = 0;	// waiting state
 
 	// wait for timer to start
-	if (battle_config.pet_equip_required && pd->pet.equip == 0)
+
+	// [GonBee]
+	// 装備可能なアクセサリーがあれば
+	//if (battle_config.pet_equip_required && pd->pet.equip == 0)
+	if (battle_config.pet_equip_required &&
+		pd->get_pet_db()->AcceID &&
+		pd->pet.equip == 0
+	)
+
 		pd->bonus->timer = INVALID_TIMER;
 	else
 		pd->bonus->timer = add_timer(gettick()+pd->bonus->delay*1000, pet_skill_bonus_timer, sd->bl.id, 0);
@@ -13945,9 +14203,20 @@ BUILDIN_FUNC(misceffect)
 		return SCRIPT_CMD_FAILURE;
 	}
 
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を引数に取る。
+	//if(st->oid && st->oid != fake_nd->bl.id) {
+	//	struct block_list *bl = map_id2bl(st->oid);
+	int id = st->oid;
+	if (script_hasdata(st, 3)) {
+		npc_data* nd = npc_name2id(script_getstr(st,3));
+		if (nd) id = nd->bl.id;
+	}
+	if(id &&
+		id != fake_nd->bl.id
+	) {
+		block_list* bl = map_id2bl(id);
 
-	if(st->oid && st->oid != fake_nd->bl.id) {
-		struct block_list *bl = map_id2bl(st->oid);
 		if (bl)
 			clif_specialeffect(bl,type,AREA);
 	} else{
@@ -13999,12 +14268,18 @@ BUILDIN_FUNC(playBGMall)
 		int x1 = script_getnum(st,6);
 		int y1 = script_getnum(st,7);
 
-		map_foreachinallarea(playBGM_sub, map_mapname2mapid(mapname), x0, y0, x1, y1, BL_PC, name);
+		// [GonBee]
+		//map_foreachinallarea(playBGM_sub, map_mapname2mapid(mapname), x0, y0, x1, y1, BL_PC, name);
+		map_foreachinallarea(playBGM_sub, script_mapname2mapid(st, mapname), x0, y0, x1, y1, BL_PC, name);
+
 	}
 	else if( script_hasdata(st,3) ) {// entire map
 		const char* mapname = script_getstr(st,3);
 
-		map_foreachinmap(playBGM_sub, map_mapname2mapid(mapname), BL_PC, name);
+		// [GonBee]
+		//map_foreachinmap(playBGM_sub, map_mapname2mapid(mapname), BL_PC, name);
+		map_foreachinmap(playBGM_sub, script_mapname2mapid(st, mapname), BL_PC, name);
+
 	}
 	else {// entire server
 		map_foreachpc(&playBGM_foreachpc_sub, name);
@@ -14023,7 +14298,13 @@ BUILDIN_FUNC(soundeffect)
 		const char* name = script_getstr(st,2);
 		int type = script_getnum(st,3);
 
-		clif_soundeffect(sd,&sd->bl,name,type);
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のために、間隔時間を指定できるようにする。
+		//clif_soundeffect(sd,&sd->bl,name,type);
+		int interval = 0;
+		if (script_hasdata(st, 4)) interval = script_getnum(st, 4);
+		clif_soundeffect(sd, &sd->bl, name, type, interval);
+
 	}
 	return SCRIPT_CMD_SUCCESS;
 }
@@ -14070,7 +14351,11 @@ BUILDIN_FUNC(soundeffectall)
 	if(!script_hasdata(st,5))
 	{	// entire map
 		const char* mapname = script_getstr(st,4);
-		map_foreachinmap(soundeffect_sub, map_mapname2mapid(mapname), BL_PC, name, type);
+
+		// [GonBee]
+		//map_foreachinmap(soundeffect_sub, map_mapname2mapid(mapname), BL_PC, name, type);
+		map_foreachinmap(soundeffect_sub, script_mapname2mapid(st, mapname), BL_PC, name, type);
+		
 	}
 	else
 	if(script_hasdata(st,8))
@@ -14080,7 +14365,11 @@ BUILDIN_FUNC(soundeffectall)
 		int y0 = script_getnum(st,6);
 		int x1 = script_getnum(st,7);
 		int y1 = script_getnum(st,8);
-		map_foreachinallarea(soundeffect_sub, map_mapname2mapid(mapname), x0, y0, x1, y1, BL_PC, name, type);
+
+		// [GonBee]
+		//map_foreachinallarea(soundeffect_sub, map_mapname2mapid(mapname), x0, y0, x1, y1, BL_PC, name, type);
+		map_foreachinallarea(soundeffect_sub, script_mapname2mapid(st, mapname), x0, y0, x1, y1, BL_PC, name, type);
+
 	}
 	else
 	{
@@ -14236,7 +14525,15 @@ BUILDIN_FUNC(petskillsupport)
 	pd->s_skill->sp = script_getnum(st,6);
 
 	//Use delay as initial offset to avoid skill/heal exploits
-	if (battle_config.pet_equip_required && pd->pet.equip == 0)
+
+	// [GonBee]
+	// 装備可能なアクセサリーがあれば
+	//if (battle_config.pet_equip_required && pd->pet.equip == 0)
+	if (battle_config.pet_equip_required &&
+		pd->get_pet_db()->AcceID &&
+		pd->pet.equip == 0
+	)
+
 		pd->s_skill->timer = INVALID_TIMER;
 	else
 		pd->s_skill->timer = add_timer(gettick()+pd->s_skill->delay*1000,pet_skill_support_timer,sd->bl.id,0);
@@ -14503,7 +14800,11 @@ BUILDIN_FUNC(recovery)
 			//When no party given, we use invoker party
 			int p_id = 0, i;
 			if(script_hasdata(st,5)) {//Bad maps shouldn't cause issues
-				map_idx = map_mapname2mapid(script_getstr(st,5));
+
+				// [GonBee]
+				//map_idx = map_mapname2mapid(script_getstr(st,5));
+				map_idx = script_mapname2mapid(st, script_getstr(st,5));
+
 				if(map_idx < 1) { //But we'll check anyways
 					ShowDebug("recovery: bad map name given (%s)\n", script_getstr(st,5));
 					return SCRIPT_CMD_FAILURE;
@@ -14531,7 +14832,11 @@ BUILDIN_FUNC(recovery)
 			//When no guild given, we use invoker guild
 			int g_id = 0, i;
 			if(script_hasdata(st,5)) {//Bad maps shouldn't cause issues
-				map_idx = map_mapname2mapid(script_getstr(st,5));
+
+				// [GonBee]
+				//map_idx = map_mapname2mapid(script_getstr(st,5));
+				map_idx = script_mapname2mapid(st, script_getstr(st,5));
+
 				if(map_idx < 1) { //But we'll check anyways
 					ShowDebug("recovery: bad map name given (%s)\n", script_getstr(st,5));
 					return SCRIPT_CMD_FAILURE;
@@ -14555,7 +14860,11 @@ BUILDIN_FUNC(recovery)
 		}
 		case 3:
 			if(script_hasdata(st,3))
-				map_idx = map_mapname2mapid(script_getstr(st,3));
+
+				// [GonBee]
+				//map_idx = map_mapname2mapid(script_getstr(st,3));
+				map_idx = script_mapname2mapid(st, script_getstr(st,3));
+
 			else if(script_rid2sd(sd))
 				map_idx = sd->bl.m;
 			if(map_idx < 1)
@@ -15071,14 +15380,21 @@ BUILDIN_FUNC(getmapxy)
 			script_pushint(st,-1);
 			return SCRIPT_CMD_FAILURE;
 	}
+
 	if (!bl) { //No object found.
 		script_pushint(st,-1);
 		return SCRIPT_CMD_SUCCESS;
 	}
 
+	// [GonBee]
+	if (bl->m >= 0) {
+
 	x= bl->x;
 	y= bl->y;
 	safestrncpy(mapname, map_getmapdata(bl->m)->name, MAP_NAME_LENGTH);
+
+	// [GonBee]
+	}
 
 	//Set MapName$
 	num=st->stack->stack_data[st->start+2].u.num;
@@ -15092,7 +15408,18 @@ BUILDIN_FUNC(getmapxy)
 		}
 	}else
 		sd=NULL;
+
+	// [GonBee]
+	if (bl->m >= 0) {
+
 	set_reg(st,sd,num,name,(void*)mapname,script_getref(st,2));
+
+	// [GonBee]
+	} else {
+		set_reg(st, sd, num, name, (void*)"-", script_getref(st,2));
+		script_pushint(st, 0);
+		return SCRIPT_CMD_SUCCESS;
+	}
 
 	//Set MapX
 	num=st->stack->stack_data[st->start+3].u.num;
@@ -17772,7 +18099,11 @@ BUILDIN_FUNC(setunitdata)
 			case UMOB_HP: status_set_hp(bl, (unsigned int)value, 0); clif_name_area(&md->bl); break;
 			case UMOB_MAXHP: status_set_hp(bl, (unsigned int)value, 0); status_set_maxhp(bl, (unsigned int)value, 0); clif_name_area(&md->bl); break;
 			case UMOB_MASTERAID: md->master_id = value; break;
+
+			// [GonBee]
 			case UMOB_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			//case UMOB_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
 			case UMOB_X: if (!unit_walktoxy(bl, (short)value, md->bl.y, 2)) unit_movepos(bl, (short)value, md->bl.y, 0, 0); break;
 			case UMOB_Y: if (!unit_walktoxy(bl, md->bl.x, (short)value, 2)) unit_movepos(bl, md->bl.x, (short)value, 0, 0); break;
 			case UMOB_SPEED: md->base_status->speed = (unsigned short)value; status_calc_misc(bl, &md->status, md->level); calc_status = true; break;
@@ -17858,7 +18189,11 @@ BUILDIN_FUNC(setunitdata)
 			case UHOM_SP: hd->base_status.sp = (unsigned int)value; status_set_sp(bl, (unsigned int)value, 0); break;
 			case UHOM_MAXSP: hd->base_status.max_sp = (unsigned int)value; status_set_maxsp(bl, (unsigned int)value, 0); break;
 			case UHOM_MASTERCID: hd->homunculus.char_id = (uint32)value; break;
-			case UHOM_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
+			// [GonBee]
+			//case UHOM_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			case UHOM_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
 			case UHOM_X: if (!unit_walktoxy(bl, (short)value, hd->bl.y, 2)) unit_movepos(bl, (short)value, hd->bl.y, 0, 0); break;
 			case UHOM_Y: if (!unit_walktoxy(bl, hd->bl.x, (short)value, 2)) unit_movepos(bl, hd->bl.x, (short)value, 0, 0); break;
 			case UHOM_HUNGER: hd->homunculus.hunger = (short)value; clif_send_homdata(map_charid2sd(hd->homunculus.char_id), SP_HUNGRY, hd->homunculus.hunger); break;
@@ -17918,7 +18253,11 @@ BUILDIN_FUNC(setunitdata)
 			case UPET_HP: status_set_hp(bl, (unsigned int)value, 0); break;
 			case UPET_MAXHP: status_set_hp(bl, (unsigned int)value, 0); status_set_maxhp(bl, (unsigned int)value, 0); break;
 			case UPET_MASTERAID: pd->pet.account_id = (unsigned int)value; break;
-			case UPET_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
+			// [GonBee]
+			//case UPET_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			case UPET_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+				
 			case UPET_X: if (!unit_walktoxy(bl, (short)value, pd->bl.y, 2)) unit_movepos(bl, (short)value, md->bl.y, 0, 0); break;
 			case UPET_Y: if (!unit_walktoxy(bl, pd->bl.x, (short)value, 2)) unit_movepos(bl, pd->bl.x, (short)value, 0, 0); break;
 			case UPET_HUNGER: pd->pet.hungry = (short)value; clif_send_petdata(map_id2sd(pd->pet.account_id), pd, 2, pd->pet.hungry); break;
@@ -17966,7 +18305,11 @@ BUILDIN_FUNC(setunitdata)
 			case UMER_HP: status_set_hp(bl, (unsigned int)value, 0); break;
 			case UMER_MAXHP: status_set_hp(bl, (unsigned int)value, 0); status_set_maxhp(bl, (unsigned int)value, 0); break;
 			case UMER_MASTERCID: mc->mercenary.char_id = (uint32)value; break;
-			case UMER_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
+			// [GonBee]
+			//case UMER_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			case UMER_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+				
 			case UMER_X: if (!unit_walktoxy(bl, (short)value, mc->bl.y, 2)) unit_movepos(bl, (short)value, mc->bl.y, 0, 0); break;
 			case UMER_Y: if (!unit_walktoxy(bl, mc->bl.x, (short)value, 2)) unit_movepos(bl, mc->bl.x, (short)value, 0, 0); break;
 			case UMER_KILLCOUNT: mc->mercenary.kill_count = (unsigned int)value; break;
@@ -18027,7 +18370,11 @@ BUILDIN_FUNC(setunitdata)
 			case UELE_SP: ed->base_status.sp = (unsigned int)value; status_set_sp(bl, (unsigned int)value, 0); break;
 			case UELE_MAXSP: ed->base_status.max_sp = (unsigned int)value; status_set_maxsp(bl, (unsigned int)value, 0); break;
 			case UELE_MASTERCID: ed->elemental.char_id = (uint32)value; break;
-			case UELE_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
+			// [GonBee]
+			//case UELE_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			case UELE_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
 			case UELE_X: if (!unit_walktoxy(bl, (short)value, ed->bl.y, 2)) unit_movepos(bl, (short)value, ed->bl.y, 0, 0); break;
 			case UELE_Y: if (!unit_walktoxy(bl, ed->bl.x, (short)value, 2)) unit_movepos(bl, ed->bl.x, (short)value, 0, 0); break;
 			case UELE_LIFETIME: ed->elemental.life_time = (unsigned int)value; break;
@@ -18087,7 +18434,11 @@ BUILDIN_FUNC(setunitdata)
 			case UNPC_LEVEL: nd->level = (unsigned int)value; break;
 			case UNPC_HP: status_set_hp(bl, (unsigned int)value, 0); break;
 			case UNPC_MAXHP: status_set_hp(bl, (unsigned int)value, 0); status_set_maxhp(bl, (unsigned int)value, 0); break;
-			case UNPC_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
+			// [GonBee]
+			//case UNPC_MAPID: if (mapname) value = map_mapname2mapid(mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+			case UNPC_MAPID: if (mapname) value = script_mapname2mapid(st, mapname); unit_warp(bl, (short)value, 0, 0, CLR_TELEPORT); break;
+
 			case UNPC_X: if (!unit_walktoxy(bl, (short)value, nd->bl.y, 2)) unit_movepos(bl, (short)value, nd->bl.x, 0, 0); break;
 			case UNPC_Y: if (!unit_walktoxy(bl, nd->bl.x, (short)value, 2)) unit_movepos(bl, nd->bl.x, (short)value, 0, 0); break;
 			case UNPC_LOOKDIR: unit_setdir(bl, (uint8)value); break;
@@ -18305,10 +18656,12 @@ BUILDIN_FUNC(unitwarp)
 		return SCRIPT_CMD_SUCCESS;
 	}
 
-	if (!strcmp(mapname,"this"))
-		map_idx = bl?bl->m:-1;
-	else
-		map_idx = map_mapname2mapid(mapname);
+	// [GonBee]
+	//if (!strcmp(mapname,"this"))
+	//	map_idx = bl?bl->m:-1;
+	//else
+	//	map_idx = map_mapname2mapid(mapname);
+	map_idx = script_mapname2mapid(st, mapname);
 
 	if (map_idx >= 0 && bl != NULL)
 		script_pushint(st, unit_warp(bl,map_idx,x,y,CLR_OUTSIGHT));
@@ -18660,16 +19013,25 @@ BUILDIN_FUNC(getvariableofnpc)
 	struct npc_data* nd;
 
 	data = script_getdata(st,2);
-	if( !data_isreference(data) )
-	{// Not a reference (aka varaible name)
-		ShowError("buildin_getvariableofnpc: not a variable\n");
+
+	// [GonBee]
+	// 変数名を渡せるようにする。
+	//if( !data_isreference(data) )
+	//{// Not a reference (aka varaible name)
+	//	ShowError("buildin_getvariableofnpc: not a variable\n");
+	if (data_isreference(data)) name = reference_getname(data);
+	else if (data_isstring(data)) name = conv_str(st, data);
+	else {
+		ShowError("buildin_getvariableofnpc: not a variable or string\n");
 		script_reportdata(data);
 		script_pushnil(st);
 		st->state = END;
 		return SCRIPT_CMD_FAILURE;
 	}
 
-	name = reference_getname(data);
+	// [GonBee]
+	//name = reference_getname(data);
+
 	if( *name != '.' || name[1] == '@' )
 	{// not a npc variable
 		ShowError("buildin_getvariableofnpc: invalid scope (not npc variable)\n");
@@ -18691,7 +19053,10 @@ BUILDIN_FUNC(getvariableofnpc)
 	if (!nd->u.scr.script->local.vars)
 		nd->u.scr.script->local.vars = i64db_alloc(DB_OPT_RELEASE_DATA);
 
-	push_val2(st->stack, C_NAME, reference_getuid(data), &nd->u.scr.script->local);
+	// [GonBee]
+	//push_val2(st->stack, C_NAME, reference_getuid(data), &nd->u.scr.script->local);
+	push_val2(st->stack, C_NAME, reference_uid(add_str(name), 0), &nd->u.scr.script->local);
+
 	return SCRIPT_CMD_SUCCESS;
 }
 
@@ -18780,7 +19145,10 @@ BUILDIN_FUNC(openauction)
 /// @see cell_chk* constants in const.txt for the types
 BUILDIN_FUNC(checkcell)
 {
-	int16 m = map_mapname2mapid(script_getstr(st,2));
+	// [GonBee]
+	//int16 m = map_mapname2mapid(script_getstr(st,2));
+	int16 m = script_mapname2mapid(st, script_getstr(st,2));
+	
 	int16 x = script_getnum(st,3);
 	int16 y = script_getnum(st,4);
 	cell_chk type = (cell_chk)script_getnum(st,5);
@@ -18797,7 +19165,10 @@ BUILDIN_FUNC(checkcell)
 /// @see cell_* constants in const.txt for the types
 BUILDIN_FUNC(setcell)
 {
-	int16 m = map_mapname2mapid(script_getstr(st,2));
+	// [GonBee]
+	//int16 m = map_mapname2mapid(script_getstr(st,2));
+	int16 m = script_mapname2mapid(st, script_getstr(st,2));
+	
 	int16 x1 = script_getnum(st,3);
 	int16 y1 = script_getnum(st,4);
 	int16 x2 = script_getnum(st,5);
@@ -18871,10 +19242,12 @@ BUILDIN_FUNC(getfreecell)
 	if (script_hasdata(st, 9))
 		flag = script_getnum(st, 9);
 
-	if (sd && strcmp(mapn, "this") == 0)
-		m = sd->bl.m;
-	else
-		m = map_mapname2mapid(mapn);
+	// [GonBee]
+	//if (sd && strcmp(mapn, "this") == 0)
+	//	m = sd->bl.m;
+	//else
+	//	m = map_mapname2mapid(mapn);
+	m = script_mapname2mapid(st, mapn);
 
 	map_search_freecell(NULL, m, &x, &y, rx, ry, flag);
 
@@ -19628,7 +20001,10 @@ BUILDIN_FUNC(bg_getareausers)
 	bg_id = script_getnum(st,2);
 	str = script_getstr(st,3);
 
-	if( (bg = bg_team_search(bg_id)) == NULL || (m = map_mapname2mapid(str)) < 0 )
+	// [GonBee]
+	//if( (bg = bg_team_search(bg_id)) == NULL || (m = map_mapname2mapid(str)) < 0 )
+	if( (bg = bg_team_search(bg_id)) == NULL || (m = script_mapname2mapid(st, str)) < 0 )
+	
 	{
 		script_pushint(st,0);
 		return SCRIPT_CMD_SUCCESS;
@@ -19659,7 +20035,11 @@ BUILDIN_FUNC(bg_updatescore)
 	int16 m;
 
 	str = script_getstr(st,2);
-	if( (m = map_mapname2mapid(str)) < 0 )
+
+	// [GonBee]
+	//if( (m = map_mapname2mapid(str)) < 0 )
+	if( (m = script_mapname2mapid(st, str)) < 0 )
+
 		return SCRIPT_CMD_SUCCESS;
 
 	struct map_data *mapdata = map_getmapdata(m);
@@ -19965,7 +20345,10 @@ BUILDIN_FUNC(instance_warpall)
 	else
 		instance_id = script_instancegetid(st);
 
-	if( !instance_id || (m = map_mapname2mapid(mapn)) < 0 || (m = instance_mapname2mapid(map_getmapdata(m)->name,instance_id)) < 0)
+	// [GonBee]
+	//if( !instance_id || (m = map_mapname2mapid(mapn)) < 0 || (m = instance_mapname2mapid(map_getmapdata(m)->name,instance_id)) < 0)
+	if( !instance_id || (m = script_mapname2mapid(st, mapn)) < 0 || (m = instance_mapname2mapid(map_getmapdata(m)->name,instance_id)) < 0)
+		
 		return SCRIPT_CMD_FAILURE;
 
 	for(i = 0; i < instance_data[instance_id].cnt_map; i++)
@@ -20336,7 +20719,10 @@ BUILDIN_FUNC(areamobuseskill)
 	int16 m;
 	int range,mobid,skill_id,skill_lv,casttime,emotion,target,cancel;
 
-	if( (m = map_mapname2mapid(script_getstr(st,2))) < 0 ) {
+	// [GonBee]
+	//if( (m = map_mapname2mapid(script_getstr(st,2))) < 0 ) {
+	if( (m = script_mapname2mapid(st, script_getstr(st,2))) < 0 ) {
+		
 		ShowError("areamobuseskill: invalid map name.\n");
 		return SCRIPT_CMD_SUCCESS;
 	}
@@ -20900,7 +21286,12 @@ BUILDIN_FUNC(checkre)
 {
 	int num;
 
-	num=script_getnum(st,2);
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、条件を省略できるようにする。
+	//num=script_getnum(st,2);
+	num = 0;
+	if (script_hasdata(st, 2)) num = script_getnum(st,2);
+
 	switch(num){
 		case 0:
 			#ifdef RENEWAL
@@ -21044,7 +21435,11 @@ BUILDIN_FUNC(cleanmap)
 	int16 m;
 
 	mapname = script_getstr(st, 2);
-	m = map_mapname2mapid(mapname);
+
+	// [GonBee]
+	//m = map_mapname2mapid(mapname);
+	m = script_mapname2mapid(st, mapname);
+	
 	if (!m)
 		return SCRIPT_CMD_FAILURE;
 
@@ -22049,6 +22444,7 @@ BUILDIN_FUNC(getvar) {
 	}
 
 	data = script_getdata(st, 2);
+
 	if (!data_isreference(data)) {
 		ShowError("buildin_getvar: Not a variable\n");
 		script_reportdata(data);
@@ -24130,7 +24526,12 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(jobchange,"i??"),
 	BUILDIN_DEF(jobname,"i"),
 	BUILDIN_DEF(input,"r??"),
-	BUILDIN_DEF(warp,"sii?"),
+
+	// [GonBee]
+	// 座標を文字列で指定できるように変更。
+	//BUILDIN_DEF(warp,"sii?"),
+	BUILDIN_DEF(warp,"svv?"),
+
 	BUILDIN_DEF2(warp, "warpchar", "sii?"),
 	BUILDIN_DEF(areawarp,"siiiisii??"),
 	BUILDIN_DEF(warpparty,"siii???"), // [Fredzilla] [Paradox924X]
@@ -24248,7 +24649,12 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(itemskill,"vi?"),
 	BUILDIN_DEF(produce,"i"),
 	BUILDIN_DEF(cooking,"i"),
-	BUILDIN_DEF(monster,"siisii???"),
+
+	// [GonBee]
+	// モンスターIDにモンスター名を指定できるように変更。
+	//BUILDIN_DEF(monster,"siisii???"),
+	BUILDIN_DEF(monster,"siisvi???"),
+
 	BUILDIN_DEF(getmobdrops,"i"),
 	BUILDIN_DEF(areamonster,"siiiisii???"),
 	BUILDIN_DEF(killmonster,"ss?"),
@@ -24279,10 +24685,18 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF2(getunits, "getmapunits", "is?"),
 	BUILDIN_DEF2(getunits, "getareaunits", "isiiii?"),
 	BUILDIN_DEF(getareadropitem,"siiiiv"),
-	BUILDIN_DEF(enablenpc,"s"),
-	BUILDIN_DEF(disablenpc,"s"),
-	BUILDIN_DEF(hideoffnpc,"s"),
-	BUILDIN_DEF(hideonnpc,"s"),
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を省略できるようにする。
+	//BUILDIN_DEF(enablenpc,"s"),
+	//BUILDIN_DEF(disablenpc,"s"),
+	//BUILDIN_DEF(hideoffnpc,"s"),
+	//BUILDIN_DEF(hideonnpc,"s"),
+	BUILDIN_DEF(enablenpc,"?"),
+	BUILDIN_DEF(disablenpc,"?"),
+	BUILDIN_DEF(hideoffnpc,"?"),
+	BUILDIN_DEF(hideonnpc,"?"),
+
 	BUILDIN_DEF(sc_start,"iii???"),
 	BUILDIN_DEF2(sc_start,"sc_start2","iiii???"),
 	BUILDIN_DEF2(sc_start,"sc_start4","iiiiii???"),
@@ -24355,10 +24769,20 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(getskilllist,"?"),
 	BUILDIN_DEF(clearitem,"?"),
 	BUILDIN_DEF(classchange,"i??"),
-	BUILDIN_DEF(misceffect,"i"),
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、NPC名を引数に取る。
+	//BUILDIN_DEF(misceffect,"i"),
+	BUILDIN_DEF(misceffect,"i?"),
+
 	BUILDIN_DEF(playBGM,"s"),
 	BUILDIN_DEF(playBGMall,"s?????"),
-	BUILDIN_DEF(soundeffect,"si"),
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、間隔時間を指定できるようにする。
+	//BUILDIN_DEF(soundeffect,"si"),
+	BUILDIN_DEF(soundeffect,"si?"),
+
 	BUILDIN_DEF(soundeffectall,"si?????"),	// SoundEffectAll [Codemaster]
 	BUILDIN_DEF(strmobinfo,"ii"),	// display mob data [Valaris]
 	BUILDIN_DEF(guardian,"siisi??"),	// summon guardians
@@ -24508,7 +24932,7 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(sleep,"i"),
 	BUILDIN_DEF(sleep2,"i"),
 	BUILDIN_DEF(awake,"s"),
-	BUILDIN_DEF(getvariableofnpc,"rs"),
+	BUILDIN_DEF(getvariableofnpc,"vs"),
 	BUILDIN_DEF(warpportal,"iisii"),
 	BUILDIN_DEF2(homunculus_evolution,"homevolution",""),	//[orn]
 	BUILDIN_DEF2(homunculus_mutate,"hommutate","?"),
@@ -24586,7 +25010,12 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(setdragon,"??"),//[Ind]
 	BUILDIN_DEF(ismounting,"?"),//[Ind]
 	BUILDIN_DEF(setmounting,"?"),//[Ind]
-	BUILDIN_DEF(checkre,"i"),
+
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、条件を省略できるようにする。
+	//BUILDIN_DEF(checkre,"i"),
+	BUILDIN_DEF(checkre,"?"),
+
 	/**
 	 * rAthena and beyond!
 	 **/

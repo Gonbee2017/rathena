@@ -486,9 +486,16 @@ unsigned int distance(int dx, int dy)
  */
 bool check_distance_client(int dx, int dy, int distance)
 {
-	if(distance < 0) distance = 0;
-
-	return (distance_client(dx,dy) <= distance);
+	// [GonBee]
+	// チェック用のクライアント距離を計算する。
+	// 距離がゼロならそのままでよい。
+	// ゼロ以外ならまず1を足し、次に自乗し、最後に1を足す。
+	//if(distance < 0) distance = 0;
+	//
+	//return (distance_client(dx,dy) <= distance);
+	int cli_dis = distance;
+	if (cli_dis) ++(++cli_dis *= cli_dis);
+	return distance_client(dx, dy) <= cli_dis;
 }
 
 /**
@@ -500,15 +507,18 @@ bool check_distance_client(int dx, int dy, int distance)
  */
 int distance_client(int dx, int dy)
 {
-	double temp_dist = sqrt((double)(dx*dx + dy*dy));
-
-	//Bonus factor used by client
-	//This affects even horizontal/vertical lines so they are one cell longer than expected
-	temp_dist -= 0.0625;
-
-	if(temp_dist < 0) temp_dist = 0;
-
-	return ((int)temp_dist);
+	
+	// [GonBee]
+	// クライアント距離の概念を「実際の距離を自乗した値」に変更した。
+	// この変更は平方根による距離の計算の負荷を減らすことを目的としている。
+	//double temp_dist = sqrt((double)(dx*dx + dy*dy));
+	//
+	////Bonus factor used by client
+	////This affects even horizontal/vertical lines so they are one cell longer than expected
+	//temp_dist -= 0.0625;
+	//
+	//if(temp_dist < 0) temp_dist = 0;
+	return dx * dx + dy * dy;
 }
 
 bool direction_diagonal( enum directions direction ){

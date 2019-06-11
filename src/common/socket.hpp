@@ -184,4 +184,8 @@ void send_shortlist_add_fd(int fd);
 void send_shortlist_do_sends();
 #endif
 
+// [GonBee]
+// BOT—p‚ÌÚ‘±B
+int pybot_connect_bot();
+
 #endif /* SOCKET_HPP */

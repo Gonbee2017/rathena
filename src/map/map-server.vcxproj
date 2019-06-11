@@ -95,7 +95,9 @@
       <PreprocessorDefinitions>$(DefineConstants);WIN32;FD_SETSIZE=4096;PCRE_SUPPORT;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;LIBCONFIG_STATIC;YY_USE_CONST;_DEBUG;_CONSOLE;_LIB;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\yaml-cpp\include\</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4250</DisableSpecificWarnings>
+      <SDLCheck>
+      </SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +133,9 @@
       <PreprocessorDefinitions>$(DefineConstants);WIN32;FD_SETSIZE=4096;PCRE_SUPPORT;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;LIBCONFIG_STATIC;YY_USE_CONST;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\yaml-cpp\include\</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4250</DisableSpecificWarnings>
+      <SDLCheck>
+      </SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -197,6 +201,9 @@
     <ClInclude Include="pc.hpp" />
     <ClInclude Include="pc_groups.hpp" />
     <ClInclude Include="pet.hpp" />
+    <ClInclude Include="pybot_external.hpp" />
+    <ClInclude Include="pybot_internal.hpp" />
+    <ClInclude Include="pybot_template.hpp" />
     <ClInclude Include="quest.hpp" />
     <ClInclude Include="script.hpp" />
     <ClInclude Include="script_constants.hpp" />
@@ -243,6 +250,15 @@
     <ClCompile Include="pc.cpp" />
     <ClCompile Include="pc_groups.cpp" />
     <ClCompile Include="pet.cpp" />
+    <ClCompile Include="pybot_ai_item.cpp" />
+    <ClCompile Include="pybot_ai_skill.cpp" />
+    <ClCompile Include="pybot_external.cpp" />
+    <ClCompile Include="pybot_ai_main.cpp" />
+    <ClCompile Include="pybot_block.cpp" />
+    <ClCompile Include="pybot_command.cpp" />
+    <ClCompile Include="pybot_gcnv.cpp" />
+    <ClCompile Include="pybot_misc.cpp" />
+    <ClCompile Include="pybot_registry.cpp" />
     <ClCompile Include="quest.cpp" />
     <ClCompile Include="script.cpp" />
     <ClCompile Include="searchstore.cpp" />
@@ -373,4 +389,3 @@
     <Copy SourceFiles="$(SolutionDir)db\import-tmpl\status_disabled.txt" DestinationFolder="$(SolutionDir)db\import\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)db\import\status_disabled.txt')" />
   </Target>
 </Project>
-

@@ -1730,6 +1730,27 @@ enum e_char_del_response char_delete(struct char_session_data* sd, uint32 char_i
 		Sql_ShowDebug(sql_handle);
 	*/
 
+	// [GonBee]
+	// パーティーBot機能に関係するレコードをすべて削除する。
+	if( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_cart_auto_get_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_distance_policy` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_equipset` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_great_mob` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_ignore_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_limit_skill` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp_stats` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_normal_attack_policy` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_play_skill` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_recover_hp_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_recover_sp_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_reject_skill` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_sell_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_storage_get_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_storage_put_item` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_team` WHERE `leader_char_id`='%d' OR `member_char_id`='%d'", char_id, char_id)
+	) Sql_ShowDebug(sql_handle);
+
 	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT `guild_id` FROM `%s` WHERE `char_id` = '%d'", schema_config.guild_db, char_id) )
 		Sql_ShowDebug(sql_handle);
 	else if( Sql_NumRows(sql_handle) > 0 )

@@ -28,6 +28,9 @@
 #include "pc_groups.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 static DBMap* party_db; // int party_id -> struct party_data* (releases data)
 static DBMap* party_booking_db; // uint32 char_id -> struct party_booking_ad_info* (releases data) // Party Booking [Spiria]
 static unsigned long party_booking_nextid = 1;
@@ -433,6 +436,24 @@ int party_invite(struct map_session_data *sd,struct map_session_data *tsd)
 	if (!tsd->fd) { //You can't invite someone who has already disconnected.
 		clif_party_invite_reply(sd,tsd->status.name,PARTY_REPLY_REJECTED);
 		return 0;
+	}
+
+	// [GonBee]
+	// Botはリーダーが加入しているパーティーからの加入要請を受諾する。
+	map_session_data* lea_sd = pybot::get_leader(tsd->status.char_id);
+	if (lea_sd) {
+		if (sd->status.party_id != lea_sd->status.party_id) {
+			clif_party_invite_reply(sd, tsd->status.name, PARTY_REPLY_REJECTED);
+			return 0;
+		}
+		if (tsd->status.party_id > 0) party_leave(tsd);
+		tsd->party_joining = true;
+		tsd->party_invite = sd->status.party_id;
+		tsd->party_invite_account = sd->status.account_id;
+		party_member mem;
+		party_fill_member(&mem, tsd, 0);
+		intif_party_addmember(tsd->party_invite, &mem);
+		return 1;
 	}
 
 	if( tsd->status.party_id > 0 || tsd->party_invite > 0 )
@@ -1096,9 +1117,11 @@ void party_exp_share(struct party_data* p, struct block_list* src, unsigned int 
 	if (c < 1)
 		return;
 
-	base_exp/=c;
-	job_exp/=c;
-	zeny/=c;
+	// [GonBee]
+	// 精度を高めるために割るのは後回しにする。
+	//base_exp/=c;
+	//job_exp/=c;
+	//zeny/=c;
 
 	if (battle_config.party_even_share_bonus && c > 1) {
 		double bonus = 100 + battle_config.party_even_share_bonus*(c-1);
@@ -1110,6 +1133,11 @@ void party_exp_share(struct party_data* p, struct block_list* src, unsigned int 
 		if (zeny)
 			zeny = (unsigned int) cap_value(zeny * bonus/100, INT_MIN, INT_MAX);
 	}
+
+	// [GonBee]
+	base_exp/=c;
+	job_exp/=c;
+	zeny/=c;
 
 	for (i = 0; i < c; i++) {
 #ifdef RENEWAL_EXP
@@ -1139,6 +1167,16 @@ int party_share_loot(struct party_data* p, struct map_session_data* sd, struct i
 	TBL_PC* target = NULL;
 	int i;
 
+	// [GonBee]
+	// Botはカートを所有しているなら、まずカートに追加しようとする。
+	auto additem = [] (map_session_data* sd, struct item* itm) -> int {
+		if (pybot::char_is_bot(sd->status.char_id) &&
+			pc_iscarton(sd) &&
+			!pc_cart_additem(sd, itm, itm->amount, LOG_TYPE_PICKDROP_PLAYER)
+		) return 0;
+		return pc_additem(sd, itm, itm->amount, LOG_TYPE_PICKDROP_PLAYER);
+	};
+
 	if (p && p->party.item&2 && (first_charid || !(battle_config.party_share_type&1))) {
 		//item distribution to party members.
 		if (battle_config.party_share_type&2) { // Round Robin
@@ -1154,7 +1192,10 @@ int party_share_loot(struct party_data* p, struct map_session_data* sd, struct i
 				if( (psd = p->data[i].sd) == NULL || sd->bl.m != psd->bl.m || pc_isdead(psd) || (battle_config.idle_no_share && pc_isidle(psd)) )
 					continue;
 
-				if (pc_additem(psd,item,item->amount,LOG_TYPE_PICKDROP_PLAYER))
+				// [GonBee]
+				//if (pc_additem(psd,item,item->amount,LOG_TYPE_PICKDROP_PLAYER))
+				if (additem(psd, item))
+
 					continue; //Chosen char can't pick up loot.
 
 				//Successful pick.
@@ -1177,7 +1218,10 @@ int party_share_loot(struct party_data* p, struct map_session_data* sd, struct i
 			while (count > 0) { //Pick a random member.
 				i = rnd()%count;
 
-				if (pc_additem(psd[i],item,item->amount,LOG_TYPE_PICKDROP_PLAYER)) { // Discard this receiver.
+				// [GonBee]
+				//if (pc_additem(psd[i],item,item->amount,LOG_TYPE_PICKDROP_PLAYER)) { // Discard this receiver.
+				if (additem(psd[i], item)) {
+
 					psd[i] = psd[count-1];
 					count--;
 				} else { // Successful pick.
@@ -1191,7 +1235,10 @@ int party_share_loot(struct party_data* p, struct map_session_data* sd, struct i
 	if (!target) {
 		target = sd; //Give it to the char that picked it up
 
-		if ((i = pc_additem(sd,item,item->amount,LOG_TYPE_PICKDROP_PLAYER)))
+		// [GonBee]
+		//if ((i = pc_additem(sd,item,item->amount,LOG_TYPE_PICKDROP_PLAYER)))
+		if ((i = additem(sd, item)))
+
 			return i;
 	}
 

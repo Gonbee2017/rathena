@@ -164,4 +164,7 @@ void read_petdb(void);
 void do_init_pet(void);
 void do_final_pet(void);
 
+// [GonBee]
+int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd);
+
 #endif /* PET_HPP */

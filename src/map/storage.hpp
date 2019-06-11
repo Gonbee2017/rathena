@@ -92,4 +92,7 @@ void storage_premiumStorage_quit(struct map_session_data *sd);
 
 int compare_item(struct item *a, struct item *b);
 
+// [GonBee]
+int storage_additem(struct map_session_data* sd, struct s_storage *stor, struct item *it, int amount);
+
 #endif /* STORAGE_HPP */

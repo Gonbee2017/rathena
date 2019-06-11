@@ -40,6 +40,9 @@
 #include "pet.hpp"
 #include "quest.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 using namespace rathena;
 
 #define ACTIVE_AI_RANGE 2	//Distance added on top of 'AREA_SIZE' at which mobs enter active AI mode.
@@ -737,8 +740,25 @@ int mob_once_spawn_area(struct map_session_data* sd, int16 m, int16 x0, int16 y0
 
 		// find a suitable map cell
 		do {
+
+			// [GonBee]
+			// Aurigaスクリプトとの互換性のために、
+			// 座標がすべてゼロ以下なら位置をランダムに選ぶ。
+			if (x0 <= 0 &&
+				y0 <= 0 &&
+				x1 <= 0 &&
+				y1 <= 0
+			) {
+				x = rnd() % (map[m].xs - 2) + 1;
+				y = rnd() % (map[m].ys - 2) + 1;
+			} else {
+
 			x = rnd()%(x1-x0+1)+x0;
 			y = rnd()%(y1-y0+1)+y0;
+
+			// [GonBee]
+			}
+
 			j++;
 		} while (map_getcell(m,x,y,CELL_CHKNOPASS) && j < max);
 
@@ -1719,7 +1739,12 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 			if (mob_warpchase(md, tbl))
 				return true; //Chasing this target.
 			if(md->ud.walktimer != INVALID_TIMER && (!can_move || md->ud.walkpath.path_pos <= battle_config.mob_chase_refresh)
-				&& (tbl || md->ud.walkpath.path_pos == 0))
+
+				// [GonBee]
+				// まったく移動していなくても、ターゲットが存在しなければアンロックする。
+				//&& (tbl || md->ud.walkpath.path_pos == 0))
+				&& tbl)
+
 				return true; //Walk at least "mob_chase_refresh" cells before dropping the target unless target is non-existent
 			mob_unlocktarget(md, tick); //Unlock target
 			tbl = NULL;
@@ -2627,7 +2652,12 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 				}
 			}
 			if(base_exp && md->dmglog[i].flag == MDLF_HOMUN) //tmpsd[i] is null if it has no homunc.
-				hom_gainexp(tmpsd[i]->hd, base_exp);
+
+				// [GonBee]
+				// ホムンクルスの取得経験値にベースレベル倍率をかける。
+				//hom_gainexp(tmpsd[i]->hd, base_exp);
+				hom_gainexp(tmpsd[i]->hd, int(base_exp * pybot::base_level_rate(&tmpsd[i]->hd->bl, md)));
+
 			if(flag) {
 				if(base_exp || job_exp) {
 					if( md->dmglog[i].flag != MDLF_PET || battle_config.pet_attack_exp_to_master ) {
@@ -2679,6 +2709,11 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		dlist->second_charid = (second_sd ? second_sd->status.char_id : 0);
 		dlist->third_charid = (third_sd ? third_sd->status.char_id : 0);
 		dlist->item = NULL;
+
+		// [GonBee]
+		// ドロップ確率のレベル倍率を計算する。
+		double bas_lv_rat = 1.;
+		if (src) bas_lv_rat = pybot::base_level_rate(src, md);
 
 		for (i = 0; i < MAX_MOB_DROP_TOTAL; i++) {
 			if (md->db->dropitem[i].nameid <= 0)
@@ -2742,6 +2777,11 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 					drop_rate = 1;
 			}
 #endif
+
+			// [GonBee]
+			// ドロップ確率にレベル倍率をかける。
+			drop_rate = int(drop_rate * bas_lv_rat);
+
 			// attempt to drop the item
 			if (rnd() % 10000 >= drop_rate)
 				continue;
@@ -2860,6 +2900,12 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		pc_gainexp(mvp_sd, &md->bl, mexp,0, 0);
 		log_mvp[1] = mexp;
 
+		// [GonBee]
+		// PCがMVPを獲得したことを記録する。
+		map_session_data* act_mvp_sd = pybot::get_leader(mvp_sd->status.char_id);
+		if (!act_mvp_sd) act_mvp_sd = mvp_sd;
+		pybot::pc_acquired_mvp(act_mvp_sd->status.char_id, md);
+
 		if( !(map_getmapflag(m, MF_NOMVPLOOT) || type&1) ) {
 			//Order might be random depending on item_drop_mvp_mode config setting
 			struct s_mob_drop mdrop[MAX_MVP_DROP_TOTAL];
@@ -2916,7 +2962,13 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 
 				mob_setdropitem_option(&item, &mdrop[i]);
 
-				if((temp = pc_additem(mvp_sd,&item,1,LOG_TYPE_PICKDROP_PLAYER)) != 0) {
+				// [GonBee]
+				// BotはMVPアイテムを即座にドロップする。
+				//if((temp = pc_additem(mvp_sd,&item,1,LOG_TYPE_PICKDROP_PLAYER)) != 0) {
+				if (pybot::char_is_bot(mvp_sd->status.char_id)) temp = 4;
+				else temp = pc_additem(mvp_sd,&item,1,LOG_TYPE_PICKDROP_PLAYER);
+				if (temp) {
+
 					clif_additem(mvp_sd,0,0,temp);
 					map_addflooritem(&item,1,mvp_sd->bl.m,mvp_sd->bl.x,mvp_sd->bl.y,mvp_sd->status.char_id,(second_sd?second_sd->status.char_id:0),(third_sd?third_sd->status.char_id:0),1,0,true);
 				}
@@ -3026,7 +3078,12 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 			 * We give the client some time to breath and this allows it to display anything it'd like with the dead corpose
 			 * For example, this delay allows it to display soul drain effect
 			 **/
-			clif_clearunit_delayed(&md->bl, CLR_DEAD, tick+250);
+
+			// [GonBee]
+			// モンスターが死亡してもクライアントに表示され続ける不具合が発生したが、
+			// 以下のように修正したところなぜか再現しなくなった。
+			//clif_clearunit_delayed(&md->bl, CLR_DEAD, tick+250);
+			clif_clearunit_area(&md->bl, CLR_DEAD);
 
 	}
 
@@ -4154,8 +4211,11 @@ static bool mob_parse_dbrow(char** str)
 		if (entry.range3 < entry.range2)
 			entry.range3 = entry.range2;
 	}
-	//Tests showed that chase range is effectively 2 cells larger than expected [Playtester]
-	entry.range3 += 2;
+
+	// [GonBee]
+	// モンスターが追跡を諦める距離がDBで設定されている通りになるように修正。
+	////Tests showed that chase range is effectively 2 cells larger than expected [Playtester]
+	//entry.range3 += 2;
 
 	status->size = atoi(str[22]);
 	status->race = atoi(str[23]);

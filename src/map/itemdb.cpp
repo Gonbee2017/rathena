@@ -140,12 +140,22 @@ static int itemdb_searchname_array_sub(DBKey key, DBData data, va_list ap)
  *------------------------------------------*/
 int itemdb_searchname_array(struct item_data** data, int size, const char *str)
 {
-	DBData *db_data[MAX_SEARCH];
+	// [GenBee]
+	// ŒŸõŒ‹‰Ê‚ð‰Â•Ï’·‚É‚·‚éB
+	//DBData *db_data[MAX_SEARCH];
+	DBData** db_data = new DBData*[size];
+
 	int i, count = 0, db_count;
 
-	db_count = itemdb->getall(itemdb, (DBData**)&db_data, size, itemdb_searchname_array_sub, str);
+	// [GenBee]
+	//db_count = itemdb->getall(itemdb, (DBData**)&db_data, size, itemdb_searchname_array_sub, str);
+	db_count = itemdb->getall(itemdb, db_data, size, itemdb_searchname_array_sub, str);
+
 	for (i = 0; i < db_count && count < size; i++)
 		data[count++] = (struct item_data*)db_data2ptr(db_data[i]);
+
+	// [GenBee]
+	delete[] db_data;
 
 	return count;
 }

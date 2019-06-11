@@ -21,6 +21,9 @@
 #include "pc_groups.hpp"
 #include "storage.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 #define TRADE_DISTANCE 2 ///Max distance from traders to enable a trade to take place.
 
 /**
@@ -81,6 +84,21 @@ void trade_traderequest(struct map_session_data *sd, struct map_session_data *ta
 	    (sd->bl.m != target_sd->bl.m || !check_distance_bl(&sd->bl, &target_sd->bl, TRADE_DISTANCE))) {
 		clif_tradestart(sd, 0); // too far
 		return ;
+	}
+
+	// [GonBee]
+	// Botはリーダーの取引要請を受諾する。
+	map_session_data* lea_sd = pybot::get_leader(target_sd->status.char_id);
+	if (lea_sd) {
+		if (lea_sd != sd) {
+			clif_displaymessage(sd->fd, msg_txt(sd, 246));
+			clif_tradestart(sd, 2);
+			return;
+		}
+		target_sd->trade_partner = sd->status.account_id;
+		sd->trade_partner = target_sd->status.account_id;
+		trade_tradeack(target_sd, 3);
+		return;
 	}
 
 	target_sd->trade_partner = sd->status.account_id;
@@ -344,7 +362,11 @@ int trade_check(struct map_session_data *sd, struct map_session_data *tsd)
  * @param index : index of item in inventory
  * @param amount : amount of item to add from index
  */
-void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
+
+// [GonBee]
+//void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
+bool trade_tradeadditem(struct map_session_data *sd, short index, short amount)
+
 {
 	struct map_session_data *target_sd;
 	struct item *item;
@@ -354,25 +376,43 @@ void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
 	nullpo_retv(sd);
 
 	if( !sd->state.trading || sd->state.deal_locked > 0 )
-		return; // Can't add stuff.
+
+		// [GonBee]
+		//return; // Can't add stuff.
+		return false; // Can't add stuff.
 
 	if( (target_sd = map_id2sd(sd->trade_partner)) == NULL ) {
 		trade_tradecancel(sd);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if( !amount ) { // Why do this.. ~.~ just send an ack, the item won't display on the trade window.
 		clif_tradeitemok(sd, index, 0);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	index -= 2; // 0 is for zeny, 1 is unknown. Gravity, go figure...
 
 	// Item checks...
 	if( index < 0 || index >= MAX_INVENTORY )
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	if( amount < 0 || amount > sd->inventory.u.items_inventory[index].amount )
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
 
 	item = &sd->inventory.u.items_inventory[index];
 	src_lv = pc_get_group_level(sd);
@@ -382,24 +422,40 @@ void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
 		(pc_get_partner(sd) != target_sd || !itemdb_canpartnertrade(item, src_lv, dst_lv)) ) { // Can't partner-trade
 		clif_displaymessage (sd->fd, msg_txt(sd,260));
 		clif_tradeitemok(sd, index+2, 1);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if( item->expire_time ) { // Rental System
 		clif_displaymessage (sd->fd, msg_txt(sd,260));
 		clif_tradeitemok(sd, index+2, 1);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if( ((item->bound == BOUND_ACCOUNT || item->bound > BOUND_GUILD) || (item->bound == BOUND_GUILD && sd->status.guild_id != target_sd->status.guild_id)) && !pc_can_give_bounded_items(sd) ) { // Item Bound
 		clif_displaymessage(sd->fd, msg_txt(sd,293));
 		clif_tradeitemok(sd, index+2, 1);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if( item->equipSwitch ){
 		clif_msg(sd, C_ITEM_EQUIP_SWITCH);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if (item->bound)
@@ -409,13 +465,21 @@ void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
 	ARR_FIND( 0, 10, trade_i, sd->deal.item[trade_i].index == index || sd->deal.item[trade_i].amount == 0 );
 	if( trade_i == 10 ) { // No space left
 		clif_tradeitemok(sd, index+2, 1);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	trade_weight = sd->inventory_data[index]->weight * amount;
 	if( target_sd->weight + sd->deal.weight + trade_weight > target_sd->max_weight ) { // fail to add item -- the player was over weighted.
 		clif_tradeitemok(sd, index+2, 1);
-		return;
+
+		// [GonBee]
+		//return;
+		return false;
+
 	}
 
 	if( sd->deal.item[trade_i].index == index ) { // The same item as before is being readjusted.
@@ -434,6 +498,9 @@ void trade_tradeadditem(struct map_session_data *sd, short index, short amount)
 
 	clif_tradeitemok(sd, index+2, 0); // Return the index as it was received
 	clif_tradeadditem(sd, target_sd, index+2, amount);
+
+	// [GonBee]
+	return true;
 }
 
 /**
@@ -486,6 +553,10 @@ void trade_tradeok(struct map_session_data *sd)
 	clif_tradeitemok(sd, 0, 0);
 	clif_tradedeal_lock(sd, 0);
 	clif_tradedeal_lock(target_sd, 1);
+
+	// [GonBee]
+	// Botはリーダーが取引をOKすると同時にOKする。
+	if (pybot::get_leader(target_sd->status.char_id) == sd) trade_tradeok(target_sd);
 }
 
 /**
@@ -574,6 +645,10 @@ void trade_tradecommit(struct map_session_data *sd)
 	}
 
 	sd->state.deal_locked = 2;
+
+	// [GonBee]
+	// Botはリーダーが取引をコミットすると同時にコミットする。
+	if (pybot::get_leader(tsd->status.char_id) == sd) tsd->state.deal_locked = 2;
 
 	if (tsd->state.deal_locked < 2)
 		return; //Not yet time for trading.

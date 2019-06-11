@@ -27,6 +27,10 @@
 #include "npc.hpp"
 #include "pc.hpp"
 
+// [GonBee]
+#include "party.hpp"
+#include "pybot_external.hpp"
+
 using namespace rathena;
 
 #define MIN_PETTHINKTIME 100
@@ -126,7 +130,16 @@ void pet_unlocktarget(struct pet_data *pd)
 int pet_attackskill(struct pet_data *pd, int target_id)
 {
 	if (!battle_config.pet_status_support || !pd->a_skill ||
-		(battle_config.pet_equip_required && !pd->pet.equip))
+
+		// [GonBee]
+		// 装備可能なアクセサリーがあれば
+		//(battle_config.pet_equip_required && !pd->pet.equip))
+		(battle_config.pet_equip_required &&
+			pd->get_pet_db()->AcceID &&
+			!pd->pet.equip
+		)
+	)
+
 		return 0;
 
 	if (DIFF_TICK(pd->ud.canact_tick, gettick()) > 0)
@@ -228,7 +241,15 @@ int pet_sc_check(struct map_session_data *sd, int type)
 	pd = sd->pd;
 
 	if( pd == NULL
-	||  (battle_config.pet_equip_required && pd->pet.equip == 0)
+
+	// [GonBee]
+	// 装備可能なアクセサリーがあれば
+	//||  (battle_config.pet_equip_required && pd->pet.equip == 0)
+	||  (battle_config.pet_equip_required &&
+		    pd->get_pet_db()->AcceID &&
+		    pd->pet.equip == 0
+		)
+
 	||  pd->recovery == NULL
 	||  pd->recovery->timer != INVALID_TIMER
 	||  pd->recovery->type != type )
@@ -757,7 +778,9 @@ bool pet_get_egg(uint32 account_id, short pet_class, int pet_id ) {
 	return true;
 }
 
-static int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd);
+// [GonBee]
+//static int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd);
+
 static int pet_food(struct map_session_data *sd, struct pet_data *pd);
 static int pet_ai_sub_hard_lootsearch(struct block_list *bl,va_list ap);
 
@@ -828,6 +851,14 @@ int pet_change_name(struct map_session_data *sd,char *name)
 		return 1;
 
 	for(i = 0; i < NAME_LENGTH && name[i]; i++) {
+
+		// [GonBee]
+		// 日本語名を無効にしない。
+		if (pybot::letter_is_jlead(name[i])) {
+			++i;
+			continue;
+		}
+
 		if( !(name[i]&0xe0) || name[i]==0x7f)
 			return 1;
 	}
@@ -900,7 +931,13 @@ int pet_equipitem(struct map_session_data *sd,int index)
 	status_set_viewdata(&pd->bl, pd->pet.class_); //Updates view_data.
 	clif_pet_equip_area(pd);
 
-	if (battle_config.pet_equip_required) { // Skotlex: start support timers if need
+	// [GonBee]
+	// 装備可能なアクセサリーがあれば
+	//if (battle_config.pet_equip_required) { // Skotlex: start support timers if need
+	if (battle_config.pet_equip_required &&
+		pd->get_pet_db()->AcceID
+	) {
+
 		t_tick tick = gettick();
 
 		if (pd->s_skill && pd->s_skill->timer == INVALID_TIMER) {
@@ -923,7 +960,11 @@ int pet_equipitem(struct map_session_data *sd,int index)
  * @param pd : pet requesting
  * @return 0:success, 1:failure
  */
-static int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd)
+
+// [GonBee]
+//static int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd)
+int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd)
+
 {
 	struct item tmp_item;
 	unsigned short nameid;
@@ -945,7 +986,13 @@ static int pet_unequipitem(struct map_session_data *sd, struct pet_data *pd)
 		map_addflooritem(&tmp_item,1,sd->bl.m,sd->bl.x,sd->bl.y,0,0,0,0,0);
 	}
 
-	if( battle_config.pet_equip_required ) { // Skotlex: halt support timers if needed
+	// [GonBee]
+	// 装備可能なアクセサリーがあれば
+	//if( battle_config.pet_equip_required ) { // Skotlex: halt support timers if needed
+	if (battle_config.pet_equip_required &&
+		pd->get_pet_db()->AcceID
+	) {
+
 		if( pd->state.skillbonus ) {
 			pd->state.skillbonus = 0;
 			status_calc_pc(sd,SCO_NONE);
@@ -1000,6 +1047,10 @@ static int pet_food(struct map_session_data *sd, struct pet_data *pd)
 			k = (pet_db_ptr->r_hungry * battle_config.pet_friendly_rate) / 100;
 		else
 			k = pet_db_ptr->r_hungry;
+
+		// [GonBee]
+		// ペットの親密度上昇にジョブレベル倍率をかける。
+		k += int(pybot::job_level_rate(pd->master, &pd->bl));
 
 		if( pd->pet.hungry > 75 ) {
 			k = k >> 1;
@@ -1207,9 +1258,25 @@ static int pet_ai_sub_hard(struct pet_data *pd, struct map_session_data *sd, t_t
 			struct flooritem_data *fitem = (struct flooritem_data *)target;
 
 			if(pd->loot->count < pd->loot->max) {
+
+				// [GonBee]
+				// Botのペットは拾得と同時に主人に渡す。
+				if (pybot::char_is_bot(pd->master->status.char_id)) {
+					party_share_loot(
+						party_search(pd->master->status.party_id),
+						pd->master,
+						&fitem->item,
+						fitem->first_get_charid
+					);
+				} else {
+
 				memcpy(&pd->loot->item[pd->loot->count++],&fitem->item,sizeof(pd->loot->item[0]));
 				pd->loot->weight += itemdb_weight(fitem->item.nameid)*fitem->item.amount;
 				map_clearflooritem(target);
+
+				// [GonBee]
+				}
+
 			}
 
 			//Target is unlocked regardless of whether it was picked or not.
@@ -1269,10 +1336,26 @@ static int pet_ai_sub_hard_lootsearch(struct block_list *bl,va_list ap)
 	pd = va_arg(ap,struct pet_data *);
 	target = va_arg(ap,struct block_list**);
 
-	sd_charid = fitem->first_get_charid;
-
-	if(sd_charid && sd_charid != pd->master->status.char_id)
-		return 0;
+	// [GonBee]
+	// ペットはパーティーのドロップも収集する。
+	// 主人がBotである場合は、無視アイテムを拾いに行かない。
+	// また所持アイテムに空きスロットがなかったり
+	// 重量がオーバーになるときも拾いに行かない。
+	// 主人がBotではない場合も無視アイテムを拾いに行かない。
+	//sd_charid = fitem->first_get_charid;
+	//
+	//if(sd_charid && sd_charid != pd->master->status.char_id)
+	//	return 0;
+	if (!pybot::pc_can_takeitem(pd->master, fitem)) return 0;
+	map_session_data* lea_sd = pybot::get_leader(pd->master->status.char_id);
+	if (lea_sd) {
+		int wei = itemdb_weight(fitem->item.nameid) * fitem->item.amount;
+		int rem = pd->master->max_weight - pd->master->weight;
+		if (pybot::flooritem_to_be_ignored(lea_sd, fitem) ||
+			!pc_inventoryblank(pd->master) ||
+			wei > rem
+		) return 0;
+	} else if (pybot::flooritem_to_be_ignored(pd->master, fitem)) return 0;
 
 	if(unit_can_reach_bl(&pd->bl,bl, pd->db->range2, 1, NULL, NULL) &&
 		((*target) == NULL || //New target closer than previous one.
@@ -1494,7 +1577,9 @@ TIMER_FUNC(pet_heal_timer){
 	pet_stop_attack(pd);
 	pet_stop_walking(pd,1);
 	clif_skill_nodamage(&pd->bl,&sd->bl,AL_HEAL,pd->s_skill->lv,1);
+
 	status_heal(&sd->bl, pd->s_skill->lv,0, 0);
+
 	pd->s_skill->timer = add_timer(tick+pd->s_skill->delay*1000,pet_heal_timer,sd->bl.id,0);
 	return 0;
 }

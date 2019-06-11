@@ -21,7 +21,11 @@ struct guardian_data;
 #define MAX_MVP_DROP_ADD 2
 #define MAX_MOB_DROP_TOTAL (MAX_MOB_DROP+MAX_MOB_DROP_ADD)
 #define MAX_MVP_DROP_TOTAL (MAX_MVP_DROP+MAX_MVP_DROP_ADD)
-#define MAX_STEAL_DROP 7
+
+// [GonBee]
+// カードをスティール可能にする。
+//#define MAX_STEAL_DROP 7
+#define MAX_STEAL_DROP MAX_MOB_DROP
 
 #define MAX_RACE2_MOBS 100
 

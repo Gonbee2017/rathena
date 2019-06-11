@@ -973,95 +973,187 @@ int npc_touchnext_areanpc(struct map_session_data* sd, bool leavemap)
  *------------------------------------------*/
 int npc_touch_areanpc(struct map_session_data* sd, int16 m, int16 x, int16 y)
 {
-	int xs,ys;
-	int f = 1;
-	int i;
-	int j, found_warp = 0;
-
-	nullpo_retr(1, sd);
-
-	// Why not enqueue it? [Inkfish]
-	//if(sd->npc_id)
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のために、
+	// NPCがインビジブル状態のときだけでなく、
+	// ハイド状態のときもタッチイベントが発生しないようにした。
+	// また複数のNPCで範囲が重複していた場合は、
+	// すべてのNPCのタッチイベントが起きるようにした。
+	// ついでに全面的に書き直した。
+	//int xs,ys;
+	//int f = 1;
+	//int i;
+	//int j, found_warp = 0;
+	//
+	//nullpo_retr(1, sd);
+	//
+	//// Why not enqueue it? [Inkfish]
+	////if(sd->npc_id)
+	////	return 1;
+	//
+	//struct map_data *mapdata = map_getmapdata(m);
+	//
+	//for(i=0;i<mapdata->npc_num;i++)
+	//{
+	//	if (mapdata->npc[i]->sc.option&OPTION_INVISIBLE) {
+	//		f=0; // a npc was found, but it is disabled; don't print warning
+	//		continue;
+	//	}
+	//
+	//	switch(mapdata->npc[i]->subtype) {
+	//	case NPCTYPE_WARP:
+	//		xs=mapdata->npc[i]->u.warp.xs;
+	//		ys=mapdata->npc[i]->u.warp.ys;
+	//		break;
+	//	case NPCTYPE_SCRIPT:
+	//		xs=mapdata->npc[i]->u.scr.xs;
+	//		ys=mapdata->npc[i]->u.scr.ys;
+	//		break;
+	//	default:
+	//		continue;
+	//	}
+	//	if( x >= mapdata->npc[i]->bl.x-xs && x <= mapdata->npc[i]->bl.x+xs
+	//	&&  y >= mapdata->npc[i]->bl.y-ys && y <= mapdata->npc[i]->bl.y+ys )
+	//		break;
+	//}
+	//
+	//if( i == mapdata->npc_num )
+	//{
+	//	if( f == 1 ) // no npc found
+	//		ShowError("npc_touch_areanpc : stray NPC cell/NPC not found in the block on coordinates '%s',%d,%d\n", mapdata->name, x, y);
 	//	return 1;
-
-	struct map_data *mapdata = map_getmapdata(m);
-
-	for(i=0;i<mapdata->npc_num;i++)
-	{
-		if (mapdata->npc[i]->sc.option&OPTION_INVISIBLE) {
-			f=0; // a npc was found, but it is disabled; don't print warning
-			continue;
-		}
-
-		switch(mapdata->npc[i]->subtype) {
-		case NPCTYPE_WARP:
-			xs=mapdata->npc[i]->u.warp.xs;
-			ys=mapdata->npc[i]->u.warp.ys;
-			break;
-		case NPCTYPE_SCRIPT:
-			xs=mapdata->npc[i]->u.scr.xs;
-			ys=mapdata->npc[i]->u.scr.ys;
-			break;
-		default:
-			continue;
-		}
-		if( x >= mapdata->npc[i]->bl.x-xs && x <= mapdata->npc[i]->bl.x+xs
-		&&  y >= mapdata->npc[i]->bl.y-ys && y <= mapdata->npc[i]->bl.y+ys )
-			break;
-	}
-	if( i == mapdata->npc_num )
-	{
-		if( f == 1 ) // no npc found
-			ShowError("npc_touch_areanpc : stray NPC cell/NPC not found in the block on coordinates '%s',%d,%d\n", mapdata->name, x, y);
-		return 1;
-	}
-	switch(mapdata->npc[i]->subtype) {
-		case NPCTYPE_WARP:
-			if ((!mapdata->npc[i]->trigger_on_hidden && (pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]))) || pc_isdead(sd))
-				break; // hidden or dead chars cannot use warps
-			if (!pc_job_can_entermap((enum e_job)sd->status.class_, map_mapindex2mapid(mapdata->npc[i]->u.warp.mapindex), sd->group_level))
-				break;
-			if(sd->count_rewarp > 10){
-				ShowWarning("Prevented infinite warp loop for player (%d:%d). Please fix NPC: '%s', path: '%s'\n", sd->status.account_id, sd->status.char_id, mapdata->npc[i]->exname, mapdata->npc[i]->path);
-				sd->count_rewarp=0;
-				break;
-			}
-			pc_setpos(sd,mapdata->npc[i]->u.warp.mapindex,mapdata->npc[i]->u.warp.x,mapdata->npc[i]->u.warp.y,CLR_OUTSIGHT);
-			break;
-		case NPCTYPE_SCRIPT:
-			for (j = i; j < mapdata->npc_num; j++) {
-				if (mapdata->npc[j]->subtype != NPCTYPE_WARP) {
-					continue;
-				}
-
-				if ((sd->bl.x >= (mapdata->npc[j]->bl.x - mapdata->npc[j]->u.warp.xs) && sd->bl.x <= (mapdata->npc[j]->bl.x + mapdata->npc[j]->u.warp.xs)) &&
-					(sd->bl.y >= (mapdata->npc[j]->bl.y - mapdata->npc[j]->u.warp.ys) && sd->bl.y <= (mapdata->npc[j]->bl.y + mapdata->npc[j]->u.warp.ys))) {
-					if ((!mapdata->npc[i]->trigger_on_hidden && (pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]))) || pc_isdead(sd))
-						break; // hidden or dead chars cannot use warps
-					pc_setpos(sd,mapdata->npc[j]->u.warp.mapindex,mapdata->npc[j]->u.warp.x,mapdata->npc[j]->u.warp.y,CLR_OUTSIGHT);
-					found_warp = 1;
+	//}
+	//
+	//switch(mapdata->npc[i]->subtype) {
+	//	case NPCTYPE_WARP:
+	//		if ((!mapdata->npc[i]->trigger_on_hidden && (pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]))) || pc_isdead(sd))
+	//			break; // hidden or dead chars cannot use warps
+	//		if (!pc_job_can_entermap((enum e_job)sd->status.class_, map_mapindex2mapid(mapdata->npc[i]->u.warp.mapindex), sd->group_level))
+	//			break;
+	//		if(sd->count_rewarp > 10){
+	//			ShowWarning("Prevented infinite warp loop for player (%d:%d). Please fix NPC: '%s', path: '%s'\n", sd->status.account_id, sd->status.char_id, mapdata->npc[i]->exname, mapdata->npc[i]->path);
+	//			sd->count_rewarp=0;
+	//			break;
+	//		}
+	//		pc_setpos(sd,mapdata->npc[i]->u.warp.mapindex,mapdata->npc[i]->u.warp.x,mapdata->npc[i]->u.warp.y,CLR_OUTSIGHT);
+	//		break;
+	//	case NPCTYPE_SCRIPT:
+	//		for (j = i; j < mapdata->npc_num; j++) {
+	//			if (mapdata->npc[j]->subtype != NPCTYPE_WARP) {
+	//				continue;
+	//			}
+	//
+	//			if ((sd->bl.x >= (mapdata->npc[j]->bl.x - mapdata->npc[j]->u.warp.xs) && sd->bl.x <= (mapdata->npc[j]->bl.x + mapdata->npc[j]->u.warp.xs)) &&
+	//				(sd->bl.y >= (mapdata->npc[j]->bl.y - mapdata->npc[j]->u.warp.ys) && sd->bl.y <= (mapdata->npc[j]->bl.y + mapdata->npc[j]->u.warp.ys))) {
+	//				if ((!mapdata->npc[i]->trigger_on_hidden && (pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]))) || pc_isdead(sd))
+	//					break; // hidden or dead chars cannot use warps
+	//				pc_setpos(sd,mapdata->npc[j]->u.warp.mapindex,mapdata->npc[j]->u.warp.x,mapdata->npc[j]->u.warp.y,CLR_OUTSIGHT);
+	//				found_warp = 1;
+	//				break;
+	//			}
+	//		}
+	//
+	//		if (found_warp > 0) {
+	//			break;
+	//		}
+	//
+	//		if( npc_ontouch_event(sd,mapdata->npc[i]) > 0 && npc_ontouch2_event(sd,mapdata->npc[i]) > 0 )
+	//		{ // failed to run OnTouch event, so just click the npc
+	//			struct unit_data *ud = unit_bl2ud(&sd->bl);
+	//			if( ud && ud->walkpath.path_pos < ud->walkpath.path_len )
+	//			{ // Since walktimer always == INVALID_TIMER at this time, we stop walking manually. [Inkfish]
+	//				clif_fixpos(&sd->bl);
+	//				ud->walkpath.path_pos = ud->walkpath.path_len;
+	//			}
+	//			sd->areanpc_id = mapdata->npc[i]->bl.id;
+	//			npc_click(sd,mapdata->npc[i]);
+	//		}
+	//		break;
+	//}
+	//return 0;
+	nullpo_retr(1, sd);
+	map_data* mapdata = map_getmapdata(m);
+	int res = 1;
+	bool war = false;
+	for (int i = 0; i < mapdata->npc_num; i++) {
+		npc_data* nd = mapdata->npc[i];
+		if (nd->subtype == NPCTYPE_WARP &&
+			x >= nd->bl.x - nd->u.warp.xs &&
+			x <= nd->bl.x + nd->u.warp.xs &&
+			y >= nd->bl.y - nd->u.warp.ys &&
+			y <= nd->bl.y + nd->u.warp.ys
+		) {
+			res = 0;
+			if (!(nd->sc.option & (OPTION_HIDE | OPTION_INVISIBLE)) &&
+				((nd->trigger_on_hidden ||
+						(!pc_ishiding(sd) &&
+							(!sd->sc.count ||
+								!sd->sc.data[SC_CAMOUFLAGE]
+							)
+						)
+					) && !pc_isdead(sd)
+				) && pc_job_can_entermap(
+					e_job(sd->status.class_),
+					map_mapindex2mapid(nd->u.warp.mapindex),
+					sd->group_level
+				)
+			) {
+				if (sd->count_rewarp > 10) {
+					ShowWarning(
+						"Prevented infinite warp loop for player (%d:%d). Please fix NPC: '%s', path: '%s'\n",
+						sd->status.account_id,
+						sd->status.char_id,
+						nd->exname,
+						nd->path
+					);
+					sd->count_rewarp = 0;
+				} else {
+					pc_setpos(sd, nd->u.warp.mapindex, nd->u.warp.x, nd->u.warp.y, CLR_OUTSIGHT);
+					war = true;
 					break;
 				}
 			}
-
-			if (found_warp > 0) {
-				break;
-			}
-
-			if( npc_ontouch_event(sd,mapdata->npc[i]) > 0 && npc_ontouch2_event(sd,mapdata->npc[i]) > 0 )
-			{ // failed to run OnTouch event, so just click the npc
-				struct unit_data *ud = unit_bl2ud(&sd->bl);
-				if( ud && ud->walkpath.path_pos < ud->walkpath.path_len )
-				{ // Since walktimer always == INVALID_TIMER at this time, we stop walking manually. [Inkfish]
-					clif_fixpos(&sd->bl);
-					ud->walkpath.path_pos = ud->walkpath.path_len;
-				}
-				sd->areanpc_id = mapdata->npc[i]->bl.id;
-				npc_click(sd,mapdata->npc[i]);
-			}
-			break;
+		}
 	}
-	return 0;
+	if (!war) {
+		for (int i = 0; i < mapdata->npc_num; i++) {
+			npc_data* nd = mapdata->npc[i];
+			if (nd->subtype == NPCTYPE_SCRIPT &&
+				x >= nd->bl.x - nd->u.scr.xs &&
+				x <= nd->bl.x + nd->u.scr.xs &&
+				y >= nd->bl.y - nd->u.scr.ys &&
+				y <= nd->bl.y + nd->u.scr.ys
+			) {
+				res = 0;
+				if (!(nd->sc.option & (OPTION_HIDE | OPTION_INVISIBLE))) {
+					if (npc_ontouch_event(sd, nd) > 0 &&
+						npc_ontouch2_event(sd, nd) > 0 &&
+						!sd->npc_id
+					) {
+						sd->areanpc_id = nd->bl.id;
+						npc_click(sd, nd);
+					}
+					unit_data* ud = unit_bl2ud(&sd->bl);
+					if (sd->npc_id &&
+						ud &&
+						ud->walkpath.path_pos < ud->walkpath.path_len
+					) {
+						clif_fixpos(&sd->bl);
+						ud->walkpath.path_pos = ud->walkpath.path_len;
+					}
+				}
+			}
+		}
+	}
+	if (res) {
+		ShowError(
+			"npc_touch_areanpc : stray NPC cell/NPC not found in the block on coordinates '%s',%d,%d\n",
+			mapdata->name,
+			x,
+			y
+		);
+	}
+	return res;
 }
 
 // OnTouch NPC or Warp for Mobs
@@ -1249,7 +1341,11 @@ void run_tomb(struct map_session_data* sd, struct npc_data* nd)
 	strftime(time, sizeof(time), "%H:%M", localtime(&nd->u.tomb.kill_time));
 
 	// TODO: Find exact color?
-	snprintf(buffer, sizeof(buffer), msg_txt(sd,657), nd->u.tomb.md->db->name);
+
+	// [GonBee]
+	//snprintf(buffer, sizeof(buffer), msg_txt(sd,657), nd->u.tomb.md->db->name);
+	snprintf(buffer, sizeof(buffer), msg_txt(sd,657), nd->u.tomb.md->db->jname);
+
 	clif_scriptmes(sd, nd->bl.id, buffer);
 
 	clif_scriptmes(sd, nd->bl.id, msg_txt(sd,658));
@@ -2402,9 +2498,12 @@ static void npc_parsename(struct npc_data* nd, const char* name, const char* sta
 		strcpy(this_mapname, (nd->bl.m==-1?"(not on a map)":mapindex_id2name(map_getmapdata(nd->bl.m)->index)));
 		strcpy(other_mapname, (dnd->bl.m==-1?"(not on a map)":mapindex_id2name(map_getmapdata(dnd->bl.m)->index)));
 
-		ShowWarning("npc_parsename: Duplicate unique name in file '%s', line'%d'. Renaming '%s' to '%s'.\n", filepath, strline(buffer,start-buffer), nd->exname, newname);
-		ShowDebug("this npc:\n   display name '%s'\n   unique name '%s'\n   map=%s, x=%d, y=%d\n", nd->name, nd->exname, this_mapname, nd->bl.x, nd->bl.y);
-		ShowDebug("other npc in '%s' :\n   display name '%s'\n   unique name '%s'\n   map=%s, x=%d, y=%d\n",dnd->path, dnd->name, dnd->exname, other_mapname, dnd->bl.x, dnd->bl.y);
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のために、NPC名が重複していても警告しない。
+		//ShowWarning("npc_parsename: Duplicate unique name in file '%s', line'%d'. Renaming '%s' to '%s'.\n", filepath, strline(buffer,start-buffer), nd->exname, newname);
+		//ShowDebug("this npc:\n   display name '%s'\n   unique name '%s'\n   map=%s, x=%d, y=%d\n", nd->name, nd->exname, this_mapname, nd->bl.x, nd->bl.y);
+		//ShowDebug("other npc in '%s' :\n   display name '%s'\n   unique name '%s'\n   map=%s, x=%d, y=%d\n",dnd->path, dnd->name, dnd->exname, other_mapname, dnd->bl.x, dnd->bl.y);
+
 		safestrncpy(nd->exname, newname, sizeof(nd->exname));
 	}
 
@@ -2773,7 +2872,14 @@ static const char* npc_parse_shop(char* w1, char* w2, char* w3, char* w4, const 
 #endif
 				break;
 			default:
-				if (sscanf(p, ",%6hu:%11d", &nameid2, &value) != 2) {
+
+				// [GonBee]
+				// Aurigaスクリプトとの互換性のために、
+				// 値段を省略できるようにする。省略ならデフォルト。
+				//if (sscanf(p, ",%6hu:%11d", &nameid2, &value) != 2) {
+				value = -1;
+				if (sscanf(p, ",%6hu:%11d", &nameid2, &value) < 1) {
+
 					ShowError("npc_parse_shop: Invalid item definition in file '%s', line '%d'. Ignoring the rest of the line...\n * w1=%s\n * w2=%s\n * w3=%s\n * w4=%s\n", filepath, strline(buffer, start - buffer), w1, w2, w3, w4);
 					skip = true;
 				}
@@ -4235,17 +4341,19 @@ int npc_parsesrcfile(const char* filepath, bool runOnInit)
 	for( p = skip_space(buffer); p && *p ; p = skip_space(p) )
 	{
 		int pos[9];
+
 		char w1[2048], w2[2048], w3[2048], w4[2048];
 		int i, count;
 		lines++;
 
 		// w1<TAB>w2<TAB>w3<TAB>w4
-		count = sv_parse(p, len+buffer-p, 0, '\t', pos, ARRAYLENGTH(pos), (e_svopt)(SV_TERMINATE_LF|SV_TERMINATE_CRLF));
+		count = sv_parse(p, len+buffer-p, 0, '\t', pos, ARRAYLENGTH(pos), (e_svopt)(SV_TERMINATE_LF|SV_TERMINATE_CRLF), false);
 		if( count < 0 )
 		{
 			ShowError("npc_parsesrcfile: Parse error in file '%s', line '%d'. Stopping...\n", filepath, strline(buffer,p-buffer));
 			break;
 		}
+
 		// fill w1
 		if( pos[3]-pos[2] > ARRAYLENGTH(w1)-1 )
 			ShowWarning("npc_parsesrcfile: w1 truncated, too much data (%d) in file '%s', line '%d'.\n", pos[3]-pos[2], filepath, strline(buffer,p-buffer));

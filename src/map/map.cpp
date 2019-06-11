@@ -50,6 +50,9 @@
 #include "storage.hpp"
 #include "trade.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 using namespace rathena;
 
 char default_codepage[32] = "";
@@ -119,8 +122,8 @@ static int block_free_count = 0, block_free_lock = 0;
 static struct block_list *bl_list[BL_LIST_MAX];
 static int bl_list_count = 0;
 
-#ifndef MAP_MAX_MSG
-	#define MAP_MAX_MSG 1550
+#ifndef MCAP_MAX_MSG
+	#define MCAP_MAX_MSG 1550
 #endif
 
 struct map_data map[MAX_MAP_PER_SERVER];
@@ -214,7 +217,20 @@ int map_getusers(void)
  *------------------------------------------*/
 int map_usercount(void)
 {
-	return pc_db->size(pc_db);
+
+	// [GonBee]
+	// Botはユーザーに含めない。
+	//return pc_db->size(pc_db);
+	int cou = 0;
+	s_mapiterator* ite = mapit_getallusers();
+	for (TBL_PC* sd = (TBL_PC*)(mapit_first(ite));
+		mapit_exists(ite);
+		sd = (TBL_PC*)(mapit_next(ite))
+	) {
+		if (!pybot::char_is_bot(sd->status.char_id)) ++cou;
+	}
+	return cou;
+
 }
 
 
@@ -4936,6 +4952,9 @@ void do_final(void){
 	do_final_buyingstore();
 	do_final_path();
 
+	// [GonBee]
+	pybot::do_final();
+
 	map_db->destroy(map_db, map_db_final);
 
 	for (int i = 0; i < map_num; i++) {
@@ -5038,7 +5057,7 @@ void set_server_type(void)
  * Message System
  *------------------------------------------------------*/
 struct msg_data {
-	char* msg[MAP_MAX_MSG];
+	char* msg[MCAP_MAX_MSG];
 };
 struct msg_data *map_lang2msgdb(uint8 lang){
 	return (struct msg_data*)idb_get(map_msg_db, lang);
@@ -5072,7 +5091,7 @@ void map_do_final_msg(void){
 	struct msg_data *mdb;
 
 	for (mdb = (struct msg_data *)dbi_first(iter); dbi_exists(iter); mdb = (struct msg_data *)dbi_next(iter)) {
-		_do_final_msg(MAP_MAX_MSG,mdb->msg);
+		_do_final_msg(MCAP_MAX_MSG,mdb->msg);
 		aFree(mdb);
 	}
 	dbi_destroy(iter);
@@ -5091,7 +5110,7 @@ int map_msg_config_read(const char *cfgName, int lang){
 		idb_remove(map_msg_db, lang);
 	idb_put(map_msg_db, lang, mdb);
 
-	if(_msg_config_read(cfgName,MAP_MAX_MSG,mdb->msg)!=0){ //an error occur
+	if(_msg_config_read(cfgName,MCAP_MAX_MSG,mdb->msg)!=0){ //an error occur
 		idb_remove(map_msg_db, lang); //@TRYME
 		aFree(mdb);
 	}
@@ -5103,14 +5122,14 @@ const char* map_msg_txt(struct map_session_data *sd, int msg_number){
 	if(sd && sd->langtype) lang = sd->langtype;
 
 	if( (mdb = map_lang2msgdb(lang)) != NULL){
-		const char *tmp = _msg_txt(msg_number,MAP_MAX_MSG,mdb->msg);
+		const char *tmp = _msg_txt(msg_number,MCAP_MAX_MSG,mdb->msg);
 		if(strcmp(tmp,"??")) //to verify result
 			return tmp;
 		ShowDebug("Message #%d not found for langtype %d.\n",msg_number,lang);
 	}
 	ShowDebug("Selected langtype %d not loaded, trying fallback...\n",lang);
 	if(lang != 0 && (mdb = map_lang2msgdb(0)) != NULL) //fallback
-		return _msg_txt(msg_number,MAP_MAX_MSG,mdb->msg);
+		return _msg_txt(msg_number,MCAP_MAX_MSG,mdb->msg);
 	return "??";
 }
 
@@ -5264,6 +5283,9 @@ int do_init(int argc, char *argv[])
 	do_init_duel();
 	do_init_vending();
 	do_init_buyingstore();
+
+	// [GonBee]
+	pybot::do_init();
 
 	npc_event_do_oninit();	// Init npcs (OnInit)
 

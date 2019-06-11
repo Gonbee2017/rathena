@@ -34,6 +34,9 @@ void (*shutdown_callback)(void) = NULL;
 int runflag = CORE_ST_RUN;
 char db_path[12] = "db"; /// relative path for db from server
 
+// [GonBee]
+int exitcode = 0;
+
 char *SERVER_NAME = NULL;
 char SERVER_TYPE = ATHENA_SERVER_NONE;
 
@@ -384,5 +387,7 @@ int main (int argc, char **argv)
 	}
 #endif
 
-	return 0;
+	// [GonBee]
+	//return 0;
+	return exitcode;
 }
