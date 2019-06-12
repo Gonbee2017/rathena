@@ -6,6 +6,5 @@ call :kill_server map
 exit /b
 
 :kill_server
-setlocal enabledelayedexpansion
-taskkill /f /im %1-server.exe>nul
+taskkill /f /im %1-server.exe>nul 2>&1
 exit /b

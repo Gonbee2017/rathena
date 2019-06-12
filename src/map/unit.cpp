@@ -102,8 +102,10 @@ int unit_walktoxy_sub(struct block_list *bl)
 	memcpy(&ud->walkpath,&wpd,sizeof(wpd));
 
 	// [GonBee]
-	// 斜めのコストが正しく機能するように修正。
-	// 目標地点に視線が通らなければ打ち切る。
+	// オリジナルのロジックではchaserangeを歩数として扱っている。
+	// そしてなぜか斜めのコストを縦横のコストの20倍としている。
+	// PyBotではこれを変更し、chaserangeを距離として扱うようにする。
+	// また視線が通らない場合はそのセルを候補から外す。
 	//if (ud->target_to && ud->chaserange>1) {
 	//	// Generally speaking, the walk path is already to an adjacent tile
 	//	// so we only need to shorten the path if the range is greater than 1.
@@ -124,28 +126,46 @@ int unit_walktoxy_sub(struct block_list *bl)
 		ud->chaserange >= 1 &&
 		ud->walkpath.path_len > 1
 	) {
+		// PCのためのチェック用の距離を計算する。
+		// チェック対象の座標と目標地点までの距離はこの値以下でなければならない。
 		int cli_ran = ud->chaserange * ud->chaserange + 1;
+
+		// 現在地点から最短の座標と歩数を目標地点の座標と歩数で初期化する。
 		int sho_x = ud->to_x;
 		int sho_y = ud->to_y;
 		int sho_len = ud->walkpath.path_len;
+
+		// チェック対象の座標を目標地点の座標で初期化する。
 		int x = sho_x;
 		int y = sho_y;
+
+		// 目標地点から現在地点の次の1歩までの経路を後ろ向きにたどる。
 		for (int len = ud->walkpath.path_len - 1; len > 0; --len) {
+			// 方向を取得し、チェック対象の座標を1歩後退させる。
 			directions dir = ud->walkpath.path[len];
 			x -= dirx[dir];
 			y -= diry[dir];
+
+			// PCならクライアント距離でチェックし、それ以外ならチェス盤距離でチェックする。
+			// chaserangeの範囲外であればループを抜ける。
 			if ((bl->type == BL_PC &&
 					distance_client_xy(x, y, ud->to_x, ud->to_y) > cli_ran
 				) || (bl->type != BL_PC &&
 					!check_distance_xy(x, y, ud->to_x, ud->to_y, ud->chaserange)
 				)
 			) break;
+
+			// 視線が通っていればその座標と歩数を最短とする。
 			if (path_search_long(NULL, bl->m, x, y, ud->to_x, ud->to_y, CELL_CHKWALL)) {
 				sho_x = x;
 				sho_y = y;
 				sho_len = len;
 			}
 		}
+
+		// 目標地点の座標と歩数を、chaserangeの範囲内であり、かつ目標地点に視線が通っており、
+		// かつ現在地点から最短の座標と歩数に置き換える。
+		// ただし、そのような座標が存在しなければ置き換えない。
 		ud->to_x = sho_x;
 		ud->to_y = sho_y;
 		ud->walkpath.path_len = sho_len;

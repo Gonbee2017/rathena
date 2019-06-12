@@ -486,16 +486,17 @@ unsigned int distance(int dx, int dy)
  */
 bool check_distance_client(int dx, int dy, int distance)
 {
+
 	// [GonBee]
 	// チェック用のクライアント距離を計算する。
-	// 距離がゼロならそのままでよい。
-	// ゼロ以外ならまず1を足し、次に自乗し、最後に1を足す。
+	// 少しボーナスを与えることで届きやすいようにする。
+	// ゼロ距離以外はまず1を足し、次に自乗し、最後に1を足す。
 	//if(distance < 0) distance = 0;
 	//
 	//return (distance_client(dx,dy) <= distance);
-	int cli_dis = distance;
-	if (cli_dis) ++(++cli_dis *= cli_dis);
-	return distance_client(dx, dy) <= cli_dis;
+	if (distance) ++(++distance *= distance);
+	return distance_client(dx, dy) <= distance;
+
 }
 
 /**
@@ -509,8 +510,10 @@ int distance_client(int dx, int dy)
 {
 	
 	// [GonBee]
-	// クライアント距離の概念を「実際の距離を自乗した値」に変更した。
-	// この変更は平方根による距離の計算の負荷を減らすことを目的としている。
+	// オリジナルではクライアント距離をユークリッド距離として計算している。
+	// しかしユークリッド距離は浮動小数点数の平方根を計算する必要があり、負荷が高い。
+	// そのためクライアント距離をユークリッド距離から「実際の距離を自乗した値」に変更する。
+	// クライアント距離の計算は頻繁に行われるのでこの変更により負荷を大きく軽減できる(はず)。
 	//double temp_dist = sqrt((double)(dx*dx + dy*dy));
 	//
 	////Bonus factor used by client
@@ -519,6 +522,7 @@ int distance_client(int dx, int dy)
 	//
 	//if(temp_dist < 0) temp_dist = 0;
 	return dx * dx + dy * dy;
+
 }
 
 bool direction_diagonal( enum directions direction ){
