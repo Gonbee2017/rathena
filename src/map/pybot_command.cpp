@@ -409,7 +409,7 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 			) {
 				bool suc = mem->sd()->status.zeny >= REPAIR_COST;
 				if (suc) {
-					pc_payzeny(mem->sd(), REPAIR_COST, LOG_TYPE_NONE, NULL);
+					pc_payzeny(mem->sd(), REPAIR_COST, LOG_TYPE_NPC, NULL);
 					itm->attribute = 0;
 					clif_produceeffect(mem->sd(), 0, itm->nameid);
 					done = true;
@@ -982,7 +982,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		) {
 			if (!idb) idb = itemdb_exists(itm->nameid);
 			int zen = pc_modifysellvalue(mem->sd(), idb->value_sell) * itm->amount;
-			pc_getzeny(mem->sd(), zen, LOG_TYPE_NONE, NULL);
+			pc_getzeny(mem->sd(), zen, LOG_TYPE_NPC, NULL);
 			out << INDEX_PREFIX << mem->member_index() << " " <<
 				ID_PREFIX << mem->char_id() << " - " <<
 				mem->name() << " : " <<

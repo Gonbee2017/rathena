@@ -34,6 +34,15 @@ CREATE TABLE `pybot_great_mob` (
   PRIMARY KEY (`char_id`, `mob_id`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_hot_map`;
+CREATE TABLE `pybot_hot_map` (
+  `province` tinyint(2) unsigned NOT NULL,
+  `type` tinyint(2) unsigned NOT NULL,
+  `map` varchar(11) NOT NULL,
+  `rate` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`province`, `type`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_ignore_item`;
 CREATE TABLE `pybot_ignore_item` (
   `char_id` int(11) unsigned NOT NULL,
@@ -47,6 +56,13 @@ CREATE TABLE IF NOT EXISTS `pybot_limit_skill` (
   `skill_id` int(11) unsigned NOT NULL,
   `skill_lv` tinyint(4) unsigned NOT NULL,
   PRIMARY KEY (`char_id`, `skill_id`)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `pybot_map_name`;
+CREATE TABLE `pybot_map_name` (
+  `map` varchar(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`map`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pybot_mvp`;
