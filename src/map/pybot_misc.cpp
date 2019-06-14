@@ -988,6 +988,38 @@ iterate_skill_unit(
 	return map_foreachincell(callback_yield_bl, m, x, y, BL_SKILL, &yie_bl);
 }
 
+// マップをロードする。
+void load_maps() {
+	sql_session::open([] (sql_session* ses) {
+		char nam_eng[11 + 1];
+		char nam_jap[100 + 1];
+		int nat_typ;
+		int map_typ;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("name_english" , nam_eng), "`,"
+			" `", construct<sql_column>("name_japanese", nam_jap), "`,"
+			" `", construct<sql_column>("nation_type"  , nat_typ), "`,"
+			" `", construct<sql_column>("map_type"     , map_typ), "` "
+			"FROM `pybot_map`"
+		);
+		while (ses->next_row()) {
+			int id = mapindex_name2id(nam_eng);
+			if (id) {
+				auto map = initialize<pybot_map>(
+					id,
+					nam_eng,
+					nam_jap,
+					nation_types(nat_typ),
+					map_types(map_typ)
+				);
+				id_maps.insert(std::make_pair(id, map));
+				type_maps[nat_typ * 100 + map_typ].push_back(map);
+			}
+		}
+	});
+}
+
 // 小文字の文字列に変換する。
 std::string // 変換した文字列。
 lowercase(

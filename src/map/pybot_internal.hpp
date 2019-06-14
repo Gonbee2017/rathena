@@ -356,14 +356,13 @@ namespace pybot {
 // -----------------------------------------------------------------------------
 // 列挙の定義
 
-// 通常攻撃ポリシーの値。
-enum normal_attack_policy_values {
-	NAPV_PENDING,    // 保留。
-	NAPV_CONTINUOUS, // 連続。
-	NAPV_SINGLE,     // 単発。
-	NAPV_MAX
+// 攻撃されているフラグ。
+enum attacked_flags {
+	AF_TRUE  = 0x1,                // 真。
+	AF_FALSE = 0x2,                // 偽。
+	AF_ALL   = AF_TRUE | AF_FALSE, // すべて。
 };
-	
+
 // 戦闘モードのフラグ。
 enum battle_mode_flags {
 	BMF_NONE   = 0x1,                    // なし。
@@ -416,29 +415,6 @@ enum equip_pos_orders {
 	EPO_COSTUME_GARMENT , // コスチューム肩。
 	EPO_AMMO            , // 矢/弾。
 	EPO_MAX             ,
-};
-
-// メタモンスター。
-enum meta_mobs {
-	MM_REST        =   100, // 休息。
-	MM_BACKUP      =   101, // 予備。
-	MM_BASE        =   102, // 基本。
-	MM_SIZE        =   120, // サイズ。
-	MM_ELEMENT     =   140, // 属性。
-	MM_RACE        =   160, // 種族。
-	MM_BOSS        =   180, // ボス。
-	MM_GREAT       =   181, // グレート。
-	MM_FLORA       =   182, // フローラ型。
-	MM_SP_DECLINE4 =   190, // SP低下4。
-	MM_SP_DECLINE3 =   191, // SP低下3。
-	MM_SP_DECLINE2 =   192, // SP低下2。
-	MM_SP_DECLINE1 =   193, // SP低下1。
-	MM_HP_DECLINE4 =   200, // HP低下4。
-	MM_HP_DECLINE3 =   201, // HP低下3。
-	MM_HP_DECLINE2 =   202, // HP低下2。
-	MM_HP_DECLINE1 =   203, // HP低下1。
-	MM_INDIVIDUAL  =   500, // 個別。
-	MM_CAUTION     = 10000, // 警戒。
 };
 
 // 追加のアイテムID。
@@ -505,6 +481,54 @@ enum item_ids {
 	ITEMID_FREEZING_SPHERE         = 13207, // アイススフィア。
 };
 
+// マップの種類。
+enum map_types {
+	MT_UNKNOWN, // 不明。
+	MT_CITY   , // 街。
+	MT_FIELD  , // フィールド。
+	MT_DUNGEON, // ダンジョン。
+};
+
+// メタモンスター。
+enum meta_mobs {
+	MM_REST        =   100, // 休息。
+	MM_BACKUP      =   101, // 予備。
+	MM_BASE        =   102, // 基本。
+	MM_SIZE        =   120, // サイズ。
+	MM_ELEMENT     =   140, // 属性。
+	MM_RACE        =   160, // 種族。
+	MM_BOSS        =   180, // ボス。
+	MM_GREAT       =   181, // グレート。
+	MM_FLORA       =   182, // フローラ型。
+	MM_SP_DECLINE4 =   190, // SP低下4。
+	MM_SP_DECLINE3 =   191, // SP低下3。
+	MM_SP_DECLINE2 =   192, // SP低下2。
+	MM_SP_DECLINE1 =   193, // SP低下1。
+	MM_HP_DECLINE4 =   200, // HP低下4。
+	MM_HP_DECLINE3 =   201, // HP低下3。
+	MM_HP_DECLINE2 =   202, // HP低下2。
+	MM_HP_DECLINE1 =   203, // HP低下1。
+	MM_INDIVIDUAL  =   500, // 個別。
+	MM_CAUTION     = 10000, // 警戒。
+};
+
+// 国の種類。
+enum nation_types {
+	NT_UNKNOWN    , // 不明。
+	NT_MIDGARD    , // ルーンミッドガッツ王国。
+	NT_SCHWARZWALD, // シュバルツバルド共和国。
+	NT_ARUNAFELTZ , // アルナベルツ教国。
+	NT_OTHER      , // その他の国々。
+};
+
+// 通常攻撃ポリシーの値。
+enum normal_attack_policy_values {
+	NAPV_PENDING,    // 保留。
+	NAPV_CONTINUOUS, // 連続。
+	NAPV_SINGLE,     // 単発。
+	NAPV_MAX
+};
+
 // 一次バトラーのフラグ。
 enum primary_flags {
 	PF_TRUE  = 0x1,                // 真。
@@ -521,20 +545,6 @@ enum registry_dirties {
 	RD_MAX,
 };
 
-// 攻撃されているフラグ。
-enum attacked_flags {
-	AF_TRUE  = 0x1,                // 真。
-	AF_FALSE = 0x2,                // 偽。
-	AF_ALL   = AF_TRUE | AF_FALSE, // すべて。
-};
-
-// 歩行中のフラグ。
-enum walking_flags {
-	WF_TRUE  = 0x1,               // 真。
-	WF_FALSE = 0x2,               // 偽。
-	WF_ALL  = WF_TRUE | WF_FALSE, // すべて。
-};
-
 // ステータスのタイプ。
 enum status_types {
 	ST_STR, // STR。
@@ -544,6 +554,13 @@ enum status_types {
 	ST_DEX, // DEX。
 	ST_LUK, // LUK。
 	ST_MAX
+};
+
+// 歩行中のフラグ。
+enum walking_flags {
+	WF_TRUE  = 0x1,               // 真。
+	WF_FALSE = 0x2,               // 偽。
+	WF_ALL  = WF_TRUE | WF_FALSE, // すべて。
 };
 
 // -----------------------------------------------------------------------------
@@ -608,6 +625,7 @@ struct play_skill;
 template <class V> struct policy_t;
 struct pos_t;
 struct private_storage_context;
+struct pybot_map;
 struct skill_mobs;
 struct skill_unit_key;
 struct sql_binder;
@@ -1997,6 +2015,15 @@ struct pos_t {
 	pos_t(int x_, int y_, int val = 0, int adv = 0);
 };
 
+// マップ。
+struct pybot_map {
+	int id;                    // マップID。
+	std::string name_english;  // 英語名。
+	std::string name_japanese; // 日本語名。
+	nation_types nation_type;  // 国の種類。
+	map_types map_type;        // マップの種類。
+};
+
 // スコープから抜けるときの処理。
 struct scope_exit {
 	// 処理。
@@ -2357,6 +2384,7 @@ void iterate_corner_xy(int m, int x, int y, int rad, yield_xy_func yie);
 void iterate_edge_bl(block_list* cen, int rad, yield_xy_func yie);
 void iterate_edge_xy(int m, int x, int y, int rad, yield_xy_func yie);
 int iterate_skill_unit(int m, int x, int y, yield_skill_unit_func yie);
+void load_maps();
 std::string lowercase(const std::string& str);
 bool mob_is_pure_flora(mob_data* md);
 bool mob_skill_is_long(e_skill kid, int klv);
@@ -2444,7 +2472,6 @@ extern const char ID_PREFIX;
 extern const char INDEX_PREFIX;
 extern const std::unordered_map<e_job,int> JOB_BOT_LIMITS;
 extern const skill_id_set LAYABLE_ON_LP_SKILLS;
-extern const std::array<std::string,1026> MAP_NAME_TABLE;
 extern const std::unordered_map<meta_mobs,std::string> META_MONSTER_NAMES;
 extern const std::array<std::string,CLASS_MAX> MOB_CLASS_NAME_TABLE;
 extern const skill_id_set MOB_SHORT_SKILLS;
@@ -2475,8 +2502,10 @@ extern int ai_timer;
 extern std::unordered_map<int,block_if*> all_bots;
 extern std::unordered_map<int,ptr<block_if>> all_leaders;
 extern std::unordered_map<int,t_tick> bot_dead_ticks;
+extern std::unordered_map<int,ptr<pybot_map>> id_maps;
 extern std::unordered_map<int,ptr<block_list>> map_initial_positions;
 extern t_tick now;
+extern std::unordered_map<int,std::vector<ptr<pybot_map>>> type_maps;
 
 }
 

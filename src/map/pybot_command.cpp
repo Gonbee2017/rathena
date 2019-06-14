@@ -2235,7 +2235,8 @@ SUBCMD_FUNC(Bot, Warp) {
 	auto pri_poi = [] (int ind, point* poi) -> std::string {
 		return print(
 			INDEX_PREFIX, ind, " - ",
-			MAP_NAME_TABLE[poi->map], " (", mapindex_id2name(poi->map), ") : ",
+			id_maps.at(poi->map)->name_japanese,
+			" (", mapindex_id2name(poi->map), ") : ",
 			poi->x, ", ", poi->y, "\n"
 		);
 	};
@@ -2281,9 +2282,9 @@ SUBCMD_FUNC(Bot, Warp) {
 			if (i == -1) {
 				std::string lc_war_loc_str = pybot::lowercase(war_loc_str);
 				for (int j = 0; j < max_mem; ++j) {
-					int map2 = mem->sd()->status.memo_point[j].map;
-					if (pybot::lowercase(MAP_NAME_TABLE[map2]) == lc_war_loc_str ||
-						pybot::lowercase(mapindex_id2name(map2)) == lc_war_loc_str
+					auto map2 = id_maps.at(mem->sd()->status.memo_point[j].map);
+					if (pybot::lowercase(map2->name_english) == lc_war_loc_str ||
+						pybot::lowercase(map2->name_japanese) == lc_war_loc_str
 					) {
 						i = j;
 						break;
@@ -2309,7 +2310,8 @@ SUBCMD_FUNC(Bot, Warp) {
 		});
 		show_client(
 			lea->fd(),
-			print("「", mem->name(), "」は「", MAP_NAME_TABLE[map],
+			print("「", mem->name(), "」は"
+				"「", id_maps.at(map)->name_japanese,
 				" (", mapindex_id2name(map), ")」"
 				"へのワープポータルを開きます。"
 			)
