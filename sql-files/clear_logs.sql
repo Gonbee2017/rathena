@@ -4,6 +4,7 @@ TRUNCATE `cashlog`;
 TRUNCATE `charlog`;
 TRUNCATE `chatlog`;
 TRUNCATE `cp_loginlog`;
+TRUNCATE `cp_onlinepeak`;
 TRUNCATE `feedinglog`;
 TRUNCATE `guild_storage_log`;
 TRUNCATE `loginlog`;
