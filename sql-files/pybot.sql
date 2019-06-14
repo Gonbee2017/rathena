@@ -34,8 +34,9 @@ CREATE TABLE `pybot_great_mob` (
   PRIMARY KEY (`char_id`, `mob_id`)
 ) ENGINE=MyISAM;
 
-DROP TABLE IF EXISTS `pybot_hot_map`;
-CREATE TABLE `pybot_hot_map` (
+DROP TABLE IF EXISTS `pybot_fever_map`;
+CREATE TABLE `pybot_fever_map` (
+  `nation` tinyint(2) unsigned NOT NULL,
   `province` tinyint(2) unsigned NOT NULL,
   `type` tinyint(2) unsigned NOT NULL,
   `map` varchar(11) NOT NULL,

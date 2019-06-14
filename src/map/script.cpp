@@ -11166,7 +11166,12 @@ BUILDIN_FUNC(getusers)
 			}
 			break;
 		case 1:
-			val = map_getusers();
+
+			// [GonBee]
+			// í‚ÉÅV‚Ì’l‚ğ•Ô‚·B
+			//val = map_getusers();
+			val = map_usercount();
+
 			break;
 		default:
 			ShowWarning("buildin_getusers: Unknown type %d.\n", flag);
