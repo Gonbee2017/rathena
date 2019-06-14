@@ -35,7 +35,7 @@ OnInit:
 	// Would you like an announcement when you reach a higher peak?
 	// 1 = Yes
 	// 0 = No
-	.displaypeakannounce = 1;
+	.displaypeakannounce = 0;
 
 // END CONFIGS
 
