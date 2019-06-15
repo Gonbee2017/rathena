@@ -55,7 +55,7 @@ taskkill /f /im %1-server.exe>nul 2>&1
 exit /b
 
 :start_server
-start cmd /c job_server.bat %1
+start "%1-server" cmd /c job_server.bat %1
 exit /b
 
 :wait_exit_server
