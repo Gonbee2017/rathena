@@ -2003,6 +2003,9 @@ const int FAME_OFFSET = 30000;
 // 名声付きであることを示すタグ。
 const std::string FAME_TAG = "名声付き";
 
+// フィーバー倍率のキー。
+const std::string FEVER_RATE_KEY = "FEVER_RATE";
+
 // グレート状態変化タイプのセット。
 const sc_type_set GREAT_SC_TYPES = {
 	SC_ADRENALINE,
@@ -3601,6 +3604,12 @@ std::unordered_map<
 	int,   // キャラクターID。
 	t_tick // 死亡チック。
 > bot_dead_ticks;
+
+// フィーバー倍率のマップ。
+std::unordered_map<
+	int, // マップID。
+	int  // 倍率。
+> fever_rates;
 
 // マップIDをキーとするマップのマップ。
 std::unordered_map<

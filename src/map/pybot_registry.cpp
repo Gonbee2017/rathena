@@ -438,8 +438,8 @@ insert_storage_put_item_func(
 		ses->execute(
 			"INSERT INTO `pybot_storage_put_item` "
 			"VALUES "
-			"(", construct<sql_param>(cid ), ","
-			" ", construct<sql_param>(nid ), ")"
+			"(", construct<sql_param>(cid), ","
+			" ", construct<sql_param>(nid), ")"
 		);
 	};
 }

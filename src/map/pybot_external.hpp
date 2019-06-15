@@ -44,6 +44,7 @@ map_session_data* get_leader(int cid);
 block_list* get_map_initial_position(map_session_data* sd);
 double job_level_rate(map_session_data* sd, block_list* bl);
 bool letter_is_jlead(uint8_t let);
+double map_rate(int m);
 void pc_acquired_mvp(int cid, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);

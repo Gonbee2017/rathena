@@ -2286,7 +2286,7 @@ bot_t::bot_t(
 	last_reloaded_equipset_tick() = 0;
 	all_bots[char_id()] = this;
 	show_info(print(
-		"'" CL_WHITE, name(), CL_RESET "' logged in. "
+		"Bot '" CL_WHITE, name(), CL_RESET "' logged in. "
 		"(AID/CID: '" CL_WHITE, account_id(), "/", char_id(), CL_RESET "',"
 		" Group '" CL_WHITE, sd()->group_id, CL_RESET "'"
 		")."

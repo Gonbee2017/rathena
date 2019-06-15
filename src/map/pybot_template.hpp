@@ -828,9 +828,10 @@ find_map_data(
 	typename M::key_type key,   // キー。
 	typename M::mapped_type def // デフォルトのデータ。
 ) {
+	M::mapped_type res = def;
 	auto val_ite = map.find(key);
-	if (val_ite == map.end()) return def;
-	return val_ite->second;
+	if (val_ite != map.end()) res = val_ite->second;
+	return res;
 }
 
 // マップからキーを探す。
@@ -842,10 +843,14 @@ find_map_key(
 	typename M::mapped_type dat, // データ。
 	typename M::key_type def     // デフォルトのキー。
 ) {
+	M::key_type res = def;
 	for (auto& val : map) {
-		if (val.second == dat) return val.first;
+		if (val.second == dat) {
+			res = val.first;
+			break;
+		}
 	}
-	return def;
+	return res;
 }
 
 // 配列から名前を探す。

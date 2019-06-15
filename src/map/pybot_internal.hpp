@@ -616,6 +616,7 @@ struct command_element;
 struct command_error;
 struct equipset_t;
 struct equipset_item;
+struct fever_size;
 struct guild_storage_context;
 template <class C> struct insert_iterator;
 struct inventory_context;
@@ -2159,6 +2160,13 @@ struct private_storage_context : storage_context {
 	virtual void delete_(int ind, int amo) override;
 };
 
+// フィーバーマップの数。
+struct fever_size {
+	nation_types nation_type; // 国の種類。
+	map_types map_type;       // マップの種類。
+	int size;                 // 数。
+};
+
 // ギルド倉庫の文脈。
 struct guild_storage_context : storage_context {
 	guild_storage_context(map_session_data* sd_);
@@ -2434,6 +2442,7 @@ int status_get_base_vit(map_session_data* sd);
 int stoi(const std::string& str, int def = 0, int bas = 10);
 std::string trim(const std::string& str, const std::string& pad_lets);
 template <class T, class R, class ...A> std::function<R(T*,A...)> unbind(R(T::*mem_fun)(A...));
+void update_fever();
 bool wall_exists(block_list* cen, int rad);
 
 // -----------------------------------------------------------------------------
@@ -2465,6 +2474,7 @@ extern const std::array<equip_index,EPO_MAX> EPO2EQI_TABLE;
 extern const std::array<std::string,EQI_MAX> EQUIP_POS_NAME_TABLE;
 extern const int FAME_OFFSET;
 extern const std::string FAME_TAG;
+extern const std::string FEVER_RATE_KEY;
 extern const sc_type_set GREAT_SC_TYPES;
 extern const std::unordered_map<sc_type,std::string> HOMUN_ICON_NAMES;
 extern const std::array<std::string,EFST_MAX> ICON_NAME_TABLE;
@@ -2502,6 +2512,7 @@ extern int ai_timer;
 extern std::unordered_map<int,block_if*> all_bots;
 extern std::unordered_map<int,ptr<block_if>> all_leaders;
 extern std::unordered_map<int,t_tick> bot_dead_ticks;
+extern std::unordered_map<int,int> fever_rates;
 extern std::unordered_map<int,ptr<pybot_map>> id_maps;
 extern std::unordered_map<int,ptr<block_list>> map_initial_positions;
 extern t_tick now;

@@ -5354,8 +5354,8 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	rate += sd->bonus.add_steal_rate;
 
 	// [GonBee]
-	// スティール成功率にジョブレベル倍率をかける。
-	rate = int(rate * pybot::job_level_rate(sd, &md->bl));
+	// スティール成功率にボーナス倍率をかける。
+	rate = int(rate * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
 
 	if( rate < 1
 #ifdef RENEWAL
@@ -5457,8 +5457,8 @@ int pc_steal_coin(struct map_session_data *sd,struct block_list *target)
 		int amount = (rnd() % (2 * target_lv + 1)) + 8 * target_lv; // Reduced formula
 
 		// [GonBee]
-		// スティールコインで獲得するZenyにジョブレベル倍率をかける。
-		amount = int(amount * pybot::job_level_rate(sd, &md->bl));
+		// スティールコインで獲得するZenyにボーナス倍率をかける。
+		amount = int(amount * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
 
 		pc_getzeny(sd, amount, LOG_TYPE_STEAL, NULL);
 
@@ -6810,13 +6810,13 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 		((pc_is_maxjoblv(sd)) ? 8 : 0);
 
 	// [GonBee]
-	// モンスターから取得した経験値にレベル倍率をかける。
+	// モンスターから取得した経験値にボーナス倍率をかける。
 	if (src &&
 		src->type == BL_MOB
 	) {
 		mob_data* md = BL_CAST(BL_MOB, src);
-		base_exp = int(base_exp * pybot::base_level_rate(&sd->bl, md));
-		job_exp = int(job_exp * pybot::job_level_rate(sd, &md->bl));
+		base_exp = int(base_exp * pybot::base_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
+		job_exp = int(job_exp * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
 	}
 
 	if (!(exp_flag&2))

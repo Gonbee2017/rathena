@@ -1049,8 +1049,8 @@ static int pet_food(struct map_session_data *sd, struct pet_data *pd)
 			k = pet_db_ptr->r_hungry;
 
 		// [GonBee]
-		// ペットの親密度上昇にジョブレベル倍率をかける。
-		k += int(pybot::job_level_rate(pd->master, &pd->bl));
+		// ペットの親密度上昇にボーナス倍率をかける。
+		k += int(pybot::job_level_rate(pd->master, &pd->bl) * pybot::map_rate(pd->master->bl.m));
 
 		if( pd->pet.hungry > 75 ) {
 			k = k >> 1;

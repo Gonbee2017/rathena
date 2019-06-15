@@ -2654,9 +2654,9 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 			if(base_exp && md->dmglog[i].flag == MDLF_HOMUN) //tmpsd[i] is null if it has no homunc.
 
 				// [GonBee]
-				// ホムンクルスの取得経験値にベースレベル倍率をかける。
+				// ホムンクルスの取得経験値にボーナス倍率をかける。
 				//hom_gainexp(tmpsd[i]->hd, base_exp);
-				hom_gainexp(tmpsd[i]->hd, int(base_exp * pybot::base_level_rate(&tmpsd[i]->hd->bl, md)));
+				hom_gainexp(tmpsd[i]->hd, int(base_exp * pybot::base_level_rate(&tmpsd[i]->hd->bl, md) * pybot::map_rate(tmpsd[i]->hd->bl.m)));
 
 			if(flag) {
 				if(base_exp || job_exp) {
@@ -2711,9 +2711,9 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		dlist->item = NULL;
 
 		// [GonBee]
-		// ドロップ確率のレベル倍率を計算する。
-		double bas_lv_rat = 1.;
-		if (src) bas_lv_rat = pybot::base_level_rate(src, md);
+		// ドロップ確率のボーナス倍率を計算する。
+		double bou_rat = 1.;
+		if (src) bou_rat = pybot::base_level_rate(src, md) * pybot::map_rate(src->m);
 
 		for (i = 0; i < MAX_MOB_DROP_TOTAL; i++) {
 			if (md->db->dropitem[i].nameid <= 0)
@@ -2779,8 +2779,8 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 #endif
 
 			// [GonBee]
-			// ドロップ確率にレベル倍率をかける。
-			drop_rate = int(drop_rate * bas_lv_rat);
+			// ドロップ確率にボーナス倍率をかける。
+			drop_rate = int(drop_rate * bou_rat);
 
 			// attempt to drop the item
 			if (rnd() % 10000 >= drop_rate)

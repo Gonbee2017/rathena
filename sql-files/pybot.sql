@@ -27,13 +27,6 @@ CREATE TABLE `pybot_equipset` (
   PRIMARY KEY (`char_id`, `mob_id`, `order`)
 ) ENGINE=MyISAM;
 
-DROP TABLE IF EXISTS `pybot_fever`;
-CREATE TABLE `pybot_fever` (
-  `map` varchar(11) NOT NULL,
-  `rate` mediumint(9) unsigned NOT NULL,
-  PRIMARY KEY (`map`)
-) ENGINE=MyISAM;
-
 DROP TABLE IF EXISTS `pybot_great_mob`;
 CREATE TABLE `pybot_great_mob` (
   `char_id` int(11) unsigned NOT NULL,

@@ -64,6 +64,7 @@ void do_final() {
 // パーティーBOT機能を初期化する。
 void do_init() {
 	load_maps();
+	update_fever();
 	skill_mobs::instance = construct<skill_mobs>();
 	card_converter::instance = construct<card_converter>();
 	add_timer_func_list(ai_t::timer_func, "pybot_ai");
@@ -151,6 +152,14 @@ letter_is_jlead(
         ) || (let >= 0xe0 &&
             let <= 0xfc
         );
+}
+
+// マップ倍率を取得する。
+double // 取得した倍率。
+map_rate(
+	int m // マップID。
+) {
+	return find_map_data(fever_rates, m, 100) / 100.;
 }
 
 // PCがMVPを獲得したことを記録する。

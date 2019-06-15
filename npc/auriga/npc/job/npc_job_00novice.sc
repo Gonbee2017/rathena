@@ -3538,6 +3538,11 @@ new_1-4,100,29,4	script	適性検査官	46,{
 	getitem 501,4;
 	getitem 503,2;
 	getitem 506,2;
+	
+	getitem 7059,5; // カプラ倉庫無料利用券
+	getitem 7060,5; // 空間移動無料利用券
+	set Zeny,Zeny+10000;
+	
 	next;
 	mes "[ヘイスン]";
 	mes "総合評価の発表後";
@@ -3784,11 +3789,6 @@ new_1-4,100,29,4	script	適性検査官	46,{
 	mes "^882420" +strcharinfo(0)+ "^000000様の";
 	mes "ご武運を祈ります。さようなら。";
 	close2;
-	
-	getitem 7059,5; // カプラ倉庫無料利用券
-	getitem 7060,5; // 空間移動無料利用券
-	set Zeny,Zeny+10000;
-	
 	set CHANGE_NV,0;
 	switch(.@i) {
 		case 1:
