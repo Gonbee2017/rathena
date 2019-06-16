@@ -32,6 +32,7 @@ struct mvp_stats {
 
 void advance_mvp_round(int cid);
 double base_level_rate(block_list* bl, mob_data* md);
+void bot_identify_equip(int cid, item* itm);
 bool char_is_bot(int cid);
 int command_bot(const int fd, map_session_data* sd, const char* mes);
 int convert_card(int car_id);

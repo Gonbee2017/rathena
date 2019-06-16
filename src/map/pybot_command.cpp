@@ -321,24 +321,8 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 		if (itm->nameid &&
 			!itm->identify
 		) {
-			bool suc = false;
-			if (mem->check_skill(MC_IDENTIFY)) suc = true;
-			else {
-				int mag_inv_ind = inv_con->find(ITEMID_MAGNIFIER);
-				if (mag_inv_ind != INT_MIN) {
-					inv_con->delete_(mag_inv_ind, 1);
-					suc = true;
-				} else {
-					int mag_car_ind = INT_MIN;
-					if (car_con) mag_car_ind = car_con->find(ITEMID_MAGNIFIER);
-					if (mag_car_ind != INT_MIN) {
-						car_con->delete_(mag_car_ind, 1);
-						suc = true;
-					}
-				}
-			}
-			if (suc) {
-				itm->identify = 1;
+			mem->identify_equip(itm, inv_con, car_con);
+			if (itm->identify) {
 				++tot_cou;
 				res = true;
 			}
@@ -350,7 +334,7 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 				INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
 				print_item(itm, idb);
-			if (!suc) out << " ※拡大鏡不足";
+			if (!itm->identify) out << " ※拡大鏡不足";
 			out << "\n";
 		}
 		return res;
@@ -2980,7 +2964,7 @@ void skill_user_limit_skill(
 	) {
 		sk_use->limit_skills()->unregister(sk->id);
 		show_client(lea->fd(), print(
-			"「", sk_use->name(), "」の「", sk_des,
+			"「", sk_use->name(), "」は「", sk_des,
 			"」のレベル制限を解除しました。"
 		));
 	} else {
@@ -2995,7 +2979,7 @@ void skill_user_limit_skill(
 		}
 		sk_use->limit_skills()->register_(sk->id, initialize<int>(lim_lv));
 		show_client(lea->fd(), print(
-			"「", sk_use->name(), "」の「", sk_des,
+			"「", sk_use->name(), "」は「", sk_des,
 			"」をレベル", lim_lv, "に制限しました。"
 		));
 	}

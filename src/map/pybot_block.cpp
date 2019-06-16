@@ -166,6 +166,7 @@ int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1546,6 +1547,46 @@ member_impl::guild_id() {
 // ホムンクルス。
 ptr<block_if>& member_impl::homun() {
 	return homun_;
+}
+
+// 武具を鑑定する。
+// すでに鑑定済みなら何もしない。
+// アイテム鑑定を使用可能であれば何も消費せずに鑑定する。
+// 所持アイテムかカートに拡大鏡があればそれを消費して鑑定する。
+// アイテム鑑定を使用不可、かつ拡大鏡がなければ何もしない。
+void member_impl::identify_equip(
+	item* itm,                // 鑑定する武具。
+	storage_context* inv_con, // 所持アイテムの文脈。nullptrなら必要に応じて作成。
+	storage_context* car_con  // カートの文脈。nullptrなら必要に応じて作成。
+) {
+	ptr<storage_context> inv_con_ptr, car_con_ptr;
+	if (!itm->identify) {
+		if (check_skill(MC_IDENTIFY)) itm->identify = 1;
+		else {
+			if (!inv_con) {
+				inv_con_ptr = construct<inventory_context>(sd());
+				inv_con = inv_con_ptr.get();
+			}
+			int mag_inv_ind = inv_con->find(ITEMID_MAGNIFIER);
+			if (mag_inv_ind != INT_MIN) {
+				inv_con->delete_(mag_inv_ind, 1);
+				itm->identify = 1;
+			} else {
+				if (!car_con &&
+					pc_iscarton(sd())
+				) {
+					car_con_ptr = construct<cart_context>(sd());
+					car_con = car_con_ptr.get();
+				}
+				int mag_car_ind = INT_MIN;
+				if (car_con) mag_car_ind = car_con->find(ITEMID_MAGNIFIER);
+				if (mag_car_ind != INT_MIN) {
+					car_con->delete_(mag_car_ind, 1);
+					itm->identify = 1;
+				}
+			}
+		}
+	}
 }
 
 // カートを引いているかを判定する。

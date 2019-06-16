@@ -40,6 +40,20 @@ base_level_rate(
 	return std::max(std::max(pc_rat, 1.) * std::max(mob_rat, 1.), 2.);
 }
 
+// Botが武具を鑑定する。
+// Botではないなら何もしない。
+// すでに鑑定済みなら何もしない。
+// アイテム鑑定を使用可能であれば何も消費せずに鑑定する。
+// 所持アイテムかカートに拡大鏡があればそれを消費して鑑定する。
+// アイテム鑑定を使用不可、かつ拡大鏡がなければ何もしない。
+void bot_identify_equip(
+	int cid,
+	item* itm
+) {
+	block_if* bot = find_map_data(all_bots, cid);
+	if (bot) bot->identify_equip(itm);
+}
+
 // キャラクターIDがBotかを判定する。
 bool // 結果。
 char_is_bot(
@@ -117,8 +131,9 @@ get_leader(
 	int cid // キャラクターID。
 ) {
 	block_if* bot = find_map_data(all_bots, cid);
-	if (!bot) return nullptr;
-	return map_id2sd(bot->leader()->account_id());
+	map_session_data* lea = nullptr;
+	if (bot) lea = map_id2sd(bot->leader()->account_id());
+	return lea;
 }
 
 // 現在のマップの初期位置を取得する。

@@ -4786,6 +4786,10 @@ bool pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem)
 		pybot::flooritem_to_be_ignored(lea_sd, fitem)
 	) return false;
 
+	// [GonBee]
+	// Bot‚ª–¢ŠÓ’è‚Ì•‹ï‚ğE‚¤‚ÆA‘¦À‚ÉŠÓ’è‚µ‚æ‚¤‚Æ‚·‚éB
+	if (!fitem->item.identify) pybot::bot_identify_equip(sd->status.char_id, &fitem->item);
+
 	//This function takes care of giving the item to whoever should have it, considering party-share options.
 	if ((flag = party_share_loot(p,sd,&fitem->item, fitem->first_get_charid))) {
 		clif_additem(sd,0,0,flag);

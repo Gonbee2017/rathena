@@ -2806,7 +2806,15 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		}
 
 		// Ore Discovery [Celest]
-		if (sd == mvp_sd && pc_checkskill(sd,BS_FINDINGORE)>0 && battle_config.finding_ore_rate/10 >= rnd()%10000) {
+
+		// [GonBee]
+		// 鉱石発見の成功率にボーナス倍率をかける。
+		//if (sd == mvp_sd && pc_checkskill(sd,BS_FINDINGORE)>0 && battle_config.finding_ore_rate/10 >= rnd()%10000) {
+		if (sd == mvp_sd &&
+			pc_checkskill(sd,BS_FINDINGORE) > 0 &&
+			int(battle_config.finding_ore_rate * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m) / 10) >= rnd() % 10000
+		) {
+
 			struct s_mob_drop mobdrop;
 			memset(&mobdrop, 0, sizeof(struct s_mob_drop));
 			mobdrop.nameid = itemdb_searchrandomid(IG_FINDINGORE,1);
@@ -2837,6 +2845,10 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 						//it's positive, then it goes as it is
 						drop_rate = it.rate;
 
+					// [GonBee]
+					// ドロップ確率にボーナス倍率をかける。
+					drop_rate = int(drop_rate * bou_rat);
+
 					if (rnd()%10000 >= drop_rate)
 						continue;
 					dropid = (it.nameid > 0) ? it.nameid : itemdb_searchrandomid(it.group,1);
@@ -2851,7 +2863,12 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 			if( sd->bonus.get_zeny_num && rnd()%100 < sd->bonus.get_zeny_rate ) {
 				i = sd->bonus.get_zeny_num > 0 ? sd->bonus.get_zeny_num : -md->level * sd->bonus.get_zeny_num;
 				if (!i) i = 1;
-				pc_getzeny(sd, 1+rnd()%i, LOG_TYPE_PICKDROP_MONSTER, NULL);
+
+				// [GonBee]
+				// 獲得するZenyにボーナス倍率をかける。
+				//pc_getzeny(sd, 1+rnd()%i, LOG_TYPE_PICKDROP_MONSTER, NULL);
+				pc_getzeny(sd, int((1 + rnd() % i) * bou_rat), LOG_TYPE_PICKDROP_MONSTER, NULL);
+
 			}
 		}
 

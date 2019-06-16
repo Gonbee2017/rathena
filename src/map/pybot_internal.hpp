@@ -1291,6 +1291,7 @@ struct member_if {
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
 	virtual ptr<block_if>& homun();
+	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
@@ -1659,6 +1660,7 @@ struct member_impl : virtual block_if {
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
 	virtual int guild_id() override;
 	virtual ptr<block_if>& homun() override;
+	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
 	virtual bool is_carton() override;
 	virtual bool is_dead() override;
 	virtual bool is_invincible() override;
