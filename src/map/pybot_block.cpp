@@ -281,6 +281,7 @@ battler_impl::check_attack(
 	block_if* ene // 敵モンスター。
 ) {
 	return battle_mode() == BM_TAUNT ||
+		!ene->has_can_attack() ||
 		ene->is_long_range_attacker() ||
 		ene->is_flora() ||
 		ene->is_paralysis() ||

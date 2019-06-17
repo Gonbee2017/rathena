@@ -451,7 +451,8 @@ moc_fild22,32,196,0		warp	moroccwarp5072		1,1,moc_fild20,349,179
 // moc_fild01	É\ÉNÉâÉhçªîô 01 Å` 19
 //==============================================================
 pay_fild01,333,360,0	warp	payonwarp0101		5,3,payon,122,31
-pay_fild08,17,75,0		warp	payonwarp0102		2,4,payon,265,92
+//pay_fild08,17,75,0		warp	payonwarp0102		2,4,payon,265,92
+pay_fild08,17,75,0		warp	payonwarp0102		2,4,payon,264,92
 pay_fild03,392,63,0		warp	payonwarp0103		2,7,alberta,19,233
 
 // payon field

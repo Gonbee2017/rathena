@@ -53,8 +53,6 @@ command_bot(
 
 // モンスターを攻撃する。
 SUBCMD_FUNC(Bot, Attack) {
-	if (!lea->member_index())
-		throw command_error{"先頭はあなたです。"};
 	int mid = 0;
 	std::string mob_str;
 	if (!args.empty()) {

@@ -1123,7 +1123,8 @@ ai_t::find_best_assist_pos() {
 		(!battler->sc()->data[SC_WARM] ||
 			tar_ene->has_knockback_immune()
 		) && (tar_ene->is_long_range_attacker() ||
-			(tar_ene->is_flora() ||
+			(!tar_ene->has_can_attack() ||
+				tar_ene->is_flora() ||
 				tar_ene->is_berserk() ||
 				tar_ene->is_paralysis()
 			) && (!tar_ene->is_great(leader) ||
