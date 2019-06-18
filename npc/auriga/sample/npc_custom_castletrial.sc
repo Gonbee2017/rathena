@@ -1500,9 +1500,9 @@ Introduce:
 	mes "遠い昔にこの世を去りました。";
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "死してなお、こうして霊体となり";
+	mes "死してなおこうして霊体となり";
 	mes "現世にとどまっているのは";
-	mes "使命をまっとうするためです。";
+	mes "ある使命をまっとうするためです。";
 	next;
 	select("どんな使命なの？");
 	mes "[" + dupvar(.pri_nam$) + "]";
@@ -1514,7 +1514,7 @@ Introduce:
 	mes "　";
 	mes "　^404040-忠実なる我がしもべよ-^000000";
 	mes "　";
-	mes "　^404040-汝の命脈尽きることなかれ-^000000";
+	mes "　^404040-汝のなすべきをなせ-^000000";
 	next;
 	mes "　";
 	mes "　^404040-永劫不滅の魂を以て-^000000";
@@ -1542,7 +1542,7 @@ Introduce:
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "成功、失敗に関わらず、終了後に";
-	mes "再び私に申請すれば、^FF4040何度でも^000000";
+	mes "再び私に申請すれば^FF4040何度でも^000000";
 	mes "繰り返し挑戦できます。";
 	mes "ただし……";
 	next;
@@ -1553,9 +1553,9 @@ Introduce:
 	mes "すらできません。";
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "ですから、私が皆様を^4040FF砦の試練^000000に";
-	mes "ご案内できるのは^FF4040夜のあいだ^000000だけ";
-	mes "ということをご留意くださいませ。";
+	mes "ですから私が冒険者を^4040FF砦の試練^000000に";
+	mes "案内できるのは^FF4040夜のあいだ^000000だけ";
+	mes "ということにご留意ください……";
 	next;
 	set CASTLE_TRIAL_INTRODUCTION, 1;
 	return;
@@ -1608,7 +1608,7 @@ Pass:
 	mes "あなたであれば挑戦者として";
 	mes "不足はありません。";
 	mes "今度はこの城にある5つの砦で";
-	mes "その力をお示しください。";
+	mes "その力を示してください。";
 	next;
 	set dupvar(CASTLE_TRIAL_PROGRESS), 2;
 	return;
@@ -1629,8 +1629,8 @@ Complete:
 		mes "どれほど待ち望んだことか……";
 		next;
 		mes "[" + dupvar(.pri_nam$) + "]";
-		mes "今こそあなたに^4040FFギルドダンジョン^000000の";
-		mes "入り口の場所をお教えしましょう。";
+		mes "今こそあなたが^4040FFギルドダンジョン^000000に";
+		mes "足を踏み入れることを許しましょう。";
 		next;
 		mes "[" + dupvar(.pri_nam$) + "]";
 		mes "^4040FFギルドダンジョン^000000には^4040FF神器^000000と呼ばれる";
@@ -1639,7 +1639,7 @@ Complete:
 		next;
 		mes "[" + dupvar(.pri_nam$) + "]";
 		mes "すべての試練を突破できたあなたなら";
-		mes "きっと^4040FF神器^000000を手に入れられる";
+		mes "必ずや^4040FF神器^000000を手に入れられる";
 		mes "はずです。";
 		next;
 		set dupvar(CASTLE_TRIAL_PROGRESS), 3;
@@ -1649,7 +1649,7 @@ TrialGuildDungeon:
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "何をお望みですか？";
 	next;
-	switch (select("^4040FF砦の試練^000000を受ける", "^4040FFギルドダンジョン^000000に行く", "やめる")) {
+	switch (select("^4040FF砦の試練^000000を受ける", "^4040FFギルドダンジョン^000000に入る", "やめる")) {
 	case 1: callsub Trial; break;
 	case 2: callsub GuildDungeon; break;
 	}
