@@ -1089,7 +1089,7 @@ AI_SKILL_USE_FUNC(MG_FIREBALL) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
