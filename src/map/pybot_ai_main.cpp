@@ -454,7 +454,7 @@ void ai_t::bot_cast_cancel() {
 	if (cas_can_lv &&
 		bot->is_casting() &&
 		skill_get_inf(bot->ud()->skill_id) & INF_ATTACK_SKILL &&
-		!map_id2bl(bot->ud()->skilltarget)
+		!find_block<block_if>(bot->ud()->skilltarget)
 	) bot->use_skill_self(SA_CASTCANCEL, cas_can_lv);
 }
 
