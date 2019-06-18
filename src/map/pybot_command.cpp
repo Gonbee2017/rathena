@@ -1046,25 +1046,25 @@ SUBCMD_FUNC(Bot, LogIn) {
 	int bot_cid = query_char_id(uid, upas, cnam);
 	if (!bot_cid)
 		throw command_error{"そのキャラクターは見つかりませんでした。"};
-	t_tick bot_res_tic = bot_restart_tick(bot_cid);
-	if (bot_res_tic) {
-		throw command_error{print(
-			"そのキャラクターはBot中に死亡しました。\n"
-			"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
-		)};
-	}
 	t_tick bot_log_tic = bot_login_tick(lea);
 	if (bot_log_tic)
 		throw command_error{print(
-			"Botがログインできるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
+			"LogInサブコマンドを実行できるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
 		)};
 	query_login_data(bot_cid,
-		[lea, bot_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta) {
+		[lea, bot_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
 			if (map_id2sd(bot_aid))
-				throw command_error{"そのキャラクターは現在ログイン中です。"};
+				throw command_error{print("「", nam, "」は現在ログイン中です。")};
 			if (unb_tim ||
 				sta
-			) throw command_error{"そのアカウントは現在停止中です。"};
+			) throw command_error{print("「", nam, "」のアカウントは現在停止中です。")};
+			t_tick bot_res_tic = bot_restart_tick(bot_cid);
+			if (bot_res_tic) {
+				throw command_error{print(
+					"「", nam, "」はBot中に死亡しました。\n"
+					"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
+				)};
+			}
 			map_session_data* bot_sd = bot_login(lea, bot_aid, bot_cid, bot_sex, bot_gid);
 			ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
 			lea->bots().push_back(bot);
@@ -2084,22 +2084,32 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	t_tick bot_log_tic = bot_login_tick(lea);
 	if (bot_log_tic)
 		throw command_error{print(
-			"Botがログインできるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
+			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
 		)};
 	lea->members().clear();
 	query_team(lea->char_id(), [lea] (int mem_cid) {
 		if (mem_cid == lea->char_id()) lea->members().push_back(lea);
 		else
 			query_login_data(mem_cid,
-				[lea, mem_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta) {
-					if (!map_id2sd(bot_aid) &&
-						!unb_tim &&
-						!sta
-					) {
-						map_session_data* bot_sd = bot_login(lea, bot_aid, mem_cid, bot_sex, bot_gid);
-						ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
-						lea->bots().push_back(bot);
-						lea->members().push_back(bot.get());
+				[lea, mem_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
+					if (map_id2sd(bot_aid))
+						show_client(lea->fd(), print("「", nam, "」は現在ログイン中です。"));
+					else if (unb_tim ||
+						sta
+					) show_client(lea->fd(), print("「", nam, "」のアカウントは停止されています。"));
+					else {
+						t_tick bot_res_tic = bot_restart_tick(mem_cid);
+						if (bot_res_tic)
+							show_client(lea->fd(), print(
+								"「", nam, "」はBot中に死亡しました。\n"
+								"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
+							));
+						else {
+							map_session_data* bot_sd = bot_login(lea, bot_aid, mem_cid, bot_sex, bot_gid);
+							ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
+							lea->bots().push_back(bot);
+							lea->members().push_back(bot.get());
+						}
 					}
 				}
 			);

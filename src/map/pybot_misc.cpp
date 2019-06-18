@@ -1375,11 +1375,12 @@ query_char_id(
 void query_login_data(
 	int cid, // キャラクターID。
 	std::function<void(
-		int, // アカウントID。
-		int, // 性別。
-		int, // グループID。
-		int, // 停止解除時間。
-		int  // 状態。
+		int,        // アカウントID。
+		int,        // 性別。
+		int,        // グループID。
+		int,        // 停止解除時間。
+		int,        // 状態。
+		std::string // 名前。
 	)> yie   // 獲得関数。
 ) {
 	sql_session::open([cid, yie] (sql_session* ses) {
@@ -1388,13 +1389,15 @@ void query_login_data(
 		int gid;
 		int unb_tim;
 		int sta;
+		char nam[24];
 		ses->execute(
 			"SELECT"
 			" l.`", construct<sql_column>("account_id", aid    ), "`,"
 			" l.`", construct<sql_column>("sex"       , sex_str), "`,"
 			" l.`", construct<sql_column>("group_id"  , gid    ), "`,"
 			" l.`", construct<sql_column>("unban_time", unb_tim), "`,"
-			" l.`", construct<sql_column>("state"     , sta    ), "` "
+			" l.`", construct<sql_column>("state"     , sta    ), "`,"
+			" c.`", construct<sql_column>("name"      , nam    ), "` "
 			"FROM"
 			" `login` AS l,"
 			" `char` AS c "
@@ -1404,7 +1407,7 @@ void query_login_data(
 			"LIMIT 1"
 		);
 		if (!ses->next_row()) RAISE_RUNTIME_ERROR("Cann't found login data.");
-		yie(aid, sex_string2number(sex_str), gid, unb_tim, sta);
+		yie(aid, sex_string2number(sex_str), gid, unb_tim, sta, nam);
 	});
 }
 

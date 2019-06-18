@@ -2417,7 +2417,7 @@ template <class O, class A> void print_to_with(O& out, const std::string& sep, A
 template <class ...A> std::string print_with(const std::string& sep, A&& ...args);
 std::string print_zeny(int zen);
 int query_char_id(const std::string& uid, const std::string& upas, const std::string& cnam);
-void query_login_data(int cid, std::function<void(int,int,int,int,int)> yie);
+void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
 void query_team(int cid, std::function<void(int)> yie);
 void save_team(block_if* lea);
 int sex_string2number(const std::string& str);
