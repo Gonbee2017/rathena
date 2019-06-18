@@ -20863,11 +20863,21 @@ static int clif_parse(int fd)
 				//Disassociate character from the socket connection.
 				session[fd]->session_data = NULL;
 				sd->fd = 0;
-				ShowInfo("Character '" CL_WHITE "%s" CL_RESET "' logged off (using @autotrade).\n", sd->status.name);
+
+				// [GonBee]
+				// プレイヤーであることを明示。
+				//ShowInfo("Character '" CL_WHITE "%s" CL_RESET "' logged off (using @autotrade).\n", sd->status.name);
+				ShowInfo("Player '" CL_WHITE "%s" CL_RESET "' logged off (using @autotrade).\n", sd->status.name);
+
 			} else
 			if (sd->state.active) {
 				// Player logout display [Valaris]
-				ShowInfo("Character '" CL_WHITE "%s" CL_RESET "' logged off.\n", sd->status.name);
+
+				// [GonBee]
+				// プレイヤーであることを明示。
+				//ShowInfo("Character '" CL_WHITE "%s" CL_RESET "' logged off.\n", sd->status.name);
+				ShowInfo("Player '" CL_WHITE "%s" CL_RESET "' logged off.\n", sd->status.name);
+
 				clif_quitsave(fd, sd);
 			} else {
 				//Unusual logout (during log on/off/map-changer procedure)

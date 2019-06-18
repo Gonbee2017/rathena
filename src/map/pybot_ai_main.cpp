@@ -84,7 +84,7 @@ void ai_t::leader_organize() {
 		bat->distance_policy_value() = dis_pol_val;
 		bat->normal_attack_policy_value() = nor_att_pol_val;
 	}
-	std::sort(ALL_RANGE(battlers), [] (block_if* lbt, block_if* rbt) -> bool {
+	std::sort(ALL_RANGE(battlers), [this] (block_if* lbt, block_if* rbt) -> bool {
 		if (lbt->is_dead() != rbt->is_dead()) return rbt->is_dead();
 		if (lbt->distance_policy_value() != rbt->distance_policy_value())
 			return lbt->distance_policy_value() < rbt->distance_policy_value();
@@ -149,7 +149,13 @@ void ai_t::leader_collect() {
 		enemies.begin(),
 		enemies.end(),
 		[this] (block_if* len, block_if* ren) -> bool {
-			if (len->is_hiding() != ren->is_hiding()) return ren->is_hiding();
+			if (len->is_hiding() != ren->is_hiding())
+				return ren->is_hiding();
+			bool lpt = !battlers.empty() &&
+				len->bl()->id == battlers.front()->ud()->target;
+			bool rpt = !battlers.empty() &&
+				ren->bl()->id == battlers.front()->ud()->target;
+			if (lpt != rpt) return lpt;
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;
@@ -589,18 +595,23 @@ void ai_t::bot_pickup_flooritem() {
 		flooritem_data* nea_fit = nullptr;
 		int nea_dis;
 		for (flooritem_data* fit : flooritems) {
-			int dis = distance_client_bl(&fit->bl, bot->bl());
-			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-			int rem = bot->sd()->max_weight - bot->sd()->weight;
-			if ((!nea_fit ||
-					dis < nea_dis
-				) && pc_can_takeitem(bot->sd(), fit) &&
-				away_warp_portals(fit->bl.x, fit->bl.y) &&
-				bot->can_reach_bl(&fit->bl) &&
-				wei <= rem
+			const TimerData* td = get_timer(fit->cleartimer);
+			if (td &&
+				td->func
 			) {
-				nea_fit = fit;
-				nea_dis = dis;
+				int dis = distance_client_bl(&fit->bl, bot->bl());
+				int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+				int rem = bot->sd()->max_weight - bot->sd()->weight;
+				if ((!nea_fit ||
+						dis < nea_dis
+					) && pc_can_takeitem(bot->sd(), fit) &&
+					away_warp_portals(fit->bl.x, fit->bl.y) &&
+					bot->can_reach_bl(&fit->bl) &&
+					wei <= rem
+				) {
+					nea_fit = fit;
+					nea_dis = dis;
+				}
 			}
 		}
 		if (nea_fit) {

@@ -1272,11 +1272,11 @@ static int pet_ai_sub_hard(struct pet_data *pd, struct map_session_data *sd, t_t
 
 				memcpy(&pd->loot->item[pd->loot->count++],&fitem->item,sizeof(pd->loot->item[0]));
 				pd->loot->weight += itemdb_weight(fitem->item.nameid)*fitem->item.amount;
-				map_clearflooritem(target);
 
 				// [GonBee]
 				}
 
+				map_clearflooritem(target);
 			}
 
 			//Target is unlocked regardless of whether it was picked or not.

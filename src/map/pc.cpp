@@ -1295,7 +1295,12 @@ bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_
 	sd->die_counter=-1;
 
 	//display login notice
-	ShowInfo("'" CL_WHITE "%s" CL_RESET "' logged in."
+
+	// [GonBee]
+	// プレイヤーであることを明示する。
+	//ShowInfo("'" CL_WHITE "%s" CL_RESET "' logged in."
+	ShowInfo("Player '" CL_WHITE "%s" CL_RESET "' logged in."
+
 	         " (AID/CID: '" CL_WHITE "%d/%d" CL_RESET "',"
 	         " IP: '" CL_WHITE "%d.%d.%d.%d" CL_RESET "',"
 	         " Group '" CL_WHITE "%d" CL_RESET "').\n",
@@ -5399,10 +5404,9 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	// [GonBee]
 	// Botはスティールに成功するとそのアイテムを即座にドロップする。
 	//flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
-	if (pybot::char_is_bot(sd->status.char_id)) {
-		map_addflooritem(&tmp_item, tmp_item.amount, sd->bl.m, sd->bl.x, sd->bl.y, 0, 0, 0, 2, 0);
-		flag = 4;
-	} else flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
+	if (pybot::char_is_bot(sd->status.char_id))
+		map_addflooritem(&tmp_item, tmp_item.amount, sd->bl.m, sd->bl.x, sd->bl.y, 0, 0, 0, 0, 0);
+	else flag = pc_additem(sd,&tmp_item,1,LOG_TYPE_PICKDROP_PLAYER);
 
 	//TODO: Should we disable stealing when the item you stole couldn't be added to your inventory? Perhaps players will figure out a way to exploit this behaviour otherwise?
 	md->state.steal_flag = UCHAR_MAX; //you can't steal from this mob any more

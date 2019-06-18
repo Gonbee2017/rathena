@@ -36,7 +36,7 @@ base_level_rate(
 	double pc_rat = status_get_lv(bl) / 20.;
 	int mob_lv = status_get_lv(&md->bl);
 	if (mob_is_pure_flora(md)) mob_lv = 1;
-	double mob_rat = mob_lv / 20.;
+	double mob_rat = mob_lv / 10.;
 	return std::max(std::max(pc_rat, 1.) * std::max(mob_rat, 1.), 2.);
 }
 
@@ -153,7 +153,7 @@ job_level_rate(
 	block_list* bl        // ブロックリスト。
 ) {
 	double pc_rat = std::min(int(sd->status.job_level), 50) / 10.;
-	double mob_rat = status_get_lv(bl) / 20.;
+	double mob_rat = status_get_lv(bl) / 10.;
 	return std::max(std::max(pc_rat, 1.) * std::max(mob_rat, 1.), 2.);
 }
 

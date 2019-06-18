@@ -1721,7 +1721,7 @@ SUBCMD_FUNC(Bot, Status) {
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
 	out << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
 		inv_num << "/" << MAX_INVENTORY << " "
-		"(" << mem->sd()->weight << "/" << mem->sd()->max_weight <<	" " <<
+		"(" << (mem->sd()->weight / 10.) << "/" << (mem->sd()->max_weight / 10.) <<	" " <<
 		print(
 			std::fixed,
 			std::setprecision(1),
@@ -1731,7 +1731,7 @@ SUBCMD_FUNC(Bot, Status) {
 		status_calc_cart_weight(mem->sd(), CALCWT_ITEM);
 		out << STORAGE_TYPE_NAME_TABLE[TABLE_CART - 1] << " " <<
 			mem->sd()->cart_num << "/" << MAX_CART << " "
-			"(" << mem->sd()->cart_weight << "/" << mem->sd()->cart_weight_max << " " <<
+			"(" << (mem->sd()->cart_weight / 10.) << "/" << (mem->sd()->cart_weight_max / 10.) << " " <<
 			print(
 				std::fixed,
 				std::setprecision(1),
@@ -2217,7 +2217,7 @@ SUBCMD_FUNC(Bot, Warp) {
 	auto pri_poi = [] (int ind, point* poi) -> std::string {
 		return print(
 			INDEX_PREFIX, ind, " - ",
-			id_maps.at(poi->map)->name_japanese,
+			id_maps.at(map_mapindex2mapid(poi->map))->name_japanese,
 			" (", mapindex_id2name(poi->map), ") : ",
 			poi->x, ", ", poi->y, "\n"
 		);
@@ -2253,48 +2253,48 @@ SUBCMD_FUNC(Bot, Warp) {
 				"「", mem->name(), "」は現在「",
 				skill_get_desc(AL_WARP), "」を使えません。"
 			)};
-		int map;
-		if (dynamic_cast<bot_impl*>(mem)) {
-			int max_mem;
-			ARR_FIND(0, MAX_MEMOPOINTS, max_mem, !mem->sd()->status.memo_point[max_mem].map);
-			std::string war_loc_str = shift_arguments(
-				args, "ワープ位置を指定してください。"
-			);
-			int i = parse_index(war_loc_str);
-			if (i == -1) {
-				std::string lc_war_loc_str = pybot::lowercase(war_loc_str);
-				for (int j = 0; j < max_mem; ++j) {
-					auto map2 = id_maps.at(mem->sd()->status.memo_point[j].map);
-					if (pybot::lowercase(map2->name_english) == lc_war_loc_str ||
-						pybot::lowercase(map2->name_japanese) == lc_war_loc_str
-					) {
-						i = j;
-						break;
-					}
+		int mind = 0;
+		int max_mem;
+		ARR_FIND(0, MAX_MEMOPOINTS, max_mem, !mem->sd()->status.memo_point[max_mem].map);
+		std::string war_loc_str = shift_arguments(
+			args, "ワープ位置を指定してください。"
+		);
+		int i = parse_index(war_loc_str);
+		if (i == -1) {
+			std::string lc_war_loc_str = pybot::lowercase(war_loc_str);
+			for (int j = 0; j <= max_mem; ++j) {
+				int mind2;
+				if (j) mind2 = mem->sd()->status.memo_point[j - 1].map;
+				else mind2 = mem->sd()->status.save_point.map;
+				auto map = id_maps.at(map_mapindex2mapid(mind2));
+				if (pybot::lowercase(map->name_english) == lc_war_loc_str ||
+					pybot::lowercase(map->name_japanese) == lc_war_loc_str
+				) {
+					mind = mind2;
+					break;
 				}
 			}
-			if (i < 0 ||
-				i >= max_mem
-			) throw command_error{print(
-				"「", war_loc_str, "」というワープ位置はありません。"
-			)};
-			if (i) map = mem->sd()->status.memo_point[i - 1].map;
-			else map = mem->sd()->status.save_point.map;
+		} else if (i <= max_mem) {
+			if (i) mind = mem->sd()->status.memo_point[i - 1].map;
+			else mind = mem->sd()->status.save_point.map;
 		}
+		if (!mind) throw command_error{print(
+			"「", war_loc_str, "」というワープ位置はありません。"
+		)};
 		int16_t x, y;
 		if (!map_search_freecell(lea->bl(), 0, &x, &y, 1, 1, 0))
 			throw command_error{print(
 				"あなたの周囲に空いているセルがありません。"
 			)};
 		if (mem->is_sit()) mem->stand();
-		mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [map] (ai_t* ai, void* fun) {
-			skill_castend_map(ai->bot->sd(), AL_WARP, mapindex_id2name(map));
+		mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [mind] (ai_t* ai, void* fun) {
+			skill_castend_map(ai->bot->sd(), AL_WARP, mapindex_id2name(mind));
 		});
 		show_client(
 			lea->fd(),
 			print("「", mem->name(), "」は"
-				"「", id_maps.at(map)->name_japanese,
-				" (", mapindex_id2name(map), ")」"
+				"「", id_maps.at(map_mapindex2mapid(mind))->name_japanese,
+				" (", mapindex_id2name(mind), ")」"
 				"へのワープポータルを開きます。"
 			)
 		);
