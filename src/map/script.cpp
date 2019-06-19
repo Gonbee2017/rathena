@@ -6913,7 +6913,14 @@ BUILDIN_FUNC(countitem)
 		id = itemdb_exists(conv_num(st, data));
 
 	if( id == NULL ) {
-		ShowError("buildin_%s: Invalid item '%s'.\n", command, script_getstr(st,2));  // returns string, regardless of what it was
+
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のためにIDがゼロならエラーにしない。
+		//ShowError("buildin_%s: Invalid item '%s'.\n", command, script_getstr(st,2));  // returns string, regardless of what it was
+		if (data_isstring(data) ||
+			conv_num(st, data)
+		) ShowError("buildin_%s: Invalid item '%s'.\n", command, script_getstr(st,2));  // returns string, regardless of what it was
+
 		script_pushint(st,0);
 		return SCRIPT_CMD_FAILURE;
 	}
