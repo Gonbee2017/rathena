@@ -409,7 +409,8 @@ void ai_t::bot_dead() {
 		bot->walk_end_func() = bot->cast_end_func() = nullptr;
 		if (!dea_tic) dea_tic = now;
 		if (!bot_restart_tick(bot->char_id()) &&
-			!leader->is_dead()
+			!leader->is_dead() &&
+			!leader->stay()
 		) bot->respawn();
 		throw turn_end_exception();
 	} else dea_tic = 0;
