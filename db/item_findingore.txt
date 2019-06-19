@@ -25,14 +25,14 @@ IG_FindingOre,1010,95	//Phracon
 IG_FindingOre,1011,55	//Emveretarcon
 
 // [GonBee]
-IG_FindingOre,7289,2	// ‚©‚ñ‚ç‚ñÎ
-IG_FindingOre,7290,2	// ‹à‰_•ê
-IG_FindingOre,7291,2	// ‚ß‚Ì‚¤
-IG_FindingOre,7292,2	// ”’‰_•ê
-IG_FindingOre,7293,2	// åKåN…»
-IG_FindingOre,7294,2	// ƒgƒ‹ƒRÎ
-IG_FindingOre,7295,2	// ‰©…»
-IG_FindingOre,7296,2	// ‹PÎ
-IG_FindingOre,7297,2	// •‰_•ê
+IG_FindingOre,7289,3	// ‚©‚ñ‚ç‚ñÎ
+IG_FindingOre,7290,3	// ‹à‰_•ê
+IG_FindingOre,7291,3	// ‚ß‚Ì‚¤
+IG_FindingOre,7292,3	// ”’‰_•ê
+IG_FindingOre,7293,3	// åKåN…»
+IG_FindingOre,7294,3	// ƒgƒ‹ƒRÎ
+IG_FindingOre,7295,3	// ‰©…»
+IG_FindingOre,7296,3	// ‹PÎ
+IG_FindingOre,7297,3	// •‰_•ê
 IG_FindingOre,7619,2	// ”ZkƒGƒ‹ƒjƒEƒ€
 IG_FindingOre,7620,2	// ”ZkƒIƒŠƒfƒIƒRƒ“
