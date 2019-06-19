@@ -2054,6 +2054,12 @@ SUBCMD_FUNC(Bot, sUmmon) {
 	show_client(lea->fd(), print("「", bot->name(), "」を引き寄せました。"));
 }
 
+// すべてのBotを引き寄せる。
+SUBCMD_FUNC(Bot, sUmmonAll) {
+	for (auto bot : lea->bots()) bot->teleport(&lea->center());
+	show_client(lea->fd(), print(lea->bots().size(), "人のBotを引き寄せました。"));
+}
+
 // メンバーを一覧表示する。
 SUBCMD_FUNC(Bot, Team) {
 	auto pri_mem = [] (block_if* mem) -> std::string {
