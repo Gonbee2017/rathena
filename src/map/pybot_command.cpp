@@ -1090,6 +1090,7 @@ SUBCMD_FUNC(Bot, LogOut) {
 	lea->update_member_indices();
 	lea->bots().erase(lea->bots().begin() + bot->bot_index());
 	lea->update_bot_indices();
+	lea->last_bot_login_tick() = now;
 }
 
 // メンバーがアイテムを拾う、または拾わない。
@@ -2137,6 +2138,7 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	lea->members().push_back(lea);
 	lea->update_member_indices();
 	lea->bots().clear();
+	lea->last_bot_login_tick() = now;
 }
 
 // メンバーの順番を変更する。
