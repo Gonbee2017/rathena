@@ -2267,7 +2267,6 @@ SUBCMD_FUNC(Bot, StoragePutAll);
 SUBCMD_FUNC(Bot, StoragePutClear);
 SUBCMD_FUNC(Bot, StoragePutImport);
 SUBCMD_FUNC(Bot, sUmmon);
-SUBCMD_FUNC(Bot, sUmmonAll);
 SUBCMD_FUNC(Bot, Team);
 SUBCMD_FUNC(Bot, TeamLogIn);
 SUBCMD_FUNC(Bot, TeamLogOut);

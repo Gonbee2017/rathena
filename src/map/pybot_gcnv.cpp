@@ -1662,12 +1662,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageputimport チェイス]\n"
 	), SUBCMD_DESC(Bot, sUmmon                     , u   ,
 		"------ sUmmon (u) サブコマンド ------\n"
-		"Botを引き寄せる。\n"
-		"入力例 [@bot summon ハイプリ]\n"
-	), SUBCMD_DESC(Bot, sUmmonAll                  , ua  ,
-		"------ sUmmonAll (ua) サブコマンド ------\n"
 		"すべてのBotを引き寄せる。\n"
-		"入力例 [@bot summonall]\n"
+		"入力例 [@bot summon]\n"
+		"特定のBotを引き寄せる。\n"
+		"入力例 [@bot summon ハイプリ]\n"
 	), SUBCMD_DESC(Bot, Team                       , t   ,
 		"------ Team (t) サブコマンド ------\n"
 		"メンバーを一覧表示する。\n"
@@ -1788,7 +1786,6 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, StoragePutClear            ,     ),
 	SUBCMD_PROC(Bot, StoragePutImport           , spi ),
 	SUBCMD_PROC(Bot, sUmmon                     , u   ),
-	SUBCMD_PROC(Bot, sUmmonAll                  , ua  ),
 	SUBCMD_PROC(Bot, Team                       , t   ) ,
 	SUBCMD_PROC(Bot, TeamLogIn                  , tli ),
 	SUBCMD_PROC(Bot, TeamLogOut                 , tlo ),
