@@ -151,11 +151,15 @@ void ai_t::leader_collect() {
 		[this] (block_if* len, block_if* ren) -> bool {
 			if (len->is_hiding() != ren->is_hiding())
 				return ren->is_hiding();
-			bool lpt = !battlers.empty() &&
-				len->bl()->id == battlers.front()->ud()->target;
-			bool rpt = !battlers.empty() &&
-				ren->bl()->id == battlers.front()->ud()->target;
-			if (lpt != rpt) return lpt;
+			if (!battlers.empty() &&
+				(battlers.front() == leader ||
+					battlers.front() == leader->homun().get()
+				)
+			) {
+				bool llt = len->bl()->id == battlers.front()->ud()->target;
+				bool rlt = ren->bl()->id == battlers.front()->ud()->target;
+				if (llt != rlt) return llt;
+			}
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;

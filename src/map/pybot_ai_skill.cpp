@@ -130,6 +130,15 @@ AI_SKILL_USE_FUNC(AL_DECAGI) {
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }
 
+// ヒールでアンデッドを攻撃する。
+AI_SKILL_USE_FUNC_T(AL_HEAL, attack) {
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		tar_ene->is_undead()
+	) bot->use_skill_block(kid, klv, tar_ene);
+}
+
 // アクアベネディクタを使う。
 AI_SKILL_USE_FUNC(AL_HOLYWATER) {
 	if (map_getcellp(map_getmapdata(bot->bl()->m), bot->bl()->x, bot->bl()->y, CELL_CHKWATER))
