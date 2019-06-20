@@ -955,7 +955,7 @@ void ai_t::battler_use_skill() {
 				) && battler->check_sp(sp_rat) &&
 				battler->can_use_skill(sk_use_pro.skill_id, klv)
 			) {
-				// SHOW_DEBUG_VARIABLE(sk_use_pro.skill_id);
+				//SHOW_DEBUG_VARIABLE(sk_use_pro.skill_id);
 				//try {
 					sk_use_pro.func(this, sk_use_pro.skill_id, klv);
 				//} catch (const turn_end_exception& exc) {
