@@ -219,7 +219,7 @@ int map_usercount(void)
 {
 
 	// [GonBee]
-	// Botはユーザーに含めない。
+	// 一般プレイヤーのみをカウントする。
 	//return pc_db->size(pc_db);
 	int cou = 0;
 	s_mapiterator* ite = mapit_getallusers();
@@ -227,7 +227,9 @@ int map_usercount(void)
 		mapit_exists(ite);
 		sd = (TBL_PC*)(mapit_next(ite))
 	) {
-		if (!pybot::char_is_bot(sd->status.char_id)) ++cou;
+		if (!pybot::char_is_bot(sd->status.char_id) &&
+			!sd->group_id
+		) ++cou;
 	}
 	return cou;
 

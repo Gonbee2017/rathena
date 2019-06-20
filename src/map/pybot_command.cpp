@@ -2176,7 +2176,7 @@ SUBCMD_FUNC(Bot, TeamOrder) {
 	}
 	if (mems.size() != lea->members().size()) 
 		throw command_error{print(
-			"メンバーは全部で", lea->members().size(), "人です。"
+			"メンバー全員(", lea->members().size(), "人)を指定してください。"
 		)};
 	lea->members() = std::move(mems);
 	lea->update_member_indices();

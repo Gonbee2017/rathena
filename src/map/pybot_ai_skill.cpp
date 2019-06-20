@@ -2617,8 +2617,19 @@ AI_SKILL_USE_FUNC(TK_RUN) {
 
 // ’g‚©‚¢•—‚ğg‚¤B
 AI_SKILL_USE_FUNC(TK_SEVENWIND) {
+	static const std::array<sc_type, 7> SCS = {
+		SC_EARTHWEAPON,
+		SC_WINDWEAPON,
+		SC_WATERWEAPON,
+		SC_FIREWEAPON,
+		SC_GHOSTWEAPON,
+		SC_SHADOWWEAPON,
+		SC_ASPERSIO,
+	};
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_attack(tar_ene)) {
+	if (!bot->sc()->data[SCS[klv - 1]] &&
+		bot->check_attack(tar_ene)
+	) {
 		int gre_lv = INT_MIN;
 		int gre_rat;
 		int max_lv = bot->check_skill(kid);
