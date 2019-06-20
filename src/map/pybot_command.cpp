@@ -744,12 +744,18 @@ SUBCMD_FUNC(Bot, ItemIgnoreClear) {
 // 無視アイテムを取り込む。
 SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"ItemIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
 	auto bot_sel_itms = construct<registry_t<int>>(load_ignore_item_func(bot->char_id()));
 	int cou = lea->ignore_items()->import_(bot_sel_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
 		cou, "件の無視アイテムを取り込みました。"
 	));
+	lea->last_heaby_tick() = now;
 }
 
 // メンバーのHP回復アイテムを一覧表示、または登録、または抹消する。
@@ -1020,12 +1026,18 @@ SUBCMD_FUNC(Bot, ItemSellClear) {
 // 売却アイテムを取り込む。
 SUBCMD_FUNC(Bot, ItemSellImport) {
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"ItemSellImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
 	auto bot_sel_itms = construct<registry_t<int>>(load_sell_item_func(bot->char_id()));
 	int cou = lea->sell_items()->import_(bot_sel_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
 		cou, "件の売却アイテムを取り込みました。"
 	));
+	lea->last_heaby_tick() = now;
 }
 
 // Botがログインする。
@@ -1046,10 +1058,10 @@ SUBCMD_FUNC(Bot, LogIn) {
 	int bot_cid = query_char_id(uid, upas, cnam);
 	if (!bot_cid)
 		throw command_error{"そのキャラクターは見つかりませんでした。"};
-	t_tick bot_log_tic = bot_login_tick(lea);
-	if (bot_log_tic)
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
 		throw command_error{print(
-			"LogInサブコマンドを実行できるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
+			"LogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
 	query_login_data(bot_cid,
 		[lea, bot_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
@@ -1071,7 +1083,7 @@ SUBCMD_FUNC(Bot, LogIn) {
 			lea->members().push_back(bot.get());
 			lea->update_bot_indices();
 			lea->update_member_indices();
-			lea->last_bot_login_tick() = now;
+			lea->last_heaby_tick() = now;
 			show_client(lea->fd(), print(
 				"「", bot->name(), "」がログインしました。"
 			));
@@ -1090,7 +1102,6 @@ SUBCMD_FUNC(Bot, LogOut) {
 	lea->update_member_indices();
 	lea->bots().erase(lea->bots().begin() + bot->bot_index());
 	lea->update_bot_indices();
-	lea->last_bot_login_tick() = now;
 }
 
 // メンバーがアイテムを拾う、または拾わない。
@@ -1175,12 +1186,18 @@ SUBCMD_FUNC(Bot, MonsterGreatClear) {
 // グレートモンスターを取り込む。
 SUBCMD_FUNC(Bot, MonsterGreatImport) {
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"MonsterGreatImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
 	auto bot_gre_mobs = construct<registry_t<int>>(load_great_mob_func(bot->char_id()));
 	int cou = lea->great_mobs()->import_(bot_gre_mobs.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
 		cou, "件のグレートモンスターを取り込みました。"
 	));
+	lea->last_heaby_tick() = now;
 }
 
 // ペットがアクセサリーを装備、または解除する。
@@ -2040,12 +2057,18 @@ SUBCMD_FUNC(Bot, StoragePutClear) {
 // 倉庫格納アイテムを取り込む。
 SUBCMD_FUNC(Bot, StoragePutImport) {
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"StoragePutImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
 	auto bot_sto_put_itms = construct<registry_t<int>>(load_storage_put_item_func(bot->char_id()));
 	int cou = lea->storage_put_items()->import_(bot_sto_put_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から", cou,
 		"件の倉庫格納アイテムを取り込みました。"
 	));
+	lea->last_heaby_tick() = now;
 }
 
 // Botを引き寄せる。
@@ -2087,10 +2110,10 @@ SUBCMD_FUNC(Bot, Team) {
 SUBCMD_FUNC(Bot, TeamLogIn) {
 	if (!lea->bots().empty())
 		throw command_error{"あなたはすでにチームを編成しています。"};
-	t_tick bot_log_tic = bot_login_tick(lea);
-	if (bot_log_tic)
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
 		throw command_error{print(
-			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(bot_log_tic + 1000), "です。"
+			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
 	lea->members().clear();
 	query_team(lea->char_id(), [lea] (int mem_cid) {
@@ -2122,7 +2145,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	});
 	lea->update_bot_indices();
 	lea->update_member_indices();
-	lea->last_bot_login_tick() = now;
+	lea->last_heaby_tick() = now;
 	show_client(lea->fd(), print(lea->bots().size(), "人のBotがログインしました。"));
 }
 
@@ -2138,7 +2161,6 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	lea->members().push_back(lea);
 	lea->update_member_indices();
 	lea->bots().clear();
-	lea->last_bot_login_tick() = now;
 }
 
 // メンバーの順番を変更する。
@@ -2809,16 +2831,6 @@ bot_login(
 		fd_exi.do_ = nullptr;
 	});
 	return sd;
-}
-
-// Botがログインできるようになるまでのチックを取得する。
-t_tick // 取得したチック。
-bot_login_tick(
-	block_if* lea // リーダー。
-) {
-	t_tick log_tic = DIFF_TICK(lea->last_bot_login_tick() + battle_config.pybot_login_cool_time, now);
-	if (log_tic < 0) log_tic = 0;
-	return log_tic;
 }
 
 // Botがリスタートできるようになるまでのチックを取得する。

@@ -15,7 +15,7 @@
  	{"pybot_around_distance", &battle_config.pybot_around_distance, 10, 1, 14},
  	{"pybot_away_distance", &battle_config.pybot_away_distance, 3, 3, 14},
  	{"pybot_away_distance_great", &battle_config.pybot_away_distance_great, 6, 3, 14},
- 	{"pybot_login_cool_time", &battle_config.pybot_login_cool_time, 10000, 0, INT_MAX},
+ 	{"pybot_heaby_cool_time", &battle_config.pybot_heaby_cool_time, 10000, 0, INT_MAX},
  	{"pybot_reload_equipset_cool_time", &battle_config.pybot_reload_equipset_cool_time, 2500, 100, INT_MAX},
  	{"pybot_restart_cool_time", &battle_config.pybot_restart_cool_time, 300000, 0, INT_MAX},
  	{"pybot_think_time", &battle_config.pybot_think_time, 250, 100, INT_MAX},

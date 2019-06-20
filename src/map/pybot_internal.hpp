@@ -1264,8 +1264,9 @@ struct leader_if {
 	virtual block_if* find_member(const std::string& nam);
 	virtual ptr<registry_t<int>>& great_mobs();
 	virtual ptr<registry_t<int>>& ignore_items();
-	virtual t_tick& last_bot_login_tick();
+	virtual t_tick& last_heaby_tick();
 	virtual std::vector<block_if*>& members();
+	virtual t_tick next_heaby_tick();
 	virtual bool& passive();
 	virtual ptr<registry_t<int>>& sell_items();
 	virtual bool& sp_suppliable();
@@ -1588,7 +1589,7 @@ struct leader_impl : virtual block_if {
 	std::unordered_map<int,ptr<block_if>> enemies_;   // 敵モンスターのマップ。
 	ptr<registry_t<int>> great_mobs_;                 // グレートモンスターのレジストリ。
 	ptr<registry_t<int>> ignore_items_;               // 無視アイテムのレジストリ。
-	t_tick last_bot_login_tick_;                      // 最後にBotをログインさせたチック。
+	t_tick last_heaby_tick_;                          // 最後に重たいコマンドを実行したチック。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
 	ptr<registry_t<int>> sell_items_;                 // 売却アイテムのレジストリ。
@@ -1605,8 +1606,9 @@ struct leader_impl : virtual block_if {
 	virtual block_if* find_member(const std::string& nam) override;
 	virtual ptr<registry_t<int>>& great_mobs() override;
 	virtual ptr<registry_t<int>>& ignore_items() override;
-	virtual t_tick& last_bot_login_tick() override;
+	virtual t_tick& last_heaby_tick() override;
 	virtual std::vector<block_if*>& members() override;
+	virtual t_tick next_heaby_tick() override;
 	virtual bool& passive() override;
 	virtual ptr<registry_t<int>>& sell_items() override;
 	virtual bool& sp_suppliable() override;
@@ -2279,7 +2281,6 @@ SUBCMD_FUNC(Bot, Warp);
 
 int bot_limit(map_session_data* sd);
 map_session_data* bot_login(block_if* lea, int bot_aid, int bot_cid, int bot_sex, int bot_gid);
-t_tick bot_login_tick(block_if* lea);
 t_tick bot_restart_tick(int cid);
 block_if* check_trade_with_bot(block_if* lea, command_argument_list& args);
 bool npc_exists(block_list* cen, int rad, npc_subtype typ, const std::string& dis_nam = "");

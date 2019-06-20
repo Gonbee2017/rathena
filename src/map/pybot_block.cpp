@@ -142,8 +142,9 @@ block_if* leader_if::find_bot(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERR
 block_if* leader_if::find_member(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::great_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
-t_tick& leader_if::last_bot_login_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::sp_suppliable() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1334,13 +1335,20 @@ ptr<registry_t<int>>& leader_impl::ignore_items() {
 }
 
 // 最後にBotをログインさせたチック。
-t_tick& leader_impl::last_bot_login_tick() {
-	return last_bot_login_tick_;
+t_tick& leader_impl::last_heaby_tick() {
+	return last_heaby_tick_;
 }
 
 // メンバーのベクタ。
 std::vector<block_if*>& leader_impl::members() {
 	return members_;
+}
+
+// 次の重たいコマンドまでのチックを計算する。
+t_tick leader_impl::next_heaby_tick() {
+	t_tick hev_tic = DIFF_TICK(last_heaby_tick() + battle_config.pybot_heaby_cool_time, now);
+	if (hev_tic < 0) hev_tic = 0;
+	return hev_tic;
 }
 
 // チームがモンスターに反応しないか。
@@ -2355,7 +2363,7 @@ leader_t::leader_t(
 	map_session_data* sd_ // セッションデータ。
 ) : member_t(sd_, this) {
 	attack_target() = 0;
-	last_bot_login_tick() = 0;
+	last_heaby_tick() = 0;
 	passive() = false;
 	stay() = false;
 	great_mobs() = construct<registry_t<int>>(
