@@ -1829,7 +1829,17 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 		return true;
 
 	// Scan area for targets
-	if (!tbl && can_move && mode&MD_LOOTER && md->lootitems && DIFF_TICK(tick, md->ud.canact_tick) > 0 &&
+
+	// [GonBee]
+	// 召喚されたモンスターがアイテムを拾わないようにする。
+	//if (!tbl && can_move && mode&MD_LOOTER && md->lootitems && DIFF_TICK(tick, md->ud.canact_tick) > 0 &&
+	if (!tbl &&
+		can_move &&
+		mode&MD_LOOTER &&
+		md->lootitems &&
+		DIFF_TICK(tick, md->ud.canact_tick) > 0 &&
+		!md->master_id &&
+
 		(md->lootitem_count < LOOTITEM_SIZE || battle_config.monster_loot_type != 1))
 	{	// Scan area for items to loot, avoid trying to loot if the mob is full and can't consume the items.
 		map_foreachinshootrange (mob_ai_sub_hard_lootsearch, &md->bl, view_range, BL_ITEM, md, &tbl);

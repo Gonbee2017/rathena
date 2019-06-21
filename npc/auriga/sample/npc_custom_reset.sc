@@ -1,6 +1,10 @@
 prontera,152,192,5	script	リセット職員	860,{
 	setarray .@cou_str$, "初回", "二回目", "三回目以降";
 	setarray .@fee, 1000000, 2000000, 3000000;
+	if (RESET_FEE_RATE) {
+		for (set .@i, 0; .@i < getarraysize(.@fee); ++.@i)
+			set .@fee[.@i], .@fee[.@i] * RESET_FEE_RATE;
+	}
 	
 	cutin "kafra_08",2;
 	mes "[リゼッタ]";
