@@ -2112,6 +2112,9 @@ void skill_user_impl::use_skill_bl(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
 	auto use = [this, kid, klv, cas_end_fun] (block_list* bl_) {
 		if (unit_skilluse_id(bl(), bl_->id, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
@@ -2145,6 +2148,9 @@ void skill_user_impl::use_skill_block(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
 	auto use = [this, kid, klv, cas_end_fun] (block_if* blo) {
 		if (unit_skilluse_id(bl(), blo->bl()->id, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
@@ -2178,6 +2184,9 @@ void skill_user_impl::use_skill_self(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
 	if (unit_skilluse_id(bl(), bl()->id, kid, klv)) {
 		if (dynamic_cast<member_impl*>(this))
 			pc_delinvincibletimer(sd());
@@ -2205,6 +2214,9 @@ void skill_user_impl::use_skill_xy(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
 	auto use = [this, x, y, kid, klv, cas_end_fun] () {
 		if (unit_skilluse_pos(bl(), x, y, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
