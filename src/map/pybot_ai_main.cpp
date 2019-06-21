@@ -1002,7 +1002,9 @@ ai_t::away_enemies(
 	} else {
 		for (block_if* ene : enemies) {
 			if (check_distance_blxy(ene->bl(), x, y, ene->away_distance(leader)) &&
-				ene->target_battler() != battler
+				(battlers.front()->distance_policy_value() == DPV_AWAY ||
+					ene->target_battler() != battler
+				)
 			) {
 				res = false;
 				break;
