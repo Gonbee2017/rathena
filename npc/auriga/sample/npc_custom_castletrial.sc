@@ -1736,24 +1736,12 @@ Abort:
 	mes "断念するのですか？";
 	next;
 	if (select("はい", "いいえ") == 1) {
-		set .@tim_rem, dupvar(.tim_rem, .@cas_tri$);
-		set .@tim_lim, dupele(.tim_pois, 0, .@cas_tri$) * 60;
-		set .@tim_ela, .@tim_lim - .@tim_rem;
-		set .@tim_abo, 60 - .@tim_ela;
-		if (.@tim_abo > 0) {
-			mes "------ ^4040FF砦の試練^000000 ------";
-			mes "^4040FF" + .@cas_nam$ + "^000000の砦で";
-			mes "行われている試練を中止できる";
-			mes "ようになるまであと^FF4040" + .@tim_abo + "秒^000000です。";
-			close;
-		} else {
-			donpcevent .@cas_tri$ + "::OnAbort";
-			viewpoint 2, 0, 0, 1, 0xFF0000;
-			mes "[" + dupvar(.pri_nam$) + "]";
-			mes "仕方がありませんね……";
-			mes "今回はこれで終了とします。";
-			close;
-		}
+		donpcevent .@cas_tri$ + "::OnAbort";
+		viewpoint 2, 0, 0, 1, 0xFF0000;
+		mes "[" + dupvar(.pri_nam$) + "]";
+		mes "仕方がありませんね……";
+		mes "今回はこれで終了とします。";
+		close;
 	}
 	return;
 Bye:

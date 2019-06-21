@@ -232,18 +232,40 @@ pc_can_takeitem(
 	flooritem_data* fit   // ドロップアイテム。
 ) {
 	now = gettick();
-	auto can_take = [sd] (int get_charid, t_tick get_tick) -> bool	{
-		if (!get_charid ||
-			get_charid == sd->status.char_id ||
-			DIFF_TICK(now, get_tick) >= 0
-		) return true;
-		map_session_data* get_sd = map_charid2sd(get_charid);
-		if (!get_sd) return true;
-		return get_sd->status.party_id == sd->status.party_id;
-	};
-	return can_take(fit->first_get_charid, fit->first_get_tick) ||
-		can_take(fit->second_get_charid, fit->second_get_tick) ||
-		can_take(fit->third_get_charid, fit->third_get_tick);
+	struct party_data *p = NULL;
+	if (sd->status.party_id)
+		p = party_search(sd->status.party_id);
+	if (fit->first_get_charid > 0 && fit->first_get_charid != sd->status.char_id) {
+		struct map_session_data *first_sd = map_charid2sd(fit->first_get_charid);
+		if (DIFF_TICK(now,fit->first_get_tick) < 0) {
+			if (!(p && p->party.item&1 &&
+				first_sd && first_sd->status.party_id == sd->status.party_id
+				))
+				return false;
+		}
+		else if (fit->second_get_charid > 0 && fit->second_get_charid != sd->status.char_id) {
+			struct map_session_data *second_sd = map_charid2sd(fit->second_get_charid);
+			if (DIFF_TICK(now, fit->second_get_tick) < 0) {
+				if (!(p && p->party.item&1 &&
+					((first_sd && first_sd->status.party_id == sd->status.party_id) ||
+					(second_sd && second_sd->status.party_id == sd->status.party_id))
+					))
+					return false;
+			}
+			else if (fit->third_get_charid > 0 && fit->third_get_charid != sd->status.char_id){
+				struct map_session_data *third_sd = map_charid2sd(fit->third_get_charid);
+				if (DIFF_TICK(now,fit->third_get_tick) < 0) {
+					if(!(p && p->party.item&1 &&
+						((first_sd && first_sd->status.party_id == sd->status.party_id) ||
+						(second_sd && second_sd->status.party_id == sd->status.party_id) ||
+						(third_sd && third_sd->status.party_id == sd->status.party_id))
+						))
+						return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 // PCがMVPを獲得したことがあるかを判定する。
