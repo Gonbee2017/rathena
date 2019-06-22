@@ -2073,14 +2073,20 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 
 // Botを引き寄せる。
 SUBCMD_FUNC(Bot, sUmmon) {
+	int cou = 0;
 	if (args.empty()) {
 		for (auto bot : lea->bots()) bot->teleport(&lea->center());
-		show_client(lea->fd(), print(lea->bots().size(), "人のBotを引き寄せました。"));
+		cou = lea->bots().size();
 	} else {
-		block_if* bot = shift_arguments_then_find_bot(lea, args);
-		bot->teleport(&lea->center());
-		show_client(lea->fd(), print("「", bot->name(), "」を引き寄せました。"));
+		while (!args.empty()) {
+			try {
+				block_if* bot = shift_arguments_then_find_bot(lea, args);
+				bot->teleport(&lea->center());
+				++cou;
+			} catch (const command_error&) {}
+		}
 	}
+	show_client(lea->fd(), print(cou, "人のBotを引き寄せました。"));
 }
 
 // メンバーを一覧表示する。
