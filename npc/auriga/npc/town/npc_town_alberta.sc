@@ -1152,8 +1152,8 @@ tur_dun01,165,29,4	script	船乗り	709,{
 	next;
 	mes "^3131FF- ドッドッドッド…… -^000000";
 	close2;
-	//warp "alberta",241,115;
-	warp "alberta",241,87;
+	warp "alberta",241,115;
+	//warp "alberta",241,87;
 	end;
 }
 

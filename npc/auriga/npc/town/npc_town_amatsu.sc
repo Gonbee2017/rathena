@@ -139,8 +139,8 @@ amatsu,194,79,5	script	貿易船船長	709,{
 		mes "帰ったら友達に土産話でも";
 		mes "してやりな。";
 		close2;
-		//warp "alberta",243,91;
-		warp "alberta",241,87;
+		warp "alberta",243,91;
+		//warp "alberta",241,87;
 		end;
 	}
 	mes "[ワルター=メオス]";

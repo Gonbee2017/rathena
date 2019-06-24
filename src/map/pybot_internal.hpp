@@ -2028,6 +2028,7 @@ struct pybot_map {
 	std::string name_japanese; // 日本語名。
 	nation_types nation_type;  // 国の種類。
 	map_types map_type;        // マップの種類。
+	bool fever_flag;           // フィーバーフラグ。
 };
 
 // スコープから抜けるときの処理。
@@ -2412,7 +2413,6 @@ std::string print_itemdb(int nid);
 template <class D> std::string print_main_status(D* dat);
 std::string print_mobdb(int mid);
 std::string print_sc(status_change* sc);
-std::string print_tick(t_tick tic);
 template <class O, class L, class ...T> void print_to_with(O& out, const std::string& sep, L lea, T&& ...tras);
 template <class O, class A> void print_to_with(O& out, const std::string& sep, A arg);
 template <class ...A> std::string print_with(const std::string& sep, A&& ...args);

@@ -90,8 +90,8 @@ gon_fild01,255,79,7	script	コンロン広報官	776,{
 		mes "我がコンロンへいらしてください。";
 		mes "では、出発しましょう！";
 		close2;
-		//warp "alberta",243,67;
-		warp "alberta",241,87;
+		warp "alberta",243,67;
+		//warp "alberta",241,87;
 		end;
 	}
 	mes "[ワバ]";

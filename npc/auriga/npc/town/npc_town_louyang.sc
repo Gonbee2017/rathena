@@ -114,8 +114,8 @@ lou_fild01,190,100,7	script	クーニャン	815,{
 		mes "……はぁ～っ！";
 		mes "アルベルタへ飛んでけにゃ～ん!!";
 		close2;
-		//warp "alberta",235,45;
-		warp "alberta",241,87;
+		warp "alberta",235,45;
+		//warp "alberta",241,87;
 		end;
 	}
 	mes "[クーニャン]";

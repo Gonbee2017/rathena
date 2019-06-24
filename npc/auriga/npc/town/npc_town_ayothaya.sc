@@ -107,8 +107,8 @@ ayothaya,152,68,1	script	アイバックティン	843,{
 		mes "また、幸せに満ちた君に";
 		mes "会えると信じてるぞ！！";
 		close2;
-		//warp "alberta",235,45;
-		warp "alberta",241,87;
+		warp "alberta",235,45;
+		//warp "alberta",241,87;
 		end;
 	}
 	mes "[アイバックティン]";

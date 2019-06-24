@@ -553,12 +553,6 @@ static void memmgr_log (char *buf)
 		}else{
 			fprintf(log_fp, "\nMemory manager: Memory leaks found at %d/%02d/%02d %02dh%02dm%02ds (Unknown version).\n", (t->tm_year + 1900), (t->tm_mon + 1), t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec );
 		}
-
-		// [GonBee]
-		// このあとクラッシュすることがあり、エラーレベルが2になってしまう。
-		// 暫定措置としてこの時点でプログラムを強制終了する。
-		exit(exitcode);
-
 	}
 	fprintf(log_fp, "%s", buf);
 	return;

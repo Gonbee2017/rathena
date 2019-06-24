@@ -12014,6 +12014,11 @@ BUILDIN_FUNC(resetskill)
 	if (!script_charid2sd(2,sd))
 		return SCRIPT_CMD_FAILURE;
 	pc_resetskill(sd,1);
+
+	// [GonBee]
+	// 太陽と月と星の感情をリセットする。
+	pc_resetfeel(sd);
+
 	return SCRIPT_CMD_SUCCESS;
 }
 

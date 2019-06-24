@@ -995,12 +995,14 @@ void load_maps() {
 		char nam_jap[100 + 1];
 		int nat_typ;
 		int map_typ;
+		int fev_fla;
 		ses->execute(
 			"SELECT"
 			" `", construct<sql_column>("name_english" , nam_eng), "`,"
 			" `", construct<sql_column>("name_japanese", nam_jap), "`,"
 			" `", construct<sql_column>("nation_type"  , nat_typ), "`,"
-			" `", construct<sql_column>("map_type"     , map_typ), "` "
+			" `", construct<sql_column>("map_type"     , map_typ), "`,"
+			" `", construct<sql_column>("fever_flag"   , fev_fla), "` "
 			"FROM `pybot_map`"
 		);
 		while (ses->next_row()) {
@@ -1012,7 +1014,8 @@ void load_maps() {
 					nam_eng,
 					nam_jap,
 					nation_types(nat_typ),
-					map_types(map_typ)
+					map_types(map_typ),
+					bool(fev_fla)
 				);
 				id_maps.insert(std::make_pair(id, map));
 				type_maps[nat_typ * 100 + map_typ].push_back(map);
@@ -1288,23 +1291,6 @@ print_sc(
 			}
 		}
 	}
-	return out.str();
-}
-
-// チックを書く。
-std::string // 書いたチック。
-print_tick(
-	t_tick tic // チック。
-) {
-	std::stringstream out;
-	t_tick secs     = tic  / 1000;
-	t_tick secs_rem = secs %   60;
-	t_tick mins     = secs /   60;
-	t_tick mins_rem = mins %   60;
-	t_tick hous     = mins /   60;
-	if (hous)     out << hous     << "時間";
-	if (mins_rem) out << mins_rem << "分";
-	out               << secs_rem << "秒";
 	return out.str();
 }
 
@@ -1781,7 +1767,9 @@ void update_fever() {
 				if (i >= maps.size()) break;
 				for (;;) {
 					auto map = maps[rnd() % maps.size()];
-					if (!KEY_EXISTS(fever_rates, map->id)) {
+					if (map->fever_flag &&
+						!KEY_EXISTS(fever_rates, map->id)
+					) {
 						fever_rates[map->id] = fev_rat;
 						fev_ids.push_back(map->id);
 						break;

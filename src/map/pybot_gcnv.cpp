@@ -356,7 +356,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_IMPOSITIO                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PR_KYRIE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PR_MAGNUS                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -369,6 +368,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (AL_HEAL, attack                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 4),
 		AI_SKILL_USE_PROC_DT    (AL_HOLYLIGHT, SM_BASH, effective               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 4),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4),
+		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_HIGH_WIZARD, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC       (WZ_FROSTNOVA                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -616,7 +616,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_IMPOSITIO                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PR_KYRIE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PR_MAGNUS                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -629,6 +628,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (AL_HEAL, attack                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 4),
 		AI_SKILL_USE_PROC_DT    (AL_HOLYLIGHT, SM_BASH, effective               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 4),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4),
+		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_PROFESSOR, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC       (SA_LANDPROTECTOR                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),

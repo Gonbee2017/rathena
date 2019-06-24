@@ -642,6 +642,7 @@ AI_SKILL_USE_FUNC(GS_FLING) {
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->def() + tar_ene->def2() >= 100 &&
+		tar_ene->def() < 100 &&
 		!tar_ene->has_status_immune() &&
 		!tar_ene->sc()->data[GS_FLING] &&
 		bot->collect_coins(5)
@@ -1401,6 +1402,7 @@ AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->def() + tar_ene->def2() >= 100 &&
+		tar_ene->def() < 100 &&
 		bot->collect_spirits(1)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -2567,12 +2569,16 @@ AI_SKILL_USE_FUNC(TF_STEAL) {
 
 // Î“Š‚°‚ğg‚Á‚Ä•X‚ğŠ„‚éB
 AI_SKILL_USE_FUNC_T(TF_THROWSTONE, crush) {
-	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
+	static const auto KEYS = skill_unit_key_map{SKILL_UNIT_KEY(WZ_STORMGUST, BL_PC, 2)};
+	bool sel_sg = skill_unit_exists_block(bot, KEYS);
+	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv, sel_sg] (block_if* ene) -> bool {
 		return bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->is_summoned() &&
 			ene->sc()->data[SC_FREEZE] &&
-			skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(WZ_STORMGUST, BL_PC, 2)});
+			(sel_sg ||
+				skill_unit_exists_block(ene, KEYS)
+			);
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }

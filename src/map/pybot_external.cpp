@@ -290,6 +290,23 @@ pc_has_acquired_mvp(
 	return res;
 }
 
+// チックを書く。
+std::string // 書いたチック。
+print_tick(
+	t_tick tic // チック。
+) {
+	std::stringstream out;
+	t_tick secs     = tic  / 1000;
+	t_tick secs_rem = secs %   60;
+	t_tick mins     = secs /   60;
+	t_tick mins_rem = mins %   60;
+	t_tick hous     = mins /   60;
+	if (hous)     out << hous     << "時間";
+	if (mins_rem) out << mins_rem << "分";
+	out               << secs_rem << "秒";
+	return out.str();
+}
+
 // MVPランキングを照会する。
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> // 照会したMVPランキング。
 query_mvp_ranking(

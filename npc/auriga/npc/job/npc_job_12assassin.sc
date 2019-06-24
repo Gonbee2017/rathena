@@ -2055,10 +2055,14 @@ OnTouch:
 		mes "以上全て私が愛用した武器だ。";
 		next;
 		switch(select("ジュル","カタール","マインゴーシュ","グラディウス")) {
-			case 0: getitem 1251,1; break;
-			case 1: getitem 1253,1; break;
-			case 2: getitem 1208,1; break;
-			case 3: getitem 1220,1; break;
+			//case 0: getitem 1251,1; break;
+			//case 1: getitem 1253,1; break;
+			//case 2: getitem 1208,1; break;
+			//case 3: getitem 1220,1; break;
+			case 1: getitem 1251,1; break;
+			case 2: getitem 1253,1; break;
+			case 3: getitem 1208,1; break;
+			case 4: getitem 1220,1; break;
 		}
 		mes "[ギルドマスター]";
 		mes "これ一つあれば十分という";

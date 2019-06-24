@@ -49,6 +49,7 @@ double map_rate(int m);
 void pc_acquired_mvp(int cid, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);
+std::string print_tick(t_tick tic);
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> query_mvp_ranking(const std::vector<e_job>& jobs, int lim);
 std::shared_ptr<mvp_stats> query_mvp_stats(int cid);
 void reload_equipset_in_battle(int cid);

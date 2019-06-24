@@ -102,8 +102,8 @@ moscovia,166,53,3	script	モスコビア広報大使	960,{
 	mes "またのお越しを";
 	mes "お待ちしています！";
 	close2;
-	//warp "alberta",243,67;
-	warp "alberta",241,87;
+	warp "alberta",243,67;
+	//warp "alberta",241,87;
 	end;
 }
 

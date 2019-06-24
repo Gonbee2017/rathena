@@ -190,6 +190,15 @@ BUILDIN_FUNC(pchasacquiredmvp) {
 }
 
 // [GonBee]
+// 秒を書く。
+// i 秒。
+// 戻り値 書いた秒。
+BUILDIN_FUNC(printseconds) {
+	script_pushstrcopy(st, pybot::print_tick(t_tick(script_getnum(st, 2) + 1) * 1000).c_str());
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // MVPランキングを照会する。
 // r      職業の配列。
 // i      最大行数。

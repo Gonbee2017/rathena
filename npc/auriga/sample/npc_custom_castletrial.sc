@@ -78,6 +78,7 @@ OnRewardOpen:
 	if (isactive(dupvar(.rid))) {
 		attachrid dupvar(.rid);
 		set dupvar(CAPTURED), 1;
+		set CASTLE_TRIAL_RETRY, 0;
 		specialeffect2 EF_TEMP_OK, AREA, strcharinfo(0, dupvar(.cid));
 	}
 	announce "おめでとうございます、砦の攻略に成功しました！！", 0x9, 0x00ffff;
@@ -145,21 +146,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 181, 65, 253;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1213, 20,
-		1686, 20,
-		1717, 20,
-		1386, 20;
+		1213, 30,
+		1686, 30,
+		1717, 30,
+		1386, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 45, 32, 121, 107;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1983, 20,
-		1982, 20,
-		1984, 20;
+		1983, 30,
+		1982, 30,
+		1984, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 176, 127, 235, 181;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1850, 20,
-		1981, 20;
+		1850, 30,
+		1981, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -188,21 +189,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 16, 160, 95, 213;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1735, 20,
-		1736, 20,
-		1505, 20,
-		1371, 20;
+		1735, 30,
+		1736, 30,
+		1505, 30,
+		1371, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 49, 8, 125, 89;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1370, 20,
-		1374, 20,
-		1295, 10;
+		1370, 30,
+		1374, 30,
+		1295, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 174, 130, 221, 191;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1754, 10,
-		1713, 20;
+		1754, 15,
+		1713, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -227,21 +228,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 33, 210, 118, 291;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1386, 20,
-		1405, 20,
-		1884, 20,
-		1780, 20;
+		1386, 30,
+		1405, 30,
+		1884, 30,
+		1780, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 58, 56, 127, 123;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1672, 20,
-		1678, 20,
-		1618, 20;
+		1672, 30,
+		1678, 30,
+		1618, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 174, 144, 220, 187;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1289, 20,
-		1717, 20;
+		1289, 30,
+		1717, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -266,21 +267,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 153, 7, 203, 101;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1665, 20,
-		1664, 20,
-		1667, 20,
-		1666, 20;
+		1665, 30,
+		1664, 30,
+		1667, 30,
+		1666, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 22, 62, 77, 125;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1735, 20,
-		1736, 20,
-		1617, 20;
+		1735, 30,
+		1736, 30,
+		1617, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 104, 159, 166, 235;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1268, 20,
-		1622, 20;
+		1268, 30,
+		1622, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -309,21 +310,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 144, 38, 226, 107;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1390, 20,
-		1769, 20,
-		1770, 20,
-		1201, 20;
+		1390, 30,
+		1769, 30,
+		1770, 30,
+		1201, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 8, 176, 65, 231;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1295, 10,
-		1735, 20,
-		1736, 20;
+		1295, 15,
+		1735, 30,
+		1736, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 128, 190, 167, 233;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1302, 10,
-		1148, 20;
+		1302, 15,
+		1148, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -362,21 +363,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 135, 100, 195;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1371, 20,
-		1504, 20,
-		1297, 20,
-		1132, 20;
+		1371, 30,
+		1504, 30,
+		1297, 30,
+		1132, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 32, 8, 91, 85;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1702, 10,
-		1864, 20,
-		1865, 20;
+		1702, 15,
+		1864, 30,
+		1865, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 170, 12, 210, 53;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1870, 10,
-		1700, 10;
+		1870, 15,
+		1700, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -401,21 +402,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 18, 121, 141, 182;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1388, 10,
-		1657, 20,
-		1869, 20,
-		1693, 20;
+		1388, 15,
+		1657, 30,
+		1869, 30,
+		1693, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 10, 12, 81, 69;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1702, 10,
-		1703, 10,
-		1371, 20;
+		1702, 15,
+		1703, 15,
+		1371, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 148, 10, 185, 49;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1700, 10,
-		1701, 10;
+		1700, 15,
+		1701, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -440,21 +441,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 156, 131, 291;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1401, 20,
-		1203, 10,
-		1204, 10,
-		1205, 10;
+		1401, 30,
+		1203, 15,
+		1204, 15,
+		1205, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 90, 14, 165, 93;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1370, 20,
-		1374, 20,
-		1382, 20;
+		1370, 30,
+		1374, 30,
+		1382, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 210, 10, 267, 75;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1268, 20,
-		1507, 20;
+		1268, 30,
+		1507, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -483,21 +484,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 10, 143, 54, 229;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1390, 20,
-		1202, 20,
-		1200, 20,
-		1377, 20;
+		1390, 30,
+		1202, 30,
+		1200, 30,
+		1377, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 8, 75, 81;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1702, 10,
-		1371, 20,
-		1655, 20;
+		1702, 15,
+		1371, 30,
+		1655, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 140, 32, 179, 67;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1755, 10,
-		1701, 10;
+		1755, 15,
+		1701, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -522,21 +523,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 6, 130, 112, 206;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1707, 10,
-		1208, 20,
-		1301, 20,
-		1869, 20;
+		1707, 15,
+		1208, 30,
+		1301, 30,
+		1869, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 36, 15, 95, 77;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1705, 10,
-		1706, 10,
-		1307, 10;
+		1705, 15,
+		1706, 15,
+		1307, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 148, 14, 207, 73;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1867, 20,
-		1704, 10;
+		1867, 30,
+		1704, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -579,21 +580,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 193, 43, 243, 135;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1654, 20,
-		1405, 20,
-		1206, 20,
-		1216, 20;
+		1654, 30,
+		1405, 30,
+		1206, 30,
+		1216, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 64, 12, 135, 61;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1678, 20,
-		1717, 20,
-		1386, 20;
+		1678, 30,
+		1717, 30,
+		1386, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 11, 112, 55, 147;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1289, 10,
-		1672, 20;
+		1289, 15,
+		1672, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -618,21 +619,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 186, 16, 277, 88;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1296, 20,
-		1299, 20,
-		1774, 20,
-		1321, 20;
+		1296, 30,
+		1299, 30,
+		1774, 30,
+		1321, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 6, 222, 83, 293;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1713, 20,
-		1716, 20,
-		1262, 10;
+		1713, 30,
+		1716, 30,
+		1262, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 244, 240, 289, 292;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1259, 10,
-		1376, 20;
+		1259, 15,
+		1376, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -657,21 +658,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 219, 21, 283, 91;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1717, 20,
-		1310, 20,
-		1319, 20,
-		1306, 20;
+		1717, 30,
+		1310, 30,
+		1319, 30,
+		1306, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 12, 4, 65, 85;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1783, 10,
-		1678, 20,
-		1381, 20;
+		1783, 15,
+		1678, 30,
+		1381, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 6, 244, 51, 289;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1283, 10,
-		1672, 20;
+		1283, 15,
+		1672, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -696,21 +697,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 216, 150, 271, 276;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1318, 20,
-		1200, 20,
-		1154, 20,
-		1652, 20;
+		1318, 30,
+		1200, 30,
+		1154, 30,
+		1652, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 6, 230, 79, 289;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1098, 20,
-		1769, 20,
-		1770, 20;
+		1098, 30,
+		1769, 30,
+		1770, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 12, 10, 61, 49;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1366, 20,
-		1837, 20;
+		1366, 30,
+		1837, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -739,21 +740,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 14, 222, 77, 285;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1753, 20,
-		1382, 20,
-		1416, 20,
-		1773, 20;
+		1753, 30,
+		1382, 30,
+		1416, 30,
+		1773, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 218, 222, 293, 288;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1374, 20,
-		1866, 20,
-		1752, 20;
+		1374, 30,
+		1866, 30,
+		1752, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 238, 6, 291, 45;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1379, 20,
-		1370, 20;
+		1379, 30,
+		1370, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -796,21 +797,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 20, 6, 103, 85;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1317, 20,
-		1515, 20,
-		1206, 20,
-		1216, 20;
+		1317, 30,
+		1515, 30,
+		1206, 30,
+		1216, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 144, 62, 201, 120;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1259, 10,
-		1310, 20,
-		1381, 20;
+		1259, 15,
+		1310, 30,
+		1381, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 72, 129, 160, 207;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1319, 20,
-		1283, 10;
+		1319, 30,
+		1283, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -835,21 +836,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 13, 153, 85, 234;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1315, 20,
-		1376, 20,
-		1310, 20,
-		1513, 20;
+		1315, 30,
+		1376, 30,
+		1310, 30,
+		1513, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 42, 20, 101, 87;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1670, 20,
-		1716, 20,
-		1283, 10;
+		1670, 30,
+		1716, 30,
+		1283, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 166, 22, 205, 61;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1259, 10,
-		1677, 20;
+		1259, 15,
+		1677, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -874,21 +875,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 157, 7, 206, 82;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1866, 20,
-		1752, 20,
-		1753, 20,
-		1504, 20;
+		1866, 30,
+		1752, 30,
+		1753, 30,
+		1504, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 5, 43, 86, 119;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1865, 20,
-		1507, 20,
-		1505, 20;
+		1865, 30,
+		1507, 30,
+		1505, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 134, 172, 195, 235;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1219, 20,
-		1379, 20;
+		1219, 30,
+		1379, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -917,21 +918,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 22, 9, 94, 60;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1203, 10,
-		1204, 10,
-		1205, 10,
-		1676, 20;
+		1203, 15,
+		1204, 15,
+		1205, 15,
+		1676, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 6, 224, 61, 291;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1678, 20,
-		1675, 20,
-		1679, 20;
+		1678, 30,
+		1675, 30,
+		1679, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 236, 223, 281, 277;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1219, 20,
-		1677, 20;
+		1219, 30,
+		1677, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -960,21 +961,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 7, 230, 85, 279;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1698, 20,
-		1774, 20,
-		1699, 20,
-		1297, 20;
+		1698, 30,
+		1774, 30,
+		1699, 30,
+		1297, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 194, 10, 285, 95;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1864, 20,
-		1865, 20,
-		1132, 20;
+		1864, 30,
+		1865, 30,
+		1132, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 8, 2, 73, 75;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1098, 20,
-		1681, 10;
+		1098, 30,
+		1681, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1017,21 +1018,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1716, 40,
-		1208, 40,
-		1376, 40,
-		1259, 20;
+		1716, 60,
+		1208, 60,
+		1376, 60,
+		1259, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1713, 40,
-		1677, 40,
-		1670, 40;
+		1713, 60,
+		1677, 60,
+		1670, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1720, 20,
-		1638, 40;
+		1720, 30,
+		1638, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1057,21 +1058,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 221, 33, 370, 124;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1701, 20,
-		1703, 20,
-		1713, 40,
-		1371, 40;
+		1701, 30,
+		1703, 30,
+		1713, 60,
+		1371, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 232, 127, 348, 235;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1755, 20,
-		1700, 20,
-		1702, 20;
+		1755, 30,
+		1700, 30,
+		1702, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 155, 108, 229, 227;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1637, 40,
-		1755, 20;
+		1637, 60,
+		1755, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1101,21 +1102,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 296, 249, 379, 338;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1219, 40,
-		1098, 40,
-		1672, 40,
-		1678, 40;
+		1219, 60,
+		1098, 60,
+		1672, 60,
+		1678, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 182, 230, 294, 338;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1829, 20,
-		1830, 20,
-		1289, 20;
+		1829, 30,
+		1830, 30,
+		1289, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 183, 177, 347, 227;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1839, 20,
-		1638, 40;
+		1839, 30,
+		1638, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1141,21 +1142,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1366, 40,
-		1675, 40,
-		1837, 40,
-		1714, 40;
+		1366, 60,
+		1675, 60,
+		1837, 60,
+		1714, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1833, 20,
-		1268, 40,
-		1673, 40;
+		1833, 30,
+		1268, 60,
+		1673, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1634, 40,
-		1831, 20;
+		1634, 60,
+		1831, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1185,21 +1186,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1706, 20,
-		1707, 20,
-		1864, 40,
-		1865, 40;
+		1706, 30,
+		1707, 30,
+		1864, 60,
+		1865, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1704, 20,
-		1705, 20,
-		1983, 40;
+		1704, 30,
+		1705, 30,
+		1983, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1870, 20,
-		1639, 40;
+		1870, 30,
+		1639, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1239,21 +1240,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 231, 22, 311, 256;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1701, 20,
-		1703, 20,
-		1713, 40,
-		1388, 20;
+		1701, 30,
+		1703, 30,
+		1713, 60,
+		1388, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 154, 22, 228, 260;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1754, 20,
-		1700, 20,
-		1702, 20;
+		1754, 30,
+		1700, 30,
+		1702, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 55, 22, 151, 233;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1755, 20,
-		1637, 40;
+		1755, 30,
+		1637, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1279,21 +1280,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 8, 17, 139, 219;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1307, 20,
-		1319, 40,
-		1259, 20,
-		1283, 20;
+		1307, 30,
+		1319, 60,
+		1259, 30,
+		1283, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 140, 17, 271, 219;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1833, 20,
-		1673, 40,
-		1675, 40;
+		1833, 30,
+		1673, 60,
+		1675, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 12, 225, 183, 375;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1831, 20,
-		1634, 40;
+		1831, 30,
+		1634, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1319,21 +1320,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1707, 20,
-		1706, 20,
-		1148, 40,
-		1379, 40;
+		1707, 30,
+		1706, 30,
+		1148, 60,
+		1379, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1704, 20,
-		1867, 40,
-		1302, 20;
+		1704, 30,
+		1867, 60,
+		1302, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1639, 40,
-		1705, 20;
+		1639, 60,
+		1705, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1363,21 +1364,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1830, 20,
-		1867, 40,
-		1219, 40,
-		1507, 40;
+		1830, 30,
+		1867, 60,
+		1219, 60,
+		1507, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1829, 20,
-		1268, 40,
-		1702, 20;
+		1829, 30,
+		1268, 60,
+		1702, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1839, 20,
-		1636, 40;
+		1839, 30,
+		1636, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1403,21 +1404,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1716, 40,
-		1714, 40,
-		1717, 40,
-		1319, 40;
+		1716, 60,
+		1714, 60,
+		1717, 60,
+		1319, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1713, 40,
-		1671, 40,
-		1679, 40;
+		1713, 60,
+		1671, 60,
+		1679, 60;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1636, 40,
-		1720, 20;
+		1636, 60,
+		1720, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1450,11 +1451,11 @@ OnInit:
 			close;
 			end;
 		}
-		if (dupvar(CASTLE_TRIAL_PROGRESS) == 0) callsub Require;
-		if (dupvar(CASTLE_TRIAL_PROGRESS) == 1) callsub Pass;
-		if (dupvar(CASTLE_TRIAL_PROGRESS) == 2) callsub Complete;
-		if (dupvar(CASTLE_TRIAL_PROGRESS) == 2) callsub Trial;
-		if (dupvar(CASTLE_TRIAL_PROGRESS) == 3) callsub TrialGuildDungeon;
+		if (dupvar(CASTLE_TRIAL_PROG) == 0) callsub Require;
+		if (dupvar(CASTLE_TRIAL_PROG) == 1) callsub Pass;
+		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Complete;
+		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Trial;
+		if (dupvar(CASTLE_TRIAL_PROG) == 3) callsub TrialGuildDungeon;
 	} else callsub Abort;
 	callsub Bye;
 OnInit:
@@ -1464,14 +1465,14 @@ OnTouch:
 	specialeffect EF_MAP_GHOST;
 	end;
 OnTimer5000:
-	set .@inv, checknpcoption(OPTION_INVISIBLE);
-	if (isnight()) {
-		if (.@inv) {
-			enablenpc;
-			specialeffect EF_MAP_GHOST;
-		}
+//	set .@inv, checknpcoption(OPTION_INVISIBLE);
+//	if (isnight()) {
+//		if (.@inv) {
+//			enablenpc;
+//			specialeffect EF_MAP_GHOST;
+//		}
 		specialeffect EF_CHEMICALBODY;
-	} else if (!.@inv) disablenpc;
+//	} else if (!.@inv) disablenpc;
 	initnpctimer;
 	end;
 Introduce:
@@ -1495,37 +1496,37 @@ Introduce:
 	mes "[？]";
 	mes "私は^4040FF" + dupvar(.pri_nam$) + "^000000です。";
 	next;
-	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "実は……私はもう死んでいます。";
-	mes "遠い昔にこの世を去りました。";
-	next;
-	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "死してなおこうして霊体となり";
-	mes "現世にとどまっているのは";
-	mes "ある使命をまっとうするためです。";
-	next;
-	select("どんな使命なの？");
-	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "私が天に召されようかという";
-	mes "今際の際のまさにその時";
-	mes "我が主^4040FF" + dupvar(.god_nam$) + "^000000が現れ";
-	mes "こう告げられました……";
-	next;
-	mes "　";
-	mes "　^404040-忠実なる我がしもべよ-^000000";
-	mes "　";
-	mes "　^404040-汝のなすべきをなせ-^000000";
-	next;
-	mes "　";
-	mes "　^404040-永劫不滅の魂を以て-^000000";
-	mes "　";
-	mes "　^404040-大いなる使命を果たせ-^000000";
-	next;
-	mes "　";
-	mes "　^404040-彼の砦にて運命は待つ-^000000";
-	mes "　";
-	mes "　^404040-力ある者に道を開け-^000000";
-	next;
+//	mes "[" + dupvar(.pri_nam$) + "]";
+//	mes "実は……私はもう死んでいます。";
+//	mes "遠い昔にこの世を去りました。";
+//	next;
+//	mes "[" + dupvar(.pri_nam$) + "]";
+//	mes "死してなおこうして霊体となり";
+//	mes "現世にとどまっているのは";
+//	mes "ある使命をまっとうするためです。";
+//	next;
+//	select("どんな使命なの？");
+//	mes "[" + dupvar(.pri_nam$) + "]";
+//	mes "私が天に召されようかという";
+//	mes "今際の際のまさにその時";
+//	mes "我が主^4040FF" + dupvar(.god_nam$) + "^000000が現れ";
+//	mes "こう告げられました……";
+//	next;
+//	mes "　";
+//	mes "　^404040-忠実なる我がしもべよ-^000000";
+//	mes "　";
+//	mes "　^404040-汝のなすべきをなせ-^000000";
+//	next;
+//	mes "　";
+//	mes "　^404040-永劫不滅の魂を以て-^000000";
+//	mes "　";
+//	mes "　^404040-大いなる使命を果たせ-^000000";
+//	next;
+//	mes "　";
+//	mes "　^404040-彼の砦にて運命は待つ-^000000";
+//	mes "　";
+//	mes "　^404040-力ある者に道を開け-^000000";
+//	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "……私の使命は見所のある冒険者を";
 	mes "^4040FF砦の試練^000000へと導くことです。";
@@ -1541,22 +1542,25 @@ Introduce:
 	mes "その回収も攻略の条件です。";
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "成功、失敗に関わらず、終了後に";
-	mes "再び私に申請すれば^FF4040何度でも^000000";
-	mes "繰り返し挑戦できます。";
+	mes "終了後に再び私に申請すれば";
+	mes "^FF4040何度でも^000000繰り返し挑戦できます。";
 	mes "ただし……";
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "ご覧の通り、私の霊体としての存在は";
-	mes "とても不安定なのです……";
-	mes "日中は霊力が弱まるために姿を現すこと";
-	mes "すらできません。";
+	mes "失敗した場合は制限時間が終わるまで";
+	mes "^FF4040再挑戦はできません^000000。";
 	next;
-	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "ですから私が冒険者を^4040FF砦の試練^000000に";
-	mes "案内できるのは^FF4040夜のあいだ^000000だけ";
-	mes "ということにご留意ください……";
-	next;
+//	mes "[" + dupvar(.pri_nam$) + "]";
+//	mes "ご覧の通り、私の霊体としての存在は";
+//	mes "とても不安定なのです……";
+//	mes "日中は霊力が弱まるために姿を現すこと";
+//	mes "すらできません。";
+//	next;
+//	mes "[" + dupvar(.pri_nam$) + "]";
+//	mes "ですから私が冒険者を^4040FF砦の試練^000000に";
+//	mes "案内できるのは^FF4040夜のあいだ^000000だけ";
+//	mes "ということにご留意ください……";
+//	next;
 	set CASTLE_TRIAL_INTRODUCTION, 1;
 	return;
 Require:
@@ -1595,7 +1599,7 @@ Require:
 			mes .@cols$[.@acq] + strmobinfo(2, .@req_mvp) + " " + .@vals$[.@acq] + "^000000";
 		}
 		next;
-	} else set dupvar(CASTLE_TRIAL_PROGRESS), 1;
+	} else set dupvar(CASTLE_TRIAL_PROG), 1;
 	return;
 Pass:
 	mes "[" + dupvar(.pri_nam$) + "]";
@@ -1610,7 +1614,7 @@ Pass:
 	mes "今度はこの城にある5つの砦で";
 	mes "その力を示してください。";
 	next;
-	set dupvar(CASTLE_TRIAL_PROGRESS), 2;
+	set dupvar(CASTLE_TRIAL_PROG), 2;
 	return;
 Complete:
 	set .@cas_maps_siz, getarraysize(dupvar(.cas_maps$));
@@ -1642,7 +1646,7 @@ Complete:
 		mes "必ずや^4040FF神器^000000を手に入れられる";
 		mes "はずです。";
 		next;
-		set dupvar(CASTLE_TRIAL_PROGRESS), 3;
+		set dupvar(CASTLE_TRIAL_PROG), 3;
 	}
 	return;
 TrialGuildDungeon:
@@ -1655,67 +1659,76 @@ TrialGuildDungeon:
 	}
 	return;
 Trial:
-	mes "[" + dupvar(.pri_nam$) + "]";
-	mes "どの砦に挑戦しますか？";
-	next;
-	set .@cas_maps_siz, getarraysize(dupvar(.cas_maps$));
-	setarray .@vals$, "未攻略", "攻略済み";
-	setarray .@cols$, "^FF4040", "^4040FF";
-	for (set .@i, 0; .@i < .@cas_maps_siz; ++.@i) {
-		set .@cas_map$, dupele(.cas_maps$, .@i);
-		set .@cap, getd("CAPTURED_" + .@cas_map$);
-		set .@cas_tri$, "CastleTrial#" + .@cas_map$;
-		set .@cas_nam$, dupvar(.cas_nam$, .@cas_tri$);
-		set .@cas_nams$[.@i], .@cas_nam$;
-		set .@cas_lis$[.@i], .@cols$[.@cap] + .@cas_nam$ + " " + .@vals$[.@cap] + "^000000";
-	}
-	set .@cas_lis$[.@i], "やめる";
-	set .@cas_ind, select(printarray(.@cas_lis$)) - 1;
-	if (.@cas_ind < .@cas_maps_siz) {
-		set .@cas_nam$, .@cas_nams$[.@cas_ind];
-		set .@cas_tri$, "CastleTrial#" + dupele(.cas_maps$, .@cas_ind);
-		if (dupvar(.nic$, .@cas_tri$) == "") {
-			mes "[" + dupvar(.pri_nam$) + "]";
-			mes "^4040FF" + .@cas_nam$ + "^000000ですね。";
-			mes "わかりました。";
-			next;
-			set .@tim_lim, dupele(.tim_pois, 0, .@cas_tri$);
-			mes "------ ^4040FF砦の試練^000000 ------";
-			mes "^FF4040" + .@tim_lim + "分^000000以内に砦のモンスターを";
-			mes "^FF4040すべて^000000倒してください。";
-			mes "最後に^FF4040宝箱^000000を開ければ終了です。";
-			next;
-			mes "------ ^4040FF砦の試練^000000 ------";
-			mes "なお^FF4040制限時間をオーバー^000000したり";
-			mes "^FF4040ログアウト^000000したりすると^FF4040失格^000000に";
-			mes "なりますのでご注意ください。";
-			next;
-			mes "[" + dupvar(.pri_nam$) + "]";
-			mes "それでは始めますよ。";
-			mes "準備はよろしいですか？";
-			next;
-			if (select("はい", "いいえ") == 1) {
-				if (dupvar(.nic$, .@cas_tri$) == "") {
-					
-					// アトミック
-					set dupvar(.nic$, .@cas_tri$), strcharinfo(0);
-					donpcevent .@cas_tri$ + "::OnStart";
-					soundeffect "se_btg_forward.wav", 0;
-					viewpoint 
-						1, 
-						dupele(.cen_xy, 0, .@cas_tri$), 
-						dupele(.cen_xy, 1, .@cas_tri$), 
-						1, 
-						0xff0000;
-					
-					mes "[" + dupvar(.pri_nam$) + "]";
-					mes "これより^4040FF砦の試練^000000スタートです！";
-					mes "一刻も早く^4040FF" + .@cas_nam$ + "^000000へ。";
-					mes "ご武運をお祈りします。";
-					close;
-				} else callsub Wait, .@cas_nam$;
-			}
-		} else callsub Wait, .@cas_nam$;
+	set .@now_secs, gettimetick(2);
+	if (CASTLE_TRIAL_RETRY <= .@now_secs) {
+		mes "[" + dupvar(.pri_nam$) + "]";
+		mes "どの砦に挑戦しますか？";
+		next;
+		set .@cas_maps_siz, getarraysize(dupvar(.cas_maps$));
+		setarray .@vals$, "未攻略", "攻略済み";
+		setarray .@cols$, "^FF4040", "^4040FF";
+		for (set .@i, 0; .@i < .@cas_maps_siz; ++.@i) {
+			set .@cas_map$, dupele(.cas_maps$, .@i);
+			set .@cap, getd("CAPTURED_" + .@cas_map$);
+			set .@cas_tri$, "CastleTrial#" + .@cas_map$;
+			set .@cas_nam$, dupvar(.cas_nam$, .@cas_tri$);
+			set .@cas_nams$[.@i], .@cas_nam$;
+			set .@cas_lis$[.@i], .@cols$[.@cap] + .@cas_nam$ + " " + .@vals$[.@cap] + "^000000";
+		}
+		set .@cas_lis$[.@i], "やめる";
+		set .@cas_ind, select(printarray(.@cas_lis$)) - 1;
+		if (.@cas_ind < .@cas_maps_siz) {
+			set .@cas_nam$, .@cas_nams$[.@cas_ind];
+			set .@cas_tri$, "CastleTrial#" + dupele(.cas_maps$, .@cas_ind);
+			if (dupvar(.nic$, .@cas_tri$) == "") {
+				mes "[" + dupvar(.pri_nam$) + "]";
+				mes "^4040FF" + .@cas_nam$ + "^000000ですね。";
+				mes "わかりました。";
+				next;
+				set .@tim_lim, dupele(.tim_pois, 0, .@cas_tri$);
+				mes "------ ^4040FF砦の試練^000000 ------";
+				mes "^FF4040" + .@tim_lim + "分^000000以内に砦のモンスターを";
+				mes "^FF4040すべて^000000倒してください。";
+				mes "最後に^FF4040宝箱^000000を開ければ終了です。";
+				next;
+				mes "------ ^4040FF砦の試練^000000 ------";
+				mes "なお^FF4040制限時間をオーバー^000000したり";
+				mes "^FF4040ログアウト^000000したりすると^FF4040失格^000000に";
+				mes "なりますのでご注意ください。";
+				next;
+				mes "[" + dupvar(.pri_nam$) + "]";
+				mes "それでは始めますよ。";
+				mes "準備はよろしいですか？";
+				next;
+				if (select("はい", "いいえ") == 1) {
+					if (dupvar(.nic$, .@cas_tri$) == "") {
+						
+						// アトミック
+						set CASTLE_TRIAL_RETRY, gettimetick(2) + .@tim_lim * 60;
+						set dupvar(.nic$, .@cas_tri$), strcharinfo(0);
+						donpcevent .@cas_tri$ + "::OnStart";
+						soundeffect "se_btg_forward.wav", 0;
+						viewpoint 
+							1, 
+							dupele(.cen_xy, 0, .@cas_tri$), 
+							dupele(.cen_xy, 1, .@cas_tri$), 
+							1, 
+							0xff0000;
+						
+						mes "[" + dupvar(.pri_nam$) + "]";
+						mes "これより^4040FF砦の試練^000000スタートです！";
+						mes "一刻も早く^4040FF" + .@cas_nam$ + "^000000へ。";
+						mes "ご武運をお祈りします。";
+						close;
+					} else callsub Wait, .@cas_nam$;
+				}
+			} else callsub Wait, .@cas_nam$;
+		}
+	} else {
+		mes "------ ^4040FF砦の試練^000000 ------";
+		mes "再挑戦できるようになるまで";
+		mes "あと^FF4040" + printseconds(CASTLE_TRIAL_RETRY - .@now_secs) + "^000000です。";
+		next;
 	}
 	return;
 GuildDungeon:
@@ -1888,67 +1901,67 @@ OnInit:
 
 
 
-prt_gld,166,39,2	script	見張り番	105,{
-	if (isnight()) {
-		emotion ET_HUK;
-		mes "[兵士]";
-		mes "(ビクッ！)";
-		next;
-		mes "[兵士]";
-		mes "……";
-		next;
-		mes "[兵士]";
-		mes "なんだ……お化けかと思った。";
-		mes "びっくりさせないでくれよ。";
-		next;
-		mes "[兵士]";
-		mes "なあ、あんた。";
-		mes "ちょっとそこの広場を見てきて";
-		mes "くれないか？";
-		mes "さっきから妙な気配がするんだ……";
-		next;
-		mes "[兵士]";
-		mes "自分で行けって？";
-		mes "お 俺は自分の持ち場があるから……";
-		close;
-	} else {
-		mes "[兵士]";
-		mes "おい、あんた";
-		mes "例の噂は知ってるか？";
-		next;
-		if (select("知ってる", "知らない") == 1) {
-			mes "[兵士]";
-			mes "俺はこう見えてこの手の話が";
-			mes "大の苦手でね。";
-			next;
-			mes "[兵士]";
-			mes "夜一人でトイレに行けなく";
-			mes "なっちゃったよ……トホホ。";
-			close;
-		} else {
-			mes "[兵士]";
-			mes "出るらしいんだよ。";
-			mes "夜に……幽霊が……";
-			next;
-			mes "[兵士]";
-			mes "南の広場のあたりに女がポツンと";
-			mes "立ってるそうだ……";
-			next;
-			mes "[兵士]";
-			mes "声をかけても何も答えずにじっと";
-			mes "こっちを見てるだけ……";
-			next;
-			mes "[兵士]";
-			mes "そして朝になると姿が薄れてフッと";
-			mes "跡形もなく消えちまうらしい……";
-			next;
-			mes "[兵士]";
-			mes "まあ、俺もこの目で確かめたわけじゃ";
-			mes "ないんだけどさ……気味悪いだろ？";
-			next;
-			mes "[兵士]";
-			mes "あぁ……やだなぁ……";
-			close;
-		}
-	}
-}
+//prt_gld,166,39,2	script	見張り番	105,{
+//	if (isnight()) {
+//		emotion ET_HUK;
+//		mes "[兵士]";
+//		mes "(ビクッ！)";
+//		next;
+//		mes "[兵士]";
+//		mes "……";
+//		next;
+//		mes "[兵士]";
+//		mes "なんだ……お化けかと思った。";
+//		mes "びっくりさせないでくれよ。";
+//		next;
+//		mes "[兵士]";
+//		mes "なあ、あんた。";
+//		mes "ちょっとそこの広場を見てきて";
+//		mes "くれないか？";
+//		mes "さっきから妙な気配がするんだ……";
+//		next;
+//		mes "[兵士]";
+//		mes "自分で行けって？";
+//		mes "お 俺は自分の持ち場があるから……";
+//		close;
+//	} else {
+//		mes "[兵士]";
+//		mes "おい、あんた";
+//		mes "例の噂は知ってるか？";
+//		next;
+//		if (select("知ってる", "知らない") == 1) {
+//			mes "[兵士]";
+//			mes "俺はこう見えてこの手の話が";
+//			mes "大の苦手でね。";
+//			next;
+//			mes "[兵士]";
+//			mes "夜一人でトイレに行けなく";
+//			mes "なっちゃったよ……トホホ。";
+//			close;
+//		} else {
+//			mes "[兵士]";
+//			mes "出るらしいんだよ。";
+//			mes "夜に……幽霊が……";
+//			next;
+//			mes "[兵士]";
+//			mes "南の広場のあたりに女がポツンと";
+//			mes "立ってるそうだ……";
+//			next;
+//			mes "[兵士]";
+//			mes "声をかけても何も答えずにじっと";
+//			mes "こっちを見てるだけ……";
+//			next;
+//			mes "[兵士]";
+//			mes "そして朝になると姿が薄れてフッと";
+//			mes "跡形もなく消えちまうらしい……";
+//			next;
+//			mes "[兵士]";
+//			mes "まあ、俺もこの目で確かめたわけじゃ";
+//			mes "ないんだけどさ……気味悪いだろ？";
+//			next;
+//			mes "[兵士]";
+//			mes "あぁ……やだなぁ……";
+//			close;
+//		}
+//	}
+//}

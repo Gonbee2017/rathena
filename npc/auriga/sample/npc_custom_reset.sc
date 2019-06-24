@@ -31,6 +31,7 @@ prontera,152,192,5	script	ƒŠƒZƒbƒgEˆõ	860,{
 		}
 		else {
 			set Zeny, Zeny - .@fee[RESET_COUNT];
+			sc_end_class;
 			resetskill;
 			resetstatus;
 			specialeffect2 EF_DISPELL;

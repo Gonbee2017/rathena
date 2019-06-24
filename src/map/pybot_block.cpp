@@ -1634,7 +1634,8 @@ bool member_impl::is_no_gemstone() {
 // メンバーが壁際にいるかを判定する。
 bool // 結果。
 member_impl::is_wall_side() {
-	return sd()->special_state.no_knockback ||
+	return dynamic_cast<leader_impl*>(this) ||
+		sd()->special_state.no_knockback ||
 		check_wall_side(bl()->m, bl()->x, bl()->y);
 }
 

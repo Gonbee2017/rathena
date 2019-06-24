@@ -1102,6 +1102,7 @@ SUBCMD_FUNC(Bot, LogOut) {
 	lea->update_member_indices();
 	lea->bots().erase(lea->bots().begin() + bot->bot_index());
 	lea->update_bot_indices();
+	lea->last_heaby_tick() = now;
 }
 
 // メンバーがアイテムを拾う、または拾わない。
@@ -2167,6 +2168,7 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	lea->members().push_back(lea);
 	lea->update_member_indices();
 	lea->bots().clear();
+	lea->last_heaby_tick() = now;
 }
 
 // メンバーの順番を変更する。
@@ -2351,8 +2353,23 @@ int // 取得した人数。
 bot_limit(
 	map_session_data* sd // セッションデータ。
 ) {
+	static const std::string CAS_TRI_PRO = "CASTLE_TRIAL_PROG";
+	static const std::string ALDE_GLD    = "alde_gld";
+	static const std::string GEF_FILD13  = "gef_fild13";
+	static const std::string PAY_GLD     = "pay_gld";
+	static const std::string PRT_GLD     = "prt_gld";
+	static const std::string SCH_GLD     = "sch_gld";
+	static const std::string ARU_GLD     = "aru_gld";
+
 	int lim = pybot::find_map_data(JOB_BOT_LIMITS, e_job(sd->status.class_), 0);
 	if (pc_is_maxbaselv(sd)) ++lim;
+	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str())) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str())) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str())) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()))
+	) ++lim;
+	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + SCH_GLD   ).c_str()))) ++lim;
+	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()))) ++lim;
 	return lim;
 }
 
