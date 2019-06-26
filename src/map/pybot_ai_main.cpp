@@ -1037,12 +1037,15 @@ ai_t::away_other_battlers(
 	int y  // Y座標。
 ) {
 	bool res = false;
-	if (battler != leader) {
+	if (check_distance_blxy(leader->bl(), x, y, AREA_SIZE)) {
 		for (int i = 0; i < battlers.size(); i++)	{
 			block_if* oth_bat = battlers[i];
-			if ((oth_bat == leader ||
-					i < battler->battle_index()
-				) && !oth_bat->is_walking() &&
+			if ((oth_bat->is_primary() ||
+					(oth_bat != leader &&
+						oth_bat != leader->homun().get()
+					)
+				) && i < battler->battle_index() &&
+				!oth_bat->is_walking() &&
 				(!check_distance_client_blxy(oth_bat->bl(), x, y, battle_config.pybot_around_distance) ||
 					!oth_bat->can_reach_xy(x, y)
 				)
@@ -1051,7 +1054,7 @@ ai_t::away_other_battlers(
 				break;
 			}
 		}
-	}
+	} else res = true;
 	return res;
 }
 
@@ -1078,17 +1081,18 @@ ai_t::check_line_other_battlers(
 	int y  // Y座標。
 ) {
 	bool res = true;
-	if (battler != leader) {
-		for (int i = 0; i < battlers.size(); i++)	{
-			block_if* oth_bat = battlers[i];
-			if ((oth_bat == leader ||
-					i < battler->battle_index()
-				) && !oth_bat->is_walking() &&
-				!oth_bat->check_line_xy(x, y)
-			) {
-				res = false;
-				break;
-			}
+	for (int i = 0; i < battlers.size(); i++)	{
+		block_if* oth_bat = battlers[i];
+		if ((oth_bat->is_primary() ||
+				(oth_bat != leader &&
+					oth_bat != leader->homun().get()
+				)
+			) && i < battler->battle_index() &&
+			!oth_bat->is_walking() &&
+			!oth_bat->check_line_xy(x, y)
+		) {
+			res = false;
+			break;
 		}
 	}
 	return res;

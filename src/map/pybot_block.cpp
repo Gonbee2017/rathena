@@ -1850,9 +1850,10 @@ ptr<registry_t<int,int>>& member_impl::storage_get_items() {
 // メンバーの武器攻撃の属性を取得する。
 e_element // 取得した属性。
 member_impl::weapon_attack_element() {
-	e_element ele;
-	if (sd()->bonus.arrow_ele) ele = e_element(sd()->bonus.arrow_ele);
-	else ele = e_element(status_calc_attack_element(bl(), sc(), status_get_attack_element(bl())));
+	e_element ele = e_element(status_calc_attack_element(bl(), sc(), status_get_attack_element(bl())));
+	if (ele == ELE_NEUTRAL &&
+		sd()->bonus.arrow_ele
+	) ele = e_element(sd()->bonus.arrow_ele);
 	return ele;
 }
 

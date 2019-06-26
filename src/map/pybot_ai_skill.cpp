@@ -27,6 +27,15 @@ AI_SKILL_USE_FUNC(AC_CONCENTRATION) {
 	if (!bot->sc()->data[SC_CONCENTRATE]) bot->use_skill_self(kid, klv);
 }
 
+// ダブルストレイフィングを使う。
+AI_SKILL_USE_FUNC(AC_DOUBLE) {
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100
+	) bot->use_skill_block(kid, klv, tar_ene);
+}
+
 // アローシャワーを使う。
 AI_SKILL_USE_FUNC(AC_SHOWER) {
 	block_if* tar_ene = bot->target_enemy();
@@ -34,7 +43,7 @@ AI_SKILL_USE_FUNC(AC_SHOWER) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
-					bot->skill_ratio(kid, klv, ene) > 0 &&
+					bot->skill_ratio(kid, klv, ene) >= 100 &&
 					!ene->is_summoned();
 			})
 		);
@@ -579,7 +588,7 @@ AI_SKILL_USE_FUNC(GS_BULLSEYE) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->race() & (RC_BRUTE | RC_DEMIHUMAN) &&
 		bot->collect_coins(1)
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -604,7 +613,7 @@ AI_SKILL_USE_FUNC(GS_DESPERADO) {
 	int cou = std::count_if(ALL_RANGE(enemies),
 		sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 			return bot->check_use_skill(kid, klv, ene) &&
-				bot->skill_ratio(kid, klv, ene) > 0 &&
+				bot->skill_ratio(kid, klv, ene) >= 100 &&
 				!ene->is_summoned() &&
 				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});;
 		})
@@ -657,7 +666,7 @@ AI_SKILL_USE_FUNC(GS_PIERCINGSHOT) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->check_skill_used_tick(kid, 2500) &&
 		!tar_ene->has_status_immune() &&
 		!tar_ene->sc()->data[SC_BLEEDING]
@@ -698,7 +707,7 @@ AI_SKILL_USE_FUNC(GS_GROUNDDRIFT) {
 			int cou = std::count_if(ALL_RANGE(enemies),
 				sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv, amm_itm] (block_if* ene) -> bool {
 					return bot->check_use_skill(kid, klv, ene) &&
-						bot->skill_ratio(kid, klv, ene) > 0 &&
+						bot->skill_ratio(kid, klv, ene) >= 100 &&
 						!ene->is_paralysis() &&
 						!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 				})
@@ -749,7 +758,7 @@ AI_SKILL_USE_FUNC(GS_TRACKING) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->flee() - bot->hit() > 25
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -759,7 +768,7 @@ AI_SKILL_USE_FUNC(GS_TRIPLEACTION) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		bot->collect_coins(1)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -849,7 +858,7 @@ AI_SKILL_USE_FUNC(HT_POWER) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		(tar_ene->race() == RC_BRUTE ||
 			tar_ene->race() == RC_INSECT
 		)
@@ -1081,7 +1090,7 @@ AI_SKILL_USE_FUNC(MC_MAMMONITE) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->is_great(leader)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -1337,7 +1346,7 @@ AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->can_move() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->is_great(leader) &&
 		!tar_ene->sc()->data[SC_FOGWALL] &&
 		bot->collect_spirits(5)
@@ -1462,7 +1471,7 @@ AI_SKILL_USE_FUNC(NJ_ISSEN) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_hp(3) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->is_great(leader)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -1655,7 +1664,7 @@ AI_SKILL_USE_FUNC(PA_SACRIFICE) {
 	if (bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 		bot->check_hp(3) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->is_great(leader) &&
 		!tar_ene->is_hiding()
 	) bot->use_skill_self(kid, klv);
@@ -2444,7 +2453,7 @@ AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_path(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
-					bot->skill_ratio(kid, klv, ene) > 0 &&
+					bot->skill_ratio(kid, klv, ene) >= 100 &&
 					!ene->is_summoned();
 			})
 		);
@@ -2827,6 +2836,7 @@ AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
+					!ene->is_summoned() &&
 					ene->is_freezable() &&
 					!ene->is_paralysis() &&
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});

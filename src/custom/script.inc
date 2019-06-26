@@ -141,6 +141,44 @@ BUILDIN_FUNC(dupvar) {
 }
 
 // [GonBee]
+// インデックスで指定された武具を装備する。
+// i インデックス。
+// i 装備箇所。
+// ? キャラクターID。
+// 戻り値 成否。
+BUILDIN_FUNC(equip2) {
+	map_session_data* sd;
+	if (!script_charid2sd(4, sd)) {
+		script_pushint(st,0);
+		return SCRIPT_CMD_FAILURE;
+	}
+	int inv_ind = script_getnum(st, 2);
+	int equ_pos_ord = script_getnum(st, 3) - 1;
+	equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(equ_pos_ord));
+	if (!equip_index_check(equ_ind)) {
+		ShowError("buildin_equip2: Invalid equip pos order %d\n", equ_pos_ord);
+		script_pushint(st,0);
+		return SCRIPT_CMD_FAILURE;
+	}
+	int equ_pos = equip_bitmask[equ_ind];
+	item *itm = &sd->inventory.u.items_inventory[inv_ind];
+	if (itm->equip &&
+		!pc_unequipitem(sd, inv_ind, 1)
+	) {
+		ShowError("buildin_equip2: Cann't unequip %d\n", inv_ind);
+		script_pushint(st,0);
+		return SCRIPT_CMD_FAILURE;
+	}
+	if (!pc_equipitem(sd, inv_ind, equ_pos)) {
+		ShowError("buildin_equip2: Item %d(%d) cannot be equipped\n", inv_ind, equ_pos);
+		script_pushint(st,0);
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_pushint(st,1);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // ペットIDを取得する。
 // 戻り値 取得したペットID。
 BUILDIN_FUNC(getpetid) {
@@ -618,9 +656,15 @@ BUILDIN_FUNC(failedrefitem2) {
 				item* itm = &sd->inventory.u.items_inventory[inv_ind];
 				itm->refine = 0;
 				pc_unequipitem(sd, inv_ind, 3);
-				clif_refine(sd->fd, 1, inv_ind, itm->refine);
+
+				int ntf = 1;
+				if (script_hasdata(st, 3)) ntf = script_getnum(st, 3);
+				if (ntf) clif_refine(sd->fd, 1, inv_ind, itm->refine);
+
 				pc_delitem(sd, inv_ind, 1, 0, 2, LOG_TYPE_SCRIPT);
-				clif_misceffect(&sd->bl, 2);
+
+				if (ntf) clif_misceffect(&sd->bl, 2);
+
 				achievement_update_objective(sd, AG_REFINE_FAIL, 1, 1);
 				res = 1;
 			}
@@ -1013,12 +1057,18 @@ BUILDIN_FUNC(successrefitem2) {
 					log_pick_pc(sd, LOG_TYPE_SCRIPT, -1, itm);
 					++itm->refine;
 					pc_unequipitem(sd, inv_ind, 2);
-					clif_refine(sd->fd, 0, inv_ind, itm->refine);
+
+					int ntf = 1;
+					if (script_hasdata(st, 3)) ntf = script_getnum(st, 3);
+					if (ntf) clif_refine(sd->fd, 0, inv_ind, itm->refine);
+
 					clif_delitem(sd, inv_ind, 1, 3);
 					log_pick_pc(sd, LOG_TYPE_SCRIPT, 1, itm);
 					clif_additem(sd, inv_ind, 1, 0);
 					pc_equipitem(sd, inv_ind, equ);
-					clif_misceffect(&sd->bl, 3);
+
+					if (ntf) clif_misceffect(&sd->bl, 3);
+
 					item_data* idb = sd->inventory_data[inv_ind];
 					achievement_update_objective(sd, AG_REFINE_SUCCESS, 2, idb->wlv, itm->refine);
 					if (itm->refine == MAX_REFINE &&

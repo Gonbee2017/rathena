@@ -827,6 +827,117 @@ prt_in,56,56,0	script	レンゾウ#Refine	85,{
 	close;
 }
 
+prt_in,54,56,0	script	イッカツ#Refine	85,{
+	if(.price[0] == 0) {
+		setarray .price,5000,100,500,5000,10000;
+		setarray .itemid,985,1010,1011,984,984;		//消費アイテム（ID指定）
+	}
+	mes "[" +strnpcinfo(1)+ "]";
+	mes "俺は武器と防具を";
+	mes "一括で精錬する鍛冶屋だ。";
+	mes "君が装備しているアイテムの中で";
+	mes "好きなものを精錬できるのだ。";
+	mes "どの装備アイテムを";
+	mes "一括で精錬したいんだい？";
+	next;
+	set .@pos,select(getequipname2(1),getequipname2(2),getequipname2(3),getequipname2(4),getequipname2(5),
+				getequipname2(6),getequipname2(7),getequipname2(8),getequipname2(9),getequipname2(10));
+	if(getequipisequiped2(.@pos) == 0) {
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "何も装備してないようだが？";
+		mes "装備してからまた来てくれ。";
+		close;
+	}
+	if(getequipisenableref2(.@pos) == 0) {
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "このアイテムは精錬不可能だ。";
+		close;
+	}
+	if(getequipisidentify(.@pos) == 0) {
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "これは未鑑定だから精錬できない。";
+		close;
+	}
+	if(getequiprefinerycnt2(.@pos) >= 10) {
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "これ以上は精錬できないぞ。";
+		close;
+	}
+	set .@wlv,getequipweaponlv2(.@pos);
+	set .@id, getequipid2(.@pos);
+	getinventorylist;
+	set .@cou, 0;
+	for (set .@i, 0; .@i < @inventorylist_count; ++.@i) {
+		if (@inventorylist_id[.@i] == .@id &&
+			@inventorylist_identify[.@i] &&
+			!@inventorylist_attribute[.@i] &&
+			@inventorylist_refine[.@i] < 10
+		) ++.@cou;
+	}
+	set .@tot_pri, .price[.@wlv] * .@cou;
+	mes "[" +strnpcinfo(1)+ "]";
+	mes "君が選んだ装備を一括精錬するには";
+	mes "全部で^3131FF" +getitemname(.itemid[.@wlv])+ "^000000が^3131FF" + .@cou + "個^000000と";
+	mes "手数料^3131FF" + .@tot_pri + "Zeny^000000が必要だな。";
+	mes "じゃあ始めるが、用意はいいか？";
+	next;
+	if (select("はい", "いいえ") == 2) {
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "そうかい……";
+		mes "また来てくれよ。";
+		close;
+	}
+	
+	// アトミック
+	getinventorylist;
+	set .@cou, 0;
+	for (set .@i, 0; .@i < @inventorylist_count; ++.@i) {
+		if (@inventorylist_id[.@i] == .@id &&
+			@inventorylist_identify[.@i] &&
+			!@inventorylist_attribute[.@i] &&
+			@inventorylist_refine[.@i] < 10
+		) ++.@cou;
+	}
+	set .@tot_pri, .price[.@wlv] * .@cou;
+	if(countitem(.itemid[.@wlv]) < .@cou || 
+		Zeny < .@tot_pri
+	) {
+		emotion 9;
+		mes "[" +strnpcinfo(1)+ "]";
+		mes "おっと、材料が足りないな。";
+		mes getitemname(.itemid[.@wlv])+ "の数と所持金を";
+		mes "ちゃんと確認してくれよ。";
+		close;
+	}
+	for (set .@i, 0; .@i < @inventorylist_count; ++.@i) {
+		if (@inventorylist_id[.@i] == .@id &&
+			@inventorylist_identify[.@i] &&
+			!@inventorylist_attribute[.@i] &&
+			@inventorylist_refine[.@i] < 10
+		) {
+			if (equip2(@inventorylist_index[.@i], .@pos)) {
+				delitem .itemid[.@wlv], 1;
+				set Zeny, Zeny - .price[.@wlv];
+				if (getequippercentrefinery2(.@pos) > rand(100)) {
+					successrefitem2 .@pos, 0;
+					++.@suc;
+				} else {
+					failedrefitem2 .@pos, 0;
+					++.@fai;
+				}
+			}
+		}
+	}
+	
+	if (.@suc) specialeffect2 EF_REFINEOK;
+	if (.@fai) specialeffect2 EF_REFINEFAIL;
+	mes "[" +strnpcinfo(1)+ "]";
+	mes "よし、終わったぞ！";
+	mes "成功が^3131FF" + .@suc + "個^000000、失敗が^FF3131" + .@fai + "個^000000だ。";
+	mes "あー、疲れた。";
+	close;
+}
+
 //==============================================================================
 //増やしたい時は以下のように設定
 //morocc_in,63,39,4	duplicate(連続鍛冶屋#Refine)	連続鍛冶屋	88

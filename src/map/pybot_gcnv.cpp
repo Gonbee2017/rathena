@@ -124,7 +124,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_ASSASSIN, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_DT    (AS_VENOMKNIFE, TF_THROWSTONE, first_attack     ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
@@ -166,8 +166,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (BA_FROSTJOKER                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (BA_MUSICALSTRIKE, SM_BASH                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC_D     (BA_MUSICALSTRIKE, AC_DOUBLE                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_BLACKSMITH, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_T     (BS_MAXIMIZE, deactivate                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (BS_REPAIRWEAPON                                ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
@@ -226,9 +226,9 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (BA_FROSTJOKER                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (CG_ARROWVULCAN, SM_BASH                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (BA_MUSICALSTRIKE, SM_BASH                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC_D     (CG_ARROWVULCAN, AC_DOUBLE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (BA_MUSICALSTRIKE, AC_DOUBLE                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_CREATOR, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC       (AM_CALLHOMUN                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AM_REST                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -297,8 +297,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (DC_SCREAM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (DC_WINKCHARM                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC_D     (DC_THROWARROW, SM_BASH                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC_D     (DC_THROWARROW, AC_DOUBLE                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_GUNSLINGER, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_T     (GS_MADNESSCANCEL, deactivate                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (GS_GATLINGFEVER, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -317,8 +317,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (GS_TRACKING                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 5),
 		AI_SKILL_USE_PROC       (GS_BULLSEYE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 5),
 		AI_SKILL_USE_PROC       (GS_MAGICALBULLET                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (GS_FULLBUSTER, SM_BASH                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (GS_RAPIDSHOWER, SM_BASH                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (GS_FULLBUSTER, AC_DOUBLE                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (GS_RAPIDSHOWER, AC_DOUBLE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (GS_TRIPLEACTION                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (GS_GLITTERING                                  ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_GYPSY, initialize<ai_t::skill_use_proc_vector>(					 	 
@@ -329,9 +329,9 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (DC_SCREAM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (DC_WINKCHARM                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 3),
-		AI_SKILL_USE_PROC_D     (CG_ARROWVULCAN, SM_BASH                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (DC_THROWARROW, SM_BASH                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC_D     (CG_ARROWVULCAN, AC_DOUBLE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (DC_THROWARROW, AC_DOUBLE                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_HIGH_PRIEST, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
@@ -419,7 +419,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (HT_DETECTING                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (HT_BLITZBEAT, MC_CARTREVOLUTION                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (HT_REMOVETRAP                                  ,  1,  0, BMF_NONE  , PF_ALL  , WF_ALL  , AF_FALSE, 0)
 	)}, {JOB_KNIGHT, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_D     (KN_SPEARSTAB, AC_CHARGEARROW                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -792,8 +792,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (HT_BLITZBEAT, MC_CARTREVOLUTION                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SN_SHARPSHOOTING                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AC_SHOWER                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (SN_FALCONASSAULT, SM_BASH                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (AC_DOUBLE, SM_BASH                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (HT_REMOVETRAP                                  ,  1,  0, BMF_NONE  , PF_ALL  , WF_ALL  , AF_FALSE, 0)
 	)}, {JOB_SOUL_LINKER, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_SPIRIT(SL_ALCHEMIST, MAPID_ALCHEMIST                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
