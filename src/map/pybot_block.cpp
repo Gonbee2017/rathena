@@ -146,6 +146,7 @@ t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<bool>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::sp_suppliable() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::stay() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -166,12 +167,14 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1356,6 +1359,11 @@ bool& leader_impl::passive() {
 	return passive_;
 }
 
+// ラッシュモードの登録値。
+ptr<regnum_t<bool>>& leader_impl::rush() {
+	return rush_;
+}
+
 // 売却アイテムのレジストリ。
 ptr<registry_t<int>>& leader_impl::sell_items() {
 	return sell_items_;
@@ -1547,6 +1555,14 @@ member_impl::find_inventory(
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
 }
 
+// 範囲スキルの発動条件となるモンスター数を取得する。
+int // 取得したモンスター数。
+member_impl::get_skill_monsters() {
+	int cou = skill_monsters()->get();
+	if (!cou) cou = DEFAULT_SKILL_MONSTERS;
+	return cou;
+}
+
 // メンバーのギルドIDを取得する。
 int // 取得したギルドID。
 member_impl::guild_id() {
@@ -1634,7 +1650,7 @@ bool member_impl::is_no_gemstone() {
 // メンバーが壁際にいるかを判定する。
 bool // 結果。
 member_impl::is_wall_side() {
-	return dynamic_cast<leader_impl*>(this) ||
+	return this == leader() ||
 		sd()->special_state.no_knockback ||
 		check_wall_side(bl()->m, bl()->x, bl()->y);
 }
@@ -1720,6 +1736,11 @@ void member_impl::load_policy(
 // ドロップアイテムを拾うかの登録値。
 ptr<regnum_t<bool>>& member_impl::loot() {
 	return loot_;
+}
+
+// 範囲魔法スキルの発動モンスター数の登録値。
+ptr<regnum_t<int>>& member_impl::skill_monsters() {
+	return skill_monsters_;
 }
 
 // 魔法力増幅状態かを判定する。
@@ -2278,6 +2299,7 @@ member_t::member_t(
 	char_id() = sd()->status.char_id;
 	leader() = lea;
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
+	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
 	cart_auto_get_items() = construct<registry_t<int>>(
@@ -2379,6 +2401,7 @@ leader_t::leader_t(
 	last_heaby_tick() = 0;
 	passive() = false;
 	stay() = false;
+	rush() = construct<regnum_t<bool>>(sd(), "pybot_rush");
 	great_mobs() = construct<registry_t<int>>(
 		load_great_mob_func(char_id()),
 		insert_great_mob_func(char_id()),

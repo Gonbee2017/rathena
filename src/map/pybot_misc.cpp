@@ -178,6 +178,10 @@ item_key::item_key(
 	nameid = parse_id(pay_str);
 	if (nameid) {
 		if (nameid != INT_MIN) {
+			if (nameid >= FAME_OFFSET) {
+				nameid -= FAME_OFFSET;
+				card[0] = CARD0_CREATE;
+			}
 			idb = itemdb_exists(nameid);
 			if (!idb) nameid = 0;
 		}

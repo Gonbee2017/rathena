@@ -671,6 +671,63 @@ SUBCMD_FUNC(Bot, Item) {
 	}
 }
 
+// すべてのメンバーのインベントリとカートにあるスタック可能なアイテムの個数の集計結果を表示する。
+SUBCMD_FUNC(Bot, ItemCount) {
+	bool all = args.empty();
+	std::unordered_map<int,int> cous;
+	while (!args.empty()) {
+		std::string idb_nam = shift_arguments(args);
+		int nid = find_itemdb(idb_nam);
+		if (!nid)
+			throw command_error{print(
+				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		std::string idb_str = print_itemdb(nid);
+		item_data* idb = itemdb_exists(actual_nameid(nid));
+		if (!itemdb_isstackable2(idb))
+			throw command_error{print(
+				"「", idb_str, "」はスタックできません。"
+			)};
+		cous[nid] = 0;
+	}
+	auto yie_itm = [all, &cous](item* itm, item_data* idb = nullptr) {
+		int nid = itm->nameid;
+		if (nid) {
+			if (!idb) idb = itemdb_exists(nid);
+			if (itemdb_isstackable2(idb)) {
+				if (itm->card[0] == CARD0_CREATE &&
+					pc_famerank(MakeDWord(itm->card[2], itm->card[3]), MAPID_ALCHEMIST)
+				) nid += FAME_OFFSET;
+				if (all ||
+					KEY_EXISTS(cous, nid)
+				) cous[nid] += itm->amount;
+			}
+		}
+	};
+	for (block_if* mem : lea->members()) {
+		for (int i = 0; i < MAX_INVENTORY; ++i)
+			yie_itm(&mem->sd()->inventory.u.items_inventory[i], mem->sd()->inventory_data[i]);
+		if (pc_iscarton(mem->sd())) {
+			for (int i = 0; i < MAX_CART; ++i)
+				yie_itm(&mem->sd()->cart.u.items_cart[i]);
+		}
+	}
+	std::vector<int> nids;
+	for (const auto& cous_val : cous) nids.push_back(cous_val.first);
+	std::sort(ALL_RANGE(nids));
+	std::stringstream out;
+	out << "------ アイテムの集計結果 ------\n";
+	int tot_cou = 0;
+	for (int nid : nids) {
+		int cou = cous.at(nid);
+		out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			print_itemdb(nid) << " " << cou << "個\n";
+		tot_cou += cou;
+	}
+	out << "合計" << nids.size() << "件、" << tot_cou << "個のアイテムが見つかりました。\n";
+	show_client(lea->fd(), out.str());
+}
+
 // メンバーがアイテムをドロップする。
 SUBCMD_FUNC(Bot, ItemDrop) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -1506,6 +1563,20 @@ SUBCMD_FUNC(Bot, sKillLimit) {
 	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
+// 範囲スキルの発動条件となるモンスター数を設定する。
+SUBCMD_FUNC(Bot, sKillMonsters) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = shift_arguments_then_parse_int(
+		args, print("モンスター数"), 1,	INT_MAX
+	);
+	mem->skill_monsters()->set(cou);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の範囲スキルの発動条件となるモンスター数を",
+		mem->skill_monsters()->get(), "匹にしました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // メンバーの演奏スキルを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillPlay) {
 	using ps_val_t = std::pair<int,play_skill*>;
@@ -2197,6 +2268,18 @@ SUBCMD_FUNC(Bot, TeamPassive) {
 	if (lea->passive())
 		show_client(lea->fd(), "あなたのチームはモンスターに反応しません。");
 	else show_client(lea->fd(), "あなたのチームはモンスターに反応します。");
+}
+
+// ラッシュモードになる、または解除する。
+SUBCMD_FUNC(Bot, TeamRush) {
+	auto& rus = lea->rush();
+	rus->set(!rus->get());
+	if (rus->get()) show_client(lea->fd(), print(
+		"あなたのチームはラッシュモードになりました。"
+	));
+	else show_client(lea->fd(), print(
+		"あなたのチームはラッシュモードを解除しました。"
+	));
 }
 
 // チームが待機、または追従する。
@@ -2940,8 +3023,12 @@ std::string print_storage(
 	for (int i = 0; i < siz; ++i) {
 		item* itm = &itms[i];
 		if (itm->nameid) {
+			int nid = itm->nameid;
+			if (itm->card[0] == CARD0_CREATE &&
+				pc_famerank(MakeDWord(itm->card[2], itm->card[3]), MAPID_ALCHEMIST)
+			) nid += FAME_OFFSET;
 			out << INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), i) << " " <<
-				ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - ";
+				ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - ";
 			item_data* idb;
 			if (idbs) idb = idbs[i];
 			else idb = itemdb_exists(itm->nameid);

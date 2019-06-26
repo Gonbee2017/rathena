@@ -1269,6 +1269,7 @@ struct leader_if {
 	virtual std::vector<block_if*>& members();
 	virtual t_tick next_heaby_tick();
 	virtual bool& passive();
+	virtual ptr<regnum_t<bool>>& rush();
 	virtual ptr<registry_t<int>>& sell_items();
 	virtual bool& sp_suppliable();
 	virtual bool& stay();
@@ -1292,12 +1293,14 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual int get_skill_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<bool>>& loot();
+	virtual ptr<regnum_t<int>>& skill_monsters();
 	virtual bool magicpower_is_active();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual ptr<block_if>& pet();
@@ -1593,6 +1596,7 @@ struct leader_impl : virtual block_if {
 	t_tick last_heaby_tick_;                          // 最後に重たいコマンドを実行したチック。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
+	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
 	ptr<registry_t<int>> sell_items_;                 // 売却アイテムのレジストリ。
 	bool sp_suppliable_;                              // SPを供給可能か。
 	bool stay_;                                       // 待機か。
@@ -1611,6 +1615,7 @@ struct leader_impl : virtual block_if {
 	virtual std::vector<block_if*>& members() override;
 	virtual t_tick next_heaby_tick() override;
 	virtual bool& passive() override;
+	virtual ptr<regnum_t<bool>>& rush() override;
 	virtual ptr<registry_t<int>>& sell_items() override;
 	virtual bool& sp_suppliable() override;
 	virtual bool& stay() override;
@@ -1632,6 +1637,7 @@ struct member_impl : virtual block_if {
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<int,int>> limit_skills_;       // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
+	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
 	int member_index_;                            // メンバーのインデックス。
 	ptr<registry_t<int,normal_attack_policy>>
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
@@ -1661,6 +1667,7 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual int get_skill_monsters() override;
 	virtual int guild_id() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
@@ -1678,6 +1685,7 @@ struct member_impl : virtual block_if {
 	virtual void load_play_skill(int mid, e_skill* kid) override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual ptr<regnum_t<bool>>& loot() override;
+	virtual ptr<regnum_t<int>>& skill_monsters() override;
 	virtual bool magicpower_is_active() override;
 	virtual int& member_index() override;
 	virtual std::string name() override;
@@ -2222,6 +2230,7 @@ SUBCMD_FUNC(Bot, HomunsKillLimit);
 SUBCMD_FUNC(Bot, HomunsKillUp);
 SUBCMD_FUNC(Bot, HomunStatus);
 SUBCMD_FUNC(Bot, Item);
+SUBCMD_FUNC(Bot, ItemCount);
 SUBCMD_FUNC(Bot, ItemDrop);
 SUBCMD_FUNC(Bot, ItemIgnore);
 SUBCMD_FUNC(Bot, ItemIgnoreClear);
@@ -2253,6 +2262,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
 SUBCMD_FUNC(Bot, sKill);
 SUBCMD_FUNC(Bot, sKillLimit);
+SUBCMD_FUNC(Bot, sKillMonsters);
 SUBCMD_FUNC(Bot, sKillPlay);
 SUBCMD_FUNC(Bot, sKillPlayClear);
 SUBCMD_FUNC(Bot, sKillPlayTransport);
@@ -2276,6 +2286,7 @@ SUBCMD_FUNC(Bot, TeamLogIn);
 SUBCMD_FUNC(Bot, TeamLogOut);
 SUBCMD_FUNC(Bot, TeamOrder);
 SUBCMD_FUNC(Bot, TeamPassive);
+SUBCMD_FUNC(Bot, TeamRush);
 SUBCMD_FUNC(Bot, TeamStay);
 SUBCMD_FUNC(Bot, TradeItem);
 SUBCMD_FUNC(Bot, TradeZeny);
@@ -2469,6 +2480,7 @@ extern const std::string CASTLE_TRIAL_NPC_NAME;
 extern const std::string CAUTION_TAG;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
+extern const int DEFAULT_SKILL_MONSTERS;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
 extern const std::array<std::string,10> ELEMENT_NAME_TABLE;
 extern const skill_unit_key_map ELEMENTAL_SKILL_UNIT_KEYS;

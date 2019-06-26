@@ -141,7 +141,7 @@ aldeg_cas05,37,111,0	warp	CastleExit#aldeg_cas05	1,1,alde_gld,264,90
 -	script	CastleTrialInit#aldeg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ノイシュヴァンシュタイン";
+	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 63, 58;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 181, 65, 253;
@@ -184,7 +184,7 @@ OnInit:
 -	script	CastleTrialInit#aldeg_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ホーエンシュヴァンガウ";
+	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 71, 266;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 16, 160, 95, 213;
@@ -223,7 +223,7 @@ OnInit:
 -	script	CastleTrialInit#aldeg_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ニュルンベルク";
+	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 120, 58;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 33, 210, 118, 291;
@@ -262,7 +262,7 @@ OnInit:
 -	script	CastleTrialInit#aldeg_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ヴュルツブルク";
+	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 256, 259;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 153, 7, 203, 101;
@@ -305,7 +305,7 @@ OnInit:
 -	script	CastleTrialInit#aldeg_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ローテンブルク";
+	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 242, 69;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 144, 38, 226, 107;
@@ -358,21 +358,21 @@ gefg_cas05,194,171,0	warp	CastleExit#gefg_cas05	1,1,gef_fild13,305,87
 -	script	CastleTrialInit#gefg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "レフリオン";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦";
 	setarray dupvar(.cen_xy, .@tar$), 179, 88;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 135, 100, 195;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
+		1865, 30,
 		1371, 30,
-		1504, 30,
 		1297, 30,
 		1132, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 32, 8, 91, 85;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
+		1198, 15,
 		1702, 15,
-		1864, 30,
-		1865, 30;
+		1864, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 170, 12, 210, 53;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
@@ -397,7 +397,7 @@ OnInit:
 -	script	CastleTrialInit#gefg_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ヨルブリガー";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 312, 266;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 18, 121, 141, 182;
@@ -436,7 +436,7 @@ OnInit:
 -	script	CastleTrialInit#gefg_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "イスネルフ";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 86, 237;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 156, 131, 291;
@@ -479,7 +479,7 @@ OnInit:
 -	script	CastleTrialInit#gefg_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ベルゲル";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 189, 311;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 10, 143, 54, 229;
@@ -518,7 +518,7 @@ OnInit:
 -	script	CastleTrialInit#gefg_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "メルセデス";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 294, 65;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 6, 130, 112, 206;
@@ -575,7 +575,7 @@ payg_cas05,45,46,0	warp	CastleExit#payg_cas05	1,1,pay_gld,198,264
 -	script	CastleTrialInit#payg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "仏影";
+	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 107, 270;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 193, 43, 243, 135;
@@ -614,7 +614,7 @@ OnInit:
 -	script	CastleTrialInit#payg_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "天壇";
+	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 272, 128;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 186, 16, 277, 88;
@@ -653,7 +653,7 @@ OnInit:
 -	script	CastleTrialInit#payg_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "明亭";
+	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 351, 293;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 219, 21, 283, 91;
@@ -692,7 +692,7 @@ OnInit:
 -	script	CastleTrialInit#payg_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "紅楼";
+	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 135, 74;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 216, 150, 271, 276;
@@ -735,7 +735,7 @@ OnInit:
 -	script	CastleTrialInit#payg_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "竹林丘";
+	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 223, 285;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 14, 222, 77, 285;
@@ -792,7 +792,7 @@ prtg_cas05,260,266,0	warp	CastleExit#prtg_cas05	1,1,prt_gld,208,240
 -	script	CastleTrialInit#prtg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "クリームヒルド";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 102, 94;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 20, 6, 103, 85;
@@ -800,7 +800,7 @@ OnInit:
 		1317, 30,
 		1515, 30,
 		1206, 30,
-		1216, 30;
+		1777, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 144, 62, 201, 120;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
@@ -831,7 +831,7 @@ OnInit:
 -	script	CastleTrialInit#prtg_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "スヴァンヒルド";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 216, 89;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 13, 153, 85, 234;
@@ -870,7 +870,7 @@ OnInit:
 -	script	CastleTrialInit#prtg_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ラーズグリーズ";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 160, 168;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 157, 7, 206, 82;
@@ -913,7 +913,7 @@ OnInit:
 -	script	CastleTrialInit#prtg_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "スケグル";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 94, 224;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 22, 9, 94, 60;
@@ -956,7 +956,7 @@ OnInit:
 -	script	CastleTrialInit#prtg_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ゲンドゥル";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 225, 224;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 7, 230, 85, 279;
@@ -1013,7 +1013,7 @@ schg_cas05,120,283,0	warp	CastleExit#schg_cas05	1,1,sch_gld,71,315
 -	script	CastleTrialInit#schg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ヒミン";
+	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 295, 75;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
@@ -1053,7 +1053,7 @@ OnInit:
 -	script	CastleTrialInit#schg_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "アンドラング";
+	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 262, 274;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 221, 33, 370, 124;
@@ -1097,7 +1097,7 @@ OnInit:
 -	script	CastleTrialInit#schg_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ヴィーズブラーイン";
+	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 77, 159;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 296, 249, 379, 338;
@@ -1137,7 +1137,7 @@ OnInit:
 -	script	CastleTrialInit#schg_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "フリョーズ";
+	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 139, 111;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
@@ -1181,7 +1181,7 @@ OnInit:
 -	script	CastleTrialInit#schg_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "スカーティルニル";
+	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 58, 315;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
@@ -1235,7 +1235,7 @@ arug_cas05,142,312,0	warp	CastleExit#arug_cas05	1,1,aru_gld,292,107
 -	script	CastleTrialInit#arug_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "マルドル";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 156, 275;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 231, 22, 311, 256;
@@ -1275,7 +1275,7 @@ OnInit:
 -	script	CastleTrialInit#arug_cas02	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "スュール";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 69, 45;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 8, 17, 139, 219;
@@ -1315,7 +1315,7 @@ OnInit:
 -	script	CastleTrialInit#arug_cas03	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ホルン";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 69, 137;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
@@ -1323,7 +1323,7 @@ OnInit:
 		1707, 30,
 		1706, 30,
 		1148, 60,
-		1379, 60;
+		1198, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
@@ -1359,7 +1359,7 @@ OnInit:
 -	script	CastleTrialInit#arug_cas04	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ゲヴン";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 290, 363;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
@@ -1399,7 +1399,7 @@ OnInit:
 -	script	CastleTrialInit#arug_cas05	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ヴァナディース";
+	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 284, 104;
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;

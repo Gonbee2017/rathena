@@ -274,7 +274,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_AUTOGUARD                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_REFLECTSHIELD                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_SHRINK                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_PROVIDENCE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_SPEARQUICKEN                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_ENDURE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_TRUE , AF_TRUE , 3),
@@ -288,6 +288,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (CR_HOLYCROSS, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (CR_SHIELDBOOMERANG, spirit                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_DANCER, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -574,7 +575,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_AUTOGUARD                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_REFLECTSHIELD                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_SHRINK                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_PROVIDENCE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_T     (PA_GOSPEL, activate                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (CR_SPEARQUICKEN                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -592,6 +593,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (CR_SHIELDBOOMERANG, spirit                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (PA_PRESSURE, ASC_BREAKER                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_PRIEST, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1408,6 +1410,12 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot item ハイプリ]\n"
 		"アイテムを使用する。\n"
 		"入力例 [@bot item ハイプリ 青ポーション]\n"
+	), SUBCMD_DESC(Bot, ItemCount                  , ic  ,
+		"------ ItemCount (ic) サブコマンド ------\n"
+		"すべてのアイテムの集計を一覧表示する。\n"
+		"入力例 [@bot itemcount]\n"
+		"任意のアイテムの集計を一覧表示する。\n"
+		"入力例 [@bot itemcount ゼロピー リンゴ 綿毛]\n"
 	), SUBCMD_DESC(Bot, ItemDrop                   , id  ,
 		"------ ItemDrop (id) サブコマンド ------\n"
 		"アイテムの全個数をドロップする。\n"
@@ -1576,6 +1584,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skilllimit ハイプリ エンジェラス 0]\n"
 		"スキルのレベル制限を解除する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス]\n"
+	), SUBCMD_DESC(Bot, sKillMonsters              , km  ,
+		"------ sKillMonsters (km) サブコマンド ------\n"
+		"範囲スキルの発動条件となるモンスター数を設定する。\n"
+		"入力例 [@bot skillmonsters ハイプリ 1]\n"
 	), SUBCMD_DESC(Bot, sKillPlay                  , kp  ,
 		"------ sKillPlay (kp) サブコマンド ------\n"
 		"演奏スキルを一覧表示する。\n"
@@ -1690,6 +1702,12 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot teampassive]\n"
 		"Botがモンスターに反応するようにする。\n"
 		"入力例 [@bot teampassive]\n"
+	), SUBCMD_DESC(Bot, TeamRush                   , tr  ,
+		"------ TeamRush (tr) サブコマンド ------\n"
+		"ラッシュモードになる。\n"
+		"入力例 [@bot teamrush]\n"
+		"ラッシュモードを解除する。\n"
+		"入力例 [@bot teamrush]\n"
 	), SUBCMD_DESC(Bot, TeamStay                   , ts  ,
 		"------ TeamStay (ts) サブコマンド ------\n"
 		"その場で待機するようにする。\n"
@@ -1739,6 +1757,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, HomunsKillUp               , hku ),
 	SUBCMD_PROC(Bot, HomunStatus                , hs  ),
 	SUBCMD_PROC(Bot, Item                       , i   ),
+	SUBCMD_PROC(Bot, ItemCount                  , ic  ),
 	SUBCMD_PROC(Bot, ItemDrop                   , id  ),
 	SUBCMD_PROC(Bot, ItemIgnore                 , ii  ),
 	SUBCMD_PROC(Bot, ItemIgnoreClear            ,     ),
@@ -1770,6 +1789,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
 	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
+	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
 	SUBCMD_PROC(Bot, sKillPlay                  , kp  ),
 	SUBCMD_PROC(Bot, sKillPlayClear             ,     ),
 	SUBCMD_PROC(Bot, sKillPlayTransport         , kpt ),
@@ -1788,11 +1808,12 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, StoragePutClear            ,     ),
 	SUBCMD_PROC(Bot, StoragePutImport           , spi ),
 	SUBCMD_PROC(Bot, sUmmon                     , u   ),
-	SUBCMD_PROC(Bot, Team                       , t   ) ,
+	SUBCMD_PROC(Bot, Team                       , t   ),
 	SUBCMD_PROC(Bot, TeamLogIn                  , tli ),
 	SUBCMD_PROC(Bot, TeamLogOut                 , tlo ),
 	SUBCMD_PROC(Bot, TeamOrder                  , to  ),
 	SUBCMD_PROC(Bot, TeamPassive                , tp  ),
+	SUBCMD_PROC(Bot, TeamRush                   , tr  ),
 	SUBCMD_PROC(Bot, TeamStay                   , ts  ),
 	SUBCMD_PROC(Bot, TradeItem                  , ti  ),
 	SUBCMD_PROC(Bot, TradeZeny                  , tz  ),
@@ -1902,6 +1923,9 @@ const std::unordered_map<
 	{JOB_STAR_GLADIATOR, NAPV_CONTINUOUS},
 	{JOB_SOUL_LINKER   , NAPV_SINGLE    },
 };
+
+// デフォルトの範囲スキルの発動条件となるモンスター数。
+const int DEFAULT_SKILL_MONSTERS = 3;
 
 // 距離ポリシー値名のテーブル。
 const std::array<

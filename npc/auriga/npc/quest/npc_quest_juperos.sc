@@ -7,7 +7,8 @@
 //------------------------------------------------------------
 yuno_fild07,208,175,0	script	juperoswarp0401		139,2,2,{ warp "jupe_cave",143,52; end; }
 jupe_cave,147,52,0		script	juperoswarp0501		139,2,2,{ warp "yuno_fild07",212,175; end; }
-jupe_cave,29,52,0		warp	juperoswarp4001		3,3,juperos_01,54,246
+//jupe_cave,29,52,0		warp	juperoswarp4001		3,3,juperos_01,54,246
+jupe_cave,29,52,0		warp	juperoswarp4001		3,3,juperos_01,55,246
 juperos_01,51,249,0		warp	juperoswarp4002		3,3,jupe_cave,36,51
 juperos_01,100,91,0		script	juperoswarp4003		139,2,2,{
 	initnpctimer;

@@ -3096,21 +3096,21 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 
 	if( !rebirth ) {
 
-		if( pcdb_checkid(md->vd->class_) ) {//Player mobs are not removed automatically by the client.
-			/* first we set them dead, then we delay the outsight effect */
-			clif_clearunit_area(&md->bl,CLR_DEAD);
-			clif_clearunit_delayed(&md->bl, CLR_OUTSIGHT,tick+3000);
-		} else
-			/**
-			 * We give the client some time to breath and this allows it to display anything it'd like with the dead corpose
-			 * For example, this delay allows it to display soul drain effect
-			 **/
-
-			// [GonBee]
-			// モンスターが死亡してもクライアントに表示され続ける不具合が発生したが、
-			// 以下のように修正したところなぜか再現しなくなった。
-			//clif_clearunit_delayed(&md->bl, CLR_DEAD, tick+250);
-			clif_clearunit_area(&md->bl, CLR_DEAD);
+		// [GonBee]
+		// モンスターが死亡してもクライアントに表示され続ける不具合が発生したが、
+		// 以下のように修正したところなぜか再現しなくなった。
+		//if( pcdb_checkid(md->vd->class_) ) {//Player mobs are not removed automatically by the client.
+		//	/* first we set them dead, then we delay the outsight effect */
+		//	clif_clearunit_area(&md->bl,CLR_DEAD);
+		//	clif_clearunit_delayed(&md->bl, CLR_OUTSIGHT,tick+3000);
+		//} else
+		//	/**
+		//	 * We give the client some time to breath and this allows it to display anything it'd like with the dead corpose
+		//	 * For example, this delay allows it to display soul drain effect
+		//	 **/
+		//	clif_clearunit_delayed(&md->bl, CLR_DEAD, tick+250);
+		clif_clearunit_area(&md->bl,CLR_DEAD);
+		clif_clearunit_delayed(&md->bl, CLR_OUTSIGHT,tick+3000);
 
 	}
 

@@ -38,7 +38,7 @@ AI_SKILL_USE_FUNC(AC_SHOWER) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 
@@ -99,7 +99,7 @@ AI_SKILL_USE_FUNC(AL_CRUCIS) {
 				ene->race() == RC_DEMON
 			) && !ene->sc()->data[SC_SIGNUMCRUCIS];
 	});
-	if (cou >= 3) bot->use_skill_self(kid, klv);
+	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 }
 
 // キュアーを使う。
@@ -285,7 +285,7 @@ AI_SKILL_USE_FUNC(BA_FROSTJOKER) {
 		int cou = std::count_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
 			return ene->is_freezable();
 		});
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -316,7 +316,7 @@ AI_SKILL_USE_FUNC(BS_HAMMERFALL) {
 					!ene->is_paralysis();
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 
@@ -445,14 +445,17 @@ AI_SKILL_USE_FUNC_T(CR_DEFENDER, deactivate) {
 
 // ディボーションを使う。
 AI_SKILL_USE_FUNC(CR_DEVOTION) {
-	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return mem != bot &&
-			!mem->is_dead() &&
-			!mem->is_hiding() &&
-			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_DEVOTION];
-	});
-	if (mem) bot->use_skill_block(kid, klv, mem);
+	if (bot->party_id()) {
+		block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+			return mem->party_id() == bot->party_id() &&
+				mem != bot &&
+				!mem->is_dead() &&
+				!mem->is_hiding() &&
+				!mem->reject_skills()->find(kid) &&
+				!mem->sc()->data[SC_DEVOTION];
+		});
+		if (mem) bot->use_skill_block(kid, klv, mem);
+	}
 }
 
 // フルケミカルチャージを使う。
@@ -478,7 +481,7 @@ AI_SKILL_USE_FUNC(CR_GRANDCROSS) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -494,7 +497,7 @@ AI_SKILL_USE_FUNC_T(CR_GRANDCROSS, effective) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -546,7 +549,7 @@ AI_SKILL_USE_FUNC(DC_SCREAM) {
 			return !ene->has_status_immune() &&
 				!ene->is_paralysis();
 		});
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -606,7 +609,7 @@ AI_SKILL_USE_FUNC(GS_DESPERADO) {
 				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});;
 		})
 	);
-	if (cou >= 3) bot->use_skill_self(kid, klv);
+	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 }
 
 // ディスアームを使う。
@@ -700,7 +703,7 @@ AI_SKILL_USE_FUNC(GS_GROUNDDRIFT) {
 						!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 				})
 			);
-			if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+			if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 		}
 	}
 }
@@ -911,7 +914,7 @@ AI_SKILL_USE_FUNC(HW_GRAVITATION) {
 					!ene->sc()->data[SC_GRAVITATION];
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 
@@ -1047,7 +1050,7 @@ AI_SKILL_USE_FUNC(MC_CARTREVOLUTION) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
@@ -1064,7 +1067,7 @@ AI_SKILL_USE_FUNC_T(MC_CARTREVOLUTION, effective) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
@@ -1099,7 +1102,7 @@ AI_SKILL_USE_FUNC(MG_FIREBALL) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
@@ -1239,7 +1242,7 @@ AI_SKILL_USE_FUNC(MG_THUNDERSTORM) {
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})
 		);
-		if (cou >= 3 &&
+		if (cou >= bot->get_skill_monsters() &&
 			bot->use_magicpower()
 		) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
@@ -1429,7 +1432,7 @@ AI_SKILL_USE_FUNC(NJ_BAKUENRYU) {
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})
 		);
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -1451,7 +1454,7 @@ AI_SKILL_USE_FUNC(NJ_HYOUSYOURAKU) {
 				ene->target_battler()->distance_policy_value() == DPV_AWAY;
 		})
 	);
-	if (cou >= 3) bot->use_skill_self(kid, klv);
+	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 }
 
 // 一閃を使う。
@@ -1477,7 +1480,7 @@ AI_SKILL_USE_FUNC(NJ_KAENSIN) {
 					!skill_unit_exists_block(ene, ELEMENTAL_SKILL_UNIT_KEYS);
 			})
 		);
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -1492,7 +1495,7 @@ AI_SKILL_USE_FUNC(NJ_KAMAITACHI) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
@@ -1545,7 +1548,7 @@ AI_SKILL_USE_FUNC(NJ_RAIGEKISAI) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -1571,7 +1574,7 @@ AI_SKILL_USE_FUNC(NJ_SUITON) {
 					!skill_unit_exists_block(ene, ELEMENTAL_SKILL_UNIT_KEYS);
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 
@@ -1837,10 +1840,13 @@ AI_SKILL_USE_FUNC(PR_MAGNUS) {
 					!ene->is_summoned() &&
 					(ene->is_undead() ||
 						ene->race() == RC_DEMON
-					) && !skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
+					) && !skill_unit_exists_block(ene, skill_unit_key_map{
+						SKILL_UNIT_KEY(PR_MAGNUS),
+						SKILL_UNIT_KEY(SA_LANDPROTECTOR)
+					});
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 
@@ -2378,7 +2384,7 @@ AI_SKILL_USE_FUNC(SM_MAGNUM) {
 				!ene->is_summoned();
 		})
 	);
-	if (cou >= 3) bot->use_skill_self(kid, klv);
+	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 }
 
 // 効果的なマグナムブレイクを使う。
@@ -2390,7 +2396,7 @@ AI_SKILL_USE_FUNC_T(SM_MAGNUM, effective) {
 				!ene->is_summoned();
 		})
 	);
-	if (cou >= 3) bot->use_skill_self(kid, klv);
+	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 }
 
 // マグナムブレイクを使って強化する。
@@ -2442,7 +2448,7 @@ AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
 					!ene->is_summoned();
 			})
 		);
-		if (cou >= 3) bot->use_skill_block(kid, klv, tar_ene);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_block(kid, klv, tar_ene);
 	}
 }
 
@@ -2769,7 +2775,7 @@ AI_SKILL_USE_FUNC(WZ_METEOR) {
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})
 		);
-		if (cou >= 3 &&
+		if (cou >= bot->get_skill_monsters() &&
 			bot->use_magicpower()
 		) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
@@ -2808,7 +2814,7 @@ AI_SKILL_USE_FUNC(WZ_STORMGUST) {
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})
 		);
-		if (cou >= 3 &&
+		if (cou >= bot->get_skill_monsters() &&
 			bot->use_magicpower()
 		) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
@@ -2826,7 +2832,7 @@ AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})
 		);
-		if (cou >= 3) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		if (cou >= bot->get_skill_monsters()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 

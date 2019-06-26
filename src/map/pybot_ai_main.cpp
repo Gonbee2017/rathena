@@ -10,6 +10,7 @@ namespace pybot {
 
 // AIのタイマーハンドラ。
 TIMER_FUNC(ai_t::timer_func) {
+//	SHOW_DEBUG;
 	now = gettick();
 	for (auto lea_val_ite = all_leaders.begin(); lea_val_ite != all_leaders.end();) {
 		auto lea = lea_val_ite->second;
@@ -23,6 +24,7 @@ TIMER_FUNC(ai_t::timer_func) {
 			++lea_val_ite;
 		} else all_leaders.erase(lea_val_ite++);
 	}
+//	SHOW_DEBUG;
 	return 0;
 }
 
@@ -336,10 +338,12 @@ void ai_t::leader_target() {
 				distance_policy_values dis_pol_val = DPV_PENDING;
 				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
 				rel_pol(bat, bat->target_enemy(), &dis_pol_val, &nor_att_pol_val);
-				if ((battlers.front()->distance_policy_value() == DPV_AWAY ||
-						bat->is_primary()
-					) && (bat->target_enemy()->target_battler() ||
-						!bat->target_enemy()->is_berserk()
+				if (leader->rush()->get() ||
+					((battlers.front()->distance_policy_value() == DPV_AWAY ||
+							bat->is_primary()
+						) && (bat->target_enemy()->target_battler() ||
+							!bat->target_enemy()->is_berserk()
+						)
 					)
 				) bat->battle_mode() = BM_TAUNT;
 				else bat->battle_mode() = BM_ASSIST;
@@ -433,8 +437,19 @@ void ai_t::bot_lost() {
 // Botがエモーションを表示する。
 void ai_t::bot_emotion() {
 	if (DIFF_TICK(now, bot->last_emotion_tick()) >= 2500) {
+		bool no_get_itms = false;
+		ptr<storage_context> sto_con;
+		if (bot->is_carton()) sto_con = construct<cart_context>(bot->sd());
+		else sto_con = construct<inventory_context>(bot->sd());
+		bot->storage_get_items()->iterate(
+			[this, &no_get_itms, sto_con] (int nid, int* amo) -> bool {
+				no_get_itms = sto_con->find(nid) == INT_MIN;
+				return !no_get_itms;
+			}
+		);
 		int typ = INT_MIN;
 		if (bot->find_broken_equip() != INT_MIN) typ = ET_HELP;
+		else if (no_get_itms) typ = ET_SCRATCH;
 		else if (bot->sc()->data[SC_WEIGHT90]) typ = ET_CRY;
 		else if (bot->sc()->data[SC_WEIGHT50]) typ = ET_OHNO;
 		else if (bot->sp_ratio() < 25) typ = ET_KEK;
@@ -1002,7 +1017,8 @@ ai_t::away_enemies(
 	} else {
 		for (block_if* ene : enemies) {
 			if (check_distance_blxy(ene->bl(), x, y, ene->away_distance(leader)) &&
-				(battlers.front()->distance_policy_value() == DPV_AWAY ||
+				(leader->rush()->get() ||
+					battlers.front()->distance_policy_value() == DPV_AWAY ||
 					ene->target_battler() != battler
 				)
 			) {
@@ -1179,7 +1195,8 @@ pos_t // 見つかった位置。見つからなかったらadvantageがINT_MIN。
 ai_t::find_best_tanut_pos() {
 	pos_t pos;
 	block_if* tar_ene = battler->target_enemy();
-	if (battler->is_primary() &&
+	if (!leader->rush()->get() &&
+		battler->is_primary() &&
 		tar_ene->is_short_range_attacker() &&
 		!tar_ene->is_flora() &&
 		tar_ene->is_great(leader) &&
