@@ -143,6 +143,7 @@ block_if* leader_if::find_member(const std::string& nam) {RAISE_NOT_IMPLEMENTED_
 ptr<registry_t<int>>& leader_if::great_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1342,6 +1343,11 @@ t_tick& leader_impl::last_heaby_tick() {
 	return last_heaby_tick_;
 }
 
+// 最後に枝召喚したID。
+int& leader_impl::last_summoned_id() {
+	return last_summoned_id_;
+}
+
 // メンバーのベクタ。
 std::vector<block_if*>& leader_impl::members() {
 	return members_;
@@ -2400,6 +2406,7 @@ leader_t::leader_t(
 ) : member_t(sd_, this) {
 	attack_target() = 0;
 	last_heaby_tick() = 0;
+	last_summoned_id() = 0;
 	passive() = false;
 	stay() = false;
 	rush() = construct<regnum_t<bool>>(sd(), "pybot_rush");

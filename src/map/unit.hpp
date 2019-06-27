@@ -123,7 +123,7 @@ int unit_escape(struct block_list *bl, struct block_list *target, short dist);
 
 // Instant unit changes
 bool unit_movepos(struct block_list *bl, short dst_x, short dst_y, int easy, bool checkpath);
-int unit_warp(struct block_list *bl, short map, short x, short y, clr_type type);
+int unit_warp(struct block_list *bl, short map, short x, short y, clr_type type, bool attack_back = false);
 int unit_setdir(struct block_list *bl, unsigned char dir);
 uint8 unit_getdir(struct block_list *bl);
 int unit_blown(struct block_list* bl, int dx, int dy, int count, enum e_skill_blown flag);

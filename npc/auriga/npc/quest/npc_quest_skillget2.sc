@@ -4422,7 +4422,7 @@ OnTouch:
 	mes "ココココココケーッコ!!";
 	next;
 	hideonnpc;
-	hideoffnpc "イヒレ#"+(strnpcinfo(2)+1);
+	hideoffnpc "イヒレ#"+(strnpcinfo(2)%5+1);
 	mes "-ニワトリが驚いて逃げた-";
 	close;
 }

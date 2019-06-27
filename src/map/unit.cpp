@@ -1243,7 +1243,12 @@ enum e_unit_blown unit_blown_immune(struct block_list* bl, uint8 flag)
  * @param type: Clear type used in clif_clearunit_area()
  * @return Success(0); Failed(1); Error(2); unit_remove_map() Failed(3); map_addblock Failed(4)
  */
-int unit_warp(struct block_list *bl,short m,short x,short y,clr_type type)
+
+// [GonBee]
+// ルードアタックに対する反撃ならテレポートできる。
+//int unit_warp(struct block_list *bl,short m,short x,short y,clr_type type)
+int unit_warp(struct block_list *bl,short m,short x,short y,clr_type type, bool attack_back)
+
 {
 	struct unit_data *ud;
 
@@ -1264,7 +1269,15 @@ int unit_warp(struct block_list *bl,short m,short x,short y,clr_type type)
 
 	switch (bl->type) {
 		case BL_MOB:
-			if (map_getmapflag(bl->m, MF_MONSTER_NOTELEPORT) && ((TBL_MOB*)bl)->master_id == 0)
+
+			// [GonBee]
+			// ルードアタックに対する反撃ならテレポートできる。
+			//if (map_getmapflag(bl->m, MF_MONSTER_NOTELEPORT) && ((TBL_MOB*)bl)->master_id == 0)
+			if (!attack_back &&
+				map_getmapflag(bl->m, MF_MONSTER_NOTELEPORT) &&
+				((TBL_MOB*)bl)->master_id == 0
+			)
+
 				return 1;
 
 			if (m != bl->m && map_getmapflag(m, MF_NOBRANCH) && battle_config.mob_warp&4 && !(((TBL_MOB *)bl)->master_id))

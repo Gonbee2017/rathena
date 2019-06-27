@@ -124,6 +124,17 @@ const char* get_equip_pos_name(equip_index equ_ind) {
 	return EQUIP_POS_NAME_TABLE[equ_ind].c_str();
 }
 
+// 最後に枝召喚したIDを取得する。
+int // 取得したID。
+get_last_summoned_id(
+	int cid // キャラクターID。
+) {
+	int bid = 0;
+	auto lea = find_map_data(all_leaders, cid);
+	if (lea) bid = lea->last_summoned_id();
+	return bid;
+}
+
 // Botのリーダーを取得する。
 map_session_data* // 取得したリーダー。
                   // Botではないか、リーダーがログアウトしているならnullptr。
@@ -413,6 +424,19 @@ void reload_equipset_in_battle(
 ) {
 	block_if* bot = find_map_data(all_bots, cid);
 	if (bot) bot->last_reloaded_equipset_tick() = 0;
+}
+
+// 最後に枝召喚したIDを設定する。
+void set_last_summoned_id(
+	map_session_data* sd, // セッションデータ。
+	int bid               // 枝召喚したモンスターのID。
+) {
+	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (!lea) {
+		lea = construct<leader_t>(sd);
+		all_leaders[lea->char_id()] = lea;
+	}
+	lea->last_summoned_id() = bid;
 }
 
 // 現在のマップの初期位置を設定する。

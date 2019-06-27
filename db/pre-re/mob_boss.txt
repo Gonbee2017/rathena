@@ -3,17 +3,17 @@
 // Structure of Database:
 // MobRandomGroupID,MobID,DummyName,Rate
 
-MOBG_Bloody_Dead_Branch,0,Baphomet,1039
+//MOBG_Bloody_Dead_Branch,0,Baphomet,1039
 MOBG_Bloody_Dead_Branch,1038,Osiris,500000
 MOBG_Bloody_Dead_Branch,1039,Baphomet,500000
 MOBG_Bloody_Dead_Branch,1046,Doppelganger,500000
 MOBG_Bloody_Dead_Branch,1059,Mistress,500000
 MOBG_Bloody_Dead_Branch,1086,Golden Thief Bug,500000
 MOBG_Bloody_Dead_Branch,1087,Orc Hero,500000
-MOBG_Bloody_Dead_Branch,1096,Angeling,500000
+//MOBG_Bloody_Dead_Branch,1096,Angeling,500000
 MOBG_Bloody_Dead_Branch,1112,Drake,500000
 MOBG_Bloody_Dead_Branch,1115,Eddga,500000
-MOBG_Bloody_Dead_Branch,1120,Ghostring,500000
+//MOBG_Bloody_Dead_Branch,1120,Ghostring,500000
 MOBG_Bloody_Dead_Branch,1147,Maya,500000
 MOBG_Bloody_Dead_Branch,1150,Moonlight Flower,500000
 MOBG_Bloody_Dead_Branch,1157,Pharaoh,500000
@@ -24,12 +24,12 @@ MOBG_Bloody_Dead_Branch,1252,Hatii,500000
 MOBG_Bloody_Dead_Branch,1272,Dark Lord,500000
 MOBG_Bloody_Dead_Branch,1312,Turtle General,500000
 MOBG_Bloody_Dead_Branch,1373,Lord of the Dead,500000
-MOBG_Bloody_Dead_Branch,1388,Arc Angeling,500000
+//MOBG_Bloody_Dead_Branch,1388,Arc Angeling,500000
 MOBG_Bloody_Dead_Branch,1389,Dracula,500000
 MOBG_Bloody_Dead_Branch,1418,Evil Snake Lord,500000
 MOBG_Bloody_Dead_Branch,1492,Samurai Specter,500000
 MOBG_Bloody_Dead_Branch,1511,Amon Ra,500000
-MOBG_Bloody_Dead_Branch,1582,Deviling,500000
+//MOBG_Bloody_Dead_Branch,1582,Deviling,500000
 MOBG_Bloody_Dead_Branch,1583,Tao Gunka,500000
 MOBG_Bloody_Dead_Branch,1623,RSX-0806,500000
 MOBG_Bloody_Dead_Branch,1630,White Lady,500000

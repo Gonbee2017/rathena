@@ -1267,6 +1267,7 @@ struct leader_if {
 	virtual ptr<registry_t<int>>& great_mobs();
 	virtual ptr<registry_t<int>>& ignore_items();
 	virtual t_tick& last_heaby_tick();
+	virtual int& last_summoned_id();
 	virtual std::vector<block_if*>& members();
 	virtual t_tick next_heaby_tick();
 	virtual bool& passive();
@@ -1595,6 +1596,7 @@ struct leader_impl : virtual block_if {
 	ptr<registry_t<int>> great_mobs_;                 // グレートモンスターのレジストリ。
 	ptr<registry_t<int>> ignore_items_;               // 無視アイテムのレジストリ。
 	t_tick last_heaby_tick_;                          // 最後に重たいコマンドを実行したチック。
+	int last_summoned_id_;                            // 最後に枝召喚したID。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
 	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
@@ -1613,6 +1615,7 @@ struct leader_impl : virtual block_if {
 	virtual ptr<registry_t<int>>& great_mobs() override;
 	virtual ptr<registry_t<int>>& ignore_items() override;
 	virtual t_tick& last_heaby_tick() override;
+	virtual int& last_summoned_id() override;
 	virtual std::vector<block_if*>& members() override;
 	virtual t_tick next_heaby_tick() override;
 	virtual bool& passive() override;

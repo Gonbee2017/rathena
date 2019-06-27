@@ -1769,6 +1769,14 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 			&&  !mobskill_use(md, tick, MSC_RUDEATTACKED) // If can't rude Attack
 			&&  can_move && unit_escape(&md->bl, tbl, rnd()%10 +1)) // Attempt escape
 			{	//Escaped
+
+				// [GonBee]
+				// ルードアタックされるとアタッカーの座標にテレポートする。
+				if (abl = map_id2bl(md->attacked_id)) {
+					unit_warp(&md->bl, abl->m, abl->x, abl->y, CLR_TELEPORT, true);
+					return true;
+				}
+
 				md->attacked_id = md->norm_attacked_id = 0;
 				return true;
 			}
@@ -1792,15 +1800,21 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 				   )
 				) )
 			{ // Rude attacked
-				if (abl->id != md->bl.id //Self damage does not cause rude attack
-				&& md->state.attacked_count++ >= RUDE_ATTACKED_COUNT				
-				&& !mobskill_use(md, tick, MSC_RUDEATTACKED) && can_move
-				&& !tbl && unit_escape(&md->bl, abl, rnd()%10 +1))
-				{	//Escaped.
-					//TODO: Maybe it shouldn't attempt to run if it has another, valid target?
-					md->attacked_id = md->norm_attacked_id = 0;
-					return true;
-				}
+
+				// [GonBee]
+				// ルードアタックされるとアタッカーの座標にテレポートする。
+				unit_warp(&md->bl, abl->m, abl->x, abl->y, CLR_TELEPORT, true);
+				return true;
+				//if (abl->id != md->bl.id //Self damage does not cause rude attack
+				//&& md->state.attacked_count++ >= RUDE_ATTACKED_COUNT				
+				//&& !mobskill_use(md, tick, MSC_RUDEATTACKED) && can_move
+				//&& !tbl && unit_escape(&md->bl, abl, rnd()%10 +1))
+				//{	//Escaped.
+				//	//TODO: Maybe it shouldn't attempt to run if it has another, valid target?
+				//	md->attacked_id = md->norm_attacked_id = 0;
+				//	return true;
+				//}
+
 			}
 			else
 			if (!(battle_config.mob_ai&0x2) && !status_check_skilluse(&md->bl, abl, 0, 0))

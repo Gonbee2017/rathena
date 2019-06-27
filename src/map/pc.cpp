@@ -4867,6 +4867,23 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 	if (item->flag.dead_branch && (mapdata->flag[MF_NOBRANCH] || mapdata_flag_gvg2(mapdata)))
 		return false;
 
+	// [GonBee]
+	// Botは枝を召喚できない。
+	// プレイヤーも最後に枝召喚したモンスターが存在していれば召喚できない。
+	if (item->flag.dead_branch) {
+		if (pybot::char_is_bot(sd->status.char_id)) return false;
+		int las_sum_id = pybot::get_last_summoned_id(sd->status.char_id);
+		if (las_sum_id) {
+			block_list* las_sum_bl = map_id2bl(las_sum_id);
+			if (las_sum_bl &&
+				las_sum_bl->type == BL_MOB
+			) {
+				mob_data* las_sum_md = (mob_data*)(las_sum_bl);
+				if (las_sum_md->master_id == sd->bl.id) return false;
+			}
+		}
+	}
+
 	switch( nameid ) {
 		case ITEMID_WING_OF_FLY:
 		case ITEMID_GIANT_FLY_WING:

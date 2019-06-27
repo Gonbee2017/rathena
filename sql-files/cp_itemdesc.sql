@@ -34,7 +34,7 @@ REPLACE INTO `cp_itemdesc` VALUES(536, '冷たいアイスクリーム。冷たすぎで、たくさ
 REPLACE INTO `cp_itemdesc` VALUES(601, '空を飛ぶ獣たちの翼を切り<br/>呪術をかけた物。<br/>―――――――――――――<br/><font color="000088">使用すると<br/>マップ上のランダムな<br/>場所にワープする</font><br/>―――――――――――――<br/>重量 : <font color="777777">5</font>');
 REPLACE INTO `cp_itemdesc` VALUES(602, '蝶の翼を切り呪術をかけた物。<font color="000088">セーブした所にワープする</font><br/><font color="ffffff">_</font><br/>重量 : <font color="777777">5</font>');
 REPLACE INTO `cp_itemdesc` VALUES(603, '不思議な青い光が出る古い箱。開けたら何が出るかは分からない。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">20</font>');
-REPLACE INTO `cp_itemdesc` VALUES(604, '歳月の流れで魔力を持つ事が<br/>可能になった木の枝。<br/>その不思議な力で命を<br/>持っている誰かを召喚する。<br/>―――――――――――――<br/><font color="FF0000">※街の中では召喚できません</font><br/>―――――――――――――<br/>重量 : <font color="777777">5</font>');
+REPLACE INTO `cp_itemdesc` VALUES(604, '歳月の流れで魔力を持つ事が<br/>可能になった木の枝。<br/>その不思議な力で命を<br/>持っている誰かを召喚する。<br/><font color="FFFFFF">_</font><br/>重量 : <font color="777777">5</font>');
 REPLACE INTO `cp_itemdesc` VALUES(605, 'メントと言う植物で作った薬。一定時間、痛みを消す。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">10</font>');
 REPLACE INTO `cp_itemdesc` VALUES(606, '茎植物のアロエの皮。かなり酸っぱい味がするが、美味しい。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">10</font>');
 REPLACE INTO `cp_itemdesc` VALUES(607, 'この世界の根になったイグドラシルの木の実。その幻想的な味に酔った後はおどろくほど生命力いっぱいな自身を発見できると言う。<font color="000088">HPとSPを全部回復</font>してくれる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">30</font>');
@@ -1890,7 +1890,7 @@ REPLACE INTO `cp_itemdesc` VALUES(12097, '色んな肉を長く細く整えた木に刺し、焼い
 REPLACE INTO `cp_itemdesc` VALUES(12098, 'さわやかないちごの味と香りが逸品のおにぎり。いちごを具にするなど、どこでもできない珍しい経験。<br/>LUK + 8<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">40</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12099, 'シュワッと痺れる舌触りが子供達に人気の炭酸ソーダ。少々血の味がするが、おいしいので気にならない。<br/>LUK + 9<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">100</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12100, 'ピリッっとした九尾狐のしっぽ料理。ルーンミッドガッツには幸運の料理としても広く知られている。<br/>LUK + 10<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">50</font>');
-REPLACE INTO `cp_itemdesc` VALUES(12103, '幾年の歳月が経ち、<br/>魔力が秘められた木の枝に<br/>血の契約をし、<br/>強力な何かを召喚する。<br/>―――――――――――――<br/><font color="FF0000">街の中では召喚できません</font><br/>―――――――――――――<br/>重量 : <font color="777777">20</font>');
+REPLACE INTO `cp_itemdesc` VALUES(12103, '幾年の歳月が経ち、<br/>魔力が秘められた木の枝に<br/>血の契約をし、<br/>強力な何かを召喚する。<br/><font color="FFFFFF">_</font><br/>重量 : <font color="777777">20</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12104, '矢筒の中身に関する表記が消され、どの矢が出るか分からない。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">20</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12105, 'きれいに包まれたテイミングアイテムセット。プレゼント用のテイミングアイテムとテイミング装備が入っている。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">20</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12106, 'アクセサリーが入っているきれいな宝石箱。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">20</font>');
