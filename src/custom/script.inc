@@ -673,6 +673,84 @@ BUILDIN_FUNC(failedrefitem2) {
 	script_pushint(st, res);
 	return SCRIPT_CMD_SUCCESS;
 }
+BUILDIN_FUNC(failedremovecards2) {
+	int i=-1,c,cardflag=0;
+
+	TBL_PC* sd;
+	int typefail;
+
+	if( !script_rid2sd(sd) )
+		return SCRIPT_CMD_SUCCESS;
+
+	equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+	typefail = script_getnum(st,3);
+
+	if (equip_index_check(equ_ind))
+		i=pc_checkequip(sd,equip_bitmask[equ_ind]);
+
+	if (i < 0 || !sd->inventory_data[i])
+		return SCRIPT_CMD_SUCCESS;
+
+	if(itemdb_isspecial(sd->inventory.u.items_inventory[i].card[0]))
+		return SCRIPT_CMD_SUCCESS;
+
+	for( c = sd->inventory_data[i]->slot - 1; c >= 0; --c ) {
+		if( sd->inventory.u.items_inventory[i].card[c] && itemdb_type(sd->inventory.u.items_inventory[i].card[c]) == IT_CARD ) {
+			cardflag = 1;
+
+			if(typefail == 2) {// add cards to inventory, clear
+				unsigned char flag = 0;
+				struct item item_tmp;
+
+				memset(&item_tmp,0,sizeof(item_tmp));
+
+				item_tmp.nameid   = sd->inventory.u.items_inventory[i].card[c];
+				item_tmp.identify = 1;
+
+				if((flag=pc_additem(sd,&item_tmp,1,LOG_TYPE_SCRIPT))){
+					clif_additem(sd,0,0,flag);
+					map_addflooritem(&item_tmp,1,sd->bl.m,sd->bl.x,sd->bl.y,0,0,0,0,0);
+				}
+			}
+		}
+	}
+
+	if(cardflag == 1) {
+		if(typefail == 0 || typefail == 2){	// destroy the item
+			pc_delitem(sd,i,1,0,2,LOG_TYPE_SCRIPT);
+		}else if(typefail == 1){ // destroy the card
+			unsigned char flag = 0, j;
+			struct item item_tmp;
+
+			memset(&item_tmp,0,sizeof(item_tmp));
+
+			item_tmp.nameid      = sd->inventory.u.items_inventory[i].nameid;
+			item_tmp.identify    = 1;
+			item_tmp.refine      = sd->inventory.u.items_inventory[i].refine;
+			item_tmp.attribute   = sd->inventory.u.items_inventory[i].attribute;
+			item_tmp.expire_time = sd->inventory.u.items_inventory[i].expire_time;
+			item_tmp.bound       = sd->inventory.u.items_inventory[i].bound;
+
+			for (j = sd->inventory_data[i]->slot; j < MAX_SLOTS; j++)
+				item_tmp.card[j]=sd->inventory.u.items_inventory[i].card[j];
+			
+			for (j = 0; j < MAX_ITEM_RDM_OPT; j++){
+				item_tmp.option[j].id=sd->inventory.u.items_inventory[i].option[j].id;
+				item_tmp.option[j].value=sd->inventory.u.items_inventory[i].option[j].value;
+				item_tmp.option[j].param=sd->inventory.u.items_inventory[i].option[j].param;
+			}
+
+			pc_delitem(sd,i,1,0,2,LOG_TYPE_SCRIPT);
+
+			if((flag=pc_additem(sd,&item_tmp,1,LOG_TYPE_SCRIPT))){
+				clif_additem(sd,0,0,flag);
+				map_addflooritem(&item_tmp,1,sd->bl.m,sd->bl.x,sd->bl.y,0,0,0,0,0);
+			}
+		}
+		clif_misceffect(&sd->bl,2);
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
 static int buildin_getareamobs_sub(block_list *bl, va_list ap) {
 	const char* eve = va_arg(ap, char*);
 	int mob_id = va_arg(ap, int);
@@ -729,6 +807,38 @@ static int buildin_getmapmobs_sub(block_list *bl, va_list ap) {
 				md->mob_id == mob_id
 			)
 		);
+}
+BUILDIN_FUNC(getequipcardcnt2)
+{
+	int i=-1,j;
+	TBL_PC *sd;
+	int count;
+
+	if( !script_rid2sd(sd) )
+		return SCRIPT_CMD_SUCCESS;
+
+	equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+	if (equip_index_check(equ_ind))
+		i=pc_checkequip(sd,equip_bitmask[equ_ind]);
+
+	if (i < 0 || !sd->inventory_data[i]) {
+		script_pushint(st,0);
+		return SCRIPT_CMD_SUCCESS;
+	}
+
+	if(itemdb_isspecial(sd->inventory.u.items_inventory[i].card[0]))
+	{
+		script_pushint(st,0);
+		return SCRIPT_CMD_SUCCESS;
+	}
+
+	count = 0;
+	for( j = 0; j < sd->inventory_data[i]->slot; j++ )
+		if( sd->inventory.u.items_inventory[i].card[j] && itemdb_type(sd->inventory.u.items_inventory[i].card[j]) == IT_CARD )
+			count++;
+
+	script_pushint(st,count);
+	return SCRIPT_CMD_SUCCESS;
 }
 BUILDIN_FUNC(getequipid2) {
 	int res = 0;
@@ -1085,5 +1195,71 @@ BUILDIN_FUNC(successrefitem2) {
 		}
 	}
 	script_pushint(st, res);
+	return SCRIPT_CMD_SUCCESS;
+}
+BUILDIN_FUNC(successremovecards2) {
+	int i=-1,c,cardflag=0;
+
+	TBL_PC* sd;
+
+	if( !script_rid2sd(sd) )
+		return SCRIPT_CMD_SUCCESS;
+
+	equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+	if (equip_index_check(equ_ind))
+		i=pc_checkequip(sd,equip_bitmask[equ_ind]);
+
+	if (i < 0 || !sd->inventory_data[i]) {
+		return SCRIPT_CMD_SUCCESS;
+	}
+
+	if(itemdb_isspecial(sd->inventory.u.items_inventory[i].card[0]))
+		return SCRIPT_CMD_SUCCESS;
+
+	for( c = sd->inventory_data[i]->slot - 1; c >= 0; --c ) {
+		if( sd->inventory.u.items_inventory[i].card[c] && itemdb_type(sd->inventory.u.items_inventory[i].card[c]) == IT_CARD ) {// extract this card from the item
+			unsigned char flag = 0;
+			struct item item_tmp;
+			memset(&item_tmp,0,sizeof(item_tmp));
+			cardflag = 1;
+			item_tmp.nameid   = sd->inventory.u.items_inventory[i].card[c];
+			item_tmp.identify = 1;
+
+			if((flag=pc_additem(sd,&item_tmp,1,LOG_TYPE_SCRIPT))){	// get back the cart in inventory
+				clif_additem(sd,0,0,flag);
+				map_addflooritem(&item_tmp,1,sd->bl.m,sd->bl.x,sd->bl.y,0,0,0,0,0);
+			}
+		}
+	}
+
+	if(cardflag == 1) {//if card was remove remplace item with no card
+		unsigned char flag = 0, j;
+		struct item item_tmp;
+		memset(&item_tmp,0,sizeof(item_tmp));
+
+		item_tmp.nameid      = sd->inventory.u.items_inventory[i].nameid;
+		item_tmp.identify    = 1;
+		item_tmp.refine      = sd->inventory.u.items_inventory[i].refine;
+		item_tmp.attribute   = sd->inventory.u.items_inventory[i].attribute;
+		item_tmp.expire_time = sd->inventory.u.items_inventory[i].expire_time;
+		item_tmp.bound       = sd->inventory.u.items_inventory[i].bound;
+
+		for (j = sd->inventory_data[i]->slot; j < MAX_SLOTS; j++)
+			item_tmp.card[j]=sd->inventory.u.items_inventory[i].card[j];
+		
+		for (j = 0; j < MAX_ITEM_RDM_OPT; j++){
+			item_tmp.option[j].id=sd->inventory.u.items_inventory[i].option[j].id;
+			item_tmp.option[j].value=sd->inventory.u.items_inventory[i].option[j].value;
+			item_tmp.option[j].param=sd->inventory.u.items_inventory[i].option[j].param;
+		}
+
+		pc_delitem(sd,i,1,0,3,LOG_TYPE_SCRIPT);
+		if((flag=pc_additem(sd,&item_tmp,1,LOG_TYPE_SCRIPT))){	//chk if can be spawn in inventory otherwise put on floor
+			clif_additem(sd,0,0,flag);
+			map_addflooritem(&item_tmp,1,sd->bl.m,sd->bl.x,sd->bl.y,0,0,0,0,0);
+		}
+
+		clif_misceffect(&sd->bl,3);
+	}
 	return SCRIPT_CMD_SUCCESS;
 }

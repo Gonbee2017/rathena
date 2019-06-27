@@ -827,7 +827,7 @@ prt_in,56,56,0	script	レンゾウ#Refine	85,{
 	close;
 }
 
-prt_in,54,56,0	script	イッカツ#Refine	85,{
+prt_in,54,56,0	script	カツオ#Refine	85,{
 	if(.price[0] == 0) {
 		setarray .price,5000,100,500,5000,10000;
 		setarray .itemid,985,1010,1011,984,984;		//消費アイテム（ID指定）

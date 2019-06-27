@@ -26,7 +26,7 @@ prt_in,28,73,4	script	賢い老女	78,{
 				getequipname2(10)
 			) - 1;
 		if (.@part) {
-			set .@count, getequipcardcnt(.@part);
+			set .@count, getequipcardcnt2(.@part);
 			if(.@count <= 0) {
 				mes "[賢い老女]";
 				mes "若いの、カードがついてないよ。";
@@ -52,14 +52,14 @@ prt_in,28,73,4	script	賢い老女	78,{
 				next;
 				set .@rate, rand(100);
 				if(.@rate <= 1) {
-					failedremovecards .@part,0;
+					failedremovecards2 .@part,0;
 					mes "[賢い老女]";
 					mes "残念だけど完全に失敗したよ。";
 					mes "武具もカードも壊れてしまった。";
 					close;
 				}
 				if(.@rate <= 1 + 2) {
-					failedremovecards .@part, .@failtype;
+					failedremovecards2 .@part, .@failtype;
 					if(.@failtype == 1) {
 						mes "[賢い老女]";
 						mes "頑張ったけどね、";
@@ -75,14 +75,14 @@ prt_in,28,73,4	script	賢い老女	78,{
 					close;
 				}
 				if(.@rate <= 1 + 2 + 4) {
-					failedremovecards .@part, 3;
+					failedremovecards2 .@part, 3;
 					mes "[賢い老女]";
 					mes "カードを取り外すのに失敗したよ。";
 					mes "でも、不幸中の幸いさ。";
 					mes "武具もカードも無事だよ。";
 					close;
 				}
-				successremovecards .@part;
+				successremovecards2 .@part;
 				mes "[賢い老女]";
 				mes "うまくいったよ。";
 				mes "これらが武具とアイテムさ。じゃあね。";

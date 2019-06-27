@@ -1127,12 +1127,38 @@ AI_SKILL_USE_FUNC(MG_FIREBOLT) {
 
 // ダメージ倍率が低くてもファイアーボルトを使う。
 AI_SKILL_USE_FUNC_T(MG_FIREBOLT, compromise) {
+	static std::vector<e_skill> ATT_MAGS = {
+		MG_FIREBOLT,
+		MG_COLDBOLT,
+		MG_LIGHTNINGBOLT,
+		WZ_EARTHSPIKE,
+		WZ_WATERBALL,
+	};
 	block_if* tar_ene = bot->target_enemy();
+	int rat = bot->skill_ratio(kid, klv, tar_ene);
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
-		bot->use_magicpower()
-	) bot->use_skill_block(kid, klv, tar_ene);
+		rat >= 50
+	) {
+		bool max = true;
+		for (e_skill mag : ATT_MAGS) {
+			int mag_klv = bot->check_skill(mag);
+			int mag_rat = bot->skill_ratio(mag, mag_klv, tar_ene);
+			if (mag_klv &&
+				(rat < mag_rat ||
+					(rat == mag_rat &&
+						klv < mag_klv
+					)
+				)
+			) {
+				max = false;
+				break;
+			}
+		}
+		if (max &&
+			bot->use_magicpower()
+		) bot->use_skill_block(kid, klv, tar_ene);
+	}
 }
 
 // ファイアーウォールを使う。
@@ -1536,11 +1562,34 @@ AI_SKILL_USE_FUNC(NJ_KIRIKAGE) {
 
 // ダメージ倍率が低くても紅炎華を使う。
 AI_SKILL_USE_FUNC_T(NJ_KOUENKA, compromise) {
+	static std::vector<e_skill> ATT_MAGS = {
+		NJ_KOUENKA,
+		NJ_HUUJIN,
+		NJ_HYOUSENSOU,
+	};
 	block_if* tar_ene = bot->target_enemy();
+	int rat = bot->skill_ratio(kid, klv, tar_ene);
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) >= 50
-	) bot->use_skill_block(kid, klv, tar_ene);
+		rat >= 50
+	) {
+		bool max = true;
+		for (e_skill mag : ATT_MAGS) {
+			int mag_klv = bot->check_skill(mag);
+			int mag_rat = bot->skill_ratio(mag, mag_klv, tar_ene);
+			if (mag_klv &&
+				(rat < mag_rat ||
+					(rat == mag_rat &&
+						klv < mag_klv
+					)
+				)
+			) {
+				max = false;
+				break;
+			}
+		}
+		if (max) bot->use_skill_block(kid, klv, tar_ene);
+	}
 }
 
 // 念を使う。
