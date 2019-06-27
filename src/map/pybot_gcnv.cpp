@@ -550,8 +550,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (NJ_KOUENKA, compromise                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_HUUJIN, NJ_KOUENKA, compromise              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_HYOUSENSOU, NJ_KOUENKA, compromise          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC_D     (NJ_SYURIKEN, SM_BASH                           ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (NJ_KUNAI, SM_BASH                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
+		AI_SKILL_USE_PROC_D     (NJ_SYURIKEN, AC_DOUBLE                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (NJ_KUNAI, AC_DOUBLE                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_NOVICE, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_T     (NV_TRICKDEAD, deactivate                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
 		AI_SKILL_USE_PROC_T     (NV_TRICKDEAD, activate                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0), 
