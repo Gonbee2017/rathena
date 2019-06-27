@@ -1360,6 +1360,7 @@ AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 			bot->sc()->data[SC_COMBO]
 		) && bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->is_great(leader) &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		!tar_ene->sc()->data[SC_FOGWALL]
 	) {
 		skill_condition req = skill_get_requirement(bot->sd(), kid, klv);
