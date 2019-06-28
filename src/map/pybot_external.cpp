@@ -157,6 +157,17 @@ get_map_initial_position(
 	else return &sd->bl;
 }
 
+// 日本語のマップ名を取得する。
+std::string // 取得した日本語のマップ名。
+get_map_name_japanese(
+	const std::string& nam_eng // 英語のマップ名。
+) {
+	std::string nam_jap;
+	auto map = find_map_data(id_maps, map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
+	if (map) nam_jap = map->name_japanese;
+	return nam_jap;
+}
+
 // ジョブレベル倍率を計算する。
 double // 計算した倍率。
 job_level_rate(

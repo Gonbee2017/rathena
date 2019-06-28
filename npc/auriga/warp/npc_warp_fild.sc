@@ -899,7 +899,7 @@ um_fild04,182,13,0		warp	umbalawarp5008		1,1,um_fild02,190,371
 // um_dun02		深奥の密林
 // nif_fild01	秘境の村
 //==============================================================
-//yggdrasil01,36,63,0	warp	yggdrasiwarp0401	1,1,um_dun02,126,147
+yggdrasil01,36,63,0	warp	yggdrasiwarp0401	1,1,um_dun02,126,147
 yggdrasil01,248,259,0	warp	yggdrasiwarp0501	1,1,nif_fild01,315,67
 
 //yggdrasil01
@@ -917,7 +917,7 @@ yggdrasil01,27,195,0	warp	yggdrasiwarp5002	1,1,yggdrasil01,267,56
 // yggdrasil01	フベルゲルミルの泉(イグドラシルの幹)
 //==============================================================
 nif_fild02,378,235,0	warp	niflheimwarp0101	1,1,niflheim,23,154
-//nif_fild01,315,63,0	warp	niflheimwarp0501	1,1,yggdrasil01,245,259
+nif_fild01,315,63,0	warp	niflheimwarp0501	1,1,yggdrasil01,245,259
 
 nif_fild01,344,322,0	warp	niflheimwarp5001	1,1,nif_fild02,26,311
 nif_fild02,22,311,0		warp	niflheimwarp5002	1,1,nif_fild01,340,322

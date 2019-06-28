@@ -44,6 +44,7 @@ const char* get_equip_pos_name(equip_index equ_ind);
 int get_last_summoned_id(int cid);
 map_session_data* get_leader(int cid);
 block_list* get_map_initial_position(map_session_data* sd);
+std::string get_map_name_japanese(const std::string& nam_eng);
 double job_level_rate(map_session_data* sd, block_list* bl);
 bool letter_is_jlead(uint8_t let);
 double map_rate(int m);

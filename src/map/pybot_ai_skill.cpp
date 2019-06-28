@@ -154,7 +154,7 @@ AI_SKILL_USE_FUNC(AL_HOLYWATER) {
 		bot->use_skill_self(kid, klv);
 }
 
-// 速度向上を使う。
+// 速度増加を使う。
 AI_SKILL_USE_FUNC(AL_INCAGI) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
@@ -162,7 +162,8 @@ AI_SKILL_USE_FUNC(AL_INCAGI) {
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_INCREASEAGI] &&
-			!mem->sc()->data[SC_QUAGMIRE];
+			!mem->sc()->data[SC_QUAGMIRE] &&
+			!mem->sc()->data[SC_CHANGEUNDEAD];
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }

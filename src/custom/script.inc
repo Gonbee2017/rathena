@@ -179,6 +179,15 @@ BUILDIN_FUNC(equip2) {
 }
 
 // [GonBee]
+// 日本語のマップ名を取得する。。
+// s 英語のマップ名。
+// 戻り値 日本語のマップ名。
+BUILDIN_FUNC(getmapnamejapanese) {
+	script_pushstrcopy(st, pybot::get_map_name_japanese(script_getstr(st, 2)).c_str());
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // ペットIDを取得する。
 // 戻り値 取得したペットID。
 BUILDIN_FUNC(getpetid) {

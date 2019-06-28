@@ -4868,8 +4868,8 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 		return false;
 
 	// [GonBee]
-	// Botは枝を召喚できない。
-	// プレイヤーも最後に枝召喚したモンスターが存在していれば召喚できない。
+	// Botの場合は枝を召喚できない。
+	// プレイヤーの場合は最後に枝召喚したモンスターが生存していればキルする。
 	if (item->flag.dead_branch) {
 		if (pybot::char_is_bot(sd->status.char_id)) return false;
 		int las_sum_id = pybot::get_last_summoned_id(sd->status.char_id);
@@ -4879,7 +4879,7 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 				las_sum_bl->type == BL_MOB
 			) {
 				mob_data* las_sum_md = (mob_data*)(las_sum_bl);
-				if (las_sum_md->master_id == sd->bl.id) return false;
+				if (las_sum_md->master_id == sd->bl.id) status_kill(las_sum_bl);
 			}
 		}
 	}

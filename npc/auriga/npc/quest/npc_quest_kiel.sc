@@ -5328,7 +5328,8 @@ kh_kiehl02,50,52,4	script	キエル#kiel1	902,{
 		mes "離せ、ボルケウス!!";
 		next;
 		hideonnpc "ミッチェル#kiel";
-		for(set .@i,1; .@i<=5; set .@i,.@i+1)
+//		for(set .@i,1; .@i<=5; set .@i,.@i+1)
+		for(set .@i,1; .@i<5; set .@i,.@i+1)
 			hideonnpc "要員#kiel"+.@i;
 		next;
 		cutin "kh_kiel02",2;
@@ -5427,7 +5428,8 @@ OnTimer1200000:
 	killmonster "kh_kiehl02","All";
 	disablenpc "kiehlwarp6";
 	hideonnpc "ミッチェル#kiel";
-	for(set .@i,1; .@i<=5; set .@i,.@i+1)
+//	for(set .@i,1; .@i<=5; set .@i,.@i+1)
+	for(set .@i,1; .@i<5; set .@i,.@i+1)
 		hideonnpc "要員#kiel"+.@i;
 	hideonnpc "キエル#kiel2";
 	hideoffnpc;
@@ -5473,7 +5475,8 @@ OnTimer2180000:
 	killmonster "kh_kiehl02","All";
 	disablenpc "kiehlwarp6";
 	hideonnpc "ミッチェル#kiel";
-	for(set .@i,1; .@i<=5; set .@i,.@i+1)
+//	for(set .@i,1; .@i<=5; set .@i,.@i+1)
+	for(set .@i,1; .@i<5; set .@i,.@i+1)
 		hideonnpc "要員#kiel"+.@i;
 	hideonnpc "キエル#kiel2";
 	hideoffnpc;

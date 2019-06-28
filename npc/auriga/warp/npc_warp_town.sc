@@ -1259,8 +1259,8 @@ gon_in,31,97,0		warp	gonryunwarp1016		1,1,gon_in,39,35
 // um_dun01		大樹の道
 // um_fild04	フムガジャング
 //==============================================================
-//umbala,106,285,0		warp	umbalawarp0401		1,1,um_dun01,42,30
-umbala,106,285,0		warp	umbalawarp0401		1,1,yggdrasil01,39,63
+umbala,106,285,0		warp	umbalawarp0401		1,1,um_dun01,42,30
+//umbala,106,285,0		warp	umbalawarp0401		1,1,yggdrasil01,39,63
 umbala,130,79,0		warp	umbalawarp0501		1,1,um_fild04,215,336
 
 //チャビバタンの家北

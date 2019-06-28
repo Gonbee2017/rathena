@@ -1262,21 +1262,22 @@ static int pet_ai_sub_hard(struct pet_data *pd, struct map_session_data *sd, t_t
 				// [GonBee]
 				// Botのペットは拾得と同時に主人に渡す。
 				if (pybot::char_is_bot(pd->master->status.char_id)) {
-					party_share_loot(
-						party_search(pd->master->status.party_id),
-						pd->master,
-						&fitem->item,
-						fitem->first_get_charid
-					);
+					if (!party_share_loot(
+							party_search(pd->master->status.party_id),
+							pd->master,
+							&fitem->item,
+							fitem->first_get_charid
+						)
+					) map_clearflooritem(target);
 				} else {
 
 				memcpy(&pd->loot->item[pd->loot->count++],&fitem->item,sizeof(pd->loot->item[0]));
 				pd->loot->weight += itemdb_weight(fitem->item.nameid)*fitem->item.amount;
+				map_clearflooritem(target);
 
 				// [GonBee]
 				}
 
-				map_clearflooritem(target);
 			}
 
 			//Target is unlocked regardless of whether it was picked or not.
