@@ -16,7 +16,26 @@ prontera,161,193,4	script	飛行機乗り	869,{
 		set .@des_fee, .des_xy_fees[.@des_ind * 3 + 2];
 		mes "[ソニック]";
 		mes "^4040FF" + .@des_lis$[.@des_ind] + "^000000か……";
-		mes "そこなら料金は^4040FF" + .@des_fee + "^000000Zenyだね。";
+		if ((.@des_map$ == "gefenia01" &&
+				countitem(7025)
+			) || (.@des_map$ == "kh_dun01" &&
+				countitem(7509)
+			) || (.@des_map$ == "kh_dun02" &&
+				countitem(7509)
+			) || (.@des_map$ == "lhz_dun01" &&
+				countitem(2657)
+			) || (.@des_map$ == "abbey01" &&
+				NAME_1QUE >= 20
+			) || (.@des_map$ == "ra_san02" &&
+				RA_2QUE >= 10
+			) || (.@des_map$ == "ama_dun01" &&
+				countitem(7160)
+			) || (.@des_map$ == "mosk_dun01" &&
+				MOSK_1QUE >= 39
+			)
+		) set .@des_fee, 0;
+		if (.@des_fee) mes "そこなら料金は^4040FF" + .@des_fee + "^000000Zenyだね。";
+		else mes "あんたならタダでいいぜ。";
 		next;
 		if (select("お願いします", "やめときます") == 1) {
 			if (Zeny < .@des_fee) {
@@ -27,7 +46,7 @@ prontera,161,193,4	script	飛行機乗り	869,{
 			}
 			emotion ET_DELIGHT;
 			mes "[ソニック]";
-			mes "毎度ありー。";
+			if (.@des_fee) mes "毎度ありー。";
 			mes "さぁ、乗った乗った！";
 			mes "大空に向かってテイクオフだ。";
 			close2;

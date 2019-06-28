@@ -133,6 +133,7 @@ AI_SKILL_USE_FUNC(AL_DECAGI) {
 			!ene->is_magic_immune() &&
 			(ene->sc()->data[SC_ADRENALINE] ||
 				ene->sc()->data[SC_INCREASEAGI] ||
+				ene->sc()->data[SC_SPEEDUP1] ||
 				ene->sc()->data[SC_TWOHANDQUICKEN]
 			) && !ene->sc()->data[SC_DECREASEAGI];
 	});
@@ -2854,8 +2855,9 @@ AI_SKILL_USE_FUNC(WZ_QUAGMIRE) {
 					!ene->sc()->data[SC_QUAGMIRE] &&
 					(ene->sc()->data[SC_ADRENALINE] ||
 						ene->sc()->data[SC_INCREASEAGI] ||
+						ene->sc()->data[SC_SPEEDUP1] ||
 						ene->sc()->data[SC_TWOHANDQUICKEN]
-					) && !skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
+					);
 			})
 		);
 		if (ene) bot->use_skill_xy(kid, klv, ene->bl()->x, ene->bl()->y);
