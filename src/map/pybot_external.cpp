@@ -160,12 +160,20 @@ get_map_initial_position(
 // 日本語のマップ名を取得する。
 std::string // 取得した日本語のマップ名。
 get_map_name_japanese(
-	const std::string& nam_eng // 英語のマップ名。
+	int mid // マップID。
 ) {
 	std::string nam_jap;
-	auto map = find_map_data(id_maps, map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
+	auto map = find_map_data(id_maps, mid);
 	if (map) nam_jap = map->name_japanese;
 	return nam_jap;
+}
+
+// 日本語のマップ名を取得する。
+std::string // 取得した日本語のマップ名。
+get_map_name_japanese(
+	const std::string& nam_eng // 英語のマップ名。
+) {
+	return get_map_name_japanese(map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
 }
 
 // ジョブレベル倍率を計算する。
@@ -205,10 +213,7 @@ void pc_acquired_mvp(
 	int cid,     // キャラクターID。
 	mob_data* md // モンスターデータ。
 ) {
-	std::string eve(md->npc_event);
-	if (eve.substr(0, BLOODY_DEAD_BRANCH_NPC_NAME.length()) != BLOODY_DEAD_BRANCH_NPC_NAME &&
-		eve.substr(0, CASTLE_TRIAL_NPC_NAME.length()) != CASTLE_TRIAL_NPC_NAME
-	) {
+	if (mob_is_normal_mvp(md)) {
 		sql_session::open([cid, md] (sql_session* ses) {
 			ses->execute(
 				"INSERT INTO `pybot_mvp` "
@@ -245,6 +250,17 @@ void pc_acquired_mvp(
 			);
 		});
 	}
+}
+
+// モンスターが通常のMVPモンスターであるかを判定する。
+bool // 結果。
+mob_is_normal_mvp(
+	mob_data* md // モンスターデータ。
+) {
+	std::string eve(md->npc_event);
+	return status_has_mode(&md->status, MD_MVP) &&
+		eve.substr(0, BLOODY_DEAD_BRANCH_NPC_NAME.length()) != BLOODY_DEAD_BRANCH_NPC_NAME &&
+		eve.substr(0, CASTLE_TRIAL_NPC_NAME.length()) != CASTLE_TRIAL_NPC_NAME;
 }
 
 // PCがドロップアイテムを拾えるかを判定する。

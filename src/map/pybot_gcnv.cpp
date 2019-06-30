@@ -542,7 +542,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (NJ_RAIGEKISAI                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (NJ_KAMAITACHI                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_D     (NJ_HUUMA, MC_CARTREVOLUTION                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (NJ_ZENYNAGE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC_D     (NJ_ZENYNAGE, MC_MAMMONITE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (NJ_ISSEN                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_DT    (NJ_KOUENKA, SM_BASH, effective                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_HUUJIN, SM_BASH, effective                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -720,11 +720,12 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (TF_SPRINKLESAND                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (TK_JUMPKICK                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (KN_CHARGEATK                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (NJ_ZENYNAGE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC_D     (NJ_ZENYNAGE, MC_MAMMONITE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (RG_BACKSTAP                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (CR_HOLYCROSS, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (WZ_WATERBALL, MG_FIREBOLT                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_FIREBOLT                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_KOUENKA, SM_BASH, effective                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -885,11 +886,12 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (TF_SPRINKLESAND                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (TK_JUMPKICK                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (KN_CHARGEATK                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (NJ_ZENYNAGE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC_D     (NJ_ZENYNAGE, MC_MAMMONITE                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (RG_BACKSTAP                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (CR_HOLYCROSS, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (WZ_WATERBALL, MG_FIREBOLT                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_FIREBOLT                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_KOUENKA, SM_BASH, effective                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -1686,12 +1688,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot team]\n"
 	), SUBCMD_DESC(Bot, TeamLogIn                  , tli ,
 		"------ TeamLogIn (tli) サブコマンド ------\n"
-		"チームをログインさせる。\n"
+		"0番のチームをログインさせる。\n"
 		"入力例 [@bot teamlogin]\n"
+		"特定の番号のチームをログインさせる。\n"
+		"入力例 [@bot teamlogin 3]\n"
 	), SUBCMD_DESC(Bot, TeamLogOut                 , tlo ,
 		"------ TeamLogOut (tlo) サブコマンド ------\n"
 		"チームをログアウトさせる。\n"
 		"入力例 [@bot teamlogout]\n"
+	), SUBCMD_DESC(Bot, TeamNumber                 , tn  ,
+		"------ TeamNumber (tn) サブコマンド ------\n"
+		"チームの一覧を表示する。\n"
+		"入力例 [@bot teamnumber]\n"
+		"チームを登録する。\n"
+		"入力例 [@bot teamnumber 3]\n"
+		"チームを抹消する。\n"
+		"入力例 [@bot teamnumber 3]\n"
 	), SUBCMD_DESC(Bot, TeamOrder                  , to  ,
 		"------ TeamOrder (to) サブコマンド ------\n"
 		"メンバーの順番を変更する。\n"
@@ -1811,6 +1823,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, Team                       , t   ),
 	SUBCMD_PROC(Bot, TeamLogIn                  , tli ),
 	SUBCMD_PROC(Bot, TeamLogOut                 , tlo ),
+	SUBCMD_PROC(Bot, TeamNumber                 , tn  ),
 	SUBCMD_PROC(Bot, TeamOrder                  , to  ),
 	SUBCMD_PROC(Bot, TeamPassive                , tp  ),
 	SUBCMD_PROC(Bot, TeamRush                   , tr  ),
@@ -3449,6 +3462,9 @@ const skill_id_set SUMMON_SKILLS = {
 	NPC_SUMMONMONSTER,
 	NPC_SUMMONSLAVE,
 };
+
+// 最大チーム数。
+const int TEAM_MAX = 100;
 
 // 鎧解除スキルのセット。
 const skill_id_set UNEQUIP_ARMOR_SKILLS = {

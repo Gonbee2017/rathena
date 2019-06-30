@@ -59,7 +59,7 @@ int card_converter::convert(int car_id) {
 	return res;
 }
 
-// 装備セットを構築する。
+// 武具一式を構築する。
 equipset_t::equipset_t(
 	int16_t mid // モンスターID。
 ) : mob_id(mid), individual_mob_id(0), mdb(nullptr) {
@@ -1401,48 +1401,15 @@ void query_login_data(
 	});
 }
 
-// DBにチームを照会する。
-void query_team(
-	int lea_cid, // リーダーのキャラクターID。
-	std::function<void(
-		int // BotのキャラクターID。
-	)> yie       // 獲得。
-) {
-	sql_session::open([lea_cid, yie] (sql_session* ses) {
-		int mem_cid;
-		ses->execute(
-			"SELECT"
-			" `", construct<sql_column>("member_char_id", mem_cid), "` "
-			"FROM `pybot_team` "
-			"WHERE `leader_char_id` = ", construct<sql_param>(lea_cid), " "
-			"ORDER BY `member_index`"
-		);
-		while (ses->next_row()) yie(mem_cid);
-	});
-}
-
-// DBにチームを保存する。
+// チームを保存する。
 void save_team(
-	block_if* lea // リーダー。
+	block_if* lea, // リーダー。
+	int tea_num    // チームの番号。
 ) {
-	sql_session::open([lea] (sql_session* ses) {
-		ses->execute(
-			"DELETE FROM `pybot_team` "
-			"WHERE `leader_char_id` = ", construct<sql_param>(lea->char_id())
-		);
-		for (block_if* mem : lea->members()) {
-			ses->execute(
-				"INSERT INTO `pybot_team` "
-				"(`leader_char_id`,"
-				" `member_index`,"
-				" `member_char_id`) "
-				"VALUES "
-				"(", construct<sql_param>(lea->char_id()     ), ","
-				" ", construct<sql_param>(mem->member_index()), ","
-				" ", construct<sql_param>(mem->char_id()     ), ")"
-			);
-		}
-	});
+	auto tea = initialize<team_t>(tea_num);
+	for (block_if* mem : lea->members())
+		tea->members.push_back(initialize<team_member>(mem->char_id(), mem->name()));
+	lea->teams()->register_(tea_num, tea);
 }
 
 // 性別の文字列を数値に変換する。

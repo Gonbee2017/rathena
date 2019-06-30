@@ -123,7 +123,7 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			specialeffect2 EF_POK_JAP;
 			emotion ET_CONGRATULATION;
 			soundeffect "complete.wav", 0;
-			announce "[" + strcharinfo(0) + "]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
+			announce "[ " + strcharinfo(0) + " ]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
 			mes "[コレット]";
 			mes "^FF4040オールMVP^000000、おめでとう！";
 			mes "^4040FF" + strcharinfo(0) + "^000000さんの功績は";

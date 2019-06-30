@@ -131,9 +131,9 @@ AI_SKILL_USE_FUNC(AL_DECAGI) {
 			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
 			!ene->is_magic_immune() &&
+			!ene->sc()->data[SC_SPEEDUP1] &&
 			(ene->sc()->data[SC_ADRENALINE] ||
 				ene->sc()->data[SC_INCREASEAGI] ||
-				ene->sc()->data[SC_SPEEDUP1] ||
 				ene->sc()->data[SC_TWOHANDQUICKEN]
 			) && !ene->sc()->data[SC_DECREASEAGI];
 	});
@@ -1662,15 +1662,6 @@ AI_SKILL_USE_FUNC(NJ_UTSUSEMI) {
 	) bot->use_skill_self(kid, klv);
 }
 
-// ‘K“Š‚°‚ðŽg‚¤B
-AI_SKILL_USE_FUNC(NJ_ZENYNAGE) {
-	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
-		bot->check_use_skill(kid, klv, tar_ene) &&
-		tar_ene->is_great(leader)
-	) bot->use_skill_block(kid, klv, tar_ene);
-}
-
 // ‰ž‹}Žè“–‚ðŽg‚¤B
 AI_SKILL_USE_FUNC(NV_FIRSTAID) {
 	if (!bot->check_hp(3)) bot->use_skill_self(kid, klv);
@@ -2849,18 +2840,18 @@ AI_SKILL_USE_FUNC(WZ_QUAGMIRE) {
 		bot->check_skill_used_tick(kid, 5 * klv * 1000 / 3)
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies),
-			sift_block_layout(bot, tar_ene, kid, klv, [] (block_if* ene) -> bool {
+			sift_block_layout(bot, tar_ene, kid, klv, [this] (block_if* ene) -> bool {
 				return !ene->is_hiding() &&
 					!ene->is_magic_immune() &&
 					!ene->sc()->data[SC_QUAGMIRE] &&
-					(ene->sc()->data[SC_ADRENALINE] ||
+					(ene->is_great(leader) ||
+						ene->sc()->data[SC_ADRENALINE] ||
 						ene->sc()->data[SC_INCREASEAGI] ||
-						ene->sc()->data[SC_SPEEDUP1] ||
 						ene->sc()->data[SC_TWOHANDQUICKEN]
-					);
+					) && !skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(WZ_QUAGMIRE)});
 			})
 		);
-		if (ene) bot->use_skill_xy(kid, klv, ene->bl()->x, ene->bl()->y);
+		if (ene) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 

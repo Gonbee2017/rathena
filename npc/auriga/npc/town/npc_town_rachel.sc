@@ -654,7 +654,8 @@ ra_temple,116,174,3	script	ネマ#ra	920,{
 			mes "[ネマ神官]";
 			mes "お幾ら程、献金して頂けますか？";
 			mes "原則、1口50000ゼニーで、";
-			mes "一度に、3口まで献金ができます。";
+//			mes "一度に、3口まで献金ができます。";
+			mes "一度に、100口まで献金ができます。";
 			mes "ここに口数とお名前をお書きください。";
 			break;
 		case 1:
@@ -679,7 +680,8 @@ ra_temple,116,174,3	script	ネマ#ra	920,{
 				mes "ありがとうございます。";
 				mes "今日はお幾ら程、献金して頂けますか？";
 				mes "原則、1口50000ゼニーで、";
-				mes "一度に、3口まで献金ができます。";
+//				mes "一度に、3口まで献金ができます。";
+				mes "一度に、100口まで献金ができます。";
 				mes "ここに口数とお名前をお書きください。";
 				break;
 			case 2:
@@ -720,7 +722,8 @@ ra_temple,116,174,3	script	ネマ#ra	920,{
 			break;
 		}
 		next;
-		if(select("1口","2口","3口","献金をやめる")==4) {
+//		if(select("1口","2口","3口","献金をやめる")==4) {
+		if(select("1口","2口","3口","10口","100口","献金をやめる")==6) {
 			cutin "ra_nemma01",2;
 			mes "[ネマ神官]";
 			mes "お金を持っていない方でも";
@@ -732,6 +735,8 @@ ra_temple,116,174,3	script	ネマ#ra	920,{
 			end;
 		}
 		set .@num,@menu;
+		if (.@num == 4) set .@num, 10;
+		if (.@num == 5) set .@num, 100;
 		cutin "ra_nemma01",2;
 		mes "[ネマ神官]";
 		mes "では、" +strcharinfo(0)+ "様、";
@@ -1429,16 +1434,53 @@ ra_temin,170,46,4	script	パノ	920,{
 		cutin "ra_fano01",255;
 		end;
 	}
-	if((MaxWeight - Weight) < 2000) {
-		cutin "ra_fano02",2;
+	while (1) {
+		if(countitem(7570) < 1) {
+			cutin "ra_fano02",2;
+			mes "[パノ神官]";
+			mes "あの……";
+			mes "抽選券を先に提示してください。";
+			close2;
+			cutin "ra_fano03",255;
+			end;
+		}
+		if((MaxWeight - Weight) < 2000) {
+			cutin "ra_fano02",2;
+			mes "[パノ神官]";
+			mes "交換する前に、その重苦しい";
+			mes "荷物から何とかしてください。";
+			mes "大きい物でも出たら";
+			mes "どうするつもりですか？";
+			close2;
+			cutin "ra_fano01",255;
+			end;
+		}
+		delitem 7570,1;
+		set .@rand,rand(100);
+		if (.@rand >= 99) {
+			switch(rand(10)) {
+				case 0: getitem 616,1; break; //古いカード帖 0.1%
+				case 1:
+				case 2: getitem 617,1; break; //古い紫色の箱 0.2%
+				case 3:
+				case 4:
+				case 5: getitem 603,1; break; //古く青い箱 0.3%
+				default: getitem 607,1; break; //イグドラシルの実 0.4%
+			}
+		}
+		else if(.@rand >= 92) getitem 644,1; //プレゼントボックス 7%
+		else if(.@rand >= 80) getitem 607,1; //イグドラシルの実 12%
+		else if(.@rand >= 69) getitem 505,1; //青ポーション 11%
+		else if(.@rand >= 61) getitem 604,1; //古木の枝 8%
+		else if(.@rand >= 49) getitem 608,1; //イグドラシルの種 12%
+		else if(.@rand >= 44) getitem 518,1; //ハチ蜜 5%
+		else if(.@rand >= 39) getitem 526,1; //ローヤルゼリー 5%
+		else  getitem 547,1; //ホワイトスリムポーション 39%
+		if (!countitem(7570)) break;
 		mes "[パノ神官]";
-		mes "交換する前に、その重苦しい";
-		mes "荷物から何とかしてください。";
-		mes "大きい物でも出たら";
-		mes "どうするつもりですか？";
-		close2;
-		cutin "ra_fano01",255;
-		end;
+		mes "まだ交換なさいますか？";
+		next;
+		if(select("はい","いいえ")==2) break;
 	}
 	cutin "ra_fano01",2;
 	mes "[パノ神官]";
@@ -1447,27 +1489,6 @@ ra_temin,170,46,4	script	パノ	920,{
 	mes "献金のお返しと言うよりは、";
 	mes "我々の感謝の気持ちと思ってください。";
 	mes "それでは。";
-	delitem 7570,1;
-	set .@rand,rand(100);
-	if (.@rand >= 99) {
-		switch(rand(10)) {
-			case 0: getitem 616,1; break; //古いカード帖 0.1%
-			case 1:
-			case 2: getitem 617,1; break; //古い紫色の箱 0.2%
-			case 3:
-			case 4:
-			case 5: getitem 603,1; break; //古く青い箱 0.3%
-			default: getitem 607,1; break; //イグドラシルの実 0.4%
-		}
-	}
-	else if(.@rand >= 92) getitem 644,1; //プレゼントボックス 7%
-	else if(.@rand >= 80) getitem 607,1; //イグドラシルの実 12%
-	else if(.@rand >= 69) getitem 505,1; //青ポーション 11%
-	else if(.@rand >= 61) getitem 604,1; //古木の枝 8%
-	else if(.@rand >= 49) getitem 608,1; //イグドラシルの種 12%
-	else if(.@rand >= 44) getitem 518,1; //ハチ蜜 5%
-	else if(.@rand >= 39) getitem 526,1; //ローヤルゼリー 5%
-	else  getitem 547,1; //ホワイトスリムポーション 39%
 	close2;
 	cutin "ra_fano01",255;
 	end;

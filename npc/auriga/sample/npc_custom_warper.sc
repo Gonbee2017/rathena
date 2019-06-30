@@ -35,7 +35,7 @@ prontera,161,193,4	script	飛行機乗り	869,{
 			)
 		) set .@des_fee, 0;
 		if (.@des_fee) mes "そこなら料金は^4040FF" + .@des_fee + "^000000Zenyだね。";
-		else mes "あんたならタダでいいぜ。";
+		else mes "あんたなら^4040FFタダ^000000でいいぜ。";
 		next;
 		if (select("お願いします", "やめときます") == 1) {
 			if (Zeny < .@des_fee) {

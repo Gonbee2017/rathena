@@ -1151,7 +1151,11 @@ SUBCMD_FUNC(Bot, LogIn) {
 // Botがログアウトする。
 SUBCMD_FUNC(Bot, LogOut) {
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	if (lea->bots().size() == 1) save_team(lea);
+	if (lea->bots().size() == 1) {
+		save_team(lea, 0);
+		lea->passive() = false;
+		lea->stay() = false;
+	}
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」がログアウトしました。"
 	));
@@ -2178,7 +2182,7 @@ SUBCMD_FUNC(Bot, Team) {
 	};
 
 	std::stringstream out;
-	out << "------ あなたのチーム ------\n";
+	out << "------ 現在のチーム ------\n";
 	for (block_if* mem : lea->members()) out << pri_mem(mem);
 	out << lea->members().size() << "人のメンバーが見つかりました。\n";
 	show_client(lea->fd(), out.str());
@@ -2194,33 +2198,38 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
 	lea->members().clear();
-	query_team(lea->char_id(), [lea] (int mem_cid) {
-		if (mem_cid == lea->char_id()) lea->members().push_back(lea);
-		else
-			query_login_data(mem_cid,
-				[lea, mem_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
-					if (map_id2sd(bot_aid))
-						show_client(lea->fd(), print("「", nam, "」は現在ログイン中です。"));
-					else if (unb_tim ||
-						sta
-					) show_client(lea->fd(), print("「", nam, "」のアカウントは停止されています。"));
-					else {
-						t_tick bot_res_tic = bot_restart_tick(mem_cid);
-						if (bot_res_tic)
-							show_client(lea->fd(), print(
-								"「", nam, "」はBot中に死亡しました。\n"
-								"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
-							));
+	int num = 0;
+	if (!args.empty()) num = shift_arguments_then_parse_int(args, "チームの番号", 0, TEAM_MAX - 1);
+	team_t* tea = lea->teams()->find(num);
+	if (tea) {
+		for (auto mem : tea->members) {
+			if (mem->char_id == lea->char_id()) lea->members().push_back(lea);
+			else
+				query_login_data(mem->char_id,
+					[lea, mem] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
+						if (map_id2sd(bot_aid))
+							show_client(lea->fd(), print("「", nam, "」は現在ログイン中です。"));
+						else if (unb_tim ||
+							sta
+						) show_client(lea->fd(), print("「", nam, "」のアカウントは停止されています。"));
 						else {
-							map_session_data* bot_sd = bot_login(lea, bot_aid, mem_cid, bot_sex, bot_gid);
-							ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
-							lea->bots().push_back(bot);
-							lea->members().push_back(bot.get());
+							t_tick bot_res_tic = bot_restart_tick(mem->char_id);
+							if (bot_res_tic)
+								show_client(lea->fd(), print(
+									"「", nam, "」はBot中に死亡しました。\n"
+									"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
+								));
+							else {
+								map_session_data* bot_sd = bot_login(lea, bot_aid, mem->char_id, bot_sex, bot_gid);
+								ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
+								lea->bots().push_back(bot);
+								lea->members().push_back(bot.get());
+							}
 						}
 					}
-				}
-			);
-	});
+				);
+		}
+	} else lea->members().push_back(lea);
 	lea->update_bot_indices();
 	lea->update_member_indices();
 	lea->last_heaby_tick() = now;
@@ -2231,7 +2240,9 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 SUBCMD_FUNC(Bot, TeamLogOut) {
 	if (lea->bots().empty())
 		throw command_error{"あなたはまだチームを編成していません。"};
-	save_team(lea);
+	save_team(lea, 0);
+	lea->stay() = false;
+	lea->passive() = false;
 	show_client(lea->fd(), print(
 		lea->bots().size(), "人のBotがログアウトしました。"
 	));
@@ -2240,6 +2251,50 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	lea->update_member_indices();
 	lea->bots().clear();
 	lea->last_heaby_tick() = now;
+}
+
+// チームを一覧表示する、または登録する、または登録を抹消する。
+SUBCMD_FUNC(Bot, TeamNumber) {
+	using tea_val_t = std::pair<int,team_t*>;
+
+	int num_wid = print(TEAM_MAX - 1).length();
+	if (args.empty()) {
+		std::vector<tea_val_t> tea_vals;
+		lea->teams()->copy(pybot::back_inserter(tea_vals));
+		std::sort(ALL_RANGE(tea_vals), [lea] (tea_val_t lval, tea_val_t rval) -> bool {
+			return lval.first < rval.first;
+		});
+		std::stringstream out;
+		out << "------ チーム ------\n";
+		for (tea_val_t tea_val : tea_vals) {
+			int num = tea_val.first;
+			team_t* tea = tea_val.second;
+			out << print(std::setw(num_wid), std::setfill('0'), num) << " - ";
+			for (int i = 0; i < tea->members.size(); ++i) {
+				auto mem = tea->members[i];
+				if (i) out << " / ";
+				out << mem->name;
+			}
+			out << "\n";
+		}
+		out << tea_vals.size() << "件のチームが見つかりました。\n";
+		show_client(lea->fd(), out.str());
+	} else {
+		int num = shift_arguments_then_parse_int(args, "チームの番号", 1, TEAM_MAX - 1);
+		if (lea->bots().empty()) {
+			lea->teams()->unregister(num);
+			show_client(
+				lea->fd(),
+				print("チーム", num, "の登録を抹消しました。")
+			);
+		} else {
+			save_team(lea, num);
+			show_client(
+				lea->fd(),
+				print("現在の編成をチーム", num, "に登録しました。")
+			);
+		}
+	}
 }
 
 // メンバーの順番を変更する。
@@ -2264,6 +2319,8 @@ SUBCMD_FUNC(Bot, TeamOrder) {
 
 // チームがモンスターに反応しない、または反応する。
 SUBCMD_FUNC(Bot, TeamPassive) {
+	if (lea->bots().empty())
+		throw command_error{"あなたはまだチームを編成していません。"};
 	lea->passive() = !lea->passive();
 	if (lea->passive())
 		show_client(lea->fd(), "あなたのチームはモンスターに反応しません。");
@@ -2272,9 +2329,8 @@ SUBCMD_FUNC(Bot, TeamPassive) {
 
 // ラッシュモードになる、または解除する。
 SUBCMD_FUNC(Bot, TeamRush) {
-	auto& rus = lea->rush();
-	rus->set(!rus->get());
-	if (rus->get()) show_client(lea->fd(), print(
+	lea->rush()->set(!lea->rush()->get());
+	if (lea->rush()->get()) show_client(lea->fd(), print(
 		"あなたのチームはラッシュモードになりました。"
 	));
 	else show_client(lea->fd(), print(
@@ -2284,6 +2340,8 @@ SUBCMD_FUNC(Bot, TeamRush) {
 
 // チームが待機、または追従する。
 SUBCMD_FUNC(Bot, TeamStay) {
+	if (lea->bots().empty())
+		throw command_error{"あなたはまだチームを編成していません。"};
 	lea->stay() = !lea->stay();
 	if (lea->stay())
 		show_client(lea->fd(), "あなたのチームはその場で待機します。");

@@ -38,7 +38,7 @@ delete_distance_policy_func(
 	};
 }
 
-// DBから装備セットを削除する関数を作る。
+// DBから武具一式を削除する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 delete_equipset_func(
 	int cid // キャラクターID。              
@@ -49,6 +49,21 @@ delete_equipset_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBからチームを削除する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+delete_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		ses->execute(
+			"DELETE FROM `pybot_team` "
+			"WHERE"
+			" `leader_char_id` = ", construct<sql_param>(cid    ), " AND"
+			" `team_number` = "   , construct<sql_param>(tea_num)
 		);
 	};
 }
@@ -249,7 +264,7 @@ insert_distance_policy_func(
 	};
 }
 
-// DBに装備セットを挿入する関数を作る。
+// DBに武具一式を挿入する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 insert_equipset_func(
 	int cid // キャラクターID。              
@@ -268,6 +283,26 @@ insert_equipset_func(
 				" ", construct<sql_param>(esi->key->card[1]), ","
 				" ", construct<sql_param>(esi->key->card[2]), ","
 				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
+// DBにチームを挿入する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+insert_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		for (int i = 0; i < tea->members.size(); ++i) {
+			auto mem = tea->members[i];
+			ses->execute(
+				"INSERT INTO `pybot_team` "
+				"VALUES "
+				"(", construct<sql_param>(cid         ), ","
+				" ", construct<sql_param>(tea_num     ), ","
+				" ", construct<sql_param>(i           ), ","
+				" ", construct<sql_param>(mem->char_id), ")"
 			);
 		}
 	};
@@ -481,7 +516,7 @@ load_distance_policy_func(
 	};
 }
 
-// DBから装備セットをロードする関数を作る。
+// DBから武具一式をロードする関数を作る。
 registry_t<int,equipset_t>::load_func // 作った関数。
 load_equipset_func(
 	int cid // キャラクターID。              
@@ -524,6 +559,43 @@ load_equipset_func(
 			equ_set->items.push_back(ei);
 		}
 		flu();
+	};
+}
+
+// DBからチームをロードする関数を作る。
+registry_t<int,team_t>::load_func // 作った関数。
+load_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int,team_t>* reg) {
+		int tea_num;
+		int mem_cid;
+		char mem_nam[24];
+		ses->execute(
+			"SELECT"
+			" t.`", construct<sql_column>("team_number"    , tea_num), "`,"
+			" t.`", construct<sql_column>("member_char_id" , mem_cid), "`,"
+			" c.`", construct<sql_column>("name"           , mem_nam), "` "
+			"FROM"
+			" `pybot_team` AS t,"
+			" `char` AS c "
+			"WHERE"
+			" t.`leader_char_id` = ", construct<sql_param>(cid), " AND"
+			" t.`member_char_id` = c.`char_id` "
+			"ORDER BY"
+			" t.`team_number`,"
+			" t.`member_index`"
+		);
+		ptr<team_t> tea;
+		while (ses->next_row()) {
+			if (!tea ||
+				tea_num != tea->tea_num
+			) {
+				tea = initialize<team_t>(tea_num);
+				reg->register_(tea_num, tea);
+			}
+			tea->members.push_back(initialize<team_member>(mem_cid, std::string(mem_nam)));
+		}
 	};
 }
 
@@ -743,7 +815,7 @@ update_distance_policy_func(
 	};
 }
 
-// DBの装備セットを更新する関数を作る。
+// DBの武具一式を更新する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 update_equipset_func(
 	int cid // キャラクターID。              
@@ -768,6 +840,32 @@ update_equipset_func(
 				" ", construct<sql_param>(esi->key->card[1]), ","
 				" ", construct<sql_param>(esi->key->card[2]), ","
 				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
+// DBのチームを更新する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+update_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		ses->execute(
+			"DELETE FROM `pybot_team` "
+			"WHERE"
+			" `leader_char_id` = ", construct<sql_param>(cid), " AND"
+			" `team_number` = "   , construct<sql_param>(tea_num)
+		);
+		for (int i = 0; i < tea->members.size(); ++i) {
+			auto mem = tea->members[i];
+			ses->execute(
+				"INSERT INTO `pybot_team` "
+				"VALUES "
+				"(", construct<sql_param>(cid         ), ","
+				" ", construct<sql_param>(tea_num     ), ","
+				" ", construct<sql_param>(i           ), ","
+				" ", construct<sql_param>(mem->char_id), ")"
 			);
 		}
 	};

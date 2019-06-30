@@ -2919,6 +2919,9 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		add_timer(tick + (!battle_config.delay_battle_damage?500:0), mob_delay_item_drop, 0, (intptr_t)dlist);
 	}
 
+	// [GonBee]
+	map_session_data* act_mvp_sd = NULL;
+
 	if(mvp_sd && md->db->mexp > 0 && !md->special_state.ai) {
 		unsigned int log_mvp[2] = {0};
 		unsigned int mexp;
@@ -2943,7 +2946,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 
 		// [GonBee]
 		// PCがMVPを獲得したことを記録する。
-		map_session_data* act_mvp_sd = pybot::get_leader(mvp_sd->status.char_id);
+		act_mvp_sd = pybot::get_leader(mvp_sd->status.char_id);
 		if (!act_mvp_sd) act_mvp_sd = mvp_sd;
 		pybot::pc_acquired_mvp(act_mvp_sd->status.char_id, md);
 
@@ -3137,7 +3140,23 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 
 	// MvP tomb [GreenBox]
 	if (battle_config.mvp_tomb_enabled && md->spawn->state.boss && map_getmapflag(md->bl.m, MF_NOTOMB) != 1)
-		mvptomb_create(md, mvp_sd ? mvp_sd->status.name : NULL, time(NULL));
+
+		// [GonBee]
+		// BotがMVPを獲得した場合は墓標にリーダーの名前を刻む。
+		//mvptomb_create(md, mvp_sd ? mvp_sd->status.name : NULL, time(NULL));
+		mvptomb_create(md, act_mvp_sd ? act_mvp_sd->status.name : NULL, time(NULL));
+
+	// [GonBee]
+	// 野良MVPモンスターが倒されるとアナウンスを流す。
+	if (pybot::mob_is_normal_mvp(md)) {
+		char message[128];
+		sprintf(message,
+			"[ %s ]で[ %s ]が倒されました。",
+			pybot::get_map_name_japanese(md->bl.m).c_str(),
+			md->name
+		);
+		intif_broadcast(message, strlen(message) + 1, BC_DEFAULT);
+	}
 
 	if( !rebirth )
 		mob_setdelayspawn(md); //Set respawning.

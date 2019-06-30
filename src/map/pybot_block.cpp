@@ -152,6 +152,7 @@ ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::sp_suppliable() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::stay() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::storage_put_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,team_t>>& leader_if::teams() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::update_bot_indices() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::update_member_indices() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
@@ -1390,6 +1391,11 @@ ptr<registry_t<int>>& leader_impl::storage_put_items() {
 	return storage_put_items_;
 }
 
+// チームのレジストリ。
+ptr<registry_t<int,team_t>>& leader_impl::teams() {
+	return teams_;
+}
+
 // Botのインデックスを更新する。
 void leader_impl::update_bot_indices() {
 	for (int i = 0; i < bots().size(); ++i) bots()[i]->bot_index() = i;
@@ -2430,13 +2436,19 @@ leader_t::leader_t(
 		insert_storage_put_item_func(char_id()),
 		delete_storage_put_item_func(char_id())
 	);
+	teams() = construct<registry_t<int,team_t>>(
+		load_team_func(char_id()),
+		insert_team_func(char_id()),
+		update_team_func(char_id()),
+		delete_team_func(char_id())
+	);
 	members().push_back(this);
 	update_member_indices();
 }
 
 // リーダーを破棄する。
 leader_t::~leader_t() {
-	if (!bots().empty()) save_team(this);
+	if (!bots().empty()) save_team(this, 0);
 }
 
 // モンスターを構築する。

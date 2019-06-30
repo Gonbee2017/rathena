@@ -637,6 +637,8 @@ struct sql_session;
 struct storage_context;
 struct subcommand_desc;
 struct subcommand_proc;
+struct team_member;
+struct team_t;
 struct turn_end_exception;
 using distance_policy = policy_t<distance_policy_values>;
 using normal_attack_policy = policy_t<normal_attack_policy_values>;
@@ -985,7 +987,6 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(NJ_SUITON);
 	AI_SKILL_USE_FUNC(NJ_TATAMIGAESHI);
 	AI_SKILL_USE_FUNC(NJ_UTSUSEMI);
-	AI_SKILL_USE_FUNC(NJ_ZENYNAGE);
 	AI_SKILL_USE_FUNC(NV_FIRSTAID);
 	AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, activate);
 	AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, deactivate);
@@ -1276,6 +1277,7 @@ struct leader_if {
 	virtual bool& sp_suppliable();
 	virtual bool& stay();
 	virtual ptr<registry_t<int>>& storage_put_items();
+	virtual ptr<registry_t<int,team_t>>& teams();
 	virtual void update_bot_indices();
 	virtual void update_member_indices();
 };
@@ -1604,6 +1606,7 @@ struct leader_impl : virtual block_if {
 	bool sp_suppliable_;                              // SPを供給可能か。
 	bool stay_;                                       // 待機か。
 	ptr<registry_t<int>> storage_put_items_;          // 倉庫格納アイテムのレジストリ。
+	ptr<registry_t<int,team_t>> teams_;               // チームのレジストリ。
 
 	virtual std::unordered_map<int,ptr<block_if>>& ally_mobs() override;
 	virtual int& attack_target() override;
@@ -1624,6 +1627,7 @@ struct leader_impl : virtual block_if {
 	virtual bool& sp_suppliable() override;
 	virtual bool& stay() override;
 	virtual ptr<registry_t<int>>& storage_put_items() override;
+	virtual ptr<registry_t<int,team_t>>& teams() override;
 	virtual void update_bot_indices() override;
 	virtual void update_member_indices() override;
 };
@@ -1969,6 +1973,18 @@ struct equipset_t {
 	explicit equipset_t(int16_t mid);
 };
 
+// チームメンバー。
+struct team_member {
+	int char_id;      // キャラクターID。
+	std::string name; // 名前。
+};
+
+// チーム。
+struct team_t {
+	int tea_num;                           // チームの番号。
+	std::vector<ptr<team_member>> members; // メンバーのベクタ。
+};
+
 // 武具一式のアイテム。
 struct equipset_item {
 	equip_pos_orders order; // 装備部位の順序。
@@ -2288,6 +2304,7 @@ SUBCMD_FUNC(Bot, sUmmon);
 SUBCMD_FUNC(Bot, Team);
 SUBCMD_FUNC(Bot, TeamLogIn);
 SUBCMD_FUNC(Bot, TeamLogOut);
+SUBCMD_FUNC(Bot, TeamNumber);
 SUBCMD_FUNC(Bot, TeamOrder);
 SUBCMD_FUNC(Bot, TeamPassive);
 SUBCMD_FUNC(Bot, TeamRush);
@@ -2319,6 +2336,7 @@ int shift_arguments_then_parse_int(command_argument_list& args, const std::strin
 registry_t<int>::save_func delete_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func delete_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
+registry_t<int,team_t>::save_func delete_team_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
 registry_t<int,int>::save_func delete_limit_skill_func(int cid);
@@ -2333,6 +2351,7 @@ registry_t<int>::save_func delete_storage_put_item_func(int cid);
 registry_t<int>::save_func insert_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func insert_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
+registry_t<int,team_t>::save_func insert_team_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
 registry_t<int,int>::save_func insert_limit_skill_func(int cid);
@@ -2347,6 +2366,7 @@ registry_t<int>::save_func insert_storage_put_item_func(int cid);
 registry_t<int>::load_func load_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
 registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
+registry_t<int,team_t>::load_func load_team_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
 registry_t<int>::load_func load_ignore_item_func(int cid);
 registry_t<int,int>::load_func load_limit_skill_func(int cid);
@@ -2360,6 +2380,7 @@ registry_t<int,int>::load_func load_storage_get_item_func(int cid);
 registry_t<int>::load_func load_storage_put_item_func(int cid);
 registry_t<int,distance_policy>::save_func update_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
+registry_t<int,team_t>::save_func update_team_func(int cid);
 registry_t<int,int>::save_func update_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func update_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func update_play_skill_func(int cid);
@@ -2434,8 +2455,7 @@ template <class ...A> std::string print_with(const std::string& sep, A&& ...args
 std::string print_zeny(int zen);
 int query_char_id(const std::string& uid, const std::string& upas, const std::string& cnam);
 void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
-void query_team(int cid, std::function<void(int)> yie);
-void save_team(block_if* lea);
+void save_team(block_if* lea, int tea_num);
 int sex_string2number(const std::string& str);
 void show_error(const std::string& mes);
 void show_info(const std::string& mes);
@@ -2516,6 +2536,7 @@ extern const std::array<_sp,ST_MAX> ST2SP_TABLE;
 extern const std::array<std::string,ST_MAX> STATUS_TYPE_NAME_TABLE;
 extern const std::array<std::string,4> STORAGE_TYPE_NAME_TABLE;
 extern const skill_id_set SUMMON_SKILLS;
+extern const int TEAM_MAX;
 extern const skill_id_set UNEQUIP_ARMOR_SKILLS;
 extern const skill_id_set UNEQUIP_HELM_SKILLS;
 extern const skill_id_set UNEQUIP_SHIELD_SKILLS;

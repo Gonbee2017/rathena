@@ -128,7 +128,8 @@ CREATE TABLE `pybot_storage_put_item` (
 DROP TABLE IF EXISTS `pybot_team`;
 CREATE TABLE `pybot_team` (
   `leader_char_id` int(11) unsigned NOT NULL,
+  `team_number` smallint(5) unsigned NOT NULL,
   `member_index` tinyint(2) unsigned NOT NULL,
   `member_char_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`leader_char_id`, `member_index`)
+  PRIMARY KEY (`leader_char_id`, `team_number`, `member_index`)
 ) ENGINE=MyISAM;
