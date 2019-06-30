@@ -103,6 +103,83 @@ equip_pos_order_to_index(
 	return ind;
 }
 
+// モンスターデータを探す。
+int // 見つかったモンスターID。見つからなかったら0。
+find_mobdb(
+	const std::string& nam // モンスター名。
+) {
+	using ele_lis = std::list<ptr<command_element>>;
+	using ele_lis_lis = std::list<ptr<ele_lis>>;
+	using str_lis = std::vector<std::string>;
+
+	auto eles = initialize<ele_lis>(initialize<command_element>(CET_LITERAL, nam));
+	eles = command_parse_tokens<ele_lis>(ALL_RANGE(*eles), "|", false, true);
+	eles = command_parse_blocks<ele_lis>(ALL_RANGE(*eles), "<", ">", false, true);
+	auto tag_blos = command_collect_blocks<ele_lis_lis>(ALL_RANGE(*eles), "<", ">", true);
+	if (tag_blos->size() > 1) return 0;
+
+	int mob_cla = INT_MIN;
+	bool cau = false;
+	if (!tag_blos->empty()) {
+		auto tag_toks = command_collect_tokens<ele_lis_lis>(ALL_RANGE(*tag_blos->front()), "|", true);
+		auto tag_strs = command_print_all<str_lis>(ALL_RANGE(*tag_toks));
+		for (const std::string& tag_str : *tag_strs) {
+			int mob_cla_ind = find_name(MOB_CLASS_NAME_TABLE, tag_str);
+			if (mob_cla_ind != INT_MIN) {
+				mob_cla = mob_cla_ind;
+				continue;
+			}
+			if (tag_str == CAUTION_TAG) {
+				cau = true;
+				continue;
+			}
+		}
+	}
+
+	auto pay_eles = initialize<ele_lis>();
+	for (auto ele : *eles) {
+		if (ele->type == CET_OPEN) break;
+		pay_eles->push_back(ele);
+	}
+	std::string pay_str = lowercase(trim(command_print(ALL_RANGE(*pay_eles)), " \t"));
+
+	int mid = parse_id(pay_str);
+	if (mid) {
+		if (mid == INT_MIN ||
+			!mob_db(mid)
+		) mid = 0;
+	} else {
+		meta_mobs emc = find_map_key(META_MONSTER_NAMES, pay_str);
+		if (emc) return emc;
+		int rac_ind = find_name(RACE_NAME_TABLE, pay_str);
+		if (rac_ind != INT_MIN) return MM_RACE + rac_ind;
+		int ele_ind = find_name(ELEMENT_NAME_TABLE, pay_str);
+		if (ele_ind != INT_MIN) return MM_ELEMENT + ele_ind;
+		int siz_ind = find_name(SIZE_NAME_TABLE, pay_str);
+		if (siz_ind != INT_MIN) return MM_SIZE + siz_ind;
+		if (!mid) {
+			uint16 mids[256];
+			int cou = mobdb_searchname_array2(pay_str.c_str(), mids, 256);
+			for (int i = 0; i < cou; i++) {
+				struct mob_db* mdb = mob_db(mids[i]);
+				if (mdb &&
+					lowercase(mdb->jname) == pay_str &&
+					(mob_cla == INT_MIN ||
+						mdb->status.class_ == mob_cla
+					)
+				) {
+					mid = mids[i];
+					break;
+				}
+			}
+		}
+	}
+	if (mid &&
+		cau
+	) mid += MM_CAUTION;
+	return mid;
+}
+
 // ドロップアイテムが無視アイテムかを判定する。
 bool // 結果。
 flooritem_to_be_ignored(
@@ -259,7 +336,7 @@ mob_is_normal_mvp(
 ) {
 	std::string eve(md->npc_event);
 	return status_has_mode(&md->status, MD_MVP) &&
-		eve.substr(0, BLOODY_DEAD_BRANCH_NPC_NAME.length()) != BLOODY_DEAD_BRANCH_NPC_NAME &&
+		eve.substr(0, PYBOT_DUMMY_NPC_NAME.length()) != PYBOT_DUMMY_NPC_NAME &&
 		eve.substr(0, CASTLE_TRIAL_NPC_NAME.length()) != CASTLE_TRIAL_NPC_NAME;
 }
 
@@ -485,5 +562,11 @@ skill_is_layable_on_lp(
 ) {
 	return KEY_EXISTS(LAYABLE_ON_LP_SKILLS, kid);
 }
+
+// -----------------------------------------------------------------------------
+// 外部から参照される変数の定義
+
+// PyBot用ダミーNPC名。
+const std::string PYBOT_DUMMY_NPC_NAME = "PyBotDummy";
 
 }

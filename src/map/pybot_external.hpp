@@ -39,6 +39,7 @@ int convert_card(int car_id);
 void do_final();
 void do_init();
 equip_index equip_pos_order_to_index(int ord);
+int find_mobdb(const std::string& nam);
 bool flooritem_to_be_ignored(map_session_data* sd, flooritem_data* fit);
 const char* get_equip_pos_name(equip_index equ_ind);
 int get_last_summoned_id(int cid);
@@ -60,6 +61,11 @@ void reload_equipset_in_battle(int cid);
 void set_last_summoned_id(map_session_data* sd, int bid);
 void set_map_initial_position(map_session_data* sd);
 bool skill_is_layable_on_lp(e_skill kid);
+
+// -----------------------------------------------------------------------------
+// ŠO•”‚©‚çQÆ‚³‚ê‚é•Ï”‚ÌéŒ¾
+
+extern const std::string PYBOT_DUMMY_NPC_NAME;
 
 }
 

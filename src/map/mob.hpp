@@ -306,6 +306,10 @@ struct item_drop_list {
 struct mob_db *mob_db(int mob_id);
 uint16 mobdb_searchname(const char * const str);
 int mobdb_searchname_array(const char *str, uint16 * out, int size);
+
+// [GonBee]
+int mobdb_searchname_array2(const char *str, uint16 * out, int size);
+
 int mobdb_checkid(const int id);
 struct view_data* mob_get_viewdata(int mob_id);
 void mob_set_dynamic_viewdata( struct mob_data* md );
@@ -330,7 +334,11 @@ int mob_warpchase(struct mob_data *md, struct block_list *target);
 int mob_target(struct mob_data *md,struct block_list *bl,int dist);
 int mob_unlocktarget(struct mob_data *md, t_tick tick);
 struct mob_data* mob_spawn_dataset(struct spawn_data *data);
-int mob_spawn(struct mob_data *md);
+
+// [GonBee]
+//int mob_spawn(struct mob_data *md);
+int mob_spawn(struct mob_data *md, bool use_ski = true);
+
 TIMER_FUNC(mob_delayspawn);
 int mob_setdelayspawn(struct mob_data *md);
 int mob_parse_dataset(struct spawn_data *data);

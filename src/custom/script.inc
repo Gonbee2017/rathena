@@ -67,6 +67,55 @@ BUILDIN_FUNC(convertcard) {
 }
 
 // [GonBee]
+// ダミーモンスターを出現させる。
+// s マップ名。
+// i x座標。
+// i y座標。
+// s 名前。
+// v モンスターID。
+// i 数。
+// ? イベント。
+// ? 消滅するまでの時間(ミリ秒)。省略なら60000。
+BUILDIN_FUNC(dummymonster) {
+	const char* mapn = script_getstr(st,2);
+	int x = script_getnum(st,3);
+	int y = script_getnum(st,4);
+	const char* str = script_getstr(st,5);
+	int class_;
+	if (script_isstring(st, 6))	class_ = mobdb_searchname(script_getstr(st, 6));
+	else class_ = script_getnum(st, 6);
+	int amount = script_getnum(st,7);
+	const char* event = "PyBotDummy::OnDead";
+	if (script_hasdata(st, 8)) {
+		event = script_getstr(st, 8);
+		check_event(st, event);
+	}
+	int timeout = 60000;
+	if (script_hasdata(st,9)) timeout = script_getnum(st, 9);
+	t_tick tick = gettick();
+
+	if (class_ >= 0 &&
+		!mobdb_checkid(class_)
+	) {
+		ShowWarning("buildin_monster: Attempted to spawn non-existing monster class %d\n", class_);
+		return SCRIPT_CMD_FAILURE;
+	}
+	map_session_data* sd = map_id2sd(st->rid);
+	int16 m = script_mapname2mapid(st, mapn);
+	for(int i = 0; i < amount; i++) {
+		mob_data* md = mob_once_spawn_sub(&sd->bl, m, x, y, str, class_, event, SZ_SMALL, AI_NONE);
+		if (md) {
+			md->special_state.ai = AI_SPHERE;
+			mob_spawn(md, false);
+			int add_mod = MD_NOCAST_SKILL | MD_KNOCKBACK_IMMUNE;
+			int del_mod = MD_CANMOVE | MD_LOOTER | MD_CANATTACK;
+			sc_start4(NULL, &md->bl, SC_MODECHANGE, 100, 1, 0, add_mod, del_mod, timeout);
+		}
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // 複製NPC毎に個別の配列の要素を参照する。
 // v      参照する配列の接頭辞。
 // i      参照する要素のインデックス。
@@ -175,6 +224,15 @@ BUILDIN_FUNC(equip2) {
 		return SCRIPT_CMD_FAILURE;
 	}
 	script_pushint(st,1);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// モンスター名からモンスターIDを検索する。
+// s モンスター名。
+// 戻り値 モンスターID。見つからなかったら0。
+BUILDIN_FUNC(findmobdb) {
+	script_pushint(st, pybot::find_mobdb(script_getstr(st, 2)));
 	return SCRIPT_CMD_SUCCESS;
 }
 

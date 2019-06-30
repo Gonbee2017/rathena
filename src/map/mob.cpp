@@ -319,6 +319,29 @@ static bool mobdb_searchname_sub(uint16 mob_id, const char * const str, bool ful
 	return false;
 }
 
+// [GonBee]
+static bool mobdb_searchname_sub2(uint16 mob_id, const char * const str, bool full_cmp)
+{
+	const struct mob_db * const mob = mob_db(mob_id);
+	
+	if( mobdb_checkid(mob_id) <= 0 )
+		return false; // invalid mob_id (includes clone check)
+	if( full_cmp ) {
+		// str must equal the db value
+		if( strcmpi(mob->name, str) == 0 || 
+			strcmpi(mob->jname, str) == 0 || 
+			strcmpi(mob->sprite, str) == 0 )
+			return true;
+	} else {
+		// str must be in the db value
+		if( stristr(mob->name, str) != NULL ||
+			stristr(mob->jname, str) != NULL ||
+			stristr(mob->sprite, str) != NULL )
+			return true;
+	}
+	return false;
+}
+
 /**
  * Searches for the Mobname
 */
@@ -354,9 +377,31 @@ int mobdb_searchname_array_(const char *str, uint16 * out, int size, bool full_c
 	return count;
 }
 
+// [GonBee]
+int mobdb_searchname_array_2(const char *str, uint16 * out, int size, bool full_cmp)
+{
+	unsigned short count = 0;
+	for( auto const &mobdb_pair : mob_db_data ) {
+		const uint16 mob_id = mobdb_pair.first;
+		if( mobdb_searchname_sub2(mob_id, str, full_cmp) ) {
+			if( count < size )
+				out[count] = mob_id;
+			count++;
+		}
+	}
+
+	return count;
+}
+
 int mobdb_searchname_array(const char *str, uint16 * out, int size)
 {
 	return mobdb_searchname_array_(str, out, size, false);
+}
+
+// [GonBee]
+int mobdb_searchname_array2(const char *str, uint16 * out, int size)
+{
+	return mobdb_searchname_array_2(str, out, size, false);
 }
 
 /*==========================================
@@ -1114,7 +1159,12 @@ int mob_count_sub(struct block_list *bl, va_list ap) {
  * @param md : mob data to spawn
  * @return 0:spawned, 1:delayed, 2:error
  */
-int mob_spawn (struct mob_data *md)
+
+// [GonBee]
+// 出現時にスキルを使用するかを選択できるようにする。
+//int mob_spawn (struct mob_data *md)
+int mob_spawn (struct mob_data *md, bool use_ski)
+
 {
 	int i=0;
 	t_tick tick = gettick();
@@ -1207,7 +1257,11 @@ int mob_spawn (struct mob_data *md)
 	if( map_getmapdata(md->bl.m)->users )
 		clif_spawn(&md->bl);
 	skill_unit_move(&md->bl,tick,1);
-	mobskill_use(md, tick, MSC_SPAWN);
+
+	// [GonBee]
+	//mobskill_use(md, tick, MSC_SPAWN);
+	if (use_ski) mobskill_use(md, tick, MSC_SPAWN);
+
 	return 0;
 }
 
@@ -2471,6 +2525,13 @@ void mob_damage(struct mob_data *md, struct block_list *src, int damage)
  *------------------------------------------*/
 int mob_dead(struct mob_data *md, struct block_list *src, int type)
 {
+
+	// [GonBee]
+	// ダミーモンスターはドロップも経験値もなし。
+	std::string eve(md->npc_event);
+	if (eve.substr(0, pybot::PYBOT_DUMMY_NPC_NAME.length()) == pybot::PYBOT_DUMMY_NPC_NAME)
+		type = 3;
+
 	struct status_data *status;
 	struct map_session_data *sd = NULL, *tmpsd[DAMAGELOG_SIZE];
 	struct map_session_data *mvp_sd = NULL, *second_sd = NULL, *third_sd = NULL;

@@ -2420,7 +2420,6 @@ template <class M> typename M::key_type find_map_key(const M& map, typename M::m
 template <class A> int find_name(const A& arr, const std::string& nam_lc);
 mob_data* find_mob(block_if* lea, int mid = 0);
 int find_mob_skill(struct mob_db* mdb, mob_skill_pred pre);
-int find_mobdb(const std::string& nam);
 int find_skilldb(const std::string& nam);
 block_if* get_active_homun(block_if* mem);
 block_if* get_homun_if_exists(block_if* mem);
@@ -2495,7 +2494,6 @@ extern const std::array<std::string,MAX_AMMO_TYPE> AMMO_TYPE_NAME_TABLE;
 extern const std::array<std::string,EPO_MAX> ARMOR_TYPE_NAME_TABLE;
 extern const std::vector<std::string> BA_FROSTJOKER_MESSAGES;
 extern const std::array<battle_mode_flags,BM_MAX> BATTLE_MODE_FLAG_TABLE;
-extern const std::string BLOODY_DEAD_BRANCH_NPC_NAME;
 extern const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS;
 extern const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS;
 extern const std::string BROKEN_EQUIP_TAG;

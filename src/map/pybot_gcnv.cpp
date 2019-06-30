@@ -1301,9 +1301,6 @@ const std::array<
 	BMF_ASSIST,
 };
 
-// 血塗られた古木の枝のイベント名。
-const std::string BLOODY_DEAD_BRANCH_NPC_NAME = "BloodyDeadBranch";
-
 // @Botのサブコマンド説明のベクタ。
 const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 	SUBCMD_DESC   (Bot, Attack                     , a   ,

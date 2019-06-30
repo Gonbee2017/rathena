@@ -457,15 +457,21 @@ AI_SKILL_USE_FUNC_T(CR_DEFENDER, deactivate) {
 // ディボーションを使う。
 AI_SKILL_USE_FUNC(CR_DEVOTION) {
 	if (bot->party_id()) {
-		block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-			return mem->party_id() == bot->party_id() &&
-				mem != bot &&
-				!mem->is_dead() &&
-				!mem->is_hiding() &&
-				!mem->reject_skills()->find(kid) &&
-				!mem->sc()->data[SC_DEVOTION];
-		});
-		if (mem) bot->use_skill_block(kid, klv, mem);
+		int cou = min(klv, MAX_DEVOTION);
+		int i;
+		ARR_FIND(0, cou, i, !bot->sd()->devotion[i]);
+		if (i < cou) {
+			block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+				return mem->party_id() == bot->party_id() &&
+					mem != bot &&
+					(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
+					!mem->is_dead() &&
+					!mem->is_hiding() &&
+					!mem->reject_skills()->find(kid) &&
+					!mem->sc()->data[SC_DEVOTION];
+			});
+			if (mem) bot->use_skill_block(kid, klv, mem);
+		}
 	}
 }
 
