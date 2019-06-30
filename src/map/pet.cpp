@@ -673,13 +673,21 @@ int pet_catch_process2(struct map_session_data* sd, int target_id)
 
 	md = (struct mob_data*)map_id2bl(target_id);
 
-	if(!md || md->bl.type != BL_MOB || md->bl.prev == NULL) { // Invalid inputs/state, abort capture.
+	// [GonBee]
+	// お試し用モンスターはテイムできない。
+	//if(!md || md->bl.type != BL_MOB || md->bl.prev == NULL) { // Invalid inputs/state, abort capture.
+	if (!md ||
+		md->bl.type != BL_MOB ||
+		md->bl.prev == NULL ||
+		md->special_state.ai == AI_SPHERE
+	) { // Invalid inputs/state, abort capture.
+
 		clif_pet_roulette(sd,0);
 		sd->catch_target_class = PET_CATCH_FAIL;
 		sd->itemid = sd->itemindex = -1;
 		return 1;
 	}
-
+	
 	//FIXME: delete taming item here, if this was an item-invoked capture and the item was flagged as delay-consume [ultramage]
 
 	pet = pet_db(md->mob_id);

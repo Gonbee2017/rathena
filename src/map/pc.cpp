@@ -5366,6 +5366,7 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	//if (md->master_id || status_has_mode(md_status, MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE ||
 	if (md->master_id ||
 		status_get_race2(&md->bl) == RC2_TREASURE ||
+		md->special_state.ai == AI_SPHERE ||
 
 		map_getmapflag(bl->m, MF_NOMOBLOOT) || // check noloot map flag [Lorky]
 		(battle_config.skill_steal_max_tries && //Reached limit of steal attempts. [Lupus]
@@ -5471,7 +5472,13 @@ int pc_steal_coin(struct map_session_data *sd,struct block_list *target)
 	// [GonBee]
 	// 状態異常耐性モンスターからもスティールコインできるようにする。
 	//if (md->state.steal_coin_flag || md->sc.data[SC_STONE] || md->sc.data[SC_FREEZE] || status_bl_has_mode(target,MD_STATUS_IMMUNE) || status_get_race2(&md->bl) == RC2_TREASURE)
-	if (md->state.steal_coin_flag || md->sc.data[SC_STONE] || md->sc.data[SC_FREEZE] || status_get_race2(&md->bl) == RC2_TREASURE)
+	if (md->state.steal_coin_flag ||
+		md->sc.data[SC_STONE] ||
+		md->sc.data[SC_FREEZE] ||
+		status_get_race2(&md->bl) == RC2_TREASURE ||
+		md->special_state.ai == AI_SPHERE
+	)
+
 		return 0;
 
 	rate = sd->battle_status.dex / 2 + 2 * (sd->status.base_level - target_lv) + (10 * pc_checkskill(sd, RG_STEALCOIN)) + sd->battle_status.luk / 2;

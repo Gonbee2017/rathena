@@ -2036,6 +2036,7 @@ AI_SKILL_USE_FUNC(RG_STEALCOIN) {
 			!ene->is_summoned() &&
 			!ene->md()->state.steal_coin_flag &&
 			ene->race2() != RC2_TREASURE &&
+			ene->md()->special_state.ai != AI_SPHERE &&
 			!ene->sc()->data[SC_FREEZE] &&
 			!ene->sc()->data[SC_STONE];
 	});
@@ -2626,7 +2627,8 @@ AI_SKILL_USE_FUNC(TF_STEAL) {
 			!ene->is_hiding() &&
 			!ene->is_summoned() &&
 			ene->md()->state.steal_flag != UCHAR_MAX &&
-			ene->race2() != RC2_TREASURE;
+			ene->race2() != RC2_TREASURE &&
+			ene->md()->special_state.ai != AI_SPHERE;
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }
