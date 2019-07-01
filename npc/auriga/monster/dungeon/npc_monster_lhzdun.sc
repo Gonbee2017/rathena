@@ -50,51 +50,57 @@ lhz_dun03,139,158,20,11	monster	エレメス=ガイル		1641,1,600000,0,1
 lhz_dun03,139,117,20,11	monster	セシル=ディモン		1644,1,600000,0,1
 lhz_dun03,138,138,36,34	monster	マーガレッタ=ソリン	1643,1,600000,0,1
 lhz_dun03,138,138,36,34	monster	カトリーヌ=ケイロン	1645,1,600000,0,1
+lhz_dun03,140,261,0,0	boss_monster	セイレン=ウィンザー	1646,1,28800000,0,0
+lhz_dun03,27,62,0,0	boss_monster	エレメス=ガイル		1647,1,28800000,0,0
+lhz_dun03,240,65,0,0	boss_monster	ハワード=アルトアイゼン	1648,1,28800000,0,0
+lhz_dun03,140,29,0,0	boss_monster	マーガレッタ=ソリン	1649,1,28800000,0,0
+lhz_dun03,253,219,0,0	boss_monster	セシル=ディモン		1650,1,28800000,0,0
+lhz_dun03,44,225,0,0	boss_monster	カトリーヌ=ケイロン	1651,1,28800000,0,0
 
-lhz_dun03,0,0,0	script	#LhzMVP3	-1,{
-OnInit:
-	initnpctimer;
-	end;
-//OnTimer6000000:
-OnTimer1500000:
-//OnTimer6300000:
-OnTimer1575000:
-//OnTimer6600000:
-OnTimer1650000:
-//OnTimer6900000:
-OnTimer1725000:
-//OnTimer7200000:
-OnTimer1800000:
-//OnTimer7500000:
-OnTimer1875000:
-	if(rand(6))
-		end;
-//OnTimer7800000:
-OnTimer1950000:
-	stopnpctimer;
-	switch(rand(6)) {
-	case 0: set .@x,140; set .@y,232; break;
-	case 1: set .@x,75; set .@y,138; break;
-	case 2: set .@x,140; set .@y,87; break;
-	case 3: set .@x,205; set .@y,140; break;
-	case 4: set .@x,123; set .@y,137; break;
-	case 5: set .@x,157; set .@y,137; break;
-	}
-	monster "lhz_dun03",.@x,.@y,"--ja--",1646+rand(6),1,"#LhzMVP3::OnKilled";
-	end;
-OnKilled:
-	switch(rand(6)) {
-	case 0: set .@x,183; set .@y,97; break;
-	case 1: set .@x,97; set .@y,96; break;
-	case 2: set .@x,47; set .@y,139; break;
-	case 3: set .@x,231; set .@y,140; break;
-	case 4: set .@x,139; set .@y,211; break;
-	case 5: set .@x,139; set .@y,259; break;
-	}
-	monster "lhz_dun03",.@x,.@y,"--ja--",1640+rand(6),1;
-	initnpctimer;
-	end;
-}
+//lhz_dun03,0,0,0	script	#LhzMVP3	-1,{
+//OnInit:
+//	initnpctimer;
+//	end;
+////OnTimer6000000:
+//OnTimer1500000:
+////OnTimer6300000:
+//OnTimer1575000:
+////OnTimer6600000:
+//OnTimer1650000:
+////OnTimer6900000:
+//OnTimer1725000:
+////OnTimer7200000:
+//OnTimer1800000:
+////OnTimer7500000:
+//OnTimer1875000:
+//	if(rand(6))
+//		end;
+////OnTimer7800000:
+//OnTimer1950000:
+//	stopnpctimer;
+//	switch(rand(6)) {
+//	case 0: set .@x,140; set .@y,232; break;
+//	case 1: set .@x,75; set .@y,138; break;
+//	case 2: set .@x,140; set .@y,87; break;
+//	case 3: set .@x,205; set .@y,140; break;
+//	case 4: set .@x,123; set .@y,137; break;
+//	case 5: set .@x,157; set .@y,137; break;
+//	}
+//	monster "lhz_dun03",.@x,.@y,"--ja--",1646+rand(6),1,"#LhzMVP3::OnKilled";
+//	end;
+//OnKilled:
+//	switch(rand(6)) {
+//	case 0: set .@x,183; set .@y,97; break;
+//	case 1: set .@x,97; set .@y,96; break;
+//	case 2: set .@x,47; set .@y,139; break;
+//	case 3: set .@x,231; set .@y,140; break;
+//	case 4: set .@x,139; set .@y,211; break;
+//	case 5: set .@x,139; set .@y,259; break;
+//	}
+//	monster "lhz_dun03",.@x,.@y,"--ja--",1640+rand(6),1;
+//	initnpctimer;
+//	end;
+//}
 
 ////============================================================
 //// 生体工学研究所 04 - lhz_dun04
