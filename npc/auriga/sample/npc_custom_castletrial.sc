@@ -31,7 +31,7 @@ OnStart:
 			"--ja--", 
 			dupele(.fix_mobs, .@fix_mob_bas + 2), 
 			1, 
-			strnpcinfo(0) + "::OnTrashMobDead";
+			strnpcinfo(0) + "::OnFixedMobDead";
 	}
 	set dupvar(.tim_rem), dupele(.tim_pois, 0) * 60;
 	announce dupvar(.cas_nam$) + "で砦の試練が開始されました。", 0;
@@ -41,8 +41,12 @@ OnAbort:
 	specialeffect2 EF_TEMP_FAIL, AREA, strcharinfo(0, dupvar(.cid));
 	announce "挑戦者が攻略を断念しました、試練を中止します。", 0x9, 0xff0000;
 	callsub Stop;
+OnFixedMobDead:
 OnTrashMobDead:
-	if (!getmapmobs("this", strnpcinfo(0) + "::OnTrashMobDead")) {
+	if (!getmapmobs("this", strnpcinfo(0) + "::OnFixedMobDead") &&
+		getmapmobs("this", strnpcinfo(0) + "::OnTrashMobDead") <= 10
+	) {
+		killmonsterall "this";
 		set .@exi_nam$, "CastleExit#" + strnpcinfo(2);
 		specialeffect EF_BASH, AREA, .@exi_nam$;
 		disablenpc .@exi_nam$;
@@ -1534,8 +1538,8 @@ Introduce:
 	select("^4040FF砦の試練^000000って？");
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "砦にモンスターたちを召喚します。";
-	mes "挑戦者はそれらをすべて倒さなくては";
-	mes "なりません。";
+	mes "挑戦者はそれらのほぼすべてを";
+	mes "倒さなくてはなりません。";
 	next;
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "また砦には貴重な宝が隠されており";
@@ -1688,7 +1692,7 @@ Trial:
 				set .@tim_lim, dupele(.tim_pois, 0, .@cas_tri$);
 				mes "------ ^4040FF砦の試練^000000 ------";
 				mes "^FF4040" + .@tim_lim + "分^000000以内に砦のモンスターを";
-				mes "^FF4040すべて^000000倒してください。";
+				mes "^FF404010匹以下まで^000000倒してください。";
 				mes "最後に^FF4040宝箱^000000を開ければ終了です。";
 				next;
 				mes "------ ^4040FF砦の試練^000000 ------";

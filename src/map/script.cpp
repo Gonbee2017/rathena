@@ -6694,7 +6694,12 @@ BUILDIN_FUNC(cutin)
 	if( !script_rid2sd(sd) )
 		return SCRIPT_CMD_SUCCESS;
 
-	clif_cutin(sd,script_getstr(st,2),script_getnum(st,3));
+	// [GonBee]
+	// Aurigaスクリプトとの互換性のため、
+	// ファイル名は数値型を許容する。
+	//clif_cutin(sd,script_getstr(st,2),script_getnum(st,3));
+	clif_cutin(sd, conv_str(st, script_getdata(st, 2)), script_getnum(st, 3));
+
 	return SCRIPT_CMD_SUCCESS;
 }
 
@@ -24593,7 +24598,7 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF2(delitem2,"cartdelitem2","viiiiiiii?"),
 	BUILDIN_DEF2(enableitemuse,"enable_items",""),
 	BUILDIN_DEF2(disableitemuse,"disable_items",""),
-	BUILDIN_DEF(cutin,"si"),
+	BUILDIN_DEF(cutin,"vi"),
 	BUILDIN_DEF(viewpoint,"iiiii"),
 	BUILDIN_DEF(heal,"ii?"),
 	BUILDIN_DEF(itemheal,"ii?"),

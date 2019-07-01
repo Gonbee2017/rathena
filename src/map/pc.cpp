@@ -4872,7 +4872,7 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 	// プレイヤーの場合は最後に枝召喚したモンスターが生存していればキルする。
 	if (item->flag.dead_branch) {
 		if (pybot::char_is_bot(sd->status.char_id)) return false;
-		int las_sum_id = pybot::get_last_summoned_id(sd->status.char_id);
+		int las_sum_id = pybot::get_last_summoned_id(sd);
 		if (las_sum_id) {
 			block_list* las_sum_bl = map_id2bl(las_sum_id);
 			if (las_sum_bl &&
@@ -5512,9 +5512,18 @@ int pc_steal_coin(struct map_session_data *sd,struct block_list *target)
  *			SETPOS_NO_MAPSERVER	Map not in this map-server, and failed to locate alternate map-server.
  *			SETPOS_AUTOTRADE	Player is in autotrade state
  *------------------------------------------*/
-enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int y, clr_type clrtype)
+
+// [GonBee]
+//enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int y, clr_type clrtype)
+enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int y, clr_type clrtype, bool pybot)
+
 {
 	nullpo_retr(SETPOS_OK,sd);
+
+	// [GonBee]
+	if (pybot::char_is_bot(sd->status.char_id) &&
+		!pybot
+	) return SETPOS_OK;
 
 	if( !mapindex || !mapindex_id2name(mapindex) ) {
 		ShowDebug("pc_setpos: Passed mapindex(%d) is invalid!\n", mapindex);

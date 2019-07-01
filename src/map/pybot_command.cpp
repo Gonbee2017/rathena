@@ -72,10 +72,11 @@ SUBCMD_FUNC(Bot, Attack) {
 		lea->attack_target() = md->bl.id;
 		if (!mid) mob_str = print_mobdb(md->mob_id);
 		show_client(lea->fd(), print("「", mob_str, "」を攻撃します。"));
-	} else if (mid)
+	} else if (mid) {
 		throw command_error{print(
 			"周辺に「", mob_str, "」が見つかりませんでした。"
 		)};
+	}
 	else throw command_error{"周辺にモンスターが見つかりませんでした。"};
 }
 
@@ -664,7 +665,7 @@ SUBCMD_FUNC(Bot, Item) {
 			throw command_error{print(
 				"「", mem->name(), "」は「", itm_str, "」を使えません。"
 			)};
-		mem->use_item(itm_ind);
+		mem->use_item(itm_ind, false);
 		show_client(lea->fd(), print(
 			"「", mem->name(), "」は「", itm_str, "」を使います。"
 		));
@@ -2717,8 +2718,8 @@ bot_login(
 		sd->qi_display = nullptr;
 		sd->qi_count = 0;
 
-		if (pc_setpos(sd, sd->status.last_point.map, sd->status.last_point.x, sd->status.last_point.y, CLR_OUTSIGHT) != SETPOS_OK &&
-			pc_setpos(sd, mapindex_name2id(MAP_PRONTERA), 273, 354, CLR_OUTSIGHT) != SETPOS_OK
+		if (pc_setpos(sd, sd->status.last_point.map, sd->status.last_point.x, sd->status.last_point.y, CLR_OUTSIGHT, true) != SETPOS_OK &&
+			pc_setpos(sd, mapindex_name2id(MAP_PRONTERA), 273, 354, CLR_OUTSIGHT, true) != SETPOS_OK
 		) RAISE_RUNTIME_ERROR("Failed pc_setpos.");
 
 		sd->die_counter = -1;

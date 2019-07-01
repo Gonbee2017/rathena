@@ -27,6 +27,14 @@ struct mvp_stats {
 	int mobs;              // モンスターの数。
 };
 
+// メンバー情報。
+struct member_info {
+	int account_id;        // アカウントID。
+	int char_id;           // キャラクターID。
+	std::string char_name; // キャラクター名。
+	e_job class_;          // 職業。
+};
+
 // -----------------------------------------------------------------------------
 // 外部から参照される関数の宣言
 
@@ -42,11 +50,12 @@ equip_index equip_pos_order_to_index(int ord);
 int find_mobdb(const std::string& nam);
 bool flooritem_to_be_ignored(map_session_data* sd, flooritem_data* fit);
 const char* get_equip_pos_name(equip_index equ_ind);
-int get_last_summoned_id(int cid);
+int get_last_summoned_id(map_session_data* sd);
 map_session_data* get_leader(int cid);
 block_list* get_map_initial_position(map_session_data* sd);
 std::string get_map_name_japanese(int mid);
 std::string get_map_name_japanese(const std::string& nam_eng);
+std::shared_ptr<std::vector<std::shared_ptr<member_info>>> get_member_list(map_session_data* sd);
 double job_level_rate(map_session_data* sd, block_list* bl);
 bool letter_is_jlead(uint8_t let);
 double map_rate(int m);

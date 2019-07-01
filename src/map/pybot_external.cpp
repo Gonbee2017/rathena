@@ -204,12 +204,14 @@ const char* get_equip_pos_name(equip_index equ_ind) {
 // 最後に枝召喚したIDを取得する。
 int // 取得したID。
 get_last_summoned_id(
-	int cid // キャラクターID。
+	map_session_data* sd // セッションデータ。
 ) {
-	int bid = 0;
-	auto lea = find_map_data(all_leaders, cid);
-	if (lea) bid = lea->last_summoned_id();
-	return bid;
+	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (!lea) {
+		lea = construct<leader_t>(sd);
+		all_leaders[lea->char_id()] = lea;
+	}
+	return lea->last_summoned_id();
 }
 
 // Botのリーダーを取得する。
@@ -251,6 +253,27 @@ get_map_name_japanese(
 	const std::string& nam_eng // 英語のマップ名。
 ) {
 	return get_map_name_japanese(map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
+}
+
+// メンバーリストを取得する。
+std::shared_ptr<std::vector<std::shared_ptr<member_info>>> // 取得したメンバーリスト。
+get_member_list(
+	map_session_data* sd // リーダーのセッションデータ。
+) {
+	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (!lea) {
+		lea = construct<leader_t>(sd);
+		all_leaders[lea->char_id()] = lea;
+	}
+	auto lis = initialize<std::vector<std::shared_ptr<member_info>>>();
+	for (block_if* mem : lea->members())
+		lis->push_back(initialize<member_info>(
+			mem->account_id(),
+			mem->char_id(),
+			mem->name(),
+			e_job(mem->sd()->status.class_)
+		));
+	return lis;
 }
 
 // ジョブレベル倍率を計算する。

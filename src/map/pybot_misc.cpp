@@ -669,7 +669,7 @@ find_mob(
 	mob_data* nea_md = nullptr;
 	int nea_dis;
 	yield_bl_func yie_md = [lea, mid, &nea_md, &nea_dis] (block_list* bl) -> int {
-		int dis = distance_client_bl(&lea->center(), bl);
+		int dis = distance_client_bl(lea->bl(), bl);
 		mob_data* md = (mob_data*)(bl);
 		if (!md->sc.data[SC_WINKCHARM] &&
 			(!md->master_id ||
@@ -687,7 +687,7 @@ find_mob(
 	};
 	map_foreachinshootrange(
 		callback_yield_bl,
-		&lea->center(),
+		lea->bl(),
 		AREA_SIZE,
 		BL_MOB,
 		&yie_md

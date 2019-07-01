@@ -575,7 +575,7 @@ bot_impl::teleport(
 	) {
 		walk_end_func() = cast_end_func() = nullptr;
 		stop_attacking();
-		pc_setpos(sd(), map_id2index(bl_->m), bl_->x, bl_->y, CLR_TELEPORT);
+		pc_setpos(sd(), map_id2index(bl_->m), bl_->x, bl_->y, CLR_TELEPORT, true);
 		stop_walking(USW_FORCE_STOP);
 		sd()->state.rewarp = 0;
 		clif_parse_LoadEndAck(fd(), sd());
@@ -2410,6 +2410,7 @@ homun_t::homun_t(
 leader_t::leader_t(
 	map_session_data* sd_ // セッションデータ。
 ) : member_t(sd_, this) {
+	center() = sd_->bl;
 	attack_target() = 0;
 	last_heaby_tick() = 0;
 	last_summoned_id() = 0;

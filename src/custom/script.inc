@@ -19,6 +19,19 @@
 //}
 
 // [GonBee]
+// スキルポイントを増やす。
+// i ポイント数。
+// ? キャラクターID。
+BUILDIN_FUNC(addskillpoint) {
+	map_session_data* sd;
+	if (script_charid2sd(3, sd)) {
+		sd->status.skill_point += script_getnum(st, 2);
+		clif_updatestatus(sd, SP_SKILLPOINT);
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // MVPの周回を進める。
 BUILDIN_FUNC(advancemvpround) {
 	map_session_data* sd;
@@ -117,9 +130,9 @@ BUILDIN_FUNC(dummymonster) {
 
 // [GonBee]
 // 複製NPC毎に個別の配列の要素を参照する。
-// v      参照する配列の接頭辞。
-// i      参照する要素のインデックス。
-// ?      NPC名。
+// v 参照する配列の接頭辞。
+// i 参照する要素のインデックス。
+// ? NPC名。
 // 戻り値 参照した変数。
 BUILDIN_FUNC(dupele) {
 	std::string pre_nam;
@@ -155,8 +168,8 @@ BUILDIN_FUNC(dupele) {
 
 // [GonBee]
 // 複製NPC毎に個別の変数を参照する。
-// v      参照する変数の接頭辞。
-// ?      NPC名。
+// v 参照する変数の接頭辞。
+// ? NPC名。
 // 戻り値 参照した変数。
 BUILDIN_FUNC(dupvar) {
 	std::string pre_nam;
@@ -246,6 +259,94 @@ BUILDIN_FUNC(getmapnamejapanese) {
 }
 
 // [GonBee]
+// チームメンバーのリストを取得する。
+// r アカウントIDの配列。
+// r キャラクターIDの配列。
+// r 名前の配列。
+// 戻り値 メンバーの数。
+BUILDIN_FUNC(getmemberlist) {
+	script_data* rids = script_getdata(st, 2);
+	if (!data_isreference(rids)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(rids);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* cids = script_getdata(st, 3);
+	if (!data_isreference(cids)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(cids);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* cnams = script_getdata(st, 4);
+	if (!data_isreference(cnams)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(cnams);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* cclas = script_getdata(st, 5);
+	if (!data_isreference(cclas)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(cclas);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	map_session_data* sd;
+	int siz = 0;
+	if (!is_string_variable(reference_getname(rids)) &&
+		!is_string_variable(reference_getname(cids)) &&
+		is_string_variable(reference_getname(cnams)) &&
+		!is_string_variable(reference_getname(cclas)) &&
+		script_rid2sd(sd)
+	) {
+		auto mem_lis = pybot::get_member_list(sd);
+		uint32 rids_ind = reference_getindex(rids);
+		uint32 cids_ind = reference_getindex(cids);
+		uint32 cnams_ind = reference_getindex(cnams);
+		uint32 cclas_ind = reference_getindex(cclas);
+		for (auto mem_inf : *mem_lis) {
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(rids), rids_ind++),
+				reference_getname(rids),
+				(void*)__64BPRTSIZE(mem_inf->account_id),
+				reference_getref(rids)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(cids), cids_ind++),
+				reference_getname(cids),
+				(void*)__64BPRTSIZE(mem_inf->char_id),
+				reference_getref(cids)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(cnams), cnams_ind++),
+				reference_getname(cnams),
+				(void*)(mem_inf->char_name.c_str()),
+				reference_getref(cnams)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(cclas), cclas_ind++),
+				reference_getname(cclas),
+				(void*)__64BPRTSIZE(mem_inf->class_),
+				reference_getref(cclas)
+			);
+		}
+		siz = mem_lis->size();
+	}
+	script_pushint(st, siz);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // ペットIDを取得する。
 // 戻り値 取得したペットID。
 BUILDIN_FUNC(getpetid) {
@@ -273,7 +374,7 @@ BUILDIN_FUNC(getpetintimate) {
 
 // [GonBee]
 // アカウントがアクティブかを判定する。
-// i      キャラクターID。
+// i キャラクターID。
 // 戻り値 結果。
 BUILDIN_FUNC(isactive) {
 	script_pushint(st, bool(map_id2sd(script_getnum(st, 2))));
@@ -282,7 +383,7 @@ BUILDIN_FUNC(isactive) {
 
 // [GonBee]
 // PCがMVPを獲得したことがあるかを判定する。
-// i      モンスターID。
+// i モンスターID。
 // 戻り値 結果。
 BUILDIN_FUNC(pchasacquiredmvp) {
 	map_session_data* sd;
@@ -305,12 +406,12 @@ BUILDIN_FUNC(printseconds) {
 
 // [GonBee]
 // MVPランキングを照会する。
-// r      職業の配列。
-// i      最大行数。
-// r      照会したキャラクター名の配列。
-// r      照会した職業の配列。
-// r      照会した周回数の配列。
-// r      照会したモンスター数の配列。
+// r 職業の配列。
+// i 最大行数。
+// r 照会したキャラクター名の配列。
+// r 照会した職業の配列。
+// r 照会した周回数の配列。
+// r 照会したモンスター数の配列。
 // 戻り値 照会した行数。
 BUILDIN_FUNC(querymvpranking) {
 	script_data* jobs = script_getdata(st, 2);
@@ -349,6 +450,7 @@ BUILDIN_FUNC(querymvpranking) {
 		return SCRIPT_CMD_FAILURE;
 	}
 	map_session_data* sd;
+	int siz = 0;
 	if (!is_string_variable(reference_getname(jobs)) &&
 		is_string_variable(reference_getname(que_cnams)) &&
 		!is_string_variable(reference_getname(que_jobs)) &&
@@ -403,8 +505,9 @@ BUILDIN_FUNC(querymvpranking) {
 				reference_getref(que_mobss)
 			);
 		}
-		script_pushint(st, mvp_ran->size());
+		siz = mvp_ran->size();
 	}
+	script_pushint(st, siz);
 	return SCRIPT_CMD_SUCCESS;
 }
 

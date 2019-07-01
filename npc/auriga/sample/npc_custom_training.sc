@@ -11,7 +11,7 @@ prontera,64,55,4	script	変なタヌキ::PyBotDummyRaccoon	543,{
 	if (select("お願いする", "必要ないよ") == 1) {
 		mes "[ポン太]";
 		mes "イヨッ、そうこなくっちゃ。";
-		mes "化けるモンスターの名前は？";
+		mes "化けてほしいモンスターの名前は？";
 		mes "なんでもこいだぞ。";
 		next;
 		input .@mob_nam$;
