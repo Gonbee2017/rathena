@@ -1150,6 +1150,12 @@ BUILDIN_FUNC(getmapname) {
 	else script_pushnil(st);
 	return SCRIPT_CMD_SUCCESS;
 }
+BUILDIN_FUNC(getmdmapname) {
+	return buildin_instance_mapname(st);
+}
+BUILDIN_FUNC(getmdnpcname) {
+	return buildin_instance_npcname(st);
+}
 BUILDIN_FUNC(getonlinepartymember) {
 	int par_id = 0;
 	if (script_hasdata(st, 2)) par_id = script_getnum(st, 2);
@@ -1209,6 +1215,12 @@ BUILDIN_FUNC(getwaitingpcid) {
 		);
 	}
 	return SCRIPT_CMD_SUCCESS;
+}
+BUILDIN_FUNC(mdcreate) {
+	return buildin_instance_create(st);
+}
+BUILDIN_FUNC(mdenter) {
+	return buildin_instance_enter(st);
 }
 BUILDIN_FUNC(npcskillsupport) {
 	int kid = script_getnum(st, 2);

@@ -188,58 +188,61 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 				close;
 			}
 			if (attachrid(.@mem_rids[.@mem_ind])) {
-				skill "ALL_INCCARRY", 10, SKILL_PERM_GRANT;
-				addskillpoint 10;
-				set MVP_MANIA_ENHANCE, 1;
-				attachrid .@pla_rid;
-				advancemvpround;
-				++.@rou;
-				for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
-					getitem .rews[.@i], 1;
-				
-				specialeffect2 EF_POK_JAP;
-				emotion ET_CONGRATULATION;
-				soundeffect "complete.wav", 0;
-				announce "[ " + strcharinfo(0) + " ]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
-				mes "[コレット]";
-				mes "^4040FFオールMVP^000000、おめでとう！";
-				mes "^4040FF" + strcharinfo(0) + "^000000さんの功績は";
-				mes "バッチリ記録しとくからね！";
-				next;
-				if (.@rou == 1) {
+				set .@mem_enc, MVP_MANIA_ENHANCE;
+				if (!.@mem_enc) {
+					skill "ALL_INCCARRY", 10, SKILL_PERM_GRANT;
+					addskillpoint 10;
+					set MVP_MANIA_ENHANCE, 1;
+					attachrid .@pla_rid;
+					advancemvpround;
+					++.@rou;
+					for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
+						getitem .rews[.@i], 1;
+					
+					specialeffect2 EF_POK_JAP;
+					emotion ET_CONGRATULATION;
+					soundeffect "complete.wav", 0;
+					announce "[ " + strcharinfo(0) + " ]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
 					mes "[コレット]";
-					mes "これで全部獲得したわけだけど";
-					mes "まだ終わりじゃないよ。";
+					mes "^4040FFオールMVP^000000、おめでとう！";
+					mes "^4040FF" + strcharinfo(0) + "^000000さんの功績は";
+					mes "バッチリ記録しとくからね！";
+					next;
+					if (.@rou == 1) {
+						mes "[コレット]";
+						mes "これで全部獲得したわけだけど";
+						mes "まだ終わりじゃないよ。";
+						next;
+						mes "[コレット]";
+						mes "MVPが好きで好きでたまらない。";
+						mes "そんなあなたならきっと";
+						mes "1周じゃ物足りないはず……";
+						next;
+						mes "[コレット]";
+						mes "というわけで、お望みなら";
+						mes "何周でもできちゃいます。";
+						next;
+						emotion ET_SMILE;
+						mes "[コレット]";
+						mes "MVPマニアの道はどこまでも";
+						mes "果てしなく続いていくのよ！";
+						mes "なーんてね、ウフフッ♪";
+						next;
+					}
+					mes "[コレット]";
+					mes "とりあえず次の周回に向けて";
+					mes "リストはクリアしておくね。";
 					next;
 					mes "[コレット]";
-					mes "MVPが好きで好きでたまらない。";
-					mes "そんなあなたならきっと";
-					mes "1周じゃ物足りないはず……";
-					next;
-					mes "[コレット]";
-					mes "というわけで、お望みなら";
-					mes "何周でもできちゃいます。";
+					mes "あと私から今回のお祝いに";
+					mes "アイテムを^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
 					next;
 					emotion ET_SMILE;
 					mes "[コレット]";
-					mes "MVPマニアの道はどこまでも";
-					mes "果てしなく続いていくのよ！";
-					mes "なーんてね、ウフフッ♪";
+					mes "なんでもブルレム兄弟イチオシの";
+					mes "神装備なんだって。";
 					next;
-				}
-				mes "[コレット]";
-				mes "とりあえず次の周回に向けて";
-				mes "リストはクリアしておくね。";
-				next;
-				mes "[コレット]";
-				mes "あと私から今回のお祝いに";
-				mes "装備を^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
-				next;
-				emotion ET_SMILE;
-				mes "[コレット]";
-				mes "なんでもブルレム兄弟イチオシの";
-				mes "神装備なんだって。";
-				next;
+				} else attachrid .@pla_rid;
 			}
 		}
 	}

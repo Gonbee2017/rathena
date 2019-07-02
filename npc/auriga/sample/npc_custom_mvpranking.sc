@@ -22,8 +22,8 @@ function	script	MVPRanking	{
 			set .@ran_rou, 0;
 			set .@ran_mobs, 0;
 		}
-		mes sprintf("#%02d ", .@i + 1) + 
-			sprintf("%02d.", .@ran_rou + 1) + 
+		mes sprintf("%02dˆÊ ", .@i + 1) + 
+			sprintf("%02d-", .@ran_rou + 1) + 
 			sprintf("%02d ", .@ran_mobs) + 
 			"^4040FF" + .@ran_nam$ + "^000000";
 	}

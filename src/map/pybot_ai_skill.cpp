@@ -3028,6 +3028,7 @@ AI_SKILL_USE_DEF(heal)(
 				!mem->is_dead() &&
 				!mem->is_hiding() &&
 				!mem->is_invincible() &&
+				!mem->is_magic_immune() &&
 				!mem->reject_skills()->find(kid) &&
 				!mem->sc()->data[SC_BERSERK] &&
 				!mem->sc()->data[SC_CHANGEUNDEAD] &&
