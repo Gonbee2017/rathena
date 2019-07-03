@@ -202,9 +202,9 @@ IG_Taming,10017,1	// Bark Shorts
 IG_Taming,10018,1	// Monkey Circlet
 IG_Taming,10019,1	// Red Scarf
 IG_Taming,10020,1	// Grave Keeper's Sword
-IG_Taming,12373,1	// Boy's Pure Heart
-IG_Taming,12374,1	// Ice Fireworks
-IG_Taming,12395,1	// Tantan Noodle
+//IG_Taming,12373,1	// Boy's Pure Heart
+//IG_Taming,12374,1	// Ice Fireworks
+//IG_Taming,12395,1	// Tantan Noodle
 // Bundle Of Magic Scroll
 IG_Scroll,686,1	// Level 3 Earth Spike
 IG_Scroll,687,1	// Level 5 Earth Spike
