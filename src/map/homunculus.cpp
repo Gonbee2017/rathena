@@ -729,7 +729,7 @@ int hom_increase_intimacy(struct homun_data * hd, unsigned int value)
 
 	// [GonBee]
 	// ホムンクルスの親密度上昇にボーナス倍率をかける。
-	value += int(pybot::job_level_rate(hd->master, &hd->bl) * pybot::map_rate(hd->master->bl.m));
+	value += int(pybot::calculate_level_rate(&hd->master->bl) * pybot::map_rate(hd->master->bl.m));
 
 	if (hd->homunculus.intimacy + value <= 100000)
 		hd->homunculus.intimacy += value;

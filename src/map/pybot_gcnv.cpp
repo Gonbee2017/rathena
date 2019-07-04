@@ -7,7 +7,10 @@ namespace pybot {
 
 // -----------------------------------------------------------------------------
 // 定数の定義
-	
+
+// 不明を示すシンボル。
+const std::string UNKNOWN_SYMBOL = "？";
+
 // AIにおけるホムンクルススキル使用手続きのマップ。
 const std::unordered_map<
 	homun_mapid,                     // ホムンクルスのマップID。
@@ -1163,11 +1166,11 @@ const std::array<
 	"アクセサリー",
 	"兜"          ,
 	"兜"          ,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
+	"兜"          ,
+	"兜"          ,
+	"兜"          ,
+	"肩にかける物",
+	"矢/弾"       ,
 };
 
 // 寒いジョークを使用したときの発言のベクタ。
@@ -2022,10 +2025,10 @@ const std::array<
 	"体"     ,
 	"左手"   ,
 	"右手"   ,
-	"コ頭上" ,
-	"コ頭中" ,
-	"コ頭下" ,
-	"コ肩"   ,
+	"衣頭上" ,
+	"衣頭中" ,
+	"衣頭下" ,
+	"衣肩"   ,
 	"矢/弾"  ,
 	"影体"   ,
 	"影右手" ,
@@ -3494,9 +3497,6 @@ const skill_id_set UNEQUIP_WEAPON_SKILLS = {
 	RG_STRIPWEAPON,
 	ST_FULLSTRIP,
 };
-
-// 不明を示すシンボル。
-const std::string UNKNOWN_SYMBOL = "？";
 
 // 有用なスキルのセット。
 const skill_id_set USEFULL_SKILLS = {

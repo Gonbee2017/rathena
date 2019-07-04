@@ -34,6 +34,9 @@ enum sc_type : int16;
 #define MAX_DEVOTION 5 /// Max Devotion slots
 #define MAX_SPIRITCHARM 10 /// Max spirit charms
 
+// [GonBee]
+#define MAX_LEVEL_BASE_EXP 99999999 ///< Max Base EXP for player on Max Base Level
+
 #define LANGTYPE_VAR "#langtype"
 #define CASHPOINT_VAR "#CASHPOINTS"
 #define KAFRAPOINT_VAR "#KAFRAPOINTS"

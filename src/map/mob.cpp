@@ -2746,7 +2746,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 				// [GonBee]
 				// ホムンクルスの取得経験値にボーナス倍率をかける。
 				//hom_gainexp(tmpsd[i]->hd, base_exp);
-				hom_gainexp(tmpsd[i]->hd, int(base_exp * pybot::base_level_rate(&tmpsd[i]->hd->bl, md) * pybot::map_rate(tmpsd[i]->hd->bl.m)));
+				hom_gainexp(tmpsd[i]->hd, int(base_exp * pybot::calculate_level_rate(&tmpsd[i]->hd->bl, md) * pybot::map_rate(tmpsd[i]->hd->bl.m)));
 
 			if(flag) {
 				if(base_exp || job_exp) {
@@ -2803,7 +2803,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		// [GonBee]
 		// ドロップ確率のボーナス倍率を計算する。
 		double bou_rat = 1.;
-		if (src) bou_rat = pybot::base_level_rate(src, md) * pybot::map_rate(src->m);
+		if (src) bou_rat = pybot::calculate_level_rate(src, md) * pybot::map_rate(src->m);
 
 		for (i = 0; i < MAX_MOB_DROP_TOTAL; i++) {
 			if (md->db->dropitem[i].nameid <= 0)
@@ -2902,7 +2902,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		//if (sd == mvp_sd && pc_checkskill(sd,BS_FINDINGORE)>0 && battle_config.finding_ore_rate/10 >= rnd()%10000) {
 		if (sd == mvp_sd &&
 			pc_checkskill(sd,BS_FINDINGORE) > 0 &&
-			int(battle_config.finding_ore_rate * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m) / 10) >= rnd() % 10000
+			int(battle_config.finding_ore_rate * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m) / 10) >= rnd() % 10000
 		) {
 
 			struct s_mob_drop mobdrop;

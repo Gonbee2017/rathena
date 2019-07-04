@@ -67,7 +67,10 @@ int pc_split_atoui(char* str, unsigned int* val, char sep, int max);
 static inline bool pc_attendance_rewarded_today( struct map_session_data* sd );
 
 #define PVP_CALCRANK_INTERVAL 1000	// PVP calculation interval
-#define MAX_LEVEL_BASE_EXP 99999999 ///< Max Base EXP for player on Max Base Level
+
+// [GonBee]
+//#define MAX_LEVEL_BASE_EXP 99999999 ///< Max Base EXP for player on Max Base Level
+
 #define MAX_LEVEL_JOB_EXP 999999999 ///< Max Job EXP for player on Max Job Level
 
 static unsigned int statp[MAX_LEVEL+1];
@@ -5382,7 +5385,7 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 
 	// [GonBee]
 	// スティール成功率にボーナス倍率をかける。
-	rate = int(rate * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
+	rate = int(rate * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
 
 	if( rate < 1
 #ifdef RENEWAL
@@ -5490,7 +5493,7 @@ int pc_steal_coin(struct map_session_data *sd,struct block_list *target)
 
 		// [GonBee]
 		// スティールコインで獲得するZenyにボーナス倍率をかける。
-		amount = int(amount * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
+		amount = int(amount * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
 
 		pc_getzeny(sd, amount, LOG_TYPE_STEAL, NULL);
 
@@ -6856,8 +6859,8 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 		src->type == BL_MOB
 	) {
 		mob_data* md = BL_CAST(BL_MOB, src);
-		base_exp = int(base_exp * pybot::base_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
-		job_exp = int(job_exp * pybot::job_level_rate(sd, &md->bl) * pybot::map_rate(sd->bl.m));
+		base_exp = int(base_exp * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
+		job_exp = int(job_exp * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
 	}
 
 	if (!(exp_flag&2))
@@ -6867,6 +6870,17 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 	nextj = pc_nextjobexp(sd);
 
 	if (flag&4){
+
+		// [GonBee]
+		// 余剰経験値をキャッシュ経験値として貯められるようにする。
+		int cas_exp = pc_readglobalreg(sd, add_str(pybot::CASH_EXP.c_str()));
+		cas_exp += base_exp;
+		if (cas_exp >= MAX_LEVEL_BASE_EXP) {
+			pc_getcash(sd, 100, 0, LOG_TYPE_PICKDROP_MONSTER);
+			cas_exp -= MAX_LEVEL_BASE_EXP;
+		}
+		pc_setglobalreg(sd, add_str(pybot::CASH_EXP.c_str()), cas_exp);
+
 		if( sd->status.base_exp >= MAX_LEVEL_BASE_EXP )
 			base_exp = 0;
 		else if( sd->status.base_exp + base_exp >= MAX_LEVEL_BASE_EXP )

@@ -39,8 +39,8 @@ struct member_info {
 // 外部から参照される関数の宣言
 
 void advance_mvp_round(int cid);
-double base_level_rate(block_list* bl, mob_data* md);
 void bot_identify_equip(int cid, item* itm);
+double calculate_level_rate(block_list* bl, mob_data* md = nullptr);
 bool char_is_bot(int cid);
 int command_bot(const int fd, map_session_data* sd, const char* mes);
 int convert_card(int car_id);
@@ -56,7 +56,6 @@ block_list* get_map_initial_position(map_session_data* sd);
 std::string get_map_name_japanese(int mid);
 std::string get_map_name_japanese(const std::string& nam_eng);
 std::shared_ptr<std::vector<std::shared_ptr<member_info>>> get_member_list(map_session_data* sd);
-double job_level_rate(map_session_data* sd, block_list* bl);
 bool letter_is_jlead(uint8_t let);
 double map_rate(int m);
 bool mob_is_normal_mvp(mob_data* md);
@@ -74,6 +73,7 @@ bool skill_is_layable_on_lp(e_skill kid);
 // -----------------------------------------------------------------------------
 // 外部から参照される変数の宣言
 
+extern const std::string CASH_EXP;
 extern const std::string PYBOT_DUMMY_NPC_NAME;
 
 }

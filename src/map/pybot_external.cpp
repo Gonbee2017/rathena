@@ -27,19 +27,6 @@ void advance_mvp_round(
 	});
 }
 
-// ベースレベル倍率を計算する。
-double // 計算した倍率。
-base_level_rate(
-	block_list* bl, // ブロックリスト。
-	mob_data* md    // モンスターデータ。
-) {
-	double pc_rat = status_get_lv(bl) / 20.;
-	int mob_lv = status_get_lv(&md->bl);
-	if (mob_is_pure_flora(md)) mob_lv = 1;
-	double mob_rat = mob_lv / 10.;
-	return std::max(std::max(pc_rat, 1.) * std::max(mob_rat, 1.), 2.);
-}
-
 // Botが武具を鑑定する。
 // Botではないなら何もしない。
 // すでに鑑定済みなら何もしない。
@@ -52,6 +39,21 @@ void bot_identify_equip(
 ) {
 	block_if* bot = find_map_data(all_bots, cid);
 	if (bot) bot->identify_equip(itm);
+}
+
+// レベル倍率を計算する。
+double // 計算した倍率。
+calculate_level_rate(
+	block_list* bl, // ブロックリスト。
+	mob_data* md    // モンスターデータ。
+) {
+	int lv = status_get_lv(bl);
+	if (md &&
+		mob_is_pure_flora(md)
+	) lv = 1;
+	double rat = (lv + 1) / 20.;
+	rat *= rat;
+	return std::max(rat, 2.);
 }
 
 // キャラクターIDがBotかを判定する。
@@ -274,17 +276,6 @@ get_member_list(
 			e_job(mem->sd()->status.class_)
 		));
 	return lis;
-}
-
-// ジョブレベル倍率を計算する。
-double // 計算した倍率。
-job_level_rate(
-	map_session_data* sd, // セッションデータ。
-	block_list* bl        // ブロックリスト。
-) {
-	double pc_rat = std::min(int(sd->status.job_level), 50) / 10.;
-	double mob_rat = status_get_lv(bl) / 10.;
-	return std::max(std::max(pc_rat, 1.) * std::max(mob_rat, 1.), 2.);
 }
 
 // 文字が全角文字の最初のバイトかを判定する。
@@ -588,6 +579,9 @@ skill_is_layable_on_lp(
 
 // -----------------------------------------------------------------------------
 // 外部から参照される変数の定義
+
+// キャッシュ経験値の登録名。
+const std::string CASH_EXP = "CASH_EXP";
 
 // PyBot用ダミーNPC名。
 const std::string PYBOT_DUMMY_NPC_NAME = "PyBotDummy";

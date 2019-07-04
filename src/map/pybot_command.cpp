@@ -480,6 +480,9 @@ SUBCMD_FUNC(Bot, EquipSet) {
 		int equ = 0;
 		auto es = construct<equipset_t>(mid);
 		for (int i = 0; i < EPO_MAX; ++i) {
+			if (i >= EPO_COSTUME_HEAD_TOP &&
+				i <= EPO_COSTUME_GARMENT
+			) continue;
 			int equ_ind = mem->sd()->equip_index[EPO2EQI_TABLE[i]];
 			if (equ_ind < 0) continue;
 			item* itm = &mem->sd()->inventory.u.items_inventory[equ_ind];
@@ -1812,7 +1815,12 @@ SUBCMD_FUNC(Bot, Status) {
 				std::setprecision(1),
 				mem->sd()->status.job_exp * 100. / pc_nextjobexp(mem->sd())
 			) << "%) ";
-	out << "Status Point " << mem->sd()->status.status_point << "\n";
+	out << "Status Point " << mem->sd()->status.status_point << " ";
+	if (pc_is_maxbaselv(mem->sd())) {
+		int cas_exp = pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str()));
+		out << "Cash Point " << mem->sd()->cashPoints << " "
+			"(" << cas_exp << "/" << MAX_LEVEL_BASE_EXP << ")\n";
+	}
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
 	out << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
 		inv_num << "/" << MAX_INVENTORY << " "

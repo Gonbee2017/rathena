@@ -409,10 +409,10 @@ enum equip_pos_orders {
 	EPO_ACC_R           , // 右アクセサリ。
 	EPO_HEAD_MID        , // 頭中。
 	EPO_HEAD_LOW        , // 頭下。
-	EPO_COSTUME_HEAD_TOP, // コスチューム頭上。
-	EPO_COSTUME_HEAD_MID, // コスチューム頭中。
-	EPO_COSTUME_HEAD_LOW, // コスチューム頭下。
-	EPO_COSTUME_GARMENT , // コスチューム肩。
+	EPO_COSTUME_HEAD_TOP, // 衣頭上。
+	EPO_COSTUME_HEAD_MID, // 衣頭中。
+	EPO_COSTUME_HEAD_LOW, // 衣頭下。
+	EPO_COSTUME_GARMENT , // 衣肩。
 	EPO_AMMO            , // 矢/弾。
 	EPO_MAX             ,
 };
@@ -2485,6 +2485,8 @@ bool wall_exists(block_list* cen, int rad);
 // -----------------------------------------------------------------------------
 // 定数の宣言
 
+extern const std::string UNKNOWN_SYMBOL;
+
 extern const std::vector<ai_t::item_use_proc> AI_ITEM_USE_PROCS;
 extern const std::unordered_map<e_job,ptr<ai_t::skill_use_proc_vector>> AI_MEMBER_SKILL_USE_PROCS;
 extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS;
@@ -2539,7 +2541,6 @@ extern const skill_id_set UNEQUIP_ARMOR_SKILLS;
 extern const skill_id_set UNEQUIP_HELM_SKILLS;
 extern const skill_id_set UNEQUIP_SHIELD_SKILLS;
 extern const skill_id_set UNEQUIP_WEAPON_SKILLS;
-extern const std::string UNKNOWN_SYMBOL;
 extern const skill_id_set USEFULL_SKILLS;
 extern const std::array<std::string,MAX_WEAPON_TYPE> WEAPON_TYPE_NAME_TABLE;
 
