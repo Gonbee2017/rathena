@@ -6876,7 +6876,7 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 		int cas_exp = pc_readglobalreg(sd, add_str(pybot::CASH_EXP.c_str()));
 		cas_exp += base_exp;
 		if (cas_exp >= MAX_LEVEL_BASE_EXP) {
-			pc_getcash(sd, 100, 0, LOG_TYPE_PICKDROP_MONSTER);
+			pc_getcash(sd, 10, 0, LOG_TYPE_PICKDROP_MONSTER);
 			cas_exp -= MAX_LEVEL_BASE_EXP;
 		}
 		pc_setglobalreg(sd, add_str(pybot::CASH_EXP.c_str()), cas_exp);
