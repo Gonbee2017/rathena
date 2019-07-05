@@ -15,6 +15,7 @@
 #include "../common/utils.hpp"
 #include "atcommand.hpp"
 #include "battle.hpp"
+#include "chrif.hpp"
 #include "clan.hpp"
 #include "clif.hpp"
 #include "guild.hpp"
@@ -2393,6 +2394,7 @@ registry_t<int,int>::save_func update_storage_get_item_func(int cid);
 
 int actual_nameid(int nid);
 template <class C> pybot::back_insert_iterator<C> back_inserter(C& x);
+bool bot_can_enter_server(int aid);
 template <class C> pybot::insert_iterator<C> inserter(C& x, typename C::iterator i);
 int callback_yield_bl(block_list* bl, va_list ap);
 bool check_quad_ratio(int x, int y, int rat);

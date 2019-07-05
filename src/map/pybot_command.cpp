@@ -1130,8 +1130,8 @@ SUBCMD_FUNC(Bot, LogIn) {
 		)};
 	query_login_data(bot_cid,
 		[lea, bot_cid] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
-			if (map_id2sd(bot_aid))
-				throw command_error{print("「", nam, "」は現在ログイン中です。")};
+			if (!bot_can_enter_server(bot_aid))
+				throw command_error{print("「", nam, "」は現在ログインできません。")};
 			if (unb_tim ||
 				sta
 			) throw command_error{print("「", nam, "」のアカウントは現在停止中です。")};
@@ -2220,8 +2220,8 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 			else
 				query_login_data(mem->char_id,
 					[lea, mem] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
-						if (map_id2sd(bot_aid))
-							show_client(lea->fd(), print("「", nam, "」は現在ログイン中です。"));
+						if (!bot_can_enter_server(bot_aid))
+							show_client(lea->fd(), print("「", nam, "」は現在ログインできません。"));
 						else if (unb_tim ||
 							sta
 						) show_client(lea->fd(), print("「", nam, "」のアカウントは停止されています。"));

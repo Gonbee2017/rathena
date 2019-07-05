@@ -541,6 +541,15 @@ actual_nameid(
 	return act_nid;
 }
 
+// Botがサーバーに入ることができるかを判定する。
+bool // 結果。
+bot_can_enter_server(
+	int aid // アカウントID。
+) {
+	return !map_id2bl(aid) &&
+		!chrif_search(aid);
+}
+
 // ブロックリスト獲得ハンドラをコールバックする。
 int callback_yield_bl(
 	block_list* bl, // ブロックリスト。

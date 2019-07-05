@@ -6855,12 +6855,20 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 
 	// [GonBee]
 	// モンスターから取得した経験値にボーナス倍率をかける。
+	// また、ホムンクルスを所有していれば、獲得した経験値と同じ量の経験値をホムンクルスにも分配する。
 	if (src &&
 		src->type == BL_MOB
 	) {
 		mob_data* md = BL_CAST(BL_MOB, src);
-		base_exp = int(base_exp * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
-		job_exp = int(job_exp * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
+		double lv_rat = pybot::calculate_level_rate(&sd->bl, md);
+		double map_rat = pybot::map_rate(sd->bl.m);
+		double exp_rat = lv_rat * map_rat;
+		if (sd->status.hom_id &&
+			sd->hd &&
+			hom_is_active(sd->hd)
+		) hom_gainexp(sd->hd, int(base_exp * pybot::calculate_level_rate(&sd->hd->bl, md) * map_rat));
+		base_exp = int(base_exp * exp_rat);
+		job_exp = int(job_exp * exp_rat);
 	}
 
 	if (!(exp_flag&2))
