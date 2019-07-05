@@ -2689,7 +2689,8 @@ AI_SKILL_USE_FUNC(TK_READYCOUNTER) {
 // タイリギを使う。
 AI_SKILL_USE_FUNC(TK_RUN) {
 	if (bot->sd()->weapontype1 == W_FIST &&
-		!bot->sc()->data[SC_SPURT]
+		!bot->sc()->data[SC_SPURT] &&
+		!bot->ud()->state.running
 	) {
 		bot->use_skill_self(kid, klv, false);
 		bot->use_skill_self(kid, klv);
@@ -2723,7 +2724,9 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 				gre_rat = rat;
 			}
 		}
-		if (gre_lv == klv) bot->use_skill_self(kid, klv);
+		if (gre_lv == klv &&
+			gre_rat > bot->weapon_attack_element_ratio(tar_ene)
+		) bot->use_skill_self(kid, klv);
 	}
 }
 

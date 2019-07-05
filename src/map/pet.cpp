@@ -1269,7 +1269,10 @@ static int pet_ai_sub_hard(struct pet_data *pd, struct map_session_data *sd, t_t
 
 				// [GonBee]
 				// Bot‚Ìƒyƒbƒg‚ÍE“¾‚Æ“¯‚Éål‚É“n‚·B
+				// ‚Ü‚½–¢ŠÓ’è‚Ì•‹ï‚ğE‚¤‚ÆA‘¦À‚ÉŠÓ’è‚µ‚æ‚¤‚Æ‚·‚éB
 				if (pybot::char_is_bot(pd->master->status.char_id)) {
+					if (!fitem->item.identify)
+						pybot::bot_identify_equip(pd->master->status.char_id, &fitem->item);
 					if (!party_share_loot(
 							party_search(pd->master->status.party_id),
 							pd->master,

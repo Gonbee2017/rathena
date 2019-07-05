@@ -342,7 +342,7 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 	for (block_if* mem : lea->members()) {
 		auto inv_con = construct<inventory_context>(mem->sd());
 		ptr<cart_context> car_con;
-		if (pc_iscarton(mem->sd())) car_con = construct<cart_context>(mem->sd());
+		if (mem->is_carton()) car_con = construct<cart_context>(mem->sd());
 		bool done = false;
 		int ind_wid = print(MAX_INVENTORY - 1).length();
 		for (int i = 0; i < MAX_INVENTORY; ++i) {
@@ -350,19 +350,23 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 			item_data* idb = mem->sd()->inventory_data[i];
 			done |= ide_itm(mem, inv_con.get(), car_con.get(), TABLE_INVENTORY, i, ind_wid, itm, idb);
 		}
-		if (pc_iscarton(mem->sd())) {
+		if (mem->is_carton()) {
 			ind_wid = print(MAX_CART - 1).length();
 			for (int i = 0; i < MAX_CART; ++i) {
 				item* itm = &mem->sd()->cart.u.items_cart[i];
 				done |= ide_itm(mem, inv_con.get(), car_con.get(), TABLE_CART, i, ind_wid, itm);
 			}
 		}
-		if (done) clif_emotion(mem->bl(), ET_SPARK);
-	}
-	clif_inventorylist(lea->sd());
-	if (pc_iscarton(lea->sd())) {
-		clif_cartlist(lea->sd());
-		clif_updatestatus(lea->sd(), SP_CARTINFO);
+		if (done) {
+			clif_emotion(mem->bl(), ET_SPARK);
+			if (mem == lea) {
+				clif_inventorylist(lea->sd());
+				if (lea->is_carton()) {
+					clif_clearcart(lea->fd());
+					clif_cartlist(lea->sd());
+				}
+			}
+		}
 	}
 	out << "‡Œv" << tot_cou << "ŒÂ‚Ì•‹ï‚ðŠÓ’è‚µ‚Ü‚µ‚½B\n";
 	show_client(lea->fd(), out.str());
@@ -711,7 +715,7 @@ SUBCMD_FUNC(Bot, ItemCount) {
 	for (block_if* mem : lea->members()) {
 		for (int i = 0; i < MAX_INVENTORY; ++i)
 			yie_itm(&mem->sd()->inventory.u.items_inventory[i], mem->sd()->inventory_data[i]);
-		if (pc_iscarton(mem->sd())) {
+		if (mem->is_carton()) {
 			for (int i = 0; i < MAX_CART; ++i)
 				yie_itm(&mem->sd()->cart.u.items_cart[i]);
 		}
@@ -1059,7 +1063,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 				done = true;
 			}
 		}
-		if (pc_iscarton(mem->sd())) {
+		if (mem->is_carton()) {
 			ind_wid = print(MAX_CART - 1).length();
 			for (int i = 0; i < MAX_CART; ++i) {
 				item* itm = &mem->sd()->cart.u.items_cart[i];
@@ -1945,7 +1949,7 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 	for (block_if* mem : lea->members()) {
 		bool done = false;
 		ptr<storage_context> mem_con;
-		if (pc_iscarton(mem->sd())) mem_con = construct<cart_context>(mem->sd());
+		if (mem->is_carton()) mem_con = construct<cart_context>(mem->sd());
 		else mem_con = construct<inventory_context>(mem->sd());
 		mem->storage_get_items()->iterate(
 			[sto_con, &out, &tot_cou, &tot_amo, mem, &done, mem_con] (int nid, int* amo) -> bool {
@@ -2114,7 +2118,7 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 				done = true;
 			}
 		}
-		if (pc_iscarton(mem->sd())) {
+		if (mem->is_carton()) {
 			ind_wid = print(MAX_CART - 1).length();
 			for (int i = 0; i < MAX_CART; ++i) {
 				item* itm = &mem->sd()->cart.u.items_cart[i];

@@ -782,6 +782,7 @@ hu_fild05,171,211,0	script	’Œ	111,{
 	misceffect 99;
 	misceffect 321,"";
 	close2;
-	warp "hu_fild05",158,274;
+//	warp "hu_fild05",158,274;
+	warp "hu_fild05",157,284;
 	end;
 }

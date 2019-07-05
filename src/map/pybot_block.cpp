@@ -1609,8 +1609,8 @@ void member_impl::identify_equip(
 				inv_con->delete_(mag_inv_ind, 1);
 				itm->identify = 1;
 			} else {
-				if (!car_con &&
-					pc_iscarton(sd())
+				if (is_carton() &&
+					!car_con
 				) {
 					car_con_ptr = construct<cart_context>(sd());
 					car_con = car_con_ptr.get();
