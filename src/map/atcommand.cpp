@@ -10688,6 +10688,10 @@ bool is_atcommand(const int fd, struct map_session_data* sd, const char* message
 		}
 	}
 
+	// [GonBee]
+	// @コマンドのログは実行前に出力する。
+	log_atcommand(sd, is_atcommand ? atcmd_msg : message);
+
 	//Attempt to use the command
 	if ( (info->func(fd, ssd, command, params) != 0) )
 	{
@@ -10696,8 +10700,9 @@ bool is_atcommand(const int fd, struct map_session_data* sd, const char* message
 		return true;
 	}
 
-	//Log only if successful.
-	log_atcommand(sd, is_atcommand ? atcmd_msg : message);
+	// [GonBee]
+	////Log only if successful.
+	//log_atcommand(sd, is_atcommand ? atcmd_msg : message);
 
 	return true;
 }

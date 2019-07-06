@@ -352,6 +352,9 @@
 // デバッグ表示の接頭辞。
 #define DEBUG_PREFIX print("Debug(", __FUNCTION__, "@", __LINE__, ")")
 
+// 予期せぬエラーのメッセージ
+#define UNEXPECTED_ERROR "予期せぬエラーが発生しました。"
+
 namespace pybot {
 
 // -----------------------------------------------------------------------------

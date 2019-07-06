@@ -47,6 +47,10 @@ command_bot(
 		show_client(fd, "構文が間違っています。");
 		show_error(err.what());
 		return -1;
+	} catch (...) {
+		show_client(fd, UNEXPECTED_ERROR);
+		show_error(UNEXPECTED_ERROR);
+		return -1;
 	}
 	return 0;
 }
@@ -2783,8 +2787,11 @@ bot_login(
 		if (sd->status.party_id) party_member_joined(sd);
 		if (sd->status.guild_id) guild_member_joined(sd);
 		if (sd->status.clan_id) clan_member_joined(sd);
-		if (sd->status.pet_id > 0) intif_request_petdata(sd->status.account_id, sd->status.char_id, sd->status.pet_id);
-		if (sd->status.hom_id > 0 ) intif_homunculus_requestload(sd->status.account_id, sd->status.hom_id);
+
+		// Botのペットが不安定なため、暫定的に無効にする。
+		//if (sd->status.pet_id > 0) intif_request_petdata(sd->status.account_id, sd->status.char_id, sd->status.pet_id);
+
+		if (sd->status.hom_id > 0) intif_homunculus_requestload(sd->status.account_id, sd->status.hom_id);
 		map_addiddb(&sd->bl);
 		map_delnickdb(sd->status.char_id, sd->status.name);
 		scope_exit map_id_exi{[sd] () {
