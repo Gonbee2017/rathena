@@ -17,7 +17,7 @@ const std::unordered_map<
 	ptr<ai_t::skill_use_proc_vector> // スキル使用手続きのベクタ。
 > AI_HOMUN_SKILL_USE_PROCS = {
 	{MAPID_AMISTR, initialize<ai_t::skill_use_proc_vector>(
-//		AI_SKILL_USE_PROC  (HAMI_CASTLE         ,  1,  0, BMF_COMBAT, PF_FALSE, WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC  (HAMI_CASTLE         ,  1,  0, BMF_COMBAT, PF_FALSE, WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC  (HAMI_DEFENCE        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC  (HAMI_BLOODLUST      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {MAPID_FILIR, initialize<ai_t::skill_use_proc_vector>(

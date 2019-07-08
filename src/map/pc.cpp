@@ -6880,7 +6880,7 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 	if (flag&4){
 
 		// [GonBee]
-		// 余剰経験値をキャッシュ経験値として貯められるようにする。
+		// 余剰経験値をショップ経験値として貯められるようにする。
 		int cas_exp = pc_readglobalreg(sd, add_str(pybot::CASH_EXP.c_str()));
 		cas_exp += base_exp;
 		if (cas_exp >= MAX_LEVEL_BASE_EXP) {

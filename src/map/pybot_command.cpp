@@ -1824,11 +1824,11 @@ SUBCMD_FUNC(Bot, Status) {
 				mem->sd()->status.job_exp * 100. / pc_nextjobexp(mem->sd())
 			) << "%) ";
 	out << "Status Point " << mem->sd()->status.status_point << " ";
-	if (pc_is_maxbaselv(mem->sd())) {
-		int cas_exp = pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str()));
-		out << "Cash Point " << mem->sd()->cashPoints << " "
-			"(" << cas_exp << "/" << MAX_LEVEL_BASE_EXP << ")\n";
-	}
+	int cas_exp = pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str()));
+	if (cas_exp ||
+		mem->sd()->cashPoints
+	) out << "Shop Point " << mem->sd()->cashPoints << " "
+		"(" << cas_exp << "/" << MAX_LEVEL_BASE_EXP << ")\n";
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
 	out << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
 		inv_num << "/" << MAX_INVENTORY << " "

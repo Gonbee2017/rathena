@@ -4816,6 +4816,9 @@
 	export_constant(IG_PRIZEOFHERO);
 	export_constant(IG_PRIVATE_AIRSHIP);
 
+	// [GonBee]
+	export_constant(IG_COSTUMEBOX);
+
 	/* unit stop walking */
 	export_constant(USW_NONE);
 	export_constant(USW_FIXPOS);

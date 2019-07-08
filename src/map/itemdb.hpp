@@ -726,6 +726,9 @@ enum e_random_item_group {
 	IG_SANTA_GIFT,
 	IG_PRIZEOFHERO,
 	IG_PRIVATE_AIRSHIP,
+
+	// [GonBee]
+	IG_COSTUMEBOX,
 };
 
 /// Enum for bound/sell restricted selling

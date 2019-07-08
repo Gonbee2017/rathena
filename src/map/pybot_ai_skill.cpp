@@ -2908,7 +2908,11 @@ AI_SKILL_USE_FUNC(HAMI_BLOODLUST) {
 
 // キャッスリングを使う。
 AI_SKILL_USE_FUNC(HAMI_CASTLE) {
-	if (!homun->master()->attacked_enemies().empty()) homun->use_skill_self(kid, klv);
+	if (homun->master()->battle_index() > homun->battle_index() &&
+		!homun->master()->attacked_enemies().empty() &&
+		homun->attacked_enemies().empty() &&
+		homun->check_skill_used_tick(kid, 2500)
+	) homun->use_skill_self(kid, klv);
 }
 
 // ディフェンスを使う。

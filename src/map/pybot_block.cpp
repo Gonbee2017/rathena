@@ -291,6 +291,7 @@ battler_impl::check_attack(
 		ene->is_long_range_attacker() ||
 		ene->is_flora() ||
 		ene->is_paralysis() ||
+		ene->sc()->data[SC_BLADESTOP] ||
 		(ene->is_berserk() && 
 			(!ene->is_great(leader()) ||
 				!around_wall_exists() ||
@@ -450,13 +451,14 @@ battler_impl::skill_ratio(
 
 // バトラーが歩き始める。
 void battler_impl::start_walking() {
-	if (!dynamic_cast<member_impl*>(this)) return;
-	pc_delinvincibletimer(sd());
-	if (sc()->data[SC_DANCING] &&
-		!sc()->data[SC_LONGING]
-	) {
-		status_change_end(bl(), SC_DANCING, INVALID_TIMER);
-		skill_used_ticks()[BD_ADAPTATION] = now;
+	if (dynamic_cast<member_impl*>(this)) {
+		pc_delinvincibletimer(sd());
+		if (sc()->data[SC_DANCING] &&
+			!sc()->data[SC_LONGING]
+		) {
+			status_change_end(bl(), SC_DANCING, INVALID_TIMER);
+			skill_used_ticks()[BD_ADAPTATION] = now;
+		}
 	}
 }
 
