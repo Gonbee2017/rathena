@@ -2240,5 +2240,6 @@ int skill_check_unit_range(struct block_list *bl, int x, int y, uint16 skill_id,
 int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC);
 struct s_skill_unit_layout *skill_get_unit_layout(uint16 skill_id, uint16 skill_lv, struct block_list* src, int x, int y);
 int skill_get_unit_range( uint16 skill_id, uint16 skill_lv );
+int skill_unit_move_sub(struct block_list* bl, va_list ap);
 
 #endif /* SKILL_HPP */

@@ -577,8 +577,8 @@ bot_impl::teleport(
 	) {
 		walk_end_func() = cast_end_func() = nullptr;
 		stop_attacking();
-		pc_setpos(sd(), map_id2index(bl_->m), bl_->x, bl_->y, CLR_TELEPORT, true);
 		stop_walking(USW_FORCE_STOP);
+		pc_setpos(sd(), map_id2index(bl_->m), bl_->x, bl_->y, CLR_TELEPORT, true);
 		sd()->state.rewarp = 0;
 		clif_parse_LoadEndAck(fd(), sd());
 		done = true;
@@ -1227,10 +1227,8 @@ homun_impl::teleport(
 		bl_->y != bl()->y
 	) {
 		stop_attacking();
-		bl()->x = bl_->x;
-		bl()->y = bl_->y;
 		stop_walking(USW_FORCE_STOP);
-		clif_spawn(bl());
+		unit_warp(bl(), bl_->m, bl_->x, bl_->y, CLR_TELEPORT);
 		done = true;
 	}
 	return done;

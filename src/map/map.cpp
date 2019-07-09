@@ -328,6 +328,22 @@ static void map_delblcell(struct block_list *bl)
 }
 #endif
 
+// [GonBee]
+// ブロックがセルに存在しているかを判定する。
+bool map_blockexists(block_list* bl, map_data* md, int pos) {
+	block_list* blos;
+	if (bl->type == BL_MOB) blos = md->block_mob[pos];
+	else blos = md->block[pos];
+	bool res = false;
+	for (block_list* bl2 = blos; bl2; bl2 = bl2->next) {
+		if (bl2 == bl) {
+			res = true;
+			break;
+		}
+	}
+	return res;
+}
+
 /*==========================================
  * Adds a block to the map.
  * Returns 0 on success, 1 on failure (illegal coordinates).
@@ -363,6 +379,14 @@ int map_addblock(struct block_list* bl)
 	}
 
 	pos = x/BLOCK_SIZE+(y/BLOCK_SIZE)*mapdata->bxs;
+
+	// [GonBee]
+	// ブロックを追加しようとしているセルに
+	// そのブロックがすでに存在していれば追加しない。
+	if (map_blockexists(bl, mapdata, pos)) {
+		ShowDebug("map_addblock: block(%d) exists already!\n", bl->type);
+		return 0;
+	}
 
 	if (bl->type == BL_MOB) {
 		bl->next = mapdata->block_mob[pos];
@@ -479,8 +503,7 @@ int map_moveblock(struct block_list *bl, int x1, int y1, t_tick tick)
 	bl->x = x1;
 	bl->y = y1;
 	if (moveblock) {
-		if(map_addblock(bl))
-			return 1;
+		if(map_addblock(bl))return 1;
 	}
 #ifdef CELL_NOSTACK
 	else map_addblcell(bl);
@@ -1110,7 +1133,8 @@ int map_foreachincell(int (*func)(struct block_list*,va_list), int16 m, int16 x,
 	struct map_data *mapdata = map_getmapdata(m);
 	va_list ap;
 
-	if ( x < 0 || y < 0 || x >= mapdata->xs || y >= mapdata->ys ) return 0;
+	if ( x < 0 || y < 0 || x >= mapdata->xs || y >= mapdata->ys )
+		return 0;
 
 	by = y / BLOCK_SIZE;
 	bx = x / BLOCK_SIZE;

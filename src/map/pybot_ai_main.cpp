@@ -10,7 +10,7 @@ namespace pybot {
 
 // AIのタイマーハンドラ。
 TIMER_FUNC(ai_t::timer_func) {
-//	SHOW_DEBUG;
+//SHOW_DEBUG;
 	now = gettick();
 	for (auto lea_val_ite = all_leaders.begin(); lea_val_ite != all_leaders.end();) {
 		auto lea = lea_val_ite->second;
@@ -24,7 +24,7 @@ TIMER_FUNC(ai_t::timer_func) {
 			++lea_val_ite;
 		} else all_leaders.erase(lea_val_ite++);
 	}
-//	SHOW_DEBUG;
+//SHOW_DEBUG;
 	return 0;
 }
 
