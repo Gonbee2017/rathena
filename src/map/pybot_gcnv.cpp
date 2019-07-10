@@ -1845,6 +1845,9 @@ const std::string CASTLE_TRIAL_NPC_NAME = "CastleTrial";
 // 警戒を示すタグ。
 const std::string CAUTION_TAG = "警戒";
 
+// 衣装装備の接頭辞。
+const std::string COSTUME_PREFIX = "[衣装] ";
+
 // デフォルト距離ポリシー値のマップ。
 const std::unordered_map<
 	e_job,                 // 職業。

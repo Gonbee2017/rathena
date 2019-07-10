@@ -7764,7 +7764,12 @@ void pc_respawn(struct map_session_data* sd, clr_type clrtype)
 
 	pc_setstand(sd, true);
 	pc_setrestartvalue(sd,3);
-	if( pc_setpos(sd, sd->status.save_point.map, sd->status.save_point.x, sd->status.save_point.y, clrtype) != SETPOS_OK )
+
+	// [GonBee]
+	// Botもリスポーン時は位置をセットする。
+	//if( pc_setpos(sd, sd->status.save_point.map, sd->status.save_point.x, sd->status.save_point.y, clrtype) != SETPOS_OK )
+	if (pc_setpos(sd, sd->status.save_point.map, sd->status.save_point.x, sd->status.save_point.y, clrtype, true) != SETPOS_OK)
+
 		clif_resurrection(&sd->bl, 1); //If warping fails, send a normal stand up packet.
 }
 

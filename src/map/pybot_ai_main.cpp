@@ -625,7 +625,7 @@ void ai_t::bot_pickup_flooritem() {
 				if ((!nea_fit ||
 						dis < nea_dis
 					) && pc_can_takeitem(bot->sd(), fit) &&
-					away_warp_portals(fit->bl.x, fit->bl.y) &&
+					//away_warp_portals(fit->bl.x, fit->bl.y) &&
 					bot->can_reach_bl(&fit->bl) &&
 					wei <= rem
 				) {
@@ -889,7 +889,10 @@ void ai_t::battler_positioning() {
 				bat_pos = find_best_tanut_pos();
 			else bat_pos = find_best_assist_pos();
 			if (bat_pos.advantage == INT_MIN) {
-				if (battler->teleport(&leader->center()))
+				block_list* fol_bl = &leader->center();
+				if (dynamic_cast<homun_impl*>(battler))
+					fol_bl = homun->master()->bl();
+				if (battler->teleport(fol_bl))
 					throw turn_end_exception();
 			} else if (battler->can_move())
 				battler->is_best_pos() = !battler->walk_xy(bat_pos.x, bat_pos.y);

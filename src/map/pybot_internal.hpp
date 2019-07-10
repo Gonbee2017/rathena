@@ -2507,6 +2507,7 @@ extern const std::string BROKEN_EQUIP_TAG;
 extern const std::string CARD_NAME_POSTFIX;
 extern const std::string CASTLE_TRIAL_NPC_NAME;
 extern const std::string CAUTION_TAG;
+extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_MONSTERS;

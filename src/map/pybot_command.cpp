@@ -2167,16 +2167,20 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 // Bot‚ğˆø‚«Šñ‚¹‚éB
 SUBCMD_FUNC(Bot, sUmmon) {
 	int cou = 0;
+	std::vector<block_if*> bots;
 	if (args.empty()) {
-		for (auto bot : lea->bots()) bot->teleport(&lea->center());
-		cou = lea->bots().size();
+		for (auto bot : lea->bots()) bots.push_back(bot.get());
 	} else {
 		while (!args.empty()) {
 			try {
-				block_if* bot = shift_arguments_then_find_bot(lea, args);
-				bot->teleport(&lea->center());
-				++cou;
+				bots.push_back(shift_arguments_then_find_bot(lea, args));
 			} catch (const command_error&) {}
+		}
+	}
+	for (block_if* bot : bots) {
+		if (!bot->is_dead()) {
+			bot->teleport(&lea->center());
+			++cou;
 		}
 	}
 	show_client(lea->fd(), print(cou, "l‚ÌBot‚ğˆø‚«Šñ‚¹‚Ü‚µ‚½B"));

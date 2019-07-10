@@ -100,7 +100,12 @@ item_key::item_key(
 	using ele_lis_lis = std::list<ptr<ele_lis>>;
 	using str_lis = std::vector<std::string>;
 
-	auto eles = initialize<ele_lis>(initialize<command_element>(CET_LITERAL, nam));
+	bool cos = nam.substr(0, COSTUME_PREFIX.length()) == COSTUME_PREFIX;
+	std::string act_nam;
+	if (cos) act_nam = nam.substr(COSTUME_PREFIX.length());
+	else act_nam = nam;
+
+	auto eles = initialize<ele_lis>(initialize<command_element>(CET_LITERAL, act_nam));
 	eles = command_parse_tokens<ele_lis>(ALL_RANGE(*eles), "|", false, true);
 	eles = command_parse_blocks<ele_lis>(ALL_RANGE(*eles), "[", "]", false, true);
 	eles = command_parse_blocks<ele_lis>(ALL_RANGE(*eles), "{", "}", false, true);
@@ -174,6 +179,7 @@ item_key::item_key(
 		pay_eles->push_back(ele);
 	}
 	std::string pay_str = lowercase(trim(command_print(ALL_RANGE(*pay_eles)), " \t"));
+	if (cos) pay_str = COSTUME_PREFIX + pay_str;
 
 	nameid = parse_id(pay_str);
 	if (nameid) {
@@ -596,7 +602,13 @@ find_itemdb(
 	using str_lis = std::vector<std::string>;
 
 	int nid = 0;
-	auto eles = initialize<ele_lis>(initialize<command_element>(CET_LITERAL, nam));
+
+	bool cos = nam.substr(0, COSTUME_PREFIX.length()) == COSTUME_PREFIX;
+	std::string act_nam;
+	if (cos) act_nam = nam.substr(COSTUME_PREFIX.length());
+	else act_nam = nam;
+
+	auto eles = initialize<ele_lis>(initialize<command_element>(CET_LITERAL, act_nam));
 	eles = command_parse_blocks<ele_lis>(ALL_RANGE(*eles), "[", "]", false, true);
 	eles = command_parse_blocks<ele_lis>(ALL_RANGE(*eles), "<", ">", false, true);
 
@@ -627,6 +639,7 @@ find_itemdb(
 		pay_eles->push_back(ele);
 	}
 	std::string pay_str = lowercase(trim(command_print(ALL_RANGE(*pay_eles)), " \t"));
+	if (cos) pay_str = COSTUME_PREFIX + pay_str;
 
 	nid = parse_id(pay_str);
 	if (nid) {

@@ -320,7 +320,9 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
 // ハンマーフォールを使う。
 AI_SKILL_USE_FUNC(BS_HAMMERFALL) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_skill_used_tick(kid, 2500)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [] (block_if* ene) -> bool {
 				return !ene->has_status_immune() &&
