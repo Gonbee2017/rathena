@@ -212,8 +212,11 @@ AI_SKILL_USE_FUNC(AM_BERSERKPITCHER) {
 
 // コールホムンクルスを使う。
 AI_SKILL_USE_FUNC(AM_CALLHOMUN) {
-	if (bot->find_inventory(item_key(bot->homun()->hd()->homunculusDB->foodID)) != INT_MIN)
-		bot->use_skill_self(kid, klv);
+	if (bot->homun()->exists() &&
+		!bot->homun()->is_active() &&
+		!bot->homun()->is_dead() &&
+		bot->find_inventory(item_key(bot->homun()->hd()->homunculusDB->foodID)) != INT_MIN
+	) bot->use_skill_self(kid, klv);
 }
 
 // バイオプラントを使う。
@@ -239,7 +242,9 @@ AI_SKILL_USE_FUNC_T(AM_POTIONPITCHER, sp) {
 
 // 安息を使う。
 AI_SKILL_USE_FUNC(AM_REST) {
-	if (bot->homun()->hd()->homunculus.hunger <= 25 &&
+	if (bot->homun()->exists() &&
+		bot->homun()->is_active() &&
+		bot->homun()->hd()->homunculus.hunger <= 25 &&
 		bot->find_inventory(item_key(bot->homun()->hd()->homunculusDB->foodID)) == INT_MIN
 	) bot->use_skill_self(kid, klv);
 }
@@ -247,6 +252,7 @@ AI_SKILL_USE_FUNC(AM_REST) {
 // リザレクションホムンクルスを使う。
 AI_SKILL_USE_FUNC(AM_RESURRECTHOMUN) {
 	if (bot->homun()->exists() &&
+		!bot->homun()->is_active() &&
 		bot->homun()->is_dead()
 	) bot->use_skill_self(kid, klv);
 }

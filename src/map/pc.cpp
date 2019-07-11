@@ -5385,7 +5385,7 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 
 	// [GonBee]
 	// スティール成功率にボーナス倍率をかける。
-	rate = int(rate * pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m));
+	rate *= pybot::calculate_level_rate(&sd->bl, md) * pybot::map_rate(sd->bl.m);
 
 	if( rate < 1
 #ifdef RENEWAL
