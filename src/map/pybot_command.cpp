@@ -120,6 +120,11 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
 			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
+			)};
 		std::string idb_str = print_itemdb(nid);
 		item_data* idb = itemdb_exists(actual_nameid(nid));
 		if (!itemdb_isstackable2(idb))
@@ -694,6 +699,11 @@ SUBCMD_FUNC(Bot, ItemCount) {
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
 			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
+			)};
 		std::string idb_str = print_itemdb(nid);
 		item_data* idb = itemdb_exists(actual_nameid(nid));
 		if (!itemdb_isstackable2(idb))
@@ -791,6 +801,8 @@ SUBCMD_FUNC(Bot, ItemIgnore) {
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
 			)};
+		if (nid >= FAME_OFFSET)
+			throw command_error{print(FAME_TAG, "のアイテムは登録できません。")};
 		std::string idb_str = print_itemdb(nid);
 		if (lea->ignore_items()->find(nid)) {
 			lea->ignore_items()->unregister(nid);
@@ -854,6 +866,11 @@ SUBCMD_FUNC(Bot, ItemRecoverHp) {
 		if (!nid)
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
 			)};
 		std::string idb_str = print_itemdb(nid);
 		item_data* idb = itemdb_exists(actual_nameid(nid));
@@ -929,6 +946,11 @@ SUBCMD_FUNC(Bot, ItemRecoverSp) {
 		if (!nid)
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
 			)};
 		std::string idb_str = print_itemdb(nid);
 		item_data* idb = itemdb_exists(actual_nameid(nid));
@@ -1034,24 +1056,27 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		if (itm->nameid &&
 			!itm->equip &&
 			!itm->card[0] &&
-			!itm->refine &&
-			lea->sell_items()->find(itm->nameid)
+			!itm->refine
 		) {
 			if (!idb) idb = itemdb_exists(itm->nameid);
-			int zen = pc_modifysellvalue(mem->sd(), idb->value_sell) * itm->amount;
-			pc_getzeny(mem->sd(), zen, LOG_TYPE_NPC, NULL);
-			out << INDEX_PREFIX << mem->member_index() << " " <<
-				ID_PREFIX << mem->char_id() << " - " <<
-				mem->name() << " : " <<
-				STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
-				INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
-				ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
-				print_item(itm, idb) << " " <<
-				print_zeny(zen) << " Zeny\n";
-			++tot_cou;
-			tot_amo += itm->amount;
-			tot_zen += zen;
-			res = true;
+			if (lea->sell_items()->find(itm->nameid) ||
+				lea->sell_items()->find(ITEM_TYPE_OFFSET + idb->type)
+			) {
+				int zen = pc_modifysellvalue(mem->sd(), idb->value_sell) * itm->amount;
+				pc_getzeny(mem->sd(), zen, LOG_TYPE_NPC, NULL);
+				out << INDEX_PREFIX << mem->member_index() << " " <<
+					ID_PREFIX << mem->char_id() << " - " <<
+					mem->name() << " : " <<
+					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
+					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
+					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
+					print_item(itm, idb) << " " <<
+					print_zeny(zen) << " Zeny\n";
+				++tot_cou;
+				tot_amo += itm->amount;
+				tot_zen += zen;
+				res = true;
+			}
 		}
 		return res;
 	};
@@ -1911,6 +1936,11 @@ SUBCMD_FUNC(Bot, StorageGet) {
 			throw command_error{print(
 				"「", idb_nam, "」というアイテムはありません。"
 			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
+			)};
 		std::string idb_str = print_itemdb(nid);
 		item_data* idb = itemdb_exists(actual_nameid(nid));
 		if (!itemdb_isstackable2(idb))
@@ -2089,7 +2119,9 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 			if (itm->card[0] == CARD0_CREATE &&
 				pc_famerank(MakeDWord(itm->card[2], itm->card[3]), MAPID_ALCHEMIST)
 			) nid += FAME_OFFSET;
-			if (lea->storage_put_items()->find(nid)) {
+			if (lea->storage_put_items()->find(nid) ||
+				lea->storage_put_items()->find(ITEM_TYPE_OFFSET + idb->type)
+			) {
 				res = (!itm->equip ||
 						pc_unequipitem(mem->sd(), ind, 1)
 					) && sto_con->add(itm, itm->amount);

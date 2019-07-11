@@ -159,20 +159,18 @@ find_mobdb(
 		if (ele_ind != INT_MIN) return MM_ELEMENT + ele_ind;
 		int siz_ind = find_name(SIZE_NAME_TABLE, pay_str);
 		if (siz_ind != INT_MIN) return MM_SIZE + siz_ind;
-		if (!mid) {
-			uint16 mids[256];
-			int cou = mobdb_searchname_array2(pay_str.c_str(), mids, 256);
-			for (int i = 0; i < cou; i++) {
-				struct mob_db* mdb = mob_db(mids[i]);
-				if (mdb &&
-					lowercase(mdb->jname) == pay_str &&
-					(mob_cla == INT_MIN ||
-						mdb->status.class_ == mob_cla
-					)
-				) {
-					mid = mids[i];
-					break;
-				}
+		uint16 mids[256];
+		int cou = mobdb_searchname_array2(pay_str.c_str(), mids, 256);
+		for (int i = 0; i < cou; i++) {
+			struct mob_db* mdb = mob_db(mids[i]);
+			if (mdb &&
+				lowercase(mdb->jname) == pay_str &&
+				(mob_cla == INT_MIN ||
+					mdb->status.class_ == mob_cla
+				)
+			) {
+				mid = mids[i];
+				break;
 			}
 		}
 	}

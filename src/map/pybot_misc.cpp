@@ -647,6 +647,11 @@ find_itemdb(
 			!itemdb_exists(actual_nameid(nid))
 		) nid = 0;
 	} else {
+		int typ_ind = find_name(ITEM_TYPE_NAME_TABLE, pay_str);
+		if (typ_ind != INT_MIN) {
+			if (ITEM_TYPE_NAME_TABLE[typ_ind] == UNKNOWN_SYMBOL) return 0;
+			return ITEM_TYPE_OFFSET + typ_ind;
+		}
 		item_data* idbs[256];
 		int cou = itemdb_searchname_array(idbs, 256, pay_str.c_str());
 		for (int i = 0; i < cou; i++) {
@@ -1096,6 +1101,7 @@ print_item(
 ) {
 	std::vector<std::string> toks;
 	std::vector<std::string> tag_toks;
+	tag_toks.push_back(ITEM_TYPE_NAME_TABLE[idb->type]);
 	if (itm->identify) {
 		toks.push_back(idb->jname);
 		if (itm->card[0] == CARD0_CREATE) {
@@ -1128,7 +1134,7 @@ print_item(
 		if (itm->refine > 0) tag_toks.push_back(print("+", int(itm->refine)));
 		if (itm->attribute == 1) tag_toks.push_back(BROKEN_EQUIP_TAG);
 	} else toks.push_back(UNKNOWN_SYMBOL);
-	if (!tag_toks.empty()) toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
+	toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
 	if (!amo) amo = itm->amount;
 	if (amo > 1) toks.push_back(print("(", amo, ")"));
 	return concatinate_strings(ALL_RANGE(toks), " ");
@@ -1140,11 +1146,8 @@ print_item_key(
 	const item_key& key // アイテムのキー。
 ) {
 	std::vector<std::string> toks;
-	std::vector<std::string> tag_toks;
 	toks.push_back(key.idb->jname);
-	if (key.card[0] ==CARD0_CREATE)
-		tag_toks.push_back(FAME_TAG);
-	else if (key.card[0] == CARD0_FORGE) {
+	if (key.card[0] == CARD0_FORGE) {
 		std::vector<std::string> for_toks;
 		int ele = key.card[1] & 0x0f;
 		if (ele) for_toks.push_back(ELEMENT_NAME_TABLE[ele]);
@@ -1168,7 +1171,6 @@ print_item_key(
 		}
 		toks.push_back(print("[", concatinate_strings(ALL_RANGE(slo_toks), "|"), "]"));
 	}
-	if (!tag_toks.empty()) toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
 	return concatinate_strings(ALL_RANGE(toks), " ");
 }
 
@@ -1177,14 +1179,18 @@ std::string // 書いたアイテムデータ。
 print_itemdb(
 	int nid // アイテムID。
 ) {
+	if (nid >= ITEM_TYPE_OFFSET &&
+		nid < ITEM_TYPE_OFFSET + IT_MAX
+	) return ITEM_TYPE_NAME_TABLE[nid - ITEM_TYPE_OFFSET];
 	std::vector<std::string> toks;
 	std::vector<std::string> tag_toks;
 	int act_nid = actual_nameid(nid);
 	item_data* idb = itemdb_exists(act_nid);
 	toks.push_back(idb->jname);
 	if (idb->slot) toks.push_back(print("[", idb->slot, "]"));
+	tag_toks.push_back(ITEM_TYPE_NAME_TABLE[idb->type]);
 	if (nid >= FAME_OFFSET) tag_toks.push_back(FAME_TAG);
-	if (!tag_toks.empty()) toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
+	toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
 	return concatinate_strings(ALL_RANGE(toks), " ");
 }
 

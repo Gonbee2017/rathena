@@ -2527,6 +2527,8 @@ extern const char ID_PREFIX;
 extern const char INDEX_PREFIX;
 extern const std::unordered_map<e_job,int> JOB_BOT_LIMITS;
 extern const skill_id_set LAYABLE_ON_LP_SKILLS;
+extern const std::array<std::string,IT_MAX> ITEM_TYPE_NAME_TABLE;
+extern const int ITEM_TYPE_OFFSET;
 extern const std::unordered_map<meta_mobs,std::string> META_MONSTER_NAMES;
 extern const std::array<std::string,CLASS_MAX> MOB_CLASS_NAME_TABLE;
 extern const skill_id_set MOB_SHORT_SKILLS;

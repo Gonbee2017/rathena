@@ -3273,6 +3273,32 @@ const skill_id_set LAYABLE_ON_LP_SKILLS = {
 	WZ_QUAGMIRE,
 };
 
+// アイテムの種類の名前のテーブル。
+const std::array<std::string,IT_MAX> ITEM_TYPE_NAME_TABLE = {
+	"回復"              , // IT_HEALING      = 0
+	UNKNOWN_SYMBOL      , // IT_UNKNOWN      = 1
+	"使用"              , // IT_USABLE       = 2
+	"その他"            , // IT_ETC          = 3
+	"防具"              , // IT_ARMOR        = 4
+	"武器"              , // IT_WEAPON       = 5
+	"カード"            , // IT_CARD         = 6
+	"ペットの卵"        , // IT_PETEGG       = 7
+	"ペットアクセサリー", // IT_PETARMOR     = 8
+	UNKNOWN_SYMBOL      , // IT_UNKNOWN2     = 9
+	"矢/弾"             , // IT_AMMO         = 10
+	"消費"              , // IT_DELAYCONSUME = 11
+	UNKNOWN_SYMBOL      , // IT_SHADOWGEAR   = 12
+	UNKNOWN_SYMBOL      ,
+	UNKNOWN_SYMBOL      ,
+	UNKNOWN_SYMBOL      ,
+	UNKNOWN_SYMBOL      ,
+	UNKNOWN_SYMBOL      ,
+	"スペシャルアイテム", // IT_CASH         = 18
+};
+
+// アイテムの種類のオフセット。
+const int ITEM_TYPE_OFFSET = 100;
+
 // メタモンスター名のマップ。
 const std::unordered_map<
 	meta_mobs,  // メタモンスター。
@@ -3299,7 +3325,7 @@ const std::array<
 	std::string, // モンスタークラス名。
 	CLASS_MAX    // モンスタークラス数。
 > MOB_CLASS_NAME_TABLE = {
-	"通常"    ,
+	"通常"        ,
 	"ボス"        ,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,

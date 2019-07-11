@@ -221,15 +221,19 @@ void ai_t::leader_collect() {
 	yield_bl_func yie_fit = [this] (block_list* bl) -> int	{
 		flooritem_data* fit = (flooritem_data*)(bl);
 		if (fit &&
-			fit->item.nameid &&
-			check_distance_client_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
-			(!leader->ignore_items()->find(fit->item.nameid) ||
-				fit->item.card[0] ||
-				fit->item.refine
-			)
+			fit->item.nameid
 		) {
-			flooritems.push_back(fit);
-			return 1;
+			item_data* idb = itemdb_exists(fit->item.nameid);
+			if (check_distance_client_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
+				((!leader->ignore_items()->find(fit->item.nameid) &&
+						!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
+					) || fit->item.card[0] ||
+					fit->item.refine
+				)
+			) {
+				flooritems.push_back(fit);
+				return 1;
+			}
 		}
 		return 0;
 	};

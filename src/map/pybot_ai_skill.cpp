@@ -242,8 +242,7 @@ AI_SKILL_USE_FUNC_T(AM_POTIONPITCHER, sp) {
 
 // ˆÀ‘§‚ðŽg‚¤B
 AI_SKILL_USE_FUNC(AM_REST) {
-	if (bot->homun()->exists() &&
-		bot->homun()->is_active() &&
+	if (bot->homun()->is_active() &&
 		bot->homun()->hd()->homunculus.hunger <= 25 &&
 		bot->find_inventory(item_key(bot->homun()->hd()->homunculusDB->foodID)) == INT_MIN
 	) bot->use_skill_self(kid, klv);
