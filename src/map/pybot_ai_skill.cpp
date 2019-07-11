@@ -1776,6 +1776,7 @@ AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
 					)
 				) && !bat->is_dead() &&
 				!bat->is_hiding() &&
+				!bat->is_invincible() &&
 				!bat->is_magic_immune() &&
 				!bat->reject_skills()->find(kid) &&
 				!check_quad_ratio(bat->sp(), bat->max_sp(), 1);
