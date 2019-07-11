@@ -5395,7 +5395,8 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 		return false;
 
 	// [GonBee]
-	// ドロップテーブル探索を逆順にする。
+	// ドロップテーブルを逆順に反復する。
+	// またスティール成功率を制限する。
 	// Try dropping one item, in the order from first to last possible slot.
 	// Droprate is affected by the skill success rate.
 	//for( i = 0; i < MAX_STEAL_DROP; i++ )
@@ -5406,12 +5407,12 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 	for (i = MAX_STEAL_DROP - 1; i >= 0; --i) {
 		if (md->db->dropitem[i].nameid > 0 &&
 			!md->db->dropitem[i].steal_protected &&
-			itemdb_exists(md->db->dropitem[i].nameid) &&
-			rnd() % 10000 < md->db->dropitem[i].p
-#ifndef RENEWAL
-				* rate / 100.
-#endif
-		) break;
+			itemdb_exists(md->db->dropitem[i].nameid)
+		) {
+			int suc_rat = int(md->db->dropitem[i].p * rate / 100.);
+			suc_rat = min(suc_rat, battle_config.steal_rate_max);
+			if (rnd() % 10000 < suc_rat) break;
+		}
 	}
 	if (i < 0) return false;
 

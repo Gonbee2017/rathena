@@ -19,3 +19,4 @@
  	{"pybot_reload_equipset_cool_time", &battle_config.pybot_reload_equipset_cool_time, 2500, 100, INT_MAX},
  	{"pybot_restart_cool_time", &battle_config.pybot_restart_cool_time, 300000, 0, INT_MAX},
  	{"pybot_think_time", &battle_config.pybot_think_time, 250, 100, INT_MAX},
+ 	{"steal_rate_max", &battle_config.steal_rate_max, 10000, 0, 10000},

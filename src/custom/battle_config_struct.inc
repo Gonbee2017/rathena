@@ -20,3 +20,4 @@ int pybot_heaby_cool_time;           // Bot‚ªd‚½‚¢ƒRƒ}ƒ“ƒh‚ğÀs‚Å‚«‚é‚æ‚¤‚É‚È‚
 int pybot_reload_equipset_cool_time; // •‹ïˆê®‚ğƒŠƒ[ƒh‚·‚é‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€B
 int pybot_restart_cool_time;         // BOT‚ª€–S‚µ‚Ä‚©‚çƒŠƒXƒ^[ƒg‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€B
 int pybot_think_time;                // AI‚ğÀs‚·‚éŠÔŠuŠÔB
+int steal_rate_max;                  // ƒXƒeƒB[ƒ‹¬Œ÷—¦‚ÌãŒÀB

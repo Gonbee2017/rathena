@@ -1234,7 +1234,9 @@ print_sc(
 				efst_types ico = efst_types(StatusIconChangeTable[sc_typ]);
 				if (ico != EFST_BLANK) ico_nam = ICON_NAME_TABLE[ico];
 			}
-			if (!ico_nam.empty()) {
+			if (!ico_nam.empty() &&
+				ico_nam != UNKNOWN_SYMBOL
+			) {
 				if (out.tellp()) out << " ";
 				out << ico_nam;
 			}
