@@ -239,8 +239,9 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 					next;
 					emotion ET_SMILE;
 					mes "[コレット]";
-					mes "なんでもブルレム兄弟イチオシの";
-					mes "神装備なんだって。";
+					mes "なんでも冒険者なら誰もがよだれを";
+					mes "垂らす神装備なんだって。";
+					mes "よかったら使ってね。";
 					next;
 				} else attachrid .@pla_rid;
 			}
@@ -254,12 +255,10 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 	close;
 OnInit:
 	setarray .rews,
-		 1191, // アルカブリンガー
-		 1636, // 茨の杖
-		13039, // アイボリーナイフ
-		 1385, // ブラディウムハンマー
-		 2450, // セフィロトシューズ
-		 2481; // ルーンブーツ
+		 2881, // オルレアンネックレス
+		18539, // スカルキャップ
+		18720, // マジカルブースター
+		28351; // ヒュッケの黒い尻尾
 	for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
 		set .rews_wei, .rews_wei + getiteminfo(.rews[.@i], 6);
 }

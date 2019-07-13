@@ -1067,7 +1067,8 @@ prontera,123,65,1	script	フランツ	85,{
 }
 
 alberta_in,13,71,4	duplicate(BuyStone)	カラマンリス	86
-prt_in,56,68,4	duplicate(BuyStone)	ブルウェル	86
+//prt_in,56,68,4	duplicate(BuyStone)	ブルウェル	86
+prt_in,62,70,4	duplicate(BuyStone)	ブルウェル	86
 morocc_in,63,32,0	duplicate(BuyStone)	サド		99
 payon,145,178,4	duplicate(BuyStone)	ベグナド	88
 yuno_in01,171,27,4	duplicate(BuyStone)	ティルレマ	86
@@ -1170,7 +1171,8 @@ ein_in01,15,87,4	duplicate(BuyStone)	ティルイハース	86
 }
 
 alberta_in,21,63,5	duplicate(ChangeStone)	ゼノフォン::ゼノフォン ゾロタス	84
-prt_in,63,69,4	duplicate(ChangeStone)	ディートリヒ		84
+//prt_in,63,69,4	duplicate(ChangeStone)	ディートリヒ		84
+prt_in,64,68,4	duplicate(ChangeStone)	ディートリヒ		84
 morocc_in,72,32,0	duplicate(ChangeStone)	アブドゥル		99
 payon,137,178,5	duplicate(ChangeStone)	ハキム			88
 yuno_in01,164,27,4	duplicate(ChangeStone)	ティルレイ		84

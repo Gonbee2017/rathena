@@ -3,7 +3,7 @@
 //==============================================================================
 
 function	script	CorrectSuccess	{
-	set .@rat, getiteminfo(getarg(1), 12) * 10 / 20;
+	set .@rat, (getiteminfo(getarg(1), 12) + 1) * 10 / 20;
 	if (.@rat < 10) set .@rat, 10;
 	return getarg(0) * .@rat / 10;
 }
@@ -1877,7 +1877,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 				mes "わかりました。";
 				mes "C級のどの防具にしますか？";
 				next;
-				switch(select("ゴヴニュの軍靴","マグニキャップ","フレイシューズ","駆魔の聖書","やめる")) {
+				switch(select("ゴヴニュの軍靴","マグニキャップ","フレイシューズ","駆魔の聖書","ヴェール","イカロスの羽","名射手のスカーフ","やめる")) {
 					case 1:	//ゴヴニュの軍靴
 						set .@delid,2419;
 						set .@getid,2493;
@@ -1906,7 +1906,28 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@amount,50;
 						set .@price,200000;
 						break;
-					case 5:	//やめる
+					case 5:	//ヴェール
+						set .@delid,2206;
+						set .@getid,5888;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 6:	//イカロスの羽
+						set .@delid,2726;
+						set .@getid,28347;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 7:	//名射手のスカーフ
+						set .@delid,2727;
+						set .@getid,28348;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 8:	//やめる
 						mes "[プロブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -1919,7 +1940,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 				mes "わかりました。";
 				mes "B級のどの防具にしますか？";
 				next;
-				switch(select("シャドウウォーカー","ぼろマント","クリティカルリング","やめる")) {
+				switch(select("シャドウウォーカー","ぼろマント","クリティカルリング","銀の懐中時計","ゴヴニュの兜","モリガンのヘルム","やめる")) {
 					case 1:	//シャドウウォーカー
 						set .@delid,2426;
 						set .@getid,2486;
@@ -1941,7 +1962,28 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@amount,20;
 						set .@price,500000;
 						break;
-					case 4:	//やめる
+					case 4:	//銀の懐中時計
+						set .@delid,2717;
+						set .@getid,2971;
+						set .@need,985;
+						set .@amount,20;
+						set .@price,500000;
+						break;
+					case 5:	//ゴヴニュの兜
+						set .@delid,5128;
+						set .@getid,19043;
+						set .@need,985;
+						set .@amount,10;
+						set .@price,400000;
+						break;
+					case 6:	//モリガンのヘルム
+						set .@delid,5127;
+						set .@getid,19044;
+						set .@need,985;
+						set .@amount,10;
+						set .@price,400000;
+						break;
+					case 7:	//やめる
 						mes "[プロブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -1954,7 +1996,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 				mes "わかりました。";
 				mes "A級のどの防具にしますか？";
 				next;
-				switch(select("ヴィダルのブーツ","セフィロトシューズ","モリガンのベルト","モルフェウスの腕輪","ゴヴニュの肩飾り","やめる")) {
+				switch(select("ヴィダルのブーツ","セフィロトシューズ","モリガンのベルト","モルフェウスの腕輪","ゴヴニュの肩飾り","ウェディングドレス","モルフェウスのショール","カーズドスター","やめる")) {
 					case 1:	//ヴィダルのブーツ
 						set .@delid,2418;
 						set .@getid,2489;
@@ -1990,7 +2032,28 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@amount,50;
 						set .@price,800000;
 						break;
-					case 6:	//やめる
+					case 6:	//ウェディングドレス
+						set .@delid,2338;
+						set .@getid,15114;
+						set .@need,985;
+						set .@amount,50;
+						set .@price,800000;
+						break;
+					case 7:	//モルフェウスのショール
+						set .@delid,2518;
+						set .@getid,20760;
+						set .@need,985;
+						set .@amount,50;
+						set .@price,800000;
+						break;
+					case 8:	//カーズドスター
+						set .@delid,2748;
+						set .@getid,28349;
+						set .@need,985;
+						set .@amount,50;
+						set .@price,800000;
+						break;
+					case 9:	//やめる
 						mes "[プロブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -2003,7 +2066,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 				mes "わかりました。";
 				mes "S級のどの防具にしますか？";
 				next;
-				switch(select("モリガンのペンダント","モルフェウスの指輪","ガラスの靴","エベシ嵐のうねり","クレイトス大地の裂け目","シャピニハ海の叫び","ルシウス火山の激しさ","ルーンブーツ","やめる")) {
+				switch(select("モリガンのペンダント","モルフェウスの指輪","ガラスの靴","エベシ嵐のうねり","クレイトス大地の裂け目","シャピニハ海の叫び","ルシウス火山の激しさ","ルーンブーツ","大型マジェスティックゴート","ヴェスパーコア1","ヴェスパーコア2","ヴェスパーコア3","ヴェスパーコア4","大型オークヒーローの兜","忍の腰帯","ヒュッケの黒い尻尾","やめる")) {
 					case 1:	//モリガンのペンダント
 						set .@delid,2651;
 						set .@getid,2901;
@@ -2060,7 +2123,63 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@amount,1;
 						set .@price,3000000;
 						break;
-					case 9:	//やめる
+					case 9:	//大型マジェスティックゴート
+						set .@delid,5374;
+						set .@getid,18724;
+						set .@need,969;
+						set .@amount,20;
+						set .@price,200000000;
+						break;
+					case 10:	//ヴェスパーコア1
+						set .@delid,2659;
+						set .@getid,28302;
+						set .@need,7619;
+						set .@amount,2;
+						set .@price,2000000;
+						break;
+					case 11:	//ヴェスパーコア2
+						set .@delid,2660;
+						set .@getid,28303;
+						set .@need,7619;
+						set .@amount,2;
+						set .@price,2000000;
+						break;
+					case 12:	//ヴェスパーコア3
+						set .@delid,2661;
+						set .@getid,28304;
+						set .@need,7619;
+						set .@amount,2;
+						set .@price,2000000;
+						break;
+					case 13:	//ヴェスパーコア4
+						set .@delid,2662;
+						set .@getid,28305;
+						set .@need,7619;
+						set .@amount,2;
+						set .@price,2000000;
+						break;
+					case 14:	//大型オークヒーローの兜
+						set .@delid,5375;
+						set .@getid,5889;
+						set .@need,969;
+						set .@amount,20;
+						set .@price,200000000;
+						break;
+					case 15:	//忍の腰帯
+						set .@delid,2654;
+						set .@getid,28350;
+						set .@need,7619;
+						set .@amount,1;
+						set .@price,1000000;
+						break;
+					case 16:	//ヒュッケの黒い尻尾
+						set .@delid,2855;
+						set .@getid,28351;
+						set .@need,969;
+						set .@amount,1;
+						set .@price,3000000;
+						break;
+					case 17:	//やめる
 						mes "[プロブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -2638,7 +2757,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 				mes "わかりました。";
 				mes "C級のどの武器にしますか？";
 				next;
-				switch(select("骸骨の杖","オーキッシュソード","ファイアーブランド","アイスファルシオン","治癒の杖","やめる")) {
+				switch(select("骸骨の杖","オーキッシュソード","ファイアーブランド","アイスファルシオン","治癒の杖","ジェントルマンの杖","スターダストブレイド","ウォーアクス","黙示録","やめる")) {
 					case 1:	//骸骨の杖
 						set .@delid,1615;
 						set .@getid,1662;
@@ -2674,7 +2793,35 @@ prontera,79,104,6	script	アラブルレム	97,{
 						set .@amount,50;
 						set .@price,200000;
 						break;
-					case 6:	//やめる
+					case 6:	//ジェントルマンの杖
+						set .@delid,1629;
+						set .@getid,1675;
+						set .@need,999;
+						set .@amount,30;
+						set .@price,100000;
+						break;
+					case 7:	//スターダストブレイド
+						set .@delid,1148;
+						set .@getid,13446;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 8:	//ウォーアクス
+						set .@delid,1306;
+						set .@getid,1324;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 9:	//黙示録
+						set .@delid,1557;
+						set .@getid,28603;
+						set .@need,999;
+						set .@amount,50;
+						set .@price,200000;
+						break;
+					case 10:	//やめる
 						mes "[アラブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -2687,7 +2834,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 				mes "わかりました。";
 				mes "B級のどの武器にしますか？";
 				next;
-				switch(select("ネメシス","ドラゴンの遺産","カウンターダガー","アイボリーナイフ","ブラディウムハンマー","やめる")) {
+				switch(select("ネメシス","ドラゴンの遺産","カウンターダガー","アイボリーナイフ","ブラディウムハンマー","アンホーリータッチ","デスナイフ","蛇蝎大全集","風魔手裏剣・炎月","風魔手裏剣・雷月","風魔手裏剣・氷月","やめる")) {
 					case 1:	//ネメシス
 						set .@delid,1541;
 						set .@getid,16022;
@@ -2723,7 +2870,49 @@ prontera,79,104,6	script	アラブルレム	97,{
 						set .@amount,10;
 						set .@price,500000;
 						break;
-					case 6:	//やめる
+					case 6:	//アンホーリータッチ
+						set .@delid,1263;
+						set .@getid,28003;
+						set .@need,984;
+						set .@amount,3;
+						set .@price,300000;
+						break;
+					case 7:	//デスナイフ
+						set .@delid,1260;
+						set .@getid,28004;
+						set .@need,984;
+						set .@amount,3;
+						set .@price,300000;
+						break;
+					case 8:	//蛇蝎大全集
+						set .@delid,1590;
+						set .@getid,1598;
+						set .@need,984;
+						set .@amount,5;
+						set .@price,400000;
+						break;
+					case 9:	//風魔手裏剣・炎月
+						set .@delid,13318;
+						set .@getid,13324;
+						set .@need,984;
+						set .@amount,3;
+						set .@price,300000;
+						break;
+					case 10:	//風魔手裏剣・雷月
+						set .@delid,13319;
+						set .@getid,13325;
+						set .@need,984;
+						set .@amount,3;
+						set .@price,300000;
+						break;
+					case 11:	//風魔手裏剣・氷月
+						set .@delid,13320;
+						set .@getid,13326;
+						set .@need,984;
+						set .@amount,3;
+						set .@price,300000;
+						break;
+					case 12:	//やめる
 						mes "[アラブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -2736,7 +2925,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 				mes "わかりました。";
 				mes "A級のどの武器にしますか？";
 				next;
-				switch(select("スタッフオブオルド","インバーススケイル","ブラッディティアーズ","ディバインクロス","スタッフオブピアーシング","やめる")) {
+				switch(select("スタッフオブオルド","インバーススケイル","ブラッディティアーズ","ディバインクロス","スタッフオブピアーシング","バトルフック","ドフレの斧","砂漠の夕暮れ","ヘルファイア","ラフィネスタッフ","やめる")) {
 					case 1:	//スタッフオブオルド
 						set .@delid,1648;
 						set .@getid,1663;
@@ -2772,7 +2961,42 @@ prontera,79,104,6	script	アラブルレム	97,{
 						set .@amount,10;
 						set .@price,800000;
 						break;
-					case 6:	//やめる
+					case 6:	//バトルフック
+						set .@delid,1421;
+						set .@getid,1440;
+						set .@need,7620;
+						set .@amount,5;
+						set .@price,700000;
+						break;
+					case 7:	//ドフレの斧
+						set .@delid,1318;
+						set .@getid,1321;
+						set .@need,7620;
+						set .@amount,10;
+						set .@price,800000;
+						break;
+					case 8:	//砂漠の夕暮れ
+						set .@delid,13034;
+						set .@getid,28704;
+						set .@need,7620;
+						set .@amount,5;
+						set .@price,700000;
+						break;
+					case 9:	//ヘルファイア
+						set .@delid,1471;
+						set .@getid,1497;
+						set .@need,7620;
+						set .@amount,10;
+						set .@price,800000;
+						break;
+					case 10:	//ラフィネスタッフ
+						set .@delid,1649;
+						set .@getid,1679;
+						set .@need,7620;
+						set .@amount,10;
+						set .@price,800000;
+						break;
+					case 11:	//やめる
 						mes "[アラブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
@@ -2785,7 +3009,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 				mes "わかりました。";
 				mes "S級のどの武器にしますか？";
 				next;
-				switch(select("村正","アルカブリンガー","カドリール","茨の杖","オークアーチャーの弓","やめる")) {
+				switch(select("村正","アルカブリンガー","カドリール","茨の杖","オークアーチャーの弓","別雲剣","マジカルブレード","イクシオンの羽","ミステルテイン","やめる")) {
 					case 1:	//村正
 						set .@delid,1164;
 						set .@getid,21003;
@@ -2821,7 +3045,35 @@ prontera,79,104,6	script	アラブルレム	97,{
 						set .@amount,20;
 						set .@price,2000000;
 						break;
-					case 6:	//やめる
+					case 6:	//別雲剣
+						set .@delid,1140;
+						set .@getid,13447;
+						set .@need,7620;
+						set .@amount,15;
+						set .@price,1000000;
+						break;
+					case 7:	//マジカルブレード
+						set .@delid,13438;
+						set .@getid,13448;
+						set .@need,7620;
+						set .@amount,20;
+						set .@price,2000000;
+						break;
+					case 8:	//イクシオンの羽
+						set .@delid,1737;
+						set .@getid,18129;
+						set .@need,7620;
+						set .@amount,15;
+						set .@price,1000000;
+						break;
+					case 9:	//ミステルテイン
+						set .@delid,1138;
+						set .@getid,13453;
+						set .@need,7620;
+						set .@amount,15;
+						set .@price,1000000;
+						break;
+					case 10:	//やめる
 						mes "[アラブルレム]";
 						mes "わかりました。";
 						mes "もし興味がわきましたら";
