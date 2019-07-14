@@ -23,7 +23,7 @@ prontera,64,55,4	script	変なタヌキ::PyBotDummyRaccoon	543,{
 			close;
 		}
 		set .@mob_lv, strmobinfo(3, .@mob_id);
-		set .@fee, 1000 * .@mob_lv;
+		set .@fee, 100 * .@mob_lv;
 		mes "[ポン太]";
 		mes "^4040FF" + .@mob_nam$ + "^000000だな？";
 		mes "お代は^FF4040" + .@fee + "Zeny^000000だぞ？";
