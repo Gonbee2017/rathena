@@ -227,11 +227,11 @@ OnInit:
 		7295, 10; // 黄水晶
 	set .ore_bous[getarraysize(.ore_bous)], getarraysize(.ores) / 2;
 	
-	set .weas[getarraysize(.weas)], 1140; // 別雲剣
+	set .weas[getarraysize(.weas)], 13447; // 別雲剣
 	setarray .ores[getarraysize(.ores)],
-		7292, 10, // 白雲母
-		7291, 10, // めのう
-		7295, 10; // 黄水晶
+		7292, 30, // 白雲母
+		7291, 30, // めのう
+		7295, 30; // 黄水晶
 	set .ore_bous[getarraysize(.ore_bous)], getarraysize(.ores) / 2;
 	
 	set .weas[getarraysize(.weas)], 1228; // コンバットナイフ
