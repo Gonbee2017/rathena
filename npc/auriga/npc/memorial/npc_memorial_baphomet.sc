@@ -500,7 +500,8 @@ monk_test,306,151,3	script	封印石	111,{
 		case 0:	// エラーなし
 			announce "[" +strcharinfo(1)+ "] パーティーの [" +strcharinfo(0)+ "] が [Sealed Shrine] に入場します",0x9,0x00FF99;
 			setquest 3040;
-			set BAPHO_1QUE,0;
+			//set BAPHO_1QUE,0;
+			set 'BAPHO_1QUE,0;
 			donpcevent getmdnpcname("BaphometControl1-1")+ "::OnStart";
 			end;
 		default:	// エラー
@@ -643,7 +644,8 @@ OnKilled:
 }
 
 1@cata,141,221,0	script	崩れかけの墓	844,3,3,{
-	switch(BAPHO_1QUE) {
+	//switch(BAPHO_1QUE) {
+	switch('BAPHO_1QUE) {
 	case 0:
 		mes "‐墓石から妙な空気を感じる……";
 		next;
@@ -729,7 +731,8 @@ OnKilled:
 		mes "さあ、時間がない！";
 		mes "急いでくれ！^000000";
 		viewpoint 1,141,221,14,0xFF89D7;
-		set BAPHO_1QUE,1;
+		//set BAPHO_1QUE,1;
+		set 'BAPHO_1QUE,1;
 		close;
 	case 1:
 		mes "[墓石の声]";
@@ -827,7 +830,8 @@ OnKilled:
 	end;
 
 OnTouch:
-	if(BAPHO_1QUE == 0) {
+	//if(BAPHO_1QUE == 0) {
+	if('BAPHO_1QUE == 0) {
 		mes "‐^556B2Fゴゴゴ……";
 		mes "　グルルル……^000000‐";
 		next;
@@ -842,7 +846,8 @@ OnTouch:
 }
 
 1@cata,176,119,4	script	先代英雄の魂#1F	411,{
-	switch(BAPHO_1QUE) {
+	//switch(BAPHO_1QUE) {
+	switch('BAPHO_1QUE) {
 	case 2:
 		cutin "ins_cata_champ_n",2;
 		mes "[先代英雄の魂]";
@@ -987,7 +992,8 @@ OnTouch:
 			viewpoint 1,71,42,11,0x00FF00;
 			viewpoint 1,155,14,12,0x00FF00;
 			viewpoint 1,85,182,13,0x00FF00;
-			set BAPHO_1QUE,3;
+			//set BAPHO_1QUE,3;
+			set 'BAPHO_1QUE,3;
 			initnpctimer;
 			donpcevent getmdnpcname("BaphometControl1-2")+"::OnStart";
 		} else {
@@ -1068,7 +1074,8 @@ OnTouch:
 			viewpoint 2,155,14,12,0x00FF00;
 			viewpoint 2,85,182,13,0x00FF00;
 			delitem 6001,countitem(6001);
-			set BAPHO_1QUE,4;
+			//set BAPHO_1QUE,4;
+			set 'BAPHO_1QUE,4;
 			mes "[先代英雄の魂]";
 			mes "……よし、いいだろう。";
 			mes "では、他の皆の状態をもう一度確認し、";
@@ -1099,7 +1106,8 @@ OnTouch:
 		mes "^0000FF使徒の証^000000はちゃんと持っているか？";
 		mes "門を通るには絶対必要だからな。";
 		next;
-		setpartyinmap BAPHO_1QUE,5;
+		//setpartyinmap BAPHO_1QUE,5;
+		set 'BAPHO_1QUE,5;
 		hideonnpc getmdnpcname("封印魔法陣#0");
 		hideonnpc getmdnpcname("封印魔法陣#2");
 		hideonnpc getmdnpcname("封印魔法陣#4");
@@ -1186,13 +1194,15 @@ OnTimer3500000:
 }
 
 1@cata,86,214,0	script	崩れかけの墓#1F_1T	844,{
-	if(BAPHO_1QUE != 1) {
+	//if(BAPHO_1QUE != 1) {
+	if('BAPHO_1QUE != 1) {
 		mes "‐倒れかけた墓石の下には";
 		mes "　何もなかった‐";
 		close;
 	}
 	getitem 6003,1;
-	setpartyinmap BAPHO_1QUE,2;
+	//setpartyinmap BAPHO_1QUE,2;
+	set 'BAPHO_1QUE,2;
 	mes "‐倒れかけた墓石の下に";
 	mes "　光る小さい物が見えた‐";
 	next;
@@ -1234,7 +1244,8 @@ OnTimer3500000:
 
 1@cata,267,210,0	script	揺らめく松明#1	844,{
 	if(getpartyleader(getcharid(1)) == strcharinfo(0)) {
-		if((BAPHO_1QUE == 3) && (countitem(6001) < 10)) {
+		//if((BAPHO_1QUE == 3) && (countitem(6001) < 10)) {
+		if(('BAPHO_1QUE == 3) && (countitem(6001) < 10)) {
 			mes "‐真っ赤に燃え上がる";
 			mes "　凄まじい勢いの";
 			mes "　巨大な松明が揺らめいている‐";
@@ -1386,7 +1397,8 @@ OnTimer22000:
 			delquest 3041;
 		misceffect 87;
 		hideonnpc getmdnpcname("封印魔法陣#0");
-		areamobuseskill getmdmapname("2@cata"),74,76,84,86,1929,686,1,0,0,26,0;
+		//areamobuseskill2 getmdmapname("2@cata"),74,76,84,86,1929,686,1,0,0,26,0;
+		areamobuseskill getmdmapname("2@cata"),79,81,10,1929,"NPC_INVINCIBLEOFF",1,0,0,ET_HELP,0;
 		percentheal -50,0;
 		sc_start Eff_Stone,20000,0;
 		setquest 3041;
@@ -1420,7 +1432,8 @@ OnTimer22000:
 			delquest 3041;
 		misceffect 87;
 		hideonnpc getmdnpcname("封印魔法陣#2");
-		areamobuseskill getmdmapname("2@cata"),118,104,128,119,1929,686,1,0,0,26,0;
+		//areamobuseskill2 getmdmapname("2@cata"),118,104,128,119,1929,686,1,0,0,26,0;
+		areamobuseskill getmdmapname("2@cata"),123,109,10,1929,"NPC_INVINCIBLEOFF",1,0,0,ET_HELP,0;
 		percentheal -50,0;
 		sc_start Eff_Stone,20000,0;
 		setquest 3041;
@@ -1454,7 +1467,8 @@ OnTimer22000:
 			delquest 3041;
 		misceffect 87;
 		hideonnpc getmdnpcname("封印魔法陣#4");
-		areamobuseskill getmdmapname("2@cata"),118,17,128,27,1929,686,1,0,0,26,0;
+		//areamobuseskill2 getmdmapname("2@cata"),118,17,128,27,1929,686,1,0,0,26,0;
+		areamobuseskill getmdmapname("2@cata"),123,22,10,1929,"NPC_INVINCIBLEOFF",1,0,0,ET_HELP,0;
 		percentheal -50,0;
 		sc_start Eff_Stone,20000,0;
 		setquest 3041;
@@ -1488,7 +1502,8 @@ OnTimer22000:
 			delquest 3041;
 		misceffect 87;
 		hideonnpc getmdnpcname("封印魔法陣#8");
-		areamobuseskill getmdmapname("2@cata"),30,16,40,26,1929,686,1,0,0,26,0;
+		//areamobuseskill2 getmdmapname("2@cata"),30,16,40,26,1929,686,1,0,0,26,0;
+		areamobuseskill getmdmapname("2@cata"),35,21,10,1929,"NPC_INVINCIBLEOFF",1,0,0,ET_HELP,0;
 		percentheal -50,0;
 		sc_start Eff_Stone,20000,0;
 		setquest 3041;
@@ -1522,7 +1537,8 @@ OnTimer22000:
 			delquest 3041;
 		misceffect 87;
 		hideonnpc getmdnpcname("封印魔法陣#10");
-		areamobuseskill getmdmapname("2@cata"),30,104,40,114,1929,686,1,0,0,26,0;
+		//areamobuseskill2 getmdmapname("2@cata"),30,104,40,114,1929,686,1,0,0,26,0;
+		areamobuseskill getmdmapname("2@cata"),35,109,10,1929,"NPC_INVINCIBLEOFF",1,0,0,ET_HELP,0;
 		percentheal -50,0;
 		sc_start Eff_Stone,20000,0;
 		setquest 3041;
@@ -1551,7 +1567,8 @@ OnTimer22000:
 }
 
 2@cata,79,65,0	script	大封印祭壇#ss	844,{
-	if((BAPHO_1QUE == 5) && (getpartyleader(getcharid(1)) == strcharinfo(0))) {
+	//if((BAPHO_1QUE == 5) && (getpartyleader(getcharid(1)) == strcharinfo(0))) {
+	if(('BAPHO_1QUE == 5) && (getpartyleader(getcharid(1)) == strcharinfo(0))) {
 		mes "‐紫色に輝く";
 		mes "　巨大な封印祭壇の下に";
 		mes "　言葉にし難い程の凄まじい魔の気配が";
@@ -1571,7 +1588,8 @@ OnTimer22000:
 		else
 			mes "みんな、気をつけて！";
 		mes "何かが近寄ってくる!!";
-		setpartyinmap BAPHO_1QUE,6;
+		//setpartyinmap BAPHO_1QUE,6;
+		set 'BAPHO_1QUE,6;
 		initnpctimer;
 		hideonnpc getmdnpcname("大封印祭壇#ss");
 		close;
@@ -1631,7 +1649,8 @@ OnTimer12000:
 		mes "これからも悪に屈せず";
 		mes "堂々と生きていってくれ。";
 		close2;
-		set BAPHO_1QUE,0;
+		//set BAPHO_1QUE,0;
+		set 'BAPHO_1QUE,0;
 		cutin "ins_cata_champ_s",255;
 		warp "monk_test",310,150;
 		end;
@@ -1654,7 +1673,8 @@ OnStart:
 	end;
 
 OnMyMobDead:
-	setpartyinmap BAPHO_1QUE,7;
+	//setpartyinmap BAPHO_1QUE,7;
+	set 'BAPHO_1QUE,7;
 	announce "魔王バフォメット : グオオオオォォ!!　こ、こんなはずでは……！　我が……この我が再び虫けらのような人間にやられる……だと……!!",0x9,0xdb7093;
 	hideoffnpc getmdnpcname("先代英雄の魂#2F");
 	hideonnpc getmdnpcname("BaphometDownSlave");

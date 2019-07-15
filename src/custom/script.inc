@@ -632,6 +632,35 @@ BUILDIN_FUNC(areamisceffect) {
 	map_foreachinarea(buildin_misceffect_sub, m, x0, y0, x1, y1, BL_PC, typ);
 	return SCRIPT_CMD_SUCCESS;
 }
+BUILDIN_FUNC(areamobuseskill2) {
+	block_list center;
+	center.m = script_mapname2mapid(st, script_getstr(st, 2));
+	if (center.m < 0 ) {
+		ShowError("areamobuseskill: invalid map name.\n");
+		return SCRIPT_CMD_SUCCESS;
+	}
+	int x0 = script_getnum(st, 3);
+	int y0 = script_getnum(st, 4);
+	int x1 = script_getnum(st, 5);
+	int y1 = script_getnum(st, 6);
+	center.x = (x0 + x1) / 2;
+	center.y = (y0 + y1) / 2;
+	int rx = abs(center.x - x0);
+	int ry = abs(center.y - y0);
+	int range = max(rx, ry);
+	int mobid = script_getnum(st, 7);
+	script_data* data = script_getdata(st, 8);
+	get_val(st, data);
+	int skill_id = (data_isstring(data) ? skill_name2id(script_getstr(st, 8)) : script_getnum(st ,8));
+	int skill_lv = script_getnum(st, 9);
+	skill_lv = min(skill_lv, battle_config.mob_max_skilllvl);
+	int casttime = script_getnum(st, 10);
+	int cancel = script_getnum(st, 11);
+	int emotion = script_getnum(st, 12);
+	int target = script_getnum(st, 13);
+	map_foreachinallrange(buildin_mobuseskill_sub, &center, range, BL_MOB, mobid, skill_id, skill_lv, casttime, cancel, emotion, target);
+	return SCRIPT_CMD_SUCCESS;
+}
 BUILDIN_FUNC(areasetcell) {
 	const char* map_nam = script_getstr(st, 2);
 	int m = script_mapname2mapid(st, map_nam);
