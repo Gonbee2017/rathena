@@ -479,6 +479,7 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 					(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
 					!mem->is_dead() &&
 					!mem->is_hiding() &&
+					!mem->is_invincible() &&
 					!mem->reject_skills()->find(kid) &&
 					!mem->sc()->data[SC_DEVOTION];
 			});
