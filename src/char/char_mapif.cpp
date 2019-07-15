@@ -412,7 +412,10 @@ int chmapif_parse_reqsavechar(int fd, int id){
 			char_mmo_char_tosql(cid, &char_dat);
 		} else {	//This may be valid on char-server reconnection, when re-sending characters that already logged off.
 			ShowError("parse_from_map (save-char): Received data for non-existant/offline character (%d:%d).\n", aid, cid);
-			char_set_char_online(id, cid, aid);
+
+			// [GonBee]
+			// Bot‚ÍƒIƒ“ƒ‰ƒCƒ“ó‘Ô‚É‚µ‚È‚¢B
+			//char_set_char_online(id, cid, aid);
 		}
 
 		if (RFIFOB(fd,12))
