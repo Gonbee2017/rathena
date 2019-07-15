@@ -313,13 +313,18 @@ AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 // アドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE) {
 	if (!bot->sc()->data[SC_ADRENALINE] &&
-		!bot->sc()->data[SC_ADRENALINE2]
+		!bot->sc()->data[SC_ADRENALINE2] &&
+		!bot->sc()->data[SC_DECREASEAGI] &&
+		!bot->sc()->data[SC_QUAGMIRE]
 	) bot->use_skill_self(kid, klv);
 }
 
 // フルアドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
-	if (!bot->sc()->data[SC_ADRENALINE2]) bot->use_skill_self(kid, klv);
+	if (!bot->sc()->data[SC_ADRENALINE2] &&
+		!bot->sc()->data[SC_DECREASEAGI] &&
+		!bot->sc()->data[SC_QUAGMIRE]
+	) bot->use_skill_self(kid, klv);
 }
 
 // ハンマーフォールを使う。
