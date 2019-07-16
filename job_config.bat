@@ -16,4 +16,14 @@ set web_logs_dir=D:\Apache24\logs\
 rem Apacheログファイルの保管日数。
 set web_logs_days=7
 rem サーバークラッシュから再起動するまでの秒数。
-set recovery_seconds=60
+set recovery_seconds=15
+rem サーバー状態をチェックする間隔。
+set check_interval=15
+rem バインドアドレス。
+set bind_address=127.0.0.1
+rem ログインサーバーのポート。
+set login_server_port=6900
+rem キャラサーバーのポート。
+set char_server_port=6121
+rem マップサーバーのポート。
+set map_server_port=5121

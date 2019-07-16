@@ -2,13 +2,17 @@
 rem サーバージョブ by GonBee
 
 cd /d %~dp0
-set result=normal
 
+echo>%1-server.run
 :execute
 %1-server
-if errorlevel 2 (
+if exist %1-server.stop (
+	del %1-server.stop>nul 2>&1
+	goto end
+)
+if errorlevel 1 (
 	timeout /t %recovery_seconds%
 	goto execute
 )
-if errorlevel 1 set result=abnormal
-echo %result%>%1-server.result
+:end
+del %1-server.run>nul 2>&1
