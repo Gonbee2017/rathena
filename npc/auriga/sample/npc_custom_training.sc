@@ -40,7 +40,7 @@ prontera,64,55,4	script	変なタヌキ::PyBotDummyRaccoon	543,{
 			close2;
 			
 			// アトミック
-			if (!checknpcoption(OPTION_INVISIBLE)) {
+			if (!checknpcoption(OPTION_HIDE)) {
 				set Zeny, Zeny - .@fee;
 				hideonnpc;
 				dummymonster "this", 64, 55, "--ja--", .@mob_id, 1, "PyBotDummyRaccoon::OnDead";

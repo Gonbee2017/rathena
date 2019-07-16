@@ -59,6 +59,7 @@ BUILDIN_FUNC(blockeffect) {
 // [GonBee]
 // NPCのオプションをチェックする。
 // i      オプション。
+// ?      NPC名。省略なら現在のNPC。
 // 戻り値 結果。
 BUILDIN_FUNC(checknpcoption) {
 	int res = 0;
