@@ -416,6 +416,7 @@ int chmapif_parse_reqsavechar(int fd, int id){
 			// [GonBee]
 			// Bot‚ÍƒIƒ“ƒ‰ƒCƒ“ó‘Ô‚É‚µ‚È‚¢B
 			//char_set_char_online(id, cid, aid);
+
 		}
 
 		if (RFIFOB(fd,12))

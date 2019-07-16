@@ -38,10 +38,15 @@ prontera,64,55,4	script	変なタヌキ::PyBotDummyRaccoon	543,{
 			mes "[ポン太]";
 			mes "よーし、それじゃ化けるぞ。";
 			close2;
-			set Zeny, Zeny - .@fee;
-			hideonnpc;
-			dummymonster "this", 64, 55, "--ja--", .@mob_id, 1, "PyBotDummyRaccoon::OnDead";
-			initnpctimer;
+			
+			// アトミック
+			if (!checknpcoption(OPTION_INVISIBLE)) {
+				set Zeny, Zeny - .@fee;
+				hideonnpc;
+				dummymonster "this", 64, 55, "--ja--", .@mob_id, 1, "PyBotDummyRaccoon::OnDead";
+				initnpctimer;
+			}
+			
 			end;
 		}
 	}
