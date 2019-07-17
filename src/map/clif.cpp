@@ -20885,7 +20885,11 @@ static int clif_parse(int fd)
 				map_quit(sd);
 			}
 		} else {
-			ShowInfo("Closed connection from '" CL_WHITE "%s" CL_RESET "'.\n", ip2str(session[fd]->client_addr, NULL));
+
+			// [GonBee]
+			// Ø’f‚Í•\Ž¦‚µ‚È‚¢B
+			//ShowInfo("Closed connection from '" CL_WHITE "%s" CL_RESET "'.\n", ip2str(session[fd]->client_addr, NULL));
+
 		}
 		do_close(fd);
 		return 0;

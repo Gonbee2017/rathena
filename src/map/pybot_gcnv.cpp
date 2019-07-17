@@ -1386,7 +1386,11 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ Help (h) サブコマンド ------\n"
 		"サブコマンドの説明を表示する。\n"
 		"入力例 [@bot help login]\n"
-	), SUBCMD_DESC(Bot, HomunsKill            , hk  ,
+	), SUBCMD_DESC(Bot, HoldMonsters               , hm  ,
+		"------ HoldMonsters (hm) サブコマンド ------\n"
+		"抱えることのできるモンスター数を設定する。\n"
+		"入力例 [@bot holdmonsters クラウン 1]\n"
+	), SUBCMD_DESC(Bot, HomunsKill                 , hk  ,
 		"------ HomunsKill (hk) サブコマン     ド ------\n"
 		"ホムンクルスのスキルを一覧表示する。\n"
 		"入力例 [@bot homunskill クリエ]\n"
@@ -1582,12 +1586,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ アスムプティオ アサクロ]\n"
 		"ターゲットスキルを特定レベルで使用する。\n"
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
+	), SUBCMD_DESC(Bot, sKillAutoSpell             , kas ,
+		"------ sKillAutoSpell (kas) サブコマンド ------\n"
+		"オートスペルで選択する魔法を設定する。\n"
+		"入力例 [@bot skillautospell プロフェ ファイアーボルト]\n"
+		"オートスペルで自由に魔法を選択するようにする。\n"
+		"入力例 [@bot skillautospell プロフェ]\n"
 	), SUBCMD_DESC(Bot, sKillLimit                 , kl  ,
 		"------ sKillLimit (kl) サブコマンド ------\n"
 		"スキルのレベルを制限する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス 0]\n"
 		"スキルのレベル制限を解除する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス]\n"
+	), SUBCMD_DESC(Bot, sKillLowRate               , klr ,
+		"------ sKillLowRate (klr) サブコマンド ------\n"
+		"低ダメージ倍率を設定する。\n"
+		"入力例 [@bot skilllowrate プロフェ 50]\n"
 	), SUBCMD_DESC(Bot, sKillMonsters              , km  ,
 		"------ sKillMonsters (km) サブコマンド ------\n"
 		"範囲スキルの発動条件となるモンスター数を設定する。\n"
@@ -1624,6 +1638,12 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillRejectTransport (krt) サブコマンド ------\n"
 		"拒否スキルを転送する。\n"
 		"入力例 [@bot skillrejecttransport クラウン ジプシー]\n"
+	), SUBCMD_DESC(Bot, sKillSevenWind             , ksw ,
+		"------ sKillSevenWind (ksw) サブコマンド ------\n"
+		"暖かい風で選択する属性を設定する。\n"
+		"入力例 [@bot skillsevenwind テコン 火属性]\n"
+		"暖かい風で自由に属性を選択するようにする。\n"
+		"入力例 [@bot skillsevenwind テコン]\n"
 	), SUBCMD_DESC(Bot, sKillUp                    , ku  ,
 		"------ sKillUp (ku) サブコマンド ------\n"
 		"スキルのレベルを上げる。\n"
@@ -1766,6 +1786,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, EquipSetLoad               , esl ),
 	SUBCMD_PROC(Bot, EquipSetTransport          , est ),
 	SUBCMD_PROC(Bot, Help                       , h   ),
+	SUBCMD_PROC(Bot, HoldMonsters               , hm  ),
 	SUBCMD_PROC(Bot, HomunsKill                 , hk  ),
 	SUBCMD_PROC(Bot, HomunsKillLimit            , hkl ),
 	SUBCMD_PROC(Bot, HomunsKillUp               , hku ),
@@ -1803,7 +1824,10 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
 	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
+	SUBCMD_PROC(Bot, sKillAutoSpell             , kas ),
+	SUBCMD_PROC(Bot, sKillLowRate               , klr ),
 	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
+	SUBCMD_PROC(Bot, sKillSevenWind             , ksw ),
 	SUBCMD_PROC(Bot, sKillPlay                  , kp  ),
 	SUBCMD_PROC(Bot, sKillPlayClear             ,     ),
 	SUBCMD_PROC(Bot, sKillPlayTransport         , kpt ),
@@ -1941,6 +1965,9 @@ const std::unordered_map<
 	{JOB_STAR_GLADIATOR, NAPV_CONTINUOUS},
 	{JOB_SOUL_LINKER   , NAPV_SINGLE    },
 };
+
+// デフォルトの低ダメージ倍率。
+const int DEFAULT_SKILL_LOW_RATE = 100;
 
 // デフォルトの範囲スキルの発動条件となるモンスター数。
 const int DEFAULT_SKILL_MONSTERS = 3;

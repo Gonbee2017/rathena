@@ -58,7 +58,7 @@ nguild_gef	mapflag	nowarpto
 nguild_pay	mapflag	nowarpto
 nguild_prt	mapflag	nowarpto
 //Lighthalzen Bio-Lab 3F
-lhz_dun03	mapflag	nowarpto
+//lhz_dun03	mapflag	nowarpto
 // Special Quests Places =======
 ama_test	mapflag	nowarpto
 gon_test	mapflag	nowarpto

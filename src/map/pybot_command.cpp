@@ -622,6 +622,31 @@ SUBCMD_FUNC(Bot, Help) {
 	show_client(lea->fd(), sc_des->sc_desc);
 }
 
+// 抱えることのできるモンスター数を設定する。
+SUBCMD_FUNC(Bot, HoldMonsters) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = shift_arguments_then_parse_int(
+		args, print("モンスター数"), -1, INT_MAX
+	);
+	if (cou) {
+		if (cou > 0)
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は",
+				cou, "匹までモンスターを抱えます。"
+			));
+		else
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は何匹でもモンスターを抱えます。"
+			));
+	} else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はモンスターを抱えません。"
+		));
+	if (cou < 0) cou = INT_MAX;
+	mem->hold_monsters()->set(cou);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // ホムンクルスのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, HomunsKill) {
 	block_if* hom = get_active_homun(shift_arguments_then_find_member(lea, args));
@@ -1604,18 +1629,114 @@ SUBCMD_FUNC(Bot, sKillLimit) {
 	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
+// オートスペルで選択する魔法を設定、または抹消する。
+SUBCMD_FUNC(Bot, sKillAutoSpell) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (!mem->check_skill(SA_AUTOSPELL))
+		throw command_error{print(
+			"「", mem->name(), "」は「",
+			skill_get_desc(SA_AUTOSPELL), "」を使えません。"
+		)};
+	if (args.empty()) {
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」は自由に魔法を選択します。"
+		));
+		mem->skill_auto_spell()->set(e_skill(0));
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	} else {
+		std::string sk_nam = shift_arguments(args);
+		int kid = find_skilldb(sk_nam);
+		if (!kid)
+			throw command_error{print(
+				"「", sk_nam, "」というスキルはありません。"
+			)};
+		if (kid != MG_FIREBOLT &&
+			kid != MG_LIGHTNINGBOLT &&
+			kid != MG_COLDBOLT &&
+			kid != MG_SOULSTRIKE &&
+			kid != MG_FIREBALL &&
+			kid != MG_FROSTDIVER &&
+			kid != MG_NAPALMBEAT
+		) throw command_error{print(
+				"「", skill_get_desc(kid), "」は指定できません。"
+			)};
+		if (!mem->check_skill(e_skill(kid)))
+			throw command_error{print(
+				"「", mem->name(), "」は「",
+				skill_get_desc(kid), "」を使えません。"
+			)};
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」は「", skill_get_desc(kid), "」を選択します。"
+		));
+		mem->skill_auto_spell()->set(e_skill(kid));
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// 低ダメージ倍率を設定する。
+SUBCMD_FUNC(Bot, sKillLowRate) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int rat = shift_arguments_then_parse_int(
+		args, print("ダメージ倍率"), 25, 200
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の低ダメージ倍率を",
+		rat, "%以下にしました。"
+	));
+	if (rat == DEFAULT_SKILL_LOW_RATE) rat = 0;
+	mem->skill_low_rate()->set(rat);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // 範囲スキルの発動条件となるモンスター数を設定する。
 SUBCMD_FUNC(Bot, sKillMonsters) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = shift_arguments_then_parse_int(
 		args, print("モンスター数"), 1,	INT_MAX
 	);
-	mem->skill_monsters()->set(cou);
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の範囲スキルの発動条件となるモンスター数を",
-		mem->skill_monsters()->get(), "匹にしました。"
+		cou, "匹にしました。"
 	));
+	if (cou == DEFAULT_SKILL_MONSTERS) cou = 0;
+	mem->skill_monsters()->set(cou);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 暖かい風で選択する属性を設定、または抹消する。
+SUBCMD_FUNC(Bot, sKillSevenWind) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (!mem->check_skill(TK_SEVENWIND))
+		throw command_error{print(
+			"「", mem->name(), "」は「",
+			skill_get_desc(TK_SEVENWIND), "」を使えません。"
+		)};
+	if (args.empty()) {
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」は自由に属性を選択します。"
+		));
+		mem->skill_seven_wind()->set(ELE_NEUTRAL);
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	} else {
+		std::string ele_nam = shift_arguments(args);
+		auto ele_nam_ite = std::find(ALL_RANGE(ELEMENT_NAME_TABLE), ele_nam);
+		if (ele_nam_ite == ELEMENT_NAME_TABLE.end())
+			throw command_error{print(
+				"「", ele_nam, "」という属性はありません。"
+			)};
+		e_element ele = e_element(ele_nam_ite - ELEMENT_NAME_TABLE.begin());
+		if (ele == ELE_NEUTRAL ||
+			ele == ELE_POISON ||
+			ele == ELE_UNDEAD
+		) throw command_error{print(
+				"「", ELEMENT_NAME_TABLE[ele], "」は指定できません。"
+			)};
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」は「", ELEMENT_NAME_TABLE[ele], "」を選択します。"
+		));
+		mem->skill_seven_wind()->set(ele);
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
 }
 
 // メンバーの演奏スキルを一覧表示、または登録、または抹消する。

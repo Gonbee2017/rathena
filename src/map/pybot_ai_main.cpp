@@ -77,6 +77,7 @@ void ai_t::leader_organize() {
 		bat->around_wall_exists() = arr_wal_exi;
 		bat->attacked_enemies().clear();
 		bat->attacked_short_range_attacker() = nullptr;
+		bat->attacked_short_range_attackers() = 0;
 		bat->attacked_long_range_attacker() = nullptr;
 		bat->attacked_by_blower() = false;
 		blocks[bat->bl()->id] = bat;
@@ -195,6 +196,7 @@ void ai_t::leader_collect() {
 			if (ene->is_short_range_attacker()) {
 				if (!tar_bat->attacked_short_range_attacker())
 					tar_bat->attacked_short_range_attacker() = ene;
+				++tar_bat->attacked_short_range_attackers();
 			} else if (!tar_bat->attacked_long_range_attacker())
 				tar_bat->attacked_long_range_attacker() = ene;
 			tar_bat->attacked_by_blower() |= ene->has_knockback_skill();
@@ -867,7 +869,11 @@ void ai_t::battler_positioning() {
 		block_if* att_ene = battler->attacked_short_range_attacker();
 		if (!battler->is_primary() &&
 			!battler->sc()->data[SC_WARM] &&
-			att_ene
+			att_ene &&
+			battler->get_hold_monsters() != INT_MAX &&
+			(att_ene->is_great(leader) ||
+				battler->attacked_short_range_attackers() > battler->get_hold_monsters()
+			)
 		) {
 			if (att_ene->check_attack_range(battler) &&
 				!battlers.front()->check_attack_range(att_ene) &&
@@ -1011,30 +1017,30 @@ void ai_t::battler_use_skill() {
 }
 
 // バトラーにとって座標が敵モンスターから離れているかを判定する。
-// ただし先頭ではないバトラーで、かつターゲットされている敵モンスターは除く。
 bool // 結果。
 ai_t::away_enemies(
 	int x, // X座標。
 	int y  // Y座標。
 ) {
-	bool res = true;
-	if (battler->is_primary()) {
-		block_if* tar_ene = battler->target_enemy();
-		res = !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader));
-	} else {
-		for (block_if* ene : enemies) {
-			if (check_distance_blxy(ene->bl(), x, y, ene->away_distance(leader)) &&
-				(leader->rush()->get() ||
-					battlers.front()->distance_policy_value() == DPV_AWAY ||
-					ene->target_battler() != battler
-				)
-			) {
-				res = false;
-				break;
-			}
-		}
-	}
-	return res;
+	//bool res = true;
+	//if (battler->is_primary()) {
+	//	block_if* tar_ene = battler->target_enemy();
+	//	res = !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader));
+	//} else {
+	//	for (block_if* ene : enemies) {
+	//		if (check_distance_blxy(ene->bl(), x, y, ene->away_distance(leader)) &&
+	//			(battlers.front()->distance_policy_value() == DPV_AWAY ||
+	//				ene->target_battler() != battler
+	//			)
+	//		) {
+	//			res = false;
+	//			break;
+	//		}
+	//	}
+	//}
+	//return res;
+	block_if* tar_ene = battler->target_enemy();
+	return !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader));
 }
 
 // 座標が他のバトラーから離れているかを判定する。

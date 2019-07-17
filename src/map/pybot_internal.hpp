@@ -1126,6 +1126,7 @@ struct battler_if {
 	virtual std::vector<block_if*>& attacked_enemies();
 	virtual block_if*& attacked_long_range_attacker();
 	virtual block_if*& attacked_short_range_attacker();
+	virtual int& attacked_short_range_attackers();
 	virtual int& battle_index();
 	virtual battle_modes& battle_mode();
 	virtual bool check_attack(block_if* ene);
@@ -1137,6 +1138,7 @@ struct battler_if {
 	virtual distance_policy_values default_distance_policy_value();
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
 	virtual distance_policy_values& distance_policy_value();
+	virtual int get_hold_monsters();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
 	virtual bool is_dead();
@@ -1301,14 +1303,19 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual int get_skill_low_rate();
 	virtual int get_skill_monsters();
+	virtual ptr<regnum_t<int>>& hold_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<bool>>& loot();
+	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
+	virtual ptr<regnum_t<int>>& skill_low_rate();
 	virtual ptr<regnum_t<int>>& skill_monsters();
+	virtual ptr<regnum_t<e_element>>& skill_seven_wind();
 	virtual bool magicpower_is_active();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual ptr<block_if>& pet();
@@ -1405,6 +1412,7 @@ struct battler_impl : virtual block_if {
 	std::vector<block_if*> attacked_enemies_; // 攻撃を受けている敵モンスターのベクタ。
 	block_if* attacked_long_range_attacker_;  // 攻撃を受けている遠隔攻撃モンスター。
 	block_if* attacked_short_range_attacker_; // 攻撃を受けている近接攻撃モンスター。
+	int attacked_short_range_attackers_;      // 攻撃を受けている近接攻撃モンスター数。
 	int battle_index_;                        // 戦闘時のインデックス。
 	battle_modes battle_mode_;                // 戦闘モード。
 	distance_policy_values
@@ -1422,6 +1430,7 @@ struct battler_impl : virtual block_if {
 	virtual std::vector<block_if*>& attacked_enemies() override;
 	virtual block_if*& attacked_long_range_attacker() override;
 	virtual block_if*& attacked_short_range_attacker() override;
+	virtual int& attacked_short_range_attackers() override;
 	virtual int& battle_index() override;
 	virtual battle_modes& battle_mode() override;
 	virtual bool check_attack(block_if* ene) override;
@@ -1563,6 +1572,7 @@ struct homun_impl : virtual block_if {
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
 	virtual bool exists() override;
+	virtual int get_hold_monsters() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
 	virtual bool is_active() override;
@@ -1645,11 +1655,15 @@ struct member_impl : virtual block_if {
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
+	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<int,int>> limit_skills_;       // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
+	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
+	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
 	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
+	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
 	int member_index_;                            // メンバーのインデックス。
 	ptr<registry_t<int,normal_attack_policy>>
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
@@ -1679,8 +1693,11 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual int get_hold_monsters() override;
+	virtual int get_skill_low_rate() override;
 	virtual int get_skill_monsters() override;
 	virtual int guild_id() override;
+	virtual ptr<regnum_t<int>>& hold_monsters() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
 	virtual bool is_carton() override;
@@ -1697,7 +1714,10 @@ struct member_impl : virtual block_if {
 	virtual void load_play_skill(int mid, e_skill* kid) override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual ptr<regnum_t<bool>>& loot() override;
+	virtual ptr<regnum_t<e_skill>>& skill_auto_spell() override;
+	virtual ptr<regnum_t<int>>& skill_low_rate() override;
 	virtual ptr<regnum_t<int>>& skill_monsters() override;
+	virtual ptr<regnum_t<e_element>>& skill_seven_wind() override;
 	virtual bool magicpower_is_active() override;
 	virtual int& member_index() override;
 	virtual std::string name() override;
@@ -2249,6 +2269,7 @@ SUBCMD_FUNC(Bot, EquipSetClear);
 SUBCMD_FUNC(Bot, EquipSetLoad);
 SUBCMD_FUNC(Bot, EquipSetTransport);
 SUBCMD_FUNC(Bot, Help);
+SUBCMD_FUNC(Bot, HoldMonsters);
 SUBCMD_FUNC(Bot, HomunsKill);
 SUBCMD_FUNC(Bot, HomunsKillLimit);
 SUBCMD_FUNC(Bot, HomunsKillUp);
@@ -2285,7 +2306,9 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack);
 SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
 SUBCMD_FUNC(Bot, sKill);
+SUBCMD_FUNC(Bot, sKillAutoSpell);
 SUBCMD_FUNC(Bot, sKillLimit);
+SUBCMD_FUNC(Bot, sKillLowRate);
 SUBCMD_FUNC(Bot, sKillMonsters);
 SUBCMD_FUNC(Bot, sKillPlay);
 SUBCMD_FUNC(Bot, sKillPlayClear);
@@ -2293,6 +2316,7 @@ SUBCMD_FUNC(Bot, sKillPlayTransport);
 SUBCMD_FUNC(Bot, sKillReject);
 SUBCMD_FUNC(Bot, sKillRejectClear);
 SUBCMD_FUNC(Bot, sKillRejectTransport);
+SUBCMD_FUNC(Bot, sKillSevenWind);
 SUBCMD_FUNC(Bot, sKillUp);
 SUBCMD_FUNC(Bot, Status);
 SUBCMD_FUNC(Bot, StatusUp);
@@ -2510,6 +2534,7 @@ extern const std::string CAUTION_TAG;
 extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
+extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
 extern const std::array<std::string,10> ELEMENT_NAME_TABLE;

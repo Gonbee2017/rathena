@@ -15,6 +15,7 @@ bool& battler_if::attacked_by_detector() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& battler_if::attacked_enemies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::attacked_long_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::attacked_short_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int& battler_if::attacked_short_range_attackers() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::battle_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 battle_modes& battler_if::battle_mode() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -26,6 +27,7 @@ bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERR
 distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_dead() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -169,14 +171,19 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int member_if::get_skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<e_element>>& member_if::skill_seven_wind() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -269,6 +276,11 @@ block_if*& battler_impl::attacked_long_range_attacker() {
 // 攻撃を受けている近接攻撃モンスター。
 block_if*& battler_impl::attacked_short_range_attacker() {
 	return attacked_short_range_attacker_;
+}
+
+// 攻撃を受けている近接攻撃モンスター数。
+int& battler_impl::attacked_short_range_attackers() {
+	return attacked_short_range_attackers_;
 }
 
 // 戦闘時のインデックス。
@@ -1100,6 +1112,12 @@ homun_impl::exists() {
 		hd();
 }
 
+// ホムンクルスが抱えることのできるモンスター数を取得する。
+int // 取得したモンスター数。
+homun_impl::get_hold_monsters() {
+	return INT_MAX;
+}
+
 // ホムンクルスデータを取得する。
 homun_data* // 取得したホムンクルスデータ。
 homun_impl::hd() {
@@ -1567,6 +1585,20 @@ member_impl::find_inventory(
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
 }
 
+// メンバーが抱えることのできるモンスター数を取得する。
+int // 取得したモンスター数。
+member_impl::get_hold_monsters() {
+	return hold_monsters()->get();
+}
+
+// 低ダメージ倍率を取得する。
+int // 取得したダメージ倍率。
+member_impl::get_skill_low_rate() {
+	int rat = skill_low_rate()->get();
+	if (!rat) rat = DEFAULT_SKILL_LOW_RATE;
+	return rat;
+}
+
 // 範囲スキルの発動条件となるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_skill_monsters() {
@@ -1579,6 +1611,11 @@ member_impl::get_skill_monsters() {
 int // 取得したギルドID。
 member_impl::guild_id() {
 	return sd()->status.guild_id;
+}
+
+// 抱えることのできるモンスター数の登録値。
+ptr<regnum_t<int>>& member_impl::hold_monsters() {
+	return hold_monsters_;
 }
 
 // ホムンクルス。
@@ -1750,9 +1787,24 @@ ptr<regnum_t<bool>>& member_impl::loot() {
 	return loot_;
 }
 
+// オートスペルで選択する魔法の登録値。
+ptr<regnum_t<e_skill>>& member_impl::skill_auto_spell() {
+	return skill_auto_spell_;
+}
+
+// 低ダメージ倍率の登録値。
+ptr<regnum_t<int>>& member_impl::skill_low_rate() {
+	return skill_low_rate_;
+}
+
 // 範囲魔法スキルの発動モンスター数の登録値。
 ptr<regnum_t<int>>& member_impl::skill_monsters() {
 	return skill_monsters_;
+}
+
+// 暖かい風で選択する属性の登録値。
+ptr<regnum_t<e_element>>& member_impl::skill_seven_wind() {
+	return skill_seven_wind_;
 }
 
 // 魔法力増幅状態かを判定する。
@@ -2311,8 +2363,12 @@ member_t::member_t(
 	account_id() = sd()->status.account_id;
 	char_id() = sd()->status.char_id;
 	leader() = lea;
+	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
+	skill_auto_spell() = construct<regnum_t<e_skill>>(sd(), "pybot_skill_auto_spell");
+	skill_low_rate() = construct<regnum_t<int>>(sd(), "pybot_skill_low_rate");
 	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");
+	skill_seven_wind() = construct<regnum_t<e_element>>(sd(), "pybot_skill_seven_wind");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
 	cart_auto_get_items() = construct<registry_t<int>>(

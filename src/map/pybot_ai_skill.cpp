@@ -2083,13 +2083,17 @@ AI_SKILL_USE_FUNC(RG_STRIPWEAPON) {
 // オートスペルを使う。
 AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 	if (bot->normal_attack_policy_value() == NAPV_CONTINUOUS) {
+		block_if* tar_ene = bot->target_enemy();
 		e_skill gre_spe_id = e_skill(0);
 		int gre_rat;
-		auto che_spe = [this, klv, &gre_spe_id, &gre_rat] (e_skill spe_id, int min_lv) {
+		auto che_spe = [this, klv, tar_ene, &gre_spe_id, &gre_rat] (e_skill spe_id, int min_lv) {
 			if (klv >= min_lv &&
-				bot->check_skill(spe_id)
+				bot->check_skill(spe_id) &&
+				(!bot->skill_auto_spell()->get() ||
+					spe_id == bot->skill_auto_spell()->get()
+				)
 			) {
-				int rat = bot->skill_ratio(spe_id, 1, bot->target_enemy());
+				int rat = bot->skill_ratio(spe_id, 1, tar_ene);
 				if (!gre_spe_id ||
 					rat > gre_rat
 				) {
@@ -2102,13 +2106,19 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 		che_spe(MG_LIGHTNINGBOLT, 2);
 		che_spe(MG_COLDBOLT, 2);
 		che_spe(MG_SOULSTRIKE, 5);
+		che_spe(MG_FIREBALL, 8);
+		che_spe(MG_FROSTDIVER, 10);
 		che_spe(MG_NAPALMBEAT, 1);
-		status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
-		if (!as_sce ||
-			as_sce->val2 != gre_spe_id
-		) bot->use_skill_self(kid, klv, true, [gre_spe_id] (ai_t* ai, void* fun) {
-			skill_autospell(ai->bot->sd(), gre_spe_id);
-		});
+		if (gre_spe_id) {
+			status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
+			if (!as_sce ||
+				(as_sce->val2 != gre_spe_id &&
+					bot->skill_ratio(e_skill(as_sce->val2), 1, tar_ene) <= bot->get_skill_low_rate()
+				)
+			) bot->use_skill_self(kid, klv, true, [gre_spe_id] (ai_t* ai, void* fun) {
+				skill_autospell(ai->bot->sd(), gre_spe_id);
+			});
+		}
 	}
 }
 
@@ -2723,7 +2733,9 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 		SC_ASPERSIO,
 	};
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SCS[klv - 1]] &&
+	if ((!bot->skill_seven_wind()->get() ||
+			skill_get_ele(kid, klv) == bot->skill_seven_wind()->get()
+		) && !bot->sc()->data[SCS[klv - 1]] &&
 		bot->check_attack(tar_ene)
 	) {
 		int gre_lv = INT_MIN;
@@ -2738,8 +2750,10 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 				gre_rat = rat;
 			}
 		}
+		int att_rat = bot->weapon_attack_element_ratio(tar_ene);
 		if (gre_lv == klv &&
-			gre_rat > bot->weapon_attack_element_ratio(tar_ene)
+			gre_rat > att_rat &&
+			att_rat <= bot->get_skill_low_rate()
 		) bot->use_skill_self(kid, klv);
 	}
 }
