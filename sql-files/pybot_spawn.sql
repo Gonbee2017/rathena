@@ -3213,7 +3213,7 @@ INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1780, 30, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1672, 30, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1678, 30, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1618, 30, 0, 0);
-INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1289, 30, 0, 0);
+INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1289, 15, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1717, 30, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1147, 1, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas03', 1289, 4, 0, 0);

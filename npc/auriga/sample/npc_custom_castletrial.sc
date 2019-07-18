@@ -245,7 +245,7 @@ OnInit:
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 174, 144, 220, 187;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1289, 30,
+		1289, 15,
 		1717, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);

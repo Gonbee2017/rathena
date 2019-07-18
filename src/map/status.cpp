@@ -6483,7 +6483,12 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 		return 90;
 #ifndef RENEWAL /// Steel Body does not provide 90 DEF in [RENEWAL]
 	if(sc->data[SC_STEELBODY])
-		return 90;
+
+		// [GonBee]
+		// ‹à„ó‘Ô‚È‚çDEF‚ð95‚É‚·‚éB
+		//return 90;
+		return 95;
+
 #endif
 	if (sc->data[SC_NYANGGRASS]) {
 		if (bl->type == BL_PC)
@@ -6649,7 +6654,12 @@ static defType status_calc_mdef(struct block_list *bl, struct status_change *sc,
 
 #ifndef RENEWAL /// Steel Body does not provide 90 MDEF in [RENEWAL]
 	if(sc->data[SC_STEELBODY])
-		return 90;
+
+		// [GonBee]
+		// ‹à„ó‘Ô‚È‚çMDEF‚ð95‚É‚·‚éB
+		//return 90;
+		return 95;
+
 #endif
 	if (sc->data[SC_NYANGGRASS]) {
 		if (bl->type == BL_PC)
