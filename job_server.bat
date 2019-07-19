@@ -11,7 +11,6 @@ if exist %1-server.stop (
 	goto end
 )
 if errorlevel 1 (
-	timeout /t %recovery_seconds%
 	goto execute
 )
 :end

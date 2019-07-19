@@ -195,6 +195,17 @@ AI_SKILL_USE_FUNC(ALL_RESURRECTION) {
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
 
+// アシッドテラーを使う。
+AI_SKILL_USE_FUNC(AM_ACIDTERROR) {
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
+		tar_ene->is_great(leader) &&
+		!tar_ene->is_long_weapon_immune()
+	) bot->use_skill_block(kid, klv, tar_ene);
+}
+
 // バーサークピッチャーを使う。
 AI_SKILL_USE_FUNC(AM_BERSERKPITCHER) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
@@ -636,7 +647,7 @@ AI_SKILL_USE_FUNC(GS_DESPERADO) {
 			return bot->check_use_skill(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) >= 100 &&
 				!ene->is_summoned() &&
-				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});;
+				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 		})
 	);
 	if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);

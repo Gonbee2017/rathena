@@ -26,7 +26,6 @@ ss-checker %bind_address% %2>nul 2>&1
 if errorlevel 1 (
 	echo %date% %time:~0,8% - %1サーバーがフリーズしたため再起動します。
 	taskkill /f /im %1-server.exe>nul 2>&1
-	timeout /t %recovery_seconds% /nobreak>nul 2>&1
 )
 exit /b
 

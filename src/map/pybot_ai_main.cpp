@@ -318,6 +318,7 @@ void ai_t::leader_target() {
 			!bat->is_dead() &&
 			bat->bl()->m == leader->center().m
 		) {
+			block_if* tar_ene = nullptr;
 			if (!bat->is_primary()) {
 				for (block_if* ene : enemies) {
 					distance_policy_values dis_pol_val = DPV_PENDING;
@@ -327,11 +328,13 @@ void ai_t::leader_target() {
 							nor_att_pol_val == NAPV_CONTINUOUS
 						) && !ene->is_flora() &&
 						ene->is_short_range_attacker() &&
-						ene->target_battler() &&
+						(bat->is_short_range_attacker() ||
+							!ene->is_long_weapon_immune()
+						) && ene->target_battler() &&
 						ene->target_battler()->battle_index() > bat->battle_index() &&
 						ene->attacked_battlers().empty()
 					) {
-						bat->target_enemy() = ene;
+						tar_ene = ene;
 						bat->battle_mode() = BM_TAUNT;
 						bat->distance_policy_value() = dis_pol_val;
 						bat->normal_attack_policy_value() = nor_att_pol_val;
@@ -339,26 +342,27 @@ void ai_t::leader_target() {
 					}
 				}
 			}
-			if (!bat->target_enemy()) {
-				bat->target_enemy() = enemies.front();
-				distance_policy_values dis_pol_val = DPV_PENDING;
-				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-				rel_pol(bat, bat->target_enemy(), &dis_pol_val, &nor_att_pol_val);
+			if (!tar_ene) {
+				tar_ene = enemies.front();
 				if (leader->rush()->get() ||
 					((battlers.front()->distance_policy_value() == DPV_AWAY ||
 							bat->is_primary()
-						) && (bat->target_enemy()->target_battler() ||
-							!bat->target_enemy()->is_berserk()
+						) && (tar_ene->target_battler() ||
+							!tar_ene->is_berserk()
 						)
 					)
 				) bat->battle_mode() = BM_TAUNT;
 				else bat->battle_mode() = BM_ASSIST;
+				distance_policy_values dis_pol_val = DPV_PENDING;
+				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
+				rel_pol(bat, tar_ene, &dis_pol_val, &nor_att_pol_val);
 				bat->distance_policy_value() = dis_pol_val;
 				bat->normal_attack_policy_value() = nor_att_pol_val;
 			}
 			if (bat->distance_policy_value() == DPV_CLOSE ||
 				bat->normal_attack_policy_value() == NAPV_CONTINUOUS
-			) bat->target_enemy()->attacked_battlers().push_back(bat);
+			) tar_ene->attacked_battlers().push_back(bat);
+			bat->target_enemy() = tar_ene;
 		}
 	}
 }
@@ -1212,27 +1216,27 @@ pos_t // 見つかった位置。見つからなかったらadvantageがINT_MIN。
 ai_t::find_best_tanut_pos() {
 	pos_t pos;
 	block_if* tar_ene = battler->target_enemy();
-	if (!leader->rush()->get() &&
-		battler->is_primary() &&
-		tar_ene->is_short_range_attacker() &&
-		!tar_ene->is_flora() &&
-		tar_ene->is_great(leader) &&
-		tar_ene->target_battler() == battler &&
-		battler->attacked_by_blower() &&
-		battler->around_wall_exists()
-	) {
-		for (int rad = 0; rad <= battle_config.pybot_around_distance; ++rad)
-			iterate_edge_bl(leader->bl(), rad, find_wall_side_pos_pred(pos));
-	} else if (battler->distance_policy_value() == DPV_CLOSE &&
-		(!battler->sc()->data[SC_WARM] ||
+	if (battler->distance_policy_value() == DPV_CLOSE) {
+		if (!leader->rush()->get() &&
+			battler->is_primary() &&
+			tar_ene->is_short_range_attacker() &&
+			!tar_ene->is_flora() &&
+			tar_ene->is_great(leader) &&
+			tar_ene->target_battler() == battler &&
+			battler->attacked_by_blower() &&
+			battler->around_wall_exists()
+		) {
+			for (int rad = 0; rad <= battle_config.pybot_around_distance; ++rad)
+				iterate_edge_bl(leader->bl(), rad, find_wall_side_pos_pred(pos));
+		} else if (!battler->sc()->data[SC_WARM] ||
 			tar_ene->target_battler() != battler ||
 			tar_ene->has_knockback_immune()
-		)
-	) {
-		int max_rad = std::min(battler->attack_range(), battle_config.pybot_around_distance);
-		pos_t wai_pos = tar_ene->waiting_position();
-		for (int rad = 1; rad <= max_rad; ++rad)
-			iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
+		) {
+			int max_rad = std::min(battler->attack_range(), battle_config.pybot_around_distance);
+			pos_t wai_pos = tar_ene->waiting_position();
+			for (int rad = 1; rad <= max_rad; ++rad)
+				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
+		}
 	}
 	if (pos.advantage == INT_MIN) pos = find_best_away_pos();
 	return pos;
@@ -1249,9 +1253,18 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			battler->check_skill(RG_BACKSTAP) &&
 			tan &&
 			tan->battle_index() < battler->battle_index();
+		bool mov = tar_ene->is_short_range_attacker() &&
+			(tar_ene->sc()->data[SC_PNEUMA] ||
+				tar_ene->sc()->data[SC_SAFETYWALL] ||
+				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
+			);
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range()) &&
-			battler->can_reach_xy(x, y) &&
+		if (((!mov &&
+					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
+				) || (mov &&
+					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
+				)
+			) && battler->can_reach_xy(x, y) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
@@ -1285,8 +1298,16 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 // バトラーが壁際に位置取る述語を作る。
 yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 	return [this, &pos] (int x, int y) -> bool {
+		block_if* tar_ene = battler->target_enemy();
+		bool mov = tar_ene->is_short_range_attacker() &&
+			(tar_ene->sc()->data[SC_PNEUMA] ||
+				tar_ene->sc()->data[SC_SAFETYWALL] ||
+				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
+			);
 		if (check_wall_side(battler->bl()->m, x, y) &&
-			battler->can_reach_xy(x, y) &&
+			(!mov ||
+				!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
+			) && battler->can_reach_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
 			check_line_other_battlers(x, y) &&

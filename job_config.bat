@@ -15,8 +15,6 @@ rem Apacheログの保存先ディレクトリ。
 set web_logs_dir=D:\Apache24\logs\
 rem Apacheログファイルの保管日数。
 set web_logs_days=7
-rem サーバークラッシュから再起動するまでの秒数。
-set recovery_seconds=15
 rem サーバー状態をチェックする間隔。
 set check_interval=15
 rem バインドアドレス。

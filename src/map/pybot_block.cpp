@@ -642,7 +642,9 @@ enemy_impl::away_distance(
 	block_if* lea // リーダー。
 ) {
 	int dis = battle_config.pybot_away_distance;
-	if (is_great(lea)) dis = battle_config.pybot_away_distance_great;
+	if (is_great(lea) &&
+		is_short_range_attacker()
+	) dis = battle_config.pybot_away_distance_great;
 	return dis;
 }
 
@@ -1008,9 +1010,15 @@ general_impl::skill_advantage(
 	int y  // Y座標。
 ) {
 	int adv = 0;
-	iterate_skill_unit(bl()->m, x, y, [&adv] (skill_unit* kun, block_list* src_bl) -> int {
-		if (src_bl->type == BL_MOB)	adv += find_map_data(ENEMY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
-		else adv += find_map_data(ALLY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
+	iterate_skill_unit(bl()->m, x, y, [this, &adv] (skill_unit* kun, block_list* src_bl) -> int {
+		if (distance_policy_value() == DPV_AWAY ||
+			(kun->group->skill_id != AL_PNEUMA &&
+				kun->group->skill_id != PF_FOGWALL
+			)
+		) {
+			if (src_bl->type == BL_MOB)	adv += find_map_data(ENEMY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
+			else adv += find_map_data(ALLY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
+		}
 		return 0;
 	});
 	return adv;

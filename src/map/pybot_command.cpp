@@ -337,7 +337,7 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 			if (!idb) idb = itemdb_exists(itm->nameid);
 			out << INDEX_PREFIX << mem->member_index() << " " <<
 				ID_PREFIX << mem->char_id() << " - " <<
-				mem->name() << " : " <<
+				mem->name() << " ; " <<
 				STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
 				INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
@@ -415,7 +415,7 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 				item_data* idb = mem->sd()->inventory_data[i];
 				out << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
-					mem->name() << " : " <<
+					mem->name() << " ; " <<
 					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), i) << " " <<
 					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
 					print_item(itm, idb);
@@ -1091,7 +1091,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 				pc_getzeny(mem->sd(), zen, LOG_TYPE_NPC, NULL);
 				out << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
-					mem->name() << " : " <<
+					mem->name() << " ; " <<
 					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
 					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
@@ -1781,7 +1781,7 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 			int mid = ps_val.first;
 			play_skill* ps = ps_val.second;
 			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
-				print_mobdb(mid) << " : " <<
+				print_mobdb(mid) << " ; " <<
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), ps->skill_id) << " - " <<
 				skill_get_desc(ps->skill_id) << "\n";
 		}
@@ -2130,7 +2130,7 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 					}
 					out << INDEX_PREFIX << mem->member_index() << " " <<
 						ID_PREFIX << mem->char_id() << " - " <<
-						mem->name() << " : " <<
+						mem->name() << " ; " <<
 						ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 						print_itemdb(nid) << " (" << com << ")";
 					if (!suc) out << " ¦•â[Ž¸”s";
@@ -2253,7 +2253,7 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 				}
 				out << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
-					mem->name() << " : " <<
+					mem->name() << " ; " <<
 					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
 					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
@@ -2581,7 +2581,7 @@ SUBCMD_FUNC(Bot, Warp) {
 		return print(
 			INDEX_PREFIX, ind, " - ",
 			id_maps.at(map_mapindex2mapid(poi->map))->name_japanese,
-			" (", mapindex_id2name(poi->map), ") : ",
+			" (", mapindex_id2name(poi->map), ") ; ",
 			poi->x, ", ", poi->y, "\n"
 		);
 	};

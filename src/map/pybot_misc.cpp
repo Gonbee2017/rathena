@@ -1012,8 +1012,7 @@ mob_skill_is_long(
 ) {
 	return !KEY_EXISTS(MOB_SHORT_SKILLS, e_skill(kid)) &&
 		!(skill_get_nk(kid) & NK_NO_DAMAGE) &&
-		(skill_get_range(kid, klv) > 3 ||
-			skill_get_splash(kid, klv) < 0 ||
+		(skill_get_splash(kid, klv) < 0 ||
 			skill_get_splash(kid, klv) > 3
 		);
 }
