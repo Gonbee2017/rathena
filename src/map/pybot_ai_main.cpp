@@ -438,8 +438,7 @@ void ai_t::bot_dead() {
 void ai_t::bot_lost() {
 	block_list* cen = &leader->center();
 	if ((bot->bl()->m != cen->m ||
-			!check_distance_bl(bot->bl(), cen, AREA_SIZE) ||
-			!bot->can_reach_bl(cen, false)
+			!check_distance_bl(bot->bl(), cen, AREA_SIZE)
 		) && bot->teleport(cen)
 	) throw turn_end_exception();
 }
@@ -797,8 +796,7 @@ void ai_t::homun_main(block_if* hom) {
 void ai_t::homun_lost() {
 	block_list* mas_bl = homun->master()->bl();
 	if ((homun->bl()->m != mas_bl->m ||
-			!check_distance_bl(homun->bl(), mas_bl, AREA_SIZE) ||
-			!homun->can_reach_block(homun->master(), false)
+			!check_distance_bl(homun->bl(), mas_bl, AREA_SIZE)
 		) && homun->teleport(mas_bl)
 	) throw turn_end_exception();
 }
