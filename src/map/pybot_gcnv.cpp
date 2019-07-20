@@ -1644,6 +1644,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillsevenwind テコン 火属性]\n"
 		"暖かい風で自由に属性を選択するようにする。\n"
 		"入力例 [@bot skillsevenwind テコン]\n"
+	), SUBCMD_DESC(Bot, sKillTail                  , kt  ,
+		"------ sKillTail (kt) サブコマンド ------\n"
+		"掛け直し時間を一覧表示する。\n"
+		"入力例 [@bot skilltail ハイプリ]\n"
+		"掛け直し時間を登録する。\n"
+		"入力例 [@bot skilltail ハイプリ アスムプティオ 5000]\n"
+		"掛け直し時間の登録を抹消する。\n"
+		"入力例 [@bot skilltail ハイプリ アスムプティオ]\n"
+	), SUBCMD_DESC(Bot, sKillTailClear            ,     ,
+		"------ sKillRejectClear サブコマンド ------\n"
+		"掛け直し時間をクリアする。\n"
+		"入力例 [@bot skilltailclear ハイプリ]\n"
+	), SUBCMD_DESC(Bot, sKillTailTransport        , ktt ,
+		"------ sKillTailTransport (ktt) サブコマンド ------\n"
+		"掛け直し時間を転送する。\n"
+		"入力例 [@bot skilltailtransport ハイプリ ハイプリ2]\n"
 	), SUBCMD_DESC(Bot, sKillUp                    , ku  ,
 		"------ sKillUp (ku) サブコマンド ------\n"
 		"スキルのレベルを上げる。\n"
@@ -1834,6 +1850,9 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillReject                , kr  ),
 	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
 	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
+	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
+	SUBCMD_PROC(Bot, sKillTailClear             ,     ),
+	SUBCMD_PROC(Bot, sKillTailTransport         , ktt ),
 	SUBCMD_PROC(Bot, sKillUp                    , ku  ),
 	SUBCMD_PROC(Bot, Status                     , s   ),
 	SUBCMD_PROC(Bot, StatusUp                   , su  ),
@@ -3463,6 +3482,8 @@ const std::unordered_map<
 	{std::type_index(typeid(const double))            , SQLDT_DOUBLE   },
 	{std::type_index(typeid(const char*))             , SQLDT_STRING   },
 
+	{std::type_index(typeid(e_skill))                 , SQLDT_INT      },
+	{std::type_index(typeid(const e_skill))           , SQLDT_INT      },
 	{std::type_index(typeid(equip_pos))               , SQLDT_INT      },
 	{std::type_index(typeid(const equip_pos))         , SQLDT_INT      },
 	{std::type_index(typeid(equip_pos_orders))        , SQLDT_INT      },

@@ -99,11 +99,11 @@ delete_ignore_item_func(
 }
 
 // DBから制限スキルを削除する関数を作る。
-registry_t<int,int>::save_func // 作った関数。
+registry_t<e_skill,int>::save_func // 作った関数。
 delete_limit_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int kid, int* klv) {
+	return [cid] (sql_session* ses, e_skill kid, int* klv) {
 		ses->execute(
 			"DELETE FROM `pybot_limit_skill` "
 			"WHERE"
@@ -174,11 +174,11 @@ delete_recover_sp_item_func(
 }
 
 // DBから拒否スキルを削除する関数を作る。
-registry_t<int>::save_func // 作った関数。
+registry_t<e_skill>::save_func // 作った関数。
 delete_reject_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int kid) {
+	return [cid] (sql_session* ses, e_skill kid) {
 		ses->execute(
 			"DELETE FROM `pybot_reject_skill` "
 			"WHERE"
@@ -199,6 +199,21 @@ delete_sell_item_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `nameid` = " , construct<sql_param>(nid)
+		);
+	};
+}
+
+// DBから掛け直し時間を削除する関数を作る。
+registry_t<e_skill,int>::save_func // 作った関数。
+delete_skill_tail_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, e_skill kid, int* dur) {
+		ses->execute(
+			"DELETE FROM `pybot_skill_tail` "
+			"WHERE"
+			" `char_id` = " , construct<sql_param>(cid), " AND"
+			" `skill_id` = ", construct<sql_param>(kid)
 		);
 	};
 }
@@ -339,11 +354,11 @@ insert_ignore_item_func(
 }
 
 // DBに制限スキルを挿入する関数を作る。
-registry_t<int,int>::save_func // 作った関数。
+registry_t<e_skill,int>::save_func // 作った関数。
 insert_limit_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int kid, int* klv) {
+	return [cid] (sql_session* ses, e_skill kid, int* klv) {
 		ses->execute(
 			"INSERT INTO `pybot_limit_skill` "
 			"VALUES "
@@ -419,11 +434,11 @@ insert_recover_sp_item_func(
 }
 
 // DBに拒否スキルを挿入する関数を作る。
-registry_t<int>::save_func // 作った関数。
+registry_t<e_skill>::save_func // 作った関数。
 insert_reject_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int kid) {
+	return [cid] (sql_session* ses, e_skill kid) {
 		ses->execute(
 			"INSERT INTO `pybot_reject_skill` "
 			"VALUES "
@@ -444,6 +459,22 @@ insert_sell_item_func(
 			"VALUES "
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
+		);
+	};
+}
+
+// DBに掛け直し時間を挿入する関数を作る。
+registry_t<e_skill,int>::save_func // 作った関数。
+insert_skill_tail_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, e_skill kid, int* dur) {
+		ses->execute(
+			"INSERT INTO `pybot_skill_tail` "
+			"VALUES "
+			"(", construct<sql_param>(cid ), ","
+			" ", construct<sql_param>(kid ), ","
+			" ", construct<sql_param>(*dur), ")"
 		);
 	};
 }
@@ -633,12 +664,12 @@ load_ignore_item_func(
 }
 
 // DBから制限スキルをロードする関数を作る。
-registry_t<int,int>::load_func // 作った関数。
+registry_t<e_skill,int>::load_func // 作った関数。
 load_limit_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, registry_t<int,int>* reg) {
-		int kid;
+	return [cid] (sql_session* ses, registry_t<e_skill,int>* reg) {
+		e_skill kid;
 		int klv;
 		ses->execute(
 			"SELECT"
@@ -730,18 +761,37 @@ load_recover_sp_item_func(
 }
 
 // DBから拒否スキルをロードする関数を作る。
-registry_t<int>::load_func // 作った関数。
+registry_t<e_skill>::load_func // 作った関数。
 load_reject_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, registry_t<int>* reg) {
+	return [cid] (sql_session* ses, registry_t<e_skill>* reg) {
 		e_skill kid;
 		ses->execute(
-			"SELECT `", construct<sql_column>("skill_id", *(int*)(&kid)), "` "
+			"SELECT `", construct<sql_column>("skill_id", kid), "` "
 			"FROM `pybot_reject_skill` "
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) reg->register_(kid);
+	};
+}
+
+// DBから掛け直し時間をロードする関数を作る。
+registry_t<e_skill,int>::load_func // 作った関数。
+load_skill_tail_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<e_skill,int>* reg) {
+		e_skill kid;
+		int dur;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("skill_id", kid), "`,"
+			" `", construct<sql_column>("duration", dur), "` "
+			"FROM `pybot_skill_tail` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) reg->register_(kid, initialize<int>(dur));
 	};
 }
 
@@ -872,11 +922,11 @@ update_team_func(
 }
 
 // DBの制限スキルを更新する関数を作る。
-registry_t<int,int>::save_func // 作った関数。
+registry_t<e_skill,int>::save_func // 作った関数。
 update_limit_skill_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int kid, int* klv) {
+	return [cid] (sql_session* ses, e_skill kid, int* klv) {
 		ses->execute(
 			"UPDATE `pybot_limit_skill` "
 			"SET `skill_lv` = ", construct<sql_param>(*klv), " "
@@ -949,6 +999,22 @@ update_recover_sp_item_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `nameid` = " , construct<sql_param>(nid)
+		);
+	};
+}
+
+// DBの掛け直し時間を更新する関数を作る。
+registry_t<e_skill,int>::save_func // 作った関数。
+update_skill_tail_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, e_skill kid, int* dur) {
+		ses->execute(
+			"UPDATE `pybot_skill_tail` "
+			"SET `duration` = ", construct<sql_param>(*dur), " "
+			"WHERE"
+			" `char_id` = " , construct<sql_param>(cid), " AND"
+			" `skill_id` = ", construct<sql_param>(kid)
 		);
 	};
 }

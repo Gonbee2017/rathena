@@ -1650,6 +1650,7 @@ SUBCMD_FUNC(Bot, sKillAutoSpell) {
 			throw command_error{print(
 				"「", sk_nam, "」というスキルはありません。"
 			)};
+		std::string sk_des = skill_get_desc(kid);
 		if (kid != MG_FIREBOLT &&
 			kid != MG_LIGHTNINGBOLT &&
 			kid != MG_COLDBOLT &&
@@ -1658,15 +1659,15 @@ SUBCMD_FUNC(Bot, sKillAutoSpell) {
 			kid != MG_FROSTDIVER &&
 			kid != MG_NAPALMBEAT
 		) throw command_error{print(
-				"「", skill_get_desc(kid), "」は指定できません。"
+				"「", sk_des, "」は指定できません。"
 			)};
 		if (!mem->check_skill(e_skill(kid)))
 			throw command_error{print(
 				"「", mem->name(), "」は「",
-				skill_get_desc(kid), "」を使えません。"
+				sk_des, "」を使えません。"
 			)};
 		show_client(lea->fd(), print(
-			"「", mem->name(), "」は「", skill_get_desc(kid), "」を選択します。"
+			"「", mem->name(), "」は「", sk_des, "」を選択します。"
 		));
 		mem->skill_auto_spell()->set(e_skill(kid));
 		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
@@ -1835,7 +1836,7 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 			mem->play_skills()->register_(mid, ps);
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", mob_str, "」用演奏スキルに"
-				"「", skill_get_desc(ps->skill_id), "」を登録しました。"
+				"「", sk_des, "」を登録しました。"
 			));
 		}
 		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
@@ -1905,13 +1906,13 @@ SUBCMD_FUNC(Bot, sKillReject) {
 		) throw command_error{print(
 			"「", sk_des, "」はターゲット支援スキルではありません。"
 		)};
-		if (mem->reject_skills()->find(kid)) {
-			mem->reject_skills()->unregister(kid);
+		if (mem->reject_skills()->find(e_skill(kid))) {
+			mem->reject_skills()->unregister(e_skill(kid));
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", sk_des, "」を拒否しません。"
 			));
 		} else {
-			mem->reject_skills()->register_(kid);
+			mem->reject_skills()->register_(e_skill(kid));
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", sk_des, "」を拒否します。"
 			));
@@ -1939,6 +1940,88 @@ SUBCMD_FUNC(Bot, sKillRejectTransport) {
 	show_client(lea->fd(), print(
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の拒否スキルを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
+// メンバーの掛け直し時間を一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, sKillTail) {
+	using tai_val_t = std::pair<e_skill,int*>;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<tai_val_t> tai_vals;
+		mem->skill_tails()->copy(pybot::back_inserter(tai_vals));
+		std::sort(ALL_RANGE(tai_vals), [] (tai_val_t lval, tai_val_t rval) -> bool {
+			return lval.first < rval.first;
+		});
+		std::stringstream out;
+		out << "------ 「" << mem->name() << "」の掛け直し時間 ------\n";
+		for (const tai_val_t& tai_val : tai_vals) {
+			e_skill kid = tai_val.first;
+			int dur = *tai_val.second;
+			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) <<
+				" - " << skill_get_desc(kid) << " " << dur << "ミリ秒前\n";
+		}
+		out << tai_vals.size() << "件の掛け直し時間が見つかりました。\n";
+		show_client(lea->fd(), out.str());
+	} else {
+		std::string sk_nam = shift_arguments(args);
+		e_skill kid = e_skill(find_skilldb(sk_nam));
+		if (!kid) throw command_error{print(
+			"「", sk_nam, "」というスキルはありません。"
+		)};
+		std::string sk_des = skill_get_desc(kid);
+		if (!(skill_get_inf(kid) & (INF_SELF_SKILL | INF_SUPPORT_SKILL)) &&
+			kid != PR_BENEDICTIO
+		) throw command_error{print(
+			"「", sk_des, "」は支援スキルではありません。"
+		)};
+		if (!skill_get_time(kid, 1))
+			throw command_error{print(
+				"「", sk_des, "」には効果時間がありません。"
+			)};
+		if (args.empty()) {
+			mem->skill_tails()->unregister(kid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」を効果が切れてから掛け直します。"
+			));
+		} else {
+			if (!mem->check_skill(e_skill(kid)))
+				throw command_error{print(
+					"「", mem->name(), "」は「",
+					sk_des, "」を使えません。"
+				)};
+			int dur = shift_arguments_then_parse_int(
+				args, print("掛け直し時間"), 1, INT_MAX
+			);
+			mem->skill_tails()->register_(kid, initialize<int>(dur));
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」を効果が切れる", dur, "ミリ秒前に掛け直します。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーの掛け直し時間をクリアする。
+SUBCMD_FUNC(Bot, sKillTailClear) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->skill_tails()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou, "件の掛け直し時間の登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーの掛け直し時間を転送する。
+SUBCMD_FUNC(Bot, sKillTailTransport) {
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->skill_tails()->import_(mem1->skill_tails().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件の掛け直し時間を転送しました。"
 	));
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
@@ -2587,10 +2670,11 @@ SUBCMD_FUNC(Bot, Warp) {
 	};
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int war_lv = mem->check_skill(AL_WARP);
+	std::string war_des = skill_get_desc(AL_WARP);
 	if (!war_lv)
 		throw command_error{print(
 			"「", mem->name(), "」は「",
-			skill_get_desc(AL_WARP), "」を使えません。"
+			war_des, "」を使えません。"
 		)};
 	if (args.empty()) {
 		std::stringstream out;
@@ -2609,12 +2693,12 @@ SUBCMD_FUNC(Bot, Warp) {
 	} else {
 		if (mem == lea)
 			throw command_error{print(
-				"自分で「", skill_get_desc(AL_WARP), "」を使ってください。"
+				"自分で「", war_des, "」を使ってください。"
 			)};
 		if (!mem->can_use_skill(AL_WARP, war_lv))
 			throw command_error{print(
 				"「", mem->name(), "」は現在「",
-				skill_get_desc(AL_WARP), "」を使えません。"
+				war_des, "」を使えません。"
 			)};
 		int mind = 0;
 		int max_mem;
@@ -3333,9 +3417,9 @@ void skill_user_limit_skill(
 			"「", sk_des, "」はアクティブスキルではありません。"
 		)};
 	if (args.empty() &&
-		sk_use->limit_skills()->find(sk->id)
+		sk_use->limit_skills()->find(e_skill(sk->id))
 	) {
-		sk_use->limit_skills()->unregister(sk->id);
+		sk_use->limit_skills()->unregister(e_skill(sk->id));
 		show_client(lea->fd(), print(
 			"「", sk_use->name(), "」は「", sk_des,
 			"」のレベル制限を解除しました。"
@@ -3350,7 +3434,7 @@ void skill_user_limit_skill(
 				skill_get_max(sk->id) - 1
 			);
 		}
-		sk_use->limit_skills()->register_(sk->id, initialize<int>(lim_lv));
+		sk_use->limit_skills()->register_(e_skill(sk->id), initialize<int>(lim_lv));
 		show_client(lea->fd(), print(
 			"「", sk_use->name(), "」は「", sk_des,
 			"」をレベル", lim_lv, "に制限しました。"
@@ -3370,7 +3454,7 @@ void skill_user_show_skills(
 	sk_use->iterate_skill([sk_use, &out, &cou] (s_skill* sk) -> bool {
 		out << ID_PREFIX << print(std::setw(5), std::setfill('0'), sk->id) << " - " <<
 			skill_get_desc(sk->id) << " " << int(sk->lv);
-		int* lim_slv = sk_use->limit_skills()->find(sk->id);
+		int* lim_slv = sk_use->limit_skills()->find(e_skill(sk->id));
 		if (lim_slv) out << " (" << *lim_slv << ")";
 		out << "\n";
 		++cou;

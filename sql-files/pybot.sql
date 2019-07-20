@@ -110,6 +110,14 @@ CREATE TABLE `pybot_sell_item` (
   PRIMARY KEY (`char_id`, `nameid`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_skill_tail`;
+CREATE TABLE IF NOT EXISTS `pybot_skill_tail` (
+  `char_id` int(11) unsigned NOT NULL,
+  `skill_id` int(11) unsigned NOT NULL,
+  `duration` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `skill_id`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_storage_get_item`;
 CREATE TABLE `pybot_storage_get_item` (
   `char_id` int(11) unsigned NOT NULL,

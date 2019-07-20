@@ -24,7 +24,7 @@ AI_SKILL_USE_FUNC(AC_CHARGEARROW) {
 
 // 集中力向上を使う。
 AI_SKILL_USE_FUNC(AC_CONCENTRATION) {
-	if (!bot->sc()->data[SC_CONCENTRATE]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_CONCENTRATE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ダブルストレイフィングを使う。
@@ -53,19 +53,19 @@ AI_SKILL_USE_FUNC(AC_SHOWER) {
 
 // エンジェラスを使う。
 AI_SKILL_USE_FUNC(AL_ANGELUS) {
-	if (!bot->sc()->data[SC_ANGELUS] &&
+	if (bot->sc_rest(SC_ANGELUS) <= bot->get_skill_tail(kid) &&
 		!bot->is_magic_immune()
 	) bot->use_skill_self(kid, klv);
 }
 
 // ブレッシングを使う。
 AI_SKILL_USE_FUNC(AL_BLESSING) {
-	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_BLESSING] &&
+			mem->sc_rest(SC_BLESSING) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_CHANGEUNDEAD];
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
@@ -157,12 +157,12 @@ AI_SKILL_USE_FUNC(AL_HOLYWATER) {
 
 // 速度増加を使う。
 AI_SKILL_USE_FUNC(AL_INCAGI) {
-	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_INCREASEAGI] &&
+			mem->sc_rest(SC_INCREASEAGI) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_QUAGMIRE] &&
 			!mem->sc()->data[SC_CHANGEUNDEAD];
 	});
@@ -269,12 +269,12 @@ AI_SKILL_USE_FUNC(AM_RESURRECTHOMUN) {
 
 // エンチャントポイズンを使う。
 AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
-	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
 		block_if* tar_ene = mem->target_enemy();
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_ENCPOISON] &&
+			mem->sc_rest(SC_ENCPOISON) <= bot->get_skill_tail(kid) &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
 			tar_ene &&
 			mem->attack_element_ratio(tar_ene, ELE_POISON) >= 100 &&
@@ -285,7 +285,7 @@ AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 
 // ポイズンリアクトを使う。
 AI_SKILL_USE_FUNC(AS_POISONREACT) {
-	if (!bot->sc()->data[SC_POISONREACT] &&
+	if (bot->sc_rest(SC_POISONREACT) <= bot->get_skill_tail(kid) &&
 		bot->target_enemy()->element() == ELE_POISON
 	) bot->use_skill_self(kid, klv);
 }
@@ -301,7 +301,7 @@ AI_SKILL_USE_FUNC(ASC_BREAKER) {
 // エンチャントデッドリーポイズンを使う。
 AI_SKILL_USE_FUNC(ASC_EDP) {
 	if (bot->distance_policy_value() == DPV_CLOSE &&
-		!bot->sc()->data[SC_EDP] &&
+		bot->sc_rest(SC_EDP) <= bot->get_skill_tail(kid) &&
 		bot->target_enemy()->is_great(leader)
 	) bot->use_skill_self(kid, klv);
 }
@@ -323,7 +323,7 @@ AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 
 // アドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE) {
-	if (!bot->sc()->data[SC_ADRENALINE] &&
+	if (bot->sc_rest(SC_ADRENALINE) <= bot->get_skill_tail(kid) &&
 		!bot->sc()->data[SC_ADRENALINE2] &&
 		!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE]
@@ -332,7 +332,7 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE) {
 
 // フルアドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
-	if (!bot->sc()->data[SC_ADRENALINE2] &&
+	if (bot->sc_rest(SC_ADRENALINE2) <= bot->get_skill_tail(kid) &&
 		!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE]
 	) bot->use_skill_self(kid, klv);
@@ -373,7 +373,7 @@ AI_SKILL_USE_FUNC_T(BS_MAXIMIZE, deactivate) {
 // オーバートラストを使う。
 AI_SKILL_USE_FUNC(BS_OVERTHRUST) {
 	if (!bot->sc()->data[SC_MAXOVERTHRUST] &&
-		!bot->sc()->data[SC_OVERTHRUST]
+		bot->sc_rest(SC_OVERTHRUST) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -414,7 +414,7 @@ AI_SKILL_USE_FUNC(BS_REPAIRWEAPON) {
 
 // ウェポンパーフェクションを使う。
 AI_SKILL_USE_FUNC(BS_WEAPONPERFECT) {
-	if (!bot->sc()->data[SC_WEAPONPERFECTION]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_WEAPONPERFECTION) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 私を縛らないでを使う。
@@ -452,7 +452,7 @@ AI_SKILL_USE_FUNC(CH_TIGERFIST) {
 
 // オートガードを使う。
 AI_SKILL_USE_FUNC(CR_AUTOGUARD) {
-	if (!bot->sc()->data[SC_AUTOGUARD]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_AUTOGUARD) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ディフェンダー状態になる。
@@ -492,7 +492,7 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 					!mem->is_hiding() &&
 					!mem->is_invincible() &&
 					!mem->reject_skills()->find(kid) &&
-					!mem->sc()->data[SC_DEVOTION];
+					mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid);
 			});
 			if (mem) bot->use_skill_block(kid, klv, mem);
 		}
@@ -550,14 +550,14 @@ AI_SKILL_USE_FUNC(CR_PROVIDENCE) {
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_PROVIDENCE];
+			mem->sc_rest(SC_PROVIDENCE) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
 
 // リフレクトシールドを使う。
 AI_SKILL_USE_FUNC(CR_REFLECTSHIELD) {
-	if (!bot->sc()->data[SC_REFLECTSHIELD]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_REFLECTSHIELD) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 魂状態でシールドブーメランを使う。
@@ -572,14 +572,14 @@ AI_SKILL_USE_FUNC_T(CR_SHIELDBOOMERANG, spirit) {
 
 // シュリンクを使う。
 AI_SKILL_USE_FUNC(CR_SHRINK) {
-	if (!bot->sc()->data[SC_SHRINK]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_SHRINK) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // スピアクイッケンを使う。
 AI_SKILL_USE_FUNC(CR_SPEARQUICKEN) {
 	if (!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE] &&
-		!bot->sc()->data[SC_SPEARQUICKEN]
+		bot->sc_rest(SC_SPEARQUICKEN) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -609,8 +609,8 @@ AI_SKILL_USE_FUNC(DC_WINKCHARM) {
 
 // アジャストメントを使う。
 AI_SKILL_USE_FUNC(GS_ADJUSTMENT) {
-	if (bot->target_battler()->is_great(leader) &&
-		!bot->sc()->data[SC_ADJUSTMENT] &&
+	if (bot->target_enemy()->is_great(leader) &&
+		bot->sc_rest(SC_ADJUSTMENT) <= bot->get_skill_tail(kid) &&
 		bot->collect_coins(2)
 	) bot->use_skill_self(kid, klv);
 }
@@ -751,7 +751,7 @@ AI_SKILL_USE_FUNC(GS_GROUNDDRIFT) {
 
 // インクリージングアキュラシーを使う。
 AI_SKILL_USE_FUNC(GS_INCREASING) {
-	if (!bot->sc()->data[SC_INCREASING] &&
+	if (bot->sc_rest(SC_INCREASING) <= bot->get_skill_tail(kid) &&
 		bot->collect_coins(4)
 	) bot->use_skill_self(kid, klv);
 }
@@ -808,33 +808,26 @@ AI_SKILL_USE_FUNC(GS_TRIPLEACTION) {
 // アスムプティオを先頭のメンバーに使う。
 AI_SKILL_USE_FUNC_T(HP_ASSUMPTIO, primary) {
 	block_if* pri_mem = members.front();
-	t_tick ass_rem = 0;
-	status_change_entry* ass_sce = pri_mem->sc()->data[SC_ASSUMPTIO];
-	if (ass_sce) {
-		const TimerData * ass_td = get_timer(ass_sce->timer);
-		ass_rem = DIFF_TICK(ass_td->tick, gettick());
-	}
 	if (!pri_mem->is_dead() &&
 		!pri_mem->is_hiding() &&
 		!pri_mem->is_magic_immune() &&
 		pri_mem->is_primary() &&
 		!pri_mem->reject_skills()->find(kid) &&
-		(!ass_sce ||
-			ass_rem < SKILL_GET_CAST_DELAY(kid, klv)
-		) && !pri_mem->sc()->data[SC_KAITE] &&
+		pri_mem->sc_rest(SC_ASSUMPTIO) <= bot->get_skill_tail(kid) &&
+		!pri_mem->sc()->data[SC_KAITE] &&
 		!pri_mem->sc()->data[SC_KYRIE]
 	) bot->use_skill_block(kid, klv, pri_mem);
 }
 
 // アスムプティオを先頭のメンバー以外に使う。
 AI_SKILL_USE_FUNC_T(HP_ASSUMPTIO, not_primary) {
-	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->is_primary() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_ASSUMPTIO] &&
+			mem->sc_rest(SC_ASSUMPTIO) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_KAITE] &&
 			!mem->sc()->data[SC_KYRIE];
 	});
@@ -992,7 +985,7 @@ AI_SKILL_USE_FUNC(KN_CHARGEATK) {
 // ワンハンドクイッケンを使う。
 AI_SKILL_USE_FUNC(KN_ONEHAND) {
 	if (!bot->sc()->data[SC_DECREASEAGI] &&
-		!bot->sc()->data[SC_ONEHAND] &&
+		bot->sc_rest(SC_ONEHAND) <= bot->get_skill_tail(kid) &&
 		!bot->sc()->data[SC_QUAGMIRE]
 	) bot->use_skill_self(kid, klv);
 }
@@ -1011,13 +1004,13 @@ AI_SKILL_USE_FUNC(KN_PIERCE) {
 AI_SKILL_USE_FUNC(KN_TWOHANDQUICKEN) {
 	if (!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE] &&
-		!bot->sc()->data[SC_TWOHANDQUICKEN]
+		bot->sc_rest(SC_TWOHANDQUICKEN) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
 // オーラブレイドを使う。
 AI_SKILL_USE_FUNC(LK_AURABLADE) {
-	if (!bot->sc()->data[SC_AURABLADE]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_AURABLADE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // バーサークを使う。
@@ -1029,7 +1022,7 @@ AI_SKILL_USE_FUNC(LK_BERSERK) {
 
 // コンセントレイションを使う。
 AI_SKILL_USE_FUNC(LK_CONCENTRATION) {
-	if (!bot->sc()->data[SC_CONCENTRATION]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_CONCENTRATION) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ヘッドクラッシュを使う。
@@ -1063,7 +1056,7 @@ AI_SKILL_USE_FUNC(LK_JOINTBEAT) {
 
 // パリイングを使う。
 AI_SKILL_USE_FUNC(LK_PARRYING) {
-	if (!bot->sc()->data[SC_PARRYING]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_PARRYING) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // スパイラルピアースを使う。
@@ -1114,7 +1107,7 @@ AI_SKILL_USE_FUNC_T(MC_CARTREVOLUTION, effective) {
 
 // ラウドボイスを使う。
 AI_SKILL_USE_FUNC(MC_LOUD) {
-	if (!bot->sc()->data[SC_LOUD]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_LOUD) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // メマーナイトを使う。
@@ -1129,7 +1122,7 @@ AI_SKILL_USE_FUNC(MC_MAMMONITE) {
 
 // エナジーコートを使う。
 AI_SKILL_USE_FUNC(MG_ENERGYCOAT) {
-	if (!bot->sc()->data[SC_ENERGYCOAT]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_ENERGYCOAT) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ファイアーボールを使う。
@@ -1394,7 +1387,7 @@ AI_SKILL_USE_FUNC(MO_COMBOFINISH) {
 
 // 爆裂波動を使う。
 AI_SKILL_USE_FUNC(MO_EXPLOSIONSPIRITS) {
-	if (!bot->sc()->data[SC_EXPLOSIONSPIRITS] &&
+	if (bot->sc_rest(SC_EXPLOSIONSPIRITS) <= bot->get_skill_tail(kid) &&
 		bot->collect_spirits(5)
 	) bot->use_skill_self(kid, klv);
 }
@@ -1506,7 +1499,7 @@ AI_SKILL_USE_FUNC(NJ_BAKUENRYU) {
 
 // 影分身を使う。
 AI_SKILL_USE_FUNC(NJ_BUNSINJYUTSU) {
-	if (!bot->sc()->data[SC_BUNSINJYUTSU]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_BUNSINJYUTSU) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 氷柱落しを使う。
@@ -1626,7 +1619,7 @@ AI_SKILL_USE_FUNC_T(NJ_KOUENKA, compromise) {
 
 // 念を使う。
 AI_SKILL_USE_FUNC(NJ_NEN) {
-	if (!bot->sc()->data[SC_NEN]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_NEN) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 雷撃砕を使う。
@@ -1688,7 +1681,7 @@ AI_SKILL_USE_FUNC(NJ_TATAMIGAESHI) {
 // 空蝉を使う。
 AI_SKILL_USE_FUNC(NJ_UTSUSEMI) {
 	if (!bot->sc()->data[SC_BUNSINJYUTSU] &&
-		!bot->sc()->data[SC_UTSUSEMI]
+		bot->sc_rest(SC_UTSUSEMI) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1745,7 +1738,7 @@ AI_SKILL_USE_FUNC(PA_SACRIFICE) {
 
 // ダブルキャスティングを使う。
 AI_SKILL_USE_FUNC(PF_DOUBLECASTING) {
-	if (!bot->sc()->data[SC_DOUBLECAST]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_DOUBLECAST) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ウォールオブフォグを使う。
@@ -1774,7 +1767,7 @@ AI_SKILL_USE_FUNC(PF_HPCONVERSION) {
 
 // メモライズを使う。
 AI_SKILL_USE_FUNC(PF_MEMORIZE) {
-	if (!bot->sc()->data[SC_MEMORIZE]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_MEMORIZE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ソウルチェンジを使う。
@@ -1818,12 +1811,12 @@ AI_SKILL_USE_FUNC(PF_SPIDERWEB) {
 
 // アスペルシオを使う。
 AI_SKILL_USE_FUNC(PR_ASPERSIO) {
-	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
 		block_if* tar_ene = mem->target_enemy();
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_ASPERSIO] &&
+			mem->sc_rest(SC_ASPERSIO) <= bot->get_skill_tail(kid) &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
 			tar_ene &&
 			mem->attack_element_ratio(tar_ene, ELE_HOLY) >= 150 &&
@@ -1834,12 +1827,12 @@ AI_SKILL_USE_FUNC(PR_ASPERSIO) {
 
 // 聖体降福を使う。
 AI_SKILL_USE_FUNC(PR_BENEDICTIO) {
-	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_BENEDICTIO];
+			mem->sc_rest(SC_BENEDICTIO) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_xy(kid, klv, mem->bl()->x, mem->bl()->y);
 }
@@ -1847,31 +1840,31 @@ AI_SKILL_USE_FUNC(PR_BENEDICTIO) {
 // グロリアを使う。
 AI_SKILL_USE_FUNC(PR_GLORIA) {
 	if (!bot->is_magic_immune() &&
-		!bot->sc()->data[SC_GLORIA]
+		bot->sc_rest(SC_GLORIA) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
 // イムポシティオマヌスを使う。
 AI_SKILL_USE_FUNC(PR_IMPOSITIO) {
-	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_IMPOSITIO];
+			mem->sc_rest(SC_IMPOSITIO) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
 
 // キリエエレイソンを使う。
 AI_SKILL_USE_FUNC(PR_KYRIE) {
-	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_ASSUMPTIO] &&
-			!mem->sc()->data[SC_KYRIE];
+			mem->sc_rest(SC_KYRIE) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -1909,7 +1902,7 @@ AI_SKILL_USE_FUNC(PR_LEXDIVINA) {
 // マグニフィカートを使う。
 AI_SKILL_USE_FUNC(PR_MAGNIFICAT) {
 	if (!bot->is_magic_immune() &&
-		!bot->sc()->data[SC_MAGNIFICAT]
+		bot->sc_rest(SC_MAGNIFICAT) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -2017,7 +2010,7 @@ AI_SKILL_USE_FUNC(PR_SUFFRAGIUM) {
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_SUFFRAGIUM];
+			mem->sc_rest(SC_SUFFRAGIUM) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2122,7 +2115,7 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 		che_spe(MG_NAPALMBEAT, 1);
 		if (gre_spe_id) {
 			status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
-			if (!as_sce ||
+			if (bot->sc_rest(SC_AUTOSPELL) <= bot->get_skill_tail(kid) ||
 				(as_sce->val2 != gre_spe_id &&
 					bot->skill_ratio(e_skill(as_sce->val2), 1, tar_ene) <= bot->get_skill_low_rate()
 				)
@@ -2296,29 +2289,29 @@ AI_SKILL_USE_FUNC(SA_VOLCANO) {
 
 // 太陽と月と星の融合を使う。
 AI_SKILL_USE_FUNC(SG_FUSION) {
-	if (!bot->sc()->data[SC_FUSION]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_FUSION) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 月の安楽を使う。
 AI_SKILL_USE_FUNC(SG_MOON_COMFORT) {
-	if (!bot->sc()->data[SC_MOON_COMFORT]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_MOON_COMFORT) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 星の安楽を使う。
 AI_SKILL_USE_FUNC(SG_STAR_COMFORT) {
-	if (!bot->sc()->data[SC_STAR_COMFORT]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_STAR_COMFORT) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 太陽の安楽を使う。
 AI_SKILL_USE_FUNC(SG_SUN_COMFORT) {
-	if (!bot->sc()->data[SC_SUN_COMFORT]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_SUN_COMFORT) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 太陽の温もりを使う。
 AI_SKILL_USE_FUNC(SG_SUN_WARM) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->sc()->data[SC_FUSION] &&
-		!bot->sc()->data[SC_WARM] &&
+		bot->sc_rest(SC_WARM) <= bot->get_skill_tail(kid) &&
 		tar_ene->has_knockback_immune()
 	) bot->use_skill_self(kid, klv);
 }
@@ -2330,7 +2323,7 @@ AI_SKILL_USE_FUNC(SL_KAAHI) {
 			!mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_KAAHI];
+			mem->sc_rest(SC_KAAHI) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2343,7 +2336,7 @@ AI_SKILL_USE_FUNC(SL_KAITE) {
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_ASSUMPTIO] &&
-			!mem->sc()->data[SC_KAITE];
+			mem->sc_rest(SC_KAITE) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2355,7 +2348,7 @@ AI_SKILL_USE_FUNC(SL_KAIZEL) {
 			!mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_KAIZEL];
+			mem->sc_rest(SC_KAIZEL) <= bot->get_skill_tail(kid);
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2466,7 +2459,7 @@ AI_SKILL_USE_FUNC_T(SM_BASH, effective) {
 
 // インデュアを使う。
 AI_SKILL_USE_FUNC(SM_ENDURE) {
-	if (!bot->sc()->data[SC_ENDURE]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_ENDURE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // マグナムブレイクを使う。
@@ -2528,7 +2521,7 @@ AI_SKILL_USE_FUNC_T(SM_PROVOKE, first_attack) {
 
 // トゥルーサイトを使う。
 AI_SKILL_USE_FUNC(SN_SIGHT) {
-	if (!bot->sc()->data[SC_TRUESIGHT]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_TRUESIGHT) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // シャープシューティングを使う。
@@ -2551,7 +2544,7 @@ AI_SKILL_USE_FUNC(SN_WINDWALK) {
 	if (!bot->is_magic_immune() &&
 		!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE] &&
-		!bot->sc()->data[SC_WINDWALK]
+		bot->sc_rest(SC_WINDWALK) <= bot->get_skill_tail(kid)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -2571,20 +2564,12 @@ AI_SKILL_USE_FUNC(ST_FULLSTRIP) {
 
 // プリザーブを使う。
 AI_SKILL_USE_FUNC(ST_PRESERVE) {
-	t_tick pre_rem = 0;
-	status_change_entry* pre_sce = bot->sc()->data[SC_PRESERVE];
-	if (pre_sce) {
-		const TimerData * pre_td = get_timer(pre_sce->timer);
-		pre_rem = DIFF_TICK(pre_td->tick, gettick());
-	}
-	if (!pre_sce ||
-		pre_rem < SKILL_GET_CAST_DELAY(kid, klv)
-	) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_PRESERVE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // リジェクトソードを使う。
 AI_SKILL_USE_FUNC(ST_REJECTSWORD) {
-	if (!bot->sc()->data[SC_REJECTSWORD]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_REJECTSWORD) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // 解毒を使う。
@@ -2698,7 +2683,7 @@ AI_SKILL_USE_FUNC_T(TF_THROWSTONE, first_attack) {
 
 // 落法を使う。
 AI_SKILL_USE_FUNC(TK_DODGE) {
-	if (!bot->sc()->data[SC_DODGE]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_DODGE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // ティオアプチャギを使う。
@@ -2724,7 +2709,7 @@ AI_SKILL_USE_FUNC(TK_READYCOUNTER) {
 // タイリギを使う。
 AI_SKILL_USE_FUNC(TK_RUN) {
 	if (bot->sd()->weapontype1 == W_FIST &&
-		!bot->sc()->data[SC_SPURT] &&
+		bot->sc_rest(SC_SPURT) <= bot->get_skill_tail(kid) &&
 		!bot->ud()->state.running
 	) {
 		bot->use_skill_self(kid, klv, false);
@@ -2746,7 +2731,7 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 	block_if* tar_ene = bot->target_enemy();
 	if ((!bot->skill_seven_wind()->get() ||
 			skill_get_ele(kid, klv) == bot->skill_seven_wind()->get()
-		) && !bot->sc()->data[SCS[klv - 1]] &&
+		) && bot->sc_rest(SCS[klv - 1]) <= bot->get_skill_tail(kid) &&
 		bot->check_attack(tar_ene)
 	) {
 		int gre_lv = INT_MIN;
@@ -2776,7 +2761,7 @@ AI_SKILL_USE_FUNC(TK_COUNTER) {
 
 // カートブーストを使う。
 AI_SKILL_USE_FUNC(WS_CARTBOOST) {
-	if (!bot->sc()->data[SC_CARTBOOST] &&
+	if (bot->sc_rest(SC_CARTBOOST) <= bot->get_skill_tail(kid) &&
 		!bot->sc()->data[SC_DECREASEAGI] &&
 		!bot->sc()->data[SC_INCREASEAGI] &&
 		!bot->sc()->data[SC_QUAGMIRE] &&
@@ -2786,12 +2771,12 @@ AI_SKILL_USE_FUNC(WS_CARTBOOST) {
 
 // メルトダウンを使う。
 AI_SKILL_USE_FUNC(WS_MELTDOWN) {
-	if (!bot->sc()->data[SC_MELTDOWN]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_MELTDOWN) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // オーバートラストマックスを使う。
 AI_SKILL_USE_FUNC(WS_OVERTHRUSTMAX) {
-	if (!bot->sc()->data[SC_MAXOVERTHRUST]) bot->use_skill_self(kid, klv);
+	if (bot->sc_rest(SC_MAXOVERTHRUST) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // アイスウォールを使う。
@@ -3033,12 +3018,12 @@ AI_SKILL_USE_DEF(cp)(
 ) {
 	return [equ, sc_typ, has_sk] (ai_t* ai, e_skill kid, int klv) {
 		if (equ & EQP_WEAPON) {
-			block_if* mem = pybot::find_if(ALL_RRANGE(ai->members), [equ, sc_typ, kid] (block_if* mem) -> bool {
+			block_if* mem = pybot::find_if(ALL_RRANGE(ai->members), [equ, sc_typ, ai, kid] (block_if* mem) -> bool {
 				return !mem->is_dead() &&
 					!mem->is_hiding() &&
 					!mem->is_walking() &&
 					!mem->reject_skills()->find(kid) &&
-					!mem->sc()->data[sc_typ] &&
+					mem->sc_rest(sc_typ) <= ai->bot->get_skill_tail(kid) &&
 					(mem->sc()->data[SC_OVERTHRUST] ||
 						mem->sc()->data[SC_MAXOVERTHRUST]
 					) && !(mem->sd()->bonus.unbreakable_equip & equ) &&
@@ -3122,7 +3107,7 @@ AI_SKILL_USE_DEF(spirit)(
 				!mem->is_dead() &&
 				!mem->is_hiding() &&
 				!mem->reject_skills()->find(kid) &&
-				!mem->sc()->data[SC_SPIRIT] &&
+				mem->sc_rest(SC_SPIRIT) <= ai->bot->get_skill_tail(kid) &&
 				(mem->sd()->class_ & MAPID_UPPERMASK) == mid;
 		});
 		if (mem) ai->bot->use_skill_block(kid, klv, mem);

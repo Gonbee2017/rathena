@@ -41,7 +41,7 @@ void battler_if::load_policy(int mid, distance_policy_values* dis_pol_val, norma
 int& battler_if::member_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values& battler_if::normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::party_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<registry_t<int>>& battler_if::reject_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<e_skill>>& battler_if::reject_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::skill_ratio(e_skill kid, int klv, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::stop_attacking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::stop_walking(int typ) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -121,6 +121,7 @@ std::string general_if::name() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_race general_if::race() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_race2 general_if::race2() {RAISE_NOT_IMPLEMENTED_ERROR;}
 status_change* general_if::sc() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick general_if::sc_rest(sc_type typ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 size general_if::size_() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::skill_advantage(int x, int y) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -173,6 +174,7 @@ int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERR
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -180,10 +182,6 @@ bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<e_element>>& member_if::skill_seven_wind() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -192,6 +190,11 @@ ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_E
 ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<e_element>>& member_if::skill_seven_wind() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<e_skill,int>>& member_if::skill_tails() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::stand() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::storage_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
@@ -224,7 +227,7 @@ bool skill_user_if::collect_spirits(int cou) {RAISE_NOT_IMPLEMENTED_ERROR;}
 s_skill* skill_user_if::find_skill(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 s_skill* skill_user_if::find_skill(int kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void skill_user_if::iterate_skill(yield_skill_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<registry_t<int,int>>& skill_user_if::limit_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<e_skill,int>>& skill_user_if::limit_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int skill_user_if::skill_point() {RAISE_NOT_IMPLEMENTED_ERROR;}
 s_skill* skill_user_if::skill(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int skill_user_if::skill_range(e_skill kid, int klv) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -997,6 +1000,20 @@ general_impl::sc() {
 	return status_get_sc(bl());
 }
 
+// 状態変化の残り時間を取得する。
+t_tick // 取得した残り時間。
+general_impl::sc_rest(
+	sc_type typ // 状態。
+) {
+	t_tick res = 0;
+	status_change_entry* sce = sc()->data[typ];
+	if (sce) {
+		const TimerData * td = get_timer(sce->timer);
+		res = DIFF_TICK(td->tick, now);
+	}
+	return res;
+}
+
 // 大きさを取得する。
 size // 取得した大きさ。
 general_impl::size_() {
@@ -1198,7 +1215,7 @@ void homun_impl::iterate_skill(
 }
 
 // 制限スキルのレジストリ。
-ptr<registry_t<int,int>>& homun_impl::limit_skills() {
+ptr<registry_t<e_skill,int>>& homun_impl::limit_skills() {
 	return master()->limit_skills();
 }
 
@@ -1216,7 +1233,7 @@ homun_impl::name() {
 }
 
 // 主人の拒否スキルのレジストリ。
-ptr<registry_t<int>>& homun_impl::reject_skills() {
+ptr<registry_t<e_skill>>& homun_impl::reject_skills() {
 	return master()->reject_skills();
 }
 
@@ -1615,6 +1632,15 @@ member_impl::get_skill_monsters() {
 	return cou;
 }
 
+// 掛け直し時間を取得する。
+t_tick // 取得した掛け直し時間。
+member_impl::get_skill_tail(
+	e_skill kid // スキルID。
+) {
+	int* dur = skill_tails()->find(kid);
+	return dur ? *dur : 0;
+}
+
 // メンバーのギルドIDを取得する。
 int // 取得したギルドID。
 member_impl::guild_id() {
@@ -1736,7 +1762,7 @@ block_if*& member_impl::leader() {
 }
 
 // 制限スキルのレジストリ。
-ptr<registry_t<int,int>>& member_impl::limit_skills() {
+ptr<registry_t<e_skill,int>>& member_impl::limit_skills() {
 	return limit_skills_;
 }
 
@@ -1795,26 +1821,6 @@ ptr<regnum_t<bool>>& member_impl::loot() {
 	return loot_;
 }
 
-// オートスペルで選択する魔法の登録値。
-ptr<regnum_t<e_skill>>& member_impl::skill_auto_spell() {
-	return skill_auto_spell_;
-}
-
-// 低ダメージ倍率の登録値。
-ptr<regnum_t<int>>& member_impl::skill_low_rate() {
-	return skill_low_rate_;
-}
-
-// 範囲魔法スキルの発動モンスター数の登録値。
-ptr<regnum_t<int>>& member_impl::skill_monsters() {
-	return skill_monsters_;
-}
-
-// 暖かい風で選択する属性の登録値。
-ptr<regnum_t<e_element>>& member_impl::skill_seven_wind() {
-	return skill_seven_wind_;
-}
-
 // 魔法力増幅状態かを判定する。
 bool // 結果。
 member_impl::magicpower_is_active() {
@@ -1866,7 +1872,7 @@ ptr<registry_t<int,int>>& member_impl::recover_sp_items() {
 }
 
 // 拒否スキルのレジストリ。
-ptr<registry_t<int>>& member_impl::reject_skills() {
+ptr<registry_t<e_skill>>& member_impl::reject_skills() {
 	return reject_skills_;
 }
 
@@ -1893,10 +1899,35 @@ member_impl::skill(
 	return nullptr;
 }
 
+// オートスペルで選択する魔法の登録値。
+ptr<regnum_t<e_skill>>& member_impl::skill_auto_spell() {
+	return skill_auto_spell_;
+}
+
+// 低ダメージ倍率の登録値。
+ptr<regnum_t<int>>& member_impl::skill_low_rate() {
+	return skill_low_rate_;
+}
+
+// 範囲魔法スキルの発動モンスター数の登録値。
+ptr<regnum_t<int>>& member_impl::skill_monsters() {
+	return skill_monsters_;
+}
+
 // メンバーのスキルポイントを取得する。
 int // 取得したスキルポイント。
 member_impl::skill_point() {
 	return sd()->status.skill_point;
+}
+
+// 暖かい風で選択する属性の登録値。
+ptr<regnum_t<e_element>>& member_impl::skill_seven_wind() {
+	return skill_seven_wind_;
+}
+
+// 掛け直し時間のレジストリ。
+ptr<registry_t<e_skill,int>>& member_impl::skill_tails() {
+	return skill_tails_;
 }
 
 // メンバーのスキルを上げる。
@@ -2396,7 +2427,7 @@ member_t::member_t(
 		update_equipset_func(char_id()),
 		delete_equipset_func(char_id())
 	);
-	limit_skills() = construct<registry_t<int,int>>(
+	limit_skills() = construct<registry_t<e_skill,int>>(
 		load_limit_skill_func(char_id()),
 		insert_limit_skill_func(char_id()),
 		update_limit_skill_func(char_id()),
@@ -2414,6 +2445,12 @@ member_t::member_t(
 		update_play_skill_func(char_id()),
 		delete_play_skill_func(char_id())
 	);
+	skill_tails() = construct<registry_t<e_skill,int>>(
+		load_skill_tail_func(char_id()),
+		insert_skill_tail_func(char_id()),
+		update_skill_tail_func(char_id()),
+		delete_skill_tail_func(char_id())
+	);
 	recover_hp_items() = construct<registry_t<int,int>>(
 		load_recover_hp_item_func(char_id()),
 		insert_recover_hp_item_func(char_id()),
@@ -2426,7 +2463,7 @@ member_t::member_t(
 		update_recover_sp_item_func(char_id()),
 		delete_recover_sp_item_func(char_id())
 	);
-	reject_skills() = construct<registry_t<int>>(
+	reject_skills() = construct<registry_t<e_skill>>(
 		load_reject_skill_func(char_id()),
 		insert_reject_skill_func(char_id()),
 		delete_reject_skill_func(char_id())

@@ -1153,7 +1153,7 @@ struct battler_if {
 	virtual int& member_index();
 	virtual normal_attack_policy_values& normal_attack_policy_value();
 	virtual int party_id();
-	virtual ptr<registry_t<int>>& reject_skills();
+	virtual ptr<registry_t<e_skill>>& reject_skills();
 	virtual int skill_ratio(e_skill kid, int klv, block_if* ene);
 	virtual void stop_attacking();
 	virtual void stop_walking(int typ = USW_FIXPOS);
@@ -1242,6 +1242,7 @@ struct general_if {
 	virtual e_race race();
 	virtual e_race2 race2();
 	virtual status_change* sc();
+	virtual t_tick sc_rest(sc_type typ);
 	virtual size size_();
 	virtual int skill_advantage(int x, int y);
 	virtual int sp();
@@ -1306,6 +1307,7 @@ struct member_if {
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
 	virtual int get_skill_low_rate();
 	virtual int get_skill_monsters();
+	virtual t_tick get_skill_tail(e_skill kid);
 	virtual ptr<regnum_t<int>>& hold_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
@@ -1313,10 +1315,6 @@ struct member_if {
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<bool>>& loot();
-	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
-	virtual ptr<regnum_t<int>>& skill_low_rate();
-	virtual ptr<regnum_t<int>>& skill_monsters();
-	virtual ptr<regnum_t<e_element>>& skill_seven_wind();
 	virtual bool magicpower_is_active();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual ptr<block_if>& pet();
@@ -1325,6 +1323,11 @@ struct member_if {
 	virtual ptr<registry_t<int,int>>& recover_sp_items();
 	virtual map_session_data*& sd();
 	virtual void sit();
+	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
+	virtual ptr<regnum_t<int>>& skill_low_rate();
+	virtual ptr<regnum_t<int>>& skill_monsters();
+	virtual ptr<regnum_t<e_element>>& skill_seven_wind();
+	virtual ptr<registry_t<e_skill,int>>& skill_tails();
 	virtual void stand();
 	virtual ptr<registry_t<int,int>>& storage_get_items();
 };
@@ -1369,7 +1372,7 @@ struct skill_user_if {
 	virtual s_skill* find_skill(const std::string& nam);
 	virtual s_skill* find_skill(int kid);
 	virtual void iterate_skill(yield_skill_func yie);
-	virtual ptr<registry_t<int,int>>& limit_skills();
+	virtual ptr<registry_t<e_skill,int>>& limit_skills();
 	virtual s_skill* skill(e_skill kid);
 	virtual int skill_point();
 	virtual int skill_range(e_skill kid, int klv);
@@ -1556,6 +1559,7 @@ struct general_impl : virtual block_if {
 	virtual e_race2 race2() override;
 	virtual int attack_range() override;
 	virtual status_change* sc() override;
+	virtual t_tick sc_rest(sc_type typ) override;
 	virtual size size_() override;
 	virtual int skill_advantage(int x, int y) override;
 	virtual int sp() override;
@@ -1584,10 +1588,10 @@ struct homun_impl : virtual block_if {
 	virtual bool is_no_gemstone() override;
 	virtual bool is_wall_side() override;
 	virtual void iterate_skill(yield_skill_func yie) override;
-	virtual ptr<registry_t<int,int>>& limit_skills() override;
+	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual std::string name() override;
-	virtual ptr<registry_t<int>>& reject_skills() override;
+	virtual ptr<registry_t<e_skill>>& reject_skills() override;
 	virtual s_skill* skill(e_skill kid) override;
 	virtual int skill_point() override;
 	virtual void skill_up(e_skill kid) override;
@@ -1659,12 +1663,8 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	block_if* leader_;                            // リーダー。
-	ptr<registry_t<int,int>> limit_skills_;       // 制限スキルのレジストリ。
+	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
-	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
-	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
-	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
-	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
 	int member_index_;                            // メンバーのインデックス。
 	ptr<registry_t<int,normal_attack_policy>>
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
@@ -1672,8 +1672,13 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,play_skill>> play_skills_; // 演奏スキルのレジストリ。
 	ptr<registry_t<int,int>> recover_hp_items_;   // HP回復アイテムのレジストリ。
 	ptr<registry_t<int,int>> recover_sp_items_;   // SP回復アイテムのレジストリ。
-	ptr<registry_t<int>> reject_skills_;          // 拒否スキルのレジストリ。
+	ptr<registry_t<e_skill>> reject_skills_;      // 拒否スキルのレジストリ。
 	map_session_data* sd_;                        // セッションデータ。
+	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
+	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
+	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
+	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
+	ptr<registry_t<e_skill,int>> skill_tails_;    // 掛け直し時間のレジストリ。
 	ptr<registry_t<int,int>> storage_get_items_;  // 倉庫補充アイテムのレジストリ。
 
 	virtual int& account_id() override;
@@ -1697,6 +1702,7 @@ struct member_impl : virtual block_if {
 	virtual int get_hold_monsters() override;
 	virtual int get_skill_low_rate() override;
 	virtual int get_skill_monsters() override;
+	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int guild_id() override;
 	virtual ptr<regnum_t<int>>& hold_monsters() override;
 	virtual ptr<block_if>& homun() override;
@@ -1710,15 +1716,11 @@ struct member_impl : virtual block_if {
 	virtual bool is_wall_side() override;
 	virtual void iterate_skill(yield_skill_func yie) override;
 	virtual block_if*& leader() override;
-	virtual ptr<registry_t<int,int>>& limit_skills() override;
+	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr) override;
 	virtual void load_play_skill(int mid, e_skill* kid) override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual ptr<regnum_t<bool>>& loot() override;
-	virtual ptr<regnum_t<e_skill>>& skill_auto_spell() override;
-	virtual ptr<regnum_t<int>>& skill_low_rate() override;
-	virtual ptr<regnum_t<int>>& skill_monsters() override;
-	virtual ptr<regnum_t<e_element>>& skill_seven_wind() override;
 	virtual bool magicpower_is_active() override;
 	virtual int& member_index() override;
 	virtual std::string name() override;
@@ -1728,11 +1730,16 @@ struct member_impl : virtual block_if {
 	virtual ptr<registry_t<int,play_skill>>& play_skills() override;
 	virtual ptr<registry_t<int,int>>& recover_hp_items() override;
 	virtual ptr<registry_t<int,int>>& recover_sp_items() override;
-	virtual ptr<registry_t<int>>& reject_skills() override;
+	virtual ptr<registry_t<e_skill>>& reject_skills() override;
 	virtual map_session_data*& sd() override;
 	virtual void sit() override;
 	virtual s_skill* skill(e_skill kid) override;
+	virtual ptr<regnum_t<e_skill>>& skill_auto_spell() override;
+	virtual ptr<regnum_t<int>>& skill_low_rate() override;
+	virtual ptr<regnum_t<int>>& skill_monsters() override;
 	virtual int skill_point() override;
+	virtual ptr<regnum_t<e_element>>& skill_seven_wind() override;
+	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
 	virtual void skill_up(e_skill kid) override;
 	virtual void stand() override;
 	virtual ptr<registry_t<int,int>>& storage_get_items() override;
@@ -2318,6 +2325,9 @@ SUBCMD_FUNC(Bot, sKillReject);
 SUBCMD_FUNC(Bot, sKillRejectClear);
 SUBCMD_FUNC(Bot, sKillRejectTransport);
 SUBCMD_FUNC(Bot, sKillSevenWind);
+SUBCMD_FUNC(Bot, sKillTail);
+SUBCMD_FUNC(Bot, sKillTailClear);
+SUBCMD_FUNC(Bot, sKillTailTransport);
 SUBCMD_FUNC(Bot, sKillUp);
 SUBCMD_FUNC(Bot, Status);
 SUBCMD_FUNC(Bot, StatusUp);
@@ -2368,13 +2378,14 @@ registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
 registry_t<int,team_t>::save_func delete_team_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
-registry_t<int,int>::save_func delete_limit_skill_func(int cid);
+registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func delete_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func delete_play_skill_func(int cid);
 registry_t<int,int>::save_func delete_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func delete_recover_sp_item_func(int cid);
-registry_t<int>::save_func delete_reject_skill_func(int cid);
+registry_t<e_skill>::save_func delete_reject_skill_func(int cid);
 registry_t<int>::save_func delete_sell_item_func(int cid);
+registry_t<e_skill,int>::save_func delete_skill_tail_func(int cid);
 registry_t<int,int>::save_func delete_storage_get_item_func(int cid);
 registry_t<int>::save_func delete_storage_put_item_func(int cid);
 registry_t<int>::save_func insert_cart_auto_get_item_func(int cid);
@@ -2383,13 +2394,14 @@ registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
 registry_t<int,team_t>::save_func insert_team_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
-registry_t<int,int>::save_func insert_limit_skill_func(int cid);
+registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func insert_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func insert_play_skill_func(int cid);
 registry_t<int,int>::save_func insert_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func insert_recover_sp_item_func(int cid);
-registry_t<int>::save_func insert_reject_skill_func(int cid);
+registry_t<e_skill>::save_func insert_reject_skill_func(int cid);
 registry_t<int>::save_func insert_sell_item_func(int cid);
+registry_t<e_skill,int>::save_func insert_skill_tail_func(int cid);
 registry_t<int,int>::save_func insert_storage_get_item_func(int cid);
 registry_t<int>::save_func insert_storage_put_item_func(int cid);
 registry_t<int>::load_func load_cart_auto_get_item_func(int cid);
@@ -2398,23 +2410,25 @@ registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
 registry_t<int,team_t>::load_func load_team_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
 registry_t<int>::load_func load_ignore_item_func(int cid);
-registry_t<int,int>::load_func load_limit_skill_func(int cid);
+registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::load_func load_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::load_func load_play_skill_func(int cid);
 registry_t<int,int>::load_func load_recover_hp_item_func(int cid);
 registry_t<int,int>::load_func load_recover_sp_item_func(int cid);
-registry_t<int>::load_func load_reject_skill_func(int cid);
+registry_t<e_skill>::load_func load_reject_skill_func(int cid);
 registry_t<int>::load_func load_sell_item_func(int cid);
+registry_t<e_skill,int>::load_func load_skill_tail_func(int cid);
 registry_t<int,int>::load_func load_storage_get_item_func(int cid);
 registry_t<int>::load_func load_storage_put_item_func(int cid);
 registry_t<int,distance_policy>::save_func update_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
 registry_t<int,team_t>::save_func update_team_func(int cid);
-registry_t<int,int>::save_func update_limit_skill_func(int cid);
+registry_t<e_skill,int>::save_func update_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func update_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func update_play_skill_func(int cid);
 registry_t<int,int>::save_func update_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func update_recover_sp_item_func(int cid);
+registry_t<e_skill,int>::save_func update_skill_tail_func(int cid);
 registry_t<int,int>::save_func update_storage_get_item_func(int cid);
 
 // -----------------------------------------------------------------------------
