@@ -1976,10 +1976,11 @@ SUBCMD_FUNC(Bot, sKillTail) {
 		) throw command_error{print(
 			"「", sk_des, "」は支援スキルではありません。"
 		)};
-		if (!skill_get_time(kid, 1))
-			throw command_error{print(
-				"「", sk_des, "」には効果時間がありません。"
-			)};
+		if (!skill_get_time(kid, 1) &&
+			!skill_get_time2(kid, 1)
+		) throw command_error{print(
+			"「", sk_des, "」には効果時間がありません。"
+		)};
 		if (args.empty()) {
 			mem->skill_tails()->unregister(kid);
 			show_client(lea->fd(), print(
