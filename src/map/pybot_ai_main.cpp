@@ -1103,8 +1103,7 @@ ai_t::check_line_other_battlers(
 		if ((oth_bat == leader ||
 				i < battler->battle_index()
 			) && !oth_bat->is_walking() &&
-			!oth_bat->check_line_xy(x, y) &&
-			!oth_bat->can_reach_xy(x, y, true)
+			!oth_bat->check_line_xy(x, y)
 		) {
 			res = false;
 			break;
@@ -1146,6 +1145,7 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, max_rad) &&
 			battler->can_reach_xy(x, y) &&
+			leader->can_reach_xy(x, y, true) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
@@ -1263,6 +1263,7 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 				)
 			) && battler->can_reach_xy(x, y) &&
+			leader->can_reach_xy(x, y, true) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
@@ -1306,6 +1307,7 @@ yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 			(!mov ||
 				!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 			) && battler->can_reach_xy(x, y) &&
+			leader->can_reach_xy(x, y, true) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
 			check_line_other_battlers(x, y) &&
