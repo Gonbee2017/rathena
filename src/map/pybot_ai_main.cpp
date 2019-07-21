@@ -438,7 +438,8 @@ void ai_t::bot_dead() {
 void ai_t::bot_lost() {
 	block_list* cen = &leader->center();
 	if ((bot->bl()->m != cen->m ||
-			!check_distance_bl(bot->bl(), cen, AREA_SIZE)
+			!check_distance_bl(bot->bl(), cen, AREA_SIZE) ||
+			!bot->can_reach_bl(cen, false)
 		) && bot->teleport(cen)
 	) throw turn_end_exception();
 }
@@ -796,7 +797,8 @@ void ai_t::homun_main(block_if* hom) {
 void ai_t::homun_lost() {
 	block_list* mas_bl = homun->master()->bl();
 	if ((homun->bl()->m != mas_bl->m ||
-			!check_distance_bl(homun->bl(), mas_bl, AREA_SIZE)
+			!check_distance_bl(homun->bl(), mas_bl, AREA_SIZE) ||
+			!homun->can_reach_block(homun->master(), false)
 		) && homun->teleport(mas_bl)
 	) throw turn_end_exception();
 }
@@ -1098,13 +1100,11 @@ ai_t::check_line_other_battlers(
 	bool res = true;
 	for (int i = 0; i < battlers.size(); i++)	{
 		block_if* oth_bat = battlers[i];
-		if ((oth_bat->is_primary() ||
-				(oth_bat != leader &&
-					oth_bat != leader->homun().get()
-				)
-			) && i < battler->battle_index() &&
-			!oth_bat->is_walking() &&
-			!oth_bat->check_line_xy(x, y)
+		if ((oth_bat == leader ||
+				i < battler->battle_index()
+			) && !oth_bat->is_walking() &&
+			!oth_bat->check_line_xy(x, y) &&
+			!oth_bat->can_reach_xy(x, y, true)
 		) {
 			res = false;
 			break;
