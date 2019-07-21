@@ -84,8 +84,8 @@ void ai_t::leader_organize() {
 		distance_policy_values dis_pol_val = DPV_PENDING;
 		normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
 		bat->load_policy(MM_BASE, &dis_pol_val, &nor_att_pol_val);
+		if (dis_pol_val == DPV_PENDING) dis_pol_val = bat->default_distance_policy_value();
 		bat->distance_policy_value() = dis_pol_val;
-		bat->normal_attack_policy_value() = nor_att_pol_val;
 	}
 	std::sort(ALL_RANGE(battlers), [this] (block_if* lbt, block_if* rbt) -> bool {
 		if (lbt->is_dead() != rbt->is_dead()) return rbt->is_dead();
@@ -946,8 +946,9 @@ void ai_t::battler_attack() {
 				battler->ud()->target != att_ene->bl()->id
 			)
 		) battler->stop_attacking();
-		if (!battler->is_attacking() &&
-			att_ene
+		if ((battler->normal_attack_policy_value() == NAPV_SINGLE ||
+				!battler->is_attacking()
+			) && att_ene
 		) battler->attack(
 			att_ene,
 			battler->normal_attack_policy_value() == NAPV_CONTINUOUS

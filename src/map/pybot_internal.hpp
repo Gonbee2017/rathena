@@ -344,10 +344,10 @@
 // メッセージをデバッグ表示する。
 #define SHOW_DEBUG_MESSAGE(\
 	mes /* メッセージ。 */\
-) show_info(print(DEBUG_PREFIX, ": ", mes))
+) show_debug(print(DEBUG_PREFIX, ": ", mes))
 
 // 接頭辞のみをデバッグ表示する。
-#define SHOW_DEBUG show_info(DEBUG_PREFIX)
+#define SHOW_DEBUG show_debug(DEBUG_PREFIX)
 
 // デバッグ表示の接頭辞。
 #define DEBUG_PREFIX print("Debug(", __FUNCTION__, "@", __LINE__, ")")
@@ -2500,6 +2500,7 @@ int query_char_id(const std::string& uid, const std::string& upas, const std::st
 void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
 void save_team(block_if* lea, int tea_num);
 int sex_string2number(const std::string& str);
+void show_debug(const std::string& mes);
 void show_error(const std::string& mes);
 void show_info(const std::string& mes);
 block_pred sift_block_layout(block_if* sk_use, block_if* sk_tar, e_skill kid, int klv, block_pred inn_pre);

@@ -1004,7 +1004,7 @@ general_impl::sc_rest(
 	status_change_entry* sce = sc()->data[typ];
 	if (sce) {
 		const TimerData * td = get_timer(sce->timer);
-		res = DIFF_TICK(td->tick, now);
+		if (td) res = DIFF_TICK(td->tick, now);
 	}
 	return res;
 }

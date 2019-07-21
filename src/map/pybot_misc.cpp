@@ -1377,7 +1377,14 @@ sex_string2number(
 	return num;
 }
 
-// コンソールにエラーを表示する。
+// コンソールにデバッグ情報を表示する。
+void show_debug(
+	const std::string& mes // メッセージ。
+) {
+	ShowDebug((mes + "\n").c_str());
+}
+
+// コンソールにエラー情報を表示する。
 void show_error(
 	const std::string& mes // メッセージ。
 ) {
