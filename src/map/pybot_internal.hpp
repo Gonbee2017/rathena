@@ -1172,7 +1172,6 @@ struct bot_if {
 	virtual bool is_sit();
 	virtual t_tick& last_emotion_tick();
 	virtual t_tick& last_reloaded_equipset_tick();
-	virtual std::unordered_set<int>& request_items();
 	virtual void respawn();
 };
 
@@ -1321,6 +1320,7 @@ struct member_if {
 	virtual ptr<registry_t<int,play_skill>>& play_skills();
 	virtual ptr<registry_t<int,int>>& recover_hp_items();
 	virtual ptr<registry_t<int,int>>& recover_sp_items();
+	virtual std::unordered_set<int>& request_items();
 	virtual map_session_data*& sd();
 	virtual void sit();
 	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
@@ -1465,13 +1465,11 @@ struct bot_impl : virtual block_if {
 	int bot_index_;                         // Botのインデックス。
 	t_tick last_emotion_tick_;              // 最後にエモーションを表示したチック。
 	t_tick last_reloaded_equipset_tick_;    // 最後に武具一式をリロードしたチック。
-	std::unordered_set<int> request_items_; // 要求アイテムのセット。
 
 	virtual int& bot_index() override;
 	virtual bool is_sit() override;
 	virtual t_tick& last_emotion_tick() override;
 	virtual t_tick& last_reloaded_equipset_tick() override;
-	virtual std::unordered_set<int>& request_items() override;
 	virtual void respawn() override;
 	virtual bool teleport(block_list* bl_) override;
 };
@@ -1673,6 +1671,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,int>> recover_hp_items_;   // HP回復アイテムのレジストリ。
 	ptr<registry_t<int,int>> recover_sp_items_;   // SP回復アイテムのレジストリ。
 	ptr<registry_t<e_skill>> reject_skills_;      // 拒否スキルのレジストリ。
+	std::unordered_set<int> request_items_;       // 要求アイテムのセット。
 	map_session_data* sd_;                        // セッションデータ。
 	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
 	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
@@ -1731,6 +1730,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<registry_t<int,int>>& recover_hp_items() override;
 	virtual ptr<registry_t<int,int>>& recover_sp_items() override;
 	virtual ptr<registry_t<e_skill>>& reject_skills() override;
+	virtual std::unordered_set<int>& request_items() override;
 	virtual map_session_data*& sd() override;
 	virtual void sit() override;
 	virtual s_skill* skill(e_skill kid) override;

@@ -57,7 +57,6 @@ int& bot_if::bot_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool bot_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_emotion_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_reloaded_equipset_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
-std::unordered_set<int>& bot_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 std::vector<block_if*>& enemy_if::attacked_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -188,6 +187,7 @@ ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,play_skill>>& member_if::play_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -565,11 +565,6 @@ t_tick& bot_impl::last_emotion_tick() {
 // 最後に武具一式をリロードしたチック。
 t_tick& bot_impl::last_reloaded_equipset_tick() {
 	return last_reloaded_equipset_tick_;
-}
-
-// 要求アイテムのセット。
-std::unordered_set<int>& bot_impl::request_items() {
-	return request_items_;
 }
 
 // Botがリスポーンする。
@@ -1781,7 +1776,8 @@ void member_impl::load_equipset(
 				if (inv_ind == INT_MIN) {
 					inv_ind = find_inventory(*es_itm->key, 0);
 					if (inv_ind == INT_MIN) {
-						request_items().insert(es_itm->key->nameid);
+						if (dynamic_cast<bot_impl*>(this))
+							request_items().insert(es_itm->key->nameid);
 						continue;
 					}
 					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
@@ -1874,6 +1870,11 @@ ptr<registry_t<int,int>>& member_impl::recover_sp_items() {
 // 拒否スキルのレジストリ。
 ptr<registry_t<e_skill>>& member_impl::reject_skills() {
 	return reject_skills_;
+}
+
+// 要求アイテムのセット。
+std::unordered_set<int>& member_impl::request_items() {
+	return request_items_;
 }
 
 // セッションデータ。

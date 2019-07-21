@@ -574,14 +574,16 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 			!(esi->equip & equ)
 		) {
 			equ |= (unsigned int)(esi->equip);
-			int inv_ind = mem->sd()->equip_index[equ_ind];
-			if (inv_ind >= 0) ++cou;
+			int inv_ind = mem->find_inventory(*esi->key, esi->equip);
 			out << ID_PREFIX << esi->key->idb->nameid << " - " <<
 				print_item_key(*esi->key) << " "
 				"(" << print_equip_type(esi->key->idb);
-			if (inv_ind >= 0) out << "@" << print_equip_pos(esi->equip);
+			if (inv_ind != INT_MIN) {
+				out << "@" << print_equip_pos(esi->equip);
+				++cou;
+			}
 			out << ")";
-			if (inv_ind < 0) out << " ¦‘•”õ¸”s";
+			if (inv_ind == INT_MIN) out << " ¦‘•”õ¸”s";
 			out << "\n";
 		}
 	}
