@@ -12,8 +12,10 @@
 
 // [GonBee]
 BUILDIN_DEF(addskillpoint, "i?"),
+BUILDIN_DEF(addstatuspoint, "i?"),
 BUILDIN_DEF(advancemvpround, ""),
 BUILDIN_DEF(blockeffect, "ii"),
+BUILDIN_DEF(canenhance, "i"),
 BUILDIN_DEF(checknpcoption, "i?"),
 BUILDIN_DEF(convertcard, "i"),
 BUILDIN_DEF(dummymonster,"siisvi??"),

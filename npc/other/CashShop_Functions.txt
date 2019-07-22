@@ -70,6 +70,37 @@ function	script	F_CashReset	{
 	return;
 }
 
+// [GonBee]
+function	script	F_CashAddExtraStatusPoint	{
+	if (canenhance(Class) && 
+		EXTRA_STATUS_POINT < 400
+	) {
+		addstatuspoint 10;
+		set EXTRA_STATUS_POINT, EXTRA_STATUS_POINT + 10;
+	} else getitem 10900, 1;
+	return;
+}
+
+// [GonBee]
+function	script	F_CashAddExtraSkillPoint	{
+	if (canenhance(Class) && 
+		EXTRA_SKILL_POINT < 20
+	) {
+		addskillpoint 1;
+		++EXTRA_SKILL_POINT;
+	} else getitem 10901, 1;
+	return;
+}
+
+// [GonBee]
+function	script	F_CashAddExtraWeight	{
+	set .@car_lv, getskilllv("ALL_INCCARRY");
+	if (.@car_lv < 10) {
+		skill "ALL_INCCARRY", .@car_lv + 1, SKILL_PERM_GRANT;
+	} else getitem 10902, 1;
+	return;
+}
+
 // Dungeon Teleport Scroll
 //============================================================ 
 // - Warp player to the selected dungeon.

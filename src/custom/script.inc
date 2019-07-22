@@ -32,6 +32,19 @@ BUILDIN_FUNC(addskillpoint) {
 }
 
 // [GonBee]
+// ステータスポイントを増やす。
+// i ポイント数。
+// ? キャラクターID。
+BUILDIN_FUNC(addstatuspoint) {
+	map_session_data* sd;
+	if (script_charid2sd(3, sd)) {
+		sd->status.status_point += script_getnum(st, 2);
+		clif_updatestatus(sd, SP_STATUSPOINT);
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // MVPの周回を進める。
 BUILDIN_FUNC(advancemvpround) {
 	map_session_data* sd;
@@ -53,6 +66,36 @@ BUILDIN_FUNC(blockeffect) {
 	}
 	block_list* bl = map_id2bl(script_getnum(st, 3));
 	if (bl) clif_specialeffect(bl, typ, AREA);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// 強化可能な職業かを判定する。
+// i      職業。
+// 戻り値 結果。
+BUILDIN_FUNC(canenhance) {
+	static const std::vector<e_job> JOBS = {
+		JOB_SUPER_NOVICE  ,
+		JOB_GUNSLINGER    ,
+		JOB_NINJA         ,
+		JOB_LORD_KNIGHT   ,
+		JOB_HIGH_PRIEST   ,
+		JOB_HIGH_WIZARD   ,
+		JOB_WHITESMITH    ,
+		JOB_SNIPER        ,
+		JOB_ASSASSIN_CROSS,
+		JOB_PALADIN       ,
+		JOB_CHAMPION      ,
+		JOB_PROFESSOR     ,
+		JOB_STALKER       ,
+		JOB_CREATOR       ,
+		JOB_CLOWN         ,
+		JOB_GYPSY         ,
+		JOB_TAEKWON       ,
+		JOB_STAR_GLADIATOR,
+		JOB_SOUL_LINKER   ,
+	};
+	script_pushint(st, std::find(JOBS.begin(), JOBS.end(), script_getnum(st, 2)) != JOBS.end());
 	return SCRIPT_CMD_SUCCESS;
 }
 

@@ -107,13 +107,13 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			next;
 			mes "[コレット]";
 			mes "メンバーの^4040FF強化^000000を行うと";
-			mes "まずアイテム重量が^FF40402000^000000増えるよ。";
-			mes "アイテムはいっぱい持てたほうが";
-			mes "絶対うれしいよね。";
+			mes "まずステータスポイントを";
+			mes "^FF4040200ポイント^000000貰えるよ。";
+			mes "一気にパワーアップだね。";
 			next;
 			mes "[コレット]";
-			mes "さらにスキルポイントが";
-			mes "^FF404010ポイント^000000ももらえちゃう。";
+			mes "さらにスキルポイントを";
+			mes "^FF404010ポイント^000000も貰えちゃう。";
 			mes "これで足りなかったスキルを";
 			mes "ゲットできるかも？";
 			next;
@@ -123,7 +123,7 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			set .@mem_lis$[.@i], "やめる";
 			while (1) {
 				mes "[コレット]";
-				mes "^4040FF強化^000000はとても大事だから";
+				mes "^4040FF強化^000000はとても大事なことだから";
 				mes "よく考えて慎重に選んでね。";
 				mes "どのメンバーを^4040FF強化^000000するの？";
 				next;
@@ -135,34 +135,15 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 					close;
 				}
 				if (attachrid(.@mem_rids[.@mem_ind])) {
-					set .@mem_enc, MVP_MANIA_ENHANCE;
+					set .@mem_enh, MVP_MANIA_ENHANCE;
 					attachrid .@pla_rid;
 					set .@mem_cla, .@mem_clas[.@mem_ind];
-					if (.@mem_enc) {
+					if (.@mem_enh) {
 						mes "[コレット]";
 						mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
 						mes "もう^FF4040強化済み^000000だからダメだよ。";
 						next;
-					} else if (.@mem_clas[.@mem_ind] != JOB_SUPER_NOVICE &&
-						.@mem_cla != JOB_GUNSLINGER &&
-						.@mem_cla != JOB_NINJA &&
-						.@mem_cla != JOB_LORD_KNIGHT &&
-						.@mem_cla != JOB_HIGH_PRIEST &&
-						.@mem_cla != JOB_HIGH_WIZARD &&
-						.@mem_cla != JOB_WHITESMITH &&
-						.@mem_cla != JOB_SNIPER &&
-						.@mem_cla != JOB_ASSASSIN_CROSS &&
-						.@mem_cla != JOB_PALADIN &&
-						.@mem_cla != JOB_CHAMPION &&
-						.@mem_cla != JOB_PROFESSOR &&
-						.@mem_cla != JOB_STALKER &&
-						.@mem_cla != JOB_CREATOR &&
-						.@mem_cla != JOB_CLOWN &&
-						.@mem_cla != JOB_GYPSY &&
-						.@mem_cla != JOB_TAEKWON &&
-						.@mem_cla != JOB_STAR_GLADIATOR &&
-						.@mem_cla != JOB_SOUL_LINKER
-					) {
+					} else if (!canenhance(.@mem_cla)) {
 						mes "[コレット]";
 						mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
 						mes "^FF4040強化できない職業^000000だからダメだよ。";
@@ -188,11 +169,10 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 				close;
 			}
 			if (attachrid(.@mem_rids[.@mem_ind])) {
-				set .@mem_enc, MVP_MANIA_ENHANCE;
-				if (!.@mem_enc) {
-					skill "ALL_INCCARRY", 10, SKILL_PERM_GRANT;
-					addskillpoint 10;
+				if (!MVP_MANIA_ENHANCE) {
 					set MVP_MANIA_ENHANCE, 1;
+					addstatuspoint 200;
+					addskillpoint 10;
 					attachrid .@pla_rid;
 					advancemvpround;
 					++.@rou;

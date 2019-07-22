@@ -393,10 +393,8 @@ int chmapif_parse_reqsavechar(int fd, int id){
 		return 0;
 	else {
 		int aid = RFIFOL(fd,4), cid = RFIFOL(fd,8), size = RFIFOW(fd,2);
-
-		// [GonBee]
-		//struct online_char_data* character;
-		//DBMap* online_char_db = char_get_onlinedb();
+		struct online_char_data* character;
+		DBMap* online_char_db = char_get_onlinedb();
 
 		if (size - 13 != sizeof(struct mmo_charstatus))
 		{
@@ -407,21 +405,24 @@ int chmapif_parse_reqsavechar(int fd, int id){
 		//Check account only if this ain't final save. Final-save goes through because of the char-map reconnect
 
 		// [GonBee]
-		// 常にキャラクターを保存する。
+		// キャラクターIDのすべてのバイトをチェックする。
 		//if (RFIFOB(fd,12) || RFIFOB(fd,13) || (
-		//	(character = (struct online_char_data*)idb_get(online_char_db, aid)) != NULL &&
-		//	character->char_id == cid))
-		//{
+		if (RFIFOB(fd,12) || RFIFOL(fd,13) || (
 
+			(character = (struct online_char_data*)idb_get(online_char_db, aid)) != NULL &&
+			character->char_id == cid))
+		{
 			struct mmo_charstatus char_dat;
 			memcpy(&char_dat, RFIFOP(fd,13), sizeof(struct mmo_charstatus));
 			char_mmo_char_tosql(cid, &char_dat);
+		} else {	//This may be valid on char-server reconnection, when re-sending characters that already logged off.
+			ShowError("parse_from_map (save-char): Received data for non-existant/offline character (%d:%d).\n", aid, cid);
 
-		// [GonBee]
-		//} else {	//This may be valid on char-server reconnection, when re-sending characters that already logged off.
-		//	ShowError("parse_from_map (save-char): Received data for non-existant/offline character (%d:%d).\n", aid, cid);
-		//	char_set_char_online(id, cid, aid);
-		//}
+			// [GonBee]
+			// Botはオンライン状態にしない。
+			//char_set_char_online(id, cid, aid);
+
+		}
 
 		if (RFIFOB(fd,12))
 		{	//Flag, set character offline after saving. [Skotlex]
