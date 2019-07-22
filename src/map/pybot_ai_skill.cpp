@@ -1901,9 +1901,9 @@ AI_SKILL_USE_FUNC(PR_LEXDIVINA) {
 
 // マグニフィカートを使う。
 AI_SKILL_USE_FUNC(PR_MAGNIFICAT) {
-	/*if (!bot->is_magic_immune() &&
+	if (!bot->is_magic_immune() &&
 		bot->sc_rest(SC_MAGNIFICAT) <= bot->get_skill_tail(kid)
-	) */bot->use_skill_self(kid, klv);
+	) bot->use_skill_self(kid, klv);
 }
 
 // マグヌスエクソシズムを使う。
