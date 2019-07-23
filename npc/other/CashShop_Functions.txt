@@ -77,7 +77,9 @@ function	script	F_CashAddExtraStatusPoint	{
 	) {
 		addstatuspoint 10;
 		set EXTRA_STATUS_POINT, EXTRA_STATUS_POINT + 10;
-	} else getitem 10900, 1;
+		delitem 10900, 1;
+		specialeffect2 EF_ENHANCE;
+	}
 	return;
 }
 
@@ -88,7 +90,9 @@ function	script	F_CashAddExtraSkillPoint	{
 	) {
 		addskillpoint 1;
 		++EXTRA_SKILL_POINT;
-	} else getitem 10901, 1;
+		delitem 10901, 1;
+		specialeffect2 EF_ENHANCE;
+	}
 	return;
 }
 
@@ -97,7 +101,9 @@ function	script	F_CashAddExtraWeight	{
 	set .@car_lv, getskilllv("ALL_INCCARRY");
 	if (.@car_lv < 10) {
 		skill "ALL_INCCARRY", .@car_lv + 1, SKILL_PERM_GRANT;
-	} else getitem 10902, 1;
+		delitem 10902, 1;
+		specialeffect2 EF_ENHANCE;
+	}
 	return;
 }
 
