@@ -1252,7 +1252,8 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			battler->check_skill(RG_BACKSTAP) &&
 			tan &&
 			tan->battle_index() < battler->battle_index();
-		bool mov = tar_ene->is_short_range_attacker() &&
+		bool mov = tar_ene->has_can_move() &&
+			tar_ene->is_short_range_attacker() &&
 			(tar_ene->sc()->data[SC_PNEUMA] ||
 				tar_ene->sc()->data[SC_SAFETYWALL] ||
 				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
@@ -1299,7 +1300,8 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 	return [this, &pos] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
-		bool mov = tar_ene->is_short_range_attacker() &&
+		bool mov = tar_ene->has_can_move() &&
+			tar_ene->is_short_range_attacker() &&
 			(tar_ene->sc()->data[SC_PNEUMA] ||
 				tar_ene->sc()->data[SC_SAFETYWALL] ||
 				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
