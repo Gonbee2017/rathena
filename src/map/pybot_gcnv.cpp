@@ -77,6 +77,7 @@ const std::vector<
 	AI_ITEM_USE_PROC_ASPD(AWAKENING_POTION                         ),
 	AI_ITEM_USE_PROC_ASPD(CONCENTRATION_POTION                     ),
 	AI_ITEM_USE_PROC     (POISON_BOTTLE                            ),
+	AI_ITEM_USE_PROC     (ENRICH_CELERMINE_JUICE                   ),
 };
 
 // AIにおけるメンバースキル使用手続きのマップ。

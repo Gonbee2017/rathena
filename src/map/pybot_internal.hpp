@@ -475,6 +475,7 @@ enum item_ids {
 	ITEMID_BLOOD_CARTRIDGE         = 12150, // ブラッドバレットケース。
 	ITEMID_SILVER_CARTRIDGE        = 12151, // シルバーバレットケース。
 	ITEMID_HOLY_ARROW_QUIVER       = 12183, // 聖なる矢筒。
+	ITEMID_ENRICH_CELERMINE_JUICE  = 12437, // 濃縮サラマインジュース。
 	ITEMID_BULLET                  = 13200, // バレット。
 	ITEMID_SILVER_BULLET           = 13201, // シルバーバレット。
 	ITEMID_BLOODY_SHELL            = 13202, // ブラッドバレット。
@@ -839,6 +840,7 @@ struct ai_t {
 	int sp_ratio_by_enemies();
 
 	AI_ITEM_USE_FUNC(CAVIAR_PANCAKE);
+	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
 	AI_ITEM_USE_FUNC(GREEN_HERB);
 	AI_ITEM_USE_FUNC(GREEN_POTION);
 	AI_ITEM_USE_FUNC(HOLY_WATER);

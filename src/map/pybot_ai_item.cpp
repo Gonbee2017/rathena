@@ -18,6 +18,14 @@ AI_ITEM_USE_FUNC(CAVIAR_PANCAKE) {
 	) bot->use_item(itm_ind);
 }
 
+// 濃縮サラマインジュースを使う。
+AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE) {
+	if (bot->battle_mode() != BM_NONE &&
+		bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
+		!bot->sc()->data[SC_EXTRACT_SALAMINE_JUICE]
+	) bot->use_item(itm_ind);
+}
+
 // 緑ハーブを使う。
 AI_ITEM_USE_FUNC(GREEN_HERB) {
 	if (bot->sc()->data[SC_POISON] &&
@@ -69,7 +77,7 @@ AI_ITEM_USE_FUNC(PANACEA) {
 // 毒薬の瓶を使う。
 AI_ITEM_USE_FUNC(POISON_BOTTLE) {
 	if (bot->sd()->status.class_ == JOB_ASSASSIN_CROSS &&
-		bot->battle_mode() &&
+		bot->battle_mode() != BM_NONE &&
 		bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 		!bot->sc()->data[SC_ASPDPOTION0] &&
 		!bot->sc()->data[SC_ASPDPOTION1] &&
@@ -103,7 +111,7 @@ AI_ITEM_USE_DEF(ammo_container)(
 ai_t::item_use_func // 作った関数。
 AI_ITEM_USE_DEF(aspd_potion)() {
 	return [] (ai_t* ai, int itm_ind) {
-		if (ai->bot->battle_mode() &&
+		if (ai->bot->battle_mode() != BM_NONE &&
 			ai->bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 			!ai->bot->sc()->data[SC_ASPDPOTION0] &&
 			!ai->bot->sc()->data[SC_ASPDPOTION1] &&
