@@ -52,4 +52,4 @@
 	close;
 }
 
-prontera,125,62,3	duplicate(ChangeEnrich)	デンス	84
+prontera,125,62,3	duplicate(ChangeEnrich)	エンリッヒ	84

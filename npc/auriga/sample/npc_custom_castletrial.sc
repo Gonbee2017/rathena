@@ -34,7 +34,7 @@ OnStart:
 			strnpcinfo(0) + "::OnFixedMobDead";
 	}
 	set dupvar(.tim_rem), dupele(.tim_pois, 0) * 60;
-	announce dupvar(.cas_nam$) + "で砦の試練が開始されました。", 0;
+	announce "[ " + dupvar(.cas_nam$) + " ]で砦の試練が開始されました。", 0;
 	initnpctimer;
 	end;
 OnAbort:
@@ -124,7 +124,7 @@ Stop:
 		specialeffect EF_SUMMONSLAVE, AREA, .@exi_nam$;
 	}
 	sleep 5000;
-	announce dupvar(.cas_nam$) + "で砦の試練が終了しました。", 0;
+	announce "[ " + dupvar(.cas_nam$) + " ]で砦の試練が終了しました。", 0;
 	set dupvar(.nic$), "";
 }
 
