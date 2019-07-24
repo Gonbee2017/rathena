@@ -1045,7 +1045,8 @@ ai_t::away_enemies(
 	//}
 	//return res;
 	block_if* tar_ene = battler->target_enemy();
-	return !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader));
+	return !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader)) ||
+		tar_ene->target_battler() == battler;
 }
 
 // 座標が他のバトラーから離れているかを判定する。
