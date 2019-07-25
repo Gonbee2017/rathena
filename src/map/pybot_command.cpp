@@ -3255,6 +3255,10 @@ bot_login(
 
 		sd->state.pc_loaded = true;
 		clif_parse_LoadEndAck(fd, sd);
+		if (pc_iscarton(sd)) {
+			sd->cart_weight_max = 0;
+			status_calc_cart_weight(sd, (e_status_calc_weight_opt)(CALCWT_ITEM|CALCWT_MAXBONUS|CALCWT_CARTSTATE));
+		}
 
 		map_id_exi.do_ = nullptr;
 		fd_exi.do_ = nullptr;
