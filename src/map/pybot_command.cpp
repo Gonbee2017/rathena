@@ -3009,6 +3009,26 @@ bot_login(
 				" `", construct<sql_column>("key"  , reg_key), "`,"
 				" `", construct<sql_column>("index", reg_idx), "`,"
 				" `", construct<sql_column>("value", reg_str), "` "
+				"FROM `acc_reg_str` "
+				"WHERE `account_id` = ", construct<sql_param>(sd->status.account_id)
+			);
+			while (ses->next_row())
+				set_reg(nullptr, sd, reference_uid(add_str(reg_key), reg_idx), reg_key, (void*)(reg_str), nullptr);
+			ses->execute(
+				"SELECT"
+				" `", construct<sql_column>("key"  , reg_key), "`,"
+				" `", construct<sql_column>("index", reg_idx), "`,"
+				" `", construct<sql_column>("value", reg_num), "` "
+				"FROM `acc_reg_num` "
+				"WHERE `account_id` = ", construct<sql_param>(sd->status.account_id)
+			);
+			while (ses->next_row())
+				set_reg(nullptr, sd, reference_uid(add_str(reg_key), reg_idx), reg_key, (void*)__64BPRTSIZE(reg_num), nullptr);
+			ses->execute(
+				"SELECT"
+				" `", construct<sql_column>("key"  , reg_key), "`,"
+				" `", construct<sql_column>("index", reg_idx), "`,"
+				" `", construct<sql_column>("value", reg_str), "` "
 				"FROM `char_reg_str` "
 				"WHERE `char_id` = ", construct<sql_param>(sd->status.char_id)
 			);
@@ -3026,6 +3046,38 @@ bot_login(
 				set_reg(nullptr, sd, reference_uid(add_str(reg_key), reg_idx), reg_key, (void*)__64BPRTSIZE(reg_num), nullptr);
 		}
 		sd->vars_ok = true;
+
+		sd->change_level_2nd = pc_readglobalreg(sd, add_str(JOBCHANGE2ND_VAR));
+		sd->change_level_3rd = pc_readglobalreg(sd, add_str(JOBCHANGE3RD_VAR));
+		sd->die_counter = pc_readglobalreg(sd, add_str(PCDIECOUNTER_VAR));
+		sd->langtype = pc_readaccountreg(sd, add_str(LANGTYPE_VAR));
+		if (msg_checklangtype(sd->langtype,true) < 0) sd->langtype = 0;
+		sd->cashPoints = pc_readaccountreg(sd, add_str(CASHPOINT_VAR));
+		sd->kafraPoints = pc_readaccountreg(sd, add_str(KAFRAPOINT_VAR));
+		sd->cook_mastery = pc_readglobalreg(sd, add_str(COOKMASTERY_VAR));
+		if ((sd->class_ & MAPID_BASEMASK) == MAPID_TAEKWON) {
+			sd->mission_mobid = pc_readglobalreg(sd, add_str(TKMISSIONID_VAR));
+			sd->mission_count = pc_readglobalreg(sd, add_str(TKMISSIONCOUNT_VAR));
+		}
+		if (battle_config.feature_banking)
+			sd->bank_vault = pc_readreg2(sd, BANK_VAULT_VAR);
+		if (battle_config.feature_roulette) {
+			sd->roulette_point.bronze = pc_readreg2(sd, ROULETTE_BRONZE_VAR);
+			sd->roulette_point.silver = pc_readreg2(sd, ROULETTE_SILVER_VAR);
+			sd->roulette_point.gold = pc_readreg2(sd, ROULETTE_GOLD_VAR);
+		}
+		sd->roulette.prizeIdx = -1;
+		for (int i = 0; i < MAX_PC_FEELHATE; i++) {
+			uint16 j;
+			if ((j = pc_readglobalreg(sd, add_str(sg_info[i].feel_var))) != 0) {
+				sd->feel_map[i].index = j;
+				sd->feel_map[i].m = map_mapindex2mapid(j);
+			} else {
+				sd->feel_map[i].index = 0;
+				sd->feel_map[i].m = -1;
+			}
+			sd->hate_mob[i] = pc_readglobalreg(sd, add_str(sg_info[i].hate_var)) - 1;
+		}
 
 		sd->state.active = 1;
 		sd->state.pc_loaded = false;
