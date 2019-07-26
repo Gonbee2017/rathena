@@ -191,8 +191,10 @@ flooritem_to_be_ignored(
 		lea = construct<leader_t>(sd);
 		all_leaders[lea->char_id()] = lea;
 	}
-	return lea->ignore_items()->find(fit->item.nameid) &&
-		!fit->item.card[0] &&
+	item_data* idb = itemdb_exists(fit->item.nameid);
+	return (lea->ignore_items()->find(fit->item.nameid) ||
+			lea->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
+		) && !fit->item.card[0] &&
 		!fit->item.refine;
 }
 

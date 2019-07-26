@@ -1354,21 +1354,20 @@ static int pet_ai_sub_hard_lootsearch(struct block_list *bl,va_list ap)
 	// また所持アイテムに空きスロットがなかったり
 	// 重量がオーバーになるときも拾いに行かない。
 	// 主人がBotではない場合も無視アイテムを拾いに行かない。
-	// ペットが不安定なため暫定的にコメント化する。
 	//sd_charid = fitem->first_get_charid;
 	//
 	//if(sd_charid && sd_charid != pd->master->status.char_id)
 	//	return 0;
 	if (!pybot::pc_can_takeitem(pd->master, fitem)) return 0;
-	//map_session_data* lea_sd = pybot::get_leader(pd->master->status.char_id);
-	//if (lea_sd) {
-	//	int wei = itemdb_weight(fitem->item.nameid) * fitem->item.amount;
-	//	int rem = pd->master->max_weight - pd->master->weight;
-	//	if (pybot::flooritem_to_be_ignored(lea_sd, fitem) ||
-	//		!pc_inventoryblank(pd->master) ||
-	//		wei > rem
-	//	) return 0;
-	//} else if (pybot::flooritem_to_be_ignored(pd->master, fitem)) return 0;
+	map_session_data* lea_sd = pybot::get_leader(pd->master->status.char_id);
+	if (lea_sd) {
+		int wei = itemdb_weight(fitem->item.nameid) * fitem->item.amount;
+		int rem = pd->master->max_weight - pd->master->weight;
+		if (pybot::flooritem_to_be_ignored(lea_sd, fitem) ||
+			!pc_inventoryblank(pd->master) ||
+			wei > rem
+		) return 0;
+	} else if (pybot::flooritem_to_be_ignored(pd->master, fitem)) return 0;
 
 	if(unit_can_reach_bl(&pd->bl,bl, pd->db->range2, 1, NULL, NULL) &&
 		((*target) == NULL || //New target closer than previous one.
