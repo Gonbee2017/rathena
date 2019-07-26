@@ -2131,7 +2131,7 @@ AI_SKILL_USE_FUNC(SA_DELUGE) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->sc()->data[SC_DELUGE] &&
 		bot->attack_element_ratio(tar_ene, ELE_WATER) > 100 &&
-		skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 
@@ -2274,7 +2274,7 @@ AI_SKILL_USE_FUNC(SA_VIOLENTGALE) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->sc()->data[SC_VIOLENTGALE] &&
 		bot->attack_element_ratio(tar_ene, ELE_WIND) > 100 &&
-		skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 
@@ -2283,7 +2283,7 @@ AI_SKILL_USE_FUNC(SA_VOLCANO) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->sc()->data[SC_VOLCANO] &&
 		bot->attack_element_ratio(tar_ene, ELE_FIRE) > 100 &&
-		skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 
