@@ -335,6 +335,8 @@ AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 				return mem != bot &&
 					!mem->is_dead() &&
 					!mem->is_hiding() &&
+					!mem->is_primary() &&
+					mem->can_move() &&
 					mem->distance_policy_value() == bot->distance_policy_value() &&
 					!mem->sc()->data[typ];
 			});
