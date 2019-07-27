@@ -318,7 +318,29 @@ AI_SKILL_USE_FUNC(BA_FROSTJOKER) {
 
 // アドリブを使う。
 AI_SKILL_USE_FUNC(BD_ADAPTATION) {
-	if (bot->is_solo()) bot->use_skill_self(kid, klv);
+	static const std::unordered_map<e_skill, sc_type> SC_TYPS = {
+		{BA_WHISTLE      , SC_WHISTLE  },
+		{BA_ASSASSINCROSS, SC_ASSNCROS },
+		{BA_POEMBRAGI    , SC_POEMBRAGI},
+		{BA_APPLEIDUN    , SC_APPLEIDUN},
+		{DC_HUMMING      , SC_HUMMING  },
+		{DC_FORTUNEKISS  , SC_FORTUNE  },
+		{DC_SERVICEFORYOU, SC_SERVICE4U},
+	};
+	if (bot->is_solo()) {
+		block_if* mem = nullptr;
+		sc_type typ = find_map_data(SC_TYPS, e_skill(bot->sc()->data[SC_DANCING]->val1 & 0xFFFF));
+		if (typ) {
+			mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv, typ] (block_if* mem) -> bool {
+				return mem != bot &&
+					!mem->is_dead() &&
+					!mem->is_hiding() &&
+					mem->distance_policy_value() == bot->distance_policy_value() &&
+					!mem->sc()->data[typ];
+			});
+		}
+		if (!mem) bot->use_skill_self(kid, klv);
+	}
 }
 
 // アドレナリンラッシュを使う。

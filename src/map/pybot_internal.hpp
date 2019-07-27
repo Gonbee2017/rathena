@@ -466,6 +466,12 @@ enum item_ids {
 	ITEMID_SHADOW_ARROW_QUIVER     = 12013, // 影の矢筒。
 	ITEMID_IMMATERIAL_ARROW_QUIVER = 12014, // 無形の矢筒。
 	ITEMID_RUSTY_ARROW_QUIVER      = 12015, // 錆びた矢筒。
+	ITEMID_STR_DISH10              = 12075, // タンの盛り合わせ。
+	ITEMID_AGI_DISH10              = 12090, // 茹でサソリ。
+	ITEMID_VIT_DISH10              = 12085, // 不死のチゲ鍋。
+	ITEMID_INT_DISH10              = 12080, // カクテル・竜の吐息。
+	ITEMID_DEX_DISH10              = 12095, // フベルゲルミルの酒。
+	ITEMID_LUK_DISH10              = 12100, // 九尾狐のしっぽ料理。
 	ITEMID_LIGHTNING_SPHERE_PACK   = 12144, // ウィンドスフィアケース。
 	ITEMID_BLIND_SPHERE_PACK       = 12145, // ダークスフィアケース。
 	ITEMID_POISON_SPHERE_PACK      = 12146, // ポイズンスフィアケース。
@@ -484,6 +490,7 @@ enum item_ids {
 	ITEMID_POISON_SPHERE           = 13205, // ポイズンスフィア。
 	ITEMID_BLIND_SPHERE            = 13206, // ダークスフィア。
 	ITEMID_FREEZING_SPHERE         = 13207, // アイススフィア。
+	ITEMID_ORLEANS_FULL_COURSE     = 14646, // オルレアンのフルコース。
 };
 
 // マップの種類。
@@ -839,14 +846,21 @@ struct ai_t {
 	yield_xy_func find_wall_side_pos_pred(pos_t& pos);
 	int sp_ratio_by_enemies();
 
+	AI_ITEM_USE_FUNC(AGI_DISH10);
 	AI_ITEM_USE_FUNC(CAVIAR_PANCAKE);
+	AI_ITEM_USE_FUNC(DEX_DISH10);
 	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
 	AI_ITEM_USE_FUNC(GREEN_HERB);
 	AI_ITEM_USE_FUNC(GREEN_POTION);
 	AI_ITEM_USE_FUNC(HOLY_WATER);
+	AI_ITEM_USE_FUNC(INT_DISH10);
 	AI_ITEM_USE_FUNC(LEAF_OF_YGGDRASIL);
+	AI_ITEM_USE_FUNC(LUK_DISH10);
+	AI_ITEM_USE_FUNC(ORLEANS_FULL_COURSE);
 	AI_ITEM_USE_FUNC(PANACEA);
 	AI_ITEM_USE_FUNC(POISON_BOTTLE);
+	AI_ITEM_USE_FUNC(STR_DISH10);
+	AI_ITEM_USE_FUNC(VIT_DISH10);
 
 	static ai_t::item_use_func AI_ITEM_USE_DEF(ammo_container)(int amm_id);
 	static ai_t::item_use_func AI_ITEM_USE_DEF(aspd_potion)();

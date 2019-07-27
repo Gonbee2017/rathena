@@ -777,7 +777,9 @@ void ai_t::bot_rest() {
 		if (bot->hp() < bot->max_hp() ||
 			bot->sp() < bot->max_sp()
 		) {
-			if (!bot->is_sit()) bot->sit();
+			if (!bot->is_sit() &&
+				!bot->sc()->data[SC_DANCING]
+			) bot->sit();
 		} else if (bot->is_sit()) bot->stand();
 	}
 }

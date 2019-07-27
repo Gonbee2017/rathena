@@ -78,6 +78,13 @@ const std::vector<
 	AI_ITEM_USE_PROC_ASPD(CONCENTRATION_POTION                     ),
 	AI_ITEM_USE_PROC     (POISON_BOTTLE                            ),
 	AI_ITEM_USE_PROC     (ENRICH_CELERMINE_JUICE                   ),
+	AI_ITEM_USE_PROC     (ORLEANS_FULL_COURSE                      ),
+	AI_ITEM_USE_PROC     (STR_DISH10                               ),
+	AI_ITEM_USE_PROC     (AGI_DISH10                               ),
+	AI_ITEM_USE_PROC     (VIT_DISH10                               ),
+	AI_ITEM_USE_PROC     (INT_DISH10                               ),
+	AI_ITEM_USE_PROC     (DEX_DISH10                               ),
+	AI_ITEM_USE_PROC     (LUK_DISH10                               ),
 };
 
 // AIにおけるメンバースキル使用手続きのマップ。
@@ -165,7 +172,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (ASC_BREAKER                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (TF_PICKSTONE                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_BARD, initialize<ai_t::skill_use_proc_vector>(						 	 
-		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (BA_FROSTJOKER                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -225,7 +232,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_CLOWN, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC       (CG_LONGINGFREEDOM                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (BA_FROSTJOKER                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -295,7 +302,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_DANCER, initialize<ai_t::skill_use_proc_vector>(					 	 
-		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (DC_SCREAM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -326,8 +333,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (GS_TRIPLEACTION                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (GS_GLITTERING                                  ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_GYPSY, initialize<ai_t::skill_use_proc_vector>(					 	 
-		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (CG_LONGINGFREEDOM                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CONCENTRATION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (DC_SCREAM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -2278,8 +2285,8 @@ const std::array<
 	"フルアドレナリンラッシュ",
 	"武器属性付与",
 	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
+	"Atkの上昇",
+	"Matkの上昇",
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
@@ -2399,12 +2406,12 @@ const std::array<
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
-	"[SP]料理",
-	"[SP]料理",
-	"[SP]料理",
-	"[SP]料理",
-	"[SP]料理",
-	"[SP]料理",
+	"タンの盛り合わせ",
+	"茹でサソリ",
+	"不死のチゲ鍋",
+	"フベルゲルミルの酒",
+	"カクテル・竜の吐息",
+	"九尾狐のしっぽ料理",
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,

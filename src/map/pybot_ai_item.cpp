@@ -8,6 +8,11 @@ namespace pybot {
 // -----------------------------------------------------------------------------
 // AIのアイテム使用ハンドラの定義
 	
+// 茹でサソリを使う。
+AI_ITEM_USE_FUNC(AGI_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_AGI_CASH]) bot->use_item(itm_ind);
+}
+
 // キャビアパンケーキを使う。
 AI_ITEM_USE_FUNC(CAVIAR_PANCAKE) {
 	if (bot->sc()->data[SC_SILENCE] ||
@@ -16,6 +21,11 @@ AI_ITEM_USE_FUNC(CAVIAR_PANCAKE) {
 		bot->sc()->data[SC_HALLUCINATION] ||
 		bot->sc()->data[SC_BLEEDING]
 	) bot->use_item(itm_ind);
+}
+
+// フベルゲルミルの酒を使う。
+AI_ITEM_USE_FUNC(DEX_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_DEX_CASH]) bot->use_item(itm_ind);
 }
 
 // 濃縮サラマインジュースを使う。
@@ -48,6 +58,11 @@ AI_ITEM_USE_FUNC(HOLY_WATER) {
 	) bot->use_item(itm_ind);
 }
 
+// カクテル・竜の吐息を使う。
+AI_ITEM_USE_FUNC(INT_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_INT_CASH]) bot->use_item(itm_ind);
+}
+
 // イグドラシルの葉を使う。
 AI_ITEM_USE_FUNC(LEAF_OF_YGGDRASIL) {
 	if (battler->can_act()) {
@@ -63,6 +78,24 @@ AI_ITEM_USE_FUNC(LEAF_OF_YGGDRASIL) {
 			}
 		}
 	}
+}
+
+// 九尾狐のしっぽ料理を使う。
+AI_ITEM_USE_FUNC(LUK_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_LUK_CASH]) bot->use_item(itm_ind);
+}
+
+// オルレアンのフルコースを使う。
+AI_ITEM_USE_FUNC(ORLEANS_FULL_COURSE) {
+	if (!bot->sc()->data[SC_FOOD_STR_CASH] ||
+		!bot->sc()->data[SC_FOOD_AGI_CASH] ||
+		!bot->sc()->data[SC_FOOD_VIT_CASH] ||
+		!bot->sc()->data[SC_FOOD_INT_CASH] ||
+		!bot->sc()->data[SC_FOOD_DEX_CASH] ||
+		!bot->sc()->data[SC_FOOD_LUK_CASH] ||
+		!bot->sc()->data[SC_ATKPOTION] ||
+		!bot->sc()->data[SC_MATKPOTION]
+	) bot->use_item(itm_ind);
 }
 
 // 万能薬を使う。
@@ -84,6 +117,16 @@ AI_ITEM_USE_FUNC(POISON_BOTTLE) {
 		!bot->sc()->data[SC_ASPDPOTION2] &&
 		!bot->sc()->data[SC_ASPDPOTION3]
 	) bot->use_item(itm_ind);
+}
+
+// タンの盛り合わせを使う。
+AI_ITEM_USE_FUNC(STR_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_STR_CASH]) bot->use_item(itm_ind);
+}
+
+// 不死のチゲ鍋を使う。
+AI_ITEM_USE_FUNC(VIT_DISH10) {
+	if (!bot->sc()->data[SC_FOOD_VIT_CASH]) bot->use_item(itm_ind);
 }
 
 // 矢/弾のコンテナを使う関数を作る。
