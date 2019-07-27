@@ -1767,7 +1767,7 @@ AI_SKILL_USE_FUNC(PF_HPCONVERSION) {
 
 // メモライズを使う。
 AI_SKILL_USE_FUNC(PF_MEMORIZE) {
-	if (bot->sc_rest(SC_MEMORIZE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (!bot->sc()->data[SC_MEMORIZE]) bot->use_skill_self(kid, klv);
 }
 
 // ソウルチェンジを使う。
