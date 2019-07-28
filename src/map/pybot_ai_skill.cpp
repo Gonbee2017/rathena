@@ -843,7 +843,7 @@ AI_SKILL_USE_FUNC_T(HP_ASSUMPTIO, primary) {
 	) bot->use_skill_block(kid, klv, pri_mem);
 }
 
-// アスムプティオを先頭のメンバー以外に使う。
+// アスムプティオを先頭以外のメンバーに使う。
 AI_SKILL_USE_FUNC_T(HP_ASSUMPTIO, not_primary) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
 		return !mem->is_dead() &&
@@ -954,9 +954,7 @@ AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_attack(tar_ene) &&
 		tar_ene->is_great(leader) &&
-		(tar_ene->sc()->data[SC_PNEUMA] ||
-			tar_ene->sc()->data[SC_SAFETYWALL]
-		)
+		skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 }
 
@@ -1760,6 +1758,14 @@ AI_SKILL_USE_FUNC(PA_SACRIFICE) {
 	) bot->use_skill_self(kid, klv);
 }
 
+// 優先スキルを使う。
+AI_SKILL_USE_FUNC(PB_FIRST) {
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene)
+	) bot->use_skill_block(kid, klv, tar_ene);
+}
+
 // ダブルキャスティングを使う。
 AI_SKILL_USE_FUNC(PF_DOUBLECASTING) {
 	if (bot->sc_rest(SC_DOUBLECAST) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
@@ -2235,8 +2241,9 @@ AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 		!skill_unit_exists_block(bot, KEYS)
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
-			return ene->has_layout_skill() &&
-				ene->is_great(leader);
+			return (ene->has_layout_skill() ||
+					ene->has_earthquake()
+				) && ene->is_great(leader);
 		});
 		if (ene) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 	}

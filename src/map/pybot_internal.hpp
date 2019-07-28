@@ -1014,6 +1014,7 @@ struct ai_t {
 	AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate);
 	AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate);
 	AI_SKILL_USE_FUNC(PA_SACRIFICE);
+	AI_SKILL_USE_FUNC(PB_FIRST);
 	AI_SKILL_USE_FUNC(PF_DOUBLECASTING);
 	AI_SKILL_USE_FUNC(PF_FOGWALL);
 	AI_SKILL_USE_FUNC(PF_HPCONVERSION);
@@ -1196,6 +1197,7 @@ struct enemy_if {
 	virtual std::vector<block_if*>& attacked_battlers();
 	virtual int away_distance(block_if* lea);
 	virtual std::vector<block_if*>& close_battlers();
+	virtual bool& has_earthquake();
 	virtual bool& has_knockback_skill();
 	virtual bool& has_layout_skill();
 	virtual bool& has_long_skill();
@@ -1320,6 +1322,7 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual ptr<registry_t<int,e_skill>>& first_skills();
 	virtual int get_skill_low_rate();
 	virtual int get_skill_monsters();
 	virtual t_tick get_skill_tail(e_skill kid);
@@ -1501,6 +1504,7 @@ struct client_impl : virtual block_if {
 struct enemy_impl : virtual block_if {
 	std::vector<block_if*> attacked_battlers_; // 攻撃を受けているバトラー。
 	std::vector<block_if*> close_battlers_;    // 攻撃範囲内にいる味方。
+	bool has_earthquake_;                      // アースクエイク所持。
 	bool has_knockback_skill_;                 // ノックバックスキル所持。
 	bool has_layout_skill_;                    // レイアウトスキル所持。
 	bool has_long_skill_;                      // 遠隔スキル所持。
@@ -1518,6 +1522,7 @@ struct enemy_impl : virtual block_if {
 	virtual std::vector<block_if*>& attacked_battlers() override;
 	virtual int away_distance(block_if* lea) override;
 	virtual std::vector<block_if*>& close_battlers() override;
+	virtual bool& has_earthquake() override;
 	virtual bool& has_knockback_skill() override;
 	virtual bool& has_layout_skill() override;
 	virtual bool& has_long_skill() override;
@@ -1674,6 +1679,7 @@ struct member_impl : virtual block_if {
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
+	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
 	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	block_if* leader_;                            // リーダー。
@@ -1714,6 +1720,7 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_hold_monsters() override;
 	virtual int get_skill_low_rate() override;
 	virtual int get_skill_monsters() override;
@@ -2120,6 +2127,7 @@ struct scope_exit {
 // スキル所持モンスターIDのセット。
 struct skill_mobs {
 	static ptr<skill_mobs> instance;        // インスタンス。
+	std::unordered_set<int> earthquake;     // アースクエイク。
 	std::unordered_set<int> knockback;      // ノックバック。
 	std::unordered_set<int> layout;         // レイアウト。
 	std::unordered_set<int> long_;          // 遠隔。
@@ -2331,6 +2339,9 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
 SUBCMD_FUNC(Bot, sKill);
 SUBCMD_FUNC(Bot, sKillAutoSpell);
+SUBCMD_FUNC(Bot, sKillFirst);
+SUBCMD_FUNC(Bot, sKillFirstClear);
+SUBCMD_FUNC(Bot, sKillFirstTransport);
 SUBCMD_FUNC(Bot, sKillLimit);
 SUBCMD_FUNC(Bot, sKillLowRate);
 SUBCMD_FUNC(Bot, sKillMonsters);
@@ -2391,7 +2402,7 @@ int shift_arguments_then_parse_int(command_argument_list& args, const std::strin
 registry_t<int>::save_func delete_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func delete_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
-registry_t<int,team_t>::save_func delete_team_func(int cid);
+registry_t<int,e_skill>::save_func delete_first_skill_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
 registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
@@ -2404,10 +2415,11 @@ registry_t<int>::save_func delete_sell_item_func(int cid);
 registry_t<e_skill,int>::save_func delete_skill_tail_func(int cid);
 registry_t<int,int>::save_func delete_storage_get_item_func(int cid);
 registry_t<int>::save_func delete_storage_put_item_func(int cid);
+registry_t<int,team_t>::save_func delete_team_func(int cid);
 registry_t<int>::save_func insert_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func insert_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
-registry_t<int,team_t>::save_func insert_team_func(int cid);
+registry_t<int,e_skill>::save_func insert_first_skill_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
 registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
@@ -2420,10 +2432,11 @@ registry_t<int>::save_func insert_sell_item_func(int cid);
 registry_t<e_skill,int>::save_func insert_skill_tail_func(int cid);
 registry_t<int,int>::save_func insert_storage_get_item_func(int cid);
 registry_t<int>::save_func insert_storage_put_item_func(int cid);
+registry_t<int,team_t>::save_func insert_team_func(int cid);
 registry_t<int>::load_func load_cart_auto_get_item_func(int cid);
-registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
+registry_t<int,e_skill>::load_func load_first_skill_func(int cid);
 registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
-registry_t<int,team_t>::load_func load_team_func(int cid);
+registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
 registry_t<int>::load_func load_ignore_item_func(int cid);
 registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
@@ -2436,9 +2449,10 @@ registry_t<int>::load_func load_sell_item_func(int cid);
 registry_t<e_skill,int>::load_func load_skill_tail_func(int cid);
 registry_t<int,int>::load_func load_storage_get_item_func(int cid);
 registry_t<int>::load_func load_storage_put_item_func(int cid);
+registry_t<int,team_t>::load_func load_team_func(int cid);
 registry_t<int,distance_policy>::save_func update_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
-registry_t<int,team_t>::save_func update_team_func(int cid);
+registry_t<int,e_skill>::save_func update_first_skill_func(int cid);
 registry_t<e_skill,int>::save_func update_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func update_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func update_play_skill_func(int cid);
@@ -2446,6 +2460,7 @@ registry_t<int,int>::save_func update_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func update_recover_sp_item_func(int cid);
 registry_t<e_skill,int>::save_func update_skill_tail_func(int cid);
 registry_t<int,int>::save_func update_storage_get_item_func(int cid);
+registry_t<int,team_t>::save_func update_team_func(int cid);
 
 // -----------------------------------------------------------------------------
 // その他の関数の宣言

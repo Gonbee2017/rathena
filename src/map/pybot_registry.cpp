@@ -38,6 +38,21 @@ delete_distance_policy_func(
 	};
 }
 
+// DBから優先スキルを削除する関数を作る。
+registry_t<int,e_skill>::save_func // 作った関数。
+delete_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int mid, e_skill* kid) {
+		ses->execute(
+			"DELETE FROM `pybot_first_skill` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
 // DBから武具一式を削除する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 delete_equipset_func(
@@ -49,21 +64,6 @@ delete_equipset_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
-		);
-	};
-}
-
-// DBからチームを削除する関数を作る。
-registry_t<int,team_t>::save_func // 作った関数。
-delete_team_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
-		ses->execute(
-			"DELETE FROM `pybot_team` "
-			"WHERE"
-			" `leader_char_id` = ", construct<sql_param>(cid    ), " AND"
-			" `team_number` = "   , construct<sql_param>(tea_num)
 		);
 	};
 }
@@ -248,6 +248,21 @@ delete_storage_put_item_func(
 	};
 }
 
+// DBからチームを削除する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+delete_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		ses->execute(
+			"DELETE FROM `pybot_team` "
+			"WHERE"
+			" `leader_char_id` = ", construct<sql_param>(cid    ), " AND"
+			" `team_number` = "   , construct<sql_param>(tea_num)
+		);
+	};
+}
+
 // DBにカート自動補充アイテムを挿入する関数を作る。
 registry_t<int>::save_func // 作った関数。
 insert_cart_auto_get_item_func(
@@ -279,6 +294,22 @@ insert_distance_policy_func(
 	};
 }
 
+// DBに優先スキルを挿入する関数を作る。
+registry_t<int,e_skill>::save_func // 作った関数。
+insert_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int mid, e_skill* kid) {
+		ses->execute(
+			"INSERT INTO `pybot_first_skill` "
+			"VALUES "
+			"(", construct<sql_param>(cid), ","
+			" ", construct<sql_param>(mid), ","
+			" ", construct<sql_param>(kid), ")"
+		);
+	};
+}
+
 // DBに武具一式を挿入する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 insert_equipset_func(
@@ -298,26 +329,6 @@ insert_equipset_func(
 				" ", construct<sql_param>(esi->key->card[1]), ","
 				" ", construct<sql_param>(esi->key->card[2]), ","
 				" ", construct<sql_param>(esi->key->card[3]), ")"
-			);
-		}
-	};
-}
-
-// DBにチームを挿入する関数を作る。
-registry_t<int,team_t>::save_func // 作った関数。
-insert_team_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
-		for (int i = 0; i < tea->members.size(); ++i) {
-			auto mem = tea->members[i];
-			ses->execute(
-				"INSERT INTO `pybot_team` "
-				"VALUES "
-				"(", construct<sql_param>(cid         ), ","
-				" ", construct<sql_param>(tea_num     ), ","
-				" ", construct<sql_param>(i           ), ","
-				" ", construct<sql_param>(mem->char_id), ")"
 			);
 		}
 	};
@@ -510,6 +521,26 @@ insert_storage_put_item_func(
 	};
 }
 
+// DBにチームを挿入する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+insert_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		for (int i = 0; i < tea->members.size(); ++i) {
+			auto mem = tea->members[i];
+			ses->execute(
+				"INSERT INTO `pybot_team` "
+				"VALUES "
+				"(", construct<sql_param>(cid         ), ","
+				" ", construct<sql_param>(tea_num     ), ","
+				" ", construct<sql_param>(i           ), ","
+				" ", construct<sql_param>(mem->char_id), ")"
+			);
+		}
+	};
+}
+
 // DBからカート自動補充アイテムをロードする関数を作る。
 registry_t<int>::load_func // 作った関数。
 load_cart_auto_get_item_func(
@@ -544,6 +575,26 @@ load_distance_policy_func(
 		);
 		while (ses->next_row())
 			reg->register_(mid, construct<distance_policy>(mid, distance_policy_values(val)));
+	};
+}
+
+// DBから距離ポリシーをロードする関数を作る。
+registry_t<int,e_skill>::load_func // 作った関数。
+load_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int,e_skill>* reg) {
+		int mid;
+		e_skill kid;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("mob_id"  , mid), "`,"
+			" `", construct<sql_column>("skill_id", kid), "` "
+			"FROM `pybot_first_skill` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row())
+			reg->register_(mid, initialize<e_skill>(kid));
 	};
 }
 
@@ -590,43 +641,6 @@ load_equipset_func(
 			equ_set->items.push_back(ei);
 		}
 		flu();
-	};
-}
-
-// DBからチームをロードする関数を作る。
-registry_t<int,team_t>::load_func // 作った関数。
-load_team_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, registry_t<int,team_t>* reg) {
-		int tea_num;
-		int mem_cid;
-		char mem_nam[24];
-		ses->execute(
-			"SELECT"
-			" t.`", construct<sql_column>("team_number"    , tea_num), "`,"
-			" t.`", construct<sql_column>("member_char_id" , mem_cid), "`,"
-			" c.`", construct<sql_column>("name"           , mem_nam), "` "
-			"FROM"
-			" `pybot_team` AS t,"
-			" `char` AS c "
-			"WHERE"
-			" t.`leader_char_id` = ", construct<sql_param>(cid), " AND"
-			" t.`member_char_id` = c.`char_id` "
-			"ORDER BY"
-			" t.`team_number`,"
-			" t.`member_index`"
-		);
-		ptr<team_t> tea;
-		while (ses->next_row()) {
-			if (!tea ||
-				tea_num != tea->tea_num
-			) {
-				tea = initialize<team_t>(tea_num);
-				reg->register_(tea_num, tea);
-			}
-			tea->members.push_back(initialize<team_member>(mem_cid, std::string(mem_nam)));
-		}
 	};
 }
 
@@ -848,6 +862,43 @@ load_storage_put_item_func(
 	};
 }
 
+// DBからチームをロードする関数を作る。
+registry_t<int,team_t>::load_func // 作った関数。
+load_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int,team_t>* reg) {
+		int tea_num;
+		int mem_cid;
+		char mem_nam[24];
+		ses->execute(
+			"SELECT"
+			" t.`", construct<sql_column>("team_number"    , tea_num), "`,"
+			" t.`", construct<sql_column>("member_char_id" , mem_cid), "`,"
+			" c.`", construct<sql_column>("name"           , mem_nam), "` "
+			"FROM"
+			" `pybot_team` AS t,"
+			" `char` AS c "
+			"WHERE"
+			" t.`leader_char_id` = ", construct<sql_param>(cid), " AND"
+			" t.`member_char_id` = c.`char_id` "
+			"ORDER BY"
+			" t.`team_number`,"
+			" t.`member_index`"
+		);
+		ptr<team_t> tea;
+		while (ses->next_row()) {
+			if (!tea ||
+				tea_num != tea->tea_num
+			) {
+				tea = initialize<team_t>(tea_num);
+				reg->register_(tea_num, tea);
+			}
+			tea->members.push_back(initialize<team_member>(mem_cid, std::string(mem_nam)));
+		}
+	};
+}
+
 // DBの距離ポリシーを更新する関数を作る。
 registry_t<int,distance_policy>::save_func // 作った関数。
 update_distance_policy_func(
@@ -858,6 +909,23 @@ update_distance_policy_func(
 			"UPDATE `pybot_distance_policy` "
 			"SET"
 			" `value` = ", construct<sql_param>(int(dis_pol->value)), " "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBの距離ポリシーを更新する関数を作る。
+registry_t<int,e_skill>::save_func // 作った関数。
+update_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int mid, e_skill* kid) {
+		ses->execute(
+			"UPDATE `pybot_first_skill` "
+			"SET"
+			" `skill_id` = ", construct<sql_param>(*kid), " "
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
@@ -890,32 +958,6 @@ update_equipset_func(
 				" ", construct<sql_param>(esi->key->card[1]), ","
 				" ", construct<sql_param>(esi->key->card[2]), ","
 				" ", construct<sql_param>(esi->key->card[3]), ")"
-			);
-		}
-	};
-}
-
-// DBのチームを更新する関数を作る。
-registry_t<int,team_t>::save_func // 作った関数。
-update_team_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
-		ses->execute(
-			"DELETE FROM `pybot_team` "
-			"WHERE"
-			" `leader_char_id` = ", construct<sql_param>(cid), " AND"
-			" `team_number` = "   , construct<sql_param>(tea_num)
-		);
-		for (int i = 0; i < tea->members.size(); ++i) {
-			auto mem = tea->members[i];
-			ses->execute(
-				"INSERT INTO `pybot_team` "
-				"VALUES "
-				"(", construct<sql_param>(cid         ), ","
-				" ", construct<sql_param>(tea_num     ), ","
-				" ", construct<sql_param>(i           ), ","
-				" ", construct<sql_param>(mem->char_id), ")"
 			);
 		}
 	};
@@ -1032,6 +1074,32 @@ update_storage_get_item_func(
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `nameid` = " , construct<sql_param>(nid)
 		);
+	};
+}
+
+// DBのチームを更新する関数を作る。
+registry_t<int,team_t>::save_func // 作った関数。
+update_team_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int tea_num, team_t* tea) {
+		ses->execute(
+			"DELETE FROM `pybot_team` "
+			"WHERE"
+			" `leader_char_id` = ", construct<sql_param>(cid), " AND"
+			" `team_number` = "   , construct<sql_param>(tea_num)
+		);
+		for (int i = 0; i < tea->members.size(); ++i) {
+			auto mem = tea->members[i];
+			ses->execute(
+				"INSERT INTO `pybot_team` "
+				"VALUES "
+				"(", construct<sql_param>(cid         ), ","
+				" ", construct<sql_param>(tea_num     ), ","
+				" ", construct<sql_param>(i           ), ","
+				" ", construct<sql_param>(mem->char_id), ")"
+			);
+		}
 	};
 }
 

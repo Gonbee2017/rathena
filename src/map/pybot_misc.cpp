@@ -253,6 +253,9 @@ skill_mobs::skill_mobs() {
 		ite_mob(1000, 3000);
 		ite_mob(20020, 32000);
 	};
+	auto is_eq = [] (e_skill kid, int klv) -> bool {
+		return kid == NPC_EARTHQUAKE;
+	};
 	auto is_kno_sk = [] (e_skill kid, int klv) -> bool {
 		return skill_get_blewcount(kid, klv);
 	};
@@ -276,6 +279,7 @@ skill_mobs::skill_mobs() {
 		return KEY_EXISTS(USEFULL_SKILLS, kid);
 	};
 
+	ini_set(earthquake, is_eq);
 	ini_set(knockback, is_kno_sk);
 	ini_set(layout, is_lay_sk);
 	ini_set(long_, mob_skill_is_long);

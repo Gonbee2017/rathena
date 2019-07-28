@@ -1676,6 +1676,104 @@ SUBCMD_FUNC(Bot, sKillAutoSpell) {
 	}
 }
 
+// メンバーの優先スキルを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, sKillFirst) {
+	using fs_val_t = std::pair<int,e_skill*>;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<fs_val_t> fs_vals;
+		mem->first_skills()->copy(pybot::back_inserter(fs_vals));
+		std::sort(ALL_RANGE(fs_vals), [lea] (fs_val_t lval, fs_val_t rval) -> bool {
+			return lval.first > rval.first;
+		});
+		std::stringstream out;
+		out << "------ 「" <<	mem->name() << "」の優先スキル ------\n";
+		for (fs_val_t fs_val : fs_vals) {
+			int mid = fs_val.first;
+			e_skill* kid = fs_val.second;
+			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << " ; " <<
+				ID_PREFIX << print(std::setw(5), std::setfill('0'), *kid) << " - " <<
+				skill_get_desc(*kid) << "\n";
+		}
+		out << fs_vals.size() << "件の優先スキルが見つかりました。\n";
+		show_client(lea->fd(), out.str());
+	} else {
+		std::string mob_nam = shift_arguments(args);
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		if (args.empty()) {
+			e_skill* old_kid = mem->first_skills()->find(mid);
+			if (!old_kid)
+				throw command_error{print(
+					"「", mob_nam, "」用優先スキルは見つかりませんでした。"
+				)};
+			mem->first_skills()->unregister(mid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str,
+				"」用優先スキルの登録を抹消しました。"
+			));
+		} else {
+			if (mid < MM_INDIVIDUAL ||
+				mid >= MM_CAUTION
+			)
+				throw command_error{print(
+					"「", META_MONSTER_NAMES.at(MM_BACKUP),
+					"」用優先スキルは登録できません。"
+				)};
+			std::string sk_nam = shift_arguments(args);
+			e_skill kid = e_skill(find_skilldb(sk_nam));
+			if (!kid)
+				throw command_error{print(
+					"「", sk_nam, "」というスキルはありません。"
+				)};
+			std::string sk_des = skill_get_desc(kid);
+			if ((!(skill_get_inf(kid) & INF_ATTACK_SKILL) &&
+					!(skill_get_inf(kid) & INF_GROUND_SKILL) &&
+					!(skill_get_inf(kid) & INF_SUPPORT_SKILL)
+				) || skill_get_inf2(kid) & INF2_PARTY_ONLY ||
+				skill_get_inf2(kid) & INF2_GUILD_ONLY
+			) throw command_error{print(
+				"「", sk_des, "」は指定できません。"
+			)};
+			mem->first_skills()->register_(mid, initialize<e_skill>(kid));
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str, "」用優先スキルに"
+				"「", sk_des, "」を登録しました。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーの優先スキルをクリアする。
+SUBCMD_FUNC(Bot, sKillFirstClear) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->first_skills()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件の優先スキルの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーの優先スキルを転送する。
+SUBCMD_FUNC(Bot, sKillFirstTransport) {
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->first_skills()->import_(mem1->first_skills().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件の優先スキルを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // 低ダメージ倍率を設定する。
 SUBCMD_FUNC(Bot, sKillLowRate) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -1816,7 +1914,7 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 					"」用演奏スキルは登録できません。"
 				)};
 			std::string sk_nam = shift_arguments(args);
-			int kid = find_skilldb(sk_nam);
+			e_skill kid = e_skill(find_skilldb(sk_nam));
 			if (!kid)
 				throw command_error{print(
 					"「", sk_nam, "」というスキルはありません。"

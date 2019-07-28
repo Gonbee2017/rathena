@@ -130,6 +130,7 @@ void ai_t::leader_collect() {
 		auto ene = find_map_data(leader->enemies(), md->bl.id);
 		if (!ene) {
 			ene = construct<enemy_t>(md);
+			ene->has_earthquake()           = KEY_EXISTS(skill_mobs::instance->earthquake    , md->mob_id);
 			ene->has_knockback_skill()      = KEY_EXISTS(skill_mobs::instance->knockback     , md->mob_id);
 			ene->has_layout_skill()         = KEY_EXISTS(skill_mobs::instance->layout        , md->mob_id);
 			ene->has_long_skill()           = KEY_EXISTS(skill_mobs::instance->long_         , md->mob_id);
@@ -961,12 +962,18 @@ void ai_t::battler_attack() {
 // バトラーがスキルを使う。
 void ai_t::battler_use_skill() {
 	auto ite_sk_pros = [this] (const ai_t::skill_use_proc_vector* pros, bool tem = false) {
-		for (const ai_t::skill_use_proc& sk_use_pro : *pros) {
+		for (ai_t::skill_use_proc sk_use_pro : *pros) {
 			if (tem) {
 				s_skill* sk = battler->skill(sk_use_pro.skill_id);
 				if (!sk ||
 					sk->flag != SKILL_FLAG_TEMPORARY
 				) continue;
+			}
+			if (sk_use_pro.skill_id == PB_FIRST) {
+				if (battler->battle_mode() == BM_NONE) continue;
+				e_skill* kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
+				if (!kid) continue;
+				sk_use_pro.skill_id = *kid;
 			}
 			int klv = battler->check_skill(sk_use_pro.skill_id);
 			if (klv < sk_use_pro.min_skill_lv) continue;

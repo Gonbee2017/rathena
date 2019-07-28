@@ -62,6 +62,7 @@ void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& enemy_if::attacked_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int enemy_if::away_distance(block_if* lea) {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& enemy_if::close_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool& enemy_if::has_earthquake() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_knockback_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_layout_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_long_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -171,6 +172,7 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -649,6 +651,11 @@ enemy_impl::away_distance(
 // 攻撃範囲内にいるバトラーのベクタ。
 std::vector<block_if*>& enemy_impl::close_battlers() {
 	return close_battlers_;
+}
+
+// アースクエイク所持か。
+bool& enemy_impl::has_earthquake() {
+	return has_earthquake_;
 }
 
 // ノックバックスキル所持か。
@@ -1605,6 +1612,11 @@ member_impl::find_inventory(
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
 }
 
+// 優先スキルのレジストリ。
+ptr<registry_t<int,e_skill>>& member_impl::first_skills() {
+	return first_skills_;
+}
+
 // メンバーが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_hold_monsters() {
@@ -2427,6 +2439,12 @@ member_t::member_t(
 		insert_equipset_func(char_id()),
 		update_equipset_func(char_id()),
 		delete_equipset_func(char_id())
+	);
+	first_skills() = construct<registry_t<int,e_skill>>(
+		load_first_skill_func(char_id()),
+		insert_first_skill_func(char_id()),
+		update_first_skill_func(char_id()),
+		delete_first_skill_func(char_id())
 	);
 	limit_skills() = construct<registry_t<e_skill,int>>(
 		load_limit_skill_func(char_id()),

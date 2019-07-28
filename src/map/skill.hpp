@@ -1991,6 +1991,10 @@ enum e_skill {
 	EL_ROCK_CRUSHER,
 	EL_ROCK_CRUSHER_ATK,
 	EL_STONE_RAIN,
+
+	// [GonBee]
+	// —DæƒXƒLƒ‹‚ğ’Ç‰ÁB
+	PB_FIRST = 9000,
 };
 
 /// The client view ids for land skills.

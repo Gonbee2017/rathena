@@ -27,6 +27,14 @@ CREATE TABLE `pybot_equipset` (
   PRIMARY KEY (`char_id`, `mob_id`, `order`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_first_skill`;
+CREATE TABLE IF NOT EXISTS `pybot_first_skill` (
+  `char_id` int(11) unsigned NOT NULL,
+  `mob_id` mediumint(9) unsigned NOT NULL,
+  `skill_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `mob_id`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_great_mob`;
 CREATE TABLE `pybot_great_mob` (
   `char_id` int(11) unsigned NOT NULL,
