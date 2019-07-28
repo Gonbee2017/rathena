@@ -1030,7 +1030,11 @@ general_impl::skill_advantage(
 ) {
 	int adv = 0;
 	iterate_skill_unit(bl()->m, x, y, [this, &adv] (skill_unit* kun, block_list* src_bl) -> int {
-		if (!is_primary()) {
+		if (distance_policy_value() == DPV_AWAY ||
+			(kun->group->skill_id != AL_PNEUMA &&
+				kun->group->skill_id != PF_FOGWALL
+			)
+		) {
 			if (src_bl->type == BL_MOB)	adv += find_map_data(ENEMY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
 			else adv += find_map_data(ALLY_SKILL_ADVANTAGES, e_skill(kun->group->skill_id), 0);
 		}
