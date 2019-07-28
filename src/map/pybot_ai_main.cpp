@@ -1182,29 +1182,30 @@ pos_t // Œ©‚Â‚©‚Á‚½ˆÊ’uBŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚çadvantage‚ªINT_MINB
 ai_t::find_best_assist_pos() {
 	pos_t pos;
 	block_if* tar_ene = battler->target_enemy();
-	block_if* tan = tar_ene->target_battler();
-	if (battler->distance_policy_value() == DPV_CLOSE &&
-		(!battler->sc()->data[SC_WARM] ||
-			tar_ene->has_knockback_immune()
-		) && (tar_ene->is_long_range_attacker() ||
-			(!tar_ene->has_can_attack() ||
-				tar_ene->is_flora() ||
-				tar_ene->is_berserk() ||
-				tar_ene->is_paralysis()
-			) && (!tar_ene->is_great(leader) ||
-				!battler->around_wall_exists() ||
-				!tan ||
-				!tan->attacked_by_blower() ||
-				tan->is_wall_side()
+	if (battler->check_attack(tar_ene)) {
+		block_if* tan = tar_ene->target_battler();
+		if (battler->distance_policy_value() == DPV_CLOSE &&
+			(!battler->sc()->data[SC_WARM] ||
+				tar_ene->has_knockback_immune()
+			) && (tar_ene->is_long_range_attacker() ||
+				(!tar_ene->has_can_attack() ||
+					tar_ene->is_flora() ||
+					tar_ene->is_berserk() ||
+					tar_ene->is_paralysis()
+				) && (!tar_ene->is_great(leader) ||
+					!battler->around_wall_exists() ||
+					!tan ||
+					!tan->attacked_by_blower() ||
+					tan->is_wall_side()
+				)
 			)
-		)
-	) {
-		int max_rad = std::min(battler->attack_range(), battle_config.pybot_around_distance);
-		pos_t wai_pos = tar_ene->waiting_position();
-		for (int rad = 1; rad <= max_rad; ++rad)
-			iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
-	}
-	if (pos.advantage == INT_MIN) pos = find_best_away_pos();
+		) {
+			int max_rad = std::min(battler->attack_range(), battle_config.pybot_around_distance);
+			pos_t wai_pos = tar_ene->waiting_position();
+			for (int rad = 1; rad <= max_rad; ++rad)
+				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
+		} else pos = find_best_away_pos();
+	} else pos = pos_t(battler->bl()->x, battler->bl()->y);
 	return pos;
 }
 
@@ -1248,7 +1249,7 @@ ai_t::find_best_tanut_pos() {
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
 		}
 	}
-	if (pos.advantage == INT_MIN) pos = find_best_away_pos();
+	if (pos.advantage == INT_MIN) pos = pos_t(battler->bl()->x, battler->bl()->y);
 	return pos;
 }
 
