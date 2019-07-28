@@ -962,20 +962,21 @@ void ai_t::battler_attack() {
 // バトラーがスキルを使う。
 void ai_t::battler_use_skill() {
 	auto ite_sk_pros = [this] (const ai_t::skill_use_proc_vector* pros, bool tem = false) {
-		for (ai_t::skill_use_proc sk_use_pro : *pros) {
+		for (const ai_t::skill_use_proc& sk_use_pro : *pros) {
 			if (tem) {
 				s_skill* sk = battler->skill(sk_use_pro.skill_id);
 				if (!sk ||
 					sk->flag != SKILL_FLAG_TEMPORARY
 				) continue;
 			}
-			if (sk_use_pro.skill_id == PB_FIRST) {
+			e_skill kid = sk_use_pro.skill_id;
+			if (kid == PB_FIRST) {
 				if (battler->battle_mode() == BM_NONE) continue;
-				e_skill* kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
-				if (!kid) continue;
-				sk_use_pro.skill_id = *kid;
+				e_skill* fir_kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
+				if (!fir_kid) continue;
+				kid = *fir_kid;
 			}
-			int klv = battler->check_skill(sk_use_pro.skill_id);
+			int klv = battler->check_skill(kid);
 			if (klv < sk_use_pro.min_skill_lv) continue;
 			if (sk_use_pro.max_skill_lv) klv = std::min(klv, sk_use_pro.max_skill_lv);
 			int sp_rat = sk_use_pro.sp_rat;
@@ -994,18 +995,18 @@ void ai_t::battler_use_skill() {
 					) || (sk_use_pro.attacked_flag & AF_FALSE &&
 						((!battler->attacked_short_range_attacker() &&
 								!battler->attacked_long_range_attacker()
-							) || !skill_get_castcancel(sk_use_pro.skill_id) ||
+							) || !skill_get_castcancel(kid) ||
 							battler->is_no_castcancel()
 						)
 					)
 				) && battler->check_sp(sp_rat) &&
-				battler->can_use_skill(sk_use_pro.skill_id, klv)
+				battler->can_use_skill(kid, klv)
 			) {
-				//SHOW_DEBUG_VARIABLE(sk_use_pro.skill_id);
+				//SHOW_DEBUG_VARIABLE(kid);
 				//try {
-					sk_use_pro.func(this, sk_use_pro.skill_id, klv);
+					sk_use_pro.func(this, kid, klv);
 				//} catch (const turn_end_exception& exc) {
-				//	SHOW_DEBUG_VARIABLE(sk_use_pro.skill_id);
+				//	SHOW_DEBUG_VARIABLE(kid);
 				//	throw exc;
 				//}
 			}

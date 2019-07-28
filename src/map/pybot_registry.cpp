@@ -303,9 +303,9 @@ insert_first_skill_func(
 		ses->execute(
 			"INSERT INTO `pybot_first_skill` "
 			"VALUES "
-			"(", construct<sql_param>(cid), ","
-			" ", construct<sql_param>(mid), ","
-			" ", construct<sql_param>(kid), ")"
+			"(", construct<sql_param>(cid ), ","
+			" ", construct<sql_param>(mid ), ","
+			" ", construct<sql_param>(*kid), ")"
 		);
 	};
 }

@@ -1763,7 +1763,11 @@ AI_SKILL_USE_FUNC(PB_FIRST) {
 	block_if* tar_ene = bot->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene)
-	) bot->use_skill_block(kid, klv, tar_ene);
+	) {
+		if (skill_get_inf(kid) & INF_GROUND_SKILL)
+			bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+		else bot->use_skill_block(kid, klv, tar_ene);
+	}
 }
 
 // ダブルキャスティングを使う。
