@@ -5673,16 +5673,6 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 	return wd;
 }
 
-// [GonBee]
-// ブロックがランドプロテクターなら1、そうでなければ0を返す。
-static int landprotector_sub(
-	block_list* bl, // ブロックリスト。
-	va_list ap      // 可変長引数のリスト。
-) {
-	skill_unit* kun = (skill_unit*)(bl);
-	return kun->group->skill_id == SA_LANDPROTECTOR;
-}
-
 /*==========================================
  * Calculate "magic"-type attacks and skills
  *------------------------------------------
@@ -6353,16 +6343,12 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				ShowError("Zero range by %d:%s, divide per 0 avoided!\n", skill_id, skill_get_name(skill_id));
 
 			// [GonBee]
-			// ランドプロテクター上なら半減する。
-			// 3セル以内ならDefでカットできる。
-			// 4セル以上ならさらに半減した上で、Mdefでカットできる。
-			if (map_foreachincell(landprotector_sub, target->m, target->x, target->y, BL_SKILL))
-				ad.damage >>= 1;
-			if (check_distance_bl(src, target, 3)) 
-				ad.damage = ad.damage * (100 - tstatus->def) / 100 - tstatus->def2;
-			else {
-				ad.damage >>= 1;
+			// 距離が3セル以下なら、Defでカットされる。
+			// 距離が4セル以上なら、DefとMdefでカットされ、さらに50%カットされる。
+			ad.damage = ad.damage * (100 - tstatus->def) / 100 - tstatus->def2;
+			if (!check_distance_bl(src, target, 3)) {
 				ad.damage = ad.damage * (100 - tstatus->mdef) / 100 - tstatus->mdef2;
+				ad.damage >>= 1;
 			}
 
 		}

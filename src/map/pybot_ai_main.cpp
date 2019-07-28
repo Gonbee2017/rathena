@@ -1327,13 +1327,8 @@ yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 			check_line_other_battlers(x, y) &&
 			away_warp_portals(x, y)
 		) {
-			int adv = battler->skill_advantage(x, y);
-			if (adv >= pos.advantage) {
-				int dis = distance_client_blxy(battler->bl(), x, y);
-				if (pos.advantage == INT_MIN ||
-					dis < pos.value
-				) pos = pos_t(x, y, dis, adv);
-			}
+			int dis = distance_client_blxy(battler->bl(), x, y);
+			if (dis < pos.value) pos = pos_t(x, y, dis);
 		}
 		return true;
 	};

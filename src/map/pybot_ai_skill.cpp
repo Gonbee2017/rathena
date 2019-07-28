@@ -2245,9 +2245,8 @@ AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 		!skill_unit_exists_block(bot, KEYS)
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
-			return (ene->has_layout_skill() ||
-					ene->has_earthquake()
-				) && ene->is_great(leader);
+			return ene->has_layout_skill() &&
+				ene->is_great(leader);
 		});
 		if (ene) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 	}
