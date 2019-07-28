@@ -1248,8 +1248,7 @@ ai_t::find_best_tanut_pos() {
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
 		}
-	}
-	if (pos.advantage == INT_MIN) pos = pos_t(battler->bl()->x, battler->bl()->y);
+	} else pos = find_best_away_pos();
 	return pos;
 }
 
