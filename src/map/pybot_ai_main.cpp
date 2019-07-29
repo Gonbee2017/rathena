@@ -929,8 +929,7 @@ void ai_t::battler_attack() {
 				tar_bat &&
 				tar_bat->battle_index() > battler->battle_index() &&
 				battler->check_attack_range(ene) &&
-				battler->check_normal_attack(ene) &&
-				battler->weapon_attack_element_ratio(ene) > 0
+				battler->check_normal_attack(ene)
 			) {
 				att_ene = ene;
 				break;
@@ -1226,8 +1225,8 @@ ai_t::find_best_away_pos() {
 pos_t // Œ©‚Â‚©‚Á‚½ˆÊ’uBŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚çadvantage‚ªINT_MINB
 ai_t::find_best_tanut_pos() {
 	pos_t pos;
-	block_if* tar_ene = battler->target_enemy();
 	if (battler->distance_policy_value() == DPV_CLOSE) {
+		block_if* tar_ene = battler->target_enemy();
 		if (!leader->rush()->get() &&
 			battler->is_primary() &&
 			tar_ene->is_short_range_attacker() &&
@@ -1248,7 +1247,8 @@ ai_t::find_best_tanut_pos() {
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
 		}
-	} else pos = find_best_away_pos();
+	}
+	if (pos.advantage == INT_MIN) pos = find_best_away_pos();
 	return pos;
 }
 
