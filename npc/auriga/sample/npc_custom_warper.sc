@@ -32,6 +32,8 @@ prontera,161,193,4	script	”òs‹@æ‚è	869,{
 				countitem(7160)
 			) || (.@des_map$ == "mosk_dun01" &&
 				MOSK_1QUE >= 39
+			) || (.@des_map$ == "bra_dun01" &&
+				BRA_3QUE >= 8
 			)
 		) set .@des_fee, 0;
 		if (.@des_fee) mes "‚»‚±‚È‚ç—¿‹à‚Í^4040FF" + .@des_fee + "^000000Zeny‚¾‚ËB";
@@ -133,4 +135,6 @@ OnInit:
 	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 201,269, 1000000;
 	setarray .des_maps$[getarraysize(.des_maps$)], "tur_dun02";
 	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 148,264, 100000;
+	setarray .des_maps$[getarraysize(.des_maps$)], "bra_dun01";
+	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 87,47, 500000;
 }

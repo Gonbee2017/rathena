@@ -1439,6 +1439,7 @@ spl_fild03,99,373,0		warp	splendidewarp5004	1,1,spl_fild02,102,32
 //スプレンディッドフィールド 01⇔スプレンディッドフィールド 02
 spl_fild01,289,28,0		warp	splendidewarp5005	1,1,spl_fild02,292,377
 spl_fild02,293,379,0	warp	splendidewarp5006	1,1,spl_fild01,289,30
+*/
 
 
 
@@ -1456,6 +1457,7 @@ bra_fild01,72,34,0		warp	brasiliswarp0101	1,1,brasilis,309,334
 
 
 
+/*
 //---エルディカスティス追加マップ
 
 

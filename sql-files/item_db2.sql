@@ -154,6 +154,7 @@ REPLACE INTO `item_db2` VALUES (2494, 'Chrystal_Pumps_', 'ガラスの靴', 4, 20, NU
 REPLACE INTO `item_db2` VALUES (2855, 'Whike_Black_Tail', 'ヒュッケの黒い尻尾', 4, 20, NULL, 100, NULL, 0, NULL, 0, 0xFFFFFFFF, 63, 2, 136, NULL, 45, 0, 0, '{ bonus bCritical,7; bonus bAspdRate,3; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (2971, 'Pocket_Watch__', '銀の懐中時計', 4, 20, NULL, 200, NULL, 0, NULL, 1, 0x00810204, 7, 2, 136, NULL, 80, 0, 0, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (5430, 'Sacred_Torch_Coronet', '聖火冠', 4, 20, NULL, 250, NULL, 3, NULL, 0, 0xFFFFFFFF, 7, 2, 256, NULL, 0, 0, 431, '{ bonus2 bSubEle,Ele_Fire,20; skill "MG_FIREBALL",5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5474, 'Notice_Board', 'お知らせ看板', 4, 20, NULL, 700, NULL, 4, NULL, 0, 0xFFFFFFFF, 63, 2, 256, NULL, 10, 1, 471, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5888, 'Wedding_Veil_', 'ヴェール', 4, 23000, NULL, 100, NULL, 0, NULL, 1, 0xFFFFFFFF, 7, 0, 256, NULL, 0, 1, 44, '{ bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5889, 'L_Orc_Hero_Helm_', '大型オークヒーローの兜', 4, 20, NULL, 900, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 768, NULL, 0, 1, 381, '{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; }', '{}', '{}');
