@@ -33,6 +33,7 @@ BUILDIN_DEF(printseconds, "i"),
 BUILDIN_DEF(querymvpranking, "rirrrr"),
 BUILDIN_DEF(querymvpstats, "rr"),
 BUILDIN_DEF(setcardlist, "r"),
+BUILDIN_DEF(updatefever, ""),
 
 // [GonBee]
 // Aurigaスクリプトとの互換性のために、以下の関数を定義する。

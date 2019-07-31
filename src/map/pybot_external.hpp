@@ -69,6 +69,7 @@ void reload_equipset_in_battle(int cid);
 void set_last_summoned_id(map_session_data* sd, int bid);
 void set_map_initial_position(map_session_data* sd);
 bool skill_is_layable_on_lp(e_skill kid);
+void update_fever();
 
 // -----------------------------------------------------------------------------
 // ŠO•”‚©‚çQÆ‚³‚ê‚é•Ï”‚ÌéŒ¾

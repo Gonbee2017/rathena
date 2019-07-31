@@ -2112,6 +2112,8 @@ struct pybot_map {
 	nation_types nation_type;  // 国の種類。
 	map_types map_type;        // マップの種類。
 	bool fever_flag;           // フィーバーフラグ。
+	int average_level;         // 平均レベル。
+	bool mvp_flag;             // MVPフラグ。
 };
 
 // スコープから抜けるときの処理。
@@ -2555,7 +2557,6 @@ int status_get_base_vit(map_session_data* sd);
 int stoi(const std::string& str, int def = 0, int bas = 10);
 std::string trim(const std::string& str, const std::string& pad_lets);
 template <class T, class R, class ...A> std::function<R(T*,A...)> unbind(R(T::*mem_fun)(A...));
-void update_fever();
 bool wall_exists(block_list* cen, int rad);
 
 // -----------------------------------------------------------------------------
@@ -2584,6 +2585,7 @@ extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMA
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
+extern const int DOUBLE_FEVER_MAPS_SIZE;
 extern const std::array<std::string,10> ELEMENT_NAME_TABLE;
 extern const skill_unit_key_map ELEMENTAL_SKILL_UNIT_KEYS;
 extern const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES;

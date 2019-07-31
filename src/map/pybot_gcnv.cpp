@@ -2075,6 +2075,9 @@ const std::array<
 	"遠隔"        ,
 };
 
+// ダブルフィーバーマップの数。
+const int DOUBLE_FEVER_MAPS_SIZE = 2;
+
 // 属性名のテーブル。
 const std::array<
 	std::string, // 属性名。

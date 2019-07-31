@@ -577,6 +577,102 @@ skill_is_layable_on_lp(
 	return KEY_EXISTS(LAYABLE_ON_LP_SKILLS, kid);
 }
 
+// フィーバーに関する情報を更新する。
+void update_fever() {
+	fever_rates.clear();
+	sql_session::open([] (sql_session* ses) {
+		int fev_rat = 2;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("value", fev_rat), "` "
+			"FROM `global_acc_reg_num` "
+			"WHERE"
+			" `account_id` = ", construct<sql_param>(1                     ), " AND"
+			" `key` = "       , construct<sql_param>(FEVER_RATE_KEY.c_str()), " AND"
+			" `index` = "     , construct<sql_param>(0                     )
+		);
+		ses->next_row();
+		int dou_fev_rat = fev_rat * 2;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("value", dou_fev_rat), "` "
+			"FROM `global_acc_reg_num` "
+			"WHERE"
+			" `account_id` = ", construct<sql_param>(1                     ), " AND"
+			" `key` = "       , construct<sql_param>(FEVER_RATE_KEY.c_str()), " AND"
+			" `index` = "     , construct<sql_param>(1                     )
+		);
+		ses->next_row();
+		int nat_typ;
+		int map_typ;
+		int siz;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("nation_type", nat_typ), "`,"
+			" `", construct<sql_column>("map_type"   , map_typ), "`,"
+			" `", construct<sql_column>("size"       , siz    ), "` "
+			"FROM `pybot_fever_size`"
+		);
+		std::vector<fever_size> sizs;
+		while (ses->next_row())
+			sizs.push_back(fever_size{nation_types(nat_typ), map_types(map_typ), siz});
+		std::vector<int> fev_ids;
+		for (const fever_size& siz : sizs) {
+			int typ = siz.nation_type * 100 + siz.map_type;
+			auto& maps = type_maps[typ];
+			for (int i = 0; i < siz.size; ++i) {
+				if (i >= maps.size()) break;
+				for (;;) {
+					auto map = maps[rnd() % maps.size()];
+					if (map->fever_flag &&
+						!KEY_EXISTS(fever_rates, map->id)
+					) {
+						fever_rates[map->id] = fev_rat;
+						fev_ids.push_back(map->id);
+						break;
+					}
+				}
+			}
+		}
+
+		if (fev_ids.size() >= DOUBLE_FEVER_MAPS_SIZE) {
+			std::sort(ALL_RANGE(fev_ids), [](int lid, int rid) -> bool {
+				auto lmap = id_maps.at(lid);
+				auto rmap = id_maps.at(rid);
+				return lmap->average_level > rmap->average_level;
+			});
+			std::unordered_set<int> dou_fev_ids;
+			while (dou_fev_ids.size() < DOUBLE_FEVER_MAPS_SIZE) {
+				int ind = rnd() % fev_ids.size();
+				int id = fev_ids[ind];
+				auto map = id_maps.at(id);
+				if (dou_fev_ids.find(id) == dou_fev_ids.end() &&
+					(ind < DOUBLE_FEVER_MAPS_SIZE ||
+						map->mvp_flag
+					)
+				) {
+					fever_rates[id] = dou_fev_rat;
+					dou_fev_ids.insert(id);
+				}
+			}
+
+		}
+
+		ses->execute("TRUNCATE `pybot_fever_rate`");
+		for (auto& fev_rat_val : fever_rates) {
+			int id = fev_rat_val.first;
+			int rat = fev_rat_val.second;
+			auto map = id_maps.at(id);
+			ses->execute(
+				"INSERT INTO `pybot_fever_rate` "
+				"VALUES "
+				"(", construct<sql_param>(map->name_english.c_str()), ","
+				" ", construct<sql_param>(rat                      ), ")"
+			);
+		}
+	});
+}
+
 // -----------------------------------------------------------------------------
 // 外部から参照される変数の定義
 

@@ -642,6 +642,13 @@ BUILDIN_FUNC(setcardlist) {
 }
 
 // [GonBee]
+// フィーバーに関する情報を更新する。
+BUILDIN_FUNC(updatefever) {
+	pybot::update_fever();
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // Aurigaスクリプトとの互換性のために、以下の関数を定義する。
 BUILDIN_FUNC(allowuseitem) {
 	return SCRIPT_CMD_SUCCESS;

@@ -954,14 +954,23 @@ void load_maps() {
 		int nat_typ;
 		int map_typ;
 		int fev_fla;
+		int avg_lv;
+		int mvp_fla;
 		ses->execute(
 			"SELECT"
-			" `", construct<sql_column>("name_english" , nam_eng), "`,"
-			" `", construct<sql_column>("name_japanese", nam_jap), "`,"
-			" `", construct<sql_column>("nation_type"  , nat_typ), "`,"
-			" `", construct<sql_column>("map_type"     , map_typ), "`,"
-			" `", construct<sql_column>("fever_flag"   , fev_fla), "` "
-			"FROM `pybot_map`"
+			" m.`", construct<sql_column>("name_english" , nam_eng), "`,"
+			" m.`", construct<sql_column>("name_japanese", nam_jap), "`,"
+			" m.`", construct<sql_column>("nation_type"  , nat_typ), "`,"
+			" m.`", construct<sql_column>("map_type"     , map_typ), "`,"
+			" m.`", construct<sql_column>("fever_flag"   , fev_fla), "`,"
+			" ROUND(SUM(IFNULL(mdb2.lv, IFNULL(mdb.lv, 0)) * IFNULL(s.amount, 0)) / SUM(IFNULL(s.amount, 1))) AS `", construct<sql_column>("avg_lv," , avg_lv ), "`,"
+			" CASE WHEN SUM(IFNULL(mdb2.mexp, IFNULL(mdb.mexp, 0))) > 0 THEN TRUE ELSE FALSE END AS `"             , construct<sql_column>("mvp_flag", mvp_fla), "` "
+			"FROM"
+			" `pybot_map` AS m "
+			" LEFT OUTER JOIN `pybot_spawn` AS s ON m.`name_english` = s.`map`"
+			" LEFT OUTER JOIN `mob_db` AS mdb ON s.`mob_id` = mdb.`id`"
+			" LEFT OUTER JOIN `mob_db2` AS mdb2 ON s.`mob_id` = mdb2.`id` "
+			"GROUP BY m.name_english"
 		);
 		while (ses->next_row()) {
 			int ind = mapindex_name2id(nam_eng);
@@ -973,7 +982,9 @@ void load_maps() {
 					nam_jap,
 					nation_types(nat_typ),
 					map_types(map_typ),
-					bool(fev_fla)
+					bool(fev_fla),
+					avg_lv,
+					bool(mvp_fla)
 				);
 				id_maps.insert(std::make_pair(id, map));
 				type_maps[nat_typ * 100 + map_typ].push_back(map);
@@ -1653,78 +1664,6 @@ trim(
 	}
 	if (fir > las) return "";
 	return str.substr(fir, las - fir + 1);
-}
-
-// フィーバーに関する情報を更新する。
-void update_fever() {
-	sql_session::open([] (sql_session* ses) {
-		int fev_rat = 2;
-		ses->execute(
-			"SELECT"
-			" `", construct<sql_column>("value", fev_rat), "` "
-			"FROM `global_acc_reg_num` "
-			"WHERE"
-			" `account_id` = ", construct<sql_param>(1                     ), " AND"
-			" `key` = "       , construct<sql_param>(FEVER_RATE_KEY.c_str()), " AND"
-			" `index` = "     , construct<sql_param>(0                     )
-		);
-		ses->next_row();
-		int dou_fev_rat = fev_rat * 2;
-		ses->execute(
-			"SELECT"
-			" `", construct<sql_column>("value", dou_fev_rat), "` "
-			"FROM `global_acc_reg_num` "
-			"WHERE"
-			" `account_id` = ", construct<sql_param>(1                     ), " AND"
-			" `key` = "       , construct<sql_param>(FEVER_RATE_KEY.c_str()), " AND"
-			" `index` = "     , construct<sql_param>(1                     )
-		);
-		ses->next_row();
-		int nat_typ;
-		int map_typ;
-		int siz;
-		ses->execute(
-			"SELECT"
-			" `", construct<sql_column>("nation_type", nat_typ), "`,"
-			" `", construct<sql_column>("map_type"   , map_typ), "`,"
-			" `", construct<sql_column>("size"       , siz    ), "` "
-			"FROM `pybot_fever_size`"
-		);
-		std::vector<fever_size> sizs;
-		while (ses->next_row())
-			sizs.push_back(fever_size{nation_types(nat_typ), map_types(map_typ), siz});
-		std::vector<int> fev_ids;
-		for (const fever_size& siz : sizs) {
-			int typ = siz.nation_type * 100 + siz.map_type;
-			auto& maps = type_maps[typ];
-			for (int i = 0; i < siz.size; ++i) {
-				if (i >= maps.size()) break;
-				for (;;) {
-					auto map = maps[rnd() % maps.size()];
-					if (map->fever_flag &&
-						!KEY_EXISTS(fever_rates, map->id)
-					) {
-						fever_rates[map->id] = fev_rat;
-						fev_ids.push_back(map->id);
-						break;
-					}
-				}
-			}
-		}
-		if (!fever_rates.empty()) fever_rates[fev_ids[rnd() % fev_ids.size()]] = dou_fev_rat;
-		ses->execute("TRUNCATE `pybot_fever_rate`");
-		for (auto& fev_rat_val : fever_rates) {
-			int id = fev_rat_val.first;
-			int rat = fev_rat_val.second;
-			auto map = id_maps.at(id);
-			ses->execute(
-				"INSERT INTO `pybot_fever_rate` "
-				"VALUES "
-				"(", construct<sql_param>(map->name_english.c_str()), ","
-				" ", construct<sql_param>(rat                      ), ")"
-			);
-		}
-	});
 }
 
 // 周辺に壁が存在するかを調べる。
