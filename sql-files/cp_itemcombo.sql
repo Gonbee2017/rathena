@@ -234,3 +234,5 @@ REPLACE INTO `cp_itemcombo` VALUES(18720,  1626, NULL,  NULL, NULL, NULL, '{ bon
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1665, NULL,  NULL, NULL, NULL, '{ bonus bMatk,15*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bCastRate,-10; } }');
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1621, NULL,  NULL, NULL, NULL, '{ bonus bMatk,20*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bDelayRate,-10; } }');
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1622, NULL,  NULL, NULL, NULL, '{ bonus bMatk,20*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bDelayRate,-10; } }');
+REPLACE INTO `cp_itemcombo` VALUES( 5277,  5917, NULL,  NULL, NULL, NULL, '{ bonus bLongAtkDef,3*(getequiprefinerycnt(EQI_HEAD_TOP)>=5)+4*(getequiprefinerycnt(EQI_HEAD_TOP)>=7); }');
+REPLACE INTO `cp_itemcombo` VALUES( 1525,  5917, NULL,  NULL, NULL, NULL, '{ bonus bLongAtkDef,-10; }');

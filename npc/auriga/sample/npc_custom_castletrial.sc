@@ -1022,21 +1022,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1716, 40,
-		1208, 40,
-		1376, 40,
-		1259, 20;
+		1716, 30,
+		1208, 30,
+		1376, 30,
+		1259, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1713, 40,
-		1677, 40,
-		1670, 40;
+		1713, 30,
+		1677, 30,
+		1670, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1720, 20,
-		1638, 40;
+		1720, 15,
+		1638, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1062,21 +1062,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 221, 33, 370, 124;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1701, 20,
-		1703, 20,
-		1713, 40,
-		1371, 40;
+		1701, 15,
+		1703, 15,
+		1713, 30,
+		1371, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 232, 127, 348, 235;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1755, 20,
-		1700, 20,
-		1702, 20;
+		1755, 15,
+		1700, 15,
+		1702, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 155, 108, 229, 227;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1637, 40,
-		1755, 20;
+		1637, 30,
+		1755, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1106,21 +1106,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 296, 249, 379, 338;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1219, 40,
-		1098, 40,
-		1672, 40,
-		1678, 40;
+		1219, 30,
+		1098, 30,
+		1672, 30,
+		1678, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 182, 230, 294, 338;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1829, 20,
-		1830, 20,
-		1289, 20;
+		1829, 15,
+		1830, 15,
+		1289, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 183, 177, 347, 227;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1839, 20,
-		1638, 40;
+		1839, 15,
+		1638, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1146,21 +1146,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1366, 40,
-		1675, 40,
-		1837, 40,
-		1714, 40;
+		1366, 30,
+		1675, 30,
+		1837, 30,
+		1714, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1833, 20,
-		1268, 40,
-		1673, 40;
+		1833, 15,
+		1268, 30,
+		1673, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1634, 40,
-		1831, 20;
+		1634, 30,
+		1831, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1190,21 +1190,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1706, 20,
-		1707, 20,
-		1864, 40,
-		1865, 40;
+		1706, 15,
+		1707, 15,
+		1864, 30,
+		1865, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 16, 4, 113, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1704, 20,
-		1705, 20,
-		1983, 40;
+		1704, 15,
+		1705, 15,
+		1983, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 76, 160, 163, 307;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1870, 20,
-		1639, 40;
+		1870, 15,
+		1639, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1244,21 +1244,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 231, 22, 311, 256;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1701, 20,
-		1703, 20,
-		1713, 40,
-		1388, 20;
+		1701, 15,
+		1703, 15,
+		1713, 30,
+		1388, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 154, 22, 228, 260;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1754, 20,
-		1700, 20,
-		1702, 20;
+		1754, 15,
+		1700, 15,
+		1702, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 55, 22, 151, 233;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1755, 20,
-		1637, 40;
+		1755, 15,
+		1637, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1284,21 +1284,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 8, 17, 139, 219;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1307, 20,
-		1319, 40,
-		1259, 20,
-		1283, 20;
+		1307, 15,
+		1319, 30,
+		1259, 15,
+		1283, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 140, 17, 271, 219;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1833, 20,
-		1673, 40,
-		1675, 40;
+		1833, 15,
+		1673, 30,
+		1675, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 12, 225, 183, 375;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1831, 20,
-		1634, 40;
+		1831, 15,
+		1634, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1324,21 +1324,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1707, 20,
-		1706, 20,
-		1148, 40,
-		1198, 20;
+		1707, 15,
+		1706, 15,
+		1148, 30,
+		1198, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1704, 20,
-		1867, 40,
-		1302, 20;
+		1704, 15,
+		1867, 30,
+		1302, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1639, 40,
-		1705, 20;
+		1639, 30,
+		1705, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1368,21 +1368,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1830, 20,
-		1867, 40,
-		1219, 40,
-		1507, 40;
+		1830, 15,
+		1867, 30,
+		1219, 30,
+		1507, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1829, 20,
-		1268, 40,
-		1702, 20;
+		1829, 15,
+		1268, 30,
+		1702, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1839, 20,
-		1636, 40;
+		1839, 15,
+		1636, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);
@@ -1408,21 +1408,21 @@ OnInit:
 	setarray dupvar(.tim_pois, .@tar$), 60, 45, 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1716, 40,
-		1714, 40,
-		1717, 40,
-		1319, 40;
+		1716, 30,
+		1714, 30,
+		1717, 30,
+		1319, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 138, 40, 227, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1713, 40,
-		1671, 40,
-		1679, 40;
+		1713, 30,
+		1671, 30,
+		1679, 30;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	setarray .@are[getarraysize(.@are)], 110, 181, 173, 321;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
-		1636, 40,
-		1720, 20;
+		1636, 30,
+		1720, 15;
 	set .@are_mob_bous[getarraysize(.@are_mob_bous)], getarraysize(.@are_mobs) / 2;
 	copyarray dupvar(.are, .@tar$), .@are, getarraysize(.@are);
 	copyarray dupvar(.are_mobs, .@tar$), .@are_mobs, getarraysize(.@are_mobs);

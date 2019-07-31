@@ -875,7 +875,9 @@ void ai_t::battler_positioning() {
 		battler->is_best_pos() = false;
 		block_if* att_ene = battler->attacked_short_range_attacker();
 		if (!battler->is_primary() &&
-			!battler->sc()->data[SC_WARM] &&
+			(battler->battle_mode() == BM_ASSIST ||
+				battler->distance_policy_value() == DPV_AWAY
+			) && !battler->sc()->data[SC_WARM] &&
 			att_ene &&
 			battler->get_hold_monsters() != INT_MAX &&
 			(att_ene->is_great(leader) ||

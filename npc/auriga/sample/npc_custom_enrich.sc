@@ -13,7 +13,7 @@
 	mes "濃縮オリデオコンや濃縮エルニウムに";
 	mes "してあげる。";
 	mes "但し、オリデオコンやエルニウムは";
-	mes "各100個持ってくるように。";
+	mes "各50個持ってくるように。";
 	next;
 	switch (select("濃縮オリデオコンを作る","濃縮エルニウムを作る","やめる")) {
 	case 1:
@@ -29,10 +29,10 @@
 		mes "いつでもまた来てくれ。";
 		close;
 	}
-	if(countitem(.@itemid)<100) {
+	if(countitem(.@itemid)<50) {
 		mes "["+strnpcinfo(3)+"]";
 		mes "え？冗談でしょ？";
-		mes getitemname(.@itemid)+ "が100個無いと";
+		mes getitemname(.@itemid)+ "が50個無いと";
 		mes getitemname(.@gain)+ "が作れないと";
 		mes "言ったじゃないか。";
 		close;
@@ -44,7 +44,7 @@
 		mes "　再度話しかけてください‐";
 		close;
 	}
-	delitem .@itemid,100;
+	delitem .@itemid,50;
 	getitem .@gain,1;
 	mes "["+strnpcinfo(3)+"]";
 	mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
