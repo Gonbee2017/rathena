@@ -454,6 +454,7 @@ enum item_ids {
 	ITEMID_IRON_ARROW              =  1770, // 鉄の矢。
 	ITEMID_HOLY_ARROW              =  1772, // 聖なる矢。
 	ITEMID_PORING_CARD             =  4001, // ポリンカード。
+	ITEMID_BRAGI_POTION            = 10903, // ブラギポーション
 	ITEMID_QUIVER                  = 12004, // 矢筒。
 	ITEMID_IRON_ARROW_QUIVER       = 12005, // 鉄の矢筒。
 	ITEMID_STEEL_ARROW_QUIVER      = 12006, // 鋼鉄の矢筒。
@@ -472,6 +473,10 @@ enum item_ids {
 	ITEMID_INT_DISH10              = 12080, // カクテル・竜の吐息。
 	ITEMID_DEX_DISH10              = 12095, // フベルゲルミルの酒。
 	ITEMID_LUK_DISH10              = 12100, // 九尾狐のしっぽ料理。
+	ITEMID_RESIST_FIRE             = 12118, // レジストファイアーポーション。
+	ITEMID_RESIST_WATER            = 12119, // レジストコールドポーション。
+	ITEMID_RESIST_EARTH            = 12120, // レジストアースポーション。
+	ITEMID_RESIST_WIND             = 12121, // レジストウィンドポーション。
 	ITEMID_LIGHTNING_SPHERE_PACK   = 12144, // ウィンドスフィアケース。
 	ITEMID_BLIND_SPHERE_PACK       = 12145, // ダークスフィアケース。
 	ITEMID_POISON_SPHERE_PACK      = 12146, // ポイズンスフィアケース。
@@ -481,6 +486,12 @@ enum item_ids {
 	ITEMID_BLOOD_CARTRIDGE         = 12150, // ブラッドバレットケース。
 	ITEMID_SILVER_CARTRIDGE        = 12151, // シルバーバレットケース。
 	ITEMID_HOLY_ARROW_QUIVER       = 12183, // 聖なる矢筒。
+	ITEMID_HP_INCREASE_POTIONS     = 12422, // HP増加ポーション(小)。
+	ITEMID_HP_INCREASE_POTIONM     = 12423, // HP増加ポーション(中)。
+	ITEMID_HP_INCREASE_POTIONL     = 12424, // HP増加ポーション(大)。
+	ITEMID_SP_INCREASE_POTIONS     = 12425, // SP増加ポーション(小)。
+	ITEMID_SP_INCREASE_POTIONM     = 12426, // SP増加ポーション(中)。
+	ITEMID_SP_INCREASE_POTIONL     = 12427, // SP増加ポーション(大)。
 	ITEMID_ENRICH_CELERMINE_JUICE  = 12437, // 濃縮サラマインジュース。
 	ITEMID_BULLET                  = 13200, // バレット。
 	ITEMID_SILVER_BULLET           = 13201, // シルバーバレット。
@@ -847,20 +858,28 @@ struct ai_t {
 	int sp_ratio_by_enemies();
 
 	AI_ITEM_USE_FUNC(AGI_DISH10);
+	AI_ITEM_USE_FUNC(BRAGI_POTION);
 	AI_ITEM_USE_FUNC(CAVIAR_PANCAKE);
 	AI_ITEM_USE_FUNC(DEX_DISH10);
 	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
 	AI_ITEM_USE_FUNC(GREEN_HERB);
 	AI_ITEM_USE_FUNC(GREEN_POTION);
 	AI_ITEM_USE_FUNC(HOLY_WATER);
+	AI_ITEM_USE_FUNC(HP_INCREASE_POTIONL);
 	AI_ITEM_USE_FUNC(INT_DISH10);
 	AI_ITEM_USE_FUNC(LEAF_OF_YGGDRASIL);
 	AI_ITEM_USE_FUNC(LUK_DISH10);
 	AI_ITEM_USE_FUNC(ORLEANS_FULL_COURSE);
 	AI_ITEM_USE_FUNC(PANACEA);
 	AI_ITEM_USE_FUNC(POISON_BOTTLE);
+	AI_ITEM_USE_FUNC(REINS_OF_MOUNT);
+	AI_ITEM_USE_FUNC(RESIST_EARTH);
+	AI_ITEM_USE_FUNC(RESIST_FIRE);
+	AI_ITEM_USE_FUNC(RESIST_WATER);
+	AI_ITEM_USE_FUNC(RESIST_WIND);
 	AI_ITEM_USE_FUNC(STR_DISH10);
 	AI_ITEM_USE_FUNC(VIT_DISH10);
+	AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL);
 
 	static ai_t::item_use_func AI_ITEM_USE_DEF(ammo_container)(int amm_id);
 	static ai_t::item_use_func AI_ITEM_USE_DEF(aspd_potion)();

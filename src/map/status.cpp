@@ -1019,8 +1019,13 @@ void initChangeTables(void)
 	StatusIconChangeTable[SC_MELON_BOMB] = EFST_MELON_BOMB;
 	StatusIconChangeTable[SC_BANANA_BOMB] = EFST_BANANA_BOMB;
 	StatusIconChangeTable[SC_BANANA_BOMB_SITDOWN] = EFST_BANANA_BOMB_SITDOWN_POSTDELAY;
-	StatusIconChangeTable[SC_PROMOTE_HEALTH_RESERCH] = EFST_PROMOTE_HEALTH_RESERCH;
-	StatusIconChangeTable[SC_ENERGY_DRINK_RESERCH] = EFST_ENERGY_DRINK_RESERCH;
+
+	// [GonBee]
+	// HP増加ポーションとSP増加ポーション状態のアイコンを変更。
+	//StatusIconChangeTable[SC_PROMOTE_HEALTH_RESERCH] = EFST_PROMOTE_HEALTH_RESERCH;
+	//StatusIconChangeTable[SC_ENERGY_DRINK_RESERCH] = EFST_ENERGY_DRINK_RESERCH;
+	StatusIconChangeTable[SC_PROMOTE_HEALTH_RESERCH] = EFST_SHIELDSPELL_DEF;
+	StatusIconChangeTable[SC_ENERGY_DRINK_RESERCH] = EFST_SHIELDSPELL_MDEF;
 
 	/* Genetics New Food Items Status Icons */
 	StatusIconChangeTable[SC_SAVAGE_STEAK] = EFST_SAVAGE_STEAK;
@@ -1032,7 +1037,12 @@ void initChangeTables(void)
 	StatusIconChangeTable[SC_STOMACHACHE] = EFST_STOMACHACHE;
 	StatusIconChangeTable[SC_EXTRACT_WHITE_POTION_Z] = EFST_EXTRACT_WHITE_POTION_Z;
 	StatusIconChangeTable[SC_VITATA_500] = EFST_VITATA_500;
-	StatusIconChangeTable[SC_EXTRACT_SALAMINE_JUICE] = EFST_EXTRACT_SALAMINE_JUICE;
+
+	// [GonBee]
+	// 濃縮サラマインジュース状態のアイコンを変更。
+	//StatusIconChangeTable[SC_EXTRACT_SALAMINE_JUICE] = EFST_EXTRACT_SALAMINE_JUICE;
+	StatusIconChangeTable[SC_EXTRACT_SALAMINE_JUICE] = EFST_ATTHASTE_CASH;
+
 	StatusIconChangeTable[SC_BOOST500] = EFST_BOOST500;
 	StatusIconChangeTable[SC_FULL_SWING_K] = EFST_FULL_SWING_K;
 	StatusIconChangeTable[SC_MANA_PLUS] = EFST_MANA_PLUS;
@@ -1096,10 +1106,17 @@ void initChangeTables(void)
 	StatusIconChangeTable[SC_GVG_CURSE] = EFST_GVG_CURSE;
 	StatusIconChangeTable[SC_GVG_SILENCE] = EFST_GVG_SILENCE;
 	StatusIconChangeTable[SC_GVG_BLIND] = EFST_GVG_BLIND;
-	StatusIconChangeTable[SC_ARMOR_ELEMENT_WATER] = EFST_RESIST_PROPERTY_WATER;
-	StatusIconChangeTable[SC_ARMOR_ELEMENT_EARTH] = EFST_RESIST_PROPERTY_GROUND;
-	StatusIconChangeTable[SC_ARMOR_ELEMENT_FIRE] = EFST_RESIST_PROPERTY_FIRE;
-	StatusIconChangeTable[SC_ARMOR_ELEMENT_WIND] = EFST_RESIST_PROPERTY_WIND;
+
+	// [GonBee]
+	// レジストポーションのアイコンを変更。
+	//StatusIconChangeTable[SC_ARMOR_ELEMENT_WATER] = EFST_RESIST_PROPERTY_WATER;
+	//StatusIconChangeTable[SC_ARMOR_ELEMENT_EARTH] = EFST_RESIST_PROPERTY_GROUND;
+	//StatusIconChangeTable[SC_ARMOR_ELEMENT_FIRE] = EFST_RESIST_PROPERTY_FIRE;
+	//StatusIconChangeTable[SC_ARMOR_ELEMENT_WIND] = EFST_RESIST_PROPERTY_WIND;
+	StatusIconChangeTable[SC_ARMOR_ELEMENT_WATER] = EFST_IZAYOI;
+	StatusIconChangeTable[SC_ARMOR_ELEMENT_EARTH] = EFST_INSPIRATION;
+	StatusIconChangeTable[SC_ARMOR_ELEMENT_FIRE] = EFST_PRESTIGE;
+	StatusIconChangeTable[SC_ARMOR_ELEMENT_WIND] = EFST_LG_REFLECTDAMAGE;
 
 	// Costumes
 	StatusIconChangeTable[SC_MOONSTAR] = EFST_MOONSTAR;
@@ -4241,6 +4258,22 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			sd->subele[ELE_FIRE] += sc->data[SC_ARMOR_ELEMENT_WIND]->val3;
 			sd->subele[ELE_WIND] += sc->data[SC_ARMOR_ELEMENT_WIND]->val4;
 		}
+
+		// [GonBee]
+		// オールレジストを追加。
+		if(sc->data[SC_ARMOR_ELEMENT_WATER] &&
+			sc->data[SC_ARMOR_ELEMENT_EARTH] &&
+			sc->data[SC_ARMOR_ELEMENT_FIRE] &&
+			sc->data[SC_ARMOR_ELEMENT_WIND]
+		) {
+			sd->subele[ELE_NEUTRAL] += 20;
+			sd->subele[ELE_POISON] += 20;
+			sd->subele[ELE_HOLY] += 20;
+			sd->subele[ELE_DARK] += 20;
+			sd->subele[ELE_GHOST] += 20;
+			sd->subele[ELE_UNDEAD] += 20;
+		}
+
 		if(sc->data[SC_ARMOR_RESIST]) { // Undead Scroll
 			sd->subele[ELE_WATER] += sc->data[SC_ARMOR_RESIST]->val1;
 			sd->subele[ELE_EARTH] += sc->data[SC_ARMOR_RESIST]->val2;
@@ -10891,10 +10924,18 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			//val2: 1 = Small Potion, 2 = Medium Potion, 3 = Large Potion
 			//val3: BaseLV of Thrower For Thrown Potions
 			//val4: MaxHP Increase By Fixed Amount
+
+			// [GonBee]
+			// HP増加ポーションの効果を変更。
+			//if (val1 == 1) // If potion was normally used, take the user's BaseLv
+			//	val4 = 1000 * val2 - 500 + status_get_lv(bl) * 10 / 3;
+			//else if (val1 == 2) // If potion was thrown at someone, take the thrower's BaseLv
+			//	val4 = 1000 * val2 - 500 + val3 * 10 / 3;
 			if (val1 == 1) // If potion was normally used, take the user's BaseLv
-				val4 = 1000 * val2 - 500 + status_get_lv(bl) * 10 / 3;
+				val4 = 5000 + (status_get_lv(bl) + 1) * (val2 - 1) * 25;
 			else if (val1 == 2) // If potion was thrown at someone, take the thrower's BaseLv
-				val4 = 1000 * val2 - 500 + val3 * 10 / 3;
+				val4 = 5000 + (val3 + 1) * (val2 - 1) * 25;
+
 			if (val4 <= 0) // Prevents a negeative value from happening
 				val4 = 0;
 			break;
@@ -10903,10 +10944,18 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			//val2: 1 = Small Potion, 2 = Medium Potion, 3 = Large Potion
 			//val3: BaseLV of Thrower For Thrown Potions
 			//val4: MaxSP Increase By Percentage Amount
+
+			// [GonBee]
+			// SP増加ポーションの効果を変更。
+			//if (val1 == 1) // If potion was normally used, take the user's BaseLv
+			//	val4 = status_get_lv(bl) / 10 + 5 * val2 - 10;
+			//else if (val1 == 2) // If potion was thrown at someone, take the thrower's BaseLv
+			//	val4 = val3 / 10 + 5 * val2 - 10;
 			if (val1 == 1) // If potion was normally used, take the user's BaseLv
-				val4 = status_get_lv(bl) / 10 + 5 * val2 - 10;
+				val4 = 50 + (status_get_lv(bl) + 1) * (val2 - 1) / 4;
 			else if (val1 == 2) // If potion was thrown at someone, take the thrower's BaseLv
-				val4 = val3 / 10 + 5 * val2 - 10;
+				val4 = 50 + (val3 + 1) * (val2 - 1) / 4;
+
 			if (val4 <= 0) // Prevents a negeative value from happening
 				val4 = 0;
 			break;
@@ -11996,6 +12045,18 @@ int status_change_clear(struct block_list* bl, int type)
 			case SC_CROSSBOWCLAN:
 			case SC_JUMPINGCLAN:
 			case SC_DAILYSENDMAILCNT:
+
+			// [GonBee]
+			// ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			case SC_ENCHANTBLADE:
+			case SC_EXTRACT_SALAMINE_JUICE:
+			case SC_PROMOTE_HEALTH_RESERCH:
+			case SC_ENERGY_DRINK_RESERCH:
+			case SC_ARMOR_ELEMENT_WATER:
+			case SC_ARMOR_ELEMENT_EARTH:
+			case SC_ARMOR_ELEMENT_FIRE:
+			case SC_ARMOR_ELEMENT_WIND:
+
 				continue;
 			}
 		}
@@ -14039,6 +14100,20 @@ void status_change_clear_buffs(struct block_list* bl, uint8 type)
 			case SC_MAPLE_FALLS:
 			case SC_TIME_ACCESSORY:
 			case SC_MAGICAL_FEATHER:
+
+			// [GonBee]
+			// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			case SC_ATKPOTION:
+			case SC_MATKPOTION:
+			case SC_ENCHANTBLADE:
+			case SC_EXTRACT_SALAMINE_JUICE:
+			case SC_PROMOTE_HEALTH_RESERCH:
+			case SC_ENERGY_DRINK_RESERCH:
+			case SC_ARMOR_ELEMENT_WATER:
+			case SC_ARMOR_ELEMENT_EARTH:
+			case SC_ARMOR_ELEMENT_FIRE:
+			case SC_ARMOR_ELEMENT_WIND:
+
 				continue;
 			// Chemical Protection is only removed by some skills
 			case SC_CP_WEAPON:

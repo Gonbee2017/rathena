@@ -13,6 +13,11 @@ AI_ITEM_USE_FUNC(AGI_DISH10) {
 	if (!bot->sc()->data[SC_FOOD_AGI_CASH]) bot->use_item(itm_ind);
 }
 
+// ブラギポーションを使う。
+AI_ITEM_USE_FUNC(BRAGI_POTION) {
+	if (!bot->sc()->data[SC_ENCHANTBLADE]) bot->use_item(itm_ind);
+}
+
 // キャビアパンケーキを使う。
 AI_ITEM_USE_FUNC(CAVIAR_PANCAKE) {
 	if (bot->sc()->data[SC_SILENCE] ||
@@ -56,6 +61,11 @@ AI_ITEM_USE_FUNC(HOLY_WATER) {
 	if (bot->sc()->data[SC_CURSE] ||
 		bot->sc()->data[SC_CHANGEUNDEAD]
 	) bot->use_item(itm_ind);
+}
+
+// HP増加ポーション(大)を使う。
+AI_ITEM_USE_FUNC(HP_INCREASE_POTIONL) {
+	if (!bot->sc()->data[SC_PROMOTE_HEALTH_RESERCH]) bot->use_item(itm_ind);
 }
 
 // カクテル・竜の吐息を使う。
@@ -117,6 +127,55 @@ AI_ITEM_USE_FUNC(POISON_BOTTLE) {
 		!bot->sc()->data[SC_ASPDPOTION2] &&
 		!bot->sc()->data[SC_ASPDPOTION3]
 	) bot->use_item(itm_ind);
+}
+
+// 騎乗用手綱を使う。
+AI_ITEM_USE_FUNC(REINS_OF_MOUNT) {
+	if (!(bot->sc()->option & OPTION_RIDING) &&
+		((!bot->sc()->data[SC_ALL_RIDING] &&
+				bot->leader()->passive() &&
+				!bot->is_hiding()
+			) || (bot->sc()->data[SC_ALL_RIDING] &&
+				!bot->leader()->passive()
+			)
+		)
+	) {
+		if (bot->is_sit()) bot->stand();
+		bot->use_item(itm_ind);
+	}
+}
+
+// レジストアースポーションを使う。
+AI_ITEM_USE_FUNC(RESIST_EARTH) {
+	if (bot->battle_mode() != BM_NONE &&
+		!bot->sc()->data[SC_ARMOR_ELEMENT_EARTH]
+	) bot->use_item(itm_ind);
+}
+
+// レジストファイアーポーションを使う。
+AI_ITEM_USE_FUNC(RESIST_FIRE) {
+	if (bot->battle_mode() != BM_NONE &&
+		!bot->sc()->data[SC_ARMOR_ELEMENT_FIRE]
+	) bot->use_item(itm_ind);
+}
+
+// レジストコールドポーションを使う。
+AI_ITEM_USE_FUNC(RESIST_WATER) {
+	if (bot->battle_mode() != BM_NONE &&
+		!bot->sc()->data[SC_ARMOR_ELEMENT_WATER]
+	) bot->use_item(itm_ind);
+}
+
+// レジストウィンドポーションを使う。
+AI_ITEM_USE_FUNC(RESIST_WIND) {
+	if (bot->battle_mode() != BM_NONE &&
+		!bot->sc()->data[SC_ARMOR_ELEMENT_WIND]
+	) bot->use_item(itm_ind);
+}
+
+// SP増加ポーション(大)を使う。
+AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL) {
+	if (!bot->sc()->data[SC_ENERGY_DRINK_RESERCH]) bot->use_item(itm_ind);
 }
 
 // タンの盛り合わせを使う。

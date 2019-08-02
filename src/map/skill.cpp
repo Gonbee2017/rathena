@@ -8032,6 +8032,16 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_WEDDING:		case SC_XMAS:			case SC_SUMMER:
 					case SC_DRESSUP:		case SC_HANBOK:			case SC_OKTOBERFEST:
 					case SC_LHZ_DUN_N1:		case SC_LHZ_DUN_N2:			case SC_LHZ_DUN_N3:			case SC_LHZ_DUN_N4:
+
+					// [GonBee]
+					// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション状態を追加。
+					case SC_ATKPOTION:
+					case SC_MATKPOTION:
+					case SC_ENCHANTBLADE:
+					case SC_EXTRACT_SALAMINE_JUICE:
+					case SC_PROMOTE_HEALTH_RESERCH:
+					case SC_ENERGY_DRINK_RESERCH:
+
 						continue;
 					case SC_WHISTLE:
 					case SC_ASSNCROS:
@@ -16623,6 +16633,13 @@ int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
 			// Magic Strings stacks additively with item bonuses
 			if (!(flag&2) && sc->data[SC_POEMBRAGI])
 				reduce_cast_rate += sc->data[SC_POEMBRAGI]->val2;
+
+			// [GonBee]
+			// ブラギポーションによる詠唱時間短縮効果。
+			else if (!(flag&2) &&
+				sc->data[SC_ENCHANTBLADE]
+			) reduce_cast_rate += sc->data[SC_ENCHANTBLADE]->val1;
+
 			// Foresight halves the cast time, it does not stack additively
 			if (sc->data[SC_MEMORIZE]) {
 				if(!(flag&2))
@@ -16896,6 +16913,11 @@ int skill_delayfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv)
 		if (sc && sc->count) {
 			if (sc->data[SC_POEMBRAGI])
 				time -= time * sc->data[SC_POEMBRAGI]->val3 / 100;
+
+			// [GonBee]
+			// ブラギポーションによるディレイ短縮効果。
+			else if (sc->data[SC_ENCHANTBLADE]) time -= time * sc->data[SC_ENCHANTBLADE]->val2 / 100;
+
 			if (sc->data[SC_WIND_INSIGNIA] && sc->data[SC_WIND_INSIGNIA]->val1 == 3 && skill_get_type(skill_id) == BF_MAGIC && skill_get_ele(skill_id, skill_lv) == ELE_WIND)
 				time /= 2; // After Delay of Wind element spells reduced by 50%.
 		}

@@ -1247,6 +1247,7 @@ print_sc(
 	status_change* sc // ステータス変化。
 ) {
 	std::stringstream out;
+	std::stringstream lin;
 	for (int sc_typ = 0; sc_typ < SC_MAX; ++sc_typ) {
 		if (sc->data[sc_typ]) {
 			std::string ico_nam = find_map_data(HOMUN_ICON_NAMES, sc_type(sc_typ));
@@ -1257,11 +1258,16 @@ print_sc(
 			if (!ico_nam.empty() &&
 				ico_nam != UNKNOWN_SYMBOL
 			) {
-				if (out.tellp()) out << " ";
-				out << ico_nam;
+				if (int(lin.tellp()) + 1 + ico_nam.length() >= CHAT_SIZE_MAX) {
+					out << lin.str() << "\n";
+					lin.str("");
+				}
+				if (lin.tellp()) lin << " ";
+				lin << ico_nam;
 			}
 		}
 	}
+	if (lin.tellp()) out << lin.str() << "\n";
 	return out.str();
 }
 
