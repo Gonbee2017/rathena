@@ -8037,7 +8037,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション状態を追加。
 					case SC_ATKPOTION:
 					case SC_MATKPOTION:
-					case SC_ENCHANTBLADE:
+					case SC_BRAGIPOTION:
 					case SC_EXTRACT_SALAMINE_JUICE:
 					case SC_PROMOTE_HEALTH_RESERCH:
 					case SC_ENERGY_DRINK_RESERCH:
@@ -9986,25 +9986,28 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					}
 					break;
 
-				case 3: // Refine Based
-					switch(opt) {
-						case 1: // Allows you to break armor at a 100% rate when you do damage.
-							sc_start(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine * 30000);
-							break;
-						case 2: // Increases DEF and Status Effect resistance depending on Shield refine rate.
-#ifdef RENEWAL
-							sc_start4(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine * 10 * status_get_lv(src) / 100,(shield_refine * 2) + (sstatus->luk / 10),0,shield_refine * 20000);
-#else
-							sc_start4(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine,(shield_refine * 2) + (sstatus->luk / 10),0,shield_refine * 20000);
-#endif
-							break;
-						case 3: // Recovers HP depending on Shield refine rate.
-							sc_start(src,bl,SC_SHIELDSPELL_REF,100,opt,INFINITE_TICK); //HP Recovery.
-							status_heal(bl,sstatus->max_hp * ((status_get_lv(src) / 10) + (shield_refine + 1)) / 100,0,2);
-							status_change_end(bl,SC_SHIELDSPELL_REF,INVALID_TIMER);
-						break;
-					}
-				break;
+// [GonBee]
+// ソウルポーション状態に変更。
+//				case 3: // Refine Based
+//					switch(opt) {
+//						case 1: // Allows you to break armor at a 100% rate when you do damage.
+//							sc_start(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine * 30000);
+//							break;
+//						case 2: // Increases DEF and Status Effect resistance depending on Shield refine rate.
+//#ifdef RENEWAL
+//							sc_start4(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine * 10 * status_get_lv(src) / 100,(shield_refine * 2) + (sstatus->luk / 10),0,shield_refine * 20000);
+//#else
+//							sc_start4(src,bl,SC_SHIELDSPELL_REF,100,opt,shield_refine,(shield_refine * 2) + (sstatus->luk / 10),0,shield_refine * 20000);
+//#endif
+//							break;
+//						case 3: // Recovers HP depending on Shield refine rate.
+//							sc_start(src,bl,SC_SHIELDSPELL_REF,100,opt,INFINITE_TICK); //HP Recovery.
+//							status_heal(bl,sstatus->max_hp * ((status_get_lv(src) / 10) + (shield_refine + 1)) / 100,0,2);
+//							status_change_end(bl,SC_SHIELDSPELL_REF,INVALID_TIMER);
+//						break;
+//					}
+//				break;
+
 			}
 			clif_skill_nodamage(src,bl,skill_id,skill_lv,1);
 		}
@@ -16637,8 +16640,8 @@ int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
 			// [GonBee]
 			// ブラギポーションによる詠唱時間短縮効果。
 			else if (!(flag&2) &&
-				sc->data[SC_ENCHANTBLADE]
-			) reduce_cast_rate += sc->data[SC_ENCHANTBLADE]->val1;
+				sc->data[SC_BRAGIPOTION]
+			) reduce_cast_rate += sc->data[SC_BRAGIPOTION]->val1;
 
 			// Foresight halves the cast time, it does not stack additively
 			if (sc->data[SC_MEMORIZE]) {
@@ -16916,7 +16919,7 @@ int skill_delayfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv)
 
 			// [GonBee]
 			// ブラギポーションによるディレイ短縮効果。
-			else if (sc->data[SC_ENCHANTBLADE]) time -= time * sc->data[SC_ENCHANTBLADE]->val2 / 100;
+			else if (sc->data[SC_BRAGIPOTION]) time -= time * sc->data[SC_BRAGIPOTION]->val2 / 100;
 
 			if (sc->data[SC_WIND_INSIGNIA] && sc->data[SC_WIND_INSIGNIA]->val1 == 3 && skill_get_type(skill_id) == BF_MAGIC && skill_get_ele(skill_id, skill_lv) == ELE_WIND)
 				time /= 2; // After Delay of Wind element spells reduced by 50%.

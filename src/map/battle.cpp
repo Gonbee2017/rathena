@@ -1584,10 +1584,13 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 			}
 		}
 		/* Self Buff that destroys the armor of any target hit with melee or ranged physical attacks */
-		if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 1 && flag&BF_WEAPON ) {
-			skill_break_equip(src,bl, EQP_ARMOR, 10000, BCT_ENEMY); // 100% chance (http://irowiki.org/wiki/Shield_Spell#Level_3_spells_.28refine_based.29)
-			status_change_end(src,SC_SHIELDSPELL_REF,INVALID_TIMER);
-		}
+
+		// [GonBee]
+		// ソウルポーション状態に変更。
+		//if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 1 && flag&BF_WEAPON ) {
+		//	skill_break_equip(src,bl, EQP_ARMOR, 10000, BCT_ENEMY); // 100% chance (http://irowiki.org/wiki/Shield_Spell#Level_3_spells_.28refine_based.29)
+		//	status_change_end(src,SC_SHIELDSPELL_REF,INVALID_TIMER);
+		//}
 
 		if( sc->data[SC_POISONINGWEAPON]
 			&& ((flag&BF_WEAPON) && (!skill_id || skill_id == GC_VENOMPRESSURE)) //check skill type poison_smoke is a unit
@@ -5158,6 +5161,9 @@ static void battle_calc_weapon_final_atk_modifiers(struct Damage* wd, struct blo
 		}
 		// Only affecting non-skills
 		if (!skill_id && wd->dmg_lv > ATK_BLOCK) {
+
+			// [GonBee]
+			// ブラギポーション状態に変更。
 			//if (sc->data[SC_ENCHANTBLADE]) {
 			//	//[((Skill Lv x 20) + 100) x (casterBaseLevel / 150)] + casterInt + MATK - MDEF - MDEF2
 			//	int64 enchant_dmg = sc->data[SC_ENCHANTBLADE]->val2;
@@ -5169,6 +5175,7 @@ static void battle_calc_weapon_final_atk_modifiers(struct Damage* wd, struct blo
 			//	if (enchant_dmg > 0)
 			//		ATK_ADD(wd->damage, wd->damage2, enchant_dmg);
 			//}
+
 		}
 		if (skill_id != SN_SHARPSHOOTING && skill_id != RA_ARROWSTORM)
 			status_change_end(src, SC_CAMOUFLAGE, INVALID_TIMER);

@@ -1273,7 +1273,12 @@ void initChangeTables(void)
 	StatusChangeFlagTable[SC_OBLIVIONCURSE] |= SCB_REGEN;
 	StatusChangeFlagTable[SC_BANDING_DEFENCE] |= SCB_SPEED;
 	StatusChangeFlagTable[SC_SHIELDSPELL_DEF] |= SCB_WATK;
-	StatusChangeFlagTable[SC_SHIELDSPELL_REF] |= SCB_DEF;
+
+	// [GonBee]
+	// ソウルポーション状態に変更。
+	//StatusChangeFlagTable[SC_SHIELDSPELL_REF] |= SCB_DEF;
+	StatusChangeFlagTable[SC_SOULPOTION] |= SCB_NONE;
+
 	StatusChangeFlagTable[SC_STOMACHACHE] |= SCB_STR|SCB_AGI|SCB_VIT|SCB_DEX|SCB_INT|SCB_LUK;
 	StatusChangeFlagTable[SC_MYSTERIOUS_POWDER] |= SCB_MAXHP;
 	StatusChangeFlagTable[SC_MELON_BOMB] |= SCB_SPEED|SCB_ASPD;
@@ -6575,8 +6580,12 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 		def -= def * (14 * sc->data[SC_ANALYZE]->val1) / 100;
 	if( sc->data[SC_NEUTRALBARRIER] )
 		def += def * sc->data[SC_NEUTRALBARRIER]->val2 / 100;
-	if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2 )
-		def += sc->data[SC_SHIELDSPELL_REF]->val2;
+
+	// [GonBee]
+	// ソウルポーション状態に変更。
+	//if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2 )
+	//	def += sc->data[SC_SHIELDSPELL_REF]->val2;
+
 	if( sc->data[SC_PRESTIGE] )
 		def += sc->data[SC_PRESTIGE]->val3;
 	if( sc->data[SC_BANDING] && sc->data[SC_BANDING]->val2 > 1 )
@@ -8317,8 +8326,12 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			sc_def += sc->data[SC_SCRESIST]->val1*100; // Status resist
 		else if (sc->data[SC_SIEGFRIED])
 			sc_def += sc->data[SC_SIEGFRIED]->val3*100; // Status resistance.
-		else if (sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2)
-			sc_def += sc->data[SC_SHIELDSPELL_REF]->val3*100;
+
+		// [GonBee]
+		// ソウルポーション状態に変更。
+		//else if (sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2)
+		//	sc_def += sc->data[SC_SHIELDSPELL_REF]->val3*100;
+
 	}
 
 	// When tick def not set, reduction is the same for both.
@@ -9317,7 +9330,11 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		break;
 	case SC_SHIELDSPELL_DEF:
 	case SC_SHIELDSPELL_MDEF:
-	case SC_SHIELDSPELL_REF:
+
+	// [GonBee]
+	// ソウルポーション状態に変更。
+	//case SC_SHIELDSPELL_REF:
+
 		status_change_end(bl, SC_MAGNIFICAT, INVALID_TIMER);
 		if( type != SC_SHIELDSPELL_DEF )
 			status_change_end(bl, SC_SHIELDSPELL_DEF, INVALID_TIMER);
@@ -11408,7 +11425,11 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		case SC_PRESTIGE:
 		case SC_SHIELDSPELL_DEF:
 		case SC_SHIELDSPELL_MDEF:
-		case SC_SHIELDSPELL_REF:
+
+		// [GonBee]
+		// ソウルポーション状態に変更。
+		//case SC_SHIELDSPELL_REF:
+
 		case SC_CRESCENTELBOW:
 		case SC_CHILLY_AIR_OPTION:
 		case SC_GUST_OPTION:
@@ -12048,7 +12069,7 @@ int status_change_clear(struct block_list* bl, int type)
 
 			// [GonBee]
 			// ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
-			case SC_ENCHANTBLADE:
+			case SC_BRAGIPOTION:
 			case SC_EXTRACT_SALAMINE_JUICE:
 			case SC_PROMOTE_HEALTH_RESERCH:
 			case SC_ENERGY_DRINK_RESERCH:
@@ -14105,7 +14126,7 @@ void status_change_clear_buffs(struct block_list* bl, uint8 type)
 			// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
 			case SC_ATKPOTION:
 			case SC_MATKPOTION:
-			case SC_ENCHANTBLADE:
+			case SC_BRAGIPOTION:
 			case SC_EXTRACT_SALAMINE_JUICE:
 			case SC_PROMOTE_HEALTH_RESERCH:
 			case SC_ENERGY_DRINK_RESERCH:
@@ -14386,6 +14407,13 @@ static int status_natural_heal(struct block_list* bl, va_list args)
 		if(!regen->state.walk)
 			flag &= ~RGN_HP;
 	}
+
+	// [GonBee]
+	// ソウルポーションの効果を追加。
+	if (sd &&
+		sd->sc.data[SC_SOULPOTION] &&
+		sd->status.sp * 4 < sd->status.max_sp
+	) status_heal(bl, 0, sd->sc.data[SC_SOULPOTION]->val1, 3);
 
 	if (!flag)
 		return 0;

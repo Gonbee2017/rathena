@@ -7480,6 +7480,12 @@ int pc_resetstate(struct map_session_data* sd)
 		}
 
 		sd->status.status_point = statp[sd->status.base_level] + ( sd->class_&JOBL_UPPER ? 52 : 0 ); // extra 52+48=100 stat points
+
+		// [GonBee]
+		// 拡張ステータスポイントを追加する。
+		sd->status.status_point += pc_readglobalreg(sd, add_str("EXTRA_STATUS_POINT"));
+		if (pc_readglobalreg(sd, add_str("MVP_MANIA_ENHANCE")))	sd->status.status_point += 200;
+
 	}
 	else
 	{

@@ -868,6 +868,11 @@ enum sc_type : int16 {
 	SC_MAX, //Automatically updated max, used in for's to check we are within bounds.
 };
 
+// [GonBee]
+// ï ñºÇíËã`ÅB
+#define SC_BRAGIPOTION SC_ENCHANTBLADE
+#define SC_SOULPOTION SC_SHIELDSPELL_REF
+
 /// Official status change ids, used to display status icons on the client.
 enum efst_types : short{
 /// Do not modify code below this, until the end of the API hook, since it will be automatically generated again

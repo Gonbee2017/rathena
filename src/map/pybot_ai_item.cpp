@@ -15,7 +15,7 @@ AI_ITEM_USE_FUNC(AGI_DISH10) {
 
 // ブラギポーションを使う。
 AI_ITEM_USE_FUNC(BRAGI_POTION) {
-	if (!bot->sc()->data[SC_ENCHANTBLADE]) bot->use_item(itm_ind);
+	if (!bot->sc()->data[SC_BRAGIPOTION]) bot->use_item(itm_ind);
 }
 
 // キャビアパンケーキを使う。

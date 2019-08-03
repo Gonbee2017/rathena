@@ -861,7 +861,7 @@ void ai_t::pet_feed() {
 
 // ペットが応援する。
 void ai_t::pet_perform() {
-	if (pet->master()->is_casting() &&
+	if (!pet->master()->can_act() &&
 		pet->can_act()
 	) {
 		pet_menu(pet->master()->sd(), 2);
