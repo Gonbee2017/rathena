@@ -1142,7 +1142,11 @@ int pc_useitem(struct map_session_data*,int);
 
 int pc_skillatk_bonus(struct map_session_data *sd, uint16 skill_id);
 int pc_sub_skillatk_bonus(struct map_session_data *sd, uint16 skill_id);
-int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id);
+
+// [GonBee]
+//int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id);
+int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv = 0);
+
 int pc_skillheal2_bonus(struct map_session_data *sd, uint16 skill_id);
 
 void pc_damage(struct map_session_data *sd,struct block_list *src,unsigned int hp, unsigned int sp);

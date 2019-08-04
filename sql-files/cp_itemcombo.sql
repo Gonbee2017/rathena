@@ -236,3 +236,11 @@ REPLACE INTO `cp_itemcombo` VALUES(18720,  1621, NULL,  NULL, NULL, NULL, '{ bon
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1622, NULL,  NULL, NULL, NULL, '{ bonus bMatk,20*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bDelayRate,-10; } }');
 REPLACE INTO `cp_itemcombo` VALUES( 5277,  5917, NULL,  NULL, NULL, NULL, '{ bonus bLongAtkDef,3*(getequiprefinerycnt(EQI_HEAD_TOP)>=5)+4*(getequiprefinerycnt(EQI_HEAD_TOP)>=7); }');
 REPLACE INTO `cp_itemcombo` VALUES( 1525,  5917, NULL,  NULL, NULL, NULL, '{ bonus bLongAtkDef,-10; }');
+REPLACE INTO `cp_itemcombo` VALUES( 2659, 18937, NULL,  NULL, NULL, NULL, '{ bonus bInt,8; bonus bMaxSPrate,5;}');
+REPLACE INTO `cp_itemcombo` VALUES( 2660, 18937, NULL,  NULL, NULL, NULL, '{ bonus bStr,7; bonus bBaseAtk,20;}');
+REPLACE INTO `cp_itemcombo` VALUES( 2661, 18937, NULL,  NULL, NULL, NULL, '{ bonus bAgi,7; bonus bFlee,15;}');
+REPLACE INTO `cp_itemcombo` VALUES( 2662, 18937, NULL,  NULL, NULL, NULL, '{ bonus bDex,7; bonus bHit,10;}');
+REPLACE INTO `cp_itemcombo` VALUES(18937, 28302, NULL,  NULL, NULL, NULL, '{ bonus bInt,8; bonus bMaxSPrate,5;}');
+REPLACE INTO `cp_itemcombo` VALUES(18937, 28303, NULL,  NULL, NULL, NULL, '{ bonus bStr,7; bonus bBaseAtk,20;}');
+REPLACE INTO `cp_itemcombo` VALUES(18937, 28304, NULL,  NULL, NULL, NULL, '{ bonus bAgi,7; bonus bFlee,15;}');
+REPLACE INTO `cp_itemcombo` VALUES(18937, 28305, NULL,  NULL, NULL, NULL, '{ bonus bDex,7; bonus bHit,10;}');

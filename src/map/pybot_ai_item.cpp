@@ -173,6 +173,11 @@ AI_ITEM_USE_FUNC(RESIST_WIND) {
 	) bot->use_item(itm_ind);
 }
 
+// 消化促進ポーションを使う。
+AI_ITEM_USE_FUNC(DIGEST_POTION) {
+	if (!bot->sc()->data[SC_DIGESTPOTION]) bot->use_item(itm_ind);
+}
+
 // SP増加ポーション(大)を使う。
 AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL) {
 	if (!bot->sc()->data[SC_ENERGY_DRINK_RESERCH]) bot->use_item(itm_ind);

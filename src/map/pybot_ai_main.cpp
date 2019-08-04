@@ -329,9 +329,8 @@ void ai_t::leader_target() {
 							nor_att_pol_val == NAPV_CONTINUOUS
 						) && !ene->is_flora() &&
 						ene->is_short_range_attacker() &&
-						(bat->is_short_range_attacker() ||
-							!ene->is_long_weapon_immune()
-						) && ene->target_battler() &&
+						!ene->need_to_leave() &&
+						ene->target_battler() &&
 						ene->target_battler()->battle_index() > bat->battle_index() &&
 						ene->attacked_battlers().empty()
 					) {
@@ -844,7 +843,9 @@ void ai_t::homun_use_skill() {
 void ai_t::pet_main(block_if* pet_) {
 	pet = pet_;
 	pet_feed();
-	pet_perform();
+
+	// ‰ž‰‡‹@”\‚Í”pŽ~B
+	//pet_perform();
 }
 
 // ƒyƒbƒg‚É‰a‚ð—^‚¦‚éB
@@ -1265,16 +1266,11 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			battler->check_skill(RG_BACKSTAP) &&
 			tan &&
 			tan->battle_index() < battler->battle_index();
-		bool mov = tar_ene->has_can_move() &&
-			tar_ene->is_short_range_attacker() &&
-			(tar_ene->sc()->data[SC_PNEUMA] ||
-				tar_ene->sc()->data[SC_SAFETYWALL] ||
-				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
-			);
+		bool ned_lea = tar_ene->need_to_leave();
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (((!mov &&
+		if (((!ned_lea &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
-				) || (mov &&
+				) || (ned_lea &&
 					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 				)
 			) && battler->can_reach_xy(x, y) &&
@@ -1313,14 +1309,9 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 	return [this, &pos] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
-		bool mov = tar_ene->has_can_move() &&
-			tar_ene->is_short_range_attacker() &&
-			(tar_ene->sc()->data[SC_PNEUMA] ||
-				tar_ene->sc()->data[SC_SAFETYWALL] ||
-				skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
-			);
+		bool ned_lea = tar_ene->need_to_leave();
 		if (check_wall_side(battler->bl()->m, x, y) &&
-			(!mov ||
+			(!ned_lea ||
 				!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 			) && battler->can_reach_xy(x, y) &&
 			leader->can_reach_xy(x, y, true) &&

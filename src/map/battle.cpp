@@ -1586,7 +1586,7 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 		/* Self Buff that destroys the armor of any target hit with melee or ranged physical attacks */
 
 		// [GonBee]
-		// ソウルポーション状態に変更。
+		// 消化促進ポーション状態に変更。
 		//if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 1 && flag&BF_WEAPON ) {
 		//	skill_break_equip(src,bl, EQP_ARMOR, 10000, BCT_ENEMY); // 100% chance (http://irowiki.org/wiki/Shield_Spell#Level_3_spells_.28refine_based.29)
 		//	status_change_end(src,SC_SHIELDSPELL_REF,INVALID_TIMER);

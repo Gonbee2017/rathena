@@ -201,7 +201,7 @@ AI_SKILL_USE_FUNC(AM_ACIDTERROR) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		tar_ene->is_great(leader) &&
+		tar_ene->fullpower(leader) &&
 		!tar_ene->is_long_weapon_immune()
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
@@ -302,7 +302,7 @@ AI_SKILL_USE_FUNC(ASC_BREAKER) {
 AI_SKILL_USE_FUNC(ASC_EDP) {
 	if (bot->distance_policy_value() == DPV_CLOSE &&
 		bot->sc_rest(SC_EDP) <= bot->get_skill_tail(kid) &&
-		bot->target_enemy()->is_great(leader)
+		bot->target_enemy()->fullpower(leader)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -784,7 +784,7 @@ AI_SKILL_USE_FUNC(GS_INCREASING) {
 AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, activate) {
 	if (!bot->sc()->data[SC_MADNESSCANCEL] &&
 		bot->is_best_pos() &&
-		bot->target_enemy()->is_great(leader) &&
+		bot->target_enemy()->fullpower(leader) &&
 		bot->collect_coins(1)
 	) bot->use_skill_self(kid, klv);
 }
@@ -794,7 +794,7 @@ AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, deactivate) {
 	if (bot->sc()->data[SC_MADNESSCANCEL] &&
 		(bot->battle_mode() == BM_NONE ||
 			!bot->is_best_pos() ||
-			!bot->target_enemy()->is_great(leader)
+			!bot->target_enemy()->fullpower(leader)
 		)
 	) bot->use_skill_self(kid, klv);
 }
@@ -1138,7 +1138,7 @@ AI_SKILL_USE_FUNC(MC_MAMMONITE) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		tar_ene->is_great(leader)
+		tar_ene->fullpower(leader)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1420,7 +1420,7 @@ AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 	if (bot->can_move() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		tar_ene->is_great(leader) &&
+		tar_ene->fullpower(leader) &&
 		!tar_ene->sc()->data[SC_FOGWALL] &&
 		bot->collect_spirits(5)
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -1432,7 +1432,7 @@ AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 	if ((bot->sc()->data[SC_BLADESTOP] ||
 			bot->sc()->data[SC_COMBO]
 		) && bot->check_use_skill(kid, klv, tar_ene) &&
-		tar_ene->is_great(leader) &&
+		tar_ene->fullpower(leader) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		!tar_ene->sc()->data[SC_FOGWALL]
 	) {
@@ -1546,7 +1546,7 @@ AI_SKILL_USE_FUNC(NJ_ISSEN) {
 	if (bot->check_hp(3) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		tar_ene->is_great(leader)
+		tar_ene->fullpower(leader)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1753,7 +1753,7 @@ AI_SKILL_USE_FUNC(PA_SACRIFICE) {
 		bot->check_hp(3) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		tar_ene->is_great(leader) &&
+		tar_ene->fullpower(leader) &&
 		!tar_ene->is_hiding()
 	) bot->use_skill_self(kid, klv);
 }

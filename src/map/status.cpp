@@ -1275,9 +1275,9 @@ void initChangeTables(void)
 	StatusChangeFlagTable[SC_SHIELDSPELL_DEF] |= SCB_WATK;
 
 	// [GonBee]
-	// ソウルポーション状態に変更。
+	// 消化促進ポーション状態に変更。
 	//StatusChangeFlagTable[SC_SHIELDSPELL_REF] |= SCB_DEF;
-	StatusChangeFlagTable[SC_SOULPOTION] |= SCB_NONE;
+	StatusChangeFlagTable[SC_DIGESTPOTION] |= SCB_NONE;
 
 	StatusChangeFlagTable[SC_STOMACHACHE] |= SCB_STR|SCB_AGI|SCB_VIT|SCB_DEX|SCB_INT|SCB_LUK;
 	StatusChangeFlagTable[SC_MYSTERIOUS_POWDER] |= SCB_MAXHP;
@@ -6582,7 +6582,7 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 		def += def * sc->data[SC_NEUTRALBARRIER]->val2 / 100;
 
 	// [GonBee]
-	// ソウルポーション状態に変更。
+	// 消化促進ポーション状態に変更。
 	//if( sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2 )
 	//	def += sc->data[SC_SHIELDSPELL_REF]->val2;
 
@@ -8328,7 +8328,7 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			sc_def += sc->data[SC_SIEGFRIED]->val3*100; // Status resistance.
 
 		// [GonBee]
-		// ソウルポーション状態に変更。
+		// 消化促進ポーション状態に変更。
 		//else if (sc->data[SC_SHIELDSPELL_REF] && sc->data[SC_SHIELDSPELL_REF]->val1 == 2)
 		//	sc_def += sc->data[SC_SHIELDSPELL_REF]->val3*100;
 
@@ -9332,7 +9332,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 	case SC_SHIELDSPELL_MDEF:
 
 	// [GonBee]
-	// ソウルポーション状態に変更。
+	// 消化促進ポーション状態に変更。
 	//case SC_SHIELDSPELL_REF:
 
 		status_change_end(bl, SC_MAGNIFICAT, INVALID_TIMER);
@@ -11427,7 +11427,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		case SC_SHIELDSPELL_MDEF:
 
 		// [GonBee]
-		// ソウルポーション状態に変更。
+		// 消化促進ポーション状態に変更。
 		//case SC_SHIELDSPELL_REF:
 
 		case SC_CRESCENTELBOW:
@@ -12068,8 +12068,9 @@ int status_change_clear(struct block_list* bl, int type)
 			case SC_DAILYSENDMAILCNT:
 
 			// [GonBee]
-			// ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			// ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
 			case SC_BRAGIPOTION:
+			case SC_DIGESTPOTION:
 			case SC_EXTRACT_SALAMINE_JUICE:
 			case SC_PROMOTE_HEALTH_RESERCH:
 			case SC_ENERGY_DRINK_RESERCH:
@@ -14123,10 +14124,11 @@ void status_change_clear_buffs(struct block_list* bl, uint8 type)
 			case SC_MAGICAL_FEATHER:
 
 			// [GonBee]
-			// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
 			case SC_ATKPOTION:
 			case SC_MATKPOTION:
 			case SC_BRAGIPOTION:
+			case SC_DIGESTPOTION:
 			case SC_EXTRACT_SALAMINE_JUICE:
 			case SC_PROMOTE_HEALTH_RESERCH:
 			case SC_ENERGY_DRINK_RESERCH:
@@ -14408,13 +14410,6 @@ static int status_natural_heal(struct block_list* bl, va_list args)
 			flag &= ~RGN_HP;
 	}
 
-	// [GonBee]
-	// ソウルポーションの効果を追加。
-	if (sd &&
-		sd->sc.data[SC_SOULPOTION] &&
-		sd->status.sp * 4 < sd->status.max_sp
-	) status_heal(bl, 0, sd->sc.data[SC_SOULPOTION]->val1, 3);
-
 	if (!flag)
 		return 0;
 
@@ -14468,6 +14463,7 @@ static int status_natural_heal(struct block_list* bl, va_list args)
 				val += regen->sp;
 				regen->tick.sp -= battle_config.natural_healsp_interval;
 			} while(regen->tick.sp >= (unsigned int)battle_config.natural_healsp_interval);
+
 			if (status_heal(bl, 0, val, 1) < val)
 				flag &= ~RGN_SSP; // full.
 		}

@@ -236,9 +236,10 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 OnInit:
 	setarray .rews,
 		 2881, // オルレアンネックレス
+		 5389, // 女神の仮面
 		18539, // スカルキャップ
 		18720, // マジカルブースター
-		28351; // ヒュッケの黒い尻尾
+		18937; // メモリーオブラバーズ
 	for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
 		set .rews_wei, .rews_wei + getiteminfo(.rews[.@i], 6);
 }

@@ -7816,7 +7816,11 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					sp += sp * bonus / 100;
 				}
 
-				if( (j = pc_skillheal_bonus(sd, skill_id)) ) {
+				// [GonBee]
+				// 消化促進ポーションを考慮する。
+				//if( (j = pc_skillheal_bonus(sd, skill_id)) ) {
+				if( (j = pc_skillheal_bonus(sd, skill_id, skill_lv)) ) {
+
 					hp += hp * j / 100;
 					sp += sp * j / 100;
 				}
@@ -8034,10 +8038,11 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_LHZ_DUN_N1:		case SC_LHZ_DUN_N2:			case SC_LHZ_DUN_N3:			case SC_LHZ_DUN_N4:
 
 					// [GonBee]
-					// Atk上昇、Matk上昇、ブラギポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション状態を追加。
+					// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション状態を追加。
 					case SC_ATKPOTION:
 					case SC_MATKPOTION:
 					case SC_BRAGIPOTION:
+					case SC_DIGESTPOTION:
 					case SC_EXTRACT_SALAMINE_JUICE:
 					case SC_PROMOTE_HEALTH_RESERCH:
 					case SC_ENERGY_DRINK_RESERCH:
@@ -9987,7 +9992,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					break;
 
 // [GonBee]
-// ソウルポーション状態に変更。
+// 消化促進ポーション状態に変更。
 //				case 3: // Refine Based
 //					switch(opt) {
 //						case 1: // Allows you to break armor at a 100% rate when you do damage.

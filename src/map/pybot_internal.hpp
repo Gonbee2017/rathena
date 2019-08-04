@@ -455,6 +455,7 @@ enum item_ids {
 	ITEMID_HOLY_ARROW              =  1772, // 聖なる矢。
 	ITEMID_PORING_CARD             =  4001, // ポリンカード。
 	ITEMID_BRAGI_POTION            = 10903, // ブラギポーション
+	ITEMID_DIGEST_POTION           = 10904, // 消化促進ポーション
 	ITEMID_QUIVER                  = 12004, // 矢筒。
 	ITEMID_IRON_ARROW_QUIVER       = 12005, // 鉄の矢筒。
 	ITEMID_STEEL_ARROW_QUIVER      = 12006, // 鋼鉄の矢筒。
@@ -861,6 +862,7 @@ struct ai_t {
 	AI_ITEM_USE_FUNC(BRAGI_POTION);
 	AI_ITEM_USE_FUNC(CAVIAR_PANCAKE);
 	AI_ITEM_USE_FUNC(DEX_DISH10);
+	AI_ITEM_USE_FUNC(DIGEST_POTION);
 	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
 	AI_ITEM_USE_FUNC(GREEN_HERB);
 	AI_ITEM_USE_FUNC(GREEN_POTION);
@@ -1216,6 +1218,7 @@ struct enemy_if {
 	virtual std::vector<block_if*>& attacked_battlers();
 	virtual int away_distance(block_if* lea);
 	virtual std::vector<block_if*>& close_battlers();
+	virtual bool fullpower(block_if* lea);
 	virtual bool& has_earthquake();
 	virtual bool& has_knockback_skill();
 	virtual bool& has_layout_skill();
@@ -1227,6 +1230,7 @@ struct enemy_if {
 	virtual bool& has_unequip_shield_skill();
 	virtual bool& has_unequip_weapon_skill();
 	virtual bool& has_usefull_skill();
+	virtual bool need_to_leave();
 	virtual block_if*& skill_target_battler();
 	virtual block_if*& target_battler();
 	virtual pos_t waiting_position();
@@ -1541,6 +1545,7 @@ struct enemy_impl : virtual block_if {
 	virtual std::vector<block_if*>& attacked_battlers() override;
 	virtual int away_distance(block_if* lea) override;
 	virtual std::vector<block_if*>& close_battlers() override;
+	virtual bool fullpower(block_if* lea) override;
 	virtual bool& has_earthquake() override;
 	virtual bool& has_knockback_skill() override;
 	virtual bool& has_layout_skill() override;
@@ -1552,6 +1557,7 @@ struct enemy_impl : virtual block_if {
 	virtual bool& has_unequip_shield_skill() override;
 	virtual bool& has_unequip_weapon_skill() override;
 	virtual bool& has_usefull_skill() override;
+	virtual bool need_to_leave() override;
 	virtual block_if*& skill_target_battler() override;
 	virtual block_if*& target_battler() override;
 	virtual pos_t waiting_position() override;

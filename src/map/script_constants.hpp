@@ -1532,7 +1532,7 @@
 	// [GonBee]
 	// ’è”‚ğ’Ç‰ÁB
 	export_constant(SC_BRAGIPOTION);
-	export_constant(SC_SOULPOTION);
+	export_constant(SC_DIGESTPOTION);
 
 	/* status icons */
 	export_deprecated_constant2("SI_BLANK",-1);

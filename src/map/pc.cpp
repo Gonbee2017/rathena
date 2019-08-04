@@ -7720,12 +7720,24 @@ int pc_sub_skillatk_bonus(struct map_session_data *sd, uint16 skill_id)
 	return bonus;
 }
 
-int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id) {
+// [GonBee]
+//int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id) {
+int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv) {
+
 	int bonus = sd->bonus.add_heal_rate;
 
 	nullpo_ret(sd);
 
 	skill_id = skill_dummy2skill_id(skill_id);
+
+	// [GonBee]
+	// 消化促進ポーションの効果を追加。
+	if (sd->sc.data[SC_DIGESTPOTION]) {
+		if (skill_id == AM_POTIONPITCHER) {
+			if (skill_lv == 5) bonus += sd->sc.data[SC_DIGESTPOTION]->val2;
+			else bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
+		} else if (skill_id == CR_SLIMPITCHER) bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
+	}
 
 	if( bonus ) {
 		switch( skill_id ) {
@@ -8664,6 +8676,10 @@ int pc_itemheal(struct map_session_data *sd, int itemid, int hp, int sp)
 		if (sd->sc.data[SC_MTF_PUMPKIN] && itemid == ITEMID_PUMPKIN)
 			bonus += sd->sc.data[SC_MTF_PUMPKIN]->val1;
 
+		// [GonBee]
+		// 消化促進ポーションの効果を追加。
+		if (sd->sc.data[SC_DIGESTPOTION]) bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
+
 		tmp = hp * bonus / 100; // Overflow check
 		if (bonus != 100 && tmp > hp)
 			hp = tmp;
@@ -8673,6 +8689,10 @@ int pc_itemheal(struct map_session_data *sd, int itemid, int hp, int sp)
 		// A potion produced by an Alchemist in the Fame Top 10 gets +50% effect [DracoRPG]
 		if (potion_flag == 2)
 			bonus += 50;
+
+		// [GonBee]
+		// 消化促進ポーションの効果を追加。
+		if (sd->sc.data[SC_DIGESTPOTION]) bonus += sd->sc.data[SC_DIGESTPOTION]->val2;
 
 		tmp = sp * bonus / 100; // Overflow check
 		if (bonus != 100 && tmp > sp)

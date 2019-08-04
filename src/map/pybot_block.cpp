@@ -62,6 +62,7 @@ void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& enemy_if::attacked_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int enemy_if::away_distance(block_if* lea) {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& enemy_if::close_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool enemy_if::fullpower(block_if* lea) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_earthquake() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_knockback_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_layout_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -73,6 +74,7 @@ bool& enemy_if::has_unequip_helm_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_unequip_shield_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_unequip_weapon_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_usefull_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool enemy_if::need_to_leave() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& enemy_if::skill_target_battler() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& enemy_if::target_battler() {RAISE_NOT_IMPLEMENTED_ERROR;}
 pos_t enemy_if::waiting_position() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -344,7 +346,9 @@ bool // 結果。
 battler_impl::check_sp(
 	int rat // SPの四分率。
 ) {
-	if (leader()->sp_suppliable()) rat = std::min(rat, 1);
+	if (leader()->sp_suppliable() ||
+		sc()->data[SC_DIGESTPOTION]
+	) rat = std::min(rat, 1);
 	return check_quad_ratio(sp(), max_sp(), rat);
 }
 
@@ -653,6 +657,15 @@ std::vector<block_if*>& enemy_impl::close_battlers() {
 	return close_battlers_;
 }
 
+// フルパワーを発揮するべきかを判定する。
+bool // 結果。
+enemy_impl::fullpower(
+	block_if* lea // リーダー。
+) {
+	return lea->rush()->get() ||
+		is_great(lea);
+}
+
 // アースクエイク所持か。
 bool& enemy_impl::has_earthquake() {
 	return has_earthquake_;
@@ -706,6 +719,17 @@ bool& enemy_impl::has_unequip_weapon_skill() {
 // 有用スキル所持か。
 bool& enemy_impl::has_usefull_skill() {
 	return has_usefull_skill_;
+}
+
+// 範囲外に移動する必要があるかを判定する。
+bool // 結果。
+enemy_impl::need_to_leave() {
+	return has_can_move() &&
+		is_short_range_attacker() &&
+		(sc()->data[SC_PNEUMA] ||
+			sc()->data[SC_SAFETYWALL] ||
+			skill_unit_exists_block(this, skill_unit_key_map{SKILL_UNIT_KEY(PF_FOGWALL)})
+		);
 }
 
 // ターゲットしているバトラー。

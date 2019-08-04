@@ -871,7 +871,7 @@ enum sc_type : int16 {
 // [GonBee]
 // ï ñºÇíËã`ÅB
 #define SC_BRAGIPOTION SC_ENCHANTBLADE
-#define SC_SOULPOTION SC_SHIELDSPELL_REF
+#define SC_DIGESTPOTION SC_SHIELDSPELL_REF
 
 /// Official status change ids, used to display status icons on the client.
 enum efst_types : short{

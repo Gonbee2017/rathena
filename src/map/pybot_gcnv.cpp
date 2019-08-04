@@ -81,6 +81,7 @@ const std::vector<
 	AI_ITEM_USE_PROC     (SP_INCREASE_POTIONL                         ),
 	AI_ITEM_USE_PROC_D   (SP_INCREASE_POTIONM    , SP_INCREASE_POTIONL),
 	AI_ITEM_USE_PROC_D   (SP_INCREASE_POTIONS    , SP_INCREASE_POTIONL),
+	AI_ITEM_USE_PROC     (DIGEST_POTION                               ),
 	AI_ITEM_USE_PROC     (RESIST_FIRE                                 ),
 	AI_ITEM_USE_PROC     (RESIST_WATER                                ),
 	AI_ITEM_USE_PROC     (RESIST_EARTH                                ),
