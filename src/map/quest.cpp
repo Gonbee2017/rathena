@@ -86,8 +86,13 @@ int quest_add(TBL_PC *sd, int quest_id)
 	}
 
 	if( quest_check(sd, quest_id, HAVEQUEST) >= 0 ) {
-		ShowError("quest_add: Character %d already has quest %d.\n", sd->status.char_id, quest_id);
-		return -1;
+
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のためエラーを抑制。
+		//ShowError("quest_add: Character %d already has quest %d.\n", sd->status.char_id, quest_id);
+		//return -1;
+		return 0;
+
 	}
 
 	n = sd->avail_quests; //Insertion point
