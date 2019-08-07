@@ -2616,6 +2616,7 @@ extern const skill_unit_key_map ELEMENTAL_SKILL_UNIT_KEYS;
 extern const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES;
 extern const std::array<equip_index,EPO_MAX> EPO2EQI_TABLE;
 extern const std::array<std::string,EQI_MAX> EQUIP_POS_NAME_TABLE;
+extern const std::vector<std::pair<std::string, std::string>> ESCAPING_TABLE;
 extern const int FAME_OFFSET;
 extern const std::string FAME_TAG;
 extern const std::string FEVER_RATE_KEY;

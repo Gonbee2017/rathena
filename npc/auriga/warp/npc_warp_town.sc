@@ -2210,7 +2210,6 @@ mosk_in,215,36,0	warp	moscoviawarp1023	1,1,mosk_dun02,53,217
 
 
 
-/*
 //---アッシュ・バキューム追加マップ
 
 
@@ -2365,7 +2364,6 @@ spl_in01,30,213,0	warp	splendidewarp1038	1,1,splendide,237,210
 //研究所
 splendide,228,164,0	warp	splendidewarp1039	1,1,spl_in01,30,301
 spl_in01,30,299,0	warp	splendidewarp1040	1,1,splendide,228,162
-*/
 
 
 

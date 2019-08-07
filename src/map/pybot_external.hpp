@@ -6,6 +6,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <vector>
 
 struct block_list;
@@ -69,10 +70,11 @@ void reload_equipset_in_battle(int cid);
 void set_last_summoned_id(map_session_data* sd, int bid);
 void set_map_initial_position(map_session_data* sd);
 bool skill_is_layable_on_lp(e_skill kid);
+std::string unescape(const std::string& tex);
 void update_fever();
 
 // -----------------------------------------------------------------------------
-// 外部から参照される変数の宣言
+// 外部から参照される定数の宣言
 
 extern const std::string CASH_EXP;
 extern const std::string PYBOT_DUMMY_NPC_NAME;

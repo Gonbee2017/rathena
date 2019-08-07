@@ -161,8 +161,13 @@ int quest_change(TBL_PC *sd, int qid1, int qid2)
 	}
 
 	if( quest_check(sd, qid1, HAVEQUEST) < 0 ) {
-		ShowError("quest_change: Character %d doesn't have quest %d.\n", sd->status.char_id, qid1);
-		return -1;
+
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のため、変更前のクエストがない場合には変更後のクエストを新規追加する。
+		//ShowError("quest_change: Character %d doesn't have quest %d.\n", sd->status.char_id, qid1);
+		//return -1;
+		return quest_add(sd, qid2);
+
 	}
 
 	ARR_FIND(0, sd->avail_quests, i, sd->quest_log[i].quest_id == qid1);
@@ -219,8 +224,12 @@ int quest_delete(TBL_PC *sd, int quest_id)
 	//Search for quest
 	ARR_FIND(0, sd->num_quests, i, sd->quest_log[i].quest_id == quest_id);
 	if( i == sd->num_quests ) {
-		ShowError("quest_delete: Character %d doesn't have quest %d.\n", sd->status.char_id, quest_id);
-		return -1;
+
+		// [GonBee]
+		// Aurigaスクリプトとの互換性のため、削除しようとしているクエストがなければ正常終了する。
+		//ShowError("quest_delete: Character %d doesn't have quest %d.\n", sd->status.char_id, quest_id);
+		//return -1;
+		return 0;
 	}
 
 	if( sd->quest_log[i].state != Q_COMPLETE )

@@ -1187,7 +1187,6 @@ abbey03,119,6,0	warp	namelesswarp4006	1,1,abbey02,149,285
 //森⇒モスコビアフィールド
 mosk_dun01,189,42,0	warp	moscoviawarp0501	1,1,mosk_fild02,190,254
 
-/*
 //---イグドラシル追加マップ
 
 
@@ -1198,7 +1197,6 @@ mosk_dun01,189,42,0	warp	moscoviawarp0501	1,1,mosk_fild02,190,254
 //イグドラシル中心部 01⇔イグドラシル中心部 02
 nyd_dun01,255,142,0	warp	nydhogwarp4001	1,1,nyd_dun02,61,265
 nyd_dun02,56,264,0	warp	nydhogwarp4002	1,1,nyd_dun01,249,143
-*/
 
 
 

@@ -38,6 +38,7 @@ nyd_dun02,100,201,3	script	守護者の門	111,8,8,{
 			mes "["+strcharinfo(0)+"]";
 			mes "（一度、ミッドガルド連合軍駐屯地の";
 			mes "司令官アジフに報告しよう）";
+			set ASH_6QUE,15;
 			set NYD_1QUE,1;
 			delquest 70374;
 			setquest 70850;
@@ -243,7 +244,8 @@ nyd_dun02,100,201,3	script	守護者の門	111,8,8,{
 			next;
 			mes "[守護者の門]";
 			mes "前回この門を通過してから";
-			mes "^FF000072時間^000000ほど経過すれば、";
+//			mes "^FF000072時間^000000ほど経過すれば、";
+			mes "^FF00004時間^000000ほど経過すれば、";
 			mes "力が安定し、再びこの門を";
 			mes "通過できるようになるだろう。";
 			close;
@@ -472,7 +474,8 @@ OnStart:
 			mes "守護者の関門を開けよう。";
 			mes "その先にニーズヘッグの巣があり";
 			mes "ニーズヘッグの影がいるのだ。";
-			setpartyinmap NYD_2QUE,1;
+//			setpartyinmap NYD_2QUE,1;
+			set 'NYD_2QUE,1;
 			donpcevent getmdnpcname("ins_nyd_1f_timer")+ "::OnStart";
 			donpcevent getmdnpcname("nyd_call_mon_1")+ "::OnStart2";
 			next;
@@ -523,7 +526,8 @@ OnStart:
 			mes "私の力で関門を開けるのは";
 			mes "30分が限界だ！";
 			mes "その間に護衛兵を倒してくれ!!";
-			setpartyinmap NYD_2QUE,1;
+//			setpartyinmap NYD_2QUE,1;
+			set 'NYD_2QUE,1;
 			donpcevent getmdnpcname("ins_nyd_1f_timer")+ "::OnStart";
 			donpcevent getmdnpcname("nyd_call_mon_1")+ "::OnStart2";
 			close;
@@ -590,7 +594,8 @@ OnKilled:
 	if(.mob <= 0) {
 		announce "ニーズヘッグの護衛兵を全て倒した！",0x9,0x00FF99;
 		hideoffnpc getmdnpcname("nyd_to2f_warp");
-		setpartyinmap NYD_2QUE,2;
+//		setpartyinmap NYD_2QUE,2;
+		set 'NYD_2QUE,2;
 	} else
 		announce "残り [" +.mob+ "]体",0x9,0x00FF99;
 	end;

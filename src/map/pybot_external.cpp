@@ -577,6 +577,31 @@ skill_is_layable_on_lp(
 	return KEY_EXISTS(LAYABLE_ON_LP_SKILLS, kid);
 }
 
+// 2バイト目が色指定エスケープの全角文字を含む文字列を置き換える。
+std::string unescape(const std::string& tex) {
+	std::stringstream out;
+	for (int i = 0; i < tex.length();) {
+		int j;
+		for (j = 0; j < ESCAPING_TABLE.size(); ++j) {
+			const auto& val = ESCAPING_TABLE[j];
+			const std::string& x = val.first;
+			if (x.length() <= tex.length() - i &&
+				x == tex.substr(i, x.length())
+			) {
+				out << val.second;
+				i += x.length();
+				break;
+			}
+		}
+		if (j == ESCAPING_TABLE.size()) {
+			char let = tex[i++];
+			out << let;
+			if (letter_is_jlead(let)) out << tex[i++];
+		}
+	}
+	return out.str();
+}
+
 // フィーバーに関する情報を更新する。
 void update_fever() {
 	fever_rates.clear();
@@ -674,7 +699,7 @@ void update_fever() {
 }
 
 // -----------------------------------------------------------------------------
-// 外部から参照される変数の定義
+// 外部から参照される定数の定義
 
 // キャッシュ経験値の登録名。
 const std::string CASH_EXP = "CASH_EXP";

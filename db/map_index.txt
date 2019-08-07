@@ -743,6 +743,7 @@ arug_dun01
 2@nyd
 nyd_dun01
 nyd_dun02
+nyd_dun_jp
 manuk
 man_fild02
 man_in01

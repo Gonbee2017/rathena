@@ -22,5 +22,5 @@ REPLACE INTO `pybot_fever_size` VALUES(2, 2, 3);
 REPLACE INTO `pybot_fever_size` VALUES(2, 3, 3);
 REPLACE INTO `pybot_fever_size` VALUES(3, 2, 2);
 REPLACE INTO `pybot_fever_size` VALUES(3, 3, 2);
-REPLACE INTO `pybot_fever_size` VALUES(4, 2, 1);
+REPLACE INTO `pybot_fever_size` VALUES(4, 2, 2);
 REPLACE INTO `pybot_fever_size` VALUES(4, 3, 2);

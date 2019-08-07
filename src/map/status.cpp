@@ -4271,7 +4271,7 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			sc->data[SC_ARMOR_ELEMENT_FIRE] &&
 			sc->data[SC_ARMOR_ELEMENT_WIND]
 		) {
-			sd->subele[ELE_NEUTRAL] += 20;
+			sd->subele[ELE_NEUTRAL] += 10;
 			sd->subele[ELE_POISON] += 20;
 			sd->subele[ELE_HOLY] += 20;
 			sd->subele[ELE_DARK] += 20;

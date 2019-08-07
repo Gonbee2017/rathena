@@ -16865,7 +16865,13 @@ void clif_quest_send_mission(struct map_session_data *sd)
 			WFIFOL(fd, i*104+22+j*30) = qi->objectives[j].mob;
 			WFIFOW(fd, i*104+26+j*30) = sd->quest_log[i].count[j];
 			mob = mob_db(qi->objectives[j].mob);
-			safestrncpy(WFIFOCP(fd, i*104+28+j*30), mob->jname, NAME_LENGTH);
+
+			// [GonBee]
+			// 2バイト目が色指定エスケープ文字の全角文字を含む文字列を置き換える。
+			//safestrncpy(WFIFOCP(fd, i*104+28+j*30), mob->jname, NAME_LENGTH);
+			const std::string esc_nam = pybot::unescape(mob->jname);
+			safestrncpy(WFIFOCP(fd, i*104+28+j*30), esc_nam.c_str(), esc_nam.length() + 1);
+
 		}
 	}
 

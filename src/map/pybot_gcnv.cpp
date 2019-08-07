@@ -2179,6 +2179,11 @@ const std::array<
 	"影左ア" ,
 };
 
+// 2バイト目がエスケープ指定文字の全角文字を含む文字列を置き換えるためのテーブル。
+const std::vector<std::pair<std::string, std::string>> ESCAPING_TABLE = {
+	{"タ", "ﾀ"},
+};
+
 // 名声付きであることを示すオフセット。
 const int FAME_OFFSET = 30000;
 

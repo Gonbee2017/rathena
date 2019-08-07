@@ -1457,7 +1457,7 @@ OnInit:
 		}
 		if (dupvar(CASTLE_TRIAL_PROG) == 0) callsub Require;
 		if (dupvar(CASTLE_TRIAL_PROG) == 1) callsub Pass;
-		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Complete;
+		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Capture;
 		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Trial;
 		if (dupvar(CASTLE_TRIAL_PROG) == 3) callsub TrialGuildDungeon;
 	} else callsub Abort;
@@ -1620,19 +1620,18 @@ Pass:
 	next;
 	set dupvar(CASTLE_TRIAL_PROG), 2;
 	return;
-Complete:
+Capture:
 	set .@cas_maps_siz, getarraysize(dupvar(.cas_maps$));
 	for (set .@i, 0; .@i < .@cas_maps_siz; ++.@i) {
 		set .@cas_map$, dupele(.cas_maps$, .@i);
-		if (!getd("CAPTURED_" + .@cas_map$)) {
-			set .@not_com, 1;
+		if (getd("CAPTURED_" + .@cas_map$)) {
+			set .@cap, 1;
 			break;
 		}
 	}
-	if (!.@not_com) {
+	if (.@cap) {
 		mes "[" + dupvar(.pri_nam$) + "]";
-		mes "おお……とうとうこの城にある";
-		mes "すべての砦を攻略したのですね。";
+		mes "おお……砦を攻略したのですね。";
 		mes "あなたのような冒険者が現れるのを";
 		mes "どれほど待ち望んだことか……";
 		next;
@@ -1646,9 +1645,9 @@ Complete:
 		mes "言われています……";
 		next;
 		mes "[" + dupvar(.pri_nam$) + "]";
-		mes "すべての試練を突破できたあなたなら";
-		mes "必ずや^4040FF神器^000000を手に入れられる";
-		mes "はずです。";
+		mes "試練を突破できたあなたなら";
+		mes "きっと^4040FF神器^000000を入手できるでしょう。";
+		mes "";
 		next;
 		set dupvar(CASTLE_TRIAL_PROG), 3;
 	}

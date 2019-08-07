@@ -665,11 +665,11 @@ bat_a01	mapflag	nomemo
 bat_a02	mapflag	nomemo
 
 // Episode 13 ====================
-mid_campin	mapflag	nomemo
-man_fild01	mapflag	nomemo
-man_fild03	mapflag	nomemo
-spl_fild02	mapflag	nomemo
-spl_fild03	mapflag	nomemo
+//mid_campin	mapflag	nomemo
+//man_fild01	mapflag	nomemo
+//man_fild03	mapflag	nomemo
+//spl_fild02	mapflag	nomemo
+//spl_fild03	mapflag	nomemo
 moc_fild22b	mapflag	nomemo
 que_dan01	mapflag	nomemo
 que_dan02	mapflag	nomemo
@@ -677,13 +677,13 @@ schg_que01	mapflag	nomemo
 schg_dun01	mapflag	nomemo
 arug_que01	mapflag	nomemo
 arug_dun01	mapflag	nomemo
-nyd_dun01	mapflag	nomemo
-nyd_dun02	mapflag	nomemo
-manuk	mapflag	nomemo
-man_fild02	mapflag	nomemo
+//nyd_dun01	mapflag	nomemo
+//nyd_dun02	mapflag	nomemo
+//manuk	mapflag	nomemo
+//man_fild02	mapflag	nomemo
 man_in01	mapflag	nomemo
-splendide	mapflag	nomemo
-spl_fild01	mapflag	nomemo
+//splendide	mapflag	nomemo
+//spl_fild01	mapflag	nomemo
 spl_in01	mapflag	nomemo
 spl_in02	mapflag	nomemo
 

@@ -9448,7 +9448,7 @@ mid_camp,188,254,3	script	モンスター学者	883,{
 		chgquest 2156,2157;
 		close;
 	case 14:
-		if(checkquest2(2157)&4 == 0) {
+		if((checkquest2(2157)&4) == 0) {
 			mes "[ルミス＝ブラック]";
 			mes "あ、あの……";
 			mes "ではよろしくお願いします。";
@@ -9916,7 +9916,7 @@ mid_camp,240,270,3	script	植物学者	750,{
 		chgquest 2149,2150;
 		close;
 	case 5:
-		if(checkquest2(2150)&4 == 0) {
+		if((checkquest2(2150)&4) == 0) {
 			mes "[テリス＝ブラック]";
 			mes "……アイツが、ねぇ～";
 			mes " ";
@@ -10026,7 +10026,7 @@ mid_camp,240,270,3	script	植物学者	750,{
 		chgquest 2150,2151;
 		close;
 	case 6:
-		if(checkquest2(2151)&4 == 0) {
+		if((checkquest2(2151)&4) == 0) {
 			mes "[テリス＝ブラック]";
 			mes "環境測定器を壊す";
 			mes "アクアエレメンタルを";
@@ -18768,7 +18768,7 @@ mid_camp,143,306,5	script	飼育士タブ#Ash	946,{
 		mes "またよろしくお願いしますね。";
 		close;
 	case 6:
-		if(checkquest2(7047)&2 == 0) {
+		if((checkquest2(7047)&2) == 0) {
 			mes "[タブ]";
 			mes "あ、この間は本当に助かりました。";
 			mes "あの子たちも喜んでくれたみたいです。";
@@ -19773,7 +19773,7 @@ mid_camp,72,94,4	script	ギャルック	421,{
 
 mid_camp,69,144,0	script	ガルル	421,{
 	if(checkquest2(12060)) {
-		if(checkquest2(12060)&2 == 0) {
+		if((checkquest2(12060)&2) == 0) {
 			mes "[ガルル]";
 			mes "今は、君から魚のはしくれを";
 			mes "受け取ることができない。";
@@ -20314,7 +20314,7 @@ mid_camp,88,100,7	script	鉱石担当の猫の手職員	876,{
 	mes "これ、わたくしのアイデアです。";
 	next;
 	if(checkquest2(12062)) {
-		if(checkquest2(12062)&2 == 0) {
+		if((checkquest2(12062)&2) == 0) {
 			mes "[鉱石担当の猫の手職員]";
 			mes "未確認鉱石をいただいたばかりなので";
 			mes "只今の時間は";
@@ -20409,14 +20409,16 @@ mid_camp,88,100,7	script	鉱石担当の猫の手職員	876,{
 	if(equippeditem(2199)) set .@time,.@time - 4;	// アフラマズダー(デバッグ用)
 	misceffect 109,"";
 	misceffect 65,"";
-	progressbar .@time;
+//	progressbar .@time;
+	progressbar "ffff00",.@time;
 	if(ASH_3QUE == 13 && rand(5) == 0) {	//会議のおともクエスト進行中
 		set ASH_3QUE,14;
 		chgquest 8201,70150;
 		getitem 6037,1;		//ぼろぼろな書類
 		misceffect 109;
 		announce strcharinfo(0)+ " : 魚の群れがいる場所で、ぼろぼろな書類を見つけた!!",9,0xFF77FF;
-		close;
+//		close;
+		end;
 	}
 	set .@rand,rand(1,70);
 	if(.@rand < 20)		getitem 6039,1;		//魚のはしくれ
@@ -20456,7 +20458,8 @@ spl_fild02,326,171,0	duplicate(魚の群れ#Ash)	魚の群れ	844
 
 -	script	不思議な岩#Ash	844,{
 	if(checkquest2(12062)) {
-		if(getquestlimit(12062) > gettimetick(2)) {
+//		if(getquestlimit(12062) > gettimetick(2)) {
+		if(checkquest(12062,PLAYTIME) == 0) {
 			mes "[" +strcharinfo(0)+ "]";
 			mes "（今は、";
 			mes "鉱石担当の猫の手職人に言われた";
@@ -20495,7 +20498,8 @@ spl_fild02,326,171,0	duplicate(魚の群れ#Ash)	魚の群れ	844
 		close;
 	}
 	misceffect 101,"";
-	progressbar 10;
+//	progressbar 10;
+	progressbar "ffff00",10;
 	set .@rand,rand(1,20);
 	if(.@rand < 13)		getitem 7049,1;		//石
 	else if(.@rand == 13)	getitem 990,1;		//レッドブラッド

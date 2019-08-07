@@ -9146,7 +9146,8 @@ mjolnir_01,32,309,3	script	#mj01_01	111,7,7,{
 			mes "　持っていこう‐";
 			close;
 		}
-		progressbar 4;
+//		progressbar 4;
+		progressbar "ffff00",4;
 		if(checkitemblank() == 0) {
 			mes "‐所持アイテムの種類数が限界で";
 			mes "　アイテムを入手することができない。";
@@ -9370,7 +9371,8 @@ hu_fild05,251,345,3	script	#hu_01	111,10,10,{
 			mes "　持っていこう‐";
 			close;
 		}
-		progressbar 4;
+//		progressbar 4;
+		progressbar "ffff00",4;
 		if(checkitemblank() == 0) {
 			mes "‐所持アイテムの種類数が限界で";
 			mes "　アイテムを入手することができない。";
@@ -9451,7 +9453,8 @@ ve_fild03,152,134,3	script	#ve_01	111,10,10,{
 			mes "　持っていこう‐";
 			close;
 		}
-		progressbar 4;
+//		progressbar 4;
+		progressbar "ffff00",4;
 		if(checkitemblank() == 0) {
 			mes "‐所持アイテムの種類数が限界で";
 			mes "　アイテムを入手することができない。";
@@ -13222,7 +13225,8 @@ nyd_dun02,173,242,0	script	nyd_warp_e4	139,1,1,{
 	if(equippeditem(2199)) set .@time,.@time - 4;	// アフラマズダー(デバッグ用)
 	misceffect 109,"";
 	misceffect 65,"";
-	progressbar .@time;
+//	progressbar .@time;
+	progressbar "ffff00",.@time;
 	if(ASH_3QUE == 13 && rand(5) == 0) {	//会議のおともクエスト進行中
 		set ASH_3QUE,14;
 		chgquest 8201,70150;
@@ -13275,7 +13279,8 @@ spl_fild01,170,74,0		duplicate(魚の群れ#Ygg)	魚の群れ#2	844
 
 -	script	不思議な岩#Ygg	844,{
 	if(checkquest2(12062)) {
-		if(getquestlimit(12062) > gettimetick(0)) {
+//		if(getquestlimit(12062) > gettimetick(0)) {
+		if(checkquest(12062,PLAYTIME) == 0) {
 			mes "[" +strcharinfo(0)+ "]";
 			mes "（今は、";
 			mes "鉱石担当の猫の手職人に言われた";
@@ -13314,7 +13319,8 @@ spl_fild01,170,74,0		duplicate(魚の群れ#Ygg)	魚の群れ#2	844
 		close;
 	}
 	misceffect 101,"";
-	progressbar 10;
+//	progressbar 10;
+	progressbar "ffff00",10;
 	set .@rand,rand(1,20);
 	if(.@rand < 13)		getitem 7049,1;		//石
 	else if(.@rand == 13)	getitem 990,1;		//レッドブラッド
