@@ -30,7 +30,7 @@ card_converter::card_converter() {
 			}
 		}
 	};
-	ite_mob(1000, 1985);
+	ite_mob(1000, 2100);
 }
 
 // カードを別のカードに変換する。
