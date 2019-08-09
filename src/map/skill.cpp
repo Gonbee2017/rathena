@@ -18899,7 +18899,11 @@ TIMER_FUNC(skill_unit_timer){
 	return 0;
 }
 
-static int skill_unit_temp[20];  // temporary storage for tracking skill unit skill ids as players move in/out of them
+// [GonBee]
+// 20ŒÂ‚Å‚Í‘«‚è‚È‚¢‚æ‚¤‚È‚Ì‚Å2”{‚Ì40ŒÂ‚ÉŠg’£B
+//static int skill_unit_temp[20];  // temporary storage for tracking skill unit skill ids as players move in/out of them
+static int skill_unit_temp[40];  // temporary storage for tracking skill unit skill ids as players move in/out of them
+
 /*==========================================
  * flag :
  *	1 : store that skill_unit in array
