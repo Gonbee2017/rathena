@@ -2125,13 +2125,21 @@ const skill_unit_key_map ELEMENTAL_SKILL_UNIT_KEYS = {
 };
 
 // 敵スキルアドバンテージのマップ。
-const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES = {
-	{MG_SAFETYWALL   ,    60},
-	{AL_PNEUMA       ,    50},
+const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_AWAY = {
+	{AL_PNEUMA       ,   100},
 	{WZ_QUAGMIRE     ,   -20},
 	{AM_DEMONSTRATION, -1000},
 	{AS_VENOMDUST    ,    -1},
-	{SA_LANDPROTECTOR,   100},
+	{SA_LANDPROTECTOR,   200},
+	{NPC_EVILLAND    ,  -100},
+};
+
+// 敵スキルアドバンテージのマップ。
+const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_CLOSE = {
+	{MG_SAFETYWALL   ,   100},
+	{WZ_QUAGMIRE     ,   -20},
+	{AM_DEMONSTRATION, -1000},
+	{AS_VENOMDUST    ,    -1},
 	{NPC_EVILLAND    ,  -100},
 };
 

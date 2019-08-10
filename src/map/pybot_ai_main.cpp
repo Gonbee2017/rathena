@@ -1150,12 +1150,12 @@ ai_t::check_stuck(
 
 // バトラーが遠隔に位置取る述語を作る。
 yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
+	block_if* tar_ene = battler->target_enemy();
 	int max_rad = battle_config.pybot_around_distance;
 	if (battler->normal_attack_policy_value() == NAPV_CONTINUOUS &&
-		battler->attack_range() > 3
+		battler->attack_range() > tar_ene->away_distance(leader)
 	) max_rad = battler->attack_range();
-	return [this, &pos, max_rad] (int x, int y) -> bool {
-		block_if* tar_ene = battler->target_enemy();
+	return [this, &pos, tar_ene, max_rad] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, max_rad) &&
 			battler->can_reach_xy(x, y) &&
