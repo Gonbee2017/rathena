@@ -158,15 +158,15 @@ void ai_t::leader_collect() {
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;
-			//if (!battlers.empty() &&
-			//	(battlers.front() == leader ||
-			//		battlers.front() == leader->homun().get()
-			//	)
-			//) {
-			//	bool llt = len->bl()->id == battlers.front()->ud()->target;
-			//	bool rlt = ren->bl()->id == battlers.front()->ud()->target;
-			//	if (llt != rlt) return llt;
-			//}
+			if (!battlers.empty() &&
+				(battlers.front() == leader ||
+					battlers.front() == leader->homun().get()
+				)
+			) {
+				bool llt = len->bl()->id == battlers.front()->ud()->target;
+				bool rlt = ren->bl()->id == battlers.front()->ud()->target;
+				if (llt != rlt) return llt;
+			}
 			if (len->has_summon_skill() != ren->has_summon_skill())
 				return len->has_summon_skill();
 			if (bool(len->md()->master_id) != bool(ren->md()->master_id))
@@ -1215,6 +1215,7 @@ ai_t::find_best_assist_pos() {
 pos_t // Œ©‚Â‚©‚Á‚½ˆÊ’uBŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚çadvantage‚ªINT_MINB
 ai_t::find_best_away_pos() {
 	pos_t pos;
+	int min_rad = 1;
 	int max_rad = battle_config.pybot_around_distance;
 	if (battler->is_long_range_attacker() &&
 		battler->normal_attack_policy_value() == NAPV_CONTINUOUS

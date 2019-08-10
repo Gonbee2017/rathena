@@ -1055,13 +1055,15 @@ general_impl::skill_advantage(
 ) {
 	int adv = 0;
 	iterate_skill_unit(bl()->m, x, y, [this, &adv] (skill_unit* kun, block_list* src_bl) -> int {
-		const std::unordered_map<e_skill,int>* advs;
+		const std::unordered_map<e_skill,int>* advs = nullptr;
 		if (battle_check_target(bl(), src_bl, BCT_ENEMY) > 0) advs = &ENEMY_SKILL_ADVANTAGES;
 		else {
 			if (distance_policy_value() == DPV_CLOSE) advs = &ALLY_SKILL_ADVANTAGES_CLOSE;
-			else advs = &ALLY_SKILL_ADVANTAGES_AWAY;
+			else if (target_enemy()->is_long_range_attacker() ||
+				!check_distance_bl(target_enemy()->bl(), &kun->bl, target_enemy()->away_distance(leader()))
+			) advs = &ALLY_SKILL_ADVANTAGES_AWAY;
 		}
-		adv += find_map_data(*advs, e_skill(kun->group->skill_id), 0);
+		if (advs) adv += find_map_data(*advs, e_skill(kun->group->skill_id), 0);
 		return 0;
 	});
 	return adv;
