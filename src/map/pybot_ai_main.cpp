@@ -155,18 +155,18 @@ void ai_t::leader_collect() {
 		[this] (block_if* len, block_if* ren) -> bool {
 			if (len->is_hiding() != ren->is_hiding())
 				return ren->is_hiding();
-			if (!battlers.empty() &&
-				(battlers.front() == leader ||
-					battlers.front() == leader->homun().get()
-				)
-			) {
-				bool llt = len->bl()->id == battlers.front()->ud()->target;
-				bool rlt = ren->bl()->id == battlers.front()->ud()->target;
-				if (llt != rlt) return llt;
-			}
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;
+			//if (!battlers.empty() &&
+			//	(battlers.front() == leader ||
+			//		battlers.front() == leader->homun().get()
+			//	)
+			//) {
+			//	bool llt = len->bl()->id == battlers.front()->ud()->target;
+			//	bool rlt = ren->bl()->id == battlers.front()->ud()->target;
+			//	if (llt != rlt) return llt;
+			//}
 			if (len->has_summon_skill() != ren->has_summon_skill())
 				return len->has_summon_skill();
 			if (bool(len->md()->master_id) != bool(ren->md()->master_id))

@@ -1169,16 +1169,15 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS = {
 	AI_SKILL_USE_PROC_HEAL  (4                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 };
 
-// 味方スキルアドバンテージのマップ。
-const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES = {
-	{MG_SAFETYWALL     ,   60},
+// 味方スキルアドバンテージのマップ(遠隔)。
+const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 	{PR_SANCTUARY      ,    2},
-	{AL_PNEUMA         ,   50},
+	{AL_PNEUMA         ,  100},
 	{WZ_QUAGMIRE       ,  -20},
 	{SA_VOLCANO        ,    1},
 	{SA_DELUGE         ,    1},
 	{SA_VIOLENTGALE    ,    1},
-	{SA_LANDPROTECTOR  ,  100},
+	{SA_LANDPROTECTOR  ,  200},
 	{BD_LULLABY        ,   30},
 	{BD_RICHMANKIM     ,   30},
 	{BD_ETERNALCHAOS   ,   30},
@@ -1198,10 +1197,17 @@ const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES = {
 	{DC_FORTUNEKISS    ,   20},
 	{DC_SERVICEFORYOU  ,   20},
 	{PA_GOSPEL         , 1000},
-	{HP_BASILICA       , 3000},
+	{HP_BASILICA       , 4000},
 	{CG_MOONLIT        , 2000},
-	{PF_FOGWALL        ,   40},
+	{PF_FOGWALL        ,  400},
 	{NJ_SUITON         ,    1},
+};
+
+// 味方スキルアドバンテージのマップ(近接)。
+const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE = {
+	{MG_SAFETYWALL     ,  100},
+	{WZ_QUAGMIRE       ,  -20},
+	{PA_GOSPEL         , 1000},
 };
 
 // 矢/弾タイプ名のテーブル。
