@@ -369,7 +369,8 @@ battler_impl::check_use_skill(
 						) && (skill_range(kid, klv) <= 3 ||
 							!ene->is_long_weapon_immune()
 						) && (!ene->sc()->data[SC_REFLECTSHIELD] ||
-							kid == NJ_ISSEN
+							kid == NJ_ISSEN ||
+							check_hp(3)
 						)
 					)
 				) && (!(skill_get_type(kid) & BF_MAGIC) ||
