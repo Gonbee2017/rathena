@@ -1057,8 +1057,7 @@ ai_t::away_enemies(
 	//}
 	//return res;
 	block_if* tar_ene = battler->target_enemy();
-	return !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader)) ||
-		tar_ene->target_battler() == battler;
+	return !check_distance_blxy(tar_ene->bl(), x, y, tar_ene->away_distance(leader));
 }
 
 // 座標が他のバトラーから離れているかを判定する。
@@ -1153,7 +1152,7 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 	block_if* tar_ene = battler->target_enemy();
 	int max_rad = battle_config.pybot_around_distance;
 	if (battler->normal_attack_policy_value() == NAPV_CONTINUOUS &&
-		battler->attack_range() > tar_ene->away_distance(leader)
+		battler->attack_range() >= tar_ene->away_distance(leader) + 1
 	) max_rad = battler->attack_range();
 	return [this, &pos, tar_ene, max_rad] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
@@ -1215,13 +1214,18 @@ ai_t::find_best_assist_pos() {
 pos_t // 見つかった位置。見つからなかったらadvantageがINT_MIN。
 ai_t::find_best_away_pos() {
 	pos_t pos;
-	int min_rad = 1;
-	int max_rad = battle_config.pybot_around_distance;
-	if (battler->is_long_range_attacker() &&
-		battler->normal_attack_policy_value() == NAPV_CONTINUOUS
-	) max_rad = battler->attack_range();
-	for (int rad = 1; rad <= max_rad; ++rad)
-		iterate_edge_bl(battler->target_enemy()->bl(), rad, find_away_pos_pred(pos));
+	block_if* tar_ene = battler->target_enemy();
+	if (tar_ene->target_battler() == battler)
+		pos = pos_t(battler->bl()->x, battler->bl()->y);
+	else {
+		int min_rad = tar_ene->away_distance(leader) + 1;
+		int max_rad = battle_config.pybot_around_distance;
+		if (battler->normal_attack_policy_value() == NAPV_CONTINUOUS &&
+			battler->attack_range() >= min_rad
+		) max_rad = battler->attack_range();
+		for (int rad = min_rad; rad <= max_rad; ++rad)
+			iterate_edge_bl(tar_ene->bl(), rad, find_away_pos_pred(pos));
+	}
 	return pos;
 }
 

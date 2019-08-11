@@ -456,6 +456,7 @@ enum item_ids {
 	ITEMID_PORING_CARD             =  4001, // ポリンカード。
 	ITEMID_BRAGI_POTION            = 10903, // ブラギポーション
 	ITEMID_DIGEST_POTION           = 10904, // 消化促進ポーション
+	ITEMID_ASAI_FRUIT              = 11516, // アサイーの実。
 	ITEMID_QUIVER                  = 12004, // 矢筒。
 	ITEMID_IRON_ARROW_QUIVER       = 12005, // 鉄の矢筒。
 	ITEMID_STEEL_ARROW_QUIVER      = 12006, // 鋼鉄の矢筒。

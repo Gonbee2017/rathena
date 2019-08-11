@@ -63,6 +63,7 @@ const std::vector<
 	AI_ITEM_USE_PROC_AMMO(HOLY_ARROW_QUIVER      , HOLY_ARROW         ),
 	AI_ITEM_USE_PROC     (GREEN_HERB                                  ),
 	AI_ITEM_USE_PROC     (GREEN_POTION                                ),
+	AI_ITEM_USE_PROC_D   (ASAI_FRUIT             , GREEN_POTION       ),
 	AI_ITEM_USE_PROC     (HOLY_WATER                                  ),
 	AI_ITEM_USE_PROC     (PANACEA                                     ),
 	AI_ITEM_USE_PROC_D   (TOM_YUM_GOONG          , PANACEA            ),

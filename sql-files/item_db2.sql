@@ -166,6 +166,7 @@ REPLACE INTO `item_db2` VALUES (5579, 'Wanderer''s_Sakkat', '彷徨う者の笠', 4, 2
 REPLACE INTO `item_db2` VALUES (5888, 'Wedding_Veil_', 'ヴェール', 4, 23000, NULL, 100, NULL, 0, NULL, 1, 0xFFFFFFFF, 7, 0, 256, NULL, 0, 1, 44, '{ bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5889, 'L_Orc_Hero_Helm_', '大型オークヒーローの兜', 4, 20, NULL, 900, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 768, NULL, 0, 1, 381, '{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5917, 'Yellow_Scarf', '黄色いスカーフ', 4, 20, NULL, 100, NULL, 0, NULL, 0, 0xFFFFFFFF, 63, 2, 1, NULL, 90, 0, 1170, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (11516, 'Asai_Fruit', 'アサイーの実', 0, 15, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(16,22),0; sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12103, 'Bloody_Dead_Branch', '血塗られた古木の枝', 2, 10000, NULL, 200, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ summon "--ja--",-3; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12225, 'Sweet_Candy_Striper', '甘いスティックキャンディ', 2, 20, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ pet 1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12622, 'Boarding_Halter', '騎乗用手綱', 2, 0, NULL, 0, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ setmounting(); }', '{}', '{ if (ismounting()) setmounting(); }');
