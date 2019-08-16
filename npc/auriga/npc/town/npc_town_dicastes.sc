@@ -7886,7 +7886,8 @@ dic_in01,165,104,0	script	フレード	454,{
 		set .@score4,checkquest2(11162);
 		set .@score5,checkquest2(11163);
 		set .@score6,checkquest2(11164);
-		if((.@score1 + .@score2 + .@score3 + .@score4 + .@score5 + .@score6) == 42) {
+//		if((.@score1 + .@score2 + .@score3 + .@score4 + .@score5 + .@score6) == 42) {
+		if(.@score1 && .@score2 && .@score3 && .@score4 && .@score5 && .@score6) {
 			mes "‐あなたの報告を聞いた";
 			mes "　フレードは頭をかかえた‐";
 			next;
@@ -7991,7 +7992,8 @@ dic_in01,165,104,0	script	フレード	454,{
 		set .@score4,checkquest2(11168);
 		set .@score5,checkquest2(11169);
 		set .@score6,checkquest2(11170);
-		if((.@score1 + .@score2 + .@score3 + .@score4 + .@score5 + .@score6) == 42) {
+//		if((.@score1 + .@score2 + .@score3 + .@score4 + .@score5 + .@score6) == 42) {
+		if(.@score1 && .@score2 && .@score3 && .@score4 && .@score5 && .@score6) {
 			mes "[フレード]";
 			mes strcharinfo(0)+ "さん";
 			mes "仲間たちを助けてくれて";
@@ -8624,7 +8626,8 @@ dic_dun01,153,107,3	script	テーラー	489,{
 	}
 }
 
-dic_dun01,111,127,5	script	ロズレ	489,{
+//dic_dun01,111,127,5	script	ロズレ	489,{
+dic_dun02,111,127,5	script	ロズレ	489,{
 	if(!equippeditem(2782) || YGG_1QUE < 100) {
 		mes "[ロズレ]";
 		mes "⊃∬∝∑∝";
@@ -9365,7 +9368,7 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 		next;
 		mes "[ラフォンテ]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099狩猟1課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -9402,7 +9405,8 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 		mes "^990099狩猟1課担当者^000000をお訪ねください。";
 		close;
 	}
-	if(checkquest2(12161)) {
+//	if(checkquest2(12161)) {
+	if(checkquest2(12159)) {
 		mes "[ラフォンテ]";
 		mes "ようこそいらっしゃいました。";
 		mes "こちらは治安管理部、";
@@ -9411,7 +9415,7 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 		mes "[ラフォンテ]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -9436,7 +9440,7 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 			mes "冒険者の方に提供しております。";
 			next;
 			mes "[ラフォンテ]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれ、";
 			mes "また、冒険者の強さによって";
@@ -9449,7 +9453,7 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[ラフォンテ]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -9477,7 +9481,8 @@ dicastes01,187,230,5	script	ラフォンテ	453,{
 	mes "ちょうど、あなたに適切な依頼が";
 	mes "入ってきております。";
 	next;
-	set .@num,rand(97,BaseLevel);
+//	set .@num,rand(97,BaseLevel);
+	set .@num,rand(97,130);
 	if(.@num < 103) {
 		setquest 12099;
 		setquest 12159;
@@ -9711,7 +9716,7 @@ dic_in01,48,263,5	script	狩猟1課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000^000000";
+		mes "5時間経過しないといけません。^000000^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -9759,7 +9764,8 @@ dicastes01,175,217,5	script	カルリホ	453,{
 		close;
 	}
 	delquest 70956;
-	if(BaseLevel < 100) {
+//	if(BaseLevel < 100) {
+	if(BaseLevel < 99) {
 		mes "[カルリホ]";
 		mes "ようこそいらっしゃいました。";
 		mes "こちらは治安管理部です。";
@@ -9793,7 +9799,7 @@ dicastes01,175,217,5	script	カルリホ	453,{
 		next;
 		mes "[カルリホ]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099狩猟2課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -9831,7 +9837,7 @@ dicastes01,175,217,5	script	カルリホ	453,{
 		mes "[カルリホ]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -9856,7 +9862,7 @@ dicastes01,175,217,5	script	カルリホ	453,{
 			mes "冒険者の方に提供しております。";
 			next;
 			mes "[カルリホ]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれ、";
 			mes "また、冒険者の強さによって";
@@ -9869,7 +9875,7 @@ dicastes01,175,217,5	script	カルリホ	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[カルリホ]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -9897,7 +9903,8 @@ dicastes01,175,217,5	script	カルリホ	453,{
 	mes "ちょうど、あなたに適切な依頼が";
 	mes "入ってきております。";
 	next;
-	set .@num,rand(100,BaseLevel);
+//	set .@num,rand(100,BaseLevel);
+	set .@num,rand(100,130);
 	if(.@num < 109) {
 		setquest 12106;
 		setquest 12160;
@@ -10116,7 +10123,7 @@ dic_in01,51,266,6	script	狩猟2課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000^000000";
+		mes "5時間経過しないといけません。^000000^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -10198,7 +10205,7 @@ dicastes01,208,230,3	script	フィラー	453,{
 		next;
 		mes "[フィラー]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099補給1課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -10244,7 +10251,7 @@ dicastes01,208,230,3	script	フィラー	453,{
 		mes "[フィラー]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -10269,7 +10276,7 @@ dicastes01,208,230,3	script	フィラー	453,{
 			mes "収集する任務を提供しております。";
 			next;
 			mes "[フィラー]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれます。";
 			mes "内容によっては難易度が高いものも";
@@ -10281,7 +10288,7 @@ dicastes01,208,230,3	script	フィラー	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[フィラー]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -10619,7 +10626,7 @@ dic_in01,51,270,7	script	補給1課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000";
+		mes "5時間経過しないといけません。^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -10702,7 +10709,7 @@ dicastes01,225,211,3	script	トラギス	453,{
 		next;
 		mes "[トラギス]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099補給2課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -10748,7 +10755,7 @@ dicastes01,225,211,3	script	トラギス	453,{
 		mes "[トラギス]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -10773,7 +10780,7 @@ dicastes01,225,211,3	script	トラギス	453,{
 			mes "収集する任務を提供しております。";
 			next;
 			mes "[トラギス]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれます。";
 			mes "内容によっては難易度が高いものも";
@@ -10785,7 +10792,7 @@ dicastes01,225,211,3	script	トラギス	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[トラギス]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -11112,7 +11119,7 @@ dic_in01,48,273,8	script	補給2課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000";
+		mes "5時間経過しないといけません。^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -11195,7 +11202,7 @@ dicastes01,223,190,2	script	カルリオン	453,{
 		next;
 		mes "[カルリオン]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099運送1課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -11243,7 +11250,7 @@ dicastes01,223,190,2	script	カルリオン	453,{
 		mes "[カルリオン]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -11270,7 +11277,7 @@ dicastes01,223,190,2	script	カルリオン	453,{
 			mes "主になりますね。";
 			next;
 			mes "[カルリオン]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれます。";
 			mes "内容によっては難易度が高いものも";
@@ -11282,7 +11289,7 @@ dicastes01,223,190,2	script	カルリオン	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[カルリオン]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -11630,7 +11637,7 @@ dic_in01,43,273,1	script	運送1課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000";
+		mes "5時間経過しないといけません。^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -11713,7 +11720,7 @@ dicastes01,211,178,2	script	モルトカ	453,{
 		next;
 		mes "[モルトカ]";
 		mes "前回の任務を依頼してから";
-		mes "23時間を過ぎましたので";
+		mes "5時間を過ぎましたので";
 		mes "一度、^990099運送2課担当者^000000に報告し";
 		mes "依頼を整理してきてください。";
 		close;
@@ -11761,7 +11768,7 @@ dicastes01,211,178,2	script	モルトカ	453,{
 		mes "[モルトカ]";
 		mes "次の任務を受けるには、";
 		mes "前回の任務を受けてから";
-		mes "23時間経過しないといけません。";
+		mes "5時間経過しないといけません。";
 		mes "今は次の任務に備えて";
 		mes "休んでください。";
 		close;
@@ -11788,7 +11795,7 @@ dicastes01,211,178,2	script	モルトカ	453,{
 			mes "主になりますね。";
 			next;
 			mes "[モルトカ]";
-			mes "任務は、23時間に1回のみ";
+			mes "任務は、5時間に1回のみ";
 			mes "受諾が可能です。";
 			mes "任務内容はランダムで選ばれます。";
 			mes "内容によっては難易度が高いものも";
@@ -11800,7 +11807,7 @@ dicastes01,211,178,2	script	モルトカ	453,{
 			mes "挑戦できるようになります。";
 			next;
 			mes "[モルトカ]";
-			mes "また、^FF0000受託してから23時間以内に";
+			mes "また、^FF0000受託してから5時間以内に";
 			mes "依頼を達成して報告しない場合、";
 			mes "依頼をキャンセル^000000させていただくので";
 			mes "ご注意ください。";
@@ -12136,7 +12143,7 @@ dic_in01,40,270,2	script	運送2課担当者	449,{
 		mes "現在あなたは依頼を受けていません。";
 		mes "依頼をもう一度受けるためには、";
 		mes "^FF0000前回の依頼を受けてから";
-		mes "23時間経過しないといけません。^000000";
+		mes "5時間経過しないといけません。^000000";
 		mes "今は次の依頼を受けるためにも";
 		mes "休んでいてください。";
 		close;
@@ -12438,7 +12445,8 @@ dic_in01,31,192,0	script	文書の束#dicas01	844,{
 		close;
 	}
 	misceffect 235,"";
-	progressbar 4;
+//	progressbar 4;
+	progressbar "ffff00",4;
 	set .@book,rand(1,70);
 	if(.@book < 51) {
 		set .@title,12165+.@book;
@@ -12574,7 +12582,8 @@ dic_in01,25,192,0	duplicate(文書の束#dicas01)	文書の束#dicas03	844
 dic_in01,25,187,0	duplicate(文書の束#dicas01)	文書の束#dicas04	844
 
 -	script	Dicastes_Trace	-1,{
-	set .@trace,strnpcinfo(5);
+//	set .@trace,strnpcinfo(5);
+	set .@trace,strnpcinfo(2);
 	switch(.@trace) {
 	case 1: set .@gain,902; set .@max,42; break;
 	case 2: set .@gain,903; set .@max,4; break;
@@ -12644,7 +12653,8 @@ dic_in01,25,187,0	duplicate(文書の束#dicas01)	文書の束#dicas04	844
 	if(checkquest2(12165+.@trace)) {
 		misceffect 310,"";
 		misceffect 12,"";
-		progressbar 4;
+//		progressbar 4;
+		progressbar "ffff00",4;
 		delquest 12165+.@trace;
 		mes "‐" +getitemname(.@gain)+ "を発見した！‐";
 		misceffect 18,"";
@@ -12766,10 +12776,10 @@ dic_in01,354,37,3	script	ブラル	449,{
 	mes "^0000ff装備中のエルディカスティスの光に^000000";
 	mes "私が隠された力を解放します。";
 	next;
-	set .@card[1],getequipcardid(.@pos,0);
-	set .@card[2],getequipcardid(.@pos,1);
-	set .@card[3],getequipcardid(.@pos,2);
-	set .@card[4],getequipcardid(.@pos,3);
+	set .@card[1],getequipcardid2(.@pos,0);
+	set .@card[2],getequipcardid2(.@pos,1);
+	set .@card[3],getequipcardid2(.@pos,2);
+	set .@card[4],getequipcardid2(.@pos,3);
 	set .@cnt,(.@card[2] > 0) + (.@card[3] > 0) + (.@card[4] > 0);
 	set .@cost,.@cnt+1;
 	mes "[ブラル]";
@@ -12857,29 +12867,54 @@ dic_in01,354,37,3	script	ブラル	449,{
 		delitem 6304,.@cost;
 		delequip2 .@pos;
 		misceffect 101,"";
+		
+//		switch(.@cnt) {
+//		case 0:
+//			set .@rand,rand(1,45);
+//			setarray .@rate[1],32,30,22,20,12,10,2,0;
+//			break;
+//		case 1:
+//			set .@rand,rand(1,45);
+//			setarray .@rate[1],32,30,17,15,2,0;
+//			break;
+//		case 2:
+//			set .@rand,rand(1,90);
+//			setarray .@rate[1],62,60,32,30,2,0;
+//			break;
+//		}
+//		setarray .@tbl_enchant[2][1],4730,4731,4710,4711,4720,4721;
+//		setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
+//		setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
+//		for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
+//			if (.@rand > .@rate[.@j]) {
+//				set .@card[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+//				break;
+//			}
+//		}
 		switch(.@cnt) {
 		case 0:
 			set .@rand,rand(1,45);
 			setarray .@rate[1],32,30,22,20,12,10,2,0;
+			setarray .@tbl_enchant[1],4766,4767,4764,4765,4762,4763,4760,4761;
 			break;
 		case 1:
 			set .@rand,rand(1,45);
 			setarray .@rate[1],32,30,17,15,2,0;
+			setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 			break;
 		case 2:
 			set .@rand,rand(1,90);
 			setarray .@rate[1],62,60,32,30,2,0;
+			setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 			break;
 		}
-		setarray .@tbl_enchant[2][1],4730,4731,4710,4711,4720,4721;
-		setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
-		setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
 		for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
 			if (.@rand > .@rate[.@j]) {
-				set .@card[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+				set .@card[4-.@cnt],.@tbl_enchant[.@j];
 				break;
 			}
 		}
+		
 		getitem2 2844,1,1,0,0,.@card[1],.@card[2],.@card[3],.@card[4];
 		mes "[ブラル]";
 		mes "……";
@@ -13229,7 +13264,7 @@ dicastes01,195,54,4	script	ジャボン	496,{
 			next;
 			mes "【野生のブーツの説明書】";
 			mes "‐系列　　　:　靴";
-			mes "　防御　　　:　12";
+			mes "　防御　　　:　1";
 			mes "　スロット　:　なし";
 			mes "　重量　　　:　0";
 			mes "　要求レベル:　75";
@@ -13241,7 +13276,7 @@ dicastes01,195,54,4	script	ジャボン	496,{
 			next;
 			mes "【野生の尻尾の説明書】";
 			mes "‐系列　　　:　肩にかける物";
-			mes "　防御　　　:　16";
+			mes "　防御　　　:　1";
 			mes "　スロット　:　なし";
 			mes "　重量　　　:　0";
 			mes "　要求レベル:　75";
@@ -13499,12 +13534,13 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		mes "はい。";
 		mes "ちゃんと回収したにゃん。";
 		delitem 2463,1;
-		set CAT_1ENCHANT,0;
+//		set CAT_1ENCHANT,0;
 		close;
 	case 3:
 		break;
 	}
-	if(countitem(2463) < 1) {
+//	if(countitem(2463) < 1) {
+	if(getequipid2(6) != 2463) {
 		mes "[ハルラビ]";
 		mes "…";
 		next;
@@ -13539,7 +13575,14 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 	mes "[ハルラビ]";
 	mes "ふむふむ";
 	mes "これは……";
-	if(CAT_1ENCHANT == 0) {
+	set .@card[1],getequipcardid2(6,0);
+	set .@card[2],getequipcardid2(6,1);
+	set .@card[3],getequipcardid2(6,2);
+	set .@card[4],getequipcardid2(6,3);
+	set .@cnt,(.@card[2] > 0) + (.@card[3] > 0) + (.@card[4] > 0);
+	set .@cost,.@cnt+1;
+//	if(CAT_1ENCHANT == 0) {
+	if(.@cnt == 0) {
 		mes "今回が初めての";
 		mes "エンチャントになるようにゃ。";
 		next;
@@ -13547,10 +13590,11 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生のブーツは壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,0;
-		set .@cost,1;
+//		set .@cnt,0;
+//		set .@cost,1;
 	}
-	else if(CAT_1ENCHANT < 9) {
+//	else if(CAT_1ENCHANT < 9) {
+	else if(.@cnt == 1) {
 		mes "1段階目の";
 		mes "エンチャントが";
 		mes "施されているようにゃ。";
@@ -13561,10 +13605,11 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生のブーツは壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,1;
-		set .@cost,2;
+//		set .@cnt,1;
+//		set .@cost,2;
 	}
-	else if(CAT_1ENCHANT < 69) {
+//	else if(CAT_1ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		mes "2段階目の";
 		mes "エンチャントが";
 		mes "施されているにゃ。";
@@ -13575,10 +13620,11 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生のブーツは壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,2;
-		set .@cost,3;
+//		set .@cnt,2;
+//		set .@cost,3;
 	}
-	else if(CAT_1ENCHANT > 68) {
+//	else if(CAT_1ENCHANT > 68) {
+	else {
 		mes "猫珠エンチャントが";
 		mes "限界まで施されているようにゃ。";
 		next;
@@ -13636,19 +13682,25 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		close;
 	}
 	delitem 6304,.@cost;
-	delitem 2463,1;
+//	delitem 2463,1;
+	delequip2 6;
 	misceffect 101,"";
-	if(CAT_1ENCHANT == 0) {
-		set .@var,1;
+//	if(CAT_1ENCHANT == 0) {
+	if(.@cnt == 0) {
+//		set .@var,1;
 		set .@rand,rand(1,40);
 		setarray .@rate[1],34,30,24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4766,4767,4764,4765,4762,4763,4760,4761;
 	}
-	else if(CAT_1ENCHANT < 9) {
+//	else if(CAT_1ENCHANT < 9) {
+	else if(.@cnt == 1) {
 		set .@var,10;
 		set .@rand,rand(1,30);
 		setarray .@rate[1],24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 	}
-	else if(CAT_1ENCHANT < 69) {
+//	else if(CAT_1ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		set .@rate, 140 - (CATHAND_POINT / 100);
 		if (.@rate < 95) set .@rate, 95;
 		set .@rand,rand(1,.@rate);
@@ -13658,33 +13710,43 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 			mes "にゃんということでしょう。";
 			mes "大失敗にゃん。";
 			mes "またよろしくにゃん。";
-			set CAT_1ENCHANT,0;
+//			set CAT_1ENCHANT,0;
 			close;
 		}
-		set .@var,100;
-		set .@rand,rand(1,30);
-		setarray .@rate[1],24,20,14,10,4,0;
+//		set .@var,100;
+//		set .@rand,rand(1,30);
+//		setarray .@rate[1],24,20,14,10,4,0;
+		set .@rand,rand(1,18);
+		setarray .@rate[1],15,13,12,9,7,6,3,1,0;
+		setarray .@tbl_enchant[1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
 	}
-	setarray .@tbl_enchant[2][1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
-	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
-	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
-	set .@str$,CAT_1ENCHANT;
-	set .@len,getstrlen(.@str$);
-	// 変数からエンチャント済み効果を保存
-	if(.@cnt >= 1)
-		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
-	if(.@cnt >= 2)
-		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
-	// 新しいエンチャントを上書き
+//	setarray .@tbl_enchant[2][1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
+//	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
+//	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
+//	set .@str$,CAT_1ENCHANT;
+//	set .@len,getstrlen(.@str$);
+//	// 変数からエンチャント済み効果を保存
+//	if(.@cnt >= 1)
+//		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
+//	if(.@cnt >= 2)
+//		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
+//	// 新しいエンチャントを上書き
+//	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
+//		if (.@rand > .@rate[.@j]) {
+//			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+//			break;
+//		}
+//	}
+//	// エンチャント結果を変数として保存
+//	set CAT_1ENCHANT,CAT_1ENCHANT + .@j * .@var;
+//	getitem2 2463,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
 	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
 		if (.@rand > .@rate[.@j]) {
-			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+			set .@card[4-.@cnt],.@tbl_enchant[.@j];
 			break;
 		}
 	}
-	// エンチャント結果を変数として保存
-	set CAT_1ENCHANT,CAT_1ENCHANT + .@j * .@var;
-	getitem2 2463,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
+	getitem2 2463,1,1,0,0,.@card[1],.@card[2],.@card[3],.@card[4];
 	mes "[ハルラビ]";
 	mes "にゃんということでしょう。";
 	mes "ふふ、成功しちゃいましたにゃん。";
@@ -13764,12 +13826,13 @@ dicastes01,190,57,3	script	カルカ	495,{
 		mes "はいにゃ。";
 		mes "ちゃんと回収しましたにゃん。";
 		delitem 2564,1;
-		set CAT_2ENCHANT,0;
+//		set CAT_2ENCHANT,0;
 		close;
 	case 3:
 		break;
 	}
-	if(countitem(2564) < 1) {
+//	if(countitem(2564) < 1) {
+	if(getequipid2(5) != 2564) {
 		mes "[カルカ]";
 		mes "…";
 		next;
@@ -13804,7 +13867,14 @@ dicastes01,190,57,3	script	カルカ	495,{
 	mes "[カルカ]";
 	mes "む～。";
 	mes "これは……";
-	if(CAT_2ENCHANT == 0) {
+	set .@card[1],getequipcardid2(5,0);
+	set .@card[2],getequipcardid2(5,1);
+	set .@card[3],getequipcardid2(5,2);
+	set .@card[4],getequipcardid2(5,3);
+	set .@cnt,(.@card[2] > 0) + (.@card[3] > 0) + (.@card[4] > 0);
+	set .@cost,.@cnt+1;
+//	if(CAT_2ENCHANT == 0) {
+	if(.@cnt == 0) {
 		mes "今回が初めての";
 		mes "エンチャントだにゃん。";
 		next;
@@ -13812,10 +13882,11 @@ dicastes01,190,57,3	script	カルカ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生の尻尾は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,0;
-		set .@cost,1;
+//		set .@cnt,0;
+//		set .@cost,1;
 	}
-	else if(CAT_2ENCHANT < 9) {
+//	else if(CAT_2ENCHANT < 9) {
+	else if(.@cnt == 1) {
 		mes "1段階目の";
 		mes "エンチャントが";
 		mes "施されているようだにゃん。";
@@ -13826,10 +13897,11 @@ dicastes01,190,57,3	script	カルカ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生の尻尾は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,1;
-		set .@cost,2;
+//		set .@cnt,1;
+//		set .@cost,2;
 	}
-	else if(CAT_2ENCHANT < 69) {
+//	else if(CAT_2ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		mes "2段階目の";
 		mes "エンチャントが";
 		mes "施されているようだにゃん。";
@@ -13840,10 +13912,11 @@ dicastes01,190,57,3	script	カルカ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "野生の尻尾は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,2;
-		set .@cost,3;
+//		set .@cnt,2;
+//		set .@cost,3;
 	}
-	else if(CAT_2ENCHANT > 68) {
+//	else if(CAT_2ENCHANT > 68) {
+	else {
 		mes "猫珠エンチャントが";
 		mes "限界まで施されているようにゃ。";
 		next;
@@ -13901,19 +13974,25 @@ dicastes01,190,57,3	script	カルカ	495,{
 		close;
 	}
 	delitem 6304,.@cost;
-	delitem 2564,1;
+//	delitem 2564,1;
+	delequip2 5;
 	misceffect 101,"";
-	if(CAT_2ENCHANT == 0) {
-		set .@var,1;
+//	if(CAT_2ENCHANT == 0) {
+	if(.@cnt == 0) {
+//		set .@var,1;
 		set .@rand,rand(1,40);
 		setarray .@rate[1],34,30,24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4766,4767,4764,4765,4762,4763,4760,4761;
 	}
-	else if(CAT_2ENCHANT < 9) {
-		set .@var,10;
+//	else if(CAT_2ENCHANT < 9) {
+	else if(.@cnt == 1) {
+//		set .@var,10;
 		set .@rand,rand(1,30);
 		setarray .@rate[1],24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 	}
-	else if(CAT_2ENCHANT < 69) {
+//	else if(CAT_2ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		set .@rate, 140 - (CATHAND_POINT / 100);
 		if (.@rate < 95) set .@rate, 95;
 		set .@rand,rand(1,.@rate);
@@ -13926,30 +14005,40 @@ dicastes01,190,57,3	script	カルカ	495,{
 			set CAT_2ENCHANT,0;
 			close;
 		}
-		set .@var,100;
-		set .@rand,rand(1,30);
-		setarray .@rate[1],24,20,14,10,4,0;
+//		set .@var,100;
+//		set .@rand,rand(1,30);
+//		setarray .@rate[1],24,20,14,10,4,0;
+		set .@rand,rand(1,18);
+		setarray .@rate[1],15,13,12,9,7,6,3,1,0;
+		setarray .@tbl_enchant[1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
 	}
-	setarray .@tbl_enchant[2][1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
-	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
-	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
-	set .@str$,CAT_2ENCHANT;
-	set .@len,getstrlen(.@str$);
-	// 変数からエンチャント済み効果を保存
-	if(.@cnt >= 1)
-		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
-	if(.@cnt >= 2)
-		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
-	// 新しいエンチャントを上書き
+//	setarray .@tbl_enchant[2][1],4730,4731,4732,4710,4711,4712,4720,4721,4722;
+//	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
+//	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
+//	set .@str$,CAT_2ENCHANT;
+//	set .@len,getstrlen(.@str$);
+//	// 変数からエンチャント済み効果を保存
+//	if(.@cnt >= 1)
+//		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
+//	if(.@cnt >= 2)
+//		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
+//	// 新しいエンチャントを上書き
+//	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
+//		if (.@rand > .@rate[.@j]) {
+//			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+//			break;
+//		}
+//	}
+//	// エンチャント結果を変数として保存
+//	set CAT_2ENCHANT,CAT_2ENCHANT + .@j * .@var;
+//	getitem2 2564,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
 	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
 		if (.@rand > .@rate[.@j]) {
-			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+			set .@card[4-.@cnt],.@tbl_enchant[.@j];
 			break;
 		}
 	}
-	// エンチャント結果を変数として保存
-	set CAT_2ENCHANT,CAT_2ENCHANT + .@j * .@var;
-	getitem2 2564,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
+	getitem2 2564,1,1,0,0,.@card[1],.@card[2],.@card[3],.@card[4];
 	mes "[カルカ]";
 	mes "にゃんとまぁ大変……";
 	mes "無事に成功しちゃいましたにゃん。";
@@ -14030,12 +14119,15 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		mes "はいにゃん。";
 		mes "ちゃんと回収したにゃん。";
 		delitem 2843,1;
-		set CAT_3ENCHANT,0;
+//		set CAT_3ENCHANT,0;
 		close;
 	case 3:
 		break;
 	}
-	if(countitem(2843) < 1) {
+//	if(countitem(2843) < 1) {
+	if(getequipid2(7) == 2843) set .@pos,7;
+	else if (getequipid2(8) == 2843) set .@pos,8;
+	else {
 		mes "[マーチョ]";
 		mes "…";
 		next;
@@ -14070,7 +14162,14 @@ dicastes01,196,57,3	script	マーチョ	495,{
 	mes "[マーチョ]";
 	mes "えっと～";
 	mes "これは……";
-	if(CAT_3ENCHANT == 0) {
+	set .@card[1],getequipcardid2(.@pos,0);
+	set .@card[2],getequipcardid2(.@pos,1);
+	set .@card[3],getequipcardid2(.@pos,2);
+	set .@card[4],getequipcardid2(.@pos,3);
+	set .@cnt,(.@card[2] > 0) + (.@card[3] > 0) + (.@card[4] > 0);
+	set .@cost,.@cnt+1;
+//	if(CAT_3ENCHANT == 0) {
+	if(.@cnt == 0) {
 		mes "今回が初めての";
 		mes "エンチャントになるようにゃ。";
 		next;
@@ -14078,10 +14177,11 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "猛獣の鈴は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,0;
-		set .@cost,1;
+//		set .@cnt,0;
+//		set .@cost,1;
 	}
-	else if(CAT_3ENCHANT < 9) {
+//	else if(CAT_3ENCHANT < 9) {
+	else if(.@cnt == 1) {
 		mes "1段階目の";
 		mes "エンチャントが";
 		mes "施されているようにゃ。";
@@ -14092,10 +14192,11 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		mes "エンチャントに失敗した場合、";
 		mes "猛獣の鈴は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,1;
-		set .@cost,2;
+//		set .@cnt,1;
+//		set .@cost,2;
 	}
-	else if(CAT_3ENCHANT < 69) {
+//	else if(CAT_3ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		mes "2段階目の";
 		mes "エンチャントが";
 		mes "施されているにゃ。";
@@ -14104,18 +14205,21 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		mes "3段階目のエンチャントに";
 		mes "チャレンジするかにゃ？";
 		mes "エンチャントに失敗した場合、";
-		mes "野生のブーツは壊れて消滅するにゃ。";
+//		mes "野生のブーツは壊れて消滅するにゃ。";
+		mes "猛獣の鈴は壊れて消滅するにゃ。";
 		mes "それでも、チャレンジするかにゃ？";
-		set .@cnt,2;
-		set .@cost,3;
+//		set .@cnt,2;
+//		set .@cost,3;
 	}
-	else if(CAT_3ENCHANT > 68) {
+//	else if(CAT_3ENCHANT > 68) {
+	else {
 		mes "猫珠エンチャントが";
 		mes "限界まで施されているようにゃ。";
 		next;
 		mes "[マーチョ]";
 		mes "これ以上エンチャントを行うには、";
-		mes "別のブーツを用意するしかないにゃ。";
+//		mes "別のブーツを用意するしかないにゃ。";
+		mes "別の鈴を用意するしかないにゃ。";
 		mes "本当に残念にゃ……。";
 		close;
 	}
@@ -14167,19 +14271,25 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		close;
 	}
 	delitem 6304,.@cost;
-	delitem 2843,1;
+//	delitem 2843,1;
+	delequip2 .@pos;
 	misceffect 101,"";
-	if(CAT_3ENCHANT == 0) {
-		set .@var,1;
+//	if(CAT_3ENCHANT == 0) {
+	if(.@cnt == 0) {
+//		set .@var,1;
 		set .@rand,rand(1,40);
 		setarray .@rate[1],34,30,24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4766,4767,4764,4765,4762,4763,4760,4761;
 	}
-	else if(CAT_3ENCHANT < 9) {
-		set .@var,10;
+//	else if(CAT_3ENCHANT < 9) {
+	else if(.@cnt == 1) {
+//		set .@var,10;
 		set .@rand,rand(1,30);
 		setarray .@rate[1],24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 	}
-	else if(CAT_3ENCHANT < 69) {
+//	else if(CAT_3ENCHANT < 69) {
+	else if(.@cnt == 2) {
 		set .@rate, 140 - (CATHAND_POINT / 100);
 		if (.@rate < 95) set .@rate, 95;
 		set .@rand,rand(1,.@rate);
@@ -14192,30 +14302,38 @@ dicastes01,196,57,3	script	マーチョ	495,{
 			set CAT_3ENCHANT,0;
 			close;
 		}
-		set .@var,100;
+//		set .@var,100;
 		set .@rand,rand(1,30);
 		setarray .@rate[1],24,20,14,10,4,0;
+		setarray .@tbl_enchant[1],4730,4731,4710,4711,4720,4721;
 	}
-	setarray .@tbl_enchant[2][1],4730,4731,4710,4711,4720,4721;
-	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
-	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
-	set .@str$,CAT_3ENCHANT;
-	set .@len,getstrlen(.@str$);
-	// 変数からエンチャント済み効果を保存
-	if(.@cnt >= 1)
-		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
-	if(.@cnt >= 2)
-		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
-	// 新しいエンチャントを上書き
+//	setarray .@tbl_enchant[2][1],4730,4731,4710,4711,4720,4721;
+//	setarray .@tbl_enchant[3][1],4730,4731,4710,4711,4720,4721;
+//	setarray .@tbl_enchant[4][1],4766,4767,4764,4765,4762,4763,4760,4761;
+//	set .@str$,CAT_3ENCHANT;
+//	set .@len,getstrlen(.@str$);
+//	// 変数からエンチャント済み効果を保存
+//	if(.@cnt >= 1)
+//		set .@new[4],.@tbl_enchant[4][substr2(.@str$,.@len-1,1)];
+//	if(.@cnt >= 2)
+//		set .@new[3],.@tbl_enchant[3][substr2(.@str$,.@len-2,1)];
+//	// 新しいエンチャントを上書き
+//	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
+//		if (.@rand > .@rate[.@j]) {
+//			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+//			break;
+//		}
+//	}
+//	// エンチャント結果を変数として保存
+//	set CAT_3ENCHANT,CAT_3ENCHANT + .@j * .@var;
+//	getitem2 2843,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
 	for(set .@j,1; .@j <= getarraysize(.@rate); set .@j,.@j+1) {
 		if (.@rand > .@rate[.@j]) {
-			set .@new[4-.@cnt],.@tbl_enchant[4-.@cnt][.@j];
+			set .@card[4-.@cnt],.@tbl_enchant[.@j];
 			break;
 		}
 	}
-	// エンチャント結果を変数として保存
-	set CAT_3ENCHANT,CAT_3ENCHANT + .@j * .@var;
-	getitem2 2843,1,1,0,0,0,.@new[2],.@new[3],.@new[4];
+	getitem2 2843,1,1,0,0,.@card[1],.@card[2],.@card[3],.@card[4];
 	mes "[マーチョ]";
 	mes "にゃんにゃかにゃ～ん!!";
 	mes "驚き、成功しちゃいましたにゃん。";

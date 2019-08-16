@@ -729,6 +729,7 @@ enum e_random_item_group {
 
 	// [GonBee]
 	IG_COSTUMEBOX,
+	IG_COINHOLDER,
 };
 
 /// Enum for bound/sell restricted selling

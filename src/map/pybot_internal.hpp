@@ -302,6 +302,31 @@
 	klv  /* レベル。 */\
 ) t_tick(skill_get_cast(kid, klv) + skill_get_delay(kid, klv))
 
+// 国マップ種類を作る。
+#define NATION_MAP_TYPE(\
+	nat, /* 国の種類。 */\
+	map  /* マップの種類。 */\
+) (((nat) << 8) | (map))
+
+// スキル無視モンスターを作る。
+#define SKILL_IGNORE_MOB(\
+	kid, /* スキルID。 */\
+	mid  /* モンスターID。 */\
+) (((kid) << 16) | (mid))
+
+// スキル無視モンスターからスキルIDを取得する。
+#define SKILL_FROM_KIM(\
+	sim /* スキル無視モンスター。 */\
+) ((sim) >> 16)
+
+// スキル無視モンスターからモンスターIDを取得する。
+#define MOB_FROM_KIM(\
+	sim /* スキル無視モンスター。 */\
+) ((sim) & 0xffff)
+
+// 不明を示すシンボル。
+#define UNKNOWN_SYMBOL std::string("？")
+
 // コンテナの全範囲のリスト。
 #define ALL_RANGE(\
 	con /* コンテナ。 */\
@@ -453,9 +478,12 @@ enum item_ids {
 	ITEMID_ARROW_OF_SHADOW         =  1767, // 影矢。
 	ITEMID_IRON_ARROW              =  1770, // 鉄の矢。
 	ITEMID_HOLY_ARROW              =  1772, // 聖なる矢。
+	ITEMID_ELF_ARROW               =  1773, // エルフの矢。
+	ITEMID_HUNTING_ARROW           =  1774, // 狩人の矢。
 	ITEMID_PORING_CARD             =  4001, // ポリンカード。
-	ITEMID_BRAGI_POTION            = 10903, // ブラギポーション
-	ITEMID_DIGEST_POTION           = 10904, // 消化促進ポーション
+	ITEMID_BRAGI_POTION            = 10903, // ブラギポーション。
+	ITEMID_DIGEST_POTION           = 10904, // 消化促進ポーション。
+	ITEMID_COATING_POTION          = 10905, // コーティングポーション。
 	ITEMID_ASAI_FRUIT              = 11516, // アサイーの実。
 	ITEMID_QUIVER                  = 12004, // 矢筒。
 	ITEMID_IRON_ARROW_QUIVER       = 12005, // 鉄の矢筒。
@@ -495,6 +523,8 @@ enum item_ids {
 	ITEMID_SP_INCREASE_POTIONM     = 12426, // SP増加ポーション(中)。
 	ITEMID_SP_INCREASE_POTIONL     = 12427, // SP増加ポーション(大)。
 	ITEMID_ENRICH_CELERMINE_JUICE  = 12437, // 濃縮サラマインジュース。
+	ITEMID_ELF_ARROW_QUIVER        = 12575, // エルフの矢筒。
+	ITEMID_HUNTING_ARROW_QUIVER    = 12576, // 狩人の矢筒。
 	ITEMID_BULLET                  = 13200, // バレット。
 	ITEMID_SILVER_BULLET           = 13201, // シルバーバレット。
 	ITEMID_BLOODY_SHELL            = 13202, // ブラッドバレット。
@@ -862,6 +892,7 @@ struct ai_t {
 	AI_ITEM_USE_FUNC(AGI_DISH10);
 	AI_ITEM_USE_FUNC(BRAGI_POTION);
 	AI_ITEM_USE_FUNC(CAVIAR_PANCAKE);
+	AI_ITEM_USE_FUNC(COATING_POTION);
 	AI_ITEM_USE_FUNC(DEX_DISH10);
 	AI_ITEM_USE_FUNC(DIGEST_POTION);
 	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
@@ -1320,9 +1351,11 @@ struct leader_if {
 	virtual int& last_summoned_id();
 	virtual std::vector<block_if*>& members();
 	virtual t_tick next_heaby_tick();
+	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
 	virtual ptr<regnum_t<bool>>& rush();
 	virtual ptr<registry_t<int>>& sell_items();
+	virtual void show_next();
 	virtual bool& sp_suppliable();
 	virtual bool& stay();
 	virtual ptr<registry_t<int>>& storage_put_items();
@@ -1367,6 +1400,7 @@ struct member_if {
 	virtual map_session_data*& sd();
 	virtual void sit();
 	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
+	virtual ptr<registry_t<int>>& skill_ignore_mobs();
 	virtual ptr<regnum_t<int>>& skill_low_rate();
 	virtual ptr<regnum_t<int>>& skill_monsters();
 	virtual ptr<regnum_t<e_element>>& skill_seven_wind();
@@ -1664,6 +1698,7 @@ struct leader_impl : virtual block_if {
 	t_tick last_heaby_tick_;                          // 最後に重たいコマンドを実行したチック。
 	int last_summoned_id_;                            // 最後に枝召喚したID。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
+	std::stringstream output_buffer_;                 // 出力バッファ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
 	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
 	ptr<registry_t<int>> sell_items_;                 // 売却アイテムのレジストリ。
@@ -1685,9 +1720,11 @@ struct leader_impl : virtual block_if {
 	virtual int& last_summoned_id() override;
 	virtual std::vector<block_if*>& members() override;
 	virtual t_tick next_heaby_tick() override;
+	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
 	virtual ptr<regnum_t<bool>>& rush() override;
 	virtual ptr<registry_t<int>>& sell_items() override;
+	virtual void show_next() override;
 	virtual bool& sp_suppliable() override;
 	virtual bool& stay() override;
 	virtual ptr<registry_t<int>>& storage_put_items() override;
@@ -1701,7 +1738,7 @@ struct member_impl : virtual block_if {
 	int account_id_;                              // アカウントID。
 	ptr<registry_t<int>> cart_auto_get_items_;    // カート自動補充アイテムのレジストリ。
 	int char_id_;                                 // キャラクターID。
-	ptr<registry_t<int,distance_policy>>
+	ptr<registry_t<int,distance_policy>>		  
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
@@ -1712,7 +1749,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
 	int member_index_;                            // メンバーのインデックス。
-	ptr<registry_t<int,normal_attack_policy>>
+	ptr<registry_t<int,normal_attack_policy>>	  
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
 	ptr<block_if> pet_;                           // ペット。
 	ptr<registry_t<int,play_skill>> play_skills_; // 演奏スキルのレジストリ。
@@ -1722,6 +1759,7 @@ struct member_impl : virtual block_if {
 	std::unordered_set<int> request_items_;       // 要求アイテムのセット。
 	map_session_data* sd_;                        // セッションデータ。
 	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
+	ptr<registry_t<int>> skill_ignore_mobs_;      // スキル無視モンスターのレジストリ。
 	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
 	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
 	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
@@ -1784,6 +1822,7 @@ struct member_impl : virtual block_if {
 	virtual void sit() override;
 	virtual s_skill* skill(e_skill kid) override;
 	virtual ptr<regnum_t<e_skill>>& skill_auto_spell() override;
+	virtual ptr<registry_t<int>>& skill_ignore_mobs() override;
 	virtual ptr<regnum_t<int>>& skill_low_rate() override;
 	virtual ptr<regnum_t<int>>& skill_monsters() override;
 	virtual int skill_point() override;
@@ -1928,6 +1967,11 @@ template <
 		T*            // データ。
 	)>;
 
+	// クリア。
+	using clear_func = std::function<void(
+		sql_session* // セッション。
+	)>;
+
 	// 獲得。
 	using yield_func = std::function<
 		bool( // 処理続行か。
@@ -1942,11 +1986,12 @@ template <
 		ptr<T> data;            // データ。
 	};
 
+	clear_func cle_fun;                              // クリア。
+	bool loading;                                    // ロード中か。
 	std::array<save_func,RD_MAX-RD_INSERT> sav_funs; // 挿入、更新、削除。
 	std::unordered_map<K,ptr<wrapper>> wras;         // ラッパーのマップ。
-	bool loading;                                    // ロード中か。
 
-	registry_t(load_func loa, save_func ins = nullptr, save_func upd = nullptr, save_func del = nullptr);
+	registry_t(load_func loa, save_func ins, save_func upd, save_func del, clear_func cle);
 	~registry_t();
 	int clear();
 	template <class O> void copy(O out);
@@ -1973,6 +2018,11 @@ template <
 		K             // キー。
 	)>;
 
+	// クリア。
+	using clear_func = std::function<void(
+		sql_session* // セッション。
+	)>;
+
 	// 獲得。
 	using yield_func = std::function<
 		bool( // 処理続行か。
@@ -1980,11 +2030,12 @@ template <
 		)
 	>;
 
-	std::array<save_func,RD_MAX-RD_INSERT> sav_funs;  // 挿入、更新、削除。
+	clear_func cle_fun;                               // クリア。
 	std::unordered_map<K,ptr<registry_dirties>> dirs; // 変更状態のマップ。
 	bool loading;                                     // ロード中か。
+	std::array<save_func,RD_MAX-RD_INSERT> sav_funs;  // 挿入、更新、削除。
 
-	registry_t(load_func loa, save_func ins = nullptr, save_func del = nullptr);
+	registry_t(load_func loa, save_func ins, save_func del, clear_func cle);
 	~registry_t();
 	int clear();
 	template <class O> void copy(O out);
@@ -2357,6 +2408,7 @@ SUBCMD_FUNC(Bot, Memo);
 SUBCMD_FUNC(Bot, MonsterGreat);
 SUBCMD_FUNC(Bot, MonsterGreatClear);
 SUBCMD_FUNC(Bot, MonsterGreatImport);
+SUBCMD_FUNC(Bot, Next);
 SUBCMD_FUNC(Bot, PetEquip);
 SUBCMD_FUNC(Bot, PetStatus);
 SUBCMD_FUNC(Bot, PolicyDistance);
@@ -2370,6 +2422,9 @@ SUBCMD_FUNC(Bot, sKillAutoSpell);
 SUBCMD_FUNC(Bot, sKillFirst);
 SUBCMD_FUNC(Bot, sKillFirstClear);
 SUBCMD_FUNC(Bot, sKillFirstTransport);
+SUBCMD_FUNC(Bot, sKillIgnoreMonster);
+SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear);
+SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport);
 SUBCMD_FUNC(Bot, sKillLimit);
 SUBCMD_FUNC(Bot, sKillLowRate);
 SUBCMD_FUNC(Bot, sKillMonsters);
@@ -2412,11 +2467,11 @@ map_session_data* bot_login(block_if* lea, int bot_aid, int bot_cid, int bot_sex
 t_tick bot_restart_tick(int cid);
 block_if* check_trade_with_bot(block_if* lea, command_argument_list& args);
 bool npc_exists(block_list* cen, int rad, npc_subtype typ, const std::string& dis_nam = "");
-std::string print_storage(block_if* mem, storage_type sto_typ);
-void show_bot_subcommands(int fd);
+void print_storage(block_if* mem, storage_type sto_typ);
+void show_bot_subcommands(block_if* lea);
 void show_client(int fd, const std::string& mes);
 void skill_user_limit_skill(block_if* lea, command_argument_list& args, block_if* sk_use);
-void skill_user_show_skills(int fd, block_if* sk_use);
+void skill_user_show_skills(block_if* sk_use);
 void skill_user_skill_up(block_if* lea, command_argument_list& args, block_if* sk_use);
 void skill_user_use_skill(block_if* lea, command_argument_list& args, block_if* sk_use);
 std::string shift_arguments(command_argument_list& args, const std::string& emp_err_mes = "");
@@ -2427,6 +2482,24 @@ int shift_arguments_then_parse_int(command_argument_list& args, const std::strin
 // -----------------------------------------------------------------------------
 // レジストリ用関数の宣言
 
+registry_t<int>::clear_func clear_cart_auto_get_item_func(int cid);
+registry_t<int,distance_policy>::clear_func clear_distance_policy_func(int cid);
+registry_t<int,equipset_t>::clear_func clear_equipset_func(int cid);
+registry_t<int,e_skill>::clear_func clear_first_skill_func(int cid);
+registry_t<int>::clear_func clear_great_mob_func(int cid);
+registry_t<int>::clear_func clear_ignore_item_func(int cid);
+registry_t<e_skill,int>::clear_func clear_limit_skill_func(int cid);
+registry_t<int,normal_attack_policy>::clear_func clear_normal_attack_policy_func(int cid);
+registry_t<int,play_skill>::clear_func clear_play_skill_func(int cid);
+registry_t<int,int>::clear_func clear_recover_hp_item_func(int cid);
+registry_t<int,int>::clear_func clear_recover_sp_item_func(int cid);
+registry_t<e_skill>::clear_func clear_reject_skill_func(int cid);
+registry_t<int>::clear_func clear_skill_ignore_mob_func(int cid);
+registry_t<int>::clear_func clear_sell_item_func(int cid);
+registry_t<e_skill,int>::clear_func clear_skill_tail_func(int cid);
+registry_t<int,int>::clear_func clear_storage_get_item_func(int cid);
+registry_t<int>::clear_func clear_storage_put_item_func(int cid);
+registry_t<int,team_t>::clear_func clear_team_func(int cid);
 registry_t<int>::save_func delete_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func delete_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
@@ -2439,6 +2512,7 @@ registry_t<int,play_skill>::save_func delete_play_skill_func(int cid);
 registry_t<int,int>::save_func delete_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func delete_recover_sp_item_func(int cid);
 registry_t<e_skill>::save_func delete_reject_skill_func(int cid);
+registry_t<int>::save_func delete_skill_ignore_mob_func(int cid);
 registry_t<int>::save_func delete_sell_item_func(int cid);
 registry_t<e_skill,int>::save_func delete_skill_tail_func(int cid);
 registry_t<int,int>::save_func delete_storage_get_item_func(int cid);
@@ -2457,6 +2531,7 @@ registry_t<int,int>::save_func insert_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func insert_recover_sp_item_func(int cid);
 registry_t<e_skill>::save_func insert_reject_skill_func(int cid);
 registry_t<int>::save_func insert_sell_item_func(int cid);
+registry_t<int>::save_func insert_skill_ignore_mob_func(int cid);
 registry_t<e_skill,int>::save_func insert_skill_tail_func(int cid);
 registry_t<int,int>::save_func insert_storage_get_item_func(int cid);
 registry_t<int>::save_func insert_storage_put_item_func(int cid);
@@ -2474,6 +2549,7 @@ registry_t<int,int>::load_func load_recover_hp_item_func(int cid);
 registry_t<int,int>::load_func load_recover_sp_item_func(int cid);
 registry_t<e_skill>::load_func load_reject_skill_func(int cid);
 registry_t<int>::load_func load_sell_item_func(int cid);
+registry_t<int>::load_func load_skill_ignore_mob_func(int cid);
 registry_t<e_skill,int>::load_func load_skill_tail_func(int cid);
 registry_t<int,int>::load_func load_storage_get_item_func(int cid);
 registry_t<int>::load_func load_storage_put_item_func(int cid);
@@ -2588,8 +2664,6 @@ bool wall_exists(block_list* cen, int rad);
 // -----------------------------------------------------------------------------
 // 定数の宣言
 
-extern const std::string UNKNOWN_SYMBOL;
-
 extern const std::vector<ai_t::item_use_proc> AI_ITEM_USE_PROCS;
 extern const std::unordered_map<e_job,ptr<ai_t::skill_use_proc_vector>> AI_MEMBER_SKILL_USE_PROCS;
 extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS;
@@ -2636,6 +2710,7 @@ extern const std::unordered_map<meta_mobs,std::string> META_MONSTER_NAMES;
 extern const std::array<std::string,CLASS_MAX> MOB_CLASS_NAME_TABLE;
 extern const skill_id_set MOB_SHORT_SKILLS;
 extern const std::array<std::string,NAPV_MAX> NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE;
+extern const int PAGE_LINES;
 extern const std::string PET_ACCESSORY_TYPE_NAME;
 extern const std::array<std::string,10> RACE_NAME_TABLE;
 extern const int REPAIR_COST;

@@ -643,7 +643,7 @@ void update_fever() {
 			sizs.push_back(fever_size{nation_types(nat_typ), map_types(map_typ), siz});
 		std::vector<int> fev_ids;
 		for (const fever_size& siz : sizs) {
-			int typ = siz.nation_type * 100 + siz.map_type;
+			int typ = NATION_MAP_TYPE(siz.nation_type, siz.map_type);
 			auto& maps = type_maps[typ];
 			for (int i = 0; i < siz.size; ++i) {
 				if (i >= maps.size()) break;

@@ -13974,13 +13974,13 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			mes "エンチャントできます。";
 			next;
 		}
-		set .@card1,getequipcardid(.@menu,0);
+		set .@card1,getequipcardid2(.@menu,0);
 		set .@card[0],.@card1;
-		set .@card2,getequipcardid(.@menu,1);
+		set .@card2,getequipcardid2(.@menu,1);
 		set .@card[1],.@card2;
-		set .@card3,getequipcardid(.@menu,2);
+		set .@card3,getequipcardid2(.@menu,2);
 		set .@card[2],.@card3;
-		set .@card4,getequipcardid(.@menu,3);
+		set .@card4,getequipcardid2(.@menu,3);
 		set .@card[3],.@card4;
 		if(.@card2 != 0) {
 			mes "[アーティファクトの研究者]";
@@ -14169,10 +14169,10 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			close;
 		}
 		set .@refine,getequiprefinerycnt2(.@menu);
-		set .@card1,getequipcardid(.@menu,0);
-		set .@card2,getequipcardid(.@menu,1);
-		set .@card3,getequipcardid(.@menu,2);
-		set .@card4,getequipcardid(.@menu,3);
+		set .@card1,getequipcardid2(.@menu,0);
+		set .@card2,getequipcardid2(.@menu,1);
+		set .@card3,getequipcardid2(.@menu,2);
+		set .@card4,getequipcardid2(.@menu,3);
 		misceffect 101,"";
 		mes "[アーティファクトの研究者]";
 		mes "それではエンチャントの効果を";

@@ -16,9 +16,14 @@ command_bot(
 	const char* mes       // メッセージ。
 ) {
 	try {
+		auto lea = find_map_data(all_leaders, sd->status.char_id);
+		if (!lea) {
+			lea = construct<leader_t>(sd);
+			all_leaders[lea->char_id()] = lea;
+		}
 		command_argument_list args;
 		command_parse_arguments(mes, pybot::back_inserter(args));
-		if (args.empty()) show_bot_subcommands(fd);
+		if (args.empty()) show_bot_subcommands(lea.get());
 		else {
 			std::string sc_nam = shift_arguments(args);
 			std::string sc_nam_lc = lowercase(sc_nam);
@@ -32,11 +37,6 @@ command_bot(
 				throw command_error{print(
 					"「", sc_nam, "」というサブコマンドはありません。"
 				)};
-			auto lea = find_map_data(all_leaders, sd->status.char_id);
-			if (!lea) {
-				lea = construct<leader_t>(sd);
-				all_leaders[lea->char_id()] = lea;
-			}
 			now = gettick();
 			sc_pro->func(lea.get(), args);
 		}
@@ -91,7 +91,7 @@ SUBCMD_FUNC(Bot, Cart) {
 		throw command_error{print(
 			"「", mem->name(), "」はカートを所有していません。"
 		)};
-	show_client(lea->fd(), print_storage(mem, TABLE_CART));
+	print_storage(mem, TABLE_CART);
 }
 
 // メンバーのカート自動補充アイテムを一覧表示、または登録、または抹消する。
@@ -105,14 +105,14 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 		std::vector<int> nids;
 		mem->cart_auto_get_items()->copy(pybot::back_inserter(nids));
 		std::sort(ALL_RANGE(nids));
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」のカート自動補充アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」のカート自動補充アイテム ------\n";
 		for (int nid : nids) {
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << "\n";
 		}
-		out << nids.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -313,9 +313,8 @@ SUBCMD_FUNC(Bot, Equip) {
 
 // すべての未鑑定の武具を鑑定する。
 SUBCMD_FUNC(Bot, EquipIdentifyAll) {
-	std::stringstream out;
 	int tot_cou = 0;
-	auto ide_itm = [&out, &tot_cou] (
+	auto ide_itm = [lea, &tot_cou] (
 		block_if* mem,
 		storage_context* inv_con,
 		storage_context* car_con,
@@ -335,19 +334,20 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 				res = true;
 			}
 			if (!idb) idb = itemdb_exists(itm->nameid);
-			out << INDEX_PREFIX << mem->member_index() << " " <<
+			lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
 				ID_PREFIX << mem->char_id() << " - " <<
 				mem->name() << " ; " <<
 				STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
 				INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
 				print_item(itm, idb);
-			if (!itm->identify) out << " ※拡大鏡不足";
-			out << "\n";
+			if (!itm->identify) lea->output_buffer() << " ※拡大鏡不足";
+			lea->output_buffer() << "\n";
 		}
 		return res;
 	};
-	out << "------ 鑑定した武具 ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 鑑定した武具 ------\n";
 	for (block_if* mem : lea->members()) {
 		auto inv_con = construct<inventory_context>(mem->sd());
 		ptr<cart_context> car_con;
@@ -377,8 +377,8 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 			}
 		}
 	}
-	out << "合計" << tot_cou << "個の武具を鑑定しました。\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << "合計" << tot_cou << "個の武具を鑑定しました。\n";
+	lea->show_next();
 }
 
 // すべての破損武具を修理する。
@@ -391,10 +391,10 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 	)) throw command_error{print(
 		"周辺に", REPAIRMAN_NAME, "NPCが見つかりません。"
 	)};
-	std::stringstream out;
 	int tot_cou = 0;
 	int tot_zen = 0;
-	out << "------ 修理した武具 ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 修理した武具 ------\n";
 	int ind_wid = print(MAX_INVENTORY - 1).length();
 	for (block_if* mem : lea->members()) {
 		bool done = false;
@@ -413,14 +413,14 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 					tot_zen += REPAIR_COST;
 				}
 				item_data* idb = mem->sd()->inventory_data[i];
-				out << INDEX_PREFIX << mem->member_index() << " " <<
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
 					mem->name() << " ; " <<
 					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), i) << " " <<
 					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
 					print_item(itm, idb);
-				if (!suc) out << " ※料金不足";
-				out << "\n";
+				if (!suc) lea->output_buffer() << " ※料金不足";
+				lea->output_buffer() << "\n";
 			}
 		}
 		if (done) {
@@ -428,8 +428,8 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 			clif_equiplist(mem->sd());
 		}
 	}
-	out << "合計" << tot_cou << "個の武具を" << print_zeny(tot_zen) << "Zenyで修理しました。\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << "合計" << tot_cou << "個の武具を" << print_zeny(tot_zen) << "Zenyで修理しました。\n";
+	lea->show_next();
 }
 
 // メンバーの武具一式を一覧表示、または登録、または抹消する。
@@ -470,18 +470,18 @@ SUBCMD_FUNC(Bot, EquipSet) {
 			}
 			return lxmid > rxmid;
 		});
-		std::stringstream out;
-		out << "------ 「" <<	mem->name() << "」の武具一式 ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」の武具一式 ------\n";
 		for (es_val_t es_val : es_vals) {
 			int mid = es_val.first;
 			equipset_t* es = es_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 				print_mobdb(mid) << " " <<
 				es->items.size() << "個"
 				"@" << pri_equ_poss(&es->items) << "\n";
 		}
-		out << es_vals.size() << "件の武具一式が見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << es_vals.size() << "件の武具一式が見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -556,8 +556,8 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 			"「", mem->name(), "」の「", mob_str, "」用武具一式はありません。"
 		)};
 	mem->load_equipset(mid);
-	std::stringstream out;
-	out << "------ 「" <<	mem->name() << "」がロードした「" <<
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" <<	mem->name() << "」がロードした「" <<
 		mob_str << "」用武具一式 ------\n";
 	int cou = 0;
 	unsigned int equ = 0;
@@ -575,20 +575,20 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 		) {
 			equ |= (unsigned int)(esi->equip);
 			int inv_ind = mem->find_inventory(*esi->key, esi->equip);
-			out << ID_PREFIX << esi->key->idb->nameid << " - " <<
+			lea->output_buffer() << ID_PREFIX << esi->key->idb->nameid << " - " <<
 				print_item_key(*esi->key) << " "
 				"(" << print_equip_type(esi->key->idb);
 			if (inv_ind != INT_MIN) {
-				out << "@" << print_equip_pos(esi->equip);
+				lea->output_buffer() << "@" << print_equip_pos(esi->equip);
 				++cou;
 			}
-			out << ")";
-			if (inv_ind == INT_MIN) out << " ※装備失敗";
-			out << "\n";
+			lea->output_buffer() << ")";
+			if (inv_ind == INT_MIN) lea->output_buffer() << " ※装備失敗";
+			lea->output_buffer() << "\n";
 		}
 	}
-	out << cou << "個の武具を装備しました。";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << cou << "個の武具を装備しました。";
+	lea->show_next();
 	if (mem != lea) clif_emotion(mem->bl(), ET_HNG);
 }
 
@@ -652,7 +652,7 @@ SUBCMD_FUNC(Bot, HoldMonsters) {
 // ホムンクルスのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, HomunsKill) {
 	block_if* hom = get_active_homun(shift_arguments_then_find_member(lea, args));
-	if (args.empty()) skill_user_show_skills(lea->fd(), hom);
+	if (args.empty()) skill_user_show_skills(hom);
 	else skill_user_use_skill(lea, args, hom);
 }
 
@@ -669,32 +669,32 @@ SUBCMD_FUNC(Bot, HomunsKillUp) {
 // ホムンクルスのステータスを表示する。
 SUBCMD_FUNC(Bot, HomunStatus) {
 	block_if* hom = get_active_homun(shift_arguments_then_find_member(lea, args));
-	std::stringstream out;
-	out << "------ 「" << hom->name() << "」のステータス ------\n";
-	out << "種類 <"  << hom->hd()->homunculusDB->name << "> "
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" << hom->name() << "」のステータス ------\n";
+	lea->output_buffer() << "種類 <"  << hom->hd()->homunculusDB->name << "> "
 		"レベル " << hom->hd()->homunculus.level   << " ";
 	if (hom->hd()->homunculus.level < battle_config.hom_max_level)
-		out << "(" << hom->hd()->homunculus.exp << "/" << hom->hd()->exp_next << " " <<
+		lea->output_buffer() << "(" << hom->hd()->homunculus.exp << "/" << hom->hd()->exp_next << " " <<
 			print(
 				std::fixed,
 				std::setprecision(1),
 				hom->hd()->homunculus.exp * 100. / hom->hd()->exp_next
 			) << "%) ";
-	out << "空腹度 " << hom->hd()->homunculus.hunger << "% 親密度 " <<
+	lea->output_buffer() << "空腹度 " << hom->hd()->homunculus.hunger << "% 親密度 " <<
 		print(
 			std::fixed,
 			std::setprecision(2),
 			hom->hd()->homunculus.intimacy / 100.
 		) << "\n";
-	out << print_main_status(hom->hd());
-	out << print_sc(hom->sc()) << "\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << print_main_status(hom->hd());
+	lea->output_buffer() << print_sc(hom->sc()) << "\n";
+	lea->show_next();
 }
 
 // メンバーのインベントリ内アイテムを一覧表示、または使う。
 SUBCMD_FUNC(Bot, Item) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	if (args.empty()) show_client(lea->fd(), print_storage(mem, TABLE_INVENTORY));
+	if (args.empty()) print_storage(mem, TABLE_INVENTORY);
 	else {
 		std::string itm_nam = shift_arguments(args);
 		int itm_ind = mem->find_inventory(itm_nam);
@@ -764,17 +764,17 @@ SUBCMD_FUNC(Bot, ItemCount) {
 	std::vector<int> nids;
 	for (const auto& cous_val : cous) nids.push_back(cous_val.first);
 	std::sort(ALL_RANGE(nids));
-	std::stringstream out;
-	out << "------ アイテムの集計結果 ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ アイテムの集計結果 ------\n";
 	int tot_cou = 0;
 	for (int nid : nids) {
 		int cou = cous.at(nid);
-		out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+		lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 			print_itemdb(nid) << " " << cou << "個\n";
 		tot_cou += cou;
 	}
-	out << "合計" << nids.size() << "件、" << tot_cou << "個のアイテムが見つかりました。\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << "合計" << nids.size() << "件、" << tot_cou << "個のアイテムが見つかりました。\n";
+	lea->show_next();
 }
 
 // メンバーがアイテムをドロップする。
@@ -813,14 +813,14 @@ SUBCMD_FUNC(Bot, ItemIgnore) {
 		std::vector<int> nids;
 		lea->ignore_items()->copy(pybot::back_inserter(nids));
 		std::sort(ALL_RANGE(nids));
-		std::stringstream out;
-		out << "------ 無視アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 無視アイテム ------\n";
 		for (int nid : nids) {
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << "\n";
 		}
-		out << nids.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -857,7 +857,12 @@ SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 		throw command_error{print(
 			"ItemIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	auto bot_sel_itms = construct<registry_t<int>>(load_ignore_item_func(bot->char_id()));
+	auto bot_sel_itms = construct<registry_t<int>>(
+		load_ignore_item_func(bot->char_id()),
+		insert_ignore_item_func(bot->char_id()),
+		delete_ignore_item_func(bot->char_id()),
+		clear_ignore_item_func(bot->char_id())
+	);
 	int cou = lea->ignore_items()->import_(bot_sel_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
@@ -877,16 +882,16 @@ SUBCMD_FUNC(Bot, ItemRecoverHp) {
 		std::sort(ALL_RANGE(itm_vals), [] (itm_val_t lval, itm_val_t rval) -> bool {
 			return *lval.second < *rval.second;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」のHP回復アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」のHP回復アイテム ------\n";
 		for (itm_val_t itm_val : itm_vals) {
 			int nid = itm_val.first;
 			int thr = *itm_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << " " << thr << "%\n";
 		}
-		out << itm_vals.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << itm_vals.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -957,16 +962,16 @@ SUBCMD_FUNC(Bot, ItemRecoverSp) {
 		std::sort(ALL_RANGE(itm_vals), [] (itm_val_t lval, itm_val_t rval) -> bool {
 			return *lval.second < *rval.second;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」のSP回復アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」のSP回復アイテム ------\n";
 		for (itm_val_t itm_val : itm_vals) {
 			int nid = itm_val.first;
 			int thr = *itm_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << " " << thr << "%\n";
 		}
-		out << itm_vals.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << itm_vals.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -1032,14 +1037,14 @@ SUBCMD_FUNC(Bot, ItemSell) {
 		std::vector<int> nids;
 		lea->sell_items()->copy(pybot::back_inserter(nids));
 		std::sort(ALL_RANGE(nids));
-		std::stringstream out;
-		out << "------ 売却アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 売却アイテム ------\n";
 		for (int nid : nids) {
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << "\n";
 		}
-		out << nids.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -1067,11 +1072,10 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		battle_config.pybot_around_distance,
 		NPCTYPE_SHOP
 	)) throw command_error{"周辺に商人NPCが見つかりません。"};
-	std::stringstream out;
 	int tot_cou = 0;
 	int tot_amo = 0;
 	int tot_zen = 0;
-	auto sel_itm = [lea, &out, &tot_cou, &tot_amo, &tot_zen] (
+	auto sel_itm = [lea, &tot_cou, &tot_amo, &tot_zen] (
 		block_if* mem,
 		storage_type sto_typ,
 		int ind,
@@ -1091,7 +1095,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 			) {
 				int zen = pc_modifysellvalue(mem->sd(), idb->value_sell) * itm->amount;
 				pc_getzeny(mem->sd(), zen, LOG_TYPE_NPC, NULL);
-				out << INDEX_PREFIX << mem->member_index() << " " <<
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
 					mem->name() << " ; " <<
 					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
@@ -1107,7 +1111,8 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		}
 		return res;
 	};
-	out << "------ 売却したアイテム ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 売却したアイテム ------\n";
 	for (block_if* mem : lea->members()) {
 		bool done = false;
 		int ind_wid = print(MAX_INVENTORY - 1).length();
@@ -1131,9 +1136,9 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		}
 		if (done) clif_emotion(mem->bl(), ET_MONEY);
 	}
-	out << "合計" << tot_cou << "件、" << tot_amo << "個のアイテムを" <<
+	lea->output_buffer() << "合計" << tot_cou << "件、" << tot_amo << "個のアイテムを" <<
 		print_zeny(tot_zen) << "Zenyで売りました。\n";
-	show_client(lea->fd(), out.str());
+	lea->show_next();
 }
 
 // 売却アイテムをクリアする。
@@ -1152,7 +1157,12 @@ SUBCMD_FUNC(Bot, ItemSellImport) {
 		throw command_error{print(
 			"ItemSellImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	auto bot_sel_itms = construct<registry_t<int>>(load_sell_item_func(bot->char_id()));
+	auto bot_sel_itms = construct<registry_t<int>>(
+		load_sell_item_func(bot->char_id()),
+		insert_sell_item_func(bot->char_id()),
+		delete_sell_item_func(bot->char_id()),
+		clear_sell_item_func(bot->char_id())
+	);
 	int cou = lea->sell_items()->import_(bot_sel_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
@@ -1266,13 +1276,13 @@ SUBCMD_FUNC(Bot, MonsterGreat) {
 		std::vector<int> mids;
 		lea->great_mobs()->copy(pybot::back_inserter(mids));
 		std::sort(ALL_RANGE(mids));
-		std::stringstream out;
-		out << "------ グレートモンスター ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ グレートモンスター ------\n";
 		for (int mid : mids)
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " << 
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " << 
 				print_mobdb(mid) << "\n";
-		out << mids.size() << "件のモンスターが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << mids.size() << "件のモンスターが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -1317,13 +1327,23 @@ SUBCMD_FUNC(Bot, MonsterGreatImport) {
 		throw command_error{print(
 			"MonsterGreatImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	auto bot_gre_mobs = construct<registry_t<int>>(load_great_mob_func(bot->char_id()));
+	auto bot_gre_mobs = construct<registry_t<int>>(
+		load_great_mob_func(bot->char_id()),
+		insert_great_mob_func(bot->char_id()),
+		delete_great_mob_func(bot->char_id()),
+		clear_great_mob_func(bot->char_id())
+	);
 	int cou = lea->great_mobs()->import_(bot_gre_mobs.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
 		cou, "件のグレートモンスターを取り込みました。"
 	));
 	lea->last_heaby_tick() = now;
+}
+
+// 次のページを表示する。
+SUBCMD_FUNC(Bot, Next) {
+	lea->show_next();
 }
 
 // ペットがアクセサリーを装備、または解除する。
@@ -1363,21 +1383,21 @@ SUBCMD_FUNC(Bot, PetEquip) {
 // ペットのステータスを表示する。
 SUBCMD_FUNC(Bot, PetStatus) {
 	block_if* pet = get_active_pet(shift_arguments_then_find_member(lea, args));
-	std::stringstream out;
-	out << "------ 「" << pet->name() << "」のステータス ------\n";
-	out << "種類 <"  << pet->pd()->get_pet_db()->jname << "> "
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" << pet->name() << "」のステータス ------\n";
+	lea->output_buffer() << "種類 <"  << pet->pd()->get_pet_db()->jname << "> "
 		"レベル " << pet->pd()->pet.level           << " "
 		"空腹度 " << pet->pd()->pet.hungry          << "% "
 		"親密度 " << print(std::fixed, std::setprecision(1), pet->pd()->pet.intimate / 10.);
 	int acc_nid = pet->pd()->get_pet_db()->AcceID;
 	if (acc_nid) {
-		out << " アクセサリー <";
-		if (pet->pd()->pet.equip) out << "装備済み";
-		else out << "未装備";
-		out << ">";
+		lea->output_buffer() << " アクセサリー <";
+		if (pet->pd()->pet.equip) lea->output_buffer() << "装備済み";
+		else lea->output_buffer() << "未装備";
+		lea->output_buffer() << ">";
 	}
-	out << "\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << "\n";
+	lea->show_next();
 }
 
 // メンバーの距離ポリシーを一覧表示、または登録、または抹消する。
@@ -1413,18 +1433,18 @@ SUBCMD_FUNC(Bot, PolicyDistance) {
 			}
 			return lxmid > rxmid;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」の距離ポリシー"
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」の距離ポリシー"
 			"(" << DISTANCE_POLICY_VALUE_NAME_TABLE[mem->default_distance_policy_value()] << ") ------\n";
 		for (pol_val_t pol_val : pol_vals) {
 			int mid = pol_val.first;
 			distance_policy* pol = pol_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 			       print_mobdb(mid) << " " <<
 			       DISTANCE_POLICY_VALUE_NAME_TABLE[pol->value] << "\n";
 		}
-		out << pol_vals.size() << "件の距離ポリシーが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << pol_vals.size() << "件の距離ポリシーが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -1532,18 +1552,18 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack) {
 			}
 			return lxmid > rxmid;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」の通常攻撃ポリシー"
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」の通常攻撃ポリシー"
 			"(" << NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE[mem->default_normal_attack_policy_value()] << ") ------\n";
 		for (pol_val_t pol_val : pol_vals) {
 			int mid = pol_val.first;
 			normal_attack_policy* pol = pol_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 				   print_mobdb(mid) << " " <<
 				   NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE[pol->value] << "\n";
 		}
-		out << pol_vals.size() << "件の通常攻撃ポリシーが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << pol_vals.size() << "件の通常攻撃ポリシーが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -1622,13 +1642,8 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackTransport) {
 // メンバーのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, sKill) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	if (args.empty()) skill_user_show_skills(lea->fd(), mem);
+	if (args.empty()) skill_user_show_skills(mem);
 	else skill_user_use_skill(lea, args, mem);
-}
-
-// メンバーのアクティブスキルを制限する。
-SUBCMD_FUNC(Bot, sKillLimit) {
-	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
 // オートスペルで選択する魔法を設定、または抹消する。
@@ -1686,18 +1701,18 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 		std::sort(ALL_RANGE(fs_vals), [lea] (fs_val_t lval, fs_val_t rval) -> bool {
 			return lval.first > rval.first;
 		});
-		std::stringstream out;
-		out << "------ 「" <<	mem->name() << "」の優先スキル ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」の優先スキル ------\n";
 		for (fs_val_t fs_val : fs_vals) {
 			int mid = fs_val.first;
 			e_skill* kid = fs_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 				print_mobdb(mid) << " ; " <<
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), *kid) << " - " <<
 				skill_get_desc(*kid) << "\n";
 		}
-		out << fs_vals.size() << "件の優先スキルが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << fs_vals.size() << "件の優先スキルが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -1740,6 +1755,10 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 			) throw command_error{print(
 				"「", sk_des, "」は指定できません。"
 			)};
+			if (!mem->check_skill(kid))
+				throw command_error{print(
+					"「", mem->name(), "」は「", sk_des, "」を使えません。"
+				)};
 			mem->first_skills()->register_(mid, initialize<e_skill>(kid));
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", mob_str, "」用優先スキルに"
@@ -1772,6 +1791,95 @@ SUBCMD_FUNC(Bot, sKillFirstTransport) {
 		cou, "件の優先スキルを転送しました。"
 	));
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
+// メンバーのスキル無視モンスターを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<int> sims;
+		mem->skill_ignore_mobs()->copy(pybot::back_inserter(sims));
+		std::sort(ALL_RANGE(sims));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のスキル無視モンスター ------\n";
+		for (int sim : sims) {
+			e_skill kid = e_skill(SKILL_FROM_KIM(sim));
+			int mid = MOB_FROM_KIM(sim);
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) << " - " <<
+				skill_get_desc(kid) << " ; " <<
+				ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << "\n";
+		}
+		lea->output_buffer() << sims.size() << "件のスキル無視モンスターが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string sk_nam = shift_arguments(args);
+		e_skill kid = e_skill(find_skilldb(sk_nam));
+		std::string sk_des = skill_get_desc(kid);
+		if (skill_get_inf2(kid) & INF2_PARTY_ONLY ||
+			skill_get_inf2(kid) & INF2_GUILD_ONLY
+		) throw command_error{print(
+			"「", sk_des, "」は指定できません。"
+		)};
+		std::string mob_nam = shift_arguments(args, "モンスターを指定してください。");
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		if (mid < MM_INDIVIDUAL ||
+			mid >= MM_CAUTION
+		) throw command_error{print(
+			"「", mob_str, "」は指定できません。"
+		)};
+		int kim = SKILL_IGNORE_MOB(kid, mid);
+		if (mem->skill_ignore_mobs()->find(kim)) {
+			mem->skill_ignore_mobs()->unregister(kim);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」を「", mob_str, "」に使います。"
+			));
+		} else {
+			if (!mem->check_skill(kid))
+				throw command_error{print(
+					"「", mem->name(), "」は「", sk_des, "」を使えません。"
+				)};
+			mem->skill_ignore_mobs()->register_(kim);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」を「", mob_str, "」に使いません。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのスキル無視モンスターをクリアする。
+SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->skill_ignore_mobs()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件のスキル無視モンスターの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのスキル無視モンスターを転送する。
+SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport) {
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->skill_ignore_mobs()->import_(mem1->skill_ignore_mobs().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のスキル無視モンスターを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
+// メンバーのアクティブスキルを制限する。
+SUBCMD_FUNC(Bot, sKillLimit) {
+	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
 // 低ダメージ倍率を設定する。
@@ -1876,18 +1984,18 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 			}
 			return lxmid > rxmid;
 		});
-		std::stringstream out;
-		out << "------ 「" <<	mem->name() << "」の演奏スキル ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」の演奏スキル ------\n";
 		for (ps_val_t ps_val : ps_vals) {
 			int mid = ps_val.first;
 			play_skill* ps = ps_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 				print_mobdb(mid) << " ; " <<
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), ps->skill_id) << " - " <<
 				skill_get_desc(ps->skill_id) << "\n";
 		}
-		out << ps_vals.size() << "件の演奏スキルが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << ps_vals.size() << "件の演奏スキルが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string mob_nam = shift_arguments(args);
 		int mid = find_mobdb(mob_nam);
@@ -1986,13 +2094,13 @@ SUBCMD_FUNC(Bot, sKillReject) {
 		std::vector<int> kids;
 		mem->reject_skills()->copy(pybot::back_inserter(kids));
 		std::sort(ALL_RANGE(kids));
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」の拒否スキル ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」の拒否スキル ------\n";
 		for (int kid : kids)
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) <<
 				" - " << skill_get_desc(kid) << "\n";
-		out << kids.size() << "件のスキルが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << kids.size() << "件のスキルが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string sk_nam = shift_arguments(args);
 		int kid = find_skilldb(sk_nam);
@@ -2054,16 +2162,16 @@ SUBCMD_FUNC(Bot, sKillTail) {
 		std::sort(ALL_RANGE(tai_vals), [] (tai_val_t lval, tai_val_t rval) -> bool {
 			return lval.first < rval.first;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」の掛け直し時間 ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」の掛け直し時間 ------\n";
 		for (const tai_val_t& tai_val : tai_vals) {
 			e_skill kid = tai_val.first;
 			int dur = *tai_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) <<
 				" - " << skill_get_desc(kid) << " " << dur << "ミリ秒前\n";
 		}
-		out << tai_vals.size() << "件の掛け直し時間が見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << tai_vals.size() << "件の掛け直し時間が見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string sk_nam = shift_arguments(args);
 		e_skill kid = e_skill(find_skilldb(sk_nam));
@@ -2135,33 +2243,33 @@ SUBCMD_FUNC(Bot, sKillUp) {
 // メンバーのステータスを表示する。
 SUBCMD_FUNC(Bot, Status) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	std::stringstream out;
-	out << "------ 「" << mem->name() << "」のステータス ------\n";
-	out << "BaseLv " << mem->sd()->status.base_level << " ";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" << mem->name() << "」のステータス ------\n";
+	lea->output_buffer() << "BaseLv " << mem->sd()->status.base_level << " ";
 	if (!pc_is_maxbaselv(mem->sd()))
-		out << "(" << mem->sd()->status.base_exp << "/" << pc_nextbaseexp(mem->sd()) <<	" " <<
+		lea->output_buffer() << "(" << mem->sd()->status.base_exp << "/" << pc_nextbaseexp(mem->sd()) <<	" " <<
 			print(
 				std::fixed,
 				std::setprecision(1),
 				mem->sd()->status.base_exp * 100. / pc_nextbaseexp(mem->sd())
 			) << "%) ";
-	out << "JobLv " << mem->sd()->status.job_level << " ";
+	lea->output_buffer() << "JobLv " << mem->sd()->status.job_level << " ";
 	if (!pc_is_maxjoblv(mem->sd()))
-		out << "(" << mem->sd()->status.job_exp << "/" << pc_nextjobexp(mem->sd()) << " " <<
+		lea->output_buffer() << "(" << mem->sd()->status.job_exp << "/" << pc_nextjobexp(mem->sd()) << " " <<
 			print(
 				std::fixed,
 				std::setprecision(1),
 				mem->sd()->status.job_exp * 100. / pc_nextjobexp(mem->sd())
 			) << "%) ";
-	out << "Status Point " << mem->sd()->status.status_point;
+	lea->output_buffer() << "Status Point " << mem->sd()->status.status_point;
 	int cas_exp = pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str()));
 	if (cas_exp ||
 		mem->sd()->cashPoints
-	) out << " Shop Point " << mem->sd()->cashPoints << " "
+	) lea->output_buffer() << " Shop Point " << mem->sd()->cashPoints << " "
 		"(" << cas_exp << "/" << MAX_LEVEL_BASE_EXP << ")";
-	out << "\n";
+	lea->output_buffer() << "\n";
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
-	out << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
+	lea->output_buffer() << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
 		inv_num << "/" << MAX_INVENTORY << " "
 		"(" << (mem->sd()->weight / 10.) << "/" << (mem->sd()->max_weight / 10.) <<	" " <<
 		print(
@@ -2171,7 +2279,7 @@ SUBCMD_FUNC(Bot, Status) {
 		) << "%) ";
 	if (mem->is_carton()) {
 		status_calc_cart_weight(mem->sd(), CALCWT_ITEM);
-		out << STORAGE_TYPE_NAME_TABLE[TABLE_CART - 1] << " " <<
+		lea->output_buffer() << STORAGE_TYPE_NAME_TABLE[TABLE_CART - 1] << " " <<
 			mem->sd()->cart_num << "/" << MAX_CART << " "
 			"(" << (mem->sd()->cart_weight / 10.) << "/" << (mem->sd()->cart_weight_max / 10.) << " " <<
 			print(
@@ -2180,10 +2288,10 @@ SUBCMD_FUNC(Bot, Status) {
 				mem->sd()->cart_weight * 100. / mem->sd()->cart_weight_max
 			) << "%) ";
 	}
-	out << "Zeny " << print_zeny(mem->sd()->status.zeny) << "\n";
-	out << print_main_status(mem->sd());
-	out << print_sc(mem->sc()) << "\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() << "Zeny " << print_zeny(mem->sd()->status.zeny) << "\n";
+	lea->output_buffer() << print_main_status(mem->sd());
+	lea->output_buffer() << print_sc(mem->sc()) << "\n";
+	lea->show_next();
 }
 
 // メンバーがステータスにポイントを割り振る。
@@ -2225,16 +2333,16 @@ SUBCMD_FUNC(Bot, StorageGet) {
 		std::sort(ALL_RANGE(itm_vals), [] (itm_val_t lval, itm_val_t rval) -> bool {
 			return lval.first < rval.first;
 		});
-		std::stringstream out;
-		out << "------ 「" << mem->name() << "」の倉庫補充アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" << mem->name() << "」の倉庫補充アイテム ------\n";
 		for (itm_val_t itm_val : itm_vals) {
 			int nid = itm_val.first;
 			int amo = *itm_val.second;
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << " (" << amo << ")\n";
 		}
-		out << itm_vals.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << itm_vals.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -2282,17 +2390,17 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 	case 2: sto_con = construct<guild_storage_context>(lea->sd()); break;
 	default: sto_con = construct<private_storage_context>(lea->sd());
 	}
-	std::stringstream out;
+	lea->output_buffer() = std::stringstream();
 	int tot_cou = 0;
 	int tot_amo = 0;
-	out << "------ 倉庫から補充したアイテム ------\n";
+	lea->output_buffer() << "------ 倉庫から補充したアイテム ------\n";
 	for (block_if* mem : lea->members()) {
 		bool done = false;
 		ptr<storage_context> mem_con;
 		if (mem->is_carton()) mem_con = construct<cart_context>(mem->sd());
 		else mem_con = construct<inventory_context>(mem->sd());
 		mem->storage_get_items()->iterate(
-			[sto_con, &out, &tot_cou, &tot_amo, mem, &done, mem_con] (int nid, int* amo) -> bool {
+			[lea, sto_con, &tot_cou, &tot_amo, mem, &done, mem_con] (int nid, int* amo) -> bool {
 				int mem_amo = mem_con->sum(nid);
 				if (mem_amo < *amo) {
 					int com = 0;
@@ -2312,23 +2420,23 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 						++tot_cou;
 						tot_amo += com;
 					}
-					out << INDEX_PREFIX << mem->member_index() << " " <<
+					lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
 						ID_PREFIX << mem->char_id() << " - " <<
 						mem->name() << " ; " <<
 						ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 						print_itemdb(nid) << " (" << com << ")";
-					if (!suc) out << " ※補充失敗";
-					else if (mem_amo + com < *amo) out << " ※在庫不足";
-					out << "\n";
+					if (!suc) lea->output_buffer() << " ※補充失敗";
+					else if (mem_amo + com < *amo) lea->output_buffer() << " ※在庫不足";
+					lea->output_buffer() << "\n";
 				}
 				return true;
 			}
 		);
 		if (done) clif_emotion(mem->bl(), ET_GO);
 	}
-	out << "合計" << tot_cou << "件、" << tot_amo <<
+	lea->output_buffer() << "合計" << tot_cou << "件、" << tot_amo <<
 		"個のアイテムを取り出しました。\n";
-	show_client(lea->fd(), out.str());
+	lea->show_next();
 }
 
 // メンバーの倉庫補充アイテムをクリアする。
@@ -2361,14 +2469,14 @@ SUBCMD_FUNC(Bot, StoragePut) {
 		std::vector<int> nids;
 		lea->storage_put_items()->copy(pybot::back_inserter(nids));
 		std::sort(ALL_RANGE(nids));
-		std::stringstream out;
-		out << "------ 倉庫格納アイテム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 倉庫格納アイテム ------\n";
 		for (int nid : nids) {
-			out << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
 				print_itemdb(nid) << "\n";
 		}
-		out << nids.size() << "件のアイテムが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
 		int nid = find_itemdb(idb_nam);
@@ -2401,10 +2509,9 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 	case 2: sto_con = construct<guild_storage_context>(lea->sd()); break;
 	default: sto_con = construct<private_storage_context>(lea->sd());
 	}
-	std::stringstream out;
 	int tot_cou = 0;
 	int tot_amo = 0;
-	auto put_itm = [lea, sto_con, &out, &tot_cou, &tot_amo] (
+	auto put_itm = [lea, sto_con, &tot_cou, &tot_amo] (
 		block_if* mem,
 		storage_type sto_typ,
 		int ind,
@@ -2435,20 +2542,21 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 					++tot_cou;
 					tot_amo += itm->amount;
 				}
-				out << INDEX_PREFIX << mem->member_index() << " " <<
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
 					ID_PREFIX << mem->char_id() << " - " <<
 					mem->name() << " ; " <<
 					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
 					INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), ind) << " " << 
 					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
 					print_item(itm, idb);
-				if (!res) out << " ※格納失敗";
-				out << "\n";
+				if (!res) lea->output_buffer() << " ※格納失敗";
+				lea->output_buffer() << "\n";
 			}
 		}
 		return res;
 	};
-	out << "------ 倉庫に格納したアイテム ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 倉庫に格納したアイテム ------\n";
 	for (block_if* mem : lea->members()) {
 		bool done = false;
 		int ind_wid = print(MAX_INVENTORY - 1).length();
@@ -2472,9 +2580,9 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 		}
 		if (done) clif_emotion(mem->bl(), ET_GOODBOY);
 	}
-	out << "合計" << tot_cou << "件、" <<
+	lea->output_buffer() << "合計" << tot_cou << "件、" <<
 		tot_amo << "個のアイテムを入れました。\n";
-	show_client(lea->fd(), out.str());
+	lea->show_next();
 }
 
 // 倉庫格納アイテムをクリアする。
@@ -2493,7 +2601,12 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 		throw command_error{print(
 			"StoragePutImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	auto bot_sto_put_itms = construct<registry_t<int>>(load_storage_put_item_func(bot->char_id()));
+	auto bot_sto_put_itms = construct<registry_t<int>>(
+		load_storage_put_item_func(bot->char_id()),
+		insert_storage_put_item_func(bot->char_id()),
+		delete_storage_put_item_func(bot->char_id()),
+		clear_storage_put_item_func(bot->char_id())
+	);
 	int cou = lea->storage_put_items()->import_(bot_sto_put_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から", cou,
@@ -2540,11 +2653,11 @@ SUBCMD_FUNC(Bot, Team) {
 		return buf.str();
 	};
 
-	std::stringstream out;
-	out << "------ 現在のチーム ------\n";
-	for (block_if* mem : lea->members()) out << pri_mem(mem);
-	out << lea->members().size() << "人のメンバーが見つかりました。\n";
-	show_client(lea->fd(), out.str());
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 現在のチーム ------\n";
+	for (block_if* mem : lea->members()) lea->output_buffer() << pri_mem(mem);
+	lea->output_buffer() << lea->members().size() << "人のメンバーが見つかりました。\n";
+	lea->show_next();
 }
 
 // チームがログインする。
@@ -2623,21 +2736,21 @@ SUBCMD_FUNC(Bot, TeamNumber) {
 		std::sort(ALL_RANGE(tea_vals), [lea] (tea_val_t lval, tea_val_t rval) -> bool {
 			return lval.first < rval.first;
 		});
-		std::stringstream out;
-		out << "------ チーム ------\n";
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ チーム ------\n";
 		for (tea_val_t tea_val : tea_vals) {
 			int num = tea_val.first;
 			team_t* tea = tea_val.second;
-			out << print(std::setw(num_wid), std::setfill('0'), num) << " - ";
+			lea->output_buffer() << print(std::setw(num_wid), std::setfill('0'), num) << " - ";
 			for (int i = 0; i < tea->members.size(); ++i) {
 				auto mem = tea->members[i];
-				if (i) out << " / ";
-				out << mem->name;
+				if (i) lea->output_buffer() << " / ";
+				lea->output_buffer() << mem->name;
 			}
-			out << "\n";
+			lea->output_buffer() << "\n";
 		}
-		out << tea_vals.size() << "件のチームが見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << tea_vals.size() << "件のチームが見つかりました。\n";
+		lea->show_next();
 	} else {
 		int num = shift_arguments_then_parse_int(args, "チームの番号", 1, TEAM_MAX - 1);
 		if (lea->bots().empty()) {
@@ -2778,19 +2891,19 @@ SUBCMD_FUNC(Bot, Warp) {
 			war_des, "」を使えません。"
 		)};
 	if (args.empty()) {
-		std::stringstream out;
-		out << "------ 「" <<	mem->name() << "」のワープ位置 ------\n";
-		out << pri_poi(0, &mem->sd()->status.save_point);
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のワープ位置 ------\n";
+		lea->output_buffer() << pri_poi(0, &mem->sd()->status.save_point);
 		int cou = 1;
 		for (int i = 0; i < MAX_MEMOPOINTS; ++i) {
 			point* poi = &mem->sd()->status.memo_point[i];
 			if (poi->map) {
-				out << pri_poi(1 + i, poi);
+				lea->output_buffer() << pri_poi(1 + i, poi);
 				++cou;
 			}
 		}
-		out << cou << "件のワープ位置が見つかりました。\n";
-		show_client(lea->fd(), out.str());
+		lea->output_buffer() << cou << "件のワープ位置が見つかりました。\n";
+		lea->show_next();
 	} else {
 		if (mem == lea)
 			throw command_error{print(
@@ -3474,10 +3587,11 @@ npc_exists(
 }
 
 // メンバーの倉庫のアイテム一覧を書く。
-std::string print_storage(
+void print_storage(
 	block_if* mem,       // メンバー。
 	storage_type sto_typ // 倉庫タイプ。
 ) {
+	block_if* lea = mem->leader();
 	item* itms;
 	item_data** idbs = nullptr;
 	int siz;
@@ -3488,10 +3602,10 @@ std::string print_storage(
 	} else if (sto_typ == TABLE_CART) {
 		itms = mem->sd()->cart.u.items_cart;
 		siz = MAX_CART;
-	} else return UNKNOWN_SYMBOL;
+	}
 	int ind_wid = print(siz - 1).length();
-	std::stringstream out;
-	out << "------ 「" << mem->name() << "」の" <<
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" << mem->name() << "」の" <<
 		STORAGE_TYPE_NAME_TABLE[sto_typ - TABLE_INVENTORY] << " ------\n";
 	int cou = 0;
 	for (int i = 0; i < siz; ++i) {
@@ -3501,45 +3615,45 @@ std::string print_storage(
 			if (itm->card[0] == CARD0_CREATE &&
 				pc_famerank(MakeDWord(itm->card[2], itm->card[3]), MAPID_ALCHEMIST)
 			) nid += FAME_OFFSET;
-			out << INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), i) << " " <<
+			lea->output_buffer() << INDEX_PREFIX << print(std::setw(ind_wid), std::setfill('0'), i) << " " <<
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - ";
 			item_data* idb;
 			if (idbs) idb = idbs[i];
 			else idb = itemdb_exists(itm->nameid);
 			if (idb) {
-				out << print_item(itm, idb);
+				lea->output_buffer() << print_item(itm, idb);
 				if ((idb->equip &&
 						idb->type != IT_CARD
 					) || idb->type == IT_PETARMOR
 				) {
-					out << " (" << print_equip_type(idb);
-					if (itm->equip) out << "@" << print_equip_pos(equip_pos(itm->equip));
-					out << ")";
+					lea->output_buffer() << " (" << print_equip_type(idb);
+					if (itm->equip) lea->output_buffer() << "@" << print_equip_pos(equip_pos(itm->equip));
+					lea->output_buffer() << ")";
 				}
-			} else out << UNKNOWN_SYMBOL;
-			out << "\n";
+			} else lea->output_buffer() << UNKNOWN_SYMBOL;
+			lea->output_buffer() << "\n";
 			++cou;
 		}
 	}
-	out << print(cou, "件のアイテムが見つかりました。\n");
-	return out.str();
+	lea->output_buffer() << print(cou, "件のアイテムが見つかりました。\n");
+	lea->show_next();
 }
 
 // クライアントに@Botコマンドのサブコマンドの一覧を表示する。
 void show_bot_subcommands(
-	int fd // ソケットの記述子。
+	block_if* lea // リーダー。
 ) {
-	std::stringstream out;
-	out << "------ @Botのサブコマンド ------\n";
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ @Botのサブコマンド ------\n";
 	for (auto& sc_pro : BOT_SUBCMD_PROCS) {
-		out << sc_pro->sc_full_name;
+		lea->output_buffer() << sc_pro->sc_full_name;
 		if (!sc_pro->sc_abr_name.empty())
-			out << " (" << sc_pro->sc_abr_name << ")";
-		out << "\n";
+			lea->output_buffer() << " (" << sc_pro->sc_abr_name << ")";
+		lea->output_buffer() << "\n";
 	}
-	out << BOT_SUBCMD_PROCS.size() <<
+	lea->output_buffer() << BOT_SUBCMD_PROCS.size() <<
 		"件のサブコマンドが見つかりました。\n";
-	show_client(fd, out.str());
+	lea->show_next();
 }
 
 // クライアントにメッセージを表示する。
@@ -3599,24 +3713,24 @@ void skill_user_limit_skill(
 
 // スキル使用者のスキル一覧を表示する。
 void skill_user_show_skills(
-	int fd,          // ソケットの記述子。
 	block_if* sk_use // スキル使用者。
 ) {
-	std::stringstream out;
-	out << print("------ 「", sk_use->name(), "」のスキル ------\n");
+	block_if* lea = sk_use->leader();
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << print("------ 「", sk_use->name(), "」のスキル ------\n");
 	int cou = 0;
-	sk_use->iterate_skill([sk_use, &out, &cou] (s_skill* sk) -> bool {
-		out << ID_PREFIX << print(std::setw(5), std::setfill('0'), sk->id) << " - " <<
+	sk_use->iterate_skill([sk_use, lea, &cou] (s_skill* sk) -> bool {
+		lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), sk->id) << " - " <<
 			skill_get_desc(sk->id) << " " << int(sk->lv);
 		int* lim_slv = sk_use->limit_skills()->find(e_skill(sk->id));
-		if (lim_slv) out << " (" << *lim_slv << ")";
-		out << "\n";
+		if (lim_slv) lea->output_buffer() << " (" << *lim_slv << ")";
+		lea->output_buffer() << "\n";
 		++cou;
 		return true;
 	});
-	out << cou << "件のスキルが見つかりました。(スキルポイント " <<
+	lea->output_buffer() << cou << "件のスキルが見つかりました。(スキルポイント " <<
 		sk_use->skill_point() << ")\n";
-	show_client(fd, out.str());
+	lea->show_next();
 }
 
 // スキル使用者のスキルレベルを上げる。

@@ -8,9 +8,6 @@ namespace pybot {
 // -----------------------------------------------------------------------------
 // 定数の定義
 
-// 不明を示すシンボル。
-const std::string UNKNOWN_SYMBOL = "？";
-
 // AIにおけるホムンクルススキル使用手続きのマップ。
 const std::unordered_map<
 	homun_mapid,                     // ホムンクルスのマップID。
@@ -61,6 +58,8 @@ const std::vector<
 	AI_ITEM_USE_PROC_AMMO(BLOOD_CARTRIDGE        , BLOODY_SHELL       ),
 	AI_ITEM_USE_PROC_AMMO(SILVER_CARTRIDGE       , SILVER_BULLET      ),
 	AI_ITEM_USE_PROC_AMMO(HOLY_ARROW_QUIVER      , HOLY_ARROW         ),
+	AI_ITEM_USE_PROC_AMMO(ELF_ARROW_QUIVER       , ELF_ARROW          ),
+	AI_ITEM_USE_PROC_AMMO(HUNTING_ARROW_QUIVER   , HUNTING_ARROW      ),
 	AI_ITEM_USE_PROC     (GREEN_HERB                                  ),
 	AI_ITEM_USE_PROC     (GREEN_POTION                                ),
 	AI_ITEM_USE_PROC_D   (ASAI_FRUIT             , GREEN_POTION       ),
@@ -74,6 +73,7 @@ const std::vector<
 	AI_ITEM_USE_PROC_D   (HONEY_PANCAKE          , CAVIAR_PANCAKE     ),
 	AI_ITEM_USE_PROC_D   (SOUR_CREAM_PANCAKE     , CAVIAR_PANCAKE     ),
 	AI_ITEM_USE_PROC_D   (MUSHROOM_PANCAKE       , CAVIAR_PANCAKE     ),
+	AI_ITEM_USE_PROC     (COATING_POTION                              ),
 	AI_ITEM_USE_PROC     (BRAGI_POTION                                ),
 	AI_ITEM_USE_PROC     (LEAF_OF_YGGDRASIL                           ),
 	AI_ITEM_USE_PROC     (HP_INCREASE_POTIONL                         ),
@@ -1607,6 +1607,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ MonsterGreatImport (mgi) サブコマンド ------\n"
 		"グレートモンスターを取り込む。\n"
 		"入力例 [@bot monstergreatimport チェイス]\n"
+	), SUBCMD_DESC(Bot, Next                       , n   ,
+		"------ Next (n) サブコマンド ------\n"
+		"次のページを表示する。\n"
+		"入力例 [@bot next]\n"
 	), SUBCMD_DESC(Bot, PetEquip                   , pe  ,
 		"------ PetEquip (pe) サブコマンド ------\n"
 		"ペットがアクセサリーを装備する。\n"
@@ -1677,12 +1681,28 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillfirst ハイウィズ 堕ちた大神官ヒバム]\n"
 	), SUBCMD_DESC(Bot, sKillFirstClear            ,     ,
 		"------ sKillRejectClear サブコマンド ------\n"
-		"優先スキルをsKillFirstClear。\n"
+		"優先スキルをクリアする。\n"
 		"入力例 [@bot skillfirstclear ハイウィズ]\n"
 	), SUBCMD_DESC(Bot, sKillFirstTransport        , kft ,
 		"------ sKillFirstTransport (kft) サブコマンド ------\n"
 		"優先スキルを転送する。\n"
 		"入力例 [@bot skillfirsttransport ハイウィズ ハイウィズ2]\n"
+	), SUBCMD_DESC(Bot, sKillIgnoreMonster         , kim ,
+		"------ sKillIgnoreMonster (kim) サブコマンド ------\n"
+		"スキル無視モンスターを一覧表示する。\n"
+		"入力例 [@bot skillignoremonster クリエ]\n"
+		"スキル無視モンスターを登録する。\n"
+		"入力例 [@bot skillignoremonster クリエ アシッドデモンストレーション 堕ちた大神官ヒバム]\n"
+		"スキル無視モンスターの登録を抹消する。\n"
+		"入力例 [@bot skillignoremonster クリエ アシッドデモンストレーション 堕ちた大神官ヒバム]\n"
+	), SUBCMD_DESC(Bot, sKillIgnoreMonsterClear    ,     ,
+		"------ sKillIgnoreMonsterClear サブコマンド ------\n"
+		"スキル無視モンスターをクリアする。\n"
+		"入力例 [@bot skillignoremonsterclear クリエ]\n"
+	), SUBCMD_DESC(Bot, sKillIgnoreMonsterTransport, kimt,
+		"------ sKillIgnoreMonsterTransport (kimt) サブコマンド ------\n"
+		"スキル無視モンスターを転送する。\n"
+		"入力例 [@bot skillignoremonstertransport クリエ クリエ2]\n"
 	), SUBCMD_DESC(Bot, sKillLimit                 , kl  ,
 		"------ sKillLimit (kl) サブコマンド ------\n"
 		"スキルのレベルを制限する。\n"
@@ -1921,6 +1941,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, MonsterGreat               , mg  ),
 	SUBCMD_PROC(Bot, MonsterGreatClear          ,     ),
 	SUBCMD_PROC(Bot, MonsterGreatImport         , mgi ),
+	SUBCMD_PROC(Bot, Next                       , n   ),
 	SUBCMD_PROC(Bot, PetEquip                   , pe  ),
 	SUBCMD_PROC(Bot, PetStatus                  , ps  ),
 	SUBCMD_PROC(Bot, PolicyDistance             , pd  ),
@@ -1930,11 +1951,14 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttackClear    ,     ),
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
-	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
 	SUBCMD_PROC(Bot, sKillAutoSpell             , kas ),
 	SUBCMD_PROC(Bot, sKillFirst                 , kf  ),
 	SUBCMD_PROC(Bot, sKillFirstClear            ,     ),
 	SUBCMD_PROC(Bot, sKillFirstTransport        , kft ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonster         , kim ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonsterClear    ,     ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonsterTransport, kimt),
+	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
 	SUBCMD_PROC(Bot, sKillLowRate               , klr ),
 	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
 	SUBCMD_PROC(Bot, sKillSevenWind             , ksw ),
@@ -3505,6 +3529,9 @@ const std::array<
 	"連続"        ,
 	"単発"        ,
 };
+
+// 1ページの行数。
+const int PAGE_LINES = 100;
 
 // ペット用アクセサリータイプ名。
 const std::string PET_ACCESSORY_TYPE_NAME = "ペット用アクセサリー";

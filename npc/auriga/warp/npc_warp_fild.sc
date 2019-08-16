@@ -1456,7 +1456,6 @@ bra_fild01,72,34,0		warp	brasiliswarp0101	1,1,brasilis,309,334
 
 
 
-/*
 //---エルディカスティス追加マップ
 
 
@@ -1476,6 +1475,7 @@ dic_fild02,71,375,0		warp	dicasteswarp5002	1,1,dic_fild01,69,25
 
 
 
+/*
 //---デワタ追加マップ
 
 

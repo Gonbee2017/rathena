@@ -28,6 +28,40 @@ AI_ITEM_USE_FUNC(CAVIAR_PANCAKE) {
 	) bot->use_item(itm_ind);
 }
 
+// コーティングポーションを使う。
+AI_ITEM_USE_FUNC(COATING_POTION) {
+	if (bot->battle_mode() != BM_NONE) {
+		if ((bot->sc()->data[SC_OVERTHRUST] ||
+				bot->sc()->data[SC_MAXOVERTHRUST]
+			) && !bot->sc()->data[SC_CP_WEAPON] &&
+			!(bot->sd()->bonus.unbreakable_equip & EQP_WEAPON) &&
+			pc_checkequip(bot->sd(), EQP_WEAPON) >= 0
+		) bot->use_item(itm_ind);
+		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
+			return ene->target_battler() == bot &&
+				((ene->has_unequip_weapon_skill() &&
+						!bot->sc()->data[SC_CP_WEAPON] &&
+						!(bot->sd()->bonus.unbreakable_equip & EQP_WEAPON) &&
+						pc_checkequip(bot->sd(), EQP_WEAPON) >= 0
+					) || (ene->has_unequip_shield_skill() &&
+						!bot->sc()->data[SC_CP_SHIELD] &&
+						!(bot->sd()->bonus.unbreakable_equip & EQP_SHIELD) &&
+						pc_checkequip(bot->sd(), EQP_SHIELD) >= 0
+					) || (ene->has_unequip_armor_skill() &&
+						!bot->sc()->data[SC_CP_ARMOR] &&
+						!(bot->sd()->bonus.unbreakable_equip & EQP_ARMOR) &&
+						pc_checkequip(bot->sd(), EQP_ARMOR) >= 0
+					) || (ene->has_unequip_helm_skill() &&
+						!bot->sc()->data[SC_CP_HELM] &&
+						!(bot->sd()->bonus.unbreakable_equip & EQP_HEAD_TOP) &&
+						pc_checkequip(bot->sd(), EQP_HEAD_TOP) >= 0
+					)
+				);
+		});
+		if (ene) bot->use_item(itm_ind);
+	}
+}
+
 // フベルゲルミルの酒を使う。
 AI_ITEM_USE_FUNC(DEX_DISH10) {
 	if (!bot->sc()->data[SC_FOOD_DEX_CASH]) bot->use_item(itm_ind);

@@ -4823,7 +4823,8 @@
 
 	// [GonBee]
 	export_constant(IG_COSTUMEBOX);
-
+	export_constant(IG_COINHOLDER);
+	
 	/* unit stop walking */
 	export_constant(USW_NONE);
 	export_constant(USW_FIXPOS);

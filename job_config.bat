@@ -16,7 +16,9 @@ set web_logs_dir=D:\Apache24\logs\
 rem Apacheログファイルの保管日数。
 set web_logs_days=7
 rem サーバー状態をチェックする間隔。
-set check_interval=15
+set check_interval=10
+rem サーバー状態をチェックする回数。
+set check_count=3
 rem バインドアドレス。
 set bind_address=127.0.0.1
 rem ログインサーバーのポート。

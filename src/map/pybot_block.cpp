@@ -151,9 +151,11 @@ t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void leader_if::show_next() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::sp_suppliable() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::stay() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::storage_put_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -195,6 +197,7 @@ std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& member_if::skill_ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<e_element>>& member_if::skill_seven_wind() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1432,6 +1435,11 @@ t_tick leader_impl::next_heaby_tick() {
 	return hev_tic;
 }
 
+// 出力バッファ。
+std::stringstream& leader_impl::output_buffer() {
+	return output_buffer_;
+}
+
 // チームがモンスターに反応しないか。
 bool& leader_impl::passive() {
 	return passive_;
@@ -1445,6 +1453,19 @@ ptr<regnum_t<bool>>& leader_impl::rush() {
 // 売却アイテムのレジストリ。
 ptr<registry_t<int>>& leader_impl::sell_items() {
 	return sell_items_;
+}
+
+// 出力バッファから次のページを表示する。
+void leader_impl::show_next() {
+	std::stringstream out;
+	for (int cou = 0; cou < PAGE_LINES; ++cou) {
+		std::string lin;
+		std::getline(output_buffer(), lin);
+		if (!output_buffer()) break;
+		out << lin << "\n";
+	}
+	if (output_buffer()) out << "…続きはNextサブコマンドで表示できます。\n";
+	show_client(fd(), out.str());
 }
 
 // SPを供給可能か。
@@ -1941,6 +1962,11 @@ member_impl::skill(
 // オートスペルで選択する魔法の登録値。
 ptr<regnum_t<e_skill>>& member_impl::skill_auto_spell() {
 	return skill_auto_spell_;
+}
+
+// スキル無視モンスターのレジストリ。
+ptr<registry_t<int>>& member_impl::skill_ignore_mobs() {
+	return skill_ignore_mobs_;
 }
 
 // 低ダメージ倍率の登録値。
@@ -2452,72 +2478,90 @@ member_t::member_t(
 	cart_auto_get_items() = construct<registry_t<int>>(
 		load_cart_auto_get_item_func(char_id()),
 		insert_cart_auto_get_item_func(char_id()),
-		delete_cart_auto_get_item_func(char_id())
+		delete_cart_auto_get_item_func(char_id()),
+		clear_cart_auto_get_item_func(char_id())
 	);
 	distance_policies() = construct<registry_t<int,distance_policy>>(
 		load_distance_policy_func(char_id()),
 		insert_distance_policy_func(char_id()),
 		update_distance_policy_func(char_id()),
-		delete_distance_policy_func(char_id())
+		delete_distance_policy_func(char_id()),
+		clear_distance_policy_func(char_id())
 	);
 	equipsets() = construct<registry_t<int,equipset_t>>(
 		load_equipset_func(char_id()),
 		insert_equipset_func(char_id()),
 		update_equipset_func(char_id()),
-		delete_equipset_func(char_id())
+		delete_equipset_func(char_id()),
+		clear_equipset_func(char_id())
 	);
 	first_skills() = construct<registry_t<int,e_skill>>(
 		load_first_skill_func(char_id()),
 		insert_first_skill_func(char_id()),
 		update_first_skill_func(char_id()),
-		delete_first_skill_func(char_id())
+		delete_first_skill_func(char_id()),
+		clear_first_skill_func(char_id())
 	);
 	limit_skills() = construct<registry_t<e_skill,int>>(
 		load_limit_skill_func(char_id()),
 		insert_limit_skill_func(char_id()),
 		update_limit_skill_func(char_id()),
-		delete_limit_skill_func(char_id())
+		delete_limit_skill_func(char_id()),
+		clear_limit_skill_func(char_id())
 	);
 	normal_attack_policies() = construct<registry_t<int,normal_attack_policy>>(
 		load_normal_attack_policy_func(char_id()),
 		insert_normal_attack_policy_func(char_id()),
 		update_normal_attack_policy_func(char_id()),
-		delete_normal_attack_policy_func(char_id())
+		delete_normal_attack_policy_func(char_id()),
+		clear_normal_attack_policy_func(char_id())
 	);
 	play_skills() = construct<registry_t<int,play_skill>>(
 		load_play_skill_func(char_id()),
 		insert_play_skill_func(char_id()),
 		update_play_skill_func(char_id()),
-		delete_play_skill_func(char_id())
+		delete_play_skill_func(char_id()),
+		clear_play_skill_func(char_id())
+	);
+	skill_ignore_mobs() = construct<registry_t<int>>(
+		load_skill_ignore_mob_func(char_id()),
+		insert_skill_ignore_mob_func(char_id()),
+		delete_skill_ignore_mob_func(char_id()),
+		clear_skill_ignore_mob_func(char_id())
 	);
 	skill_tails() = construct<registry_t<e_skill,int>>(
 		load_skill_tail_func(char_id()),
 		insert_skill_tail_func(char_id()),
 		update_skill_tail_func(char_id()),
-		delete_skill_tail_func(char_id())
+		delete_skill_tail_func(char_id()),
+		clear_skill_tail_func(char_id())
 	);
 	recover_hp_items() = construct<registry_t<int,int>>(
 		load_recover_hp_item_func(char_id()),
 		insert_recover_hp_item_func(char_id()),
 		update_recover_hp_item_func(char_id()),
-		delete_recover_hp_item_func(char_id())
+		delete_recover_hp_item_func(char_id()),
+		clear_recover_hp_item_func(char_id())
 	);
 	recover_sp_items() = construct<registry_t<int,int>>(
 		load_recover_sp_item_func(char_id()),
 		insert_recover_sp_item_func(char_id()),
 		update_recover_sp_item_func(char_id()),
-		delete_recover_sp_item_func(char_id())
+		delete_recover_sp_item_func(char_id()),
+		clear_recover_sp_item_func(char_id())
 	);
 	reject_skills() = construct<registry_t<e_skill>>(
 		load_reject_skill_func(char_id()),
 		insert_reject_skill_func(char_id()),
-		delete_reject_skill_func(char_id())
+		delete_reject_skill_func(char_id()),
+		clear_reject_skill_func(char_id())
 	);
 	storage_get_items() = construct<registry_t<int,int>>(
 		load_storage_get_item_func(char_id()),
 		insert_storage_get_item_func(char_id()),
 		update_storage_get_item_func(char_id()),
-		delete_storage_get_item_func(char_id())
+		delete_storage_get_item_func(char_id()),
+		clear_storage_get_item_func(char_id())
 	);
 }
 
@@ -2566,28 +2610,33 @@ leader_t::leader_t(
 	great_mobs() = construct<registry_t<int>>(
 		load_great_mob_func(char_id()),
 		insert_great_mob_func(char_id()),
-		delete_great_mob_func(char_id())
+		delete_great_mob_func(char_id()),
+		clear_great_mob_func(char_id())
 	);
 	ignore_items() = construct<registry_t<int>>(
 		load_ignore_item_func(char_id()),
 		insert_ignore_item_func(char_id()),
-		delete_ignore_item_func(char_id())
+		delete_ignore_item_func(char_id()),
+		clear_ignore_item_func(char_id())
 	);
 	sell_items() = construct<registry_t<int>>(
 		load_sell_item_func(char_id()),
 		insert_sell_item_func(char_id()),
-		delete_sell_item_func(char_id())
+		delete_sell_item_func(char_id()),
+		clear_sell_item_func(char_id())
 	);
 	storage_put_items() = construct<registry_t<int>>(
 		load_storage_put_item_func(char_id()),
 		insert_storage_put_item_func(char_id()),
-		delete_storage_put_item_func(char_id())
+		delete_storage_put_item_func(char_id()),
+		clear_storage_put_item_func(char_id())
 	);
 	teams() = construct<registry_t<int,team_t>>(
 		load_team_func(char_id()),
 		insert_team_func(char_id()),
 		update_team_func(char_id()),
-		delete_team_func(char_id())
+		delete_team_func(char_id()),
+		clear_team_func(char_id())
 	);
 	members().push_back(this);
 	update_member_indices();

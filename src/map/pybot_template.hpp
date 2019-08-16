@@ -15,11 +15,13 @@ registry_t<K,T>::registry_t(
 	load_func loa, // ロード。
 	save_func ins, // 挿入。
 	save_func upd, // 更新。
-	save_func del  // 削除。
+	save_func del, // 削除。
+	clear_func cle // クリア。
 ) {
 	sav_funs[RD_INSERT - RD_INSERT] = ins;
 	sav_funs[RD_UPDATE - RD_INSERT] = upd;
 	sav_funs[RD_DELETE - RD_INSERT] = del;
+	cle_fun = cle;
 	loading = true;
 	sql_session::open([this, loa] (sql_session* ses) {
 		loa(ses, this);
@@ -49,18 +51,13 @@ template <class K, class T>
 int // 抹消した値の数。
 registry_t<K,T>::clear() {
 	int cou = 0;
-	for (auto wra_val_ite = wras.begin(); wra_val_ite != wras.end();) {
-		auto wra = wra_val_ite->second;
-		if (wra->dirty == RD_DELETE) continue;
-		if (wra->dirty == RD_INSERT) wras.erase(wra_val_ite++);
-		else {
-			if (wra->dirty == RD_CLEAN ||
-				wra->dirty == RD_UPDATE
-			) wra->dirty = RD_DELETE;
-			++wra_val_ite;
-		}
-		++cou;
+	for (auto wra_val : wras) {
+		if (wra_val.second->dirty != RD_DELETE) ++cou;
 	}
+	wras.clear();
+	sql_session::open([this] (sql_session* ses) {
+		cle_fun(ses);
+	});
 	return cou;
 }
 
@@ -160,10 +157,12 @@ template <class K>
 registry_t<K,void>::registry_t(
 	load_func loa, // ロード。
 	save_func ins, // 挿入。
-	save_func del  // 削除。
+	save_func del, // 削除。
+	clear_func cle // クリア。
 ) {
 	sav_funs[RD_INSERT - RD_INSERT] = ins;
 	sav_funs[RD_DELETE - RD_INSERT] = del;
+	cle_fun = cle;
 	loading = true;
 	sql_session::open([this, loa] (sql_session* ses) {
 		loa(ses, this);
@@ -193,16 +192,13 @@ template <class K>
 int // 抹消したキーの数。
 registry_t<K,void>::clear() {
 	int cou = 0;
-	for (auto dir_val_ite = dirs.begin(); dir_val_ite != dirs.end();) {
-		auto dir = dir_val_ite->second;
-		if (*dir == RD_DELETE) continue;
-		if (*dir == RD_INSERT) dirs.erase(dir_val_ite++);
-		else if (*dir == RD_CLEAN) {
-			*dir = RD_DELETE;
-			++dir_val_ite;
-		}
-		++cou;
+	for (auto dir_val : dirs) {
+		if (*dir_val.second != RD_DELETE) ++cou;
 	}
+	dirs.clear();
+	sql_session::open([this] (sql_session* ses) {
+		cle_fun(ses);
+	});
 	return cou;
 }
 

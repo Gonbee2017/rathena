@@ -923,6 +923,41 @@ BUILDIN_FUNC(failedrefitem2) {
 	script_pushint(st, res);
 	return SCRIPT_CMD_SUCCESS;
 }
+BUILDIN_FUNC(failedrefitem3) {
+	int res = 0;
+	map_session_data* sd;
+	if (script_rid2sd(sd)) {
+		equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+		if (equip_index_check(equ_ind)) {
+			int inv_ind = pc_checkequip(sd, equip_bitmask[equ_ind]);
+			if (inv_ind >= 0) {
+				item* itm = &sd->inventory.u.items_inventory[inv_ind];
+				if (itm->refine) {
+					int equ = itm->equip;
+					log_pick_pc(sd, LOG_TYPE_SCRIPT, -1, itm);
+					--itm->refine;
+					pc_unequipitem(sd, inv_ind, 2);
+
+					int ntf = 1;
+					if (script_hasdata(st, 3)) ntf = script_getnum(st, 3);
+					if (ntf) clif_refine(sd->fd, 1, inv_ind, itm->refine);
+
+					clif_delitem(sd, inv_ind, 1, 3);
+					log_pick_pc(sd, LOG_TYPE_SCRIPT, 1, itm);
+					clif_additem(sd, inv_ind, 1, 0);
+					pc_equipitem(sd, inv_ind, equ);
+
+					if (ntf) clif_misceffect(&sd->bl, 2);
+
+					achievement_update_objective(sd, AG_REFINE_FAIL, 1, 1);
+				}
+				res = itm->refine;
+			}
+		}
+	}
+	script_pushint(st, res);
+	return SCRIPT_CMD_SUCCESS;
+}
 BUILDIN_FUNC(failedremovecards2) {
 	int i=-1,c,cardflag=0;
 
@@ -1088,6 +1123,25 @@ BUILDIN_FUNC(getequipcardcnt2)
 			count++;
 
 	script_pushint(st,count);
+	return SCRIPT_CMD_SUCCESS;
+}
+BUILDIN_FUNC(getequipcardid2)
+{
+	int id = 0;
+	map_session_data* sd;
+	if (script_rid2sd(sd))	{
+		equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+		if (equip_index_check(equ_ind)) {
+			int i = pc_checkequip(sd, equip_bitmask[equ_ind]);
+			if (i >= 0 &&
+				sd->inventory_data[i]
+			) {
+				int slo = script_getnum(st, 3);
+				if (slo < MAX_SLOTS) id = sd->inventory.u.items_inventory[i].card[slo];
+			}
+		}
+	}
+	script_pushint(st, id);
 	return SCRIPT_CMD_SUCCESS;
 }
 BUILDIN_FUNC(getequipid2) {

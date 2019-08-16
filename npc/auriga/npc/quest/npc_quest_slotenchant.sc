@@ -2992,7 +2992,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 					case 10:	//ラフィネスタッフ
 						set .@delid,1649;
 						set .@getid,1679;
-						set .@need,7620;
+						set .@need,6224;
 						set .@amount,10;
 						set .@price,800000;
 						break;
@@ -3020,7 +3020,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 					case 2:	//アルカブリンガー
 						set .@delid,1191;
 						set .@getid,21004;
-						set .@need,7620;
+						set .@need,6224;
 						set .@amount,15;
 						set .@price,1000000;
 						break;
@@ -3055,7 +3055,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 					case 7:	//マジカルブレード
 						set .@delid,13438;
 						set .@getid,13448;
-						set .@need,7620;
+						set .@need,6224;
 						set .@amount,20;
 						set .@price,2000000;
 						break;

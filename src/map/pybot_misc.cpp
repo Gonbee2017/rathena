@@ -30,7 +30,7 @@ card_converter::card_converter() {
 			}
 		}
 	};
-	ite_mob(1000, 2100);
+	ite_mob(1000, 4000);
 }
 
 // カードを別のカードに変換する。
@@ -987,7 +987,7 @@ void load_maps() {
 					bool(mvp_fla)
 				);
 				id_maps.insert(std::make_pair(id, map));
-				type_maps[nat_typ * 100 + map_typ].push_back(map);
+				type_maps[NATION_MAP_TYPE(nat_typ, map_typ)].push_back(map);
 			}
 		}
 	});
@@ -1200,6 +1200,7 @@ print_itemdb(
 	std::vector<std::string> tag_toks;
 	int act_nid = actual_nameid(nid);
 	item_data* idb = itemdb_exists(act_nid);
+	if (!idb) return UNKNOWN_SYMBOL;
 	toks.push_back(idb->jname);
 	if (idb->slot) toks.push_back(print("[", idb->slot, "]"));
 	tag_toks.push_back(ITEM_TYPE_NAME_TABLE[idb->type]);

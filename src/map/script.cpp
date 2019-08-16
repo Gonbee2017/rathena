@@ -8610,6 +8610,12 @@ BUILDIN_FUNC(strnpcinfo)
 		case 2: // # fragment
 			if((buf = strchr(nd->name,'#')) != NULL)
 				name = aStrdup(buf+1);
+
+			// [GonBee]
+			// Šg’£–¼‚©‚ç‚à’T‚·B
+			else if((buf = strchr(nd->exname,'#')) != NULL)
+				name = aStrdup(buf+1);
+
 			break;
 		case 3: // unique name
 			name = aStrdup(nd->exname);

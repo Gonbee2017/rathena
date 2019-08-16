@@ -11,7 +11,8 @@ namespace pybot {
 // チャージアローを使う。
 AI_SKILL_USE_FUNC(AC_CHARGEARROW) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->has_knockback_immune() &&
 			ene->is_casting() &&
@@ -30,7 +31,8 @@ AI_SKILL_USE_FUNC(AC_CONCENTRATION) {
 // ダブルストレイフィングを使う。
 AI_SKILL_USE_FUNC(AC_DOUBLE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -39,7 +41,9 @@ AI_SKILL_USE_FUNC(AC_DOUBLE) {
 // アローシャワーを使う。
 AI_SKILL_USE_FUNC(AC_SHOWER) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -88,7 +92,8 @@ AI_SKILL_USE_FUNC_T(AL_BLESSING, cure) {
 // ブレッシングを使って呪いをかける。
 AI_SKILL_USE_FUNC_T(AL_BLESSING, curse) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
 			!ene->is_magic_immune() &&
@@ -101,8 +106,9 @@ AI_SKILL_USE_FUNC_T(AL_BLESSING, curse) {
 
 // シグナムクルシスを使う。
 AI_SKILL_USE_FUNC(AL_CRUCIS) {
-	int cou = std::count_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-		return ene->is_berserk() &&
+	int cou = std::count_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_berserk() &&
 			!ene->is_summoned() &&
 			(ene->is_undead() ||
 				ene->race() == RC_DEMON
@@ -127,7 +133,8 @@ AI_SKILL_USE_FUNC(AL_CURE) {
 // 速度減少を使う。
 AI_SKILL_USE_FUNC(AL_DECAGI) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
 			!ene->is_magic_immune() &&
@@ -143,7 +150,8 @@ AI_SKILL_USE_FUNC(AL_DECAGI) {
 // ヒールでアンデッドを攻撃する。
 AI_SKILL_USE_FUNC_T(AL_HEAL, attack) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->is_undead()
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -175,8 +183,9 @@ AI_SKILL_USE_FUNC(AL_PNEUMA) {
 		!bot->sc()->data[SC_PNEUMA] &&
 		bot->is_best_pos()
 	) {
-		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-			return ene->has_long_weapon_skill() ||
+		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->has_long_weapon_skill() ||
 				ene->is_long_range_attacker();
 		});
 		if (ene &&
@@ -198,7 +207,8 @@ AI_SKILL_USE_FUNC(ALL_RESURRECTION) {
 // アシッドテラーを使う。
 AI_SKILL_USE_FUNC(AM_ACIDTERROR) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->fullpower(leader) &&
@@ -233,7 +243,8 @@ AI_SKILL_USE_FUNC(AM_CALLHOMUN) {
 // バイオプラントを使う。
 AI_SKILL_USE_FUNC(AM_CANNIBALIZE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_used_tick(kid, 60 * 1000) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_used_tick(kid, 60 * 1000) &&
 		tar_ene->is_great(leader)
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 }
@@ -285,32 +296,38 @@ AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 
 // ポイズンリアクトを使う。
 AI_SKILL_USE_FUNC(AS_POISONREACT) {
-	if (bot->sc_rest(SC_POISONREACT) <= bot->get_skill_tail(kid) &&
-		bot->target_enemy()->element() == ELE_POISON
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->sc_rest(SC_POISONREACT) <= bot->get_skill_tail(kid) &&
+		tar_ene->element() == ELE_POISON
 	) bot->use_skill_self(kid, klv);
 }
 
 // ソウルブレイカーを使う。
 AI_SKILL_USE_FUNC(ASC_BREAKER) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // エンチャントデッドリーポイズンを使う。
 AI_SKILL_USE_FUNC(ASC_EDP) {
+	block_if* tar_ene = bot->target_enemy();
 	if (bot->distance_policy_value() == DPV_CLOSE &&
 		bot->sc_rest(SC_EDP) <= bot->get_skill_tail(kid) &&
-		bot->target_enemy()->fullpower(leader)
+		!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		tar_ene->fullpower(leader)
 	) bot->use_skill_self(kid, klv);
 }
 
 // 寒いジョークを使う。
 AI_SKILL_USE_FUNC(BA_FROSTJOKER) {
 	if (bot->check_skill_used_tick(kid, skill_get_delay(kid, klv) * 2)) {
-		int cou = std::count_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-			return ene->is_freezable();
+		int cou = std::count_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->is_freezable();
 		});
 		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
 	}
@@ -365,7 +382,8 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
 // ハンマーフォールを使う。
 AI_SKILL_USE_FUNC(BS_HAMMERFALL) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_skill_used_tick(kid, 2500)
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
@@ -451,13 +469,17 @@ AI_SKILL_USE_FUNC(CG_LONGINGFREEDOM) {
 
 // 連柱崩撃を使う。
 AI_SKILL_USE_FUNC(CH_CHAINCRUSH) {
-	if (bot->collect_spirits(2)) bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->collect_spirits(2)
+	) bot->use_skill_self(kid, klv);
 }
 
 // 猛虎硬爬山を使う。
 AI_SKILL_USE_FUNC(CH_PALMSTRIKE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->has_knockback_immune()
@@ -471,7 +493,10 @@ AI_SKILL_USE_FUNC(CH_SOULCOLLECT) {
 
 // 伏虎拳を使う。
 AI_SKILL_USE_FUNC(CH_TIGERFIST) {
-	if (bot->collect_spirits(1)) bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->collect_spirits(1)
+	) bot->use_skill_self(kid, klv);
 }
 
 // オートガードを使う。
@@ -482,8 +507,9 @@ AI_SKILL_USE_FUNC(CR_AUTOGUARD) {
 // ディフェンダー状態になる。
 AI_SKILL_USE_FUNC_T(CR_DEFENDER, activate) {
 	if (!bot->sc()->data[SC_DEFENDER]) {
-		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
-			return ene->is_great(leader) &&
+		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->is_great(leader) &&
 				ene->has_long_weapon_skill();
 		});
 		if (ene) bot->use_skill_self(kid, klv);
@@ -541,7 +567,8 @@ AI_SKILL_USE_FUNC(CR_GRANDCROSS) {
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->is_summoned();
 			})
@@ -557,7 +584,8 @@ AI_SKILL_USE_FUNC_T(CR_GRANDCROSS, effective) {
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned();
 			})
@@ -588,7 +616,8 @@ AI_SKILL_USE_FUNC(CR_REFLECTSHIELD) {
 AI_SKILL_USE_FUNC_T(CR_SHIELDBOOMERANG, spirit) {
 	if (bot->sc()->data[SC_SPIRIT]) {
 		block_if* tar_ene = bot->target_enemy();
-		if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+		if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, tar_ene) &&
 			bot->check_use_skill(kid, klv, tar_ene)
 		) bot->use_skill_block(kid, klv, tar_ene);
 	}
@@ -610,8 +639,9 @@ AI_SKILL_USE_FUNC(CR_SPEARQUICKEN) {
 // スクリームを使う。
 AI_SKILL_USE_FUNC(DC_SCREAM) {
 	if (bot->check_skill_used_tick(kid, skill_get_delay(kid, klv) * 2)) {
-		int cou = std::count_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-			return !ene->has_status_immune() &&
+		int cou = std::count_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				!ene->has_status_immune() &&
 				!ene->is_paralysis();
 		});
 		if (cou >= bot->get_skill_monsters()) bot->use_skill_self(kid, klv);
@@ -621,7 +651,8 @@ AI_SKILL_USE_FUNC(DC_SCREAM) {
 // 魅惑のウィンクを使う。
 AI_SKILL_USE_FUNC(DC_WINKCHARM) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene != enemies.front() &&
 			status_get_lv(ene->bl()) < status_get_lv(bot->bl()) &&
 			ene->check_skill_used_tick(kid, 2500) &&
@@ -633,7 +664,9 @@ AI_SKILL_USE_FUNC(DC_WINKCHARM) {
 
 // アジャストメントを使う。
 AI_SKILL_USE_FUNC(GS_ADJUSTMENT) {
-	if (bot->target_enemy()->is_great(leader) &&
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		tar_ene->is_great(leader) &&
 		bot->sc_rest(SC_ADJUSTMENT) <= bot->get_skill_tail(kid) &&
 		bot->collect_coins(2)
 	) bot->use_skill_self(kid, klv);
@@ -642,7 +675,8 @@ AI_SKILL_USE_FUNC(GS_ADJUSTMENT) {
 // ブルズアイを使う。
 AI_SKILL_USE_FUNC(GS_BULLSEYE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->race() & (RC_BRUTE | RC_DEMIHUMAN) &&
@@ -653,7 +687,8 @@ AI_SKILL_USE_FUNC(GS_BULLSEYE) {
 // クラッカーを使って詠唱を邪魔する。
 AI_SKILL_USE_FUNC(GS_CRACKER) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->has_status_immune() &&
 			ene->is_casting() &&
@@ -668,7 +703,8 @@ AI_SKILL_USE_FUNC(GS_CRACKER) {
 AI_SKILL_USE_FUNC(GS_DESPERADO) {
 	int cou = std::count_if(ALL_RANGE(enemies),
 		sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_use_skill(kid, klv, ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_use_skill(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) >= 100 &&
 				!ene->is_summoned() &&
 				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
@@ -680,7 +716,8 @@ AI_SKILL_USE_FUNC(GS_DESPERADO) {
 // ディスアームを使う。
 AI_SKILL_USE_FUNC(GS_DISARM) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->check_use_skill(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->check_skill_used_tick(kid, 2500) &&
@@ -693,7 +730,8 @@ AI_SKILL_USE_FUNC(GS_DISARM) {
 // ダストを使う。
 AI_SKILL_USE_FUNC(GS_DUST) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->has_knockback_immune() &&
 			ene->is_casting() &&
@@ -706,7 +744,8 @@ AI_SKILL_USE_FUNC(GS_DUST) {
 // フライングを使う。
 AI_SKILL_USE_FUNC(GS_FLING) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->def() + tar_ene->def2() >= 100 &&
@@ -720,7 +759,8 @@ AI_SKILL_USE_FUNC(GS_FLING) {
 // ピアーシングショットを使う。
 AI_SKILL_USE_FUNC(GS_PIERCINGSHOT) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->check_skill_used_tick(kid, 2500) &&
@@ -762,7 +802,8 @@ AI_SKILL_USE_FUNC(GS_GROUNDDRIFT) {
 		) {
 			int cou = std::count_if(ALL_RANGE(enemies),
 				sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv, amm_itm] (block_if* ene) -> bool {
-					return bot->check_use_skill(kid, klv, ene) &&
+					return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+						bot->check_use_skill(kid, klv, ene) &&
 						bot->skill_ratio(kid, klv, ene) >= 100 &&
 						!ene->is_paralysis() &&
 						!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
@@ -782,9 +823,11 @@ AI_SKILL_USE_FUNC(GS_INCREASING) {
 
 // マッドネスキャンセラー状態になる。
 AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, activate) {
-	if (!bot->sc()->data[SC_MADNESSCANCEL] &&
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_MADNESSCANCEL] &&
 		bot->is_best_pos() &&
-		bot->target_enemy()->fullpower(leader) &&
+		tar_ene->fullpower(leader) &&
 		bot->collect_coins(1)
 	) bot->use_skill_self(kid, klv);
 }
@@ -802,7 +845,8 @@ AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, deactivate) {
 // マジカルバレットを使う。
 AI_SKILL_USE_FUNC(GS_MAGICALBULLET) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->attack_element_ratio(tar_ene, ELE_GHOST) > 100 &&
 		bot->collect_coins(1)
@@ -812,7 +856,8 @@ AI_SKILL_USE_FUNC(GS_MAGICALBULLET) {
 // トラッキングを使う。
 AI_SKILL_USE_FUNC(GS_TRACKING) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->flee() - bot->hit() > 25
@@ -822,7 +867,8 @@ AI_SKILL_USE_FUNC(GS_TRACKING) {
 // トリプルアクションを使う。
 AI_SKILL_USE_FUNC(GS_TRIPLEACTION) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		bot->collect_coins(1)
@@ -861,7 +907,8 @@ AI_SKILL_USE_FUNC_T(HP_ASSUMPTIO, not_primary) {
 // アンクルスネアを使う。
 AI_SKILL_USE_FUNC(HT_ANKLESNARE) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return ene->is_walking() &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
 			!skill_check_unit_range2(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv, false);
@@ -872,7 +919,8 @@ AI_SKILL_USE_FUNC(HT_ANKLESNARE) {
 // ディテクティングを使う。
 AI_SKILL_USE_FUNC(HT_DETECTING) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->is_hiding();
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
@@ -881,7 +929,8 @@ AI_SKILL_USE_FUNC(HT_DETECTING) {
 // フリージングトラップを使う。
 AI_SKILL_USE_FUNC(HT_FREEZINGTRAP) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return ene->is_walking() &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
 			ene->is_freezable() &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
@@ -893,7 +942,8 @@ AI_SKILL_USE_FUNC(HT_FREEZINGTRAP) {
 // ランドマインを使う。
 AI_SKILL_USE_FUNC(HT_LANDMINE) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return ene->is_walking() &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
 			bot->skill_ratio(kid, klv, ene) > 100 &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
@@ -905,7 +955,8 @@ AI_SKILL_USE_FUNC(HT_LANDMINE) {
 // ビーストストレイフィングを使う。
 AI_SKILL_USE_FUNC(HT_POWER) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		(tar_ene->race() == RC_BRUTE ||
@@ -940,7 +991,8 @@ AI_SKILL_USE_FUNC(HT_REMOVETRAP) {
 // サンドマンを使う。
 AI_SKILL_USE_FUNC(HT_SANDMAN) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return ene->is_walking() &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
 			!ene->has_status_immune() &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
@@ -952,7 +1004,8 @@ AI_SKILL_USE_FUNC(HT_SANDMAN) {
 // ガンバンテインを使う。
 AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_attack(tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_attack(tar_ene) &&
 		tar_ene->is_great(leader) &&
 		skill_unit_exists_block(tar_ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
@@ -964,7 +1017,8 @@ AI_SKILL_USE_FUNC(HW_GRAVITATION) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					!ene->is_paralysis() &&
 					!ene->is_summoned() &&
 					!ene->sc()->data[SC_GRAVITATION];
@@ -977,7 +1031,8 @@ AI_SKILL_USE_FUNC(HW_GRAVITATION) {
 // オートカウンターを使う。
 AI_SKILL_USE_FUNC(KN_AUTOCOUNTER) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->check_hp(3) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->check_hp(3) &&
 		!bot->sc()->data[SC_AUTOCOUNTER] &&
 		bot->attacked_enemies().size() == 1 &&
 		bot->attacked_enemies().front() == tar_ene
@@ -996,7 +1051,8 @@ AI_SKILL_USE_FUNC(KN_AUTOCOUNTER) {
 // チャージアタックを使う。
 AI_SKILL_USE_FUNC(KN_CHARGEATK) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_CLOSE &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
@@ -1015,7 +1071,8 @@ AI_SKILL_USE_FUNC(KN_ONEHAND) {
 // ピアースを使う。
 AI_SKILL_USE_FUNC(KN_PIERCE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->size_() != SZ_SMALL
@@ -1050,7 +1107,8 @@ AI_SKILL_USE_FUNC(LK_CONCENTRATION) {
 // ヘッドクラッシュを使う。
 AI_SKILL_USE_FUNC(LK_HEADCRUSH) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -1065,7 +1123,8 @@ AI_SKILL_USE_FUNC(LK_HEADCRUSH) {
 // ジョイントビートを使う。
 AI_SKILL_USE_FUNC(LK_JOINTBEAT) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -1084,7 +1143,8 @@ AI_SKILL_USE_FUNC(LK_PARRYING) {
 // スパイラルピアースを使う。
 AI_SKILL_USE_FUNC(LK_SPIRALPIERCE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		!tar_ene->has_status_immune() &&
@@ -1101,7 +1161,8 @@ AI_SKILL_USE_FUNC(MC_CARTREVOLUTION) {
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->is_summoned();
 			})
@@ -1118,7 +1179,8 @@ AI_SKILL_USE_FUNC_T(MC_CARTREVOLUTION, effective) {
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned();
 			})
@@ -1135,7 +1197,8 @@ AI_SKILL_USE_FUNC(MC_LOUD) {
 // メマーナイトを使う。
 AI_SKILL_USE_FUNC(MC_MAMMONITE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->fullpower(leader)
@@ -1153,7 +1216,8 @@ AI_SKILL_USE_FUNC(MG_FIREBALL) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned();
 			})
@@ -1165,7 +1229,8 @@ AI_SKILL_USE_FUNC(MG_FIREBALL) {
 // ファイアーボルトを使う。
 AI_SKILL_USE_FUNC(MG_FIREBOLT) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 100 &&
 		bot->use_magicpower()
@@ -1183,7 +1248,8 @@ AI_SKILL_USE_FUNC_T(MG_FIREBOLT, compromise) {
 	};
 	block_if* tar_ene = bot->target_enemy();
 	int rat = bot->skill_ratio(kid, klv, tar_ene);
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		rat >= 50
 	) {
@@ -1219,7 +1285,8 @@ AI_SKILL_USE_FUNC(MG_FIREWALL) {
 	if (bot->check_skill_used_tick(kid, 2500)) {
 		pos_t pos;
 		block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv, &pos] (block_if* ene) -> bool {
-			if (bot->attack_element_ratio(ene, ELE_FIRE) > 0 &&
+			if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->attack_element_ratio(ene, ELE_FIRE) > 0 &&
 				ene->attacked_battlers().empty() &&
 				!ene->has_knockback_immune() &&
 				!ene->is_magic_immune() &&
@@ -1248,7 +1315,8 @@ AI_SKILL_USE_FUNC(MG_FIREWALL) {
 // フロストダイバーを使う。
 AI_SKILL_USE_FUNC(MG_FROSTDIVER) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->attacked_battlers().empty() &&
 			ene->is_freezable() &&
 			!ene->is_hiding() &&
@@ -1263,7 +1331,8 @@ AI_SKILL_USE_FUNC(MG_FROSTDIVER) {
 // ナパームビートを使う。
 AI_SKILL_USE_FUNC(MG_NAPALMBEAT) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -1273,7 +1342,8 @@ AI_SKILL_USE_FUNC(MG_NAPALMBEAT) {
 AI_SKILL_USE_FUNC(MG_SAFETYWALL) {
 	block_if* pri_bat = battlers.front();
 	block_if* tar_ene = pri_bat->target_enemy();
-	if (!pri_bat->is_walking() &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!pri_bat->is_walking() &&
 		!pri_bat->sc()->data[SC_SAFETYWALL] &&
 		tar_ene &&
 		((tar_ene->is_great(leader) &&
@@ -1287,8 +1357,9 @@ AI_SKILL_USE_FUNC(MG_SAFETYWALL) {
 // サイトを使う。
 AI_SKILL_USE_FUNC(MG_SIGHT) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies),
-		sift_block_splash(bot, kid, klv, [] (block_if* ene) -> bool {
-			return ene->is_hiding();
+		sift_block_splash(bot, kid, klv, [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->is_hiding();
 		})
 	);
 	if (ene) bot->use_skill_self(kid, klv);
@@ -1297,7 +1368,8 @@ AI_SKILL_USE_FUNC(MG_SIGHT) {
 // ストーンカースを使う。
 AI_SKILL_USE_FUNC(MG_STONECURSE) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid] (block_if* ene) -> bool {
-		return bot->attack_element_ratio(ene, ELE_EARTH) > 0 &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->attack_element_ratio(ene, ELE_EARTH) > 0 &&
 			ene->attacked_battlers().empty() &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -1315,7 +1387,9 @@ AI_SKILL_USE_FUNC(MG_STONECURSE) {
 // サンダーストームを使う。
 AI_SKILL_USE_FUNC(MG_THUNDERSTORM) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -1344,7 +1418,8 @@ AI_SKILL_USE_FUNC(MO_ABSORBSPIRITS) {
 // 寸勁を使う。
 AI_SKILL_USE_FUNC(MO_BALKYOUNG) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		!tar_ene->is_hiding()
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies),
@@ -1362,7 +1437,8 @@ AI_SKILL_USE_FUNC(MO_BALKYOUNG) {
 // 白刃取りを使う。
 AI_SKILL_USE_FUNC(MO_BLADESTOP) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_BLADESTOP] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_BLADESTOP] &&
 		!bot->sc()->data[SC_BLADESTOP_WAIT] &&
 		bot->attacked_enemies().size() == 1 &&
 		bot->attacked_enemies().front() == tar_ene &&
@@ -1374,7 +1450,8 @@ AI_SKILL_USE_FUNC(MO_BLADESTOP) {
 // 残影を使う。
 AI_SKILL_USE_FUNC(MO_BODYRELOCATION) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_CLOSE &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_attack(tar_ene) &&
@@ -1399,12 +1476,17 @@ AI_SKILL_USE_FUNC_T(MO_CALLSPIRITS, ready) {
 
 // 連打掌を使う。
 AI_SKILL_USE_FUNC(MO_CHAINCOMBO) {
-	bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)))
+		bot->use_skill_self(kid, klv);
 }
 
 // 猛龍拳を使う。
 AI_SKILL_USE_FUNC(MO_COMBOFINISH) {
-	if (bot->collect_spirits(1)) bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->collect_spirits(1)
+	) bot->use_skill_self(kid, klv);
 }
 
 // 爆裂波動を使う。
@@ -1417,7 +1499,8 @@ AI_SKILL_USE_FUNC(MO_EXPLOSIONSPIRITS) {
 // 阿修羅覇凰拳を使う。
 AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->can_move() &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->can_move() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->fullpower(leader) &&
@@ -1429,7 +1512,8 @@ AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 // 阿修羅覇凰拳をコンボで使う。
 AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 	block_if* tar_ene = bot->target_enemy();
-	if ((bot->sc()->data[SC_BLADESTOP] ||
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		(bot->sc()->data[SC_BLADESTOP] ||
 			bot->sc()->data[SC_COMBO]
 		) && bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->fullpower(leader) &&
@@ -1445,7 +1529,8 @@ AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 // 指弾を使う。
 AI_SKILL_USE_FUNC(MO_FINGEROFFENSIVE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_AWAY &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->distance_policy_value() == DPV_AWAY &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
@@ -1456,7 +1541,8 @@ AI_SKILL_USE_FUNC(MO_FINGEROFFENSIVE) {
 // 指弾を使って氷を割る。
 AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, crush) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->is_summoned() &&
 			ene->sc()->data[SC_FREEZE] &&
@@ -1470,7 +1556,8 @@ AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, crush) {
 // 指弾を使って挑発する。
 AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, first_attack) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->check_use_taunt_skill(ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->is_hiding() &&
@@ -1484,7 +1571,8 @@ AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, first_attack) {
 // 発勁を使う。
 AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->def() + tar_ene->def2() >= 100 &&
@@ -1496,7 +1584,8 @@ AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 // 金剛を使う。
 AI_SKILL_USE_FUNC(MO_STEELBODY) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_STEELBODY] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_STEELBODY] &&
 		tar_ene->is_great(leader) &&
 		tar_ene->target_battler() == bot &&
 		bot->collect_spirits(5)
@@ -1509,7 +1598,8 @@ AI_SKILL_USE_FUNC(NJ_BAKUENRYU) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned() &&
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
@@ -1527,8 +1617,9 @@ AI_SKILL_USE_FUNC(NJ_BUNSINJYUTSU) {
 // 氷柱落しを使う。
 AI_SKILL_USE_FUNC(NJ_HYOUSYOURAKU) {
 	int cou = std::count_if(ALL_RANGE(enemies),
-		sift_block_layout(bot, bot, kid, klv, [] (block_if* ene) -> bool {
-			return ene->attacked_battlers().empty() &&
+		sift_block_layout(bot, bot, kid, klv, [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->attacked_battlers().empty() &&
 				ene->is_freezable() &&
 				!ene->is_hiding() &&
 				ene->is_short_range_attacker() &&
@@ -1543,7 +1634,8 @@ AI_SKILL_USE_FUNC(NJ_HYOUSYOURAKU) {
 // 一閃を使う。
 AI_SKILL_USE_FUNC(NJ_ISSEN) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_hp(3) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_hp(3) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->fullpower(leader)
@@ -1557,7 +1649,8 @@ AI_SKILL_USE_FUNC(NJ_KAENSIN) {
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->skill_ratio(kid, klv, ene) > 100 &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_hiding() &&
 					!ene->is_summoned() &&
 					!skill_unit_exists_block(ene, ELEMENTAL_SKILL_UNIT_KEYS);
@@ -1573,7 +1666,8 @@ AI_SKILL_USE_FUNC(NJ_KAMAITACHI) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_path(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned();
 			})
@@ -1585,7 +1679,8 @@ AI_SKILL_USE_FUNC(NJ_KAMAITACHI) {
 // 霞斬りを使う。
 AI_SKILL_USE_FUNC(NJ_KASUMIKIRI) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_CLOSE &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->sc()->data[SC_HIDING] &&
 		bot->check_skill_used_tick(NJ_KIRIKAGE, 2500) &&
 		bot->check_skill_used_tick(NJ_SHADOWJUMP, 2500) &&
@@ -1600,7 +1695,8 @@ AI_SKILL_USE_FUNC(NJ_KASUMIKIRI) {
 // 影斬りを使う。
 AI_SKILL_USE_FUNC(NJ_KIRIKAGE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_attack_range(tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_attack_range(tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		bot->check_skill_used_tick(TF_HIDING, 1000)
@@ -1616,7 +1712,8 @@ AI_SKILL_USE_FUNC_T(NJ_KOUENKA, compromise) {
 	};
 	block_if* tar_ene = bot->target_enemy();
 	int rat = bot->skill_ratio(kid, klv, tar_ene);
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		rat >= 50
 	) {
@@ -1649,7 +1746,8 @@ AI_SKILL_USE_FUNC(NJ_RAIGEKISAI) {
 	if (!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 100 &&
 					!ene->is_summoned();
 			})
@@ -1672,8 +1770,9 @@ AI_SKILL_USE_FUNC(NJ_SUITON) {
 		bot->check_skill_range_block(kid, klv, tar_ene)
 	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
-			sift_block_layout(bot, tar_ene, kid, klv, [] (block_if* ene) -> bool {
-				return !ene->has_status_immune() &&
+			sift_block_layout(bot, tar_ene, kid, klv, [this, kid] (block_if* ene) -> bool {
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					!ene->has_status_immune() &&
 					!ene->is_hiding() &&
 					!ene->is_magic_immune() &&
 					!ene->sc()->data[SC_SUITON] &&
@@ -1689,7 +1788,8 @@ AI_SKILL_USE_FUNC(NJ_TATAMIGAESHI) {
 	if (!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->skill_ratio(kid, klv, ene) > 0 &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->has_knockback_immune() &&
 					ene->is_casting() &&
 					ene->ud()->skill_id == NC_SELFDESTRUCTION &&
@@ -1729,10 +1829,12 @@ AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, deactivate) {
 
 // ゴスペル状態になる。
 AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
-	if (!bot->sc()->data[SC_GOSPEL] &&
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_GOSPEL] &&
 		bot->check_hp(3) &&
 		bot->is_best_pos() &&
-		bot->target_enemy()->is_great(leader)
+		tar_ene->is_great(leader)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1749,7 +1851,8 @@ AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate) {
 // サクリファイスを使う。
 AI_SKILL_USE_FUNC(PA_SACRIFICE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 		bot->check_hp(3) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
@@ -1784,8 +1887,9 @@ AI_SKILL_USE_FUNC(PF_FOGWALL) {
 		!bot->sc()->data[SC_VIOLENTGALE] &&
 		!bot->sc()->data[SC_VOLCANO]
 	) {
-		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
-			return ene->is_casting() &&
+		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->is_casting() &&
 				mob_skill_is_long(e_skill(ene->ud()->skill_id), ene->ud()->skill_lv);
 		});
 		if (ene) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
@@ -1831,8 +1935,9 @@ AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
 
 // スパイダーウェブを使う。
 AI_SKILL_USE_FUNC(PF_SPIDERWEB) {
-	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this] (block_if* ene) -> bool {
-		return ene != bot->target_enemy() &&
+	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene != bot->target_enemy() &&
 			!ene->has_knockback_immune() &&
 			ene->is_great(leader) &&
 			!ene->is_hiding() &&
@@ -1907,7 +2012,8 @@ AI_SKILL_USE_FUNC(PR_KYRIE) {
 AI_SKILL_USE_FUNC(PR_LEXAETERNA) {
 	if (bot->normal_attack_policy_value() == NAPV_SINGLE) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_attack(ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_attack(ene) &&
 				!ene->is_hiding() &&
 				!ene->is_magic_immune() &&
 				!ene->is_summoned() &&
@@ -1922,7 +2028,8 @@ AI_SKILL_USE_FUNC(PR_LEXAETERNA) {
 // レックスディビーナを使う。
 AI_SKILL_USE_FUNC(PR_LEXDIVINA) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
-		return bot->check_attack(ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_attack(ene) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
 			ene->has_usefull_skill() &&
@@ -1946,7 +2053,8 @@ AI_SKILL_USE_FUNC(PR_MAGNUS) {
 	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return bot->check_use_skill(kid, klv, ene) &&
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					bot->check_use_skill(kid, klv, ene) &&
 					!ene->is_summoned() &&
 					(ene->is_undead() ||
 						ene->race() == RC_DEMON
@@ -2020,7 +2128,8 @@ AI_SKILL_USE_FUNC(PR_STRECOVERY) {
 // リカバリーを使ってアンデッドモンスターを暗闇状態にする。
 AI_SKILL_USE_FUNC_T(PR_STRECOVERY, blind) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
@@ -2052,7 +2161,8 @@ AI_SKILL_USE_FUNC(PR_SUFFRAGIUM) {
 // ターンアンデッドを使う。
 AI_SKILL_USE_FUNC(PR_TURNUNDEAD) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->check_use_skill(kid, klv, ene) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -2066,7 +2176,8 @@ AI_SKILL_USE_FUNC(PR_TURNUNDEAD) {
 // バックスタブを使う。
 AI_SKILL_USE_FUNC(RG_BACKSTAP) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0
 	) {
@@ -2081,7 +2192,8 @@ AI_SKILL_USE_FUNC(RG_BACKSTAP) {
 // スティールコインを使う。
 AI_SKILL_USE_FUNC(RG_STEALCOIN) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
@@ -2098,7 +2210,8 @@ AI_SKILL_USE_FUNC(RG_STEALCOIN) {
 // ストリップシールドを使う。
 AI_SKILL_USE_FUNC(RG_STRIPSHIELD) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		tar_ene->check_skill_used_tick(ST_FULLSTRIP, 2500) &&
 		tar_ene->check_skill_used_tick(kid, 2500) &&
 		!tar_ene->is_hiding() &&
@@ -2109,7 +2222,8 @@ AI_SKILL_USE_FUNC(RG_STRIPSHIELD) {
 // ストリップウェポンを使う。
 AI_SKILL_USE_FUNC(RG_STRIPWEAPON) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_skill_used_tick(ST_FULLSTRIP, 2500) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->is_hiding() &&
@@ -2120,8 +2234,10 @@ AI_SKILL_USE_FUNC(RG_STRIPWEAPON) {
 
 // オートスペルを使う。
 AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
-	if (bot->normal_attack_policy_value() == NAPV_CONTINUOUS) {
-		block_if* tar_ene = bot->target_enemy();
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->normal_attack_policy_value() == NAPV_CONTINUOUS
+	) {
 		e_skill gre_spe_id = e_skill(0);
 		int gre_rat;
 		auto che_spe = [this, klv, tar_ene, &gre_spe_id, &gre_rat] (e_skill spe_id, int min_lv) {
@@ -2163,7 +2279,8 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 // デリュージを使う。
 AI_SKILL_USE_FUNC(SA_DELUGE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_DELUGE] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_DELUGE] &&
 		bot->attack_element_ratio(tar_ene, ELE_WATER) > 100 &&
 		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
@@ -2172,7 +2289,8 @@ AI_SKILL_USE_FUNC(SA_DELUGE) {
 // ディスペルを使う。
 AI_SKILL_USE_FUNC(SA_DISPELL) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_sc_types(GREAT_SC_TYPES) &&
 			!ene->is_magic_immune() &&
 			ene->is_boss() &&
@@ -2239,7 +2357,8 @@ AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 	static const skill_unit_key_map KEYS = {SKILL_UNIT_KEY(SA_LANDPROTECTOR)};
 	block_if* tar_ene = bot->target_enemy();
-	if (tar_ene->is_great(leader) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		tar_ene->is_great(leader) &&
 		bot->is_best_pos() &&
 		bot->check_attack(tar_ene) &&
 		!skill_unit_exists_block(bot, KEYS)
@@ -2272,7 +2391,8 @@ AI_SKILL_USE_FUNC(SA_LIGHTNINGLOADER) {
 AI_SKILL_USE_FUNC(SA_MAGICROD) {
 	if (!bot->sc()->data[SC_MAGICROD]) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-			return !bot->is_magic_immune() &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				!bot->is_magic_immune() &&
 				ene->skill_target_battler() == bot;
 		});
 		if (ene) bot->use_skill_self(kid, klv);
@@ -2297,8 +2417,9 @@ AI_SKILL_USE_FUNC(SA_SEISMICWEAPON) {
 
 // スペルブレイカーを使う。
 AI_SKILL_USE_FUNC(SA_SPELLBREAKER) {
-	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-		return ene->is_casting();
+	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_casting();
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }
@@ -2306,7 +2427,8 @@ AI_SKILL_USE_FUNC(SA_SPELLBREAKER) {
 // バイオレントゲイルを使う。
 AI_SKILL_USE_FUNC(SA_VIOLENTGALE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_VIOLENTGALE] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_VIOLENTGALE] &&
 		bot->attack_element_ratio(tar_ene, ELE_WIND) > 100 &&
 		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
@@ -2315,7 +2437,8 @@ AI_SKILL_USE_FUNC(SA_VIOLENTGALE) {
 // ボルケーノを使う。
 AI_SKILL_USE_FUNC(SA_VOLCANO) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_VOLCANO] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_VOLCANO] &&
 		bot->attack_element_ratio(tar_ene, ELE_FIRE) > 100 &&
 		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
@@ -2344,7 +2467,8 @@ AI_SKILL_USE_FUNC(SG_SUN_COMFORT) {
 // 太陽の温もりを使う。
 AI_SKILL_USE_FUNC(SG_SUN_WARM) {
 	block_if* tar_ene = bot->target_enemy();
-	if (!bot->sc()->data[SC_FUSION] &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->sc()->data[SC_FUSION] &&
 		bot->sc_rest(SC_WARM) <= bot->get_skill_tail(kid) &&
 		tar_ene->has_knockback_immune()
 	) bot->use_skill_self(kid, klv);
@@ -2401,8 +2525,9 @@ AI_SKILL_USE_FUNC(SL_KAUPE) {
 
 // エスカを使う。
 AI_SKILL_USE_FUNC(SL_SKA) {
-	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-		return !ene->is_hiding() &&
+	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			!ene->is_hiding() &&
 			ene->md()->mob_id != MOBID_EMPERIUM &&
 			!ene->sc()->data[SC_SKA];
 	});
@@ -2411,8 +2536,9 @@ AI_SKILL_USE_FUNC(SL_SKA) {
 
 // エスクを使う。
 AI_SKILL_USE_FUNC(SL_SKE) {
-	block_if* mob = pybot::find_if(ALL_RANGE(ally_mobs), [] (block_if* mob) -> bool {
-		return !mob->sc()->data[SC_SKE];
+	block_if* mob = pybot::find_if(ALL_RANGE(ally_mobs), [this, kid] (block_if* mob) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, mob->md()->mob_id)) &&
+			!mob->sc()->data[SC_SKE];
 	});
 	if (mob) bot->use_skill_block(kid, klv, mob);
 }
@@ -2420,7 +2546,8 @@ AI_SKILL_USE_FUNC(SL_SKE) {
 // エスマを使う。
 AI_SKILL_USE_FUNC(SL_SMA) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		bot->sc()->data[SC_SMA]
@@ -2430,7 +2557,8 @@ AI_SKILL_USE_FUNC(SL_SMA) {
 // エスティンを使う。
 AI_SKILL_USE_FUNC(SL_STIN) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->size_() == SZ_SMALL
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -2439,15 +2567,17 @@ AI_SKILL_USE_FUNC(SL_STIN) {
 // エストンを使う。
 AI_SKILL_USE_FUNC(SL_STUN) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // エスウを使う。
 AI_SKILL_USE_FUNC(SL_SWOO) {
-	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [] (block_if* ene) -> bool {
-		return !ene->has_status_immune() &&
+	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			!ene->has_status_immune() &&
 			!ene->is_hiding() &&
 			ene->is_walking() &&
 			!ene->sc()->data[SC_SWOO];
@@ -2463,7 +2593,8 @@ AI_SKILL_USE_FUNC(SM_AUTOBERSERK) {
 // バッシュを使う。
 AI_SKILL_USE_FUNC(SM_BASH) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -2473,7 +2604,8 @@ AI_SKILL_USE_FUNC(SM_BASH) {
 AI_SKILL_USE_FUNC_T(SM_BASH, disturb) {
 	if (bot->check_skill(SM_FATALBLOW)) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_skill_range_block(kid, klv, ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_skill_range_block(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) > 0 &&
 				!ene->has_status_immune() &&
 				ene->is_casting();
@@ -2485,7 +2617,8 @@ AI_SKILL_USE_FUNC_T(SM_BASH, disturb) {
 // 効果的なバッシュを使う。
 AI_SKILL_USE_FUNC_T(SM_BASH, effective) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 100
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -2500,7 +2633,8 @@ AI_SKILL_USE_FUNC(SM_ENDURE) {
 AI_SKILL_USE_FUNC(SM_MAGNUM) {
 	int cou = std::count_if(ALL_RANGE(enemies),
 		sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_use_skill(kid, klv, ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_use_skill(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) > 0 &&
 				!ene->is_summoned();
 		})
@@ -2512,7 +2646,8 @@ AI_SKILL_USE_FUNC(SM_MAGNUM) {
 AI_SKILL_USE_FUNC_T(SM_MAGNUM, effective) {
 	int cou = std::count_if(ALL_RANGE(enemies),
 		sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_use_skill(kid, klv, ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_use_skill(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) > 100 &&
 				!ene->is_summoned();
 		})
@@ -2530,7 +2665,8 @@ AI_SKILL_USE_FUNC_T(SM_MAGNUM, enchant) {
 // プロボックを使ってDefを下げる。
 AI_SKILL_USE_FUNC(SM_PROVOKE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_attack(tar_ene) &&
 		tar_ene->can_be_provoke() &&
 		tar_ene->check_skill_used_tick(kid, 2500) &&
@@ -2545,7 +2681,8 @@ AI_SKILL_USE_FUNC(SM_PROVOKE) {
 // プロボックを使って挑発する。
 AI_SKILL_USE_FUNC_T(SM_PROVOKE, first_attack) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->check_use_taunt_skill(ene) &&
 			ene->can_be_provoke() &&
 			ene->check_skill_used_tick(kid, 2500);
@@ -2561,7 +2698,9 @@ AI_SKILL_USE_FUNC(SN_SIGHT) {
 // シャープシューティングを使う。
 AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_path(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -2585,7 +2724,8 @@ AI_SKILL_USE_FUNC(SN_WINDWALK) {
 // フルストリップを使う。
 AI_SKILL_USE_FUNC(ST_FULLSTRIP) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_skill_used_tick(ST_FULLSTRIP, 2500) &&
 			!ene->is_hiding() &&
 			(!ene->sc()->data[SC_STRIPSHIELD] ||
@@ -2647,7 +2787,8 @@ AI_SKILL_USE_FUNC(TF_PICKSTONE) {
 // インベナムを使う。
 AI_SKILL_USE_FUNC(TF_POISON) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -2662,7 +2803,8 @@ AI_SKILL_USE_FUNC(TF_POISON) {
 // 砂まきを使う。
 AI_SKILL_USE_FUNC(TF_SPRINKLESAND) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->has_status_immune() &&
@@ -2676,7 +2818,8 @@ AI_SKILL_USE_FUNC(TF_SPRINKLESAND) {
 // スティールを使う。
 AI_SKILL_USE_FUNC(TF_STEAL) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->check_skill_used_tick(kid, 2500) &&
 			!ene->is_hiding() &&
 			!ene->is_summoned() &&
@@ -2692,7 +2835,8 @@ AI_SKILL_USE_FUNC_T(TF_THROWSTONE, crush) {
 	static const auto KEYS = skill_unit_key_map{SKILL_UNIT_KEY(WZ_STORMGUST, BL_PC, 2)};
 	bool sel_sg = skill_unit_exists_block(bot, KEYS);
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv, sel_sg] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->is_summoned() &&
 			ene->sc()->data[SC_FREEZE] &&
@@ -2706,7 +2850,8 @@ AI_SKILL_USE_FUNC_T(TF_THROWSTONE, crush) {
 // 石投げを使って挑発する。
 AI_SKILL_USE_FUNC_T(TF_THROWSTONE, first_attack) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return bot->check_skill_range_block(kid, klv, ene) &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
 			bot->check_use_taunt_skill(ene) &&
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->is_hiding() &&
@@ -2723,7 +2868,8 @@ AI_SKILL_USE_FUNC(TK_DODGE) {
 // ティオアプチャギを使う。
 AI_SKILL_USE_FUNC(TK_JUMPKICK) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_CLOSE &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
@@ -2763,7 +2909,8 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 		SC_ASPERSIO,
 	};
 	block_if* tar_ene = bot->target_enemy();
-	if ((!bot->skill_seven_wind()->get() ||
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		(!bot->skill_seven_wind()->get() ||
 			skill_get_ele(kid, klv) == bot->skill_seven_wind()->get()
 		) && bot->sc_rest(SCS[klv - 1]) <= bot->get_skill_tail(kid) &&
 		bot->check_attack(tar_ene)
@@ -2790,7 +2937,10 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 
 // アプチャオルリギを使う。
 AI_SKILL_USE_FUNC(TK_COUNTER) {
-	if (bot->combo_skill_id() == kid) bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->combo_skill_id() == kid
+	) bot->use_skill_self(kid, klv);
 }
 
 // カートブーストを使う。
@@ -2824,7 +2974,8 @@ AI_SKILL_USE_FUNC(WZ_ICEWALL) {
 	if (bot->check_skill_used_tick(kid, 2500)) {
 		pos_t pos;
 		block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv, &pos] (block_if* ene) -> bool {
-			if (ene->attacked_battlers().empty() &&
+			if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->attacked_battlers().empty() &&
 				ene->is_short_range_attacker() &&
 				ene->is_walking() &&
 				ene->walk_target_battler() &&
@@ -2849,7 +3000,8 @@ AI_SKILL_USE_FUNC(WZ_ICEWALL) {
 // ファイアーピラーを使う。
 AI_SKILL_USE_FUNC(WZ_FIREPILLAR) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
-		return ene->is_walking() &&
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
 			bot->skill_ratio(kid, klv, ene) > 100 &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
@@ -2862,7 +3014,8 @@ AI_SKILL_USE_FUNC(WZ_FIREPILLAR) {
 AI_SKILL_USE_FUNC(WZ_FROSTNOVA) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies),
 		sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-			return ene->attacked_battlers().empty() &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				ene->attacked_battlers().empty() &&
 				ene->is_freezable() &&
 				!ene->is_hiding();
 		})
@@ -2874,7 +3027,8 @@ AI_SKILL_USE_FUNC(WZ_FROSTNOVA) {
 AI_SKILL_USE_FUNC(WZ_JUPITEL) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies),
 		sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-			return bot->check_skill_range_block(kid, klv, ene) &&
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->check_skill_range_block(kid, klv, ene) &&
 				ene->attacked_battlers().empty() &&
 				!ene->is_summoned() &&
 				ene->sc()->data[SC_FREEZE] &&
@@ -2887,7 +3041,9 @@ AI_SKILL_USE_FUNC(WZ_JUPITEL) {
 // メテオストームを使う。
 AI_SKILL_USE_FUNC(WZ_METEOR) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_splash(tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -2905,7 +3061,8 @@ AI_SKILL_USE_FUNC(WZ_METEOR) {
 // クァグマイアを使う。
 AI_SKILL_USE_FUNC(WZ_QUAGMIRE) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene) &&
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_skill_used_tick(kid, 5 * klv * 1000 / 3)
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies),
@@ -2927,7 +3084,9 @@ AI_SKILL_USE_FUNC(WZ_QUAGMIRE) {
 // ストームガストを使う。
 AI_SKILL_USE_FUNC(WZ_STORMGUST) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -2945,7 +3104,9 @@ AI_SKILL_USE_FUNC(WZ_STORMGUST) {
 // ストームガストを使って凍結する。
 AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
@@ -3060,14 +3221,16 @@ AI_SKILL_USE_DEF(cp)(
 					mem->sc_rest(sc_typ) <= ai->bot->get_skill_tail(kid) &&
 					(mem->sc()->data[SC_OVERTHRUST] ||
 						mem->sc()->data[SC_MAXOVERTHRUST]
-					) && !(mem->sd()->bonus.unbreakable_equip & equ) &&
+					) && !mem->sc()->data[sc_typ] &&
+					!(mem->sd()->bonus.unbreakable_equip & equ) &&
 					pc_checkequip(mem->sd(), equ) >= 0;
 			});
 			if (mem) ai->bot->use_skill_block(kid, klv, mem);
 		}
-		block_if* ene = pybot::find_if(ALL_RANGE(ai->enemies), [equ, sc_typ, has_sk, kid] (block_if* ene) -> bool {
+		block_if* ene = pybot::find_if(ALL_RANGE(ai->enemies), [equ, sc_typ, has_sk, ai, kid] (block_if* ene) -> bool {
 			block_if* tar_bat = ene->target_battler();
-			return (ene->*has_sk)() &&
+			return !ai->bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				(ene->*has_sk)() &&
 				!ene->is_walking() &&
 				tar_bat &&
 				dynamic_cast<member_impl*>(tar_bat) &&

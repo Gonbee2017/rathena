@@ -570,6 +570,7 @@ function	script	Refine4	{
 		mes "これ以上は精錬できないな。";
 		return;
 	}
+	set .@id, getequipid2(.@i);
 	//初回呼び出し時のみ料金とアイテムIDをそれぞれ格納
 	if(.price[0]==0) {
 		setarray .price,5000,100,500,5000,10000;
@@ -632,84 +633,104 @@ function	script	Refine4	{
 //	case 4: setarray .@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
 //	}
 //	if(.@parcent[getequiprefinerycnt2(.@i)] < 100) {
-	if(getequippercentrefinery2(.@i, 1) < 100) {
-		mes "["+getarg(0)+"]";
-		if(.@wlv==0) {	//防具のとき
-			mes "あらら！";
-			mes "この防具はもう";
-			mes "何回も精錬されちゃったね。";
-			mes "これ以上精錬すると";
-			mes "防具が壊れちゃう";
-			mes "恐れがある……";
-			next;
+	while (1) {
+		if(getequipid2(.@i) != .@id ||
+			getequiprefinerycnt2(.@i)>=10
+		) return;
+		if(getequippercentrefinery2(.@i, 1) < 100) {
 			mes "["+getarg(0)+"]";
-			mes "防具が壊れちゃうと";
-			mes "二度と使えないんだぜ?!";
-			mes "中に打ち込まれたカードも特性も";
-			mes "^FF0000すべてが消えちゃう^000000んだからね。";
-			mes "^FF0000防具自体が消えちゃう^000000ってわけだ。";
-			mes "それでも精錬するつもりか？";
-		} else {		//武器のとき
-			mes "あらら！";
-			mes "この武器はもう";
-			mes "何回も精錬されちゃったね。";
-			mes "これ以上精錬すると";
-			mes "武器が壊れちゃう";
-			mes "恐れがある……";
+			if(.@wlv==0) {	//防具のとき
+				mes "あらら！";
+				mes "この防具はもう";
+				mes "何回も精錬されちゃったね。";
+				mes "これ以上精錬すると";
+//				mes "防具が壊れちゃう";
+				mes "防具が劣化する恐れがある……";
+				//next;
+				//mes "["+getarg(0)+"]";
+				//mes "防具が壊れちゃうと";
+				//mes "二度と使えないんだぜ?!";
+				//mes "中に打ち込まれたカードも特性も";
+				//mes "^FF0000すべてが消えちゃう^000000んだからね。";
+				//mes "^FF0000防具自体が消えちゃう^000000ってわけだ。";
+				mes "それでも精錬するつもりか？";
+			} else {		//武器のとき
+				mes "あらら！";
+				mes "この武器はもう";
+				mes "何回も精錬されちゃったね。";
+				mes "これ以上精錬すると";
+//				mes "武器が壊れちゃう";
+				mes "武器が劣化する恐れがある……";
+				//next;
+				//mes "["+getarg(0)+"]";
+				//mes "武器が壊れちゃうと";
+				//mes "二度と使えないんだぜ?!";
+				//mes "中に打ち込まれたカードも特性も";
+				//mes "^FF0000すべてが消えちゃう^000000んだからね。";
+				//mes "^FF0000武器自体が消えちゃう^000000ってわけだ。";
+				mes "それでも精錬するつもりか？";
+			}
 			next;
-			mes "["+getarg(0)+"]";
-			mes "武器が壊れちゃうと";
-			mes "二度と使えないんだぜ?!";
-			mes "中に打ち込まれたカードも特性も";
-			mes "^FF0000すべてが消えちゃう^000000んだからね。";
-			mes "^FF0000武器自体が消えちゃう^000000ってわけだ。";
-			mes "それでも精錬するつもりか？";
+			if(select("はい","いいえ")==2) {
+				mes "["+getarg(0)+"]";
+				mes "そうだな、物は大切に扱うべきだからな。";
+				return;
+			}
 		}
-		next;
-		if(select("はい","いいえ")==2) {
+		if(getequipid2(.@i) != .@id ||
+			getequiprefinerycnt2(.@i)>=10
+		) return;
+		if(countitem(.itemid[.@wlv])<1 || Zeny<.price[.@wlv]) {
 			mes "["+getarg(0)+"]";
-			mes "そうだな、物は大切に扱うべきだからな。";
+			mes "これがお前が持ってるすべてか？";
+			mes "残念だけど、材料が足りないと";
+			mes "精錬してあげられないぜ。";
+			mes "俺も仕事をした代価くらい";
+			mes "貰わないとな……。";
 			return;
 		}
-	}
-	if(countitem(.itemid[.@wlv])<1 || Zeny<.price[.@wlv]) {
+		delitem .itemid[.@wlv],1;
+		set Zeny,Zeny-.price[.@wlv];
 		mes "["+getarg(0)+"]";
-		mes "これがお前が持ってるすべてか？";
-		mes "残念だけど、材料が足りないと";
-		mes "精錬してあげられないぜ。";
-		mes "俺も仕事をした代価くらい";
-		mes "貰わないとな……。";
-		return;
-	}
-	delitem .itemid[.@wlv],1;
-	set Zeny,Zeny-.price[.@wlv];
-	mes "["+getarg(0)+"]";
-	mes "カン！ カン！ カン！";
-//	if(.@parcent[getequiprefinerycnt2(.@i)] > rand(100)) {
-	if(getequippercentrefinery2(.@i, 1) > rand(100)) {
-		successrefitem2 .@i;
+		mes "カン！ カン！ カン！";
+//		if(.@parcent[getequiprefinerycnt2(.@i)] > rand(100)) {
+		if(getequippercentrefinery2(.@i, 1) > rand(100)) {
+			successrefitem2 .@i;
+			next;
+			emotion getarg(1);
+			mes "["+getarg(0)+"]";
+			mes "さ！ 無事に精錬が終わったぜ。";
+			mes "俺の腕はまだ使えるぜ！";
+			mes "自分で言うのもなんだが、";
+			mes "なかなか良い出来じゃないか！";
+			if(getequiprefinerycnt2(.@i)>=10) return;
+		}
+		else {
+			failedrefitem3 .@i;
+			next;
+			emotion getarg(2);
+			//mes "["+getarg(0)+"]";
+			//mes "ウアアアアアアアアアアッ!!!!";
+			//next;
+			mes "["+getarg(0)+"]";
+			mes "あ、あら……";
+			mes "失敗しちゃった。ご、ごめん……";
+			//mes "装備が壊れちゃったな……";
+			//mes "だ、だからさ……";
+			//mes "危ないって言ったじゃないか……";
+			//mes "俺を恨まないでくれ……";
+			mes "ま、まあ、でも……";
+			mes "ちょっと劣化しただけで";
+			mes "壊れちゃいないからな……";
+		}
+		mes "まだ精錬するかい？";
 		next;
-		emotion getarg(1);
-		mes "["+getarg(0)+"]";
-		mes "さ！ 無事に精錬が終わったぜ。";
-		mes "俺の腕はまだ使えるぜ！";
-		mes "自分で言うのもなんだが、";
-		mes "なかなか良い出来じゃないか！";
-	}
-	else {
-		failedrefitem2 .@i;
-		next;
-		emotion getarg(2);
-		mes "["+getarg(0)+"]";
-		mes "ウアアアアアアアアアアッ!!!!";
-		next;
-		mes "["+getarg(0)+"]";
-		mes "あ、あら……";
-		mes "失敗しちゃった。ご、ごめん……";
-		mes "装備が壊れちゃったな……";
-		mes "だ、だからさ……";
-		mes "危ないって言ったじゃないか……";
-		mes "俺を恨まないでくれ……";
+		if(select("はい","いいえ")==2) {
+			mes "[" +strnpcinfo(1)+ "]";
+			mes "そうかい……";
+			mes "また来てくれよ。";
+			return;
+		}
 	}
 	return;
 	//closeで終了

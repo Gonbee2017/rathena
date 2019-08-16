@@ -687,6 +687,9 @@ man_in01	mapflag	nomemo
 spl_in01	mapflag	nomemo
 spl_in02	mapflag	nomemo
 
+// [GonBee]
+dic_in01	mapflag	nomemo
+
 //evt_zombie	mapflag	nomemo
 
 // Bossnia (custom) ==============

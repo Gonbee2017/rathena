@@ -22,11 +22,13 @@ timeout /t %check_interval% /nobreak>nul 2>&1
 goto run
 
 :check
-ss-checker %bind_address% %2>nul 2>&1
-if errorlevel 1 (
-	echo %date% %time:~0,8% - %1サーバーがフリーズしたため再起動します。
-	taskkill /f /im %1-server.exe>nul 2>&1
+for /l %%i in (1,1,%check_count%) do (
+	ss-checker %bind_address% %2>nul 2>&1
+	if not errorlevel 1 exit /b
+	if not %%i==%check_count% timeout /t %check_interval% /nobreak>nul 2>&1
 )
+taskkill /f /im %1-server.exe>nul 2>&1
+echo %date% %time:~0,8% - %1サーバーがフリーズしたため再起動します。
 exit /b
 
 :backup

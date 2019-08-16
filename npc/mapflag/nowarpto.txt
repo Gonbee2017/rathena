@@ -156,6 +156,9 @@ spl_in01	mapflag	nowarpto
 1@nyd	mapflag	nowarpto
 2@nyd	mapflag	nowarpto
 
+// [GonBee]
+dic_in01	mapflag	nowarpto
+
 // Bossnia (custom) ==============
 bossnia_01	mapflag	nowarpto
 bossnia_02	mapflag	nowarpto

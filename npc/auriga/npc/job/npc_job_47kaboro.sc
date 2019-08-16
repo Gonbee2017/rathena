@@ -4352,10 +4352,10 @@ que_ng,75,23,3	script	’b–èt ƒe[ƒl#ko	762,{
 			close;
 		}
 		set .@refine,getequiprefinerycnt2(.@menu);
-		set .@card1,getequipcardid(.@menu,0);
-		set .@card2,getequipcardid(.@menu,1);
-		set .@card3,getequipcardid(.@menu,2);
-		set .@card4,getequipcardid(.@menu,3);
+		set .@card1,getequipcardid2(.@menu,0);
+		set .@card2,getequipcardid2(.@menu,1);
+		set .@card3,getequipcardid2(.@menu,2);
+		set .@card4,getequipcardid2(.@menu,3);
 		if(.@type == 1) {
 			if(.@card3 == 0) {
 				mes "[’b–èt ƒe[ƒl]";
@@ -4405,13 +4405,13 @@ que_ng,75,23,3	script	’b–èt ƒe[ƒl#ko	762,{
 		close;
 	}
 	set .@refine,getequiprefinerycnt2(.@menu);
-	set .@card1,getequipcardid(.@menu,0);
+	set .@card1,getequipcardid2(.@menu,0);
 	set .@card[1],.@card1;
-	set .@card2,getequipcardid(.@menu,1);
+	set .@card2,getequipcardid2(.@menu,1);
 	set .@card[2],.@card2;
-	set .@card3,getequipcardid(.@menu,2);
+	set .@card3,getequipcardid2(.@menu,2);
 	set .@card[3],.@card3;
-	set .@card4,getequipcardid(.@menu,3);
+	set .@card4,getequipcardid2(.@menu,3);
 	set .@card[4],.@card4;
 	if(.@card4 == 0) {
 		mes "[’b–èt ƒe[ƒl]";
