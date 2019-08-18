@@ -61,6 +61,15 @@ prontera,161,193,4	script	”òs‹@æ‚è	869,{
 	mes "‚¢‚Â‚Å‚à‚Ç‚¤‚¼B";
 	close;
 OnInit:
+	setarray .des_maps$[getarraysize(.des_maps$)], "einbroch";
+	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 64,204, 30000;
+	setarray .des_maps$[getarraysize(.des_maps$)], "lighthalzen";
+	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 262,75, 30000;
+	setarray .des_maps$[getarraysize(.des_maps$)], "hugel";
+	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 181,146, 30000;
+	setarray .des_maps$[getarraysize(.des_maps$)], "ra_fild12";
+	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 292,204, 30000;
+	
 	setarray .des_maps$[getarraysize(.des_maps$)], "anthell01";
 	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 35,263, 10000;
 	setarray .des_maps$[getarraysize(.des_maps$)], "beach_dun";
