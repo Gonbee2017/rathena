@@ -1140,19 +1140,6 @@ AI_SKILL_USE_FUNC(LK_PARRYING) {
 	if (bot->sc_rest(SC_PARRYING) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
-// スパイラルピアースを使う。
-AI_SKILL_USE_FUNC(LK_SPIRALPIERCE) {
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		bot->check_skill_range_block(kid, klv, tar_ene) &&
-		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		!tar_ene->has_status_immune() &&
-		!tar_ene->sc()->data[SC_STOP] &&
-		tar_ene->size_() != SZ_BIG
-	) bot->use_skill_block(kid, klv, tar_ene);
-}
-
 // カートレボリューションを使う。
 AI_SKILL_USE_FUNC(MC_CARTREVOLUTION) {
 	block_if* tar_ene = bot->target_enemy();

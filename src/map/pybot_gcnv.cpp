@@ -513,7 +513,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (KN_CHARGEATK                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (LK_JOINTBEAT                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (LK_SPIRALPIERCE                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (LK_SPIRALPIERCE, SM_BASH                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (KN_PIERCE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_MAGE, initialize<ai_t::skill_use_proc_vector>(						 	 
