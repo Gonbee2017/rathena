@@ -2278,9 +2278,9 @@ AI_SKILL_USE_FUNC(SA_DISPELL) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
 		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
 			bot->check_skill_range_block(kid, klv, ene) &&
+			ene->is_great(leader) &&
 			ene->check_sc_types(GREAT_SC_TYPES) &&
 			!ene->is_magic_immune() &&
-			ene->is_boss() &&
 			!ene->is_hiding();
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);

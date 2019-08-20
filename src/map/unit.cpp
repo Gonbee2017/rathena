@@ -2210,10 +2210,20 @@ int unit_set_target(struct unit_data* ud, int target_id)
 {
 	nullpo_ret(ud);
 
-	if( ud->target != target_id ) {
+	// [GonBee]
+	// 取り巻きモンスターはターゲット数を変更しない。
+	//if( ud->target != target_id ) {
+	mob_data* md = BL_CAST(BL_MOB, ud->bl);
+	if (ud->target != target_id &&
+		(!md ||
+			!md->master_id
+		)
+	) {
+
 		struct unit_data * ux;
 		struct block_list* target;
-	
+
+		if (ud->target && (target = map_id2bl(ud->target)) && (ux = unit_bl2ud(target)) && ux->target_count > 0)
 		if (ud->target && (target = map_id2bl(ud->target)) && (ux = unit_bl2ud(target)) && ux->target_count > 0)
 			ux->target_count--;
 
