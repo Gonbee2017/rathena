@@ -875,7 +875,6 @@ struct ai_t {
 	void battler_attack();
 	void battler_use_skill();
 
-	bool away_enemies(int x, int y);
 	bool away_other_battlers(int x, int y);
 	bool away_warp_portals(int x, int y);
 	bool check_line_other_battlers(int x, int y);
@@ -1207,6 +1206,7 @@ struct battler_if {
 	virtual bool check_use_taunt_skill(block_if* ene);
 	virtual distance_policy_values default_distance_policy_value();
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
+	virtual int distance_max_value();
 	virtual distance_policy_values& distance_policy_value();
 	virtual int get_hold_monsters();
 	virtual int guild_id();
@@ -1370,6 +1370,7 @@ struct member_if {
 	virtual ptr<registry_t<int>>& cart_auto_get_items();
 	virtual int& char_id();
 	virtual e_skill combo_skill_id();
+	virtual ptr<regnum_t<int>>& distance_max();
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies();
 	virtual ptr<registry_t<int,equipset_t>>& equipsets();
 	virtual int& fd();
@@ -1654,6 +1655,7 @@ struct homun_impl : virtual block_if {
 	virtual int check_skill(e_skill kid) override;
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
+	virtual int distance_max_value() override;
 	virtual bool exists() override;
 	virtual int get_hold_monsters() override;
 	virtual homun_data* hd() override;
@@ -1737,6 +1739,7 @@ struct member_impl : virtual block_if {
 	int account_id_;                              // アカウントID。
 	ptr<registry_t<int>> cart_auto_get_items_;    // カート自動補充アイテムのレジストリ。
 	int char_id_;                                 // キャラクターID。
+	ptr<regnum_t<int>> distance_max_;             // 最大距離の登録値。
 	ptr<registry_t<int,distance_policy>>		  
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
@@ -1775,6 +1778,8 @@ struct member_impl : virtual block_if {
 	virtual e_skill combo_skill_id() override;
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
+	virtual ptr<regnum_t<int>>& distance_max() override;
+	virtual int distance_max_value() override;
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies() override;
 	virtual ptr<registry_t<int,equipset_t>>& equipsets() override;
 	virtual int& fd() override;
@@ -2371,6 +2376,7 @@ SUBCMD_FUNC(Bot, CartAutoGetClear);
 SUBCMD_FUNC(Bot, CartAutoGetTransport);
 SUBCMD_FUNC(Bot, CartGet);
 SUBCMD_FUNC(Bot, CartPut);
+SUBCMD_FUNC(Bot, DistanceMax);
 SUBCMD_FUNC(Bot, Equip);
 SUBCMD_FUNC(Bot, EquipIdentifyAll);
 SUBCMD_FUNC(Bot, EquipRepairAll);

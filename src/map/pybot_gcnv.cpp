@@ -513,7 +513,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (KN_CHARGEATK                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (LK_JOINTBEAT                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC_D     (LK_SPIRALPIERCE, SM_BASH                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (LK_SPIRALPIERCE, SM_BASH                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (KN_PIERCE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_MAGE, initialize<ai_t::skill_use_proc_vector>(						 	 
@@ -638,7 +638,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_DT    (CR_HOLYCROSS, SM_BASH, effective               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (SM_BASH, effective                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC_D     (PA_SHIELDCHAIN, SM_BASH                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 5),
+		AI_SKILL_USE_PROC_D     (PA_SHIELDCHAIN, SM_BASH                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (CR_HOLYCROSS, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (CR_SHIELDBOOMERANG, spirit                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
@@ -1421,6 +1421,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot cartput クリエ ブルージェムストーン]\n"
 		"カートにアイテムの特定個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン 5]\n"
+	), SUBCMD_DESC(Bot, DistanceMax                , dm  ,
+		"------ DistanceMax (dm) サブコマンド ------\n"
+		"モンスターとの最大距離を設定する。\n"
+		"入力例 [@bot distancemax ドナ 5]\n"
 	), SUBCMD_DESC(Bot, Equip                      , e   ,
 		"------ Equip (e) サブコマンド ------\n"
 		"武具を装備する。\n"
@@ -1905,6 +1909,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt),
 	SUBCMD_PROC(Bot, CartGet                    , cg  ),
 	SUBCMD_PROC(Bot, CartPut                    , cp  ),
+	SUBCMD_PROC(Bot, DistanceMax                , dm  ),
 	SUBCMD_PROC(Bot, Equip                      , e   ),
 	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia ),
 	SUBCMD_PROC(Bot, EquipRepairAll             , era ),

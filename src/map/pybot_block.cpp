@@ -26,6 +26,7 @@ bool battler_if::check_use_skill(e_skill kid, int klv, block_if* ene) {RAISE_NOT
 bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -168,6 +169,7 @@ bool member_if::can_ka(block_if* tar_mem) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::char_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_skill member_if::combo_skill_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::distance_max() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,distance_policy>>& member_if::distance_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,equipset_t>>& member_if::equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::fd() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -372,6 +374,7 @@ battler_impl::check_use_skill(
 						) && (skill_range(kid, klv) <= 3 ||
 							!ene->is_long_weapon_immune()
 						) && (!ene->sc()->data[SC_REFLECTSHIELD] ||
+							skill_range(kid, klv) > 3 ||
 							kid == NJ_ISSEN ||
 							check_hp(3)
 						)
@@ -1161,6 +1164,12 @@ homun_impl::default_normal_attack_policy_value() {
 	return nor_att_pol_val;
 }
 
+// ホムンクルスの最大距離の値を取得する。
+int // 取得した最大距離の値。
+homun_impl::distance_max_value() {
+	return battle_config.pybot_around_distance;
+}
+
 // ホムンクルスが存在するかを判定する。
 bool // 結果。
 homun_impl::exists() {
@@ -1581,6 +1590,19 @@ member_impl::default_distance_policy_value() {
 normal_attack_policy_values // 取得した通常攻撃ポリシー値。
 member_impl::default_normal_attack_policy_value() {
 	return find_map_data(DEFAULT_NORMAL_ATTACK_POLICY_VALUES, e_job(sd()->status.class_));
+}
+
+// 最大距離の登録値。
+ptr<regnum_t<int>>& member_impl::distance_max() {
+	return distance_max_;
+}
+
+// メンバーの最大距離の値を取得する。
+int // 取得した最大距離の値。
+member_impl::distance_max_value() {
+	int val = distance_max()->get();
+	if (!val) val = battle_config.pybot_around_distance;
+	return val;
 }
 
 // 距離ポリシーのレジストリ。
@@ -2467,6 +2489,7 @@ member_t::member_t(
 	account_id() = sd()->status.account_id;
 	char_id() = sd()->status.char_id;
 	leader() = lea;
+	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
 	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
 	skill_auto_spell() = construct<regnum_t<e_skill>>(sd(), "pybot_skill_auto_spell");

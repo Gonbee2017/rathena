@@ -257,6 +257,27 @@ SUBCMD_FUNC(Bot, CartPut) {
 	clif_emotion(mem->bl(), ET_OK);
 }
 
+// モンスターとの最大距離を設定する。
+SUBCMD_FUNC(Bot, DistanceMax) {
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int dis = shift_arguments_then_parse_int(
+		args, print("距離"), 1, battle_config.pybot_around_distance
+	);
+	if (dis == battle_config.pybot_around_distance) dis = 0;
+	if (dis) {
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はモンスターに対して最大",
+			dis, "セル以内に位置取ります。"
+		));
+	} else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はモンスターに対して最大",
+			battle_config.pybot_around_distance, "セル以内に位置取ります。"
+		));
+	mem->distance_max()->set(dis);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // メンバーが武具を装備、または装備を解除する。
 SUBCMD_FUNC(Bot, Equip) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
