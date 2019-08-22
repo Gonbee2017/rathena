@@ -702,7 +702,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SA_VOLCANO                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_VIOLENTGALE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_DELUGE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (SA_AUTOSPELL                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (SA_AUTOSPELL                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SA_FLAMELAUNCHER                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_LIGHTNINGLOADER                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_SEISMICWEAPON                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -815,7 +815,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SA_VOLCANO                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_VIOLENTGALE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_DELUGE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (SA_AUTOSPELL                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (SA_AUTOSPELL                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SA_FLAMELAUNCHER                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_LIGHTNINGLOADER                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_SEISMICWEAPON                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -876,13 +876,13 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SL_SKE                                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_SKA                                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_SWOO                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SL_SMA                                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SL_STIN                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -987,13 +987,13 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SG_SUN_WARM                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC_D     (SG_MOON_WARM, SG_SUN_WARM                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC_D     (SG_STAR_WARM, SG_SUN_WARM                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (TK_JUMPKICK                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_SUPER_NOVICE, initialize<ai_t::skill_use_proc_vector>(				 	 
@@ -1066,13 +1066,13 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (TK_READYDOWN, TK_READYCOUNTER                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (TK_DODGE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (TK_RUN                                         ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  1, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  2,  2, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  3,  3, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  4,  4, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  5,  5, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  6,  6, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  7,  7, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (TK_JUMPKICK                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_THIEF, initialize<ai_t::skill_use_proc_vector>(					 	 
@@ -1669,12 +1669,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ アスムプティオ アサクロ]\n"
 		"ターゲットスキルを特定レベルで使用する。\n"
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
-	), SUBCMD_DESC(Bot, sKillAutoSpell             , kas ,
-		"------ sKillAutoSpell (kas) サブコマンド ------\n"
-		"オートスペルで選択する魔法を設定する。\n"
-		"入力例 [@bot skillautospell プロフェ ファイアーボルト]\n"
-		"オートスペルで自由に魔法を選択するようにする。\n"
-		"入力例 [@bot skillautospell プロフェ]\n"
+	), SUBCMD_DESC(Bot, sKillEnchantWeapon         , kew ,
+		"------ sKillEnchantWeapon (kew) サブコマンド ------\n"
+		"武器属性付与を一覧表示する。\n"
+		"入力例 [@bot skillenchantweapon アサクロ]\n"
+		"武器属性付与を登録する。\n"
+		"入力例 [@bot skillenchantweapon アサクロ iz_dun00 風属性]\n"
+		"武器属性付与の登録を抹消する。\n"
+		"入力例 [@bot skillenchantweapon アサクロ iz_dun00]\n"
+	), SUBCMD_DESC(Bot, sKillEnchantWeaponClear    ,     ,
+		"------ sKillEnchantWeaponClear サブコマンド ------\n"
+		"武器属性付与をクリアする。\n"
+		"入力例 [@bot skillenchantweaponclear アサクロ]\n"
+	), SUBCMD_DESC(Bot, sKillEnchantWeaponTransport, kewt,
+		"------ sKillEnchantWeaponTransport (kewt) サブコマンド ------\n"
+		"武器属性付与を転送する。\n"
+		"入力例 [@bot skillenchantweapontransport アサクロ チェイス]\n"
 	), SUBCMD_DESC(Bot, sKillFirst                  , kf  ,
 		"------ sKillFirst (kf) サブコマンド ------\n"
 		"優先スキルを一覧表示する。\n"
@@ -1713,10 +1723,6 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skilllimit ハイプリ エンジェラス 0]\n"
 		"スキルのレベル制限を解除する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス]\n"
-	), SUBCMD_DESC(Bot, sKillLowRate               , klr ,
-		"------ sKillLowRate (klr) サブコマンド ------\n"
-		"低ダメージ倍率を設定する。\n"
-		"入力例 [@bot skilllowrate プロフェ 50]\n"
 	), SUBCMD_DESC(Bot, sKillMonsters              , km  ,
 		"------ sKillMonsters (km) サブコマンド ------\n"
 		"範囲スキルの発動条件となるモンスター数を設定する。\n"
@@ -1753,12 +1759,6 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillRejectTransport (krt) サブコマンド ------\n"
 		"拒否スキルを転送する。\n"
 		"入力例 [@bot skillrejecttransport クラウン ジプシー]\n"
-	), SUBCMD_DESC(Bot, sKillSevenWind             , ksw ,
-		"------ sKillSevenWind (ksw) サブコマンド ------\n"
-		"暖かい風で選択する属性を設定する。\n"
-		"入力例 [@bot skillsevenwind テコン 火属性]\n"
-		"暖かい風で自由に属性を選択するようにする。\n"
-		"入力例 [@bot skillsevenwind テコン]\n"
 	), SUBCMD_DESC(Bot, sKillTail                  , kt  ,
 		"------ sKillTail (kt) サブコマンド ------\n"
 		"掛け直し時間を一覧表示する。\n"
@@ -1956,7 +1956,9 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttackClear    ,     ),
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
-	SUBCMD_PROC(Bot, sKillAutoSpell             , kas ),
+	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew ),
+	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,     ),
+	SUBCMD_PROC(Bot, sKillEnchantWeaponTransport, kewt),
 	SUBCMD_PROC(Bot, sKillFirst                 , kf  ),
 	SUBCMD_PROC(Bot, sKillFirstClear            ,     ),
 	SUBCMD_PROC(Bot, sKillFirstTransport        , kft ),
@@ -1964,9 +1966,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillIgnoreMonsterClear    ,     ),
 	SUBCMD_PROC(Bot, sKillIgnoreMonsterTransport, kimt),
 	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
-	SUBCMD_PROC(Bot, sKillLowRate               , klr ),
 	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
-	SUBCMD_PROC(Bot, sKillSevenWind             , ksw ),
 	SUBCMD_PROC(Bot, sKillPlay                  , kp  ),
 	SUBCMD_PROC(Bot, sKillPlayClear             ,     ),
 	SUBCMD_PROC(Bot, sKillPlayTransport         , kpt ),
@@ -2275,7 +2275,7 @@ const std::array<
 	"集中力向上",
 	"ハイディング",
 	"クローキング",
-	"武器属性付与",
+	"武器属性付与(毒)",
 	"ポイズンリアクト",
 	"クァグマイア",
 	"エンジェラス",
@@ -2286,7 +2286,7 @@ const std::array<
 	"スローポイズン",
 	"イムポシティオマヌス",
 	"サフラギウム",
-	"武器属性付与",
+	"武器属性付与(聖)",
 	"鎧属性付与",
 	"キリエエレイソン",
 	"マグニフィカート",
@@ -2359,14 +2359,14 @@ const std::array<
 	"金剛",
 	"阿修羅覇凰拳",
 	UNKNOWN_SYMBOL,
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
+	"武器属性付与(火)",
+	"武器属性付与(水)",
+	"武器属性付与(風)",
+	"武器属性付与(地)",
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
-	"鎧属性付与",
+	"鎧属性付与(不死)",
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
@@ -2415,9 +2415,9 @@ const std::array<
 	"落法",
 	UNKNOWN_SYMBOL,
 	"スパート",
-	"武器属性付与",
+	"武器属性付与(闇)",
 	"フルアドレナリンラッシュ",
-	"武器属性付与",
+	"武器属性付与(念)",
 	UNKNOWN_SYMBOL,
 	"[SP]Atk上昇",
 	"[SP]Matk上昇",
@@ -3166,16 +3166,16 @@ const std::array<
 	"イヌハッカシャワー",
 	UNKNOWN_SYMBOL,
 	"マタタビの根っこ",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
-	"武器属性付与",
+	"武器属性付与(無)",
+	"武器属性付与(水)",
+	"武器属性付与(地)",
+	"武器属性付与(火)",
+	"武器属性付与(風)",
+	"武器属性付与(毒)",
+	"武器属性付与(聖)",
+	"武器属性付与(闇)",
+	"武器属性付与(念)",
+	"武器属性付与(不死)",
 	"無属性攻撃耐性",
 	"水属性攻撃耐性",
 	"地属性攻撃耐性",
@@ -3627,6 +3627,8 @@ const std::unordered_map<
 	{std::type_index(typeid(const double))            , SQLDT_DOUBLE   },
 	{std::type_index(typeid(const char*))             , SQLDT_STRING   },
 
+	{std::type_index(typeid(e_element))               , SQLDT_INT8     },
+	{std::type_index(typeid(const e_element))         , SQLDT_INT8     },
 	{std::type_index(typeid(e_skill))                 , SQLDT_INT      },
 	{std::type_index(typeid(const e_skill))           , SQLDT_INT      },
 	{std::type_index(typeid(equip_pos))               , SQLDT_INT      },

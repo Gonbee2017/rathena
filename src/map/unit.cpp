@@ -614,6 +614,14 @@ static TIMER_FUNC(unit_walktoxy_timer){
 
 		if(battle_config.official_cell_stack_limit > 0
 			&& map_count_oncell(bl->m, x, y, BL_CHAR|BL_NPC, 1) > battle_config.official_cell_stack_limit) {
+
+			// [GonBee]
+			// Botはスタックできる。
+			map_session_data* sd = BL_CAST(BL_PC, bl);
+			if (!sd ||
+				!pybot::char_is_bot(sd->status.char_id)
+			) {
+
 			//Walked on occupied cell, call unit_walktoxy again
 			if(ud->steptimer != INVALID_TIMER) {
 				//Execute step timer on next step instead
@@ -621,6 +629,10 @@ static TIMER_FUNC(unit_walktoxy_timer){
 				ud->steptimer = INVALID_TIMER;
 			}
 			return unit_walktoxy(bl, x, y, 8);
+
+			// [GonBee]
+			}
+
 		}
 	}
 

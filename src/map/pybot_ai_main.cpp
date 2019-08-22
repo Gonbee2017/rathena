@@ -1105,13 +1105,16 @@ ai_t::check_stuck(
 	int y  // YÀ•WB
 ) {
 	bool res = false;
-	for (int i = 0; i < battlers.size(); i++)	{
-		block_if* oth_bat = battlers[i];
-		if ((oth_bat == leader ||
-				oth_bat == leader->homun().get() ||
-				i < battler->battle_index()
-			) && oth_bat->bl()->x == x &&
-			oth_bat->bl()->y == y
+	for (block_if* bat : battlers)	{
+		if (bat != battler &&
+			((!bat->is_walking() &&
+					bat->bl()->x == x &&
+					bat->bl()->y == y
+				) || (bat->is_walking() &&
+					bat->ud()->to_x == x &&
+					bat->ud()->to_y == y
+				)
+			)
 		) {
 			res = true;
 			break;

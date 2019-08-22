@@ -1380,13 +1380,13 @@ struct member_if {
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
-	virtual int get_skill_low_rate();
 	virtual int get_skill_monsters();
 	virtual t_tick get_skill_tail(e_skill kid);
 	virtual ptr<regnum_t<int>>& hold_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
+	virtual ptr<registry_t<int,e_element>>& kew_elements();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<bool>>& loot();
@@ -1399,11 +1399,8 @@ struct member_if {
 	virtual std::unordered_set<int>& request_items();
 	virtual map_session_data*& sd();
 	virtual void sit();
-	virtual ptr<regnum_t<e_skill>>& skill_auto_spell();
 	virtual ptr<registry_t<int>>& skill_ignore_mobs();
-	virtual ptr<regnum_t<int>>& skill_low_rate();
 	virtual ptr<regnum_t<int>>& skill_monsters();
-	virtual ptr<regnum_t<e_element>>& skill_seven_wind();
 	virtual ptr<registry_t<e_skill,int>>& skill_tails();
 	virtual void stand();
 	virtual ptr<registry_t<int,int>>& storage_get_items();
@@ -1747,6 +1744,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
 	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
+	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
@@ -1790,7 +1788,6 @@ struct member_impl : virtual block_if {
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_hold_monsters() override;
-	virtual int get_skill_low_rate() override;
 	virtual int get_skill_monsters() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int guild_id() override;
@@ -1805,6 +1802,7 @@ struct member_impl : virtual block_if {
 	virtual bool is_no_gemstone() override;
 	virtual bool is_wall_side() override;
 	virtual void iterate_skill(yield_skill_func yie) override;
+	virtual ptr<registry_t<int,e_element>>& kew_elements() override;
 	virtual block_if*& leader() override;
 	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr) override;
@@ -1825,12 +1823,9 @@ struct member_impl : virtual block_if {
 	virtual map_session_data*& sd() override;
 	virtual void sit() override;
 	virtual s_skill* skill(e_skill kid) override;
-	virtual ptr<regnum_t<e_skill>>& skill_auto_spell() override;
 	virtual ptr<registry_t<int>>& skill_ignore_mobs() override;
-	virtual ptr<regnum_t<int>>& skill_low_rate() override;
 	virtual ptr<regnum_t<int>>& skill_monsters() override;
 	virtual int skill_point() override;
-	virtual ptr<regnum_t<e_element>>& skill_seven_wind() override;
 	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
 	virtual void skill_up(e_skill kid) override;
 	virtual void stand() override;
@@ -2423,7 +2418,9 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack);
 SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
 SUBCMD_FUNC(Bot, sKill);
-SUBCMD_FUNC(Bot, sKillAutoSpell);
+SUBCMD_FUNC(Bot, sKillEnchantWeapon);
+SUBCMD_FUNC(Bot, sKillEnchantWeaponClear);
+SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport);
 SUBCMD_FUNC(Bot, sKillFirst);
 SUBCMD_FUNC(Bot, sKillFirstClear);
 SUBCMD_FUNC(Bot, sKillFirstTransport);
@@ -2431,7 +2428,6 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster);
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear);
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport);
 SUBCMD_FUNC(Bot, sKillLimit);
-SUBCMD_FUNC(Bot, sKillLowRate);
 SUBCMD_FUNC(Bot, sKillMonsters);
 SUBCMD_FUNC(Bot, sKillPlay);
 SUBCMD_FUNC(Bot, sKillPlayClear);
@@ -2439,7 +2435,6 @@ SUBCMD_FUNC(Bot, sKillPlayTransport);
 SUBCMD_FUNC(Bot, sKillReject);
 SUBCMD_FUNC(Bot, sKillRejectClear);
 SUBCMD_FUNC(Bot, sKillRejectTransport);
-SUBCMD_FUNC(Bot, sKillSevenWind);
 SUBCMD_FUNC(Bot, sKillTail);
 SUBCMD_FUNC(Bot, sKillTailClear);
 SUBCMD_FUNC(Bot, sKillTailTransport);
@@ -2493,6 +2488,7 @@ registry_t<int,equipset_t>::clear_func clear_equipset_func(int cid);
 registry_t<int,e_skill>::clear_func clear_first_skill_func(int cid);
 registry_t<int>::clear_func clear_great_mob_func(int cid);
 registry_t<int>::clear_func clear_ignore_item_func(int cid);
+registry_t<int,e_element>::clear_func clear_kew_element_func(int cid);
 registry_t<e_skill,int>::clear_func clear_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::clear_func clear_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::clear_func clear_play_skill_func(int cid);
@@ -2511,6 +2507,7 @@ registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
 registry_t<int,e_skill>::save_func delete_first_skill_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
+registry_t<int,e_element>::save_func delete_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func delete_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func delete_play_skill_func(int cid);
@@ -2529,6 +2526,7 @@ registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
 registry_t<int,e_skill>::save_func insert_first_skill_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
+registry_t<int,e_element>::save_func insert_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func insert_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func insert_play_skill_func(int cid);
@@ -2547,6 +2545,7 @@ registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
 registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
 registry_t<int>::load_func load_ignore_item_func(int cid);
+registry_t<int,e_element>::load_func load_kew_element_func(int cid);
 registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::load_func load_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::load_func load_play_skill_func(int cid);
@@ -2562,6 +2561,7 @@ registry_t<int,team_t>::load_func load_team_func(int cid);
 registry_t<int,distance_policy>::save_func update_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
 registry_t<int,e_skill>::save_func update_first_skill_func(int cid);
+registry_t<int,e_element>::save_func update_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func update_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func update_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func update_play_skill_func(int cid);

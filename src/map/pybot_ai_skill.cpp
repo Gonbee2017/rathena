@@ -281,15 +281,14 @@ AI_SKILL_USE_FUNC(AM_RESURRECTHOMUN) {
 // エンチャントポイズンを使う。
 AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			mem->sc_rest(SC_ENCPOISON) <= bot->get_skill_tail(kid) &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_POISON) >= 100 &&
-			mem->attack_element_ratio(tar_ene, ELE_POISON) >= mem->weapon_attack_element_ratio(tar_ene);
+			ele &&
+			*ele == ELE_POISON;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -1938,15 +1937,14 @@ AI_SKILL_USE_FUNC(PF_SPIDERWEB) {
 // アスペルシオを使う。
 AI_SKILL_USE_FUNC(PR_ASPERSIO) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			mem->sc_rest(SC_ASPERSIO) <= bot->get_skill_tail(kid) &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_HOLY) >= 150 &&
-			mem->attack_element_ratio(tar_ene, ELE_HOLY) - mem->weapon_attack_element_ratio(tar_ene) >= 50;
+			ele &&
+			*ele == ELE_HOLY;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2221,46 +2219,33 @@ AI_SKILL_USE_FUNC(RG_STRIPWEAPON) {
 
 // オートスペルを使う。
 AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		bot->normal_attack_policy_value() == NAPV_CONTINUOUS
-	) {
-		e_skill gre_spe_id = e_skill(0);
-		int gre_rat;
-		auto che_spe = [this, klv, tar_ene, &gre_spe_id, &gre_rat] (e_skill spe_id, int min_lv) {
-			if (klv >= min_lv &&
-				bot->check_skill(spe_id) &&
-				(!bot->skill_auto_spell()->get() ||
-					spe_id == bot->skill_auto_spell()->get()
-				)
-			) {
-				int rat = bot->skill_ratio(spe_id, 1, tar_ene);
-				if (!gre_spe_id ||
-					rat > gre_rat
-				) {
-					gre_spe_id = spe_id;
-					gre_rat = rat;
-				}
+	struct spe_t {
+		e_skill kid;
+		int min_lv;
+	};
+	static const std::unordered_map<e_element,spe_t> SPES = {
+		{ELE_FIRE , {MG_FIREBOLT     , 2}},
+		{ELE_WIND , {MG_LIGHTNINGBOLT, 2}},
+		{ELE_WATER, {MG_COLDBOLT     , 2}},
+		{ELE_GHOST, {MG_SOULSTRIKE   , 5}},
+	};
+	e_element* ele = bot->kew_elements()->find(bot->bl()->m);
+	if (ele) {
+		const auto& spe_val = SPES.find(*ele);
+		if (spe_val != SPES.end()) {
+			const spe_t& spe = spe_val->second;
+			e_skill spe_kid = spe.kid;
+			if (klv >= spe.min_lv) {
+				status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
+				if (bot->sc_rest(SC_AUTOSPELL) <= bot->get_skill_tail(kid) ||
+					as_sce->val2 != spe_kid
+				) bot->use_skill_self(kid, klv, true, [spe_kid] (ai_t* ai, void* fun) {
+					skill_autospell(ai->bot->sd(), spe_kid);
+				});
 			}
-		};
-		che_spe(MG_FIREBOLT, 2);
-		che_spe(MG_LIGHTNINGBOLT, 2);
-		che_spe(MG_COLDBOLT, 2);
-		che_spe(MG_SOULSTRIKE, 5);
-		che_spe(MG_FIREBALL, 8);
-		che_spe(MG_FROSTDIVER, 10);
-		che_spe(MG_NAPALMBEAT, 1);
-		if (gre_spe_id) {
-			status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
-			if (bot->sc_rest(SC_AUTOSPELL) <= bot->get_skill_tail(kid) ||
-				(as_sce->val2 != gre_spe_id &&
-					bot->skill_ratio(e_skill(as_sce->val2), 1, tar_ene) <= bot->get_skill_low_rate()
-				)
-			) bot->use_skill_self(kid, klv, true, [gre_spe_id] (ai_t* ai, void* fun) {
-				skill_autospell(ai->bot->sd(), gre_spe_id);
-			});
 		}
 	}
+	
 }
 
 // デリュージを使う。
@@ -2311,15 +2296,14 @@ AI_SKILL_USE_FUNC_T(SA_DISPELL, cure) {
 // フロストウェポンを使う。
 AI_SKILL_USE_FUNC(SA_FROSTWEAPON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_WATERWEAPON] &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_WATER) >= 150 &&
-			mem->attack_element_ratio(tar_ene, ELE_WATER) - mem->weapon_attack_element_ratio(tar_ene) >= 50;
+			ele &&
+			*ele == ELE_WATER;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2327,15 +2311,14 @@ AI_SKILL_USE_FUNC(SA_FROSTWEAPON) {
 // フレイムランチャーを使う。
 AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_FIREWEAPON] &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_FIRE) >= 150 &&
-			mem->attack_element_ratio(tar_ene, ELE_FIRE) - mem->weapon_attack_element_ratio(tar_ene) >= 50;
+			ele &&
+			*ele == ELE_FIRE;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2361,15 +2344,14 @@ AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 // ライトニングローダーを使う。
 AI_SKILL_USE_FUNC(SA_LIGHTNINGLOADER) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_WINDWEAPON] &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_WIND) >= 150 &&
-			mem->attack_element_ratio(tar_ene, ELE_WIND) - mem->weapon_attack_element_ratio(tar_ene) >= 50;
+			ele &&
+			*ele == ELE_WIND;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2389,15 +2371,14 @@ AI_SKILL_USE_FUNC(SA_MAGICROD) {
 // サイズミックウェポンを使う。
 AI_SKILL_USE_FUNC(SA_SEISMICWEAPON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		block_if* tar_ene = mem->target_enemy();
+		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_EARTHWEAPON] &&
 			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
-			tar_ene &&
-			mem->attack_element_ratio(tar_ene, ELE_EARTH) >= 150 &&
-			mem->attack_element_ratio(tar_ene, ELE_EARTH) - mem->weapon_attack_element_ratio(tar_ene) >= 50;
+			ele &&
+			*ele == ELE_EARTH;
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -2849,7 +2830,7 @@ AI_SKILL_USE_FUNC_T(TF_THROWSTONE, first_attack) {
 
 // 落法を使う。
 AI_SKILL_USE_FUNC(TK_DODGE) {
-	if (bot->sc_rest(SC_DODGE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (!bot->sc()->data[SC_DODGE]) bot->use_skill_self(kid, klv);
 }
 
 // ティオアプチャギを使う。
@@ -2886,7 +2867,16 @@ AI_SKILL_USE_FUNC(TK_RUN) {
 
 // 暖かい風を使う。
 AI_SKILL_USE_FUNC(TK_SEVENWIND) {
-	static const std::array<sc_type, 7> SCS = {
+	static const std::array<e_element,7> ELES = {
+		ELE_EARTH,
+		ELE_WIND,
+		ELE_WATER,
+		ELE_FIRE,
+		ELE_GHOST,
+		ELE_DARK,
+		ELE_HOLY,
+	};
+	static const std::array<sc_type,7> SCS = {
 		SC_EARTHWEAPON,
 		SC_WINDWEAPON,
 		SC_WATERWEAPON,
@@ -2895,31 +2885,11 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 		SC_SHADOWWEAPON,
 		SC_ASPERSIO,
 	};
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		(!bot->skill_seven_wind()->get() ||
-			skill_get_ele(kid, klv) == bot->skill_seven_wind()->get()
-		) && bot->sc_rest(SCS[klv - 1]) <= bot->get_skill_tail(kid) &&
-		bot->check_attack(tar_ene)
-	) {
-		int gre_lv = INT_MIN;
-		int gre_rat;
-		int max_lv = bot->check_skill(kid);
-		for (int lv = 1; lv <= max_lv; ++lv) {
-			int rat = bot->skill_ratio(kid, lv, tar_ene);
-			if (gre_lv == INT_MIN ||
-				rat > gre_rat
-			) {
-				gre_lv = lv;
-				gre_rat = rat;
-			}
-		}
-		int att_rat = bot->weapon_attack_element_ratio(tar_ene);
-		if (gre_lv == klv &&
-			gre_rat > att_rat &&
-			att_rat <= bot->get_skill_low_rate()
-		) bot->use_skill_self(kid, klv);
-	}
+	e_element* ele = bot->kew_elements()->find(bot->bl()->m);
+	if (ele &&
+		*ele == ELES[klv - 1] &&
+		bot->sc_rest(SCS[klv - 1]) <= bot->get_skill_tail(kid)
+	) bot->use_skill_self(kid, klv);
 }
 
 // アプチャオルリギを使う。

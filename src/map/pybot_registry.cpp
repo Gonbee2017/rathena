@@ -86,6 +86,19 @@ clear_ignore_item_func(
 	};
 }
 
+// DBから武器属性付与をクリアする関数を作る。
+registry_t<int,e_element>::clear_func // 作った関数。
+clear_kew_element_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_kew_element` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBから制限スキルをクリアする関数を作る。
 registry_t<e_skill,int>::clear_func // 作った関数。
 clear_limit_skill_func(
@@ -329,6 +342,24 @@ delete_ignore_item_func(
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `nameid` = " , construct<sql_param>(nid)
 		);
+	};
+}
+
+// DBから武器属性付与を削除する関数を作る。
+registry_t<int,e_element>::save_func // 作った関数。
+delete_kew_element_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid, e_element* ele) {
+		auto map_val = id_maps.find(mid);
+		if (map_val != id_maps.end()) {
+			ses->execute(
+				"DELETE FROM `pybot_kew_element` "
+				"WHERE"
+				" `char_id` = ", construct<sql_param>(cid), " AND"
+				" `map` = "    , construct<sql_param>(map_val->second->name_english.c_str())
+			);
+		}
 	};
 }
 
@@ -610,6 +641,25 @@ insert_ignore_item_func(
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
+	};
+}
+
+// DBに武器属性付与を挿入する関数を作る。
+registry_t<int,e_element>::save_func // 作った関数。
+insert_kew_element_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid, e_element* ele) {
+		auto map_val = id_maps.find(mid);
+		if (map_val != id_maps.end()) {
+			ses->execute(
+				"INSERT INTO `pybot_kew_element` "
+				"VALUES "
+				"(", construct<sql_param>(cid), ","
+				" ", construct<sql_param>(map_val->second->name_english.c_str()), ","
+				" ", construct<sql_param>(*ele), ")"
+			);
+		}
 	};
 }
 
@@ -942,6 +992,28 @@ load_ignore_item_func(
 	};
 }
 
+// DBから武器属性付与をロードする関数を作る。
+registry_t<int,e_element>::load_func // 作った関数。
+load_kew_element_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<int,e_element>* reg) {
+		char map[12];
+		e_element ele;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("map"    , map), "`,"
+			" `", construct<sql_column>("element", ele), "` "
+			"FROM `pybot_kew_element` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) {
+			int ind = mapindex_name2id(map);
+			if (ind) reg->register_(map_mapindex2mapid(ind), initialize<e_element>(ele));
+		}
+	};
+}
+
 // DBから制限スキルをロードする関数を作る。
 registry_t<e_skill,int>::load_func // 作った関数。
 load_limit_skill_func(
@@ -1011,7 +1083,7 @@ load_recover_hp_item_func(
 		int thr;
 		ses->execute(
 			"SELECT"
-			" `", construct<sql_column>("nameid", nid), "`,"
+			" `", construct<sql_column>("nameid"   , nid), "`,"
 			" `", construct<sql_column>("threshold", thr), "` "
 			"FROM `pybot_recover_hp_item` "
 			"WHERE `char_id` = ", construct<sql_param>(cid)
@@ -1030,7 +1102,7 @@ load_recover_sp_item_func(
 		int thr;
 		ses->execute(
 			"SELECT"
-			" `", construct<sql_column>("nameid", nid), "`,"
+			" `", construct<sql_column>("nameid"   , nid), "`,"
 			" `", construct<sql_column>("threshold", thr), "` "
 			"FROM `pybot_recover_sp_item` "
 			"WHERE `char_id` = ", construct<sql_param>(cid)
@@ -1243,6 +1315,25 @@ update_equipset_func(
 				" ", construct<sql_param>(esi->key->card[1]), ","
 				" ", construct<sql_param>(esi->key->card[2]), ","
 				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
+// DBの武器属性付与を更新する関数を作る。
+registry_t<int,e_element>::save_func // 作った関数。
+update_kew_element_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid, e_element* ele) {
+		auto map_val = id_maps.find(mid);
+		if (map_val != id_maps.end()) {
+			ses->execute(
+				"UPDATE `pybot_kew_element` "
+				"SET `element` = ", construct<sql_param>(*ele), " "
+				"WHERE"
+				" `char_id` = ", construct<sql_param>(cid), " AND"
+				" `map` = "    , construct<sql_param>(map_val->second->name_english.c_str())
 			);
 		}
 	};

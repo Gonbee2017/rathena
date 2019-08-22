@@ -49,6 +49,14 @@ CREATE TABLE `pybot_ignore_item` (
   PRIMARY KEY (`char_id`, `nameid`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_kew_element`;
+CREATE TABLE `pybot_kew_element` (
+  `char_id` int(11) unsigned NOT NULL,
+  `map` varchar(11) NOT NULL,
+  `element` tinyint(2) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `map`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_limit_skill`;
 CREATE TABLE IF NOT EXISTS `pybot_limit_skill` (
   `char_id` int(11) unsigned NOT NULL,

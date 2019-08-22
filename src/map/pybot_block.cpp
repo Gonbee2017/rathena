@@ -179,7 +179,6 @@ int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int member_if::get_skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -197,12 +196,10 @@ ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_E
 ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<e_skill>>& member_if::skill_auto_spell() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::skill_ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::skill_low_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<e_element>>& member_if::skill_seven_wind() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& member_if::skill_tails() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::stand() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::storage_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1692,14 +1689,6 @@ member_impl::get_hold_monsters() {
 	return hold_monsters()->get();
 }
 
-// 低ダメージ倍率を取得する。
-int // 取得したダメージ倍率。
-member_impl::get_skill_low_rate() {
-	int rat = skill_low_rate()->get();
-	if (!rat) rat = DEFAULT_SKILL_LOW_RATE;
-	return rat;
-}
-
 // 範囲スキルの発動条件となるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_skill_monsters() {
@@ -1963,6 +1952,11 @@ map_session_data*& member_impl::sd() {
 	return sd_;
 }
 
+// 武器属性付与のレジストリ。
+ptr<registry_t<int,e_element>>& member_impl::kew_elements() {
+	return kew_elements_;
+}
+
 // メンバーが座る。
 void member_impl::sit() {
 	pc_setsit(sd());
@@ -1981,19 +1975,9 @@ member_impl::skill(
 	return nullptr;
 }
 
-// オートスペルで選択する魔法の登録値。
-ptr<regnum_t<e_skill>>& member_impl::skill_auto_spell() {
-	return skill_auto_spell_;
-}
-
 // スキル無視モンスターのレジストリ。
 ptr<registry_t<int>>& member_impl::skill_ignore_mobs() {
 	return skill_ignore_mobs_;
-}
-
-// 低ダメージ倍率の登録値。
-ptr<regnum_t<int>>& member_impl::skill_low_rate() {
-	return skill_low_rate_;
 }
 
 // 範囲魔法スキルの発動モンスター数の登録値。
@@ -2005,11 +1989,6 @@ ptr<regnum_t<int>>& member_impl::skill_monsters() {
 int // 取得したスキルポイント。
 member_impl::skill_point() {
 	return sd()->status.skill_point;
-}
-
-// 暖かい風で選択する属性の登録値。
-ptr<regnum_t<e_element>>& member_impl::skill_seven_wind() {
-	return skill_seven_wind_;
 }
 
 // 掛け直し時間のレジストリ。
@@ -2492,10 +2471,7 @@ member_t::member_t(
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
 	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
-	skill_auto_spell() = construct<regnum_t<e_skill>>(sd(), "pybot_skill_auto_spell");
-	skill_low_rate() = construct<regnum_t<int>>(sd(), "pybot_skill_low_rate");
 	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");
-	skill_seven_wind() = construct<regnum_t<e_element>>(sd(), "pybot_skill_seven_wind");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
 	cart_auto_get_items() = construct<registry_t<int>>(
@@ -2524,6 +2500,13 @@ member_t::member_t(
 		update_first_skill_func(char_id()),
 		delete_first_skill_func(char_id()),
 		clear_first_skill_func(char_id())
+	);
+	kew_elements() = construct<registry_t<int,e_element>>(
+		load_kew_element_func(char_id()),
+		insert_kew_element_func(char_id()),
+		update_kew_element_func(char_id()),
+		delete_kew_element_func(char_id()),
+		clear_kew_element_func(char_id())
 	);
 	limit_skills() = construct<registry_t<e_skill,int>>(
 		load_limit_skill_func(char_id()),
