@@ -497,6 +497,7 @@ enum item_ids {
 	ITEMID_SHADOW_ARROW_QUIVER     = 12013, // 影の矢筒。
 	ITEMID_IMMATERIAL_ARROW_QUIVER = 12014, // 無形の矢筒。
 	ITEMID_RUSTY_ARROW_QUIVER      = 12015, // 錆びた矢筒。
+	ITEMID_WATER_OF_DARKNESS       = 12020, // 呪われた水。
 	ITEMID_STR_DISH10              = 12075, // タンの盛り合わせ。
 	ITEMID_AGI_DISH10              = 12090, // 茹でサソリ。
 	ITEMID_VIT_DISH10              = 12085, // 不死のチゲ鍋。
@@ -913,6 +914,7 @@ struct ai_t {
 	AI_ITEM_USE_FUNC(STR_DISH10);
 	AI_ITEM_USE_FUNC(VIT_DISH10);
 	AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL);
+	AI_ITEM_USE_FUNC(WATER_OF_DARKNESS);
 
 	static ai_t::item_use_func AI_ITEM_USE_DEF(ammo_container)(int amm_id);
 	static ai_t::item_use_func AI_ITEM_USE_DEF(aspd_potion)();

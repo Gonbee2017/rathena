@@ -87,6 +87,7 @@ const std::vector<
 	AI_ITEM_USE_PROC     (RESIST_WATER                                ),
 	AI_ITEM_USE_PROC     (RESIST_EARTH                                ),
 	AI_ITEM_USE_PROC     (RESIST_WIND                                 ),
+	AI_ITEM_USE_PROC     (WATER_OF_DARKNESS                           ),
 	AI_ITEM_USE_PROC_ASPD(BERSERK_POTION                              ),
 	AI_ITEM_USE_PROC_ASPD(AWAKENING_POTION                            ),
 	AI_ITEM_USE_PROC_ASPD(CONCENTRATION_POTION                        ),

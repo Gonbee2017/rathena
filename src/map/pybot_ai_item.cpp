@@ -227,6 +227,24 @@ AI_ITEM_USE_FUNC(VIT_DISH10) {
 	if (!bot->sc()->data[SC_FOOD_VIT_CASH]) bot->use_item(itm_ind);
 }
 
+// 呪われた水を使う。
+AI_ITEM_USE_FUNC(WATER_OF_DARKNESS) {
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+	if (ele &&
+		*ele == ELE_DARK
+	) {
+		status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
+		if (!ea_sce ||
+			ea_sce->val2 != ELE_DARK
+		) {
+			try {bot->use_item(itm_ind);}
+			catch (const item_used_exception&) {
+				bot->use_skill_block(ITEM_ENCHANTARMS, 8, bot);
+			}
+		}
+	}
+}
+
 // 矢/弾のコンテナを使う関数を作る。
 ai_t::item_use_func // 作った関数。
 AI_ITEM_USE_DEF(ammo_container)(
