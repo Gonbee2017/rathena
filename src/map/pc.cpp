@@ -5722,6 +5722,13 @@ enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, in
 	}
 	else 
 		sd->count_rewarp = 0;
+
+	// [GonBee]
+	// Botではなければマップ移動でキャラ保存。
+	if (sd->state.pc_loaded &&
+		!pybot::char_is_bot(sd->status.char_id) &&
+		sd->state.changemap
+	) chrif_save(sd, CSAVE_NORMAL);
 	
 	return SETPOS_OK;
 }
