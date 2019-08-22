@@ -2609,6 +2609,7 @@ block_if* get_active_homun(block_if* mem);
 block_if* get_homun_if_exists(block_if* mem);
 block_if* get_active_pet(block_if* mem);
 block_if* get_pet_if_exists(block_if* mem);
+int get_source_mapid(int m);
 template <class T, class ...A> ptr<T> initialize(A&& ...args);
 void iterate_corner_bl(block_list* cen, int rad, yield_xy_func yie);
 void iterate_corner_xy(int m, int x, int y, int rad, yield_xy_func yie);

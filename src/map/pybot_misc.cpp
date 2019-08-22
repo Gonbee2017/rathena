@@ -854,6 +854,17 @@ get_pet_if_exists(
 	return pet;
 }
 
+// ソースマップIDを取得する。
+int // 取得したソースマップID。
+get_source_mapid(
+	int m // マップID。
+) {
+	int res = m;
+	map_data* md = map_getmapdata(m);
+	if (md->instance_src_map) res = md->instance_src_map;
+	return res;
+}
+
 // 正方形の隅の座標を反復する。
 void iterate_corner_bl(
 	block_list* cen,  // 中心。

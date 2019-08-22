@@ -281,7 +281,7 @@ AI_SKILL_USE_FUNC(AM_RESURRECTHOMUN) {
 // エンチャントポイズンを使う。
 AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -1937,7 +1937,7 @@ AI_SKILL_USE_FUNC(PF_SPIDERWEB) {
 // アスペルシオを使う。
 AI_SKILL_USE_FUNC(PR_ASPERSIO) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2229,7 +2229,7 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 		{ELE_WATER, {MG_COLDBOLT     , 2}},
 		{ELE_GHOST, {MG_SOULSTRIKE   , 5}},
 	};
-	e_element* ele = bot->kew_elements()->find(bot->bl()->m);
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
 	if (ele) {
 		const auto& spe_val = SPES.find(*ele);
 		if (spe_val != SPES.end()) {
@@ -2296,7 +2296,7 @@ AI_SKILL_USE_FUNC_T(SA_DISPELL, cure) {
 // フロストウェポンを使う。
 AI_SKILL_USE_FUNC(SA_FROSTWEAPON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2311,7 +2311,7 @@ AI_SKILL_USE_FUNC(SA_FROSTWEAPON) {
 // フレイムランチャーを使う。
 AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2344,7 +2344,7 @@ AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 // ライトニングローダーを使う。
 AI_SKILL_USE_FUNC(SA_LIGHTNINGLOADER) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2371,7 +2371,7 @@ AI_SKILL_USE_FUNC(SA_MAGICROD) {
 // サイズミックウェポンを使う。
 AI_SKILL_USE_FUNC(SA_SEISMICWEAPON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid, klv] (block_if* mem) -> bool {
-		e_element* ele = mem->kew_elements()->find(mem->bl()->m);
+		e_element* ele = mem->kew_elements()->find(get_source_mapid(mem->bl()->m));
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2885,7 +2885,7 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 		SC_SHADOWWEAPON,
 		SC_ASPERSIO,
 	};
-	e_element* ele = bot->kew_elements()->find(bot->bl()->m);
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
 	if (ele &&
 		*ele == ELES[klv - 1] &&
 		bot->sc_rest(SCS[klv - 1]) <= bot->get_skill_tail(kid)
