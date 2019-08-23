@@ -2727,7 +2727,12 @@ void status_calc_misc(struct block_list *bl, struct status_data *status, int lev
 
 	if (bl->type&battle_config.enable_perfect_flee) {
 		stat = status->flee2;
-		stat += status->luk + 10; // (every 10 luk = +1 perfect flee)
+
+		// [GonBee]
+		// Luk1‚²‚Æ‚ÉŠ®‘S‰ñ”ð+0.2‚É•ÏXB
+		//stat += status->luk + 10; // (every 10 luk = +1 perfect flee)
+		stat += status->luk * 2 + 10;
+
 		status->flee2 = cap_value(stat, 0, SHRT_MAX);
 	} else
 		status->flee2 = 0;
@@ -4070,9 +4075,19 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 
 	// Absolute modifiers from passive skills
 	if((skill=pc_checkskill(sd,TF_MISS))>0)
-		base_status->flee += skill*(sd->class_&JOBL_2 && (sd->class_&MAPID_BASEMASK) == MAPID_THIEF? 4 : 3);
+
+		// [GonBee]
+		// ‰ñ”ð—¦‘‰Á‚Í2ŽŸE‚È‚çŒø‰Ê‚ð2”{‚É‚·‚éB
+		//base_status->flee += skill*(sd->class_&JOBL_2 && (sd->class_&MAPID_BASEMASK) == MAPID_THIEF? 4 : 3);
+		base_status->flee += skill*(sd->class_&JOBL_2 && (sd->class_&MAPID_BASEMASK) == MAPID_THIEF? 6 : 3);
+
 	if((skill=pc_checkskill(sd,MO_DODGE))>0)
-		base_status->flee += (skill*3)>>1;
+
+		// [GonBee]
+		// Œ©Ø‚è‚ÍChampion‚È‚çŒø‰Ê‚ð2”{‚É‚·‚éB
+		//base_status->flee += (skill*3)>>1;
+		base_status->flee += (skill*3) >> int(sd->status.class_ != JOB_CHAMPION);
+
 	if (pc_checkskill(sd, SU_POWEROFLIFE) > 0)
 		base_status->flee += 20;
 

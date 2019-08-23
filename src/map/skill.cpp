@@ -1460,7 +1460,12 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 
 	case ST_REJECTSWORD:
-		sc_start(src,bl,SC_AUTOCOUNTER,(skill_lv*15),skill_lv,skill_get_time(skill_id,skill_lv));
+
+		// [GonBee]
+		// リジェクトソードの反射確率を強化。
+		//sc_start(src,bl,SC_AUTOCOUNTER,(skill_lv*15),skill_lv,skill_get_time(skill_id,skill_lv));
+		sc_start(src,bl,SC_AUTOCOUNTER,(skill_lv*20),skill_lv,skill_get_time(skill_id,skill_lv));
+
 		break;
 
 	case PF_FOGWALL:
