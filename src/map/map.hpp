@@ -18,6 +18,9 @@
 #include "../common/timer.hpp"
 #include "../config/core.hpp"
 
+// [GonBee]
+#include <stack>
+
 struct npc_data;
 struct item_data;
 struct Channel;
@@ -1189,5 +1192,16 @@ extern char roulette_table[32];
 extern char guild_storage_log_table[32];
 
 void do_shutdown(void);
+
+// [GonBee]
+// サーバークラッシュ原因究明用のコールスタック。
+class CallStack {
+public:
+	CallStack(const std::string& fun);
+	~CallStack();
+	static std::stack<std::string> log;
+};
+
+#define CS_ENTER CallStack _cs(__FUNCTION__)
 
 #endif /* MAP_HPP */

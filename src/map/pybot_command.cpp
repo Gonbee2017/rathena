@@ -15,6 +15,7 @@ command_bot(
 	map_session_data* sd, // セッションデータ。
 	const char* mes       // メッセージ。
 ) {
+	CS_ENTER;
 	try {
 		auto lea = find_map_data(all_leaders, sd->status.char_id);
 		if (!lea) {

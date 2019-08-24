@@ -334,6 +334,7 @@ REPLACE INTO `item_db2` VALUES (10551, 'Coating_Potion_Box_10551', 'コーティング
 REPLACE INTO `item_db2` VALUES (10552, 'White_Herb_Box_10552', '白ハーブの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 509,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10553, 'Blue_Herb_Box_10553', '青ハーブの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 510,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10554, 'Starsand_Of_Witch_Box_10554', '魔女の星の砂の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 1061,100; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (10555, 'Water_Of_Darkness_Box_10555', '呪われた水の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 12020,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10900, 'Seed_Of_Status', 'ステータスの種', 2, 5000, NULL, 300, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ callfunc "F_CashAddExtraStatusPoint"; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10901, 'Seed_Of_Skill', 'スキルの種', 2, 5000, NULL, 300, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ callfunc "F_CashAddExtraSkillPoint"; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10902, 'Berry_Of_Weight', 'アイテム重量の実', 2, 5000, NULL, 300, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ callfunc "F_CashAddExtraWeight"; }', '{}', '{}');

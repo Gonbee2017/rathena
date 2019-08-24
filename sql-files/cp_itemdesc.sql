@@ -8250,6 +8250,7 @@ REPLACE INTO `cp_itemdesc` VALUES(10551, '[コーティングポーション]が<br/>100個入
 REPLACE INTO `cp_itemdesc` VALUES(10552, '[白ハーブ]が<br/>100個入っている箱。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10553, '[青ハーブ]が<br/>100個入っている箱。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10554, '[魔女の星の砂]が<br/>100個入っている箱。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(10555, '[呪われた水]が<br/>100個入っている箱。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10900, '食べるとステータスポイントが<br/><font color="0000ff">10ポイント</font>アップする不思議な種。<br/>合計で<font color="ff0000">400ポイント</font>まで<br/>上げることができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">30</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10901, '食べるとスキルポイントが<br/><font color="0000ff">1ポイント</font>アップする不思議な種。<br/>合計で<font color="ff0000">20ポイント</font>まで<br/>上げることができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">30</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10902, '食べるとアイテム重量が<br/><font color="0000ff">200</font>アップする不思議な実。<br/>合計で<font color="ff0000">2000</font>まで<br/>上げることができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">30</font>');

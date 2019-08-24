@@ -5044,6 +5044,11 @@ void do_abort(void)
 		return;
 	}
 	ShowError("Server received crash signal! Attempting to save all online characters!\n");
+
+	// [GonBee]
+	// コールスタックのログを出力する。
+	while (!CallStack::log.empty()) ShowError("Call: %s\n", CallStack::log.top().c_str());
+
 	map_foreachpc(map_abort_sub);
 	chrif_flush_fifo();
 }
@@ -5334,3 +5339,11 @@ int do_init(int argc, char *argv[])
 	return 0;
 }
 
+// [GonBee]
+CallStack::CallStack(const std::string& fun) {
+	log.push(fun);
+}
+CallStack::~CallStack() {
+	if (!log.empty()) log.pop();
+}
+std::stack<std::string> CallStack::log;
