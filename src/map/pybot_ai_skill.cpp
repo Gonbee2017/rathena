@@ -2234,28 +2234,31 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 		spe_t{MG_COLDBOLT     , ELE_WATER, 2},
 		spe_t{MG_SOULSTRIKE   , ELE_GHOST, 5},
 	};
-	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
-	e_skill gre_kid = e_skill(0);
-	int gre_rat = 0;
-	for (const spe_t& spe : SPES) {
-		int rat = bot->attack_element_ratio(bot->target_enemy(), spe.ele);
-		if (spe.min_lv <= klv &&
-			(!ele ||
-				spe.ele == *ele
-			) && rat > gre_rat
-		) {
-			gre_kid = spe.kid;
-			gre_rat = rat;
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_attack(tar_ene)) {
+		e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+		e_skill gre_kid = e_skill(0);
+		int gre_rat = 0;
+		for (const spe_t& spe : SPES) {
+			int rat = bot->attack_element_ratio(tar_ene, spe.ele);
+			if (spe.min_lv <= klv &&
+				(!ele ||
+					spe.ele == *ele
+				) && rat > gre_rat
+			) {
+				gre_kid = spe.kid;
+				gre_rat = rat;
+			}
 		}
+		status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
+		if (gre_kid &&
+			(!as_sce ||
+				as_sce->val2 != gre_kid
+			)
+		) bot->use_skill_self(kid, klv, true, [gre_kid] (ai_t* ai, void* fun) {
+			skill_autospell(ai->bot->sd(), gre_kid);
+		});
 	}
-	status_change_entry* as_sce = bot->sc()->data[SC_AUTOSPELL];
-	if (gre_kid &&
-		(!as_sce ||
-			as_sce->val2 != gre_kid
-		)
-	) bot->use_skill_self(kid, klv, true, [gre_kid] (ai_t* ai, void* fun) {
-		skill_autospell(ai->bot->sd(), gre_kid);
-	});
 }
 
 // デリュージを使う。
@@ -2898,23 +2901,26 @@ AI_SKILL_USE_FUNC(TK_SEVENWIND) {
 		enc_t{SC_SHADOWWEAPON, ELE_DARK },
 		enc_t{SC_ASPERSIO    , ELE_HOLY },
 	};
-	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
-	int gre_lv = 0;
-	int gre_rat = bot->weapon_attack_element_ratio(bot->target_enemy());
-	for (int lv = 1; lv <= klv; ++lv) {
-		const enc_t& enc = ENCS[lv - 1];
-		int rat = bot->attack_element_ratio(bot->target_enemy(), enc.ele);
-		if ((!ele ||
-				enc.ele == *ele
-			) && rat > gre_rat
-		) {
-			gre_lv = lv;
-			gre_rat = rat;
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->check_attack(tar_ene)) {
+		e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+		int gre_lv = 0;
+		int gre_rat = bot->weapon_attack_element_ratio(tar_ene);
+		for (int lv = 1; lv <= klv; ++lv) {
+			const enc_t& enc = ENCS[lv - 1];
+			int rat = bot->attack_element_ratio(bot->target_enemy(), enc.ele);
+			if ((!ele ||
+					enc.ele == *ele
+				) && rat > gre_rat
+			) {
+				gre_lv = lv;
+				gre_rat = rat;
+			}
 		}
+		if (gre_lv &&
+			!bot->sc()->data[ENCS[gre_lv - 1].typ]
+		) bot->use_skill_self(kid, gre_lv);
 	}
-	if (gre_lv &&
-		!bot->sc()->data[ENCS[gre_lv - 1].typ]
-	) bot->use_skill_self(kid, gre_lv);
 }
 
 // アプチャオルリギを使う。
