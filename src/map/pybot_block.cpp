@@ -43,7 +43,7 @@ int& battler_if::member_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values& battler_if::normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::party_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill>>& battler_if::reject_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::skill_ratio(e_skill kid, int klv, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::skill_ratio(e_skill kid, int klv, block_if* tar) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::stop_attacking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::stop_walking(int typ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::target_enemy() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -52,7 +52,7 @@ bool battler_if::walk_bl(block_list* tbl, int ran) {RAISE_NOT_IMPLEMENTED_ERROR;
 ai_t::done_func& battler_if::walk_end_func() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::walk_xy(int x, int y, int ran) {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_element battler_if::weapon_attack_element() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::weapon_attack_element_ratio(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::weapon_attack_element_ratio(block_if* tar) {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 int& bot_if::bot_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool bot_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -461,15 +461,15 @@ int // 計算した倍率。
 battler_impl::skill_ratio(
 	e_skill kid,  // スキルID。
 	int klv,      // スキルレベル。
-	block_if* ene // 敵モンスター。
+	block_if* tar // ターゲット。
 ) {
 	int rat = 0;
 	if (!(skill_get_type(kid) & BF_MAGIC) ||
-		!ene->is_magic_immune()
+		!tar->is_magic_immune()
 	) {
 		e_element ele = e_element(skill_get_ele(kid, klv));
 		if (ele == ELE_NONE) ele = weapon_attack_element();
-		rat = attack_element_ratio(ene, ele);
+		rat = attack_element_ratio(tar, ele);
 	}
 	return rat;
 }
@@ -551,9 +551,9 @@ battler_impl::walk_xy(
 // 武器攻撃の属性ダメージ倍率を計算する。
 int // 計算した倍率。
 battler_impl::weapon_attack_element_ratio(
-	block_if* ene // 敵モンスター。
+	block_if* tar // ターゲット。
 ) {
-	return attack_element_ratio(ene, weapon_attack_element());
+	return attack_element_ratio(tar, weapon_attack_element());
 }
 
 // Botのインデックス。

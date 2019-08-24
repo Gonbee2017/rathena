@@ -855,6 +855,7 @@ struct ai_t {
 	void bot_pickup_flooritem();
 	void bot_positioning();
 	void bot_follow();
+	void bot_remove_enchant();
 	void bot_attack();
 	void bot_play_skill();
 	void bot_use_skill();
@@ -1225,7 +1226,7 @@ struct battler_if {
 	virtual normal_attack_policy_values& normal_attack_policy_value();
 	virtual int party_id();
 	virtual ptr<registry_t<e_skill>>& reject_skills();
-	virtual int skill_ratio(e_skill kid, int klv, block_if* ene);
+	virtual int skill_ratio(e_skill kid, int klv, block_if* tar);
 	virtual void stop_attacking();
 	virtual void stop_walking(int typ = USW_FIXPOS);
 	virtual block_if*& target_enemy();
@@ -1234,7 +1235,7 @@ struct battler_if {
 	virtual ai_t::done_func& walk_end_func();
 	virtual bool walk_xy(int x, int y, int ran = 0);
 	virtual e_element weapon_attack_element();
-	virtual int weapon_attack_element_ratio(block_if* ene);
+	virtual int weapon_attack_element_ratio(block_if* tar);
 };
 
 // Botのインターフェイス。
@@ -1273,7 +1274,7 @@ struct enemy_if {
 // 汎用のインターフェイス。
 struct general_if {
 	virtual void act_end();
-	virtual int attack_element_ratio(block_if* src, e_element ele);
+	virtual int attack_element_ratio(block_if* tar, e_element ele);
 	virtual int attack_range();
 	virtual block_list* bl();
 	virtual bool can_act();
@@ -1525,7 +1526,7 @@ struct battler_impl : virtual block_if {
 	virtual bool& is_best_pos() override;
 	virtual bool is_primary() override;
 	virtual normal_attack_policy_values& normal_attack_policy_value() override;
-	virtual int skill_ratio(e_skill kid, int klv, block_if* ene) override;
+	virtual int skill_ratio(e_skill kid, int klv, block_if* tar) override;
 	void start_walking();
 	virtual void stop_attacking() override;
 	virtual void stop_walking(int typ = USW_FIXPOS) override;
@@ -1533,7 +1534,7 @@ struct battler_impl : virtual block_if {
 	virtual bool walk_bl(block_list* tbl, int ran = 0) override;
 	virtual ai_t::done_func& walk_end_func() override;
 	virtual bool walk_xy(int x, int y, int ran = 0) override;
-	virtual int weapon_attack_element_ratio(block_if* ene) override;
+	virtual int weapon_attack_element_ratio(block_if* tar) override;
 };
 
 // Botの実装。
@@ -1601,7 +1602,7 @@ struct enemy_impl : virtual block_if {
 // 汎用の実装。
 struct general_impl : virtual block_if {
 	virtual void act_end() override;
-	virtual int attack_element_ratio(block_if* src, e_element ele) override;
+	virtual int attack_element_ratio(block_if* tar, e_element ele) override;
 	virtual bool can_act() override;
 	virtual bool can_move() override;
 	virtual bool can_reach_bl(block_list* bl_, bool eas = true) override;

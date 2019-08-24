@@ -408,6 +408,7 @@ void ai_t::bot_main(
 	bot_pickup_flooritem();
 	bot_positioning();
 	bot_follow();
+	bot_remove_enchant();
 	bot_attack();
 	bot_play_skill();
 	bot_use_skill();
@@ -684,9 +685,35 @@ void ai_t::bot_follow() {
 	}
 }
 
+// Botが武器に付与された属性を解除する。
+void ai_t::bot_remove_enchant() {
+	struct enc_t {
+		sc_type typ;
+		e_element ele;
+	};
+	static const std::array<enc_t,9> ENCS = {
+		enc_t{SC_EARTHWEAPON , ELE_EARTH },
+		enc_t{SC_WINDWEAPON  , ELE_WIND  },
+		enc_t{SC_WATERWEAPON , ELE_WATER },
+		enc_t{SC_FIREWEAPON  , ELE_FIRE  },
+		enc_t{SC_GHOSTWEAPON , ELE_GHOST },
+		enc_t{SC_SHADOWWEAPON, ELE_DARK  },
+		enc_t{SC_ASPERSIO    , ELE_HOLY  },
+		enc_t{SC_ENCPOISON   , ELE_POISON},
+		enc_t{SC_ENCHANTARMS , ELE_DARK  },
+	};
+	if (bot->battle_mode() != BM_NONE) {
+		for (const enc_t& enc : ENCS) {
+			if (bot->sc()->data[enc.typ] &&
+				bot->attack_element_ratio(bot->target_enemy(), enc.ele) <= 0
+			) status_change_end(bot->bl(), enc.typ, INVALID_TIMER);
+		}
+	}
+}
+
 // Botが攻撃する。
 void ai_t::bot_attack() {
-	 if (pc_can_attack(bot->sd(), 0)) battler_attack();
+	if (pc_can_attack(bot->sd(), 0)) battler_attack();
 }
 
 // Botが演奏スキルを使う。
