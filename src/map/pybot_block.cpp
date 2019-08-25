@@ -30,6 +30,8 @@ int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -132,6 +134,7 @@ int general_if::skill_advantage(int x, int y) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::sp_ratio() {RAISE_NOT_IMPLEMENTED_ERROR;}
 unit_data* general_if::ud() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int general_if::vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::walkpath_length() {RAISE_NOT_IMPLEMENTED_ERROR;}
 pos_t general_if::walkpath_pos(int stes) {RAISE_NOT_IMPLEMENTED_ERROR;}
 
@@ -185,6 +188,8 @@ int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1094,6 +1099,11 @@ general_impl::ud() {
 	return unit_bl2ud(bl());
 }
 
+// Vitを取得する。
+int general_impl::vit() {
+	return status_get_vit(bl());
+}
+
 // 歩行経路の長さを取得する。
 int // 取得した長さ。
 general_impl::walkpath_length() {
@@ -1188,6 +1198,18 @@ homun_impl::get_high_def() {
 int // 取得した高DefVit。
 homun_impl::get_high_def_vit() {
 	return master()->get_high_def_vit();
+}
+
+// ホムンクルスの高Fleeを取得する。
+int // 取得した高Flee。
+homun_impl::get_high_flee() {
+	return master()->get_high_flee();
+}
+
+// ホムンクルスの高Hitを取得する。
+int // 取得した高Hit。
+homun_impl::get_high_hit() {
+	return master()->get_high_hit();
 }
 
 // ホムンクルスが抱えることのできるモンスター数を取得する。
@@ -1715,6 +1737,22 @@ member_impl::get_high_def_vit() {
 	return res;
 }
 
+// メンバーの高Fleeを取得する。
+int // 取得した高Flee。
+member_impl::get_high_flee() {
+	int res = high_flee()->get();
+	if (!res) res = DEFAULT_HIGH_FLEE;
+	return res;
+}
+
+// メンバーの高Hitを取得する。
+int // 取得した高Hit。
+member_impl::get_high_hit() {
+	int res = high_hit()->get();
+	if (!res) res = DEFAULT_HIGH_HIT;
+	return res;
+}
+
 // メンバーが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_hold_monsters() {
@@ -1752,6 +1790,16 @@ ptr<regnum_t<int>>& member_impl::high_def() {
 // 高DefVitの登録値。
 ptr<regnum_t<int>>& member_impl::high_def_vit() {
 	return high_def_vit_;
+}
+
+// 高Fleeの登録値。
+ptr<regnum_t<int>>& member_impl::high_flee() {
+	return high_flee_;
+}
+
+// 高Hitの登録値。
+ptr<regnum_t<int>>& member_impl::high_hit() {
+	return high_hit_;
 }
 
 // 抱えることのできるモンスター数の登録値。
@@ -2513,6 +2561,8 @@ member_t::member_t(
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
 	high_def() = construct<regnum_t<int>>(sd(), "pybot_high_def");
 	high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_high_def_vit");
+	high_flee() = construct<regnum_t<int>>(sd(), "pybot_high_flee");
+	high_hit() = construct<regnum_t<int>>(sd(), "pybot_high_hit");
 	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
 	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");

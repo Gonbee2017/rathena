@@ -1404,14 +1404,6 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot cartput クリエ ブルージェムストーン]\n"
 		"カートにアイテムの特定個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン 5]\n"
-	), SUBCMD_DESC(Bot, DefHigh                    , dh  ,
-		"------ DefHigh (dh) サブコマンド ------\n"
-		"高Defを設定する。\n"
-		"入力例 [@bot defhigh アサクロ 50]\n"
-	), SUBCMD_DESC(Bot, DefVitHigh                 , dvh ,
-		"------ DefVitHigh (dvh) サブコマンド ------\n"
-		"高DefVitを設定する。\n"
-		"入力例 [@bot defvithigh アサクロ 100]\n"
 	), SUBCMD_DESC(Bot, DistanceMax                , dm  ,
 		"------ DistanceMax (dm) サブコマンド ------\n"
 		"モンスターとの最大距離を設定する。\n"
@@ -1456,12 +1448,28 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ Help (h) サブコマンド ------\n"
 		"サブコマンドの説明を表示する。\n"
 		"入力例 [@bot help login]\n"
+	), SUBCMD_DESC(Bot, HighDef                    , hd  ,
+		"------ HighDef (hd) サブコマンド ------\n"
+		"高Defを設定する。\n"
+		"入力例 [@bot highdef アサクロ 40]\n"
+	), SUBCMD_DESC(Bot, HighDefVit                 , hdv ,
+		"------ HighDefVit (hdv) サブコマンド ------\n"
+		"高DefVitを設定する。\n"
+		"入力例 [@bot highdefvit アサクロ 100]\n"
+	), SUBCMD_DESC(Bot, HighFlee                   , hf  ,
+		"------ HighFlee (hf) サブコマンド ------\n"
+		"高Fleeを設定する。\n"
+		"入力例 [@bot highflee アサクロ 150]\n"
+	), SUBCMD_DESC(Bot, HighHit                    , hh  ,
+		"------ HighHit (hh) サブコマンド ------\n"
+		"高Hitを設定する。\n"
+		"入力例 [@bot highhit アサクロ 175]\n"
 	), SUBCMD_DESC(Bot, HoldMonsters               , hm  ,
 		"------ HoldMonsters (hm) サブコマンド ------\n"
 		"抱えることのできるモンスター数を設定する。\n"
 		"入力例 [@bot holdmonsters クラウン 1]\n"
 	), SUBCMD_DESC(Bot, HomunsKill                 , hk  ,
-		"------ HomunsKill (hk) サブコマン     ド ------\n"
+		"------ HomunsKill (hk) サブコマンド ------\n"
 		"ホムンクルスのスキルを一覧表示する。\n"
 		"入力例 [@bot homunskill クリエ]\n"
 		"ホムンクルスがスキルを最高レベルで使用する。\n"
@@ -1900,8 +1908,6 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt),
 	SUBCMD_PROC(Bot, CartGet                    , cg  ),
 	SUBCMD_PROC(Bot, CartPut                    , cp  ),
-	SUBCMD_PROC(Bot, DefHigh                    , dh  ),
-	SUBCMD_PROC(Bot, DefVitHigh                 , dvh ),
 	SUBCMD_PROC(Bot, DistanceMax                , dm  ),
 	SUBCMD_PROC(Bot, Equip                      , e   ),
 	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia ),
@@ -1911,6 +1917,10 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, EquipSetLoad               , esl ),
 	SUBCMD_PROC(Bot, EquipSetTransport          , est ),
 	SUBCMD_PROC(Bot, Help                       , h   ),
+	SUBCMD_PROC(Bot, HighDef                    , hd  ),
+	SUBCMD_PROC(Bot, HighDefVit                 , hdv ),
+	SUBCMD_PROC(Bot, HighFlee                   , hf  ),
+	SUBCMD_PROC(Bot, HighHit                    , hh  ),
 	SUBCMD_PROC(Bot, HoldMonsters               , hm  ),
 	SUBCMD_PROC(Bot, HomunsKill                 , hk  ),
 	SUBCMD_PROC(Bot, HomunsKillLimit            , hkl ),
@@ -2056,10 +2066,16 @@ const std::unordered_map<
 };
 
 // デフォルトの高Def。
-const int DEFAULT_HIGH_DEF = 50;
+const int DEFAULT_HIGH_DEF = 40;
 
 // デフォルトの高DefVit。
 const int DEFAULT_HIGH_DEF_VIT = 100;
+
+// デフォルトの高Flee。
+const int DEFAULT_HIGH_FLEE = 150;
+
+// デフォルトの高Hit。
+const int DEFAULT_HIGH_HIT = 175;
 
 // デフォルト通常攻撃ポリシー値のマップ。
 const std::unordered_map<
@@ -3501,6 +3517,8 @@ const std::unordered_map<
 	{MM_FLORA       , "フローラ型"},
 	{MM_HIGH_DEF    , "高Def"     },
 	{MM_HIGH_DEF_VIT, "高DefVit"  },
+	{MM_HIGH_FLEE   , "高Flee"    },
+	{MM_HIGH_HIT    , "高Hit"     },
 	{MM_SP_DECLINE4 , "SP低下4"   },
 	{MM_SP_DECLINE3 , "SP低下3"   },
 	{MM_SP_DECLINE2 , "SP低下2"   },

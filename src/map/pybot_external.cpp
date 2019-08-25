@@ -143,7 +143,7 @@ find_mobdb(
 		if (ele->type == CET_OPEN) break;
 		pay_eles->push_back(ele);
 	}
-	std::string pay_str = lowercase(trim(command_print(ALL_RANGE(*pay_eles)), " \t"));
+	std::string pay_str = trim(command_print(ALL_RANGE(*pay_eles)), " \t");
 
 	int mid = parse_id(pay_str);
 	if (mid) {
@@ -151,8 +151,8 @@ find_mobdb(
 			!mob_db(mid)
 		) mid = 0;
 	} else {
-		meta_mobs emc = find_map_key(META_MONSTER_NAMES, pay_str);
-		if (emc) return emc;
+		meta_mobs met_mob = find_map_key(META_MONSTER_NAMES, pay_str);
+		if (met_mob) return met_mob;
 		int rac_ind = find_name(RACE_NAME_TABLE, pay_str);
 		if (rac_ind != INT_MIN) return MM_RACE + rac_ind;
 		int ele_ind = find_name(ELEMENT_NAME_TABLE, pay_str);
@@ -160,11 +160,12 @@ find_mobdb(
 		int siz_ind = find_name(SIZE_NAME_TABLE, pay_str);
 		if (siz_ind != INT_MIN) return MM_SIZE + siz_ind;
 		uint16 mids[256];
-		int cou = mobdb_searchname_array2(pay_str.c_str(), mids, 256);
+		std::string pay_str_lc = lowercase(pay_str);
+		int cou = mobdb_searchname_array2(pay_str_lc.c_str(), mids, 256);
 		for (int i = 0; i < cou; i++) {
 			struct mob_db* mdb = mob_db(mids[i]);
 			if (mdb &&
-				lowercase(mdb->jname) == pay_str &&
+				lowercase(mdb->jname) == pay_str_lc &&
 				(mob_cla == INT_MIN ||
 					mdb->status.class_ == mob_cla
 				)

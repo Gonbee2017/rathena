@@ -1197,11 +1197,12 @@ void do_shutdown(void);
 // サーバークラッシュ原因究明用のコールスタック。
 class CallStack {
 public:
-	CallStack(const std::string& fun);
+	CallStack(const std::string& nam);
 	~CallStack();
 	static std::stack<std::string> log;
 };
 
 #define CS_ENTER CallStack _cs(__FUNCTION__)
+#define CS_ENTER_N(nam) CallStack _cs(nam)
 
 #endif /* MAP_HPP */

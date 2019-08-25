@@ -5343,8 +5343,8 @@ int do_init(int argc, char *argv[])
 }
 
 // [GonBee]
-CallStack::CallStack(const std::string& fun) {
-	log.push(fun);
+CallStack::CallStack(const std::string& nam) {
+	log.push(nam);
 }
 CallStack::~CallStack() {
 	if (!log.empty()) log.pop();

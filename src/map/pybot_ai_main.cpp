@@ -305,7 +305,9 @@ void ai_t::leader_target() {
 			}
 			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
 		}
-		if (ene->def() + ene->def2() >= bat->get_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
+		if (ene->hit() >= bat->get_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
+		if (ene->flee() >= bat->get_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
+		if (ene->def() + ene->vit() >= bat->get_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
 		if (ene->def() >= bat->get_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
 		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
 		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
@@ -588,7 +590,9 @@ void ai_t::bot_reload_equipset() {
 			}
 			bot->load_equipset(MM_SP_DECLINE4, &equ);
 		}
-		if (tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
+		if (tar_ene->hit() >= bot->get_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
+		if (tar_ene->flee() >= bot->get_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
+		if (tar_ene->def() + tar_ene->vit() >= bot->get_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
 		if (tar_ene->def() >= bot->get_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
 		if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
 		if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
@@ -786,7 +790,9 @@ void ai_t::bot_play_skill() {
 				}
 				bot->load_play_skill(MM_SP_DECLINE4, &kid);
 			}
-			if (tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
+			if (tar_ene->hit() >= bot->get_high_hit()) bot->load_play_skill(MM_HIGH_HIT, &kid);
+			if (tar_ene->flee() >= bot->get_high_flee()) bot->load_play_skill(MM_HIGH_FLEE, &kid);
+			if (tar_ene->def() + tar_ene->vit() >= bot->get_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
 			if (tar_ene->def() >= bot->get_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
 			if (tar_ene->is_flora()) bot->load_play_skill(MM_FLORA, &kid);
 			if (tar_ene->is_great(leader)) bot->load_play_skill(MM_GREAT, &kid);
@@ -1062,6 +1068,7 @@ void ai_t::battler_use_skill() {
 				) && battler->check_sp(sp_rat) &&
 				battler->can_use_skill(kid, klv)
 			) {
+				CS_ENTER_N(print("kid=", kid));
 				//SHOW_DEBUG_VARIABLE(kid);
 				//try {
 					sk_use_pro.func(this, kid, klv);

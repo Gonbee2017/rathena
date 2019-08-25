@@ -558,6 +558,8 @@ enum meta_mobs {
 	MM_FLORA        =   182, // フローラ型。
 	MM_HIGH_DEF     =   185, // 高Def。
 	MM_HIGH_DEF_VIT =   186, // 高DefVit。
+	MM_HIGH_FLEE    =   187, // 高Flee。
+	MM_HIGH_HIT     =   188, // 高Hit。
 	MM_SP_DECLINE4  =   190, // SP低下4。
 	MM_SP_DECLINE3  =   191, // SP低下3。
 	MM_SP_DECLINE2  =   192, // SP低下2。
@@ -1215,6 +1217,8 @@ struct battler_if {
 	virtual distance_policy_values& distance_policy_value();
 	virtual int get_high_def();
 	virtual int get_high_def_vit();
+	virtual int get_high_flee();
+	virtual int get_high_hit();
 	virtual int get_hold_monsters();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
@@ -1326,6 +1330,7 @@ struct general_if {
 	virtual int sp();
 	virtual int sp_ratio();
 	virtual unit_data* ud();
+	virtual int vit();
 	virtual int walkpath_length();
 	virtual pos_t walkpath_pos(int stes);
 };
@@ -1391,6 +1396,8 @@ struct member_if {
 	virtual t_tick get_skill_tail(e_skill kid);
 	virtual ptr<regnum_t<int>>& high_def();
 	virtual ptr<regnum_t<int>>& high_def_vit();
+	virtual ptr<regnum_t<int>>& high_flee();
+	virtual ptr<regnum_t<int>>& high_hit();
 	virtual ptr<regnum_t<int>>& hold_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
@@ -1650,6 +1657,7 @@ struct general_impl : virtual block_if {
 	virtual int sp() override;
 	virtual int sp_ratio() override;
 	virtual unit_data* ud() override;
+	virtual int vit() override;
 	virtual int walkpath_length() override;
 	virtual pos_t walkpath_pos(int stes) override;
 };
@@ -1665,6 +1673,8 @@ struct homun_impl : virtual block_if {
 	virtual bool exists() override;
 	virtual int get_high_def() override;
 	virtual int get_high_def_vit() override;
+	virtual int get_high_flee() override;
+	virtual int get_high_hit() override;
 	virtual int get_hold_monsters() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
@@ -1755,6 +1765,8 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
 	ptr<regnum_t<int>> high_def_;                 // 高Defの登録値。
 	ptr<regnum_t<int>> high_def_vit_;             // 高DefVitの登録値。
+	ptr<regnum_t<int>> high_flee_;                // 高Fleeの登録値。
+	ptr<regnum_t<int>> high_hit_;                 // 高Hitの登録値。
 	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
@@ -1802,12 +1814,16 @@ struct member_impl : virtual block_if {
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_high_def() override;
 	virtual int get_high_def_vit() override;
+	virtual int get_high_flee() override;
+	virtual int get_high_hit() override;
 	virtual int get_hold_monsters() override;
 	virtual int get_skill_monsters() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int guild_id() override;
 	virtual ptr<regnum_t<int>>& high_def() override;
 	virtual ptr<regnum_t<int>>& high_def_vit() override;
+	virtual ptr<regnum_t<int>>& high_flee() override;
+	virtual ptr<regnum_t<int>>& high_hit() override;
 	virtual ptr<regnum_t<int>>& hold_monsters() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
@@ -2388,8 +2404,6 @@ SUBCMD_FUNC(Bot, CartAutoGetClear);
 SUBCMD_FUNC(Bot, CartAutoGetTransport);
 SUBCMD_FUNC(Bot, CartGet);
 SUBCMD_FUNC(Bot, CartPut);
-SUBCMD_FUNC(Bot, DefHigh);
-SUBCMD_FUNC(Bot, DefVitHigh);
 SUBCMD_FUNC(Bot, DistanceMax);
 SUBCMD_FUNC(Bot, Equip);
 SUBCMD_FUNC(Bot, EquipIdentifyAll);
@@ -2399,6 +2413,10 @@ SUBCMD_FUNC(Bot, EquipSetClear);
 SUBCMD_FUNC(Bot, EquipSetLoad);
 SUBCMD_FUNC(Bot, EquipSetTransport);
 SUBCMD_FUNC(Bot, Help);
+SUBCMD_FUNC(Bot, HighDef);
+SUBCMD_FUNC(Bot, HighDefVit);
+SUBCMD_FUNC(Bot, HighFlee);
+SUBCMD_FUNC(Bot, HighHit);
 SUBCMD_FUNC(Bot, HoldMonsters);
 SUBCMD_FUNC(Bot, HomunsKill);
 SUBCMD_FUNC(Bot, HomunsKillLimit);
@@ -2709,6 +2727,8 @@ extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
 extern const int DEFAULT_HIGH_DEF;
 extern const int DEFAULT_HIGH_DEF_VIT;
+extern const int DEFAULT_HIGH_FLEE;
+extern const int DEFAULT_HIGH_HIT;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;

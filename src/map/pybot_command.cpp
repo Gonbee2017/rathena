@@ -265,46 +265,6 @@ SUBCMD_FUNC(Bot, CartPut) {
 	clif_emotion(mem->bl(), ET_OK);
 }
 
-// 高Defを設定する。
-SUBCMD_FUNC(Bot, DefHigh) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int def = shift_arguments_then_parse_int(
-		args, print("Def"), 1, INT_MAX
-	);
-	if (def == DEFAULT_HIGH_DEF) def = 0;
-	if (def)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefが", def, "以上のモンスターを高Defとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefが", DEFAULT_HIGH_DEF, "以上のモンスターを高Defとみなします。"
-		));
-	mem->high_def()->set(def);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
-// 高DefVitを設定する。
-SUBCMD_FUNC(Bot, DefVitHigh) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int dv = shift_arguments_then_parse_int(
-		args, print("DefVit"), 1, INT_MAX
-	);
-	if (dv == DEFAULT_HIGH_DEF_VIT) dv = 0;
-	if (dv)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefとVitの合計が", dv, "以上のモンスターを高DefVitとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefとVitの合計が", DEFAULT_HIGH_DEF_VIT, "以上のモンスターを高DefVitとみなします。"
-		));
-	mem->high_def_vit()->set(dv);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
 // モンスターとの最大距離を設定する。
 SUBCMD_FUNC(Bot, DistanceMax) {
 	CS_ENTER;
@@ -704,6 +664,86 @@ SUBCMD_FUNC(Bot, Help) {
 			"「", sc_nam, "」というサブコマンドはありません。"
 		)};
 	show_client(lea->fd(), sc_des->sc_desc);
+}
+
+// 高Defを設定する。
+SUBCMD_FUNC(Bot, HighDef) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int def = shift_arguments_then_parse_int(
+		args, print("Def"), 1, INT_MAX
+	);
+	if (def == DEFAULT_HIGH_DEF) def = 0;
+	if (def)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefが", def, "以上のモンスターを高Defとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefが", DEFAULT_HIGH_DEF, "以上のモンスターを高Defとみなします。"
+		));
+	mem->high_def()->set(def);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 高DefVitを設定する。
+SUBCMD_FUNC(Bot, HighDefVit) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int dv = shift_arguments_then_parse_int(
+		args, print("DefVit"), 1, INT_MAX
+	);
+	if (dv == DEFAULT_HIGH_DEF_VIT) dv = 0;
+	if (dv)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefとVitの合計が", dv, "以上のモンスターを高DefVitとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefとVitの合計が", DEFAULT_HIGH_DEF_VIT, "以上のモンスターを高DefVitとみなします。"
+		));
+	mem->high_def_vit()->set(dv);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 高Fleeを設定する。
+SUBCMD_FUNC(Bot, HighFlee) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int fle = shift_arguments_then_parse_int(
+		args, print("Flee"), 1, INT_MAX
+	);
+	if (fle == DEFAULT_HIGH_FLEE) fle = 0;
+	if (fle)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はFleeが", fle, "以上のモンスターを高Fleeとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はFleeが", DEFAULT_HIGH_FLEE, "以上のモンスターを高Fleeとみなします。"
+		));
+	mem->high_flee()->set(fle);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 高Hitを設定する。
+SUBCMD_FUNC(Bot, HighHit) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int hit = shift_arguments_then_parse_int(
+		args, print("Hit"), 1, INT_MAX
+	);
+	if (hit == DEFAULT_HIGH_HIT) hit = 0;
+	if (hit)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はHitが", hit, "以上のモンスターを高Hitとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はHitが", DEFAULT_HIGH_HIT, "以上のモンスターを高Hitとみなします。"
+		));
+	mem->high_hit()->set(hit);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
 // 抱えることのできるモンスター数を設定する。

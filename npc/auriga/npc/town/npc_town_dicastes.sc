@@ -9788,7 +9788,8 @@ dicastes01,175,217,5	script	カルリホ	453,{
 		mes "ぜひご助力ください。";
 		mes "　";
 		mes "‐クエストを受諾するには";
-		mes "　^FF0000BaseLv100以上^000000必要です‐";
+//		mes "　^FF0000BaseLv100以上^000000必要です‐";
+		mes "　^FF0000BaseLv99^000000必要です‐";
 		close;
 	}
 	if(checkquest2(12160) & 0x2) {
@@ -10020,7 +10021,8 @@ dic_in01,51,266,6	script	狩猟2課担当者	449,{
 		mes "　出直した方がよさそうだ‐";
 		close;
 	}
-	if(BaseLevel < 100) {
+//	if(BaseLevel < 100) {
+	if(BaseLevel < 99) {
 		mes "[狩猟2課担当者]";
 		mes "ようこそいらっしゃいました。";
 		mes "こちらは治安管理部です。";
@@ -10043,7 +10045,8 @@ dic_in01,51,266,6	script	狩猟2課担当者	449,{
 		mes "ぜひご助力ください。";
 		mes "　";
 		mes "‐クエストを受諾するには";
-		mes "　^FF0000BaseLv100以上^000000必要です‐";
+//		mes "　^FF0000BaseLv100以上^000000必要です‐";
+		mes "　^FF0000BaseLv99^000000必要です‐";
 		close;
 	}
 	if(checkquest2(12106)) {

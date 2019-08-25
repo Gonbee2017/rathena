@@ -1563,7 +1563,7 @@ AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit() &&
+		tar_ene->def() + tar_ene->vit() >= bot->get_high_def_vit() &&
 		tar_ene->def() < 100 &&
 		bot->collect_spirits(1)
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -2686,7 +2686,6 @@ AI_SKILL_USE_FUNC(SN_SIGHT) {
 
 // シャープシューティングを使う。
 AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
-	CS_ENTER;
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
 		bot->check_skill_range_block(kid, klv, tar_ene)

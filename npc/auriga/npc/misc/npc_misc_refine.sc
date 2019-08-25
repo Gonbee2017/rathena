@@ -1159,6 +1159,7 @@ ein_in01,15,87,4	duplicate(BuyStone)	ティルイハース	86
 			mes "　再度話しかけてください‐";
 			close;
 		}
+		if(countitem(.@itemid)<5) close;
 		delitem .@itemid,5;
 		getitem .@gain,1;
 		mes "["+strnpcinfo(3)+"]";
@@ -1176,13 +1177,14 @@ ein_in01,15,87,4	duplicate(BuyStone)	ティルイハース	86
 		mes "いつでもまた来てくれ。";
 		close;
 	}
-	if(checkweight(.@gain,1)==0) {
+	if(checkweight(.@gain,.@num)==0) {
 		mes "‐所持アイテムの重量が重い為";
 		mes "　危険です。";
 		mes "　所持アイテムを減らしてから、";
 		mes "　再度話しかけてください‐";
 		close;
 	}
+	if(countitem(.@itemid)<.@num*5) close;
 	delitem .@itemid,.@num*5;
 	getitem .@gain,.@num;
 	mes "["+strnpcinfo(3)+"]";
@@ -1199,6 +1201,93 @@ payon,137,178,5	duplicate(ChangeStone)	ハキム			88
 yuno_in01,164,27,4	duplicate(ChangeStone)	ティルレイ		84
 ein_in01,18,82,5	duplicate(ChangeStone)	マティシュタイン	84
 
+
+//====================================================================
+//オリデオコン/エルニウム交換NPC
+//--------------------------------------------------------------------
+
+-	script	TradeOriElu	-1,{
+	if(checkitemblank()==0) {
+		mes "- 所持アイテムの種類数が -";
+		mes "- 多いため、アイテムを受けとる -";
+		mes "- ことができません。 -";
+		mes "- 所持アイテムを減らしてから -";
+		mes "- 再度話しかけてください。 -";
+		close;
+	}
+	mes "["+strnpcinfo(3)+"]";	//識別子を参照
+	mes "オリデオコンとエルニウムを";
+	mes "交換してあげようか？";
+	mes "但し、君の2個を僕の1個と";
+	mes "交換するという条件だけどね。";
+	next;
+	switch (select("オリデオコンをエルニウムに","エルニウムをオリデオコンに","やめる")) {
+	case 1:
+		set .@itemid,984;
+		set .@gain,985;
+		break;
+	case 2:
+		set .@itemid,985;
+		set .@gain,984;
+		break;
+	case 3:
+		mes "["+strnpcinfo(3)+"]";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	if(countitem(.@itemid)<2) {
+		mes "["+strnpcinfo(3)+"]";
+		mes "え？冗談でしょ？";
+		mes getitemname(.@itemid)+ "が少なくとも";
+		mes "2つ必要だよ。";
+		close;
+	}
+	mes "["+strnpcinfo(3)+"]";
+	mes "交換する量はどうする？";
+	next;
+	if(select("1回分だけ交換する","全部交換する")==1) {
+		if(checkweight(.@gain,1)==0) {
+			mes "‐所持アイテムの重量が重い為";
+			mes "　危険です。";
+			mes "　所持アイテムを減らしてから、";
+			mes "　再度話しかけてください‐";
+			close;
+		}
+		if(countitem(.@itemid)<2) close;
+		delitem .@itemid,2;
+		getitem .@gain,1;
+		mes "["+strnpcinfo(3)+"]";
+		mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	set .@num,countitem(.@itemid)/2;
+	mes "["+strnpcinfo(3)+"]";
+	mes "君の" + getitemname(.@itemid)+ "^FF0000" +(.@num*2)+ "^000000個を";
+	mes "僕の" + getitemname(.@gain)+ "^FF0000" +.@num+ "^000000個と交換するよ？";
+	next;
+	if(select("やっぱりやめます","お願いします")==1) {
+		mes "["+strnpcinfo(3)+"]";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	if(checkweight(.@gain,.@num)==0) {
+		mes "‐所持アイテムの重量が重い為";
+		mes "　危険です。";
+		mes "　所持アイテムを減らしてから、";
+		mes "　再度話しかけてください‐";
+		close;
+	}
+	if(countitem(.@itemid)<.@num*2) close;
+	delitem .@itemid,.@num*2;
+	getitem .@gain,.@num;
+	mes "["+strnpcinfo(3)+"]";
+	mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
+	mes "いつでもまた来てくれ。";
+	close;
+}
+
+prt_in,63,69,4	duplicate(TradeOriElu)	マッシモ		83
 
 //====================================================================
 //武具修理NPC
