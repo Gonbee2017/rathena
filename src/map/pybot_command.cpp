@@ -671,7 +671,7 @@ SUBCMD_FUNC(Bot, HighDef) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int def = shift_arguments_then_parse_int(
-		args, print("Def"), 1, INT_MAX
+		args, print("Def"), 1, 100
 	);
 	if (def == DEFAULT_HIGH_DEF) def = 0;
 	if (def)
