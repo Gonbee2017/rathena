@@ -58,6 +58,7 @@ command_bot(
 
 // モンスターを攻撃する。
 SUBCMD_FUNC(Bot, Attack) {
+	CS_ENTER;
 	int mid = 0;
 	std::string mob_str;
 	if (!args.empty()) {
@@ -87,6 +88,7 @@ SUBCMD_FUNC(Bot, Attack) {
 
 // メンバーのカート内アイテムを一覧表示する。
 SUBCMD_FUNC(Bot, Cart) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
@@ -97,6 +99,7 @@ SUBCMD_FUNC(Bot, Cart) {
 
 // メンバーのカート自動補充アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, CartAutoGet) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
@@ -152,6 +155,7 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 
 // メンバーのカート自動補充アイテムをクリアする。
 SUBCMD_FUNC(Bot, CartAutoGetClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
@@ -167,6 +171,7 @@ SUBCMD_FUNC(Bot, CartAutoGetClear) {
 
 // メンバーのカート自動補充アイテムを転送する。
 SUBCMD_FUNC(Bot, CartAutoGetTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	if (!mem1->is_carton())
 		throw command_error{print(
@@ -188,6 +193,7 @@ SUBCMD_FUNC(Bot, CartAutoGetTransport) {
 
 // メンバーがアイテムをカートから取り出す。
 SUBCMD_FUNC(Bot, CartGet) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
@@ -223,6 +229,7 @@ SUBCMD_FUNC(Bot, CartGet) {
 
 // メンバーがアイテムをカートに入れる。
 SUBCMD_FUNC(Bot, CartPut) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
@@ -260,6 +267,7 @@ SUBCMD_FUNC(Bot, CartPut) {
 
 // モンスターとの最大距離を設定する。
 SUBCMD_FUNC(Bot, DistanceMax) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int dis = shift_arguments_then_parse_int(
 		args, print("距離"), 1, battle_config.pybot_around_distance
@@ -281,6 +289,7 @@ SUBCMD_FUNC(Bot, DistanceMax) {
 
 // メンバーが武具を装備、または装備を解除する。
 SUBCMD_FUNC(Bot, Equip) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
 		int cou = 0;
@@ -318,8 +327,12 @@ SUBCMD_FUNC(Bot, Equip) {
 				clif_emotion(mem->bl(), ET_SCRATCH);
 			}
 		} else {
+			int equ = idb->equip;
+			if (equ == EQP_HAND_R &&
+				(mem->sd()->class_ & MAPID_UPPERMASK) == MAPID_ASSASSIN
+			) equ = EQP_ARMS;
 			if (pc_isequip(mem->sd(), itm_ind) ||
-				!pc_equipitem(mem->sd(), itm_ind, idb->equip)
+				!pc_equipitem(mem->sd(), itm_ind, equ)
 			) throw command_error{print(
 				"「", mem->name(), "」は「", itm_str, "」を装備できません。"
 			)};
@@ -335,6 +348,7 @@ SUBCMD_FUNC(Bot, Equip) {
 
 // すべての未鑑定の武具を鑑定する。
 SUBCMD_FUNC(Bot, EquipIdentifyAll) {
+	CS_ENTER;
 	int tot_cou = 0;
 	auto ide_itm = [lea, &tot_cou] (
 		block_if* mem,
@@ -405,6 +419,7 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 
 // すべての破損武具を修理する。
 SUBCMD_FUNC(Bot, EquipRepairAll) {
+	CS_ENTER;
 	if (!npc_exists(
 		lea->bl(),
 		battle_config.pybot_around_distance,
@@ -456,6 +471,7 @@ SUBCMD_FUNC(Bot, EquipRepairAll) {
 
 // メンバーの武具一式を一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, EquipSet) {
+	CS_ENTER;
 	using es_val_t = std::pair<int,equipset_t*>;
 	auto pri_equ_poss = [] (std::vector<ptr<equipset_item>>* itms) -> std::string {
 		std::vector<std::string> toks;
@@ -552,6 +568,7 @@ SUBCMD_FUNC(Bot, EquipSet) {
 
 // メンバーの武具一式をクリアする。
 SUBCMD_FUNC(Bot, EquipSetClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->equipsets()->clear();
 	show_client(lea->fd(), print(
@@ -562,6 +579,7 @@ SUBCMD_FUNC(Bot, EquipSetClear) {
 
 // メンバーの武具一式をロードする。
 SUBCMD_FUNC(Bot, EquipSetLoad) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	std::string mob_nam = shift_arguments(
 		args, "モンスターを指定してください。"
@@ -616,6 +634,7 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 
 // メンバーの武具一式を転送する。
 SUBCMD_FUNC(Bot, EquipSetTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -629,6 +648,7 @@ SUBCMD_FUNC(Bot, EquipSetTransport) {
 
 // サブコマンドの説明を表示する。
 SUBCMD_FUNC(Bot, Help) {
+	CS_ENTER;
 	std::string sc_nam = shift_arguments(
 		args, "サブコマンドを指定してください。"
 	);
@@ -648,6 +668,7 @@ SUBCMD_FUNC(Bot, Help) {
 
 // 抱えることのできるモンスター数を設定する。
 SUBCMD_FUNC(Bot, HoldMonsters) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = shift_arguments_then_parse_int(
 		args, print("モンスター数"), -1, INT_MAX
@@ -673,6 +694,7 @@ SUBCMD_FUNC(Bot, HoldMonsters) {
 
 // ホムンクルスのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, HomunsKill) {
+	CS_ENTER;
 	block_if* hom = get_active_homun(shift_arguments_then_find_member(lea, args));
 	if (args.empty()) skill_user_show_skills(hom);
 	else skill_user_use_skill(lea, args, hom);
@@ -680,16 +702,19 @@ SUBCMD_FUNC(Bot, HomunsKill) {
 
 // ホムンクルスのアクティブスキルを制限する。
 SUBCMD_FUNC(Bot, HomunsKillLimit) {
+	CS_ENTER;
 	skill_user_limit_skill(lea, args, get_active_homun(shift_arguments_then_find_member(lea, args)));
 }
 
 // ホムンクルスのスキルレベルを上げる。
 SUBCMD_FUNC(Bot, HomunsKillUp) {
+	CS_ENTER;
 	skill_user_skill_up(lea, args, get_active_homun(shift_arguments_then_find_member(lea, args)));
 }
 
 // ホムンクルスのステータスを表示する。
 SUBCMD_FUNC(Bot, HomunStatus) {
+	CS_ENTER;
 	block_if* hom = get_active_homun(shift_arguments_then_find_member(lea, args));
 	lea->output_buffer() = std::stringstream();
 	lea->output_buffer() << "------ 「" << hom->name() << "」のステータス ------\n";
@@ -715,6 +740,7 @@ SUBCMD_FUNC(Bot, HomunStatus) {
 
 // メンバーのインベントリ内アイテムを一覧表示、または使う。
 SUBCMD_FUNC(Bot, Item) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) print_storage(mem, TABLE_INVENTORY);
 	else {
@@ -739,6 +765,7 @@ SUBCMD_FUNC(Bot, Item) {
 
 // すべてのメンバーのインベントリとカートにあるスタック可能なアイテムの個数の集計結果を表示する。
 SUBCMD_FUNC(Bot, ItemCount) {
+	CS_ENTER;
 	bool all = args.empty();
 	std::unordered_map<int,int> cous;
 	while (!args.empty()) {
@@ -801,6 +828,7 @@ SUBCMD_FUNC(Bot, ItemCount) {
 
 // メンバーがアイテムをドロップする。
 SUBCMD_FUNC(Bot, ItemDrop) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	std::string itm_nam = shift_arguments(
 		args, "アイテムを指定してください。"
@@ -831,6 +859,7 @@ SUBCMD_FUNC(Bot, ItemDrop) {
 
 // 無視アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, ItemIgnore) {
+	CS_ENTER;
 	if (args.empty()) {
 		std::vector<int> nids;
 		lea->ignore_items()->copy(pybot::back_inserter(nids));
@@ -865,6 +894,7 @@ SUBCMD_FUNC(Bot, ItemIgnore) {
 
 // 無視アイテムをクリアする。
 SUBCMD_FUNC(Bot, ItemIgnoreClear) {
+	CS_ENTER;
 	int cou = lea->ignore_items()->clear();
 	show_client(lea->fd(), print(
 		cou, "件の無視アイテムの登録を抹消しました。"
@@ -873,6 +903,7 @@ SUBCMD_FUNC(Bot, ItemIgnoreClear) {
 
 // 無視アイテムを取り込む。
 SUBCMD_FUNC(Bot, ItemIgnoreImport) {
+	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	t_tick hev_tic = lea->next_heaby_tick();
 	if (hev_tic)
@@ -895,6 +926,7 @@ SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 
 // メンバーのHP回復アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, ItemRecoverHp) {
+	CS_ENTER;
 	using itm_val_t = std::pair<int,int*>;
 
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -951,6 +983,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHp) {
 
 // メンバーのHP回復アイテムをクリアする。
 SUBCMD_FUNC(Bot, ItemRecoverHpClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->recover_hp_items()->clear();
 	show_client(lea->fd(), print(
@@ -962,6 +995,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHpClear) {
 
 // メンバーのHP回復アイテムを転送する。
 SUBCMD_FUNC(Bot, ItemRecoverHpTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -975,6 +1009,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHpTransport) {
 
 // メンバーのSP回復アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, ItemRecoverSp) {
+	CS_ENTER;
 	using itm_val_t = std::pair<int,int*>;
 
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -1032,6 +1067,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSp) {
 
 // メンバーのSP回復アイテムをクリアする。
 SUBCMD_FUNC(Bot, ItemRecoverSpClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->recover_sp_items()->clear();
 	show_client(lea->fd(), print(
@@ -1042,6 +1078,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSpClear) {
 
 // メンバーのSP回復アイテムを転送する。
 SUBCMD_FUNC(Bot, ItemRecoverSpTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1055,6 +1092,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSpTransport) {
 
 // 売却アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, ItemSell) {
+	CS_ENTER;
 	if (args.empty()) {
 		std::vector<int> nids;
 		lea->sell_items()->copy(pybot::back_inserter(nids));
@@ -1089,6 +1127,7 @@ SUBCMD_FUNC(Bot, ItemSell) {
 
 // すべての売却アイテムを売却する。
 SUBCMD_FUNC(Bot, ItemSellAll) {
+	CS_ENTER;
 	if (!npc_exists(
 		lea->bl(),
 		battle_config.pybot_around_distance,
@@ -1165,6 +1204,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 
 // 売却アイテムをクリアする。
 SUBCMD_FUNC(Bot, ItemSellClear) {
+	CS_ENTER;
 	int cou = lea->sell_items()->clear();
 	show_client(lea->fd(), print(
 		cou, "件の売却アイテムの登録を抹消しました。"
@@ -1173,6 +1213,7 @@ SUBCMD_FUNC(Bot, ItemSellClear) {
 
 // 売却アイテムを取り込む。
 SUBCMD_FUNC(Bot, ItemSellImport) {
+	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	t_tick hev_tic = lea->next_heaby_tick();
 	if (hev_tic)
@@ -1195,6 +1236,7 @@ SUBCMD_FUNC(Bot, ItemSellImport) {
 
 // Botがログインする。
 SUBCMD_FUNC(Bot, LogIn) {
+	CS_ENTER;
 	if (lea->bots().size() >= bot_limit(lea->sd()))
 		throw command_error{
 		"チームに所属しているBotの人数が制限人数に達しています。"
@@ -1246,6 +1288,7 @@ SUBCMD_FUNC(Bot, LogIn) {
 
 // Botがログアウトする。
 SUBCMD_FUNC(Bot, LogOut) {
+	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	if (lea->bots().size() == 1) {
 		save_team(lea, 0);
@@ -1264,6 +1307,7 @@ SUBCMD_FUNC(Bot, LogOut) {
 
 // メンバーがアイテムを拾う、または拾わない。
 SUBCMD_FUNC(Bot, Loot) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	auto& loot = mem->loot();
 	loot->set(!loot->get());
@@ -1278,6 +1322,7 @@ SUBCMD_FUNC(Bot, Loot) {
 
 // メンバーが現在位置をメモする。
 SUBCMD_FUNC(Bot, Memo) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->check_skill(AL_WARP))
 		throw command_error{print(
@@ -1294,6 +1339,7 @@ SUBCMD_FUNC(Bot, Memo) {
 
 // グレートモンスターを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, MonsterGreat) {
+	CS_ENTER;
 	if (args.empty()) {
 		std::vector<int> mids;
 		lea->great_mobs()->copy(pybot::back_inserter(mids));
@@ -1335,6 +1381,7 @@ SUBCMD_FUNC(Bot, MonsterGreat) {
 
 // グレートモンスターをクリアする。
 SUBCMD_FUNC(Bot, MonsterGreatClear) {
+	CS_ENTER;
 	int cou = lea->great_mobs()->clear();
 	show_client(lea->fd(), print(
 		cou, "件のグレートモンスターの登録を抹消しました。"
@@ -1343,6 +1390,7 @@ SUBCMD_FUNC(Bot, MonsterGreatClear) {
 
 // グレートモンスターを取り込む。
 SUBCMD_FUNC(Bot, MonsterGreatImport) {
+	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	t_tick hev_tic = lea->next_heaby_tick();
 	if (hev_tic)
@@ -1365,11 +1413,13 @@ SUBCMD_FUNC(Bot, MonsterGreatImport) {
 
 // 次のページを表示する。
 SUBCMD_FUNC(Bot, Next) {
+	CS_ENTER;
 	lea->show_next();
 }
 
 // ペットがアクセサリーを装備、または解除する。
 SUBCMD_FUNC(Bot, PetEquip) {
+	CS_ENTER;
 	block_if* pet = get_active_pet(shift_arguments_then_find_member(lea, args));
 	int acc_nid = pet->pd()->get_pet_db()->AcceID;
 	if (!acc_nid)
@@ -1404,6 +1454,7 @@ SUBCMD_FUNC(Bot, PetEquip) {
 
 // ペットのステータスを表示する。
 SUBCMD_FUNC(Bot, PetStatus) {
+	CS_ENTER;
 	block_if* pet = get_active_pet(shift_arguments_then_find_member(lea, args));
 	lea->output_buffer() = std::stringstream();
 	lea->output_buffer() << "------ 「" << pet->name() << "」のステータス ------\n";
@@ -1424,6 +1475,7 @@ SUBCMD_FUNC(Bot, PetStatus) {
 
 // メンバーの距離ポリシーを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, PolicyDistance) {
+	CS_ENTER;
 	using pol_val_t = std::pair<int,distance_policy*>;
 
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -1519,6 +1571,7 @@ SUBCMD_FUNC(Bot, PolicyDistance) {
 
 // メンバーの距離ポリシーをクリアする。
 SUBCMD_FUNC(Bot, PolicyDistanceClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->distance_policies()->clear();
 	show_client(lea->fd(), print(
@@ -1530,6 +1583,7 @@ SUBCMD_FUNC(Bot, PolicyDistanceClear) {
 
 // メンバーの距離ポリシーを転送する。
 SUBCMD_FUNC(Bot, PolicyDistanceTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1543,6 +1597,7 @@ SUBCMD_FUNC(Bot, PolicyDistanceTransport) {
 
 // メンバーの通常攻撃ポリシーを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, PolicyNormalAttack) {
+	CS_ENTER;
 	using pol_val_t = std::pair<int,normal_attack_policy*>;
 
 	block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -1639,6 +1694,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack) {
 
 // メンバーの通常攻撃ポリシーをクリアする。
 SUBCMD_FUNC(Bot, PolicyNormalAttackClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->normal_attack_policies()->clear();
 	show_client(lea->fd(), print(
@@ -1650,6 +1706,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackClear) {
 
 // メンバーの通常攻撃ポリシーを転送する。
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1663,6 +1720,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackTransport) {
 
 // メンバーのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, sKill) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) skill_user_show_skills(mem);
 	else skill_user_use_skill(lea, args, mem);
@@ -1670,6 +1728,7 @@ SUBCMD_FUNC(Bot, sKill) {
 
 // メンバーの武器属性付与を一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
+	CS_ENTER;
 	using kew_val_t = std::pair<int,e_element*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
@@ -1727,6 +1786,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 
 // メンバーの武器属性付与をクリアする。
 SUBCMD_FUNC(Bot, sKillEnchantWeaponClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->kew_elements()->clear();
 	show_client(lea->fd(), print(
@@ -1738,6 +1798,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeaponClear) {
 
 // メンバーの武器属性付与を転送する。
 SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1751,6 +1812,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport) {
 
 // メンバーの優先スキルを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillFirst) {
+	CS_ENTER;
 	using fs_val_t = std::pair<int,e_skill*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
@@ -1829,6 +1891,7 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 
 // メンバーの優先スキルをクリアする。
 SUBCMD_FUNC(Bot, sKillFirstClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->first_skills()->clear();
 	show_client(lea->fd(), print(
@@ -1840,6 +1903,7 @@ SUBCMD_FUNC(Bot, sKillFirstClear) {
 
 // メンバーの優先スキルを転送する。
 SUBCMD_FUNC(Bot, sKillFirstTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1853,6 +1917,7 @@ SUBCMD_FUNC(Bot, sKillFirstTransport) {
 
 // メンバーのスキル無視モンスターを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
 		std::vector<int> sims;
@@ -1913,6 +1978,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
 
 // メンバーのスキル無視モンスターをクリアする。
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->skill_ignore_mobs()->clear();
 	show_client(lea->fd(), print(
@@ -1924,6 +1990,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear) {
 
 // メンバーのスキル無視モンスターを転送する。
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -1937,11 +2004,13 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport) {
 
 // メンバーのアクティブスキルを制限する。
 SUBCMD_FUNC(Bot, sKillLimit) {
+	CS_ENTER;
 	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
 // 範囲スキルの発動条件となるモンスター数を設定する。
 SUBCMD_FUNC(Bot, sKillMonsters) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = shift_arguments_then_parse_int(
 		args, print("モンスター数"), 1,	INT_MAX
@@ -1957,6 +2026,7 @@ SUBCMD_FUNC(Bot, sKillMonsters) {
 
 // メンバーの演奏スキルを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillPlay) {
+	CS_ENTER;
 	using ps_val_t = std::pair<int,play_skill*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
@@ -2060,6 +2130,7 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 
 // メンバーの演奏スキルをクリアする。
 SUBCMD_FUNC(Bot, sKillPlayClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
 		throw command_error{print(
@@ -2075,6 +2146,7 @@ SUBCMD_FUNC(Bot, sKillPlayClear) {
 
 // メンバーの演奏スキルを転送する。
 SUBCMD_FUNC(Bot, sKillPlayTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	if ((mem1->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
 		throw command_error{print(
@@ -2096,6 +2168,7 @@ SUBCMD_FUNC(Bot, sKillPlayTransport) {
 
 // メンバーの拒否スキルを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillReject) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
 		std::vector<int> kids;
@@ -2138,6 +2211,7 @@ SUBCMD_FUNC(Bot, sKillReject) {
 
 // メンバーの拒否スキルをクリアする。
 SUBCMD_FUNC(Bot, sKillRejectClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->reject_skills()->clear();
 	show_client(lea->fd(), print(
@@ -2148,6 +2222,7 @@ SUBCMD_FUNC(Bot, sKillRejectClear) {
 
 // メンバーの拒否スキルを転送する。
 SUBCMD_FUNC(Bot, sKillRejectTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -2161,6 +2236,7 @@ SUBCMD_FUNC(Bot, sKillRejectTransport) {
 
 // メンバーの掛け直し時間を一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillTail) {
+	CS_ENTER;
 	using tai_val_t = std::pair<e_skill,int*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
@@ -2221,6 +2297,7 @@ SUBCMD_FUNC(Bot, sKillTail) {
 
 // メンバーの掛け直し時間をクリアする。
 SUBCMD_FUNC(Bot, sKillTailClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->skill_tails()->clear();
 	show_client(lea->fd(), print(
@@ -2231,6 +2308,7 @@ SUBCMD_FUNC(Bot, sKillTailClear) {
 
 // メンバーの掛け直し時間を転送する。
 SUBCMD_FUNC(Bot, sKillTailTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -2244,11 +2322,13 @@ SUBCMD_FUNC(Bot, sKillTailTransport) {
 
 // メンバーのスキルレベルを上げる。
 SUBCMD_FUNC(Bot, sKillUp) {
+	CS_ENTER;
 	skill_user_skill_up(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
 // メンバーのステータスを表示する。
 SUBCMD_FUNC(Bot, Status) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	lea->output_buffer() = std::stringstream();
 	lea->output_buffer() << "------ 「" << mem->name() << "」のステータス ------\n";
@@ -2303,6 +2383,7 @@ SUBCMD_FUNC(Bot, Status) {
 
 // メンバーがステータスにポイントを割り振る。
 SUBCMD_FUNC(Bot, StatusUp) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	std::string typ_str = shift_arguments(
 		args, "タイプを指定してください。"
@@ -2332,6 +2413,7 @@ SUBCMD_FUNC(Bot, StatusUp) {
 
 // メンバーの倉庫補充アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, StorageGet) {
+	CS_ENTER;
 	using itm_val_t = std::pair<int,int*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
@@ -2391,6 +2473,7 @@ SUBCMD_FUNC(Bot, StorageGet) {
 
 // 倉庫からアイテムを補充する。
 SUBCMD_FUNC(Bot, StorageGetAll) {
+	CS_ENTER;
 	ptr<storage_context> sto_con;
 	switch (lea->sd()->state.storage_flag) {
 	case 0: throw command_error{"倉庫を開いてください。"};
@@ -2448,6 +2531,7 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 
 // メンバーの倉庫補充アイテムをクリアする。
 SUBCMD_FUNC(Bot, StorageGetClear) {
+	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int cou = mem->storage_get_items()->clear();
 	show_client(lea->fd(), print(
@@ -2459,6 +2543,7 @@ SUBCMD_FUNC(Bot, StorageGetClear) {
 
 // メンバーの倉庫補充アイテムを転送する。
 SUBCMD_FUNC(Bot, StorageGetTransport) {
+	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
@@ -2472,6 +2557,7 @@ SUBCMD_FUNC(Bot, StorageGetTransport) {
 
 // メンバーの倉庫格納アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, StoragePut) {
+	CS_ENTER;
 	if (args.empty()) {
 		std::vector<int> nids;
 		lea->storage_put_items()->copy(pybot::back_inserter(nids));
@@ -2510,6 +2596,7 @@ SUBCMD_FUNC(Bot, StoragePut) {
 
 // 倉庫にアイテムを格納する。
 SUBCMD_FUNC(Bot, StoragePutAll) {
+	CS_ENTER;
 	ptr<storage_context> sto_con;
 	switch (lea->sd()->state.storage_flag) {
 	case 0: throw command_error{"倉庫を開いてください。"};
@@ -2594,6 +2681,7 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 
 // 倉庫格納アイテムをクリアする。
 SUBCMD_FUNC(Bot, StoragePutClear) {
+	CS_ENTER;
 	int cou = lea->storage_put_items()->clear();
 	show_client(lea->fd(), print(
 		cou, "件の倉庫格納アイテムの登録を抹消しました。"
@@ -2602,6 +2690,7 @@ SUBCMD_FUNC(Bot, StoragePutClear) {
 
 // 倉庫格納アイテムを取り込む。
 SUBCMD_FUNC(Bot, StoragePutImport) {
+	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	t_tick hev_tic = lea->next_heaby_tick();
 	if (hev_tic)
@@ -2624,6 +2713,7 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 
 // Botを引き寄せる。
 SUBCMD_FUNC(Bot, sUmmon) {
+	CS_ENTER;
 	int cou = 0;
 	std::vector<block_if*> bots;
 	if (args.empty()) {
@@ -2646,6 +2736,7 @@ SUBCMD_FUNC(Bot, sUmmon) {
 
 // メンバーを一覧表示する。
 SUBCMD_FUNC(Bot, Team) {
+	CS_ENTER;
 	auto pri_mem = [] (block_if* mem) -> std::string {
 		std::stringstream buf;
 		buf << INDEX_PREFIX << mem->member_index() << " " <<
@@ -2669,6 +2760,7 @@ SUBCMD_FUNC(Bot, Team) {
 
 // チームがログインする。
 SUBCMD_FUNC(Bot, TeamLogIn) {
+	CS_ENTER;
 	if (!lea->bots().empty())
 		throw command_error{"あなたはすでにチームを編成しています。"};
 	t_tick hev_tic = lea->next_heaby_tick();
@@ -2717,6 +2809,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 
 // チームがログアウトする。
 SUBCMD_FUNC(Bot, TeamLogOut) {
+	CS_ENTER;
 	if (lea->bots().empty())
 		throw command_error{"あなたはまだチームを編成していません。"};
 	save_team(lea, 0);
@@ -2734,6 +2827,7 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 
 // チームを一覧表示する、または登録する、または登録を抹消する。
 SUBCMD_FUNC(Bot, TeamNumber) {
+	CS_ENTER;
 	using tea_val_t = std::pair<int,team_t*>;
 
 	int num_wid = print(TEAM_MAX - 1).length();
@@ -2778,6 +2872,7 @@ SUBCMD_FUNC(Bot, TeamNumber) {
 
 // メンバーの順番を変更する。
 SUBCMD_FUNC(Bot, TeamOrder) {
+	CS_ENTER;
 	std::vector<block_if*> mems;
 	while (!args.empty()) {
 		block_if* mem = shift_arguments_then_find_member(lea, args);
@@ -2798,6 +2893,7 @@ SUBCMD_FUNC(Bot, TeamOrder) {
 
 // チームがモンスターに反応しない、または反応する。
 SUBCMD_FUNC(Bot, TeamPassive) {
+	CS_ENTER;
 	if (lea->bots().empty())
 		throw command_error{"あなたはまだチームを編成していません。"};
 	lea->passive() = !lea->passive();
@@ -2808,6 +2904,7 @@ SUBCMD_FUNC(Bot, TeamPassive) {
 
 // ラッシュモードになる、または解除する。
 SUBCMD_FUNC(Bot, TeamRush) {
+	CS_ENTER;
 	lea->rush()->set(!lea->rush()->get());
 	if (lea->rush()->get()) show_client(lea->fd(), print(
 		"あなたのチームはラッシュモードになりました。"
@@ -2819,6 +2916,7 @@ SUBCMD_FUNC(Bot, TeamRush) {
 
 // チームが待機、または追従する。
 SUBCMD_FUNC(Bot, TeamStay) {
+	CS_ENTER;
 	if (lea->bots().empty())
 		throw command_error{"あなたはまだチームを編成していません。"};
 	lea->stay() = !lea->stay();
@@ -2829,6 +2927,7 @@ SUBCMD_FUNC(Bot, TeamStay) {
 
 // Botがアイテムを取引に追加する。
 SUBCMD_FUNC(Bot, TradeItem) {
+	CS_ENTER;
 	block_if* bot = check_trade_with_bot(lea, args);
 	std::string itm_nam = shift_arguments(
 		args, "アイテムを指定してください。"
@@ -2861,6 +2960,7 @@ SUBCMD_FUNC(Bot, TradeItem) {
 
 // BotがZenyを取引に追加する。
 SUBCMD_FUNC(Bot, TradeZeny) {
+	CS_ENTER;
 	block_if* bot = check_trade_with_bot(lea, args);
 	int amo = bot->sd()->status.zeny;
 	if (!args.empty()) amo = shift_arguments_then_parse_int(
@@ -2881,6 +2981,7 @@ SUBCMD_FUNC(Bot, TradeZeny) {
 
 // メンバーがワープ位置を一覧表示、またはワープポータルを開く。
 SUBCMD_FUNC(Bot, Warp) {
+	CS_ENTER;
 	auto pri_poi = [] (int ind, point* poi) -> std::string {
 		return print(
 			INDEX_PREFIX, ind, " - ",

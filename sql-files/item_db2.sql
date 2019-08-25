@@ -175,6 +175,11 @@ REPLACE INTO `item_db2` VALUES (2943, 'Critical_Ring_', 'クリティカルリング', 4,
 REPLACE INTO `item_db2` VALUES (2971, 'Pocket_Watch__', '銀の懐中時計', 4, 20, NULL, 200, NULL, 0, NULL, 1, 0x00810204, 7, 2, 136, NULL, 80, 0, 0, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (2984, 'Glove_Save_Rimnil', 'セーフリームニルの手袋', 4, 10, NULL, 100, NULL, NULL, NULL, 1, 0xFFFFFFFF, 63, 2, 136, NULL, 30, NULL, NULL, '{ bonus2 bExpAddRace,RC_All,5; bonus2 bSubRace,RC_All,-5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4150, 'Goat_Card', 'ゴートカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 16, NULL, NULL, NULL, NULL, '{ bonus bDef,2; bonus bMdef,5; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4200, 'Megalith_Card', 'メガリスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, '{ bonus bMdef,7; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4240, 'Arclouse_Card', 'アクラウスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus bDef,2; bonus bMdef,3; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4278, 'Gibbet_Card', 'ジビットカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bMdef,5; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4287, 'Kapha_Card', '河童カード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, '{ bonus bMdef,8; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4505, 'Scaraba_Card', 'スカラバカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 136, NULL, NULL, NULL, NULL, '{ bonus bMatk,20; bonus bMaxSPrate,-1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4506, 'Dolomedes_Card', 'ドロメデスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bDex,2; if(BaseClass==Job_Archer){ bonus bDex,getrefine()/3; } }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4507, 'Q_Scaraba_Card', '女王スカラバカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace2,RC2_SCARABA,30; bonus2 bAddMonsterDropItem,12806,30; }', '{}', '{}');
@@ -731,7 +736,7 @@ REPLACE INTO `item_db2` VALUES (20221, 'C_Eyes_Of_Ifrit_20221', '[衣装] イフリー
 REPLACE INTO `item_db2` VALUES (20223, 'C_Centimental_Leaf_20223', '[衣装] 草の葉', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 4096, 0, 1, 0, 57, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (20224, 'C_Red_Tailed_Ribbon_20224', '[衣装] 赤いリボン', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 167, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (20231, 'C_Snowman_Hat_20231', '[衣装] 雪だるま帽子', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 616, '{}', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (20236, 'C_Hellomother_Hat_20236', '[衣装] アークエンジェリング帽', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 241, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (20236, 'C_Hellomother_Hat_20236', '[衣装] アークエンジェリング帽', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 341, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (20237, 'C_Pink_Fur_Hat_20237', '[衣装] 毛糸の帽子（桃）', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 281, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (20238, 'C_Blue_Drooping_Kitty_20238', '[衣装] たれ猫（青）', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 277, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (20241, 'C_Eclipse_Hat_20241', '[衣装] エクリプス帽子', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 922, '{}', '{}', '{}');

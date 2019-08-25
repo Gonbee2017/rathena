@@ -36,6 +36,9 @@
 #include "pet.hpp"
 #include "script.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 // Regen related flags.
 enum e_regen {
 	RGN_NONE = 0x00,
@@ -1858,6 +1861,20 @@ int status_damage(struct block_list *src,struct block_list *target,int64 dhp, in
 
 		return (int)(hp+sp);
 	}
+
+	// [GonBee]
+	// Bot‚Í€–S‚·‚é‚Æ‘¦À‚É‘h¶‚µ‚æ‚¤‚Æ‚·‚éB
+	map_session_data* sd = BL_CAST(BL_PC, target);
+	if (sd &&
+		pybot::char_is_bot(sd->status.char_id)
+	) {
+		clif_parse_AutoRevive(sd->fd, sd);
+		if (!pc_isdead(sd)) {
+			status_change_clear(target, 0);
+			return (int)(hp+sp);
+		}
+	}
+
 	if (target->type == BL_MOB && sc && sc->data[SC_REBIRTH] && !((TBL_MOB*) target)->state.rebirth) { // Ensure the monster has not already rebirthed before doing so.
 		status_revive(target, sc->data[SC_REBIRTH]->val2, 0);
 		status_change_clear(target,0);
@@ -3750,6 +3767,10 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 	memset(sd->param_bonus, 0, sizeof(sd->param_bonus));
 
 	base_status->def += (refinedef+50)/100;
+
+	// [GonBee]
+	// ¸˜B‚ÌŒø‰Ê‚ğMdef‚É‚à“K—p‚·‚éB
+	base_status->mdef += (refinedef + 50) / 100;
 
 	// Parse Cards
 	for (i = 0; i < EQI_MAX; i++) {

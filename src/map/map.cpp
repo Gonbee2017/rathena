@@ -5047,7 +5047,10 @@ void do_abort(void)
 
 	// [GonBee]
 	// コールスタックのログを出力する。
-	while (!CallStack::log.empty()) ShowError("Call: %s\n", CallStack::log.top().c_str());
+	while (!CallStack::log.empty()) {
+		ShowError("Call: %s\n", CallStack::log.top().c_str());
+		CallStack::log.pop();
+	}
 
 	map_foreachpc(map_abort_sub);
 	chrif_flush_fifo();

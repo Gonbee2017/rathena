@@ -8179,10 +8179,6 @@ int pc_dead(struct map_session_data *sd,struct block_list *src)
 		}
 	}
 
-	// [GonBee]
-	// Bot‚ÍŽ€–S‚·‚é‚Æ‘¦À‚É‘h¶‚µ‚æ‚¤‚Æ‚·‚éB
-	if (pybot::char_is_bot(sd->status.char_id)) clif_parse_AutoRevive(sd->fd, sd);
-
 	// pvp
 	// disable certain pvp functions on pk_mode [Valaris]
 	if( !battle_config.pk_mode && mapdata->flag[MF_PVP] && !mapdata->flag[MF_PVP_NOCALCRANK] ) {

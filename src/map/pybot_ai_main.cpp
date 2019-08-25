@@ -31,6 +31,7 @@ TIMER_FUNC(ai_t::timer_func) {
 void ai_t::leader_main(
 	block_if* lea // リーダー。
 ) {
+	CS_ENTER;
 	leader = lea;
 	leader_organize();
 	leader_collect();
@@ -41,6 +42,7 @@ void ai_t::leader_main(
 
 // リーダーが編成する。
 void ai_t::leader_organize() {
+	CS_ENTER;
 	if (leader->bl()->m != leader->center().m) leader->stay() = false;
 	if (!leader->stay()) leader->center() = *leader->bl();
 	for (block_if* mem : leader->members()) {
@@ -99,6 +101,7 @@ void ai_t::leader_organize() {
 
 // リーダーが集める。
 void ai_t::leader_collect() {
+	CS_ENTER;
 	std::vector<mob_data*> ene_mds;
 	std::vector<mob_data*> aly_mds;
 	yield_bl_func yie_md = [this, &ene_mds, &aly_mds] (block_list* bl) -> int {
@@ -270,6 +273,7 @@ void ai_t::leader_collect() {
 
 // リーダーがターゲットを決める。
 void ai_t::leader_target() {
+	CS_ENTER;
 	auto rel_pol = [] (
 		block_if* bat,
 		block_if* ene,
@@ -368,6 +372,7 @@ void ai_t::leader_target() {
 
 // リーダーがバトラーのAIを呼ぶ。
 void ai_t::leader_battler() {
+	CS_ENTER;
 	for (block_if* bat : battlers) {
 		if (bat != leader &&
 			bat != leader->homun().get()
@@ -383,6 +388,7 @@ void ai_t::leader_battler() {
 
 // リーダーがペットのAIを呼ぶ。
 void ai_t::leader_pet() {
+	CS_ENTER;
 	for (block_if* pet : pets) {
 		try {pet_main(pet);} catch (const turn_end_exception&) {}
 	}
@@ -392,6 +398,7 @@ void ai_t::leader_pet() {
 void ai_t::bot_main(
 	block_if* bot_ // Bot。
 ) {
+	CS_ENTER;
 	battler = bot = bot_;
 	bot_dialog();
 	bot_dead();
@@ -416,12 +423,14 @@ void ai_t::bot_main(
 
 // Botが対話する。
 void ai_t::bot_dialog() {
+	CS_ENTER;
 	pc_close_npc(bot->sd(), 2);
 	if (pc_cant_act(bot->sd())) throw turn_end_exception();
 }
 
 // Botが死亡している。
 void ai_t::bot_dead() {
+	CS_ENTER;
 	t_tick& dea_tic = bot_dead_ticks[bot->char_id()];
 	if (bot->is_dead()) {
 		bot->walk_end_func() = bot->cast_end_func() = nullptr;
@@ -436,6 +445,7 @@ void ai_t::bot_dead() {
 
 // Botがリーダーを見失う。
 void ai_t::bot_lost() {
+	CS_ENTER;
 	block_list* cen = &leader->center();
 	if ((bot->bl()->m != cen->m ||
 			!check_distance_bl(bot->bl(), cen, AREA_SIZE) ||
@@ -446,6 +456,7 @@ void ai_t::bot_lost() {
 
 // Botがエモーションを表示する。
 void ai_t::bot_emotion() {
+	CS_ENTER;
 	if (DIFF_TICK(now, bot->last_emotion_tick()) >= 2500) {
 		bool no_get_itms = false;
 		ptr<storage_context> sto_con;
@@ -473,6 +484,7 @@ void ai_t::bot_emotion() {
 
 // Botが立つ。
 void ai_t::bot_stand() {
+	CS_ENTER;
 	if (bot->battle_mode() != BM_NONE &&
 		bot->is_sit()
 	) bot->stand();
@@ -480,6 +492,7 @@ void ai_t::bot_stand() {
 
 // Botが詠唱をキャンセルする。
 void ai_t::bot_cast_cancel() {
+	CS_ENTER;
 	int cas_can_lv = bot->check_skill(SA_CASTCANCEL);
 	if (cas_can_lv &&
 		bot->is_casting() &&
@@ -490,6 +503,7 @@ void ai_t::bot_cast_cancel() {
 
 // Botが歩き終わる。
 void ai_t::bot_walk_end() {
+	CS_ENTER;
 	ai_t::done_func fun = bot->walk_end_func();
 	if (fun) {
 		if (bot->is_walking()) throw turn_end_exception();
@@ -500,6 +514,7 @@ void ai_t::bot_walk_end() {
 
 // Botが唱え終わる。
 void ai_t::bot_cast_end() {
+	CS_ENTER;
 	ai_t::done_func fun = bot->cast_end_func();
 	if (fun) {
 		if (!bot->can_act()) throw turn_end_exception();
@@ -510,6 +525,7 @@ void ai_t::bot_cast_end() {
 
 // Botがカートからアイテムを補充する。
 void ai_t::bot_cart_auto_get() {
+	CS_ENTER;
 	if (bot->is_carton()) {
 		auto inv_con = construct<inventory_context>(bot->sd());
 		auto car_con = construct<cart_context>(bot->sd());
@@ -530,6 +546,7 @@ void ai_t::bot_cart_auto_get() {
 
 // Botが武具一式をリロードする。
 void ai_t::bot_reload_equipset() {
+	CS_ENTER;
 	equip_pos equ = equip_pos(0);
 	if (bot->battle_mode() == BM_NONE) {
 		if (bot->last_reloaded_equipset_tick()) {
@@ -583,6 +600,7 @@ void ai_t::bot_reload_equipset() {
 
 // Botがアイテムを使う。
 void ai_t::bot_use_item() {
+	CS_ENTER;
 	using itm_val_t = std::pair<int,int*>;
 	if (!battler->is_paralysis()) {
 		auto inv_con = construct<inventory_context>(bot->sd());
@@ -617,6 +635,7 @@ void ai_t::bot_use_item() {
 
 // Botがドロップアイテムを拾う。
 void ai_t::bot_pickup_flooritem() {
+	CS_ENTER;
 	if (bot->loot()->get() &&
 		bot->battle_mode() != BM_TAUNT &&
 		!bot->sc()->data[SC_WEIGHT90] &&
@@ -668,11 +687,13 @@ void ai_t::bot_pickup_flooritem() {
 
 // Botが位置取る。
 void ai_t::bot_positioning() {
+	CS_ENTER;
 	battler_positioning();
 }
 
 // Botが中心についていく。
 void ai_t::bot_follow() {
+	CS_ENTER;
 	int ran = int(bot->member_index() < leader->member_index()) + bot->member_index();
 	if (bot->battle_mode() == BM_NONE &&
 		!bot->is_walking() &&
@@ -686,6 +707,7 @@ void ai_t::bot_follow() {
 
 // Botが武器に付与された属性を解除する。
 void ai_t::bot_remove_enchant() {
+	CS_ENTER;
 	struct enc_t {
 		sc_type typ;
 		e_element ele;
@@ -712,11 +734,13 @@ void ai_t::bot_remove_enchant() {
 
 // Botが攻撃する。
 void ai_t::bot_attack() {
+	CS_ENTER;
 	if (pc_can_attack(bot->sd(), 0)) battler_attack();
 }
 
 // Botが演奏スキルを使う。
 void ai_t::bot_play_skill() {
+	CS_ENTER;
 	if ((bot->sd()->class_ & MAPID_UPPERMASK) == MAPID_BARDDANCER &&
 		!bot->is_walking() &&
 		!bot->sc()->cant.cast &&
@@ -791,11 +815,13 @@ void ai_t::bot_play_skill() {
 
 // Botがスキルを使う。
 void ai_t::bot_use_skill() {
+	CS_ENTER;
 	battler_use_skill();
 }
 
 // Botが休息する。
 void ai_t::bot_rest() {
+	CS_ENTER;
 	if (bot->battle_mode() == BM_NONE &&
 		!bot->is_walking() &&
 		bot->can_act()
