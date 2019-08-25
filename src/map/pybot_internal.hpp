@@ -547,25 +547,27 @@ enum map_types {
 
 // メタモンスター。
 enum meta_mobs {
-	MM_REST        =   100, // 休息。
-	MM_BACKUP      =   101, // 予備。
-	MM_BASE        =   102, // 基本。
-	MM_SIZE        =   120, // サイズ。
-	MM_ELEMENT     =   140, // 属性。
-	MM_RACE        =   160, // 種族。
-	MM_BOSS        =   180, // ボス。
-	MM_GREAT       =   181, // グレート。
-	MM_FLORA       =   182, // フローラ型。
-	MM_SP_DECLINE4 =   190, // SP低下4。
-	MM_SP_DECLINE3 =   191, // SP低下3。
-	MM_SP_DECLINE2 =   192, // SP低下2。
-	MM_SP_DECLINE1 =   193, // SP低下1。
-	MM_HP_DECLINE4 =   200, // HP低下4。
-	MM_HP_DECLINE3 =   201, // HP低下3。
-	MM_HP_DECLINE2 =   202, // HP低下2。
-	MM_HP_DECLINE1 =   203, // HP低下1。
-	MM_INDIVIDUAL  =   500, // 個別。
-	MM_CAUTION     = 10000, // 警戒。
+	MM_REST         =   100, // 休息。
+	MM_BACKUP       =   101, // 予備。
+	MM_BASE         =   102, // 基本。
+	MM_SIZE         =   120, // サイズ。
+	MM_ELEMENT      =   140, // 属性。
+	MM_RACE         =   160, // 種族。
+	MM_BOSS         =   180, // ボス。
+	MM_GREAT        =   181, // グレート。
+	MM_FLORA        =   182, // フローラ型。
+	MM_HIGH_DEF     =   185, // 高Def。
+	MM_HIGH_DEF_VIT =   186, // 高DefVit。
+	MM_SP_DECLINE4  =   190, // SP低下4。
+	MM_SP_DECLINE3  =   191, // SP低下3。
+	MM_SP_DECLINE2  =   192, // SP低下2。
+	MM_SP_DECLINE1  =   193, // SP低下1。
+	MM_HP_DECLINE4  =   200, // HP低下4。
+	MM_HP_DECLINE3  =   201, // HP低下3。
+	MM_HP_DECLINE2  =   202, // HP低下2。
+	MM_HP_DECLINE1  =   203, // HP低下1。
+	MM_INDIVIDUAL   =   500, // 個別。
+	MM_CAUTION      = 10000, // 警戒。
 };
 
 // 国の種類。
@@ -1211,6 +1213,8 @@ struct battler_if {
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
 	virtual int distance_max_value();
 	virtual distance_policy_values& distance_policy_value();
+	virtual int get_high_def();
+	virtual int get_high_def_vit();
 	virtual int get_hold_monsters();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
@@ -1385,6 +1389,8 @@ struct member_if {
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
 	virtual int get_skill_monsters();
 	virtual t_tick get_skill_tail(e_skill kid);
+	virtual ptr<regnum_t<int>>& high_def();
+	virtual ptr<regnum_t<int>>& high_def_vit();
 	virtual ptr<regnum_t<int>>& hold_monsters();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
@@ -1657,6 +1663,8 @@ struct homun_impl : virtual block_if {
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
 	virtual int distance_max_value() override;
 	virtual bool exists() override;
+	virtual int get_high_def() override;
+	virtual int get_high_def_vit() override;
 	virtual int get_hold_monsters() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
@@ -1745,6 +1753,8 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
+	ptr<regnum_t<int>> high_def_;                 // 高Defの登録値。
+	ptr<regnum_t<int>> high_def_vit_;             // 高DefVitの登録値。
 	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
@@ -1790,10 +1800,14 @@ struct member_impl : virtual block_if {
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
+	virtual int get_high_def() override;
+	virtual int get_high_def_vit() override;
 	virtual int get_hold_monsters() override;
 	virtual int get_skill_monsters() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int guild_id() override;
+	virtual ptr<regnum_t<int>>& high_def() override;
+	virtual ptr<regnum_t<int>>& high_def_vit() override;
 	virtual ptr<regnum_t<int>>& hold_monsters() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
@@ -2374,6 +2388,8 @@ SUBCMD_FUNC(Bot, CartAutoGetClear);
 SUBCMD_FUNC(Bot, CartAutoGetTransport);
 SUBCMD_FUNC(Bot, CartGet);
 SUBCMD_FUNC(Bot, CartPut);
+SUBCMD_FUNC(Bot, DefHigh);
+SUBCMD_FUNC(Bot, DefVitHigh);
 SUBCMD_FUNC(Bot, DistanceMax);
 SUBCMD_FUNC(Bot, Equip);
 SUBCMD_FUNC(Bot, EquipIdentifyAll);
@@ -2691,6 +2707,8 @@ extern const std::string CASTLE_TRIAL_NPC_NAME;
 extern const std::string CAUTION_TAG;
 extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
+extern const int DEFAULT_HIGH_DEF;
+extern const int DEFAULT_HIGH_DEF_VIT;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;

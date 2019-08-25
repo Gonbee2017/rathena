@@ -265,6 +265,46 @@ SUBCMD_FUNC(Bot, CartPut) {
 	clif_emotion(mem->bl(), ET_OK);
 }
 
+// 高Defを設定する。
+SUBCMD_FUNC(Bot, DefHigh) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int def = shift_arguments_then_parse_int(
+		args, print("Def"), 1, INT_MAX
+	);
+	if (def == DEFAULT_HIGH_DEF) def = 0;
+	if (def)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefが", def, "以上のモンスターを高Defとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefが", DEFAULT_HIGH_DEF, "以上のモンスターを高Defとみなします。"
+		));
+	mem->high_def()->set(def);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 高DefVitを設定する。
+SUBCMD_FUNC(Bot, DefVitHigh) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int dv = shift_arguments_then_parse_int(
+		args, print("DefVit"), 1, INT_MAX
+	);
+	if (dv == DEFAULT_HIGH_DEF_VIT) dv = 0;
+	if (dv)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefとVitの合計が", dv, "以上のモンスターを高DefVitとみなします。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はDefとVitの合計が", DEFAULT_HIGH_DEF_VIT, "以上のモンスターを高DefVitとみなします。"
+		));
+	mem->high_def_vit()->set(dv);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // モンスターとの最大距離を設定する。
 SUBCMD_FUNC(Bot, DistanceMax) {
 	CS_ENTER;

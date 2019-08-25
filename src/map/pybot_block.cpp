@@ -28,6 +28,8 @@ distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IM
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -181,6 +183,8 @@ int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_E
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1174,6 +1178,18 @@ homun_impl::exists() {
 		hd();
 }
 
+// ホムンクルスの高Defを取得する。
+int // 取得した高Def。
+homun_impl::get_high_def() {
+	return master()->get_high_def();
+}
+
+// ホムンクルスの高DefVitを取得する。
+int // 取得した高DefVit。
+homun_impl::get_high_def_vit() {
+	return master()->get_high_def_vit();
+}
+
 // ホムンクルスが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
 homun_impl::get_hold_monsters() {
@@ -1683,6 +1699,22 @@ ptr<registry_t<int,e_skill>>& member_impl::first_skills() {
 	return first_skills_;
 }
 
+// メンバーの高Defを取得する。
+int // 取得した高Def。
+member_impl::get_high_def() {
+	int res = high_def()->get();
+	if (!res) res = DEFAULT_HIGH_DEF;
+	return res;
+}
+
+// メンバーの高DefVitを取得する。
+int // 取得した高DefVit。
+member_impl::get_high_def_vit() {
+	int res = high_def_vit()->get();
+	if (!res) res = DEFAULT_HIGH_DEF_VIT;
+	return res;
+}
+
 // メンバーが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_hold_monsters() {
@@ -1710,6 +1742,16 @@ member_impl::get_skill_tail(
 int // 取得したギルドID。
 member_impl::guild_id() {
 	return sd()->status.guild_id;
+}
+
+// 高Defの登録値。
+ptr<regnum_t<int>>& member_impl::high_def() {
+	return high_def_;
+}
+
+// 高DefVitの登録値。
+ptr<regnum_t<int>>& member_impl::high_def_vit() {
+	return high_def_vit_;
 }
 
 // 抱えることのできるモンスター数の登録値。
@@ -2469,6 +2511,8 @@ member_t::member_t(
 	char_id() = sd()->status.char_id;
 	leader() = lea;
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
+	high_def() = construct<regnum_t<int>>(sd(), "pybot_high_def");
+	high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_high_def_vit");
 	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
 	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");

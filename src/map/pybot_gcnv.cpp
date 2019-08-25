@@ -1404,6 +1404,14 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot cartput クリエ ブルージェムストーン]\n"
 		"カートにアイテムの特定個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン 5]\n"
+	), SUBCMD_DESC(Bot, DefHigh                    , dh  ,
+		"------ DefHigh (dh) サブコマンド ------\n"
+		"高Defを設定する。\n"
+		"入力例 [@bot defhigh アサクロ 50]\n"
+	), SUBCMD_DESC(Bot, DefVitHigh                 , dvh ,
+		"------ DefVitHigh (dvh) サブコマンド ------\n"
+		"高DefVitを設定する。\n"
+		"入力例 [@bot defvithigh アサクロ 100]\n"
 	), SUBCMD_DESC(Bot, DistanceMax                , dm  ,
 		"------ DistanceMax (dm) サブコマンド ------\n"
 		"モンスターとの最大距離を設定する。\n"
@@ -1892,6 +1900,8 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt),
 	SUBCMD_PROC(Bot, CartGet                    , cg  ),
 	SUBCMD_PROC(Bot, CartPut                    , cp  ),
+	SUBCMD_PROC(Bot, DefHigh                    , dh  ),
+	SUBCMD_PROC(Bot, DefVitHigh                 , dvh ),
 	SUBCMD_PROC(Bot, DistanceMax                , dm  ),
 	SUBCMD_PROC(Bot, Equip                      , e   ),
 	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia ),
@@ -2044,6 +2054,12 @@ const std::unordered_map<
 	{JOB_STAR_GLADIATOR, DPV_CLOSE},
 	{JOB_SOUL_LINKER   , DPV_AWAY },
 };
+
+// デフォルトの高Def。
+const int DEFAULT_HIGH_DEF = 50;
+
+// デフォルトの高DefVit。
+const int DEFAULT_HIGH_DEF_VIT = 100;
 
 // デフォルト通常攻撃ポリシー値のマップ。
 const std::unordered_map<

@@ -305,6 +305,8 @@ void ai_t::leader_target() {
 			}
 			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
 		}
+		if (ene->def() + ene->def2() >= bat->get_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
+		if (ene->def() >= bat->get_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
 		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
 		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
 		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
@@ -586,6 +588,8 @@ void ai_t::bot_reload_equipset() {
 			}
 			bot->load_equipset(MM_SP_DECLINE4, &equ);
 		}
+		if (tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
+		if (tar_ene->def() >= bot->get_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
 		if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
 		if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
 		if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
@@ -782,6 +786,8 @@ void ai_t::bot_play_skill() {
 				}
 				bot->load_play_skill(MM_SP_DECLINE4, &kid);
 			}
+			if (tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
+			if (tar_ene->def() >= bot->get_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
 			if (tar_ene->is_flora()) bot->load_play_skill(MM_FLORA, &kid);
 			if (tar_ene->is_great(leader)) bot->load_play_skill(MM_GREAT, &kid);
 			if (tar_ene->is_boss()) bot->load_play_skill(MM_BOSS, &kid);

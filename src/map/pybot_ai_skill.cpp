@@ -749,7 +749,7 @@ AI_SKILL_USE_FUNC(GS_FLING) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		tar_ene->def() + tar_ene->def2() >= 100 &&
+		tar_ene->def() >= bot->get_high_def() &&
 		tar_ene->def() < 100 &&
 		!tar_ene->has_status_immune() &&
 		!tar_ene->sc()->data[GS_FLING] &&
@@ -1563,7 +1563,7 @@ AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		tar_ene->def() + tar_ene->def2() >= 100 &&
+		tar_ene->def() + tar_ene->def2() >= bot->get_high_def_vit() &&
 		tar_ene->def() < 100 &&
 		bot->collect_spirits(1)
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -2659,7 +2659,7 @@ AI_SKILL_USE_FUNC(SM_PROVOKE) {
 		bot->check_attack(tar_ene) &&
 		tar_ene->can_be_provoke() &&
 		tar_ene->check_skill_used_tick(kid, 2500) &&
-		tar_ene->def() >= 50 &&
+		tar_ene->def() >= bot->get_high_def() &&
 		tar_ene->def() < 100 &&
 		(!tar_ene->sc()->data[SC_PROVOKE] ||
 			tar_ene->sc()->data[SC_PROVOKE]->val1 < klv
