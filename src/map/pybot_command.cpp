@@ -272,17 +272,11 @@ SUBCMD_FUNC(Bot, DistanceMax) {
 	int dis = shift_arguments_then_parse_int(
 		args, print("距離"), 1, battle_config.pybot_around_distance
 	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はモンスターに対して最大",
+		dis, "セル以内に位置取ります。"
+	));
 	if (dis == battle_config.pybot_around_distance) dis = 0;
-	if (dis) {
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はモンスターに対して最大",
-			dis, "セル以内に位置取ります。"
-		));
-	} else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はモンスターに対して最大",
-			battle_config.pybot_around_distance, "セル以内に位置取ります。"
-		));
 	mem->distance_max()->set(dis);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
@@ -666,86 +660,6 @@ SUBCMD_FUNC(Bot, Help) {
 	show_client(lea->fd(), sc_des->sc_desc);
 }
 
-// 高Defを設定する。
-SUBCMD_FUNC(Bot, HighDef) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int def = shift_arguments_then_parse_int(
-		args, print("Def"), 1, 100
-	);
-	if (def == DEFAULT_HIGH_DEF) def = 0;
-	if (def)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefが", def, "以上のモンスターを高Defとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefが", DEFAULT_HIGH_DEF, "以上のモンスターを高Defとみなします。"
-		));
-	mem->high_def()->set(def);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
-// 高DefVitを設定する。
-SUBCMD_FUNC(Bot, HighDefVit) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int dv = shift_arguments_then_parse_int(
-		args, print("DefVit"), 1, INT_MAX
-	);
-	if (dv == DEFAULT_HIGH_DEF_VIT) dv = 0;
-	if (dv)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefとVitの合計が", dv, "以上のモンスターを高DefVitとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はDefとVitの合計が", DEFAULT_HIGH_DEF_VIT, "以上のモンスターを高DefVitとみなします。"
-		));
-	mem->high_def_vit()->set(dv);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
-// 高Fleeを設定する。
-SUBCMD_FUNC(Bot, HighFlee) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int fle = shift_arguments_then_parse_int(
-		args, print("Flee"), 1, INT_MAX
-	);
-	if (fle == DEFAULT_HIGH_FLEE) fle = 0;
-	if (fle)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はFleeが", fle, "以上のモンスターを高Fleeとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はFleeが", DEFAULT_HIGH_FLEE, "以上のモンスターを高Fleeとみなします。"
-		));
-	mem->high_flee()->set(fle);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
-// 高Hitを設定する。
-SUBCMD_FUNC(Bot, HighHit) {
-	CS_ENTER;
-	block_if* mem = shift_arguments_then_find_member(lea, args);
-	int hit = shift_arguments_then_parse_int(
-		args, print("Hit"), 1, INT_MAX
-	);
-	if (hit == DEFAULT_HIGH_HIT) hit = 0;
-	if (hit)
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はHitが", hit, "以上のモンスターを高Hitとみなします。"
-		));
-	else
-		show_client(lea->fd(), print(
-			"「", mem->name(), "」はHitが", DEFAULT_HIGH_HIT, "以上のモンスターを高Hitとみなします。"
-		));
-	mem->high_hit()->set(hit);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
-}
-
 // 抱えることのできるモンスター数を設定する。
 SUBCMD_FUNC(Bot, HoldMonsters) {
 	CS_ENTER;
@@ -768,7 +682,7 @@ SUBCMD_FUNC(Bot, HoldMonsters) {
 			"「", mem->name(), "」はモンスターを抱えません。"
 		));
 	if (cou < 0) cou = INT_MAX;
-	mem->hold_monsters()->set(cou);
+	mem->hold_mobs()->set(cou);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
@@ -1491,6 +1405,66 @@ SUBCMD_FUNC(Bot, MonsterGreatImport) {
 	lea->last_heaby_tick() = now;
 }
 
+// モンスターの高Defを設定する。
+SUBCMD_FUNC(Bot, MonsterHighDef) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int def = shift_arguments_then_parse_int(
+		args, print("Def"), 1, 100
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はDefが", def, "以上のモンスターを高Defとみなします。"
+	));
+	if (def == DEFAULT_MOB_HIGH_DEF) def = 0;
+	mem->mob_high_def()->set(def);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// モンスターの高DefVitを設定する。
+SUBCMD_FUNC(Bot, MonsterHighDefVit) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int dv = shift_arguments_then_parse_int(
+		args, print("DefVit"), 1, INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はDefとVitの合計が", dv, "以上のモンスターを高DefVitとみなします。"
+	));
+	if (dv == DEFAULT_MOB_HIGH_DEF_VIT) dv = 0;
+	mem->mob_high_def_vit()->set(dv);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// モンスターの高Fleeを設定する。
+SUBCMD_FUNC(Bot, MonsterHighFlee) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int fle = shift_arguments_then_parse_int(
+		args, print("Flee"), 1, INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はFleeが", fle, "以上のモンスターを高Fleeとみなします。"
+	));
+	if (fle == DEFAULT_MOB_HIGH_FLEE) fle = 0;
+	mem->mob_high_flee()->set(fle);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// モンスターの高Hitを設定する。
+SUBCMD_FUNC(Bot, MonsterHighHit) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int hit = shift_arguments_then_parse_int(
+		args, print("Hit"), 1, INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はHitが", hit, "以上のモンスターを高Hitとみなします。"
+	));
+	if (hit == DEFAULT_MOB_HIGH_HIT) hit = 0;
+	mem->mob_high_hit()->set(hit);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // 次のページを表示する。
 SUBCMD_FUNC(Bot, Next) {
 	CS_ENTER;
@@ -1937,7 +1911,7 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 				mid >= MM_CAUTION
 			)
 				throw command_error{print(
-					"「", META_MONSTER_NAMES.at(MM_BACKUP),
+					"「", META_MONSTER_NAMES.at(meta_mobs(mid)),
 					"」用優先スキルは登録できません。"
 				)};
 			std::string sk_nam = shift_arguments(args);
@@ -2100,7 +2074,7 @@ SUBCMD_FUNC(Bot, sKillMonsters) {
 		cou, "匹にしました。"
 	));
 	if (cou == DEFAULT_SKILL_MONSTERS) cou = 0;
-	mem->skill_monsters()->set(cou);
+	mem->skill_mobs()->set(cou);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
@@ -2312,6 +2286,21 @@ SUBCMD_FUNC(Bot, sKillRejectTransport) {
 		cou, "件の拒否スキルを転送しました。"
 	));
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
+// ソウルチェンジを許可するSP率を設定する。
+SUBCMD_FUNC(Bot, sKillSoulChangeRate) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int rat = shift_arguments_then_parse_int(
+		args, print("SP率"), 1, 100
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はSPが", rat, "%未満のときにソウルチェンジを許可します。"
+	));
+	if (rat == DEFAULT_SOUL_CHANGE_RATE) rat = 0;
+	mem->soul_change_rate()->set(rat);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
 // メンバーの掛け直し時間を一覧表示、または登録、または抹消する。

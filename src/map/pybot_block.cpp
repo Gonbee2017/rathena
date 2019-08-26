@@ -21,6 +21,7 @@ battle_modes& battler_if::battle_mode() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_hp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_normal_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::check_soul_change() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_sp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_skill(e_skill kid, int klv, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -28,11 +29,12 @@ distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IM
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_soul_change_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_dead() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -184,13 +186,9 @@ int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int member_if::get_skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int member_if::get_skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::hold_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -198,6 +196,10 @@ void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ER
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,play_skill>>& member_if::play_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -205,10 +207,11 @@ ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_E
 ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::soul_change_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::skill_ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::skill_monsters() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& member_if::skill_tails() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::stand() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::storage_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -352,15 +355,21 @@ battler_impl::check_normal_attack(
 		);
 }
 
+// バトラーがソウルチェンジを許可するかを判定する。
+bool // 結果。
+battler_impl::check_soul_change() {
+	return sp() * 100 < get_soul_change_rate() * max_sp();
+}
+
 // バトラーのSPが大丈夫かを判定する。
 bool // 結果。
 battler_impl::check_sp(
 	int rat // SPの四分率。
 ) {
-	if (leader()->sp_suppliable() ||
-		sc()->data[SC_DIGESTPOTION]
-	) rat = std::min(rat, 1);
-	return check_quad_ratio(sp(), max_sp(), rat);
+	return ((leader()->sp_suppliable() ||
+				sc()->data[SC_DIGESTPOTION]
+			) && !check_soul_change()
+		) || check_quad_ratio(sp(), max_sp(), rat);
 }
 
 // バトラーが敵モンスターにスキルを使っても大丈夫かを判定する。
@@ -1188,34 +1197,40 @@ homun_impl::exists() {
 		hd();
 }
 
-// ホムンクルスの高Defを取得する。
-int // 取得した高Def。
-homun_impl::get_high_def() {
-	return master()->get_high_def();
-}
-
-// ホムンクルスの高DefVitを取得する。
-int // 取得した高DefVit。
-homun_impl::get_high_def_vit() {
-	return master()->get_high_def_vit();
-}
-
-// ホムンクルスの高Fleeを取得する。
-int // 取得した高Flee。
-homun_impl::get_high_flee() {
-	return master()->get_high_flee();
-}
-
-// ホムンクルスの高Hitを取得する。
-int // 取得した高Hit。
-homun_impl::get_high_hit() {
-	return master()->get_high_hit();
-}
-
 // ホムンクルスが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
-homun_impl::get_hold_monsters() {
+homun_impl::get_hold_mobs() {
 	return INT_MAX;
+}
+
+// ホムンクルスのモンスターの高Defを取得する。
+int // 取得した高Def。
+homun_impl::get_mob_high_def() {
+	return master()->get_mob_high_def();
+}
+
+// ホムンクルスのモンスターの高DefVitを取得する。
+int // 取得した高DefVit。
+homun_impl::get_mob_high_def_vit() {
+	return master()->get_mob_high_def_vit();
+}
+
+// ホムンクルスのモンスターの高Fleeを取得する。
+int // 取得した高Flee。
+homun_impl::get_mob_high_flee() {
+	return master()->get_mob_high_flee();
+}
+
+// ホムンクルスのモンスターの高Hitを取得する。
+int // 取得した高Hit。
+homun_impl::get_mob_high_hit() {
+	return master()->get_mob_high_hit();
+}
+
+// ホムンクルスのソウルチェンジを許可するSP率を取得する。
+int // 取得した高Hit。
+homun_impl::get_soul_change_rate() {
+	return DEFAULT_SOUL_CHANGE_RATE;
 }
 
 // ホムンクルスデータを取得する。
@@ -1721,48 +1736,48 @@ ptr<registry_t<int,e_skill>>& member_impl::first_skills() {
 	return first_skills_;
 }
 
-// メンバーの高Defを取得する。
-int // 取得した高Def。
-member_impl::get_high_def() {
-	int res = high_def()->get();
-	if (!res) res = DEFAULT_HIGH_DEF;
-	return res;
-}
-
-// メンバーの高DefVitを取得する。
-int // 取得した高DefVit。
-member_impl::get_high_def_vit() {
-	int res = high_def_vit()->get();
-	if (!res) res = DEFAULT_HIGH_DEF_VIT;
-	return res;
-}
-
-// メンバーの高Fleeを取得する。
-int // 取得した高Flee。
-member_impl::get_high_flee() {
-	int res = high_flee()->get();
-	if (!res) res = DEFAULT_HIGH_FLEE;
-	return res;
-}
-
-// メンバーの高Hitを取得する。
-int // 取得した高Hit。
-member_impl::get_high_hit() {
-	int res = high_hit()->get();
-	if (!res) res = DEFAULT_HIGH_HIT;
-	return res;
-}
-
 // メンバーが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
-member_impl::get_hold_monsters() {
-	return hold_monsters()->get();
+member_impl::get_hold_mobs() {
+	return hold_mobs()->get();
+}
+
+// メンバーのモンスターの高Defを取得する。
+int // 取得した高Def。
+member_impl::get_mob_high_def() {
+	int res = mob_high_def()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_DEF;
+	return res;
+}
+
+// メンバーのモンスターの高DefVitを取得する。
+int // 取得した高DefVit。
+member_impl::get_mob_high_def_vit() {
+	int res = mob_high_def_vit()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_DEF_VIT;
+	return res;
+}
+
+// メンバーのモンスターの高Fleeを取得する。
+int // 取得した高Flee。
+member_impl::get_mob_high_flee() {
+	int res = mob_high_flee()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_FLEE;
+	return res;
+}
+
+// メンバーのモンスターの高Hitを取得する。
+int // 取得した高Hit。
+member_impl::get_mob_high_hit() {
+	int res = mob_high_hit()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_HIT;
+	return res;
 }
 
 // 範囲スキルの発動条件となるモンスター数を取得する。
 int // 取得したモンスター数。
-member_impl::get_skill_monsters() {
-	int cou = skill_monsters()->get();
+member_impl::get_skill_mobs() {
+	int cou = skill_mobs()->get();
 	if (!cou) cou = DEFAULT_SKILL_MONSTERS;
 	return cou;
 }
@@ -1776,35 +1791,23 @@ member_impl::get_skill_tail(
 	return dur ? *dur : 0;
 }
 
+// メンバーのソウルチェンジを許可するSP率を取得する。
+int // 取得したSP率。
+member_impl::get_soul_change_rate() {
+	int res = soul_change_rate()->get();
+	if (!res) res = DEFAULT_SOUL_CHANGE_RATE;
+	return res;
+}
+
 // メンバーのギルドIDを取得する。
 int // 取得したギルドID。
 member_impl::guild_id() {
 	return sd()->status.guild_id;
 }
 
-// 高Defの登録値。
-ptr<regnum_t<int>>& member_impl::high_def() {
-	return high_def_;
-}
-
-// 高DefVitの登録値。
-ptr<regnum_t<int>>& member_impl::high_def_vit() {
-	return high_def_vit_;
-}
-
-// 高Fleeの登録値。
-ptr<regnum_t<int>>& member_impl::high_flee() {
-	return high_flee_;
-}
-
-// 高Hitの登録値。
-ptr<regnum_t<int>>& member_impl::high_hit() {
-	return high_hit_;
-}
-
 // 抱えることのできるモンスター数の登録値。
-ptr<regnum_t<int>>& member_impl::hold_monsters() {
-	return hold_monsters_;
+ptr<regnum_t<int>>& member_impl::hold_mobs() {
+	return hold_mobs_;
 }
 
 // ホムンクルス。
@@ -1911,6 +1914,11 @@ void member_impl::iterate_skill(
 	}
 }
 
+// 武器属性付与のレジストリ。
+ptr<registry_t<int,e_element>>& member_impl::kew_elements() {
+	return kew_elements_;
+}
+
 // リーダー。
 block_if*& member_impl::leader() {
 	return leader_;
@@ -1990,6 +1998,26 @@ int& member_impl::member_index() {
 	return member_index_;
 }
 
+// モンスターの高Defの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_def() {
+	return mob_high_def_;
+}
+
+// モンスターの高DefVitの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_def_vit() {
+	return mob_high_def_vit_;
+}
+
+// モンスターの高Fleeの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_flee() {
+	return mob_high_flee_;
+}
+
+// モンスターの高Hitの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_hit() {
+	return mob_high_hit_;
+}
+
 // メンバーの名前を取得する。
 std::string // 取得した名前。
 member_impl::name() {
@@ -2042,9 +2070,9 @@ map_session_data*& member_impl::sd() {
 	return sd_;
 }
 
-// 武器属性付与のレジストリ。
-ptr<registry_t<int,e_element>>& member_impl::kew_elements() {
-	return kew_elements_;
+// ソウルチェンジを許可するSP率の登録値。
+ptr<regnum_t<int>>& member_impl::soul_change_rate() {
+	return soul_change_rate_;
 }
 
 // メンバーが座る。
@@ -2071,8 +2099,8 @@ ptr<registry_t<int>>& member_impl::skill_ignore_mobs() {
 }
 
 // 範囲魔法スキルの発動モンスター数の登録値。
-ptr<regnum_t<int>>& member_impl::skill_monsters() {
-	return skill_monsters_;
+ptr<regnum_t<int>>& member_impl::skill_mobs() {
+	return skill_mobs_;
 }
 
 // メンバーのスキルポイントを取得する。
@@ -2356,12 +2384,7 @@ skill_user_impl::skill_range(
 	e_skill kid, // スキルID。
 	int klv      // スキルレベル。
 ) {
-	int ran = skill_get_range(kid, klv);
-	if (ran < 0) {
-		if (battle_config.use_weapon_skill_range & bl()->type) ran = attack_range();
-		else ran = -ran;
-	}
-	return ran;
+	return skill_get_range2(bl(), kid, klv, true);
 }
 
 // アンコールを使う。
@@ -2559,13 +2582,14 @@ member_t::member_t(
 	char_id() = sd()->status.char_id;
 	leader() = lea;
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
-	high_def() = construct<regnum_t<int>>(sd(), "pybot_high_def");
-	high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_high_def_vit");
-	high_flee() = construct<regnum_t<int>>(sd(), "pybot_high_flee");
-	high_hit() = construct<regnum_t<int>>(sd(), "pybot_high_hit");
-	hold_monsters() = construct<regnum_t<int>>(sd(), "pybot_hold_monsters");
+	hold_mobs() = construct<regnum_t<int>>(sd(), "pybot_hold_mobs");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
-	skill_monsters() = construct<regnum_t<int>>(sd(), "pybot_skill_monsters");
+	mob_high_def() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def");
+	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
+	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
+	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
+	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
+	soul_change_rate() = construct<regnum_t<int>>(sd(), "pybot_soul_change_rate");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
 	cart_auto_get_items() = construct<registry_t<int>>(

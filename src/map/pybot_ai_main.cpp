@@ -305,10 +305,10 @@ void ai_t::leader_target() {
 			}
 			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
 		}
-		if (ene->hit() >= bat->get_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
-		if (ene->flee() >= bat->get_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
-		if (ene->def() + ene->vit() >= bat->get_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
-		if (ene->def() >= bat->get_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
+		if (ene->hit() >= bat->get_mob_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
+		if (ene->flee() >= bat->get_mob_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
+		if (ene->def() + ene->vit() >= bat->get_mob_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
+		if (ene->def() >= bat->get_mob_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
 		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
 		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
 		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
@@ -590,10 +590,10 @@ void ai_t::bot_reload_equipset() {
 			}
 			bot->load_equipset(MM_SP_DECLINE4, &equ);
 		}
-		if (tar_ene->hit() >= bot->get_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
-		if (tar_ene->flee() >= bot->get_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
-		if (tar_ene->def() + tar_ene->vit() >= bot->get_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
-		if (tar_ene->def() >= bot->get_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
+		if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
+		if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
+		if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
+		if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
 		if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
 		if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
 		if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
@@ -790,10 +790,10 @@ void ai_t::bot_play_skill() {
 				}
 				bot->load_play_skill(MM_SP_DECLINE4, &kid);
 			}
-			if (tar_ene->hit() >= bot->get_high_hit()) bot->load_play_skill(MM_HIGH_HIT, &kid);
-			if (tar_ene->flee() >= bot->get_high_flee()) bot->load_play_skill(MM_HIGH_FLEE, &kid);
-			if (tar_ene->def() + tar_ene->vit() >= bot->get_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
-			if (tar_ene->def() >= bot->get_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
+			if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_play_skill(MM_HIGH_HIT, &kid);
+			if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_play_skill(MM_HIGH_FLEE, &kid);
+			if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
+			if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
 			if (tar_ene->is_flora()) bot->load_play_skill(MM_FLORA, &kid);
 			if (tar_ene->is_great(leader)) bot->load_play_skill(MM_GREAT, &kid);
 			if (tar_ene->is_boss()) bot->load_play_skill(MM_BOSS, &kid);
@@ -944,9 +944,9 @@ void ai_t::battler_positioning() {
 				battler->distance_policy_value() == DPV_AWAY
 			) && !battler->sc()->data[SC_WARM] &&
 			att_ene &&
-			battler->get_hold_monsters() != INT_MAX &&
+			battler->get_hold_mobs() != INT_MAX &&
 			(att_ene->is_great(leader) ||
-				battler->attacked_short_range_attackers() > battler->get_hold_monsters()
+				battler->attacked_short_range_attackers() > battler->get_hold_mobs()
 			)
 		) {
 			if (att_ene->check_attack_range(battler) &&

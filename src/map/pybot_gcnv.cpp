@@ -1448,22 +1448,6 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ Help (h) サブコマンド ------\n"
 		"サブコマンドの説明を表示する。\n"
 		"入力例 [@bot help login]\n"
-	), SUBCMD_DESC(Bot, HighDef                    , hd  ,
-		"------ HighDef (hd) サブコマンド ------\n"
-		"高Defを設定する。\n"
-		"入力例 [@bot highdef アサクロ 40]\n"
-	), SUBCMD_DESC(Bot, HighDefVit                 , hdv ,
-		"------ HighDefVit (hdv) サブコマンド ------\n"
-		"高DefVitを設定する。\n"
-		"入力例 [@bot highdefvit アサクロ 100]\n"
-	), SUBCMD_DESC(Bot, HighFlee                   , hf  ,
-		"------ HighFlee (hf) サブコマンド ------\n"
-		"高Fleeを設定する。\n"
-		"入力例 [@bot highflee アサクロ 150]\n"
-	), SUBCMD_DESC(Bot, HighHit                    , hh  ,
-		"------ HighHit (hh) サブコマンド ------\n"
-		"高Hitを設定する。\n"
-		"入力例 [@bot highhit アサクロ 175]\n"
 	), SUBCMD_DESC(Bot, HoldMonsters               , hm  ,
 		"------ HoldMonsters (hm) サブコマンド ------\n"
 		"抱えることのできるモンスター数を設定する。\n"
@@ -1610,6 +1594,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ MonsterGreatImport (mgi) サブコマンド ------\n"
 		"グレートモンスターを取り込む。\n"
 		"入力例 [@bot monstergreatimport チェイス]\n"
+	), SUBCMD_DESC(Bot, MonsterHighDef             , mhd ,
+		"------ MonsterHighDef (mhd) サブコマンド ------\n"
+		"モンスターの高Defを設定する。\n"
+		"入力例 [@bot monsterhighdef アサクロ 40]\n"
+	), SUBCMD_DESC(Bot, MonsterHighDefVit          , mhdv,
+		"------ MonsterHighDefVit (mhdv) サブコマンド ------\n"
+		"モンスターの高DefVitを設定する。\n"
+		"入力例 [@bot monsterhighdefvit アサクロ 100]\n"
+	), SUBCMD_DESC(Bot, MonsterHighFlee            , mhf ,
+		"------ MonsterHighFlee (mhf) サブコマンド ------\n"
+		"モンスターの高Fleeを設定する。\n"
+		"入力例 [@bot monsterhighflee アサクロ 150]\n"
+	), SUBCMD_DESC(Bot, MonsterHighHit             , mhh ,
+		"------ MonsterHighHit (mhh) サブコマンド ------\n"
+		"モンスターの高Hitを設定する。\n"
+		"入力例 [@bot monsterhighhit アサクロ 175]\n"
 	), SUBCMD_DESC(Bot, Next                       , n   ,
 		"------ Next (n) サブコマンド ------\n"
 		"次のページを表示する。\n"
@@ -1758,6 +1758,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillRejectTransport (krt) サブコマンド ------\n"
 		"拒否スキルを転送する。\n"
 		"入力例 [@bot skillrejecttransport クラウン ジプシー]\n"
+	), SUBCMD_DESC(Bot, sKillSoulChangeRate        , kscr,
+		"------ sKillSoulChangeRate (kscr) サブコマンド ------\n"
+		"ソウルチェンジを許可するSP率を設定する。\n"
+		"入力例 [@bot skillsoulchangerate アサクロ 10]\n"
 	), SUBCMD_DESC(Bot, sKillTail                  , kt  ,
 		"------ sKillTail (kt) サブコマンド ------\n"
 		"掛け直し時間を一覧表示する。\n"
@@ -1766,11 +1770,11 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skilltail ハイプリ アスムプティオ 5000]\n"
 		"掛け直し時間の登録を抹消する。\n"
 		"入力例 [@bot skilltail ハイプリ アスムプティオ]\n"
-	), SUBCMD_DESC(Bot, sKillTailClear            ,     ,
+	), SUBCMD_DESC(Bot, sKillTailClear             ,     ,
 		"------ sKillTailClear サブコマンド ------\n"
 		"掛け直し時間をクリアする。\n"
 		"入力例 [@bot skilltailclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, sKillTailTransport        , ktt ,
+	), SUBCMD_DESC(Bot, sKillTailTransport         , ktt ,
 		"------ sKillTailTransport (ktt) サブコマンド ------\n"
 		"掛け直し時間を転送する。\n"
 		"入力例 [@bot skilltailtransport ハイプリ ハイプリ2]\n"
@@ -1917,10 +1921,6 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, EquipSetLoad               , esl ),
 	SUBCMD_PROC(Bot, EquipSetTransport          , est ),
 	SUBCMD_PROC(Bot, Help                       , h   ),
-	SUBCMD_PROC(Bot, HighDef                    , hd  ),
-	SUBCMD_PROC(Bot, HighDefVit                 , hdv ),
-	SUBCMD_PROC(Bot, HighFlee                   , hf  ),
-	SUBCMD_PROC(Bot, HighHit                    , hh  ),
 	SUBCMD_PROC(Bot, HoldMonsters               , hm  ),
 	SUBCMD_PROC(Bot, HomunsKill                 , hk  ),
 	SUBCMD_PROC(Bot, HomunsKillLimit            , hkl ),
@@ -1949,6 +1949,10 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, MonsterGreat               , mg  ),
 	SUBCMD_PROC(Bot, MonsterGreatClear          ,     ),
 	SUBCMD_PROC(Bot, MonsterGreatImport         , mgi ),
+	SUBCMD_PROC(Bot, MonsterHighDef             , mhd ),
+	SUBCMD_PROC(Bot, MonsterHighDefVit          , mhdv),
+	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf ),
+	SUBCMD_PROC(Bot, MonsterHighHit             , mhh ),
 	SUBCMD_PROC(Bot, Next                       , n   ),
 	SUBCMD_PROC(Bot, PetEquip                   , pe  ),
 	SUBCMD_PROC(Bot, PetStatus                  , ps  ),
@@ -1976,6 +1980,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillReject                , kr  ),
 	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
 	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
+	SUBCMD_PROC(Bot, sKillSoulChangeRate        , kscr),
 	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
 	SUBCMD_PROC(Bot, sKillTailClear             ,     ),
 	SUBCMD_PROC(Bot, sKillTailTransport         , ktt ),
@@ -2065,17 +2070,17 @@ const std::unordered_map<
 	{JOB_SOUL_LINKER   , DPV_AWAY },
 };
 
-// デフォルトの高Def。
-const int DEFAULT_HIGH_DEF = 40;
+// デフォルトのモンスターの高Def。
+const int DEFAULT_MOB_HIGH_DEF = 40;
 
-// デフォルトの高DefVit。
-const int DEFAULT_HIGH_DEF_VIT = 100;
+// デフォルトのモンスターの高DefVit。
+const int DEFAULT_MOB_HIGH_DEF_VIT = 100;
 
-// デフォルトの高Flee。
-const int DEFAULT_HIGH_FLEE = 150;
+// デフォルトのモンスターの高Flee。
+const int DEFAULT_MOB_HIGH_FLEE = 150;
 
-// デフォルトの高Hit。
-const int DEFAULT_HIGH_HIT = 175;
+// デフォルトのモンスターの高Hit。
+const int DEFAULT_MOB_HIGH_HIT = 175;
 
 // デフォルト通常攻撃ポリシー値のマップ。
 const std::unordered_map<
@@ -2128,6 +2133,9 @@ const int DEFAULT_SKILL_LOW_RATE = 100;
 
 // デフォルトの範囲スキルの発動条件となるモンスター数。
 const int DEFAULT_SKILL_MONSTERS = 3;
+
+// デフォルトのソウルチェンジを許可するSP率。
+const int DEFAULT_SOUL_CHANGE_RATE = 25;
 
 // 距離ポリシー値名のテーブル。
 const std::array<

@@ -1208,6 +1208,7 @@ struct battler_if {
 	virtual bool check_attack(block_if* ene);
 	virtual bool check_hp(int rat);
 	virtual bool check_normal_attack(block_if* ene);
+	virtual bool check_soul_change();
 	virtual bool check_sp(int rat);
 	virtual bool check_use_skill(e_skill kid, int klv, block_if* ene);
 	virtual bool check_use_taunt_skill(block_if* ene);
@@ -1215,11 +1216,12 @@ struct battler_if {
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
 	virtual int distance_max_value();
 	virtual distance_policy_values& distance_policy_value();
-	virtual int get_high_def();
-	virtual int get_high_def_vit();
-	virtual int get_high_flee();
-	virtual int get_high_hit();
-	virtual int get_hold_monsters();
+	virtual int get_hold_mobs();
+	virtual int get_mob_high_def();
+	virtual int get_mob_high_def_vit();
+	virtual int get_mob_high_flee();
+	virtual int get_mob_high_hit();
+	virtual int get_soul_change_rate();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
 	virtual bool is_dead();
@@ -1392,13 +1394,9 @@ struct member_if {
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
-	virtual int get_skill_monsters();
+	virtual int get_skill_mobs();
 	virtual t_tick get_skill_tail(e_skill kid);
-	virtual ptr<regnum_t<int>>& high_def();
-	virtual ptr<regnum_t<int>>& high_def_vit();
-	virtual ptr<regnum_t<int>>& high_flee();
-	virtual ptr<regnum_t<int>>& high_hit();
-	virtual ptr<regnum_t<int>>& hold_monsters();
+	virtual ptr<regnum_t<int>>& hold_mobs();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
@@ -1407,6 +1405,10 @@ struct member_if {
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<bool>>& loot();
 	virtual bool magicpower_is_active();
+	virtual ptr<regnum_t<int>>& mob_high_def();
+	virtual ptr<regnum_t<int>>& mob_high_def_vit();
+	virtual ptr<regnum_t<int>>& mob_high_flee();
+	virtual ptr<regnum_t<int>>& mob_high_hit();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual ptr<block_if>& pet();
 	virtual ptr<registry_t<int,play_skill>>& play_skills();
@@ -1416,8 +1418,9 @@ struct member_if {
 	virtual map_session_data*& sd();
 	virtual void sit();
 	virtual ptr<registry_t<int>>& skill_ignore_mobs();
-	virtual ptr<regnum_t<int>>& skill_monsters();
+	virtual ptr<regnum_t<int>>& skill_mobs();
 	virtual ptr<registry_t<e_skill,int>>& skill_tails();
+	virtual ptr<regnum_t<int>>& soul_change_rate();
 	virtual void stand();
 	virtual ptr<registry_t<int,int>>& storage_get_items();
 };
@@ -1530,6 +1533,7 @@ struct battler_impl : virtual block_if {
 	virtual bool check_attack(block_if* ene) override;
 	virtual bool check_hp(int rat) override;
 	virtual bool check_normal_attack(block_if* ene) override;
+	virtual bool check_soul_change() override;
 	virtual bool check_sp(int rat) override;
 	virtual bool check_use_skill(e_skill kid, int klv, block_if* ene) override;
 	virtual bool check_use_taunt_skill(block_if* ene) override;
@@ -1671,11 +1675,12 @@ struct homun_impl : virtual block_if {
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
 	virtual int distance_max_value() override;
 	virtual bool exists() override;
-	virtual int get_high_def() override;
-	virtual int get_high_def_vit() override;
-	virtual int get_high_flee() override;
-	virtual int get_high_hit() override;
-	virtual int get_hold_monsters() override;
+	virtual int get_hold_mobs() override;
+	virtual int get_mob_high_def() override;
+	virtual int get_mob_high_def_vit() override;
+	virtual int get_mob_high_flee() override;
+	virtual int get_mob_high_hit() override;
+	virtual int get_soul_change_rate() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
 	virtual bool is_active() override;
@@ -1763,17 +1768,17 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
-	ptr<regnum_t<int>> high_def_;                 // 高Defの登録値。
-	ptr<regnum_t<int>> high_def_vit_;             // 高DefVitの登録値。
-	ptr<regnum_t<int>> high_flee_;                // 高Fleeの登録値。
-	ptr<regnum_t<int>> high_hit_;                 // 高Hitの登録値。
-	ptr<regnum_t<int>> hold_monsters_;            // 抱えることのできるモンスター数の登録値。
+	ptr<regnum_t<int>> hold_mobs_;            // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
 	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
 	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
 	int member_index_;                            // メンバーのインデックス。
+	ptr<regnum_t<int>> mob_high_def_;             // モンスターの高Defの登録値。
+	ptr<regnum_t<int>> mob_high_def_vit_;         // モンスターの高DefVitの登録値。
+	ptr<regnum_t<int>> mob_high_flee_;            // モンスターの高Fleeの登録値。
+	ptr<regnum_t<int>> mob_high_hit_;             // モンスターの高Hitの登録値。
 	ptr<registry_t<int,normal_attack_policy>>	  
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
 	ptr<block_if> pet_;                           // ペット。
@@ -1786,9 +1791,10 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<e_skill>> skill_auto_spell_;     // オートスペルで選択するスキルの登録値。
 	ptr<registry_t<int>> skill_ignore_mobs_;      // スキル無視モンスターのレジストリ。
 	ptr<regnum_t<int>> skill_low_rate_;           // 低ダメージ倍率の登録値。
-	ptr<regnum_t<int>> skill_monsters_;           // 範囲スキルの発動モンスター数の登録値。
+	ptr<regnum_t<int>> skill_mobs_;           // 範囲スキルの発動モンスター数の登録値。
 	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
 	ptr<registry_t<e_skill,int>> skill_tails_;    // 掛け直し時間のレジストリ。
+	ptr<regnum_t<int>> soul_change_rate_;         // ソウルチェンジを許可するSP率の登録値。
 	ptr<registry_t<int,int>> storage_get_items_;  // 倉庫補充アイテムのレジストリ。
 
 	virtual int& account_id() override;
@@ -1812,19 +1818,16 @@ struct member_impl : virtual block_if {
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
-	virtual int get_high_def() override;
-	virtual int get_high_def_vit() override;
-	virtual int get_high_flee() override;
-	virtual int get_high_hit() override;
-	virtual int get_hold_monsters() override;
-	virtual int get_skill_monsters() override;
+	virtual int get_hold_mobs() override;
+	virtual int get_mob_high_def() override;
+	virtual int get_mob_high_def_vit() override;
+	virtual int get_mob_high_flee() override;
+	virtual int get_mob_high_hit() override;
+	virtual int get_skill_mobs() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
+	virtual int get_soul_change_rate() override;
 	virtual int guild_id() override;
-	virtual ptr<regnum_t<int>>& high_def() override;
-	virtual ptr<regnum_t<int>>& high_def_vit() override;
-	virtual ptr<regnum_t<int>>& high_flee() override;
-	virtual ptr<regnum_t<int>>& high_hit() override;
-	virtual ptr<regnum_t<int>>& hold_monsters() override;
+	virtual ptr<regnum_t<int>>& hold_mobs() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
 	virtual bool is_carton() override;
@@ -1844,6 +1847,10 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<bool>>& loot() override;
 	virtual bool magicpower_is_active() override;
 	virtual int& member_index() override;
+	virtual ptr<regnum_t<int>>& mob_high_def() override;
+	virtual ptr<regnum_t<int>>& mob_high_def_vit() override;
+	virtual ptr<regnum_t<int>>& mob_high_flee() override;
+	virtual ptr<regnum_t<int>>& mob_high_hit() override;
 	virtual std::string name() override;
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies() override;
 	virtual int party_id() override;
@@ -1857,10 +1864,11 @@ struct member_impl : virtual block_if {
 	virtual void sit() override;
 	virtual s_skill* skill(e_skill kid) override;
 	virtual ptr<registry_t<int>>& skill_ignore_mobs() override;
-	virtual ptr<regnum_t<int>>& skill_monsters() override;
+	virtual ptr<regnum_t<int>>& skill_mobs() override;
 	virtual int skill_point() override;
 	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
 	virtual void skill_up(e_skill kid) override;
+	virtual ptr<regnum_t<int>>& soul_change_rate() override;
 	virtual void stand() override;
 	virtual ptr<registry_t<int,int>>& storage_get_items() override;
 	virtual e_element weapon_attack_element() override;
@@ -2413,10 +2421,6 @@ SUBCMD_FUNC(Bot, EquipSetClear);
 SUBCMD_FUNC(Bot, EquipSetLoad);
 SUBCMD_FUNC(Bot, EquipSetTransport);
 SUBCMD_FUNC(Bot, Help);
-SUBCMD_FUNC(Bot, HighDef);
-SUBCMD_FUNC(Bot, HighDefVit);
-SUBCMD_FUNC(Bot, HighFlee);
-SUBCMD_FUNC(Bot, HighHit);
 SUBCMD_FUNC(Bot, HoldMonsters);
 SUBCMD_FUNC(Bot, HomunsKill);
 SUBCMD_FUNC(Bot, HomunsKillLimit);
@@ -2445,6 +2449,10 @@ SUBCMD_FUNC(Bot, Memo);
 SUBCMD_FUNC(Bot, MonsterGreat);
 SUBCMD_FUNC(Bot, MonsterGreatClear);
 SUBCMD_FUNC(Bot, MonsterGreatImport);
+SUBCMD_FUNC(Bot, MonsterHighDef);
+SUBCMD_FUNC(Bot, MonsterHighDefVit);
+SUBCMD_FUNC(Bot, MonsterHighFlee);
+SUBCMD_FUNC(Bot, MonsterHighHit);
 SUBCMD_FUNC(Bot, Next);
 SUBCMD_FUNC(Bot, PetEquip);
 SUBCMD_FUNC(Bot, PetStatus);
@@ -2472,6 +2480,7 @@ SUBCMD_FUNC(Bot, sKillPlayTransport);
 SUBCMD_FUNC(Bot, sKillReject);
 SUBCMD_FUNC(Bot, sKillRejectClear);
 SUBCMD_FUNC(Bot, sKillRejectTransport);
+SUBCMD_FUNC(Bot, sKillSoulChangeRate);
 SUBCMD_FUNC(Bot, sKillTail);
 SUBCMD_FUNC(Bot, sKillTailClear);
 SUBCMD_FUNC(Bot, sKillTailTransport);
@@ -2725,13 +2734,14 @@ extern const std::string CASTLE_TRIAL_NPC_NAME;
 extern const std::string CAUTION_TAG;
 extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
-extern const int DEFAULT_HIGH_DEF;
-extern const int DEFAULT_HIGH_DEF_VIT;
-extern const int DEFAULT_HIGH_FLEE;
-extern const int DEFAULT_HIGH_HIT;
+extern const int DEFAULT_MOB_HIGH_DEF;
+extern const int DEFAULT_MOB_HIGH_DEF_VIT;
+extern const int DEFAULT_MOB_HIGH_FLEE;
+extern const int DEFAULT_MOB_HIGH_HIT;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;
+extern const int DEFAULT_SOUL_CHANGE_RATE;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
 extern const int DOUBLE_FEVER_MAPS_SIZE;
 extern const std::array<std::string,10> ELEMENT_NAME_TABLE;
