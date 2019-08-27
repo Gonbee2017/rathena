@@ -1909,11 +1909,7 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 		} else {
 			if (mid < MM_INDIVIDUAL ||
 				mid >= MM_CAUTION
-			)
-				throw command_error{print(
-					"「", META_MONSTER_NAMES.at(meta_mobs(mid)),
-					"」用優先スキルは登録できません。"
-				)};
+			) throw command_error{print("「", mob_str, "」は指定できません。")};
 			std::string sk_nam = shift_arguments(args);
 			e_skill kid = e_skill(find_skilldb(sk_nam));
 			if (!kid)
@@ -2007,9 +2003,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
 		std::string mob_str = print_mobdb(mid);
 		if (mid < MM_INDIVIDUAL ||
 			mid >= MM_CAUTION
-		) throw command_error{print(
-			"「", mob_str, "」は指定できません。"
-		)};
+		) throw command_error{print("「", mob_str, "」は指定できません。")};
 		int kim = SKILL_IGNORE_MOB(kid, mid);
 		if (mem->skill_ignore_mobs()->find(kim)) {
 			mem->skill_ignore_mobs()->unregister(kim);
