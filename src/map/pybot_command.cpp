@@ -1807,7 +1807,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 		int mid = map_mapname2mapid(map_str.c_str());
 		if (!mid) 
 			throw command_error{print(
-				"「", map_str, "」というマップは見つかりませんでした。"
+				"「", map_str, "」というマップIDは見つかりませんでした。"
 			)};
 		auto map = id_maps.at(mid);
 		if (args.empty()) {

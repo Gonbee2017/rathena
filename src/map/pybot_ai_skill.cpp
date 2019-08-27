@@ -78,7 +78,8 @@ AI_SKILL_USE_FUNC(AL_BLESSING) {
 // ブレッシングを使って呪いと石化を治癒する。
 AI_SKILL_USE_FUNC_T(AL_BLESSING, cure) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->is_hiding() &&
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_CHANGEUNDEAD] &&
@@ -120,7 +121,8 @@ AI_SKILL_USE_FUNC(AL_CRUCIS) {
 // キュアーを使う。
 AI_SKILL_USE_FUNC(AL_CURE) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->is_hiding() &&
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			(mem->sc()->data[SC_BLIND] ||
 				mem->sc()->data[SC_CONFUSION] ||
@@ -432,7 +434,9 @@ AI_SKILL_USE_FUNC(BS_REPAIRWEAPON) {
 
 	int itm_ind;
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid, &itm_ind] (block_if* mem) -> bool {
-		if (!mem->reject_skills()->find(kid) &&
+		if (!mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->reject_skills()->find(kid) &&
 			!mem->is_walking()
 		) {
 			for (itm_ind = 0;; ++itm_ind) {
@@ -512,7 +516,9 @@ AI_SKILL_USE_FUNC_T(CR_DEFENDER, activate) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
 			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
 				ene->is_great(leader) &&
-				ene->has_long_weapon_skill();
+				(ene->is_long_range_attacker() ||
+					ene->has_long_weapon_skill()
+				);
 		});
 		if (ene) bot->use_skill_self(kid, klv);
 	}
@@ -523,7 +529,9 @@ AI_SKILL_USE_FUNC_T(CR_DEFENDER, deactivate) {
 	if (bot->sc()->data[SC_DEFENDER]) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
 			return ene->is_great(leader) &&
-				ene->has_long_weapon_skill();
+				(ene->is_long_range_attacker() ||
+					ene->has_long_weapon_skill()
+				);
 		});
 		if (!ene) bot->use_skill_self(kid, klv);
 	}
@@ -1332,6 +1340,8 @@ AI_SKILL_USE_FUNC(MG_SAFETYWALL) {
 	block_if* pri_bat = battlers.front();
 	block_if* tar_ene = pri_bat->target_enemy();
 	if (bot->check_skill_range_block(kid, klv, pri_bat) &&
+		!pri_bat->is_dead() &&
+		!pri_bat->is_hiding() &&
 		!pri_bat->sc()->data[SC_SAFETYWALL] &&
 		!pri_bat->is_walking() &&
 		tar_ene &&
@@ -2092,7 +2102,8 @@ AI_SKILL_USE_FUNC(PR_SANCTUARY) {
 // スローポイズンを使う。
 AI_SKILL_USE_FUNC(PR_SLOWPOISON) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->is_hiding() &&
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_SLOWPOISON] &&
@@ -2106,7 +2117,8 @@ AI_SKILL_USE_FUNC(PR_SLOWPOISON) {
 // リカバリーを使う。
 AI_SKILL_USE_FUNC(PR_STRECOVERY) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->is_hiding() &&
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			(mem->sc()->data[SC_FREEZE] ||
 				mem->sc()->data[SC_SLEEP] ||
@@ -2745,7 +2757,8 @@ AI_SKILL_USE_FUNC(ST_REJECTSWORD) {
 // 解毒を使う。
 AI_SKILL_USE_FUNC(TF_DETOXIFY) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->is_hiding() &&
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			(mem->sc()->data[SC_POISON] ||
 				mem->sc()->data[SC_DPOISON]
@@ -3247,12 +3260,12 @@ AI_SKILL_USE_DEF(heal)(
 ) {
 	return [hp_rat] (ai_t* ai, e_skill kid, int klv) {
 		block_if* mem = pybot::find_if(ALL_RRANGE(ai->members), [hp_rat, ai, kid] (block_if* mem) -> bool {
-			return !mem->check_hp(hp_rat) &&
-				!mem->is_dead() &&
+			return !mem->is_dead() &&
 				!mem->is_hiding() &&
 				!mem->is_invincible() &&
 				!mem->is_magic_immune() &&
 				!mem->reject_skills()->find(kid) &&
+				!mem->check_hp(hp_rat) &&
 				!mem->sc()->data[SC_BERSERK] &&
 				!mem->sc()->data[SC_CHANGEUNDEAD] &&
 				!mem->sc()->data[SC_KAITE];
@@ -3277,11 +3290,11 @@ AI_SKILL_USE_DEF(pp_hp)(
 		block_if* bat = pybot::find_if(ALL_RRANGE(ai->battlers), [hp_rat, kid] (block_if* bat) -> bool {
 			return (dynamic_cast<member_impl*>(bat) ||
 					bat->is_primary()
-				) && !bat->check_hp(hp_rat) &&
-				!bat->is_dead() &&
+				) && !bat->is_dead() &&
 				!bat->is_hiding() &&
 				!bat->is_invincible() &&
 				!bat->reject_skills()->find(kid) &&
+				!bat->check_hp(hp_rat) &&
 				!bat->sc()->data[SC_BERSERK];
 		});
 		if (bat) ai->bot->use_skill_block(kid, klv, bat);
@@ -3314,11 +3327,11 @@ AI_SKILL_USE_DEF(spp)(
 	return [hp_rat] (ai_t* ai, e_skill kid, int klv) {
 		int cou = std::count_if(ALL_RANGE(ai->members),
 			sift_block_layout(ai->bot, ai->bot, kid, klv, [hp_rat, kid] (block_if* mem) -> bool {
-				return !mem->check_hp(hp_rat) &&
-					!mem->is_dead() &&
+				return !mem->is_dead() &&
 					!mem->is_hiding() &&
 					!mem->is_invincible() &&
 					!mem->reject_skills()->find(kid) &&
+					!mem->check_hp(hp_rat) &&
 					!mem->sc()->data[SC_BERSERK];
 			})
 		);

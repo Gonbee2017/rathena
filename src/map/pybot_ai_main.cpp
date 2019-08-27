@@ -81,6 +81,8 @@ void ai_t::leader_organize() {
 		bat->attacked_short_range_attackers() = 0;
 		bat->attacked_long_range_attacker() = nullptr;
 		bat->attacked_by_blower() = false;
+		bat->attacked_by_detector() = false;
+		bat->attacked_via_devotion() = false;
 		blocks[bat->bl()->id] = bat;
 		distance_policy_values dis_pol_val = DPV_PENDING;
 		normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
@@ -204,6 +206,11 @@ void ai_t::leader_collect() {
 				tar_bat->attacked_long_range_attacker() = ene;
 			tar_bat->attacked_by_blower() |= ene->has_knockback_skill();
 			tar_bat->attacked_by_detector() |= ene->has_detector();
+			status_change_entry* dev_sce = tar_bat->sc()->data[SC_DEVOTION];
+			if (dev_sce) {
+				block_if* tar_dev_bat = find_block<battler_impl>(dev_sce->val1);
+				if (tar_dev_bat) tar_dev_bat->attacked_via_devotion() = true;
+			}
 		}
 		ene->skill_target_battler() = find_block<battler_impl>(ene->ud()->skilltarget);
 		ene->walk_target_battler() = find_block<battler_impl>(ene->ud()->target_to);
@@ -1047,6 +1054,11 @@ void ai_t::battler_use_skill() {
 			if (sk_use_pro.max_skill_lv) klv = std::min(klv, sk_use_pro.max_skill_lv);
 			int sp_rat = sk_use_pro.sp_rat;
 			if (sp_rat > 4) sp_rat = sp_ratio_by_enemies();
+			bool att = (!battler->sc()->data[SC_DEVOTION] &&
+					(battler->attacked_short_range_attacker() ||
+						battler->attacked_long_range_attacker()
+					)
+				) || battler->attacked_via_devotion();
 			if (BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
 				(battler->is_primary() ? PF_TRUE : PF_FALSE) & sk_use_pro.primary_flag &&
 				((sk_use_pro.walking_flag & WF_TRUE &&
@@ -1055,13 +1067,10 @@ void ai_t::battler_use_skill() {
 						!battler->is_walking()
 					) 
 				) && ((sk_use_pro.attacked_flag & AF_TRUE &&
-						(battler->attacked_short_range_attacker() ||
-							battler->attacked_long_range_attacker()
-						)
+						att
 					) || (sk_use_pro.attacked_flag & AF_FALSE &&
-						((!battler->attacked_short_range_attacker() &&
-								!battler->attacked_long_range_attacker()
-							) || !skill_get_castcancel(kid) ||
+						(!att ||
+							!skill_get_castcancel(kid) ||
 							battler->is_no_castcancel()
 						)
 					)
@@ -1069,13 +1078,7 @@ void ai_t::battler_use_skill() {
 				battler->can_use_skill(kid, klv)
 			) {
 				CS_ENTER_N(print("kid=", kid));
-				//SHOW_DEBUG_VARIABLE(kid);
-				//try {
-					sk_use_pro.func(this, kid, klv);
-				//} catch (const turn_end_exception& exc) {
-				//	SHOW_DEBUG_VARIABLE(kid);
-				//	throw exc;
-				//}
+				sk_use_pro.func(this, kid, klv);
 			}
 		}
 	};

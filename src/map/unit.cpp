@@ -1950,8 +1950,15 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 
 	// In official this is triggered even if no cast time.
 	clif_skillcasting(src, src->id, target_id, 0,0, skill_id, skill_get_ele(skill_id, skill_lv), casttime);
+	
+	// [GonBee]
+	// ‰r¥ŽžŠÔƒ[ƒ‚ÌƒXƒLƒ‹‚Í‰r¥ƒ^[ƒQƒbƒg‚Å‚Í‚È‚¢B
+	//if (sd && target->type == BL_MOB) {
+	if (sd &&
+		target->type == BL_MOB &&
+		skill_get_cast(skill_id, skill_lv)
+	) {
 
-	if (sd && target->type == BL_MOB) {
 		TBL_MOB *md = (TBL_MOB*)target;
 
 		mobskill_event(md, src, tick, -1); // Cast targetted skill event.

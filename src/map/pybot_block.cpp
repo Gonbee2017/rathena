@@ -16,6 +16,7 @@ std::vector<block_if*>& battler_if::attacked_enemies() {RAISE_NOT_IMPLEMENTED_ER
 block_if*& battler_if::attacked_long_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::attacked_short_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::attacked_short_range_attackers() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool& battler_if::attacked_via_devotion() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::battle_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 battle_modes& battler_if::battle_mode() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -302,6 +303,11 @@ block_if*& battler_impl::attacked_short_range_attacker() {
 // 攻撃を受けている近接攻撃モンスター数。
 int& battler_impl::attacked_short_range_attackers() {
 	return attacked_short_range_attackers_;
+}
+
+// ディボーション経由で攻撃を受けているか。
+bool& battler_impl::attacked_via_devotion() {
+	return attacked_via_devotion_;
 }
 
 // 戦闘時のインデックス。

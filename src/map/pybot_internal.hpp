@@ -1203,6 +1203,7 @@ struct battler_if {
 	virtual block_if*& attacked_long_range_attacker();
 	virtual block_if*& attacked_short_range_attacker();
 	virtual int& attacked_short_range_attackers();
+	virtual bool& attacked_via_devotion();
 	virtual int& battle_index();
 	virtual battle_modes& battle_mode();
 	virtual bool check_attack(block_if* ene);
@@ -1510,6 +1511,7 @@ struct battler_impl : virtual block_if {
 	block_if* attacked_long_range_attacker_;  // 攻撃を受けている遠隔攻撃モンスター。
 	block_if* attacked_short_range_attacker_; // 攻撃を受けている近接攻撃モンスター。
 	int attacked_short_range_attackers_;      // 攻撃を受けている近接攻撃モンスター数。
+	bool attacked_via_devotion_;              // ディボーション経由で攻撃を受けているか。
 	int battle_index_;                        // 戦闘時のインデックス。
 	battle_modes battle_mode_;                // 戦闘モード。
 	distance_policy_values
@@ -1528,6 +1530,7 @@ struct battler_impl : virtual block_if {
 	virtual block_if*& attacked_long_range_attacker() override;
 	virtual block_if*& attacked_short_range_attacker() override;
 	virtual int& attacked_short_range_attackers() override;
+	virtual bool& attacked_via_devotion() override;
 	virtual int& battle_index() override;
 	virtual battle_modes& battle_mode() override;
 	virtual bool check_attack(block_if* ene) override;

@@ -3631,7 +3631,12 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 				skillratio += 70 * skill_lv;
 			else
 #endif
-				skillratio += 35 * skill_lv;
+
+				// [GonBee]
+				// ホーリークロスを強化。
+				//skillratio += 35 * skill_lv;
+				skillratio += 70 * skill_lv;
+
 			break;
 		case AM_DEMONSTRATION:
 			skillratio += 20 * skill_lv;
