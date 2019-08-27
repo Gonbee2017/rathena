@@ -544,7 +544,7 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 		int i;
 		ARR_FIND(0, cou, i, !bot->sd()->devotion[i]);
 		if (i < cou) {
-			block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+			block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 				return mem->party_id() == bot->party_id() &&
 					mem != bot &&
 					(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
@@ -552,8 +552,21 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 					!mem->is_hiding() &&
 					!mem->is_invincible() &&
 					!mem->reject_skills()->find(kid) &&
-					mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid);
+					mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid) &&
+					mem->attacked_enemies().empty();
 			});
+			if (!mem) {
+				mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+					return mem->party_id() == bot->party_id() &&
+						mem != bot &&
+						(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
+						!mem->is_dead() &&
+						!mem->is_hiding() &&
+						!mem->is_invincible() &&
+						!mem->reject_skills()->find(kid) &&
+						mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid);
+				});
+			}
 			if (mem) bot->use_skill_block(kid, klv, mem);
 		}
 	}
