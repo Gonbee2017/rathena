@@ -2282,6 +2282,20 @@ SUBCMD_FUNC(Bot, sKillRejectTransport) {
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
+// 安全に詠唱できる時間を設定する。
+SUBCMD_FUNC(Bot, sKillSafeCastTime) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cas_tim = shift_arguments_then_parse_int(
+		args, print("詠唱時間"), 0, INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はスキルの実詠唱時間が", cas_tim, "ミリ秒以下ならモンスターにターゲットされていても使用します。"
+	));
+	mem->safe_cast_time()->set(cas_tim);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // ソウルチェンジを許可するSP率を設定する。
 SUBCMD_FUNC(Bot, sKillSoulChangeRate) {
 	CS_ENTER;

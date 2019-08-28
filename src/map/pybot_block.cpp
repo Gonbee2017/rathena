@@ -207,6 +207,7 @@ ptr<registry_t<int,play_skill>>& member_if::play_skills() {RAISE_NOT_IMPLEMENTED
 ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::soul_change_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -2071,6 +2072,11 @@ std::unordered_set<int>& member_impl::request_items() {
 	return request_items_;
 }
 
+// 安全な詠唱時間の登録値。
+ptr<regnum_t<int>>& member_impl::safe_cast_time() {
+	return safe_cast_time_;
+}
+
 // セッションデータ。
 map_session_data*& member_impl::sd() {
 	return sd_;
@@ -2594,6 +2600,7 @@ member_t::member_t(
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
 	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
+	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
 	soul_change_rate() = construct<regnum_t<int>>(sd(), "pybot_soul_change_rate");
 	homun() = construct<homun_t>(this);

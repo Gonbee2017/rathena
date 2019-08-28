@@ -1758,6 +1758,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillRejectTransport (krt) サブコマンド ------\n"
 		"拒否スキルを転送する。\n"
 		"入力例 [@bot skillrejecttransport クラウン ジプシー]\n"
+	), SUBCMD_DESC(Bot, sKillSafeCastTime          , ksct,
+		"------ sKillSafeCastTime (ksct) サブコマンド ------\n"
+		"安全に詠唱できる時間を設定する。\n"
+		"入力例 [@bot skillsafecasttime ハイウィズ 500]\n"
 	), SUBCMD_DESC(Bot, sKillSoulChangeRate        , kscr,
 		"------ sKillSoulChangeRate (kscr) サブコマンド ------\n"
 		"ソウルチェンジを許可するSP率を設定する。\n"
@@ -1980,6 +1984,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillReject                , kr  ),
 	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
 	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
+	SUBCMD_PROC(Bot, sKillSafeCastTime          , ksct),
 	SUBCMD_PROC(Bot, sKillSoulChangeRate        , kscr),
 	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
 	SUBCMD_PROC(Bot, sKillTailClear             ,     ),

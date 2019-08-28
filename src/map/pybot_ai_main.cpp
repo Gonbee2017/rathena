@@ -1054,11 +1054,11 @@ void ai_t::battler_use_skill() {
 			if (sk_use_pro.max_skill_lv) klv = std::min(klv, sk_use_pro.max_skill_lv);
 			int sp_rat = sk_use_pro.sp_rat;
 			if (sp_rat > 4) sp_rat = sp_ratio_by_enemies();
-			bool att = (!battler->sc()->data[SC_DEVOTION] &&
-					(battler->attacked_short_range_attacker() ||
-						battler->attacked_long_range_attacker()
-					)
-				) || battler->attacked_via_devotion();
+			bool att = !battler->sc()->data[SC_DEVOTION] &&
+				(battler->attacked_short_range_attacker() ||
+					battler->attacked_long_range_attacker() ||
+					battler->attacked_via_devotion()
+				);
 			if (BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
 				(battler->is_primary() ? PF_TRUE : PF_FALSE) & sk_use_pro.primary_flag &&
 				((sk_use_pro.walking_flag & WF_TRUE &&
@@ -1071,7 +1071,8 @@ void ai_t::battler_use_skill() {
 					) || (sk_use_pro.attacked_flag & AF_FALSE &&
 						(!att ||
 							!skill_get_castcancel(kid) ||
-							battler->is_no_castcancel()
+							battler->is_no_castcancel() ||
+							skill_castfix(battler->bl(), kid, klv) <= battler->safe_cast_time()->get()
 						)
 					)
 				) && battler->check_sp(sp_rat) &&
