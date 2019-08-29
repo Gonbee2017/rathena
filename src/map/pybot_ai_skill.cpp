@@ -254,12 +254,13 @@ AI_SKILL_USE_FUNC(AM_CANNIBALIZE) {
 // ポーションピッチャーを使ってSPを回復する。
 AI_SKILL_USE_FUNC_T(AM_POTIONPITCHER, sp) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [kid] (block_if* mem) -> bool {
-		return !mem->check_sp(1) &&
-			!mem->is_dead() &&
+		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_invincible() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_BERSERK];
+			mem->sc()->data[SC_DIGESTPOTION] &&
+			!mem->sc()->data[SC_BERSERK] &&
+			mem->check_supply_sp();
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -1940,7 +1941,7 @@ AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
 				!bat->is_invincible() &&
 				!bat->is_magic_immune() &&
 				!bat->reject_skills()->find(kid) &&
-				bat->check_soul_change();
+				bat->check_supply_sp();
 		});
 		if (bat) bot->use_skill_block(kid, klv, bat);
 	}

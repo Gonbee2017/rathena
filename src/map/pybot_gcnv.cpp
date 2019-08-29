@@ -127,13 +127,14 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_ALCHEMIST, initialize<ai_t::skill_use_proc_vector>(				 	 
-		AI_SKILL_USE_PROC       (AM_CALLHOMUN                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (AM_REST                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (AM_RESURRECTHOMUN                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (WEAPON, WEAPON, WEAPON, weapon                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (SHIELD, SHIELD, SHIELD, shield                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
+		AI_SKILL_USE_PROC       (AM_CALLHOMUN                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (AM_REST                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (AM_RESURRECTHOMUN                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (WEAPON, WEAPON, WEAPON, weapon                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (SHIELD, SHIELD, SHIELD, shield                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_PP_HP (2                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_PP_HP (3                                              ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -143,7 +144,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (AM_DEMONSTRATION, WZ_FIREPILLAR                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MC_LOUD                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AM_BERSERKPITCHER                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_CARTREVOLUTION                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -265,14 +265,15 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (BA_MUSICALSTRIKE, AC_DOUBLE                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_CREATOR, initialize<ai_t::skill_use_proc_vector>(					 	 
-		AI_SKILL_USE_PROC       (AM_CALLHOMUN                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (AM_REST                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (AM_RESURRECTHOMUN                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC       (CR_FULLPROTECTION                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (WEAPON, WEAPON, WEAPON, weapon                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (SHIELD, SHIELD, SHIELD, shield                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
-		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
+		AI_SKILL_USE_PROC       (AM_CALLHOMUN                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (AM_REST                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (AM_RESURRECTHOMUN                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (CR_FULLPROTECTION                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (WEAPON, WEAPON, WEAPON, weapon                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (SHIELD, SHIELD, SHIELD, shield                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_SPP   (1                                              , 10,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_SPP   (2                                              , 10,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -286,7 +287,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (AM_DEMONSTRATION, WZ_FIREPILLAR                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MC_LOUD                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (AM_BERSERKPITCHER                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_CARTREVOLUTION                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -1762,10 +1762,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillSafeCastTime (ksct) サブコマンド ------\n"
 		"安全に詠唱できる時間を設定する。\n"
 		"入力例 [@bot skillsafecasttime ハイウィズ 500]\n"
-	), SUBCMD_DESC(Bot, sKillSoulChangeRate        , kscr,
-		"------ sKillSoulChangeRate (kscr) サブコマンド ------\n"
-		"ソウルチェンジを許可するSP率を設定する。\n"
-		"入力例 [@bot skillsoulchangerate アサクロ 10]\n"
+	), SUBCMD_DESC(Bot, sKillSupplySpRate          , kssr,
+		"------ sKillSupplySpRate (kssr) サブコマンド ------\n"
+		"SPの供給を許可するSP率を設定する。\n"
+		"入力例 [@bot skillsupplysprate アサクロ 10]\n"
 	), SUBCMD_DESC(Bot, sKillTail                  , kt  ,
 		"------ sKillTail (kt) サブコマンド ------\n"
 		"掛け直し時間を一覧表示する。\n"
@@ -1985,7 +1985,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
 	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
 	SUBCMD_PROC(Bot, sKillSafeCastTime          , ksct),
-	SUBCMD_PROC(Bot, sKillSoulChangeRate        , kscr),
+	SUBCMD_PROC(Bot, sKillSupplySpRate          , kssr),
 	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
 	SUBCMD_PROC(Bot, sKillTailClear             ,     ),
 	SUBCMD_PROC(Bot, sKillTailTransport         , ktt ),
@@ -2139,8 +2139,8 @@ const int DEFAULT_SKILL_LOW_RATE = 100;
 // デフォルトの範囲スキルの発動条件となるモンスター数。
 const int DEFAULT_SKILL_MONSTERS = 3;
 
-// デフォルトのソウルチェンジを許可するSP率。
-const int DEFAULT_SOUL_CHANGE_RATE = 25;
+// デフォルトのSPの供給を許可するSP率。
+const int DEFAULT_SUPPLY_SP_RATE = 25;
 
 // 距離ポリシー値名のテーブル。
 const std::array<

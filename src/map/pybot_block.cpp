@@ -22,8 +22,8 @@ battle_modes& battler_if::battle_mode() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_hp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_normal_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
-bool battler_if::check_soul_change() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_sp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::check_supply_sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_skill(e_skill kid, int klv, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -35,7 +35,7 @@ int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::get_soul_change_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_dead() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -209,7 +209,7 @@ ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_E
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::soul_change_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::skill_ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -362,12 +362,6 @@ battler_impl::check_normal_attack(
 		);
 }
 
-// バトラーがソウルチェンジを許可するかを判定する。
-bool // 結果。
-battler_impl::check_soul_change() {
-	return sp() * 100 < get_soul_change_rate() * max_sp();
-}
-
 // バトラーのSPが大丈夫かを判定する。
 bool // 結果。
 battler_impl::check_sp(
@@ -375,8 +369,14 @@ battler_impl::check_sp(
 ) {
 	return ((leader()->sp_suppliable() ||
 				sc()->data[SC_DIGESTPOTION]
-			) && !check_soul_change()
+			) && !check_supply_sp()
 		) || check_quad_ratio(sp(), max_sp(), rat);
+}
+
+// バトラーがSPの供給を許可するかを判定する。
+bool // 結果。
+battler_impl::check_supply_sp() {
+	return sp() * 100 < get_supply_sp_rate() * max_sp();
 }
 
 // バトラーが敵モンスターにスキルを使っても大丈夫かを判定する。
@@ -1234,10 +1234,10 @@ homun_impl::get_mob_high_hit() {
 	return master()->get_mob_high_hit();
 }
 
-// ホムンクルスのソウルチェンジを許可するSP率を取得する。
+// ホムンクルスのSPの供給を許可するSP率を取得する。
 int // 取得した高Hit。
-homun_impl::get_soul_change_rate() {
-	return DEFAULT_SOUL_CHANGE_RATE;
+homun_impl::get_supply_sp_rate() {
+	return DEFAULT_SUPPLY_SP_RATE;
 }
 
 // ホムンクルスデータを取得する。
@@ -1798,11 +1798,11 @@ member_impl::get_skill_tail(
 	return dur ? *dur : 0;
 }
 
-// メンバーのソウルチェンジを許可するSP率を取得する。
+// メンバーのSPの供給を許可するSP率を取得する。
 int // 取得したSP率。
-member_impl::get_soul_change_rate() {
-	int res = soul_change_rate()->get();
-	if (!res) res = DEFAULT_SOUL_CHANGE_RATE;
+member_impl::get_supply_sp_rate() {
+	int res = supply_sp_rate()->get();
+	if (!res) res = DEFAULT_SUPPLY_SP_RATE;
 	return res;
 }
 
@@ -2072,7 +2072,7 @@ std::unordered_set<int>& member_impl::request_items() {
 	return request_items_;
 }
 
-// 安全な詠唱時間の登録値。
+// 安全に詠唱できる時間の登録値。
 ptr<regnum_t<int>>& member_impl::safe_cast_time() {
 	return safe_cast_time_;
 }
@@ -2082,9 +2082,9 @@ map_session_data*& member_impl::sd() {
 	return sd_;
 }
 
-// ソウルチェンジを許可するSP率の登録値。
-ptr<regnum_t<int>>& member_impl::soul_change_rate() {
-	return soul_change_rate_;
+// SPの供給を許可するSP率の登録値。
+ptr<regnum_t<int>>& member_impl::supply_sp_rate() {
+	return supply_sp_rate_;
 }
 
 // メンバーが座る。
@@ -2602,7 +2602,7 @@ member_t::member_t(
 	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
-	soul_change_rate() = construct<regnum_t<int>>(sd(), "pybot_soul_change_rate");
+	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
 	cart_auto_get_items() = construct<registry_t<int>>(

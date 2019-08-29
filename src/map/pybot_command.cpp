@@ -2296,18 +2296,18 @@ SUBCMD_FUNC(Bot, sKillSafeCastTime) {
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
-// ソウルチェンジを許可するSP率を設定する。
-SUBCMD_FUNC(Bot, sKillSoulChangeRate) {
+// SPの供給を許可するSP率を設定する。
+SUBCMD_FUNC(Bot, sKillSupplySpRate) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int rat = shift_arguments_then_parse_int(
 		args, print("SP率"), 1, 100
 	);
 	show_client(lea->fd(), print(
-		"「", mem->name(), "」はSPが", rat, "%未満のときにソウルチェンジを許可します。"
+		"「", mem->name(), "」はSPが", rat, "%未満のときにSPの供給を許可します。"
 	));
-	if (rat == DEFAULT_SOUL_CHANGE_RATE) rat = 0;
-	mem->soul_change_rate()->set(rat);
+	if (rat == DEFAULT_SUPPLY_SP_RATE) rat = 0;
+	mem->supply_sp_rate()->set(rat);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
