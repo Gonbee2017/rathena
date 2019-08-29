@@ -994,7 +994,10 @@ void ai_t::battler_positioning() {
 // バトラーが攻撃する。
 void ai_t::battler_attack() {
 	if (battler->battle_mode() != BM_NONE &&
-		!battler->is_walking()
+		!battler->is_walking() &&
+		(battler->distance_policy_value() == DPV_CLOSE ||
+			battler->normal_attack_policy_value() == NAPV_CONTINUOUS
+		)
 	) {
 		block_if* att_ene = nullptr;
 		for (block_if* ene : enemies) {
