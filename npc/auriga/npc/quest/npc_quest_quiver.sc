@@ -124,8 +124,6 @@ payon_in01,5,134,4	script	発明家ゼックス	89,{
 		mes "組み合わせに必要なZeny :";
 		mes "^0000FF" +.@price+ " Zeny^000000";
 		next;
-		mes "交換しますか？";
-		next;
 		if(select("交換する","交換しない")==2) {
 			mes "[発明家ゼックス]";
 			mes "なんだ……";
@@ -143,6 +141,7 @@ payon_in01,5,134,4	script	発明家ゼックス	89,{
 		mes "せっかくすごい発明をしたのに……";
 		close;
 	}
+	if(countitem(.@arr)<.@max*500) close;
 	delitem .@arr,.@max*500;
 	set Zeny,Zeny-.@price;
 	getitem .@quiv,.@max;
@@ -154,3 +153,5 @@ payon_in01,5,134,4	script	発明家ゼックス	89,{
 	mes "使えなくなるから気をつけて。^000000";
 	close;
 }
+
+prontera,139,98,6	duplicate(発明家ゼックス)	発明家ゼックス#prontera	89
