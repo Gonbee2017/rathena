@@ -160,6 +160,8 @@ void ai_t::leader_collect() {
 		[this] (block_if* len, block_if* ren) -> bool {
 			if (len->is_hiding() != ren->is_hiding())
 				return ren->is_hiding();
+			if (bool(len->md()->master_id) != bool(ren->md()->master_id))
+				return ren->md()->master_id;
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;
@@ -174,8 +176,6 @@ void ai_t::leader_collect() {
 			}
 			if (len->has_summon_skill() != ren->has_summon_skill())
 				return len->has_summon_skill();
-			if (bool(len->md()->master_id) != bool(ren->md()->master_id))
-				return ren->md()->master_id;
 			if (len->md()->tdmg != ren->md()->tdmg) return len->md()->tdmg > ren->md()->tdmg;
 			if (len->is_long_range_attacker() != ren->is_long_range_attacker())
 				return ren->is_long_range_attacker();

@@ -3060,28 +3060,28 @@ AI_SKILL_USE_FUNC(WZ_FROSTNOVA) {
 
 // ユピテルサンダーを使う。
 AI_SKILL_USE_FUNC(WZ_JUPITEL) {
-	if (gvg) {
-		block_if* tar_ene = bot->target_enemy();
-		if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-			bot->check_skill_range_block(kid, klv, tar_ene) &&
-			bot->check_use_skill(kid, klv, tar_ene) &&
-			bot->skill_ratio(kid, klv, tar_ene) > 100 &&
-			bot->use_magicpower()
-		) bot->use_skill_block(kid, klv, tar_ene);
-	}
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		(gvg ||
+			tar_ene->has_knockback_immune()
+		) && bot->skill_ratio(kid, klv, tar_ene) > 100 &&
+		bot->use_magicpower()
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // ダメージ倍率が低くてもユピテルサンダーを使う。
 AI_SKILL_USE_FUNC_T(WZ_JUPITEL, compromise) {
-	if (gvg) {
-		block_if* tar_ene = bot->target_enemy();
-		if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-			bot->check_skill_range_block(kid, klv, tar_ene) &&
-			bot->check_use_skill(kid, klv, tar_ene) &&
-			bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
-			bot->use_magicpower()
-		) bot->use_skill_block(kid, klv, tar_ene);
-	}
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		(gvg ||
+			tar_ene->has_knockback_immune()
+		) && bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
+		bot->use_magicpower()
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // ユピテルサンダーを使って氷を割る。
@@ -3185,32 +3185,28 @@ AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 
 // ウォーターボールを使う。
 AI_SKILL_USE_FUNC(WZ_WATERBALL) {
-	if (bot->on_water() ||
-		skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
-	) {
-		block_if* tar_ene = bot->target_enemy();
-		if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-			bot->check_skill_range_block(kid, klv, tar_ene) &&
-			bot->check_use_skill(kid, klv, tar_ene) &&
-			bot->skill_ratio(kid, klv, tar_ene) > 100 &&
-			bot->use_magicpower()
-		) bot->use_skill_block(kid, klv, tar_ene);
-	}
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		bot->skill_ratio(kid, klv, tar_ene) > 100 &&
+		(bot->on_water() ||
+			skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
+		) && bot->use_magicpower()
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // ダメージ倍率が低くてもウォーターボールを使う。
 AI_SKILL_USE_FUNC_T(WZ_WATERBALL, compromise) {
-	if (bot->on_water() ||
-		skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
-	) {
-		block_if* tar_ene = bot->target_enemy();
-		if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-			bot->check_skill_range_block(kid, klv, tar_ene) &&
-			bot->check_use_skill(kid, klv, tar_ene) &&
-			bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
-			bot->use_magicpower()
-		) bot->use_skill_block(kid, klv, tar_ene);
-	}
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
+		(bot->on_water() ||
+			skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
+		) && bot->use_magicpower()
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // ブラッドラストを使う。
