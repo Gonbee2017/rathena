@@ -45,6 +45,7 @@ void ai_t::leader_organize() {
 	CS_ENTER;
 	if (leader->bl()->m != leader->center().m) leader->stay() = false;
 	if (!leader->stay()) leader->center() = *leader->bl();
+	gvg = map_flag_gvg2(leader->center().m);
 	for (block_if* mem : leader->members()) {
 		if (mem != leader ||
 			(mem->bl()->m == leader->center().m &&
@@ -204,7 +205,7 @@ void ai_t::leader_collect() {
 				++tar_bat->attacked_short_range_attackers();
 			} else if (!tar_bat->attacked_long_range_attacker())
 				tar_bat->attacked_long_range_attacker() = ene;
-			tar_bat->attacked_by_blower() |= ene->has_knockback_skill();
+			if (!gvg) tar_bat->attacked_by_blower() |= ene->has_knockback_skill();
 			tar_bat->attacked_by_detector() |= ene->has_detector();
 			status_change_entry* dev_sce = tar_bat->sc()->data[SC_DEVOTION];
 			if (dev_sce) {
@@ -949,8 +950,9 @@ void ai_t::battler_positioning() {
 		if (!battler->is_primary() &&
 			(battler->battle_mode() == BM_ASSIST ||
 				battler->distance_policy_value() == DPV_AWAY
-			) && !battler->sc()->data[SC_WARM] &&
-			att_ene &&
+			) && (gvg ||
+				!battler->sc()->data[SC_WARM]
+			) && att_ene &&
 			battler->get_hold_mobs() != INT_MAX &&
 			(att_ene->is_great(leader) ||
 				battler->attacked_short_range_attackers() > battler->get_hold_mobs()
@@ -1229,7 +1231,8 @@ ai_t::find_best_assist_pos() {
 	if (battler->check_attack(tar_ene)) {
 		block_if* tan = tar_ene->target_battler();
 		if (battler->distance_policy_value() == DPV_CLOSE &&
-			(!battler->sc()->data[SC_WARM] ||
+			(gvg ||
+				!battler->sc()->data[SC_WARM] ||
 				tar_ene->has_knockback_immune()
 			) && (tar_ene->is_long_range_attacker() ||
 				(!tar_ene->has_can_attack() ||
@@ -1285,9 +1288,10 @@ ai_t::find_best_tanut_pos() {
 		) {
 			for (int rad = 0; rad <= battle_config.pybot_around_distance; ++rad)
 				iterate_edge_bl(leader->bl(), rad, find_wall_side_pos_pred(pos));
-		} else if (!battler->sc()->data[SC_WARM] ||
-			tar_ene->target_battler() != battler ||
-			tar_ene->has_knockback_immune()
+		} else if (gvg ||
+			!battler->sc()->data[SC_WARM] ||
+			tar_ene->has_knockback_immune() ||
+			tar_ene->target_battler() != battler
 		) {
 			int max_rad = std::min(battler->attack_range() + 1, battler->distance_max_value() +1);
 			pos_t wai_pos = tar_ene->waiting_position();

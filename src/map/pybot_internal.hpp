@@ -827,6 +827,7 @@ struct ai_t {
 	block_if* bot;                           // Bot。
 	std::vector<block_if*> enemies;          // 敵モンスターのベクタ。
 	std::vector<flooritem_data*> flooritems; // ドロップアイテムのベクタ。
+	bool gvg;                                // 砦マップか。
 	block_if* homun;                         // ホムンクルス。
 	std::vector<block_if*> homuns;           // ホムンクルスのベクタ。
 	block_if* leader;                        // リーダー。
@@ -1165,10 +1166,14 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(WZ_FIREPILLAR);
 	AI_SKILL_USE_FUNC(WZ_FROSTNOVA);
 	AI_SKILL_USE_FUNC(WZ_JUPITEL);
+	AI_SKILL_USE_FUNC_T(WZ_JUPITEL, compromise);
+	AI_SKILL_USE_FUNC_T(WZ_JUPITEL, crush);
 	AI_SKILL_USE_FUNC(WZ_METEOR);
 	AI_SKILL_USE_FUNC(WZ_QUAGMIRE);
 	AI_SKILL_USE_FUNC(WZ_STORMGUST);
 	AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze);
+	AI_SKILL_USE_FUNC(WZ_WATERBALL);
+	AI_SKILL_USE_FUNC_T(WZ_WATERBALL, compromise);
 
 	AI_SKILL_USE_FUNC(HAMI_BLOODLUST);
 	AI_SKILL_USE_FUNC(HAMI_CASTLE);
@@ -1324,6 +1329,7 @@ struct general_if {
 	virtual int max_hp();
 	virtual int max_sp();
 	virtual std::string name();
+	virtual bool on_water();
 	virtual e_race race();
 	virtual e_race2 race2();
 	virtual status_change* sc();
@@ -1655,6 +1661,7 @@ struct general_impl : virtual block_if {
 	virtual bool is_walking() override;
 	virtual int max_hp() override;
 	virtual int max_sp() override;
+	virtual bool on_water() override;
 	virtual e_race race() override;
 	virtual e_race2 race2() override;
 	virtual int attack_range() override;
@@ -2792,6 +2799,7 @@ extern const skill_id_set UNEQUIP_HELM_SKILLS;
 extern const skill_id_set UNEQUIP_SHIELD_SKILLS;
 extern const skill_id_set UNEQUIP_WEAPON_SKILLS;
 extern const skill_id_set USEFULL_SKILLS;
+extern const skill_unit_key_map WATERBALL_SKILL_UNIT_KEYS;
 extern const std::array<std::string,MAX_WEAPON_TYPE> WEAPON_TYPE_NAME_TABLE;
 
 // -----------------------------------------------------------------------------

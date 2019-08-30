@@ -128,6 +128,7 @@ bool general_if::is_walking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::string general_if::name() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool general_if::on_water() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_race general_if::race() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_race2 general_if::race2() {RAISE_NOT_IMPLEMENTED_ERROR;}
 status_change* general_if::sc() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1035,6 +1036,12 @@ general_impl::max_hp() {
 int // 取得した最大SP。
 general_impl::max_sp() {
 	return status_get_max_sp(bl());
+}
+
+// 水の上にいるかを判定する。
+bool // 結果。
+general_impl::on_water() {
+	return map_getcellp(map_getmapdata(bl()->m), bl()->x, bl()->y, CELL_CHKWATER);
 }
 
 // 種族を取得する。
