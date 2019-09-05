@@ -2491,6 +2491,7 @@ lighthalzen,41,52,0	warp	s_atelierwarp1013	1,1,s_atelier,18,75
 s_atelier,18,79,0	warp	s_atelierwarp1014	1,1,lighthalzen,41,56
 s_atelier,32,64,0	warp	s_atelierwarp1015	1,1,s_atelier,80,63
 s_atelier,80,66,0	warp	s_atelierwarp1016	1,1,s_atelier,32,62
+*/
 
 
 
@@ -2508,6 +2509,7 @@ splendide,275,390,0		warp	bifrostwarp0501	1,1,bif_fild01,316,50
 
 
 
+/*
 //---マラン島追加マップ
 
 

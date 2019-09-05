@@ -688,7 +688,10 @@ spl_in01	mapflag	nomemo
 spl_in02	mapflag	nomemo
 
 // [GonBee]
+1@nyd	mapflag	nowarpto
+2@nyd	mapflag	nowarpto
 dic_in01	mapflag	nomemo
+1@mist	mapflag	nomemo
 
 //evt_zombie	mapflag	nomemo
 

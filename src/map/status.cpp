@@ -10342,7 +10342,22 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val3 = 5+5*val1; // bAtk/wAtk rate change
 			break;
 		case SC_MINDBREAKER:
-			val2 = 20*val1; // matk increase.
+
+			// [GonBee]
+			// メンタルスティックによる補正。
+			//val2 = 20*val1; // matk increase.
+			{
+				int ms_ref = 0;
+				if (sd) {
+					int wep_ind = sd->equip_index[EQI_HAND_R];
+					if (wep_ind >= 0) {
+						item* wep = &sd->inventory.u.items_inventory[wep_ind];
+						if (wep->nameid == 1654) ms_ref = wep->refine;
+					}
+				}
+				val2 = 20 * val1 - 2 * ms_ref * val1; // matk increase.
+			}
+
 			val3 = 12*val1; // mdef2 reduction.
 			break;
 		case SC_JAILED:

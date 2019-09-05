@@ -1804,7 +1804,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 		lea->show_next();
 	} else {
 		std::string map_str = shift_arguments(args);
-		int mid = map_mapname2mapid(map_str.c_str());
+		int mid = map_mapname2mapid(lowercase(map_str).c_str());
 		if (!mid) 
 			throw command_error{print(
 				"「", map_str, "」というマップIDは見つかりませんでした。"

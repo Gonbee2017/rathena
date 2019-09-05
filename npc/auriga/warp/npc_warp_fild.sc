@@ -1494,6 +1494,7 @@ dew_fild01,57,273,0		warp	dewatawarp0102	1,1,dew_in01,15,33
 
 //デワタフィールド 01⇒イスタナ洞窟
 dew_fild01,48,65,0		warp	dewatawarp0401	1,1,dew_dun02,302,30
+*/
 
 
 
@@ -1511,6 +1512,7 @@ dew_fild01,48,65,0		warp	dewatawarp0401	1,1,dew_dun02,302,30
 //ビフロストフィールド 01⇒前線基地 スプレンディッド
 bif_fild01,318,48,0		warp	bifrostwarp0101	1,1,splendide,270,378
 
+/*
 //ビフロストフィールド 02⇒花が咲き始めた大地
 bif_fild02,292,351,0	warp	bifrostwarp0501	1,1,ecl_fild01,205,76
 

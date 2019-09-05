@@ -1393,6 +1393,21 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		rate = 5+5*skill_lv;
 		if(sd && (skill=pc_checkskill(sd,DC_DANCINGLESSON)))
 			rate += 5+skill;
+
+		// [GonBee]
+		// ダンスシューズの効果。
+		{
+			int ds_ref = 0;
+			if (sd) {
+				int sho_ind = sd->equip_index[EQI_SHOES];
+				if (sho_ind >= 0) {
+					item* sho = &sd->inventory.u.items_inventory[sho_ind];
+					if (sho->nameid == 2465) ds_ref = sho->refine;
+				}
+			}
+			rate += rate * 2 * ds_ref / 100;
+		}
+
 		status_zap(bl, 0, rate);
 		break;
 	case SL_STUN:
@@ -8680,6 +8695,16 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				status_change_end(bl, SC_SLEEP, INVALID_TIMER);
 			}
 
+			// [GonBee]
+			// メンタルスティックの効果。
+			if (sd) {
+				int wep_ind = sd->equip_index[EQI_HAND_R];
+				if (wep_ind >= 0) {
+					item* wep = &sd->inventory.u.items_inventory[wep_ind];
+					if (wep->nameid == 1654) break;
+				}
+			}
+
 			if (dstmd)
 				mob_target(dstmd, src, skill_get_range2(src, skill_id, skill_lv, true));
 		}
@@ -13024,6 +13049,21 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 #endif
 		if (sd)
 			val1 += pc_checkskill(sd, DC_DANCINGLESSON);
+
+		// [GonBee]
+		// ダンスシューズの効果。
+		{
+			int ds_ref = 0;
+			if (sd) {
+				int sho_ind = sd->equip_index[EQI_SHOES];
+				if (sho_ind >= 0) {
+					item* sho = &sd->inventory.u.items_inventory[sho_ind];
+					if (sho->nameid == 2465) ds_ref = sho->refine;
+				}
+			}
+			val1 += val1 * 2 * ds_ref / 100;
+		}
+
 		break;
 	case BA_POEMBRAGI:
 		val1 = 3 * skill_lv + status->dex / 10; // Casting time reduction
@@ -13050,6 +13090,22 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 			val2 += pc_checkskill(sd, DC_DANCINGLESSON);
 #endif
 		}
+
+		// [GonBee]
+		// ダンスシューズの効果。
+		{
+			int ds_ref = 0;
+			if (sd) {
+				int sho_ind = sd->equip_index[EQI_SHOES];
+				if (sho_ind >= 0) {
+					item* sho = &sd->inventory.u.items_inventory[sho_ind];
+					if (sho->nameid == 2465) ds_ref = sho->refine;
+				}
+			}
+			val1 += val1 * 2 * ds_ref / 100;
+			val2 += val2 * 2 * ds_ref / 100;
+		}
+
 		val1 *= 10; //Because 10 is actually 1% aspd
 		break;
 	case DC_SERVICEFORYOU:
@@ -13059,6 +13115,22 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 			val1 += pc_checkskill(sd, DC_DANCINGLESSON) / 2;
 			val2 += pc_checkskill(sd, DC_DANCINGLESSON) / 2;
 		}
+
+		// [GonBee]
+		// ダンスシューズの効果。
+		{
+			int ds_ref = 0;
+			if (sd) {
+				int sho_ind = sd->equip_index[EQI_SHOES];
+				if (sho_ind >= 0) {
+					item* sho = &sd->inventory.u.items_inventory[sho_ind];
+					if (sho->nameid == 2465) ds_ref = sho->refine;
+				}
+			}
+			val1 += val1 * 2 * ds_ref / 100;
+			val2 += val2 * 2 * ds_ref / 100;
+		}
+
 		break;
 	case BA_ASSASSINCROSS:
 		if (sd)
@@ -13075,6 +13147,21 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		val1 *= 10; //Because every 10 crit is an actual cri point.
 		if (sd)
 			val1 += 5 * pc_checkskill(sd, DC_DANCINGLESSON);
+
+		// [GonBee]
+		// ダンスシューズの効果。
+		{
+			int ds_ref = 0;
+			if (sd) {
+				int sho_ind = sd->equip_index[EQI_SHOES];
+				if (sho_ind >= 0) {
+					item* sho = &sd->inventory.u.items_inventory[sho_ind];
+					if (sho->nameid == 2465) ds_ref = sho->refine;
+				}
+			}
+			val1 += val1 * 2 * ds_ref / 100;
+		}
+
 		break;
 	case BD_DRUMBATTLEFIELD:
 	#ifdef RENEWAL

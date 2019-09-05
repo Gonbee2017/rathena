@@ -158,6 +158,7 @@ spl_in01	mapflag	nowarpto
 
 // [GonBee]
 dic_in01	mapflag	nowarpto
+1@mist	mapflag	nowarpto
 
 // Bossnia (custom) ==============
 bossnia_01	mapflag	nowarpto

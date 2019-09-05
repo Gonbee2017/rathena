@@ -998,7 +998,7 @@ tha_t12,96,58,0	script	石像#tt1	111,{
 	}
 	mes "‐石像の穴に魔力石を入れると、";
 	mes "石像が神秘的な光に包まれた‐";
-	delitem 7426,1;
+//	delitem 7426,1;
 	misceffect 55;
 	donpcevent "tteffect2::OnGlow";
 	set $@THA_1SEAL,1;
@@ -1036,7 +1036,7 @@ tha_t12,161,58,0	script	石像#tt4	111,{
 	}
 	mes "‐石像の穴に魔力石を入れると、";
 	mes "石像が神秘的な光に包まれた‐";
-	delitem 7427,1;
+//	delitem 7427,1;
 	misceffect 57;
 	donpcevent "tteffect3::OnGlow";
 	set $@THA_1SEAL,2;
@@ -1074,7 +1074,7 @@ tha_t12,104,18,0	script	石像#tt2	111,{
 	}
 	mes "‐石像の穴に魔力石を入れると、";
 	mes "石像が神秘的な光に包まれた‐";
-	delitem 7428,1;
+//	delitem 7428,1;
 	misceffect 54;
 	donpcevent "tteffect5::OnGlow";
 	set $@THA_1SEAL,3;
@@ -1112,7 +1112,7 @@ tha_t12,128,86,0	script	石像#tt3	111,{
 	}
 	mes "‐石像の穴に魔力石を入れると、";
 	mes "石像が神秘的な光に包まれた‐";
-	delitem 7430,1;
+//	delitem 7430,1;
 	misceffect 59;
 	donpcevent "tteffect1::OnGlow";
 	set $@THA_1SEAL,4;
@@ -1155,7 +1155,7 @@ tha_t12,154,18,0	script	石像#tt5	111,{
 	mes "‐五つの石像全てが光に包まれ、";
 	mes "石像たちの中心にある模様が";
 	mes "奇妙な風と共に強い気を発し始めた‐";
-	delitem 7429,1;
+//	delitem 7429,1;
 	donpcevent "tteffect4::OnGlow";
 	donpcevent "WarpThana::OnStart";
 	set $@THA_1SEAL,5;
