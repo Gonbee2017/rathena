@@ -4143,10 +4143,18 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 	}
 
 #ifndef RENEWAL
-	if (!battle_config.magic_defense_type && base_status->mdef > battle_config.max_def) {
-		base_status->mdef2 += battle_config.over_def_bonus*(base_status->mdef -battle_config.max_def);
-		base_status->mdef = (signed char)battle_config.max_def;
+
+	// [GonBee]
+	// œŽZMdef‚ÌãŒÀ‚ÌÝ’è‚ð•ª—£B
+	//if (!battle_config.magic_defense_type && base_status->mdef > battle_config.max_def) {
+	//	base_status->mdef2 += battle_config.over_def_bonus*(base_status->mdef -battle_config.max_def);
+	//	base_status->mdef = (signed char)battle_config.max_def;
+	//}
+	if (!battle_config.magic_defense_type && base_status->mdef > battle_config.max_mdef) {
+		base_status->mdef2 += battle_config.over_def_bonus*(base_status->mdef -battle_config.max_mdef);
+		base_status->mdef = (signed char)battle_config.max_mdef;
 	}
+
 #endif
 
 // ----- ASPD CALCULATION -----

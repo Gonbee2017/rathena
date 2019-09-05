@@ -13,6 +13,7 @@
  **/
 
 // [GonBee]
+int max_mdef;                        // 除算Mdefの上限。
 int pybot_around_distance;           // 周辺距離。
 int pybot_away_distance;             // 敵モンスターから離れていると言える最短距離。
 int pybot_away_distance_great;       // グレートモンスターから離れていると言える最短距離。

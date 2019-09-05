@@ -12,6 +12,7 @@
  **/
 
 	// [GonBee]
+	{"max_mdef", &battle_config.max_mdef, 100, 0, INT_MAX},
  	{"pybot_around_distance", &battle_config.pybot_around_distance, 9, 1, 14},
  	{"pybot_away_distance", &battle_config.pybot_away_distance, 3, 3, 14},
  	{"pybot_away_distance_great", &battle_config.pybot_away_distance_great, 6, 3, 14},
