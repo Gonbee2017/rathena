@@ -317,6 +317,7 @@ void ai_t::leader_target() {
 		if (ene->flee() >= bat->get_mob_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
 		if (ene->def() + ene->vit() >= bat->get_mob_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
 		if (ene->def() >= bat->get_mob_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
+		if (ene->mdef() >= bat->get_mob_high_mdef()) bat->load_policy(MM_HIGH_MDEF, dis_pol_val, nor_att_pol_val);
 		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
 		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
 		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
@@ -602,6 +603,7 @@ void ai_t::bot_reload_equipset() {
 		if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
 		if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
 		if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
+		if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_equipset(MM_HIGH_MDEF, &equ);
 		if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
 		if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
 		if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
@@ -802,6 +804,7 @@ void ai_t::bot_play_skill() {
 			if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_play_skill(MM_HIGH_FLEE, &kid);
 			if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
 			if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
+			if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_play_skill(MM_HIGH_MDEF, &kid);
 			if (tar_ene->is_flora()) bot->load_play_skill(MM_FLORA, &kid);
 			if (tar_ene->is_great(leader)) bot->load_play_skill(MM_GREAT, &kid);
 			if (tar_ene->is_boss()) bot->load_play_skill(MM_BOSS, &kid);

@@ -1465,6 +1465,21 @@ SUBCMD_FUNC(Bot, MonsterHighHit) {
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
+// モンスターの高Mdefを設定する。
+SUBCMD_FUNC(Bot, MonsterHighMdef) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int mdef = shift_arguments_then_parse_int(
+		args, print("Mdef"), 1, 100
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はMdefが", mdef, "以上のモンスターを高Mdefとみなします。"
+	));
+	if (mdef == DEFAULT_MOB_HIGH_MDEF) mdef = 0;
+	mem->mob_high_mdef()->set(mdef);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // 次のページを表示する。
 SUBCMD_FUNC(Bot, Next) {
 	CS_ENTER;

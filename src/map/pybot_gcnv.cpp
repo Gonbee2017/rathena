@@ -710,6 +710,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SA_LIGHTNINGLOADER                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_SEISMICWEAPON                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_FROSTWEAPON                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (PF_MINDBREAKER                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_FIREBALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_THUNDERSTORM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -1616,6 +1617,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ MonsterHighHit (mhh) サブコマンド ------\n"
 		"モンスターの高Hitを設定する。\n"
 		"入力例 [@bot monsterhighhit アサクロ 175]\n"
+	), SUBCMD_DESC(Bot, MonsterHighMdef            , mhmd,
+		"------ MonsterHighMdef (mhmd) サブコマンド ------\n"
+		"モンスターの高Mdefを設定する。\n"
+		"入力例 [@bot monsterhighmdef アサクロ 40]\n"
 	), SUBCMD_DESC(Bot, Next                       , n   ,
 		"------ Next (n) サブコマンド ------\n"
 		"次のページを表示する。\n"
@@ -1963,6 +1968,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, MonsterHighDefVit          , mhdv),
 	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf ),
 	SUBCMD_PROC(Bot, MonsterHighHit             , mhh ),
+	SUBCMD_PROC(Bot, MonsterHighMdef            , mhmd),
 	SUBCMD_PROC(Bot, Next                       , n   ),
 	SUBCMD_PROC(Bot, PetEquip                   , pe  ),
 	SUBCMD_PROC(Bot, PetStatus                  , ps  ),
@@ -2092,6 +2098,9 @@ const int DEFAULT_MOB_HIGH_FLEE = 150;
 
 // デフォルトのモンスターの高Hit。
 const int DEFAULT_MOB_HIGH_HIT = 175;
+
+// デフォルトのモンスターの高Mdef。
+const int DEFAULT_MOB_HIGH_MDEF = 40;
 
 // デフォルト通常攻撃ポリシー値のマップ。
 const std::unordered_map<
@@ -3534,6 +3543,7 @@ const std::unordered_map<
 	{MM_BOSS        , "ボス"      },
 	{MM_GREAT       , "グレート"  },
 	{MM_FLORA       , "フローラ型"},
+	{MM_HIGH_MDEF   , "高Mdef"    },
 	{MM_HIGH_DEF    , "高Def"     },
 	{MM_HIGH_DEF_VIT, "高DefVit"  },
 	{MM_HIGH_FLEE   , "高Flee"    },

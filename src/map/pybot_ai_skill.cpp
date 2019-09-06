@@ -1933,6 +1933,20 @@ AI_SKILL_USE_FUNC(PF_MEMORIZE) {
 	if (!bot->sc()->data[SC_MEMORIZE]) bot->use_skill_self(kid, klv);
 }
 
+// マインドブレイカーを使ってMdefを下げる。
+AI_SKILL_USE_FUNC(PF_MINDBREAKER) {
+	block_if* ene = pybot::find_if(ALL_RRANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
+		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+		bot->check_skill_range_block(kid, klv, ene) &&
+		bot->check_attack(ene) &&
+		ene->can_be_provoke() &&
+		ene->check_skill_used_tick(kid, 2500) &&
+		ene->mdef() >= bot->get_mob_high_mdef() &&
+		!ene->sc()->data[SC_MINDBREAKER];
+	});
+	if (ene) bot->use_skill_block(kid, klv, ene);
+}
+
 // ソウルチェンジを使う。
 AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
 	if (check_quad_ratio(bot->sp(), bot->max_sp(), 2) &&

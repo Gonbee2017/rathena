@@ -5926,7 +5926,6 @@ REPLACE INTO `mob_skill_db` VALUES (2133, 'クリティカルスラッシュ', 'attack', 17
 REPLACE INTO `mob_skill_db` VALUES (2133, 'ソニックブロー', 'attack', 136, 10, 500, 800, 5000, 'no', 'target', 'always', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 REPLACE INTO `mob_skill_db` VALUES (2133, 'グラウンドアタック', 'attack', 185, 3, 500, 500, 5000, 'no', 'target', 'always', NULL, NULL, NULL, NULL, NULL, NULL, '6', NULL);
 REPLACE INTO `mob_skill_db` VALUES (2133, 'オートガード', 'attack', 249, 2, 700, 0, 300000, 'yes', 'self', 'always', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-REPLACE INTO `mob_skill_db` VALUES (2133, 'サモンスレイブ', 'idle', 196, 1, 10000, 2000, 60000, 'no', 'self', 'slavele', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 REPLACE INTO `mob_skill_db` VALUES (2134, 'エモーション', 'walk', 197, 1, 2000, 0, 5000, 'yes', 'self', 'always', NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL);
 REPLACE INTO `mob_skill_db` VALUES (2134, 'グラウンドアタック', 'attack', 185, 3, 500, 0, 5000, 'yes', 'target', 'always', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 REPLACE INTO `mob_skill_db` VALUES (2134, 'スタンアタック', 'attack', 179, 3, 500, 1500, 5000, 'yes', 'target', 'always', NULL, NULL, NULL, NULL, NULL, NULL, '21', NULL);

@@ -4161,30 +4161,30 @@ OnKilled:
 	close;
 OnTimer5000:
 	announce "竜の叫び : …………………う…た……？………",0x9,0xFFFF00;
-	misceffect 91,getmdnpcname("ensyutu_1");
-	misceffect 91,getmdnpcname("ensyutu_2");
-	misceffect 91,getmdnpcname("ensyutu_3");
+	misceffect 91,getmdnpcname("mora_ensyutu_1");
+	misceffect 91,getmdnpcname("mora_ensyutu_2");
+	misceffect 91,getmdnpcname("mora_ensyutu_3");
 	end;
 OnTimer10000:
-	misceffect 91,getmdnpcname("ensyutu_4");
-	misceffect 91,getmdnpcname("ensyutu_5");
-	misceffect 91,getmdnpcname("ensyutu_6");
+	misceffect 91,getmdnpcname("mora_ensyutu_4");
+	misceffect 91,getmdnpcname("mora_ensyutu_5");
+	misceffect 91,getmdnpcname("mora_ensyutu_6");
 	end;
 OnTimer15000:
 	announce "竜の叫び : …………………どこかで…………………なつかしい……",0x9,0xFFFF00;
-	misceffect 91,getmdnpcname("ensyutu_1");
-	misceffect 91,getmdnpcname("ensyutu_2");
-	misceffect 91,getmdnpcname("ensyutu_3");
+	misceffect 91,getmdnpcname("mora_ensyutu_1");
+	misceffect 91,getmdnpcname("mora_ensyutu_2");
+	misceffect 91,getmdnpcname("mora_ensyutu_3");
 	end;
 OnTimer20000:
-	misceffect 91,getmdnpcname("ensyutu_1");
-	misceffect 91,getmdnpcname("ensyutu_2");
-	misceffect 91,getmdnpcname("ensyutu_3");
+	misceffect 91,getmdnpcname("mora_ensyutu_1");
+	misceffect 91,getmdnpcname("mora_ensyutu_2");
+	misceffect 91,getmdnpcname("mora_ensyutu_3");
 	end;
 OnTimer25000:
-	misceffect 91,getmdnpcname("ensyutu_4");
-	misceffect 91,getmdnpcname("ensyutu_5");
-	misceffect 91,getmdnpcname("ensyutu_6");
+	misceffect 91,getmdnpcname("mora_ensyutu_4");
+	misceffect 91,getmdnpcname("mora_ensyutu_5");
+	misceffect 91,getmdnpcname("mora_ensyutu_6");
 	end;
 OnTimer30000:
 	set .flag,1;
@@ -12862,10 +12862,10 @@ mora,152,97,5	script	アーティファクト管理人	515,{
 					mes "―――――――――――――";
 					mes "MaxSP + 150";
 					mes "―――――――――――――";
-					mes "「ジュデックス」で";
+					mes "「マグヌスエクソシズム」で";
 					mes "与えるダメージ + 30%";
 					mes "―――――――――――――";
-					mes "「ジュデックス」を";
+					mes "「マグヌスエクソシズム」を";
 					mes "使用した時のSP消費量 + 40";
 					mes "―――――――――――――";
 					mes "系列 : ^777777靴^000000";
@@ -12939,7 +12939,7 @@ mora,152,97,5	script	アーティファクト管理人	515,{
 					mes "Int + 1";
 					mes "―――――――――――――";
 					mes "[ヒール]を";
-					mes "使用した時のSP消費量 - 40";
+					mes "使用した時のSP消費量 - 30";
 					mes "―――――――――――――";
 					mes "系列 : ^777777鎧^000000";
 					mes "防御 : ^7777775^000000";
@@ -13895,19 +13895,19 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			close;
 		}
 		switch(Job) {
-		case Job_RuneKnight:
+		case JOB_LORD_KNIGHT:
 			setarray .@artifact,2475,2476,2574,2575,2883,2884,15036,15037;
 			break;
-		case Job_Warlock:
+		case JOB_HIGH_WIZARD:
 			setarray .@artifact,2007,2008,2009,2010,2011,2012,2013,2014,2467,2468,2469,2470,2859,2860,2861,2862,15025,15026,15027,15028;
 			break;
-		case Job_Ranger:
+		case JOB_SNIPER:
 			setarray .@artifact,2479,2480,2580,2581,2890,2891,15042,15043;
 			break;
-		case Job_ArchBishop:
+		case JOB_HIGH_PRIEST:
 			setarray .@artifact,1657,1660,16013,16018,2156,2471,2472,2569,2570,2864,2865,2866,15029,15030;
 			break;
-		case Job_Guillotine:
+		case JOB_ASSASSIN_CROSS:
 			setarray .@artifact,2477,2478,2577,2578,2886,2887,15038,15039;
 			break;
 		}
@@ -14180,19 +14180,19 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			close;
 		}
 		switch(Job) {
-		case Job_RuneKnight:
+		case JOB_LORD_KNIGHT:
 			setarray .@artifact,2475,2476,2574,2575,2883,2884,15036,15037;
 			break;
-		case Job_Warlock:
+		case JOB_HIGH_WIZARD:
 			setarray .@artifact,2007,2008,2009,2010,2011,2012,2013,2014,2467,2468,2469,2470,2859,2860,2861,2862,15025,15026,15027,15028;
 			break;
-		case Job_Ranger:
+		case JOB_SNIPER:
 			setarray .@artifact,2479,2480,2580,2581,2890,2891,15042,15043;
 			break;
-		case Job_ArchBishop:
+		case JOB_HIGH_PRIEST:
 			setarray .@artifact,1657,1660,16013,16018,2156,2471,2472,2569,2570,2864,2865,2866,15029,15030;
 			break;
-		case Job_Guillotine:
+		case JOB_ASSASSIN_CROSS:
 			setarray .@artifact,2477,2478,2577,2578,2886,2887,15038,15039;
 			break;
 		}

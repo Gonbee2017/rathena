@@ -35,6 +35,7 @@ int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -127,6 +128,7 @@ bool general_if::is_solo() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_walking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
+defType general_if::mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::string general_if::name() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::on_water() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_race general_if::race() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -202,6 +204,7 @@ ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,play_skill>>& member_if::play_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1038,6 +1041,11 @@ general_impl::max_sp() {
 	return status_get_max_sp(bl());
 }
 
+// Mdefを取得する。
+defType general_impl::mdef() {
+	return status_get_mdef(bl());
+}
+
 // 水の上にいるかを判定する。
 bool // 結果。
 general_impl::on_water() {
@@ -1239,6 +1247,12 @@ homun_impl::get_mob_high_flee() {
 int // 取得した高Hit。
 homun_impl::get_mob_high_hit() {
 	return master()->get_mob_high_hit();
+}
+
+// ホムンクルスのモンスターの高Mdefを取得する。
+int // 取得した高Mdef。
+homun_impl::get_mob_high_mdef() {
+	return master()->get_mob_high_mdef();
 }
 
 // ホムンクルスのSPの供給を許可するSP率を取得する。
@@ -1788,6 +1802,14 @@ member_impl::get_mob_high_hit() {
 	return res;
 }
 
+// メンバーのモンスターの高Mdefを取得する。
+int // 取得した高Mdef。
+member_impl::get_mob_high_mdef() {
+	int res = mob_high_mdef()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_MDEF;
+	return res;
+}
+
 // 範囲スキルの発動条件となるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_skill_mobs() {
@@ -2030,6 +2052,11 @@ ptr<regnum_t<int>>& member_impl::mob_high_flee() {
 // モンスターの高Hitの登録値。
 ptr<regnum_t<int>>& member_impl::mob_high_hit() {
 	return mob_high_hit_;
+}
+
+// モンスターの高Mdefの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_mdef() {
+	return mob_high_mdef_;
 }
 
 // メンバーの名前を取得する。
@@ -2607,6 +2634,7 @@ member_t::member_t(
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
 	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
+	mob_high_mdef() = construct<regnum_t<int>>(sd(), "pybot_mob_high_mdef");
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");

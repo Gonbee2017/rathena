@@ -556,6 +556,7 @@ enum meta_mobs {
 	MM_BOSS         =   180, // ボス。
 	MM_GREAT        =   181, // グレート。
 	MM_FLORA        =   182, // フローラ型。
+	MM_HIGH_MDEF    =   184, // 高Mdef。
 	MM_HIGH_DEF     =   185, // 高Def。
 	MM_HIGH_DEF_VIT =   186, // 高DefVit。
 	MM_HIGH_FLEE    =   187, // 高Flee。
@@ -1078,6 +1079,7 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(PF_FOGWALL);
 	AI_SKILL_USE_FUNC(PF_HPCONVERSION);
 	AI_SKILL_USE_FUNC(PF_MEMORIZE);
+	AI_SKILL_USE_FUNC(PF_MINDBREAKER);
 	AI_SKILL_USE_FUNC(PF_SOULCHANGE);
 	AI_SKILL_USE_FUNC(PF_SPIDERWEB);
 	AI_SKILL_USE_FUNC(PR_ASPERSIO);
@@ -1227,6 +1229,7 @@ struct battler_if {
 	virtual int get_mob_high_def_vit();
 	virtual int get_mob_high_flee();
 	virtual int get_mob_high_hit();
+	virtual int get_mob_high_mdef();
 	virtual int get_supply_sp_rate();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
@@ -1309,6 +1312,7 @@ struct general_if {
 	virtual bool check_skill_range_block(e_skill kid, int klv, block_if* blo);
 	virtual bool check_skill_range_xy(e_skill kid, int klv, int x, int y);
 	virtual defType def();
+	virtual defType mdef();
 	virtual int def2();
 	virtual e_element element();
 	virtual int flee();
@@ -1416,6 +1420,7 @@ struct member_if {
 	virtual ptr<regnum_t<int>>& mob_high_def_vit();
 	virtual ptr<regnum_t<int>>& mob_high_flee();
 	virtual ptr<regnum_t<int>>& mob_high_hit();
+	virtual ptr<regnum_t<int>>& mob_high_mdef();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual ptr<block_if>& pet();
 	virtual ptr<registry_t<int,play_skill>>& play_skills();
@@ -1661,6 +1666,7 @@ struct general_impl : virtual block_if {
 	virtual bool is_walking() override;
 	virtual int max_hp() override;
 	virtual int max_sp() override;
+	virtual defType mdef() override;
 	virtual bool on_water() override;
 	virtual e_race race() override;
 	virtual e_race2 race2() override;
@@ -1691,6 +1697,7 @@ struct homun_impl : virtual block_if {
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
+	virtual int get_mob_high_mdef() override;
 	virtual int get_supply_sp_rate() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
@@ -1790,6 +1797,7 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> mob_high_def_vit_;         // モンスターの高DefVitの登録値。
 	ptr<regnum_t<int>> mob_high_flee_;            // モンスターの高Fleeの登録値。
 	ptr<regnum_t<int>> mob_high_hit_;             // モンスターの高Hitの登録値。
+	ptr<regnum_t<int>> mob_high_mdef_;            // モンスターの高Mdefの登録値。
 	ptr<registry_t<int,normal_attack_policy>>	  
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
 	ptr<block_if> pet_;                           // ペット。
@@ -1835,6 +1843,7 @@ struct member_impl : virtual block_if {
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
+	virtual int get_mob_high_mdef() override;
 	virtual int get_skill_mobs() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int get_supply_sp_rate() override;
@@ -1863,6 +1872,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<int>>& mob_high_def_vit() override;
 	virtual ptr<regnum_t<int>>& mob_high_flee() override;
 	virtual ptr<regnum_t<int>>& mob_high_hit() override;
+	virtual ptr<regnum_t<int>>& mob_high_mdef() override;
 	virtual std::string name() override;
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies() override;
 	virtual int party_id() override;
@@ -2466,6 +2476,7 @@ SUBCMD_FUNC(Bot, MonsterHighDef);
 SUBCMD_FUNC(Bot, MonsterHighDefVit);
 SUBCMD_FUNC(Bot, MonsterHighFlee);
 SUBCMD_FUNC(Bot, MonsterHighHit);
+SUBCMD_FUNC(Bot, MonsterHighMdef);
 SUBCMD_FUNC(Bot, Next);
 SUBCMD_FUNC(Bot, PetEquip);
 SUBCMD_FUNC(Bot, PetStatus);
@@ -2752,6 +2763,7 @@ extern const int DEFAULT_MOB_HIGH_DEF;
 extern const int DEFAULT_MOB_HIGH_DEF_VIT;
 extern const int DEFAULT_MOB_HIGH_FLEE;
 extern const int DEFAULT_MOB_HIGH_HIT;
+extern const int DEFAULT_MOB_HIGH_MDEF;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;
