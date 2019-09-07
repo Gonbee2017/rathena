@@ -6615,7 +6615,8 @@ mora,31,138,6	script	レシア研究員#mora	522,{
 				close;
 			}
 			set .@rand,rand(5);
-			if(.@rand < 2) {
+//			if(.@rand < 2) {
+			if(.@rand < 1) {
 				chgquest 5023,5021;
 				mes "[レシア研究員]";
 				mes "これは……";
@@ -6634,7 +6635,8 @@ mora,31,138,6	script	レシア研究員#mora	522,{
 				mes "集めてくるんだ。";
 				mes "頼んだぞ。";
 				close;
-			} else if(.@rand < 4) {
+//			} else if(.@rand < 4) {
+			} else if(.@rand < 2) {
 				chgquest 5023,5022;
 				mes "[レシア研究員]";
 				mes "これは……";
