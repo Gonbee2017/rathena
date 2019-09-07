@@ -13684,6 +13684,7 @@ dicastes01,193,58,3	script	ハルラビ	495,{
 		mes "とても残念にゃん。";
 		close;
 	}
+	if (getequipid2(6) != 2463) close;
 	delitem 6304,.@cost;
 //	delitem 2463,1;
 	delequip2 6;
@@ -13976,6 +13977,7 @@ dicastes01,190,57,3	script	カルカ	495,{
 		mes "とても残念だにゃん。";
 		close;
 	}
+	if (getequipid2(5) != 2564) close;
 	delitem 6304,.@cost;
 //	delitem 2564,1;
 	delequip2 5;
@@ -14273,6 +14275,7 @@ dicastes01,196,57,3	script	マーチョ	495,{
 		mes "とても残念にゃん。";
 		close;
 	}
+	if (getequipid2(.@pos) != 2843) close;
 	delitem 6304,.@cost;
 //	delitem 2843,1;
 	delequip2 .@pos;

@@ -11015,6 +11015,9 @@ mora,123,177,6	script	ペンダント細工師	509,{
 		mes "仕方ありません。";
 		close;
 	}
+	if(countitem(6380) < 5 ||
+		countitem(2858) < 1
+	) close;
 	misceffect 101,"";
 	delitem 6380,5;
 	delitem 2858,1;
@@ -11190,6 +11193,9 @@ mora,134,166,4	script	バルバリウェストフード	509,{
 		mes "仕方ありません。";
 		close;
 	}
+	if(countitem(6380) < 5 ||
+		countitem(2568) < 1
+	) close;
 	misceffect 101,"";
 	delitem 6380,5;
 	delitem 2568,1;
@@ -11227,18 +11233,181 @@ OnInit:
 function	script	ArtifactEnchants	{
 	set .@c,getarg(0);	// カテゴリー
 	set .@s,getarg(1);	// 段階
+	//switch(.@c) {
+	//case 1:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4792,4786,4787,4800,4795; break;
+	//	case 2: setarray .@tbl_enchant,4791,4792,4793,4786,4787,4788,4800,4795,4796; break;
+	//	case 3: setarray .@tbl_enchant,4792,4793,4794,4787,4788,4789,4800,4801,4796; break;
+	//	}
+	//	break;
+	//case 2:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4795,4700,4720,4811; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4795,4700,4701,4720,4721,4811,4810; break;
+	//	case 3: setarray .@tbl_enchant,4700,4701,4702,4720,4721,4722,4811,4810,4809; break;
+	//	}
+	//	break;
+	//case 3:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4700,4701,4720,4721,4811,4810; break;
+	//	case 2: setarray .@tbl_enchant,4700,4701,4702,4720,4721,4722,4811,4810,4809; break;
+	//	case 3: setarray .@tbl_enchant,4701,4702,4703,4721,4722,4723,4812,4811,4810; break;
+	//	}
+	//	break;
+	//case 4:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4792,4786,4795,4796,4740; break;
+	//	case 2: setarray .@tbl_enchant,4791,4792,4793,4786,4795,4796,4797,4740,4741; break;
+	//	case 3: setarray .@tbl_enchant,4792,4793,4794,4740,4741,4742,4796,4797,4798; break;
+	//	}
+	//	break;
+	//case 5:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4792,4793,4740,4741,4796,4797; break;
+	//	case 2: setarray .@tbl_enchant,4792,4793,4740,4741,4742,4796,4797,4798,4861; break;
+	//	case 3: setarray .@tbl_enchant,4793,4741,4742,4743,4797,4798,4862; break;
+	//	}
+	//	break;
+	//case 6:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4795,4750,4730,4859; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4795,4750,4751,4730,4731,4859,4860; break;
+	//	case 3: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4859,4860,4762; break;
+	//	}
+	//	break;
+	//case 7:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4750,4751,4730,4731,4860,4762; break;
+	//	case 2: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4860,4762,4763; break;
+	//	case 3: setarray .@tbl_enchant,4751,4752,4753,4731,4732,4733,4762,4763,4854; break;
+	//	}
+	//	break;
+	//case 8:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4786,4750,4730,4764; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4786,4750,4751,4730,4731,4764,4765; break;
+	//	case 3: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4764,4765,4807; break;
+	//	}
+	//	break;
+	//case 9:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4750,4751,4730,4731,4764,4765; break;
+	//	case 2: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4764,4765; break;
+	//	case 3: setarray .@tbl_enchant,4751,4752,4753,4731,4732,4733,4765,4807; break;
+	//	}
+	//	break;
+	//case 10:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4800,4710,4720,4801; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4800,4801,4710,4711,4720,4721,4815; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4712,4720,4721,4722,4801,4815,4814; break;
+	//	}
+	//	break;
+	//case 11:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4710,4711,4720,4721,4801,4815; break;
+	//	case 2: setarray .@tbl_enchant,4710,4711,4712,4720,4721,4722,4801,4815,4814; break;
+	//	case 3: setarray .@tbl_enchant,4711,4712,4713,4721,4722,4723,4815,4814,4813; break;
+	//	}
+	//	break;
+	//case 12:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4815,4814,4711,4712,4721,4722; break;
+	//	case 2: setarray .@tbl_enchant,4815,4814,4813,4711,4712,4713,4721,4722,4760; break;
+	//	case 3: setarray .@tbl_enchant,4712,4713,4714,4722,4814,4813,4812,4760,4761; break;
+	//	}
+	//	break;
+	//case 13:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4800,4710,4750,4720; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4800,4710,4711,4750,4751,4720,4721; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4712,4750,4751,4752,4720,4721,4722; break;
+	//	}
+	//	break;
+	//case 14:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4710,4711,4750,4751,4720,4721; break;
+	//	case 2: setarray .@tbl_enchant,4710,4711,4712,4750,4751,4720,4721,4722,4832; break;
+	//	case 3: setarray .@tbl_enchant,4711,4712,4713,4751,4721,4722,4723,4832,4833; break;
+	//	}
+	//	break;
+	//case 15:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4791,4786,4795,4750,4700,4764; break;
+	//	case 2: setarray .@tbl_enchant,4791,4786,4795,4750,4751,4700,4701,4764,4765; break;
+	//	case 3: setarray .@tbl_enchant,4750,4751,4752,4700,4701,4702,4764,4765,4818; break;
+	//	}
+	//	break;
+	//case 16:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4750,4751,4700,4701,4764,4765; break;
+	//	case 2: setarray .@tbl_enchant,4750,4751,4752,4700,4701,4702,4764,4765,4818; break;
+	//	case 3: setarray .@tbl_enchant,4751,4752,4753,4701,4702,4703,4765,4818,4817; break;
+	//	}
+	//	break;
+	//case 17:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4795,4800,4786,4710,4720,4740; break;
+	//	case 2: setarray .@tbl_enchant,4795,4800,4786,4710,4711,4720,4721,4740,4741; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4712,4720,4721,4740,4741,4742,4805; break;
+	//	}
+	//	break;
+	//case 18:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4710,4711,4720,4721,4740,4741; break;
+	//	case 2: setarray .@tbl_enchant,4710,4711,4712,4720,4721,4740,4741,4742,4805; break;
+	//	case 3: setarray .@tbl_enchant,4711,4712,4713,4721,4741,4742,4743,4805,4850; break;
+	//	}
+	//	break;
+	//case 19:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4795,4800,4786,4710,4700,4720; break;
+	//	case 2: setarray .@tbl_enchant,4795,4800,4786,4710,4711,4700,4701,4720,4721; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4712,4700,4701,4702,4720,4721,4722; break;
+	//	}
+	//	break;
+	//case 20:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4710,4711,4700,4701,4720,4721; break;
+	//	case 2: setarray .@tbl_enchant,4710,4711,4712,4700,4701,4702,4720,4721,4722; break;
+	//	case 3: setarray .@tbl_enchant,4711,4712,4701,4702,4721,4722,4767,4861,4760; break;
+	//	}
+	//	break;
+	//case 21:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4795,4800,4786,4710,4720,4740; break;
+	//	case 2: setarray .@tbl_enchant,4795,4800,4786,4710,4711,4720,4721,4740,4741; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4720,4721,4722,4740,4741,4861,4803; break;
+	//	}
+	//	break;
+	//case 22:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4795,4800,4786,4710,4720,4740; break;
+	//	case 2: setarray .@tbl_enchant,4795,4800,4786,4710,4711,4720,4721,4740,4741; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4720,4721,4722,4740,4741,4861,4805; break;
+	//	}
+	//	break;
+	//case 23:
+	//	switch(.@s) {
+	//	case 1: setarray .@tbl_enchant,4795,4800,4786,4710,4720,4740; break;
+	//	case 2: setarray .@tbl_enchant,4795,4800,4786,4710,4711,4720,4721,4740,4741; break;
+	//	case 3: setarray .@tbl_enchant,4710,4711,4720,4721,4722,4740,4741,4861,4804; break;
+	//	}
+	//	break;
+	//}
 	switch(.@c) {
 	case 1:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4792,4786,4787,4800,4795; break;
-		case 2: setarray .@tbl_enchant,4791,4792,4793,4786,4787,4788,4800,4795,4796; break;
-		case 3: setarray .@tbl_enchant,4792,4793,4794,4787,4788,4789,4800,4801,4796; break;
+		case 1: setarray .@tbl_enchant,4786,4787,4800,4795; break;
+		case 2: setarray .@tbl_enchant,4786,4787,4788,4800,4795,4796; break;
+		case 3: setarray .@tbl_enchant,4787,4788,4789,4800,4801,4796; break;
 		}
 		break;
 	case 2:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4795,4700,4720,4811; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4795,4700,4701,4720,4721,4811,4810; break;
+		case 1: setarray .@tbl_enchant,4786,4795,4700,4720,4811; break;
+		case 2: setarray .@tbl_enchant,4786,4795,4700,4701,4720,4721,4811,4810; break;
 		case 3: setarray .@tbl_enchant,4700,4701,4702,4720,4721,4722,4811,4810,4809; break;
 		}
 		break;
@@ -11251,22 +11420,22 @@ function	script	ArtifactEnchants	{
 		break;
 	case 4:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4792,4786,4795,4796,4740; break;
-		case 2: setarray .@tbl_enchant,4791,4792,4793,4786,4795,4796,4797,4740,4741; break;
-		case 3: setarray .@tbl_enchant,4792,4793,4794,4740,4741,4742,4796,4797,4798; break;
+		case 1: setarray .@tbl_enchant,4786,4795,4796,4740; break;
+		case 2: setarray .@tbl_enchant,4786,4795,4796,4797,4740,4741; break;
+		case 3: setarray .@tbl_enchant,4740,4741,4742,4796,4797,4798; break;
 		}
 		break;
 	case 5:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4792,4793,4740,4741,4796,4797; break;
-		case 2: setarray .@tbl_enchant,4792,4793,4740,4741,4742,4796,4797,4798,4861; break;
-		case 3: setarray .@tbl_enchant,4793,4741,4742,4743,4797,4798,4862; break;
+		case 1: setarray .@tbl_enchant,4740,4741,4796,4797; break;
+		case 2: setarray .@tbl_enchant,4740,4741,4742,4796,4797,4798,4861; break;
+		case 3: setarray .@tbl_enchant,4741,4742,4743,4797,4798,4862; break;
 		}
 		break;
 	case 6:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4795,4750,4730,4859; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4795,4750,4751,4730,4731,4859,4860; break;
+		case 1: setarray .@tbl_enchant,4786,4795,4750,4730,4859; break;
+		case 2: setarray .@tbl_enchant,4786,4795,4750,4751,4730,4731,4859,4860; break;
 		case 3: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4859,4860,4762; break;
 		}
 		break;
@@ -11279,8 +11448,8 @@ function	script	ArtifactEnchants	{
 		break;
 	case 8:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4786,4750,4730,4764; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4786,4750,4751,4730,4731,4764,4765; break;
+		case 1: setarray .@tbl_enchant,4786,4786,4750,4730,4764; break;
+		case 2: setarray .@tbl_enchant,4786,4786,4750,4751,4730,4731,4764,4765; break;
 		case 3: setarray .@tbl_enchant,4750,4751,4752,4730,4731,4732,4764,4765,4807; break;
 		}
 		break;
@@ -11293,8 +11462,8 @@ function	script	ArtifactEnchants	{
 		break;
 	case 10:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4800,4710,4720,4801; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4800,4801,4710,4711,4720,4721,4815; break;
+		case 1: setarray .@tbl_enchant,4786,4800,4710,4720,4801; break;
+		case 2: setarray .@tbl_enchant,4786,4800,4801,4710,4711,4720,4721,4815; break;
 		case 3: setarray .@tbl_enchant,4710,4711,4712,4720,4721,4722,4801,4815,4814; break;
 		}
 		break;
@@ -11314,8 +11483,8 @@ function	script	ArtifactEnchants	{
 		break;
 	case 13:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4800,4710,4750,4720; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4800,4710,4711,4750,4751,4720,4721; break;
+		case 1: setarray .@tbl_enchant,4786,4800,4710,4750,4720; break;
+		case 2: setarray .@tbl_enchant,4786,4800,4710,4711,4750,4751,4720,4721; break;
 		case 3: setarray .@tbl_enchant,4710,4711,4712,4750,4751,4752,4720,4721,4722; break;
 		}
 		break;
@@ -11328,8 +11497,8 @@ function	script	ArtifactEnchants	{
 		break;
 	case 15:
 		switch(.@s) {
-		case 1: setarray .@tbl_enchant,4791,4786,4795,4750,4700,4764; break;
-		case 2: setarray .@tbl_enchant,4791,4786,4795,4750,4751,4700,4701,4764,4765; break;
+		case 1: setarray .@tbl_enchant,4786,4795,4750,4700,4764; break;
+		case 2: setarray .@tbl_enchant,4786,4795,4750,4751,4700,4701,4764,4765; break;
 		case 3: setarray .@tbl_enchant,4750,4751,4752,4700,4701,4702,4764,4765,4818; break;
 		}
 		break;
@@ -14091,8 +14260,15 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			mes "お待ちしています。";
 			close;
 		}
+		if (getequipid2(.@menu) != .@itemid ||
+			getequipcardid2(.@menu,0) != .@card1 ||
+			getequipcardid2(.@menu,1) != .@card2 ||
+			getequipcardid2(.@menu,2) != .@card3 ||
+			getequipcardid2(.@menu,3) != .@card4
+		) close;
 		set .@rand,rand(100);
-		if(.@soket >= 3 && .@rand < 5) {
+//		if(.@soket >= 3 && .@rand < 5) {
+		if(.@soket >= 3 && .@rand < 1) {
 			misceffect 183,"";
 			mes "[アーティファクトの研究者]";
 			mes "ああっ！";
@@ -14103,7 +14279,8 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			set Zeny,Zeny-100000;
 			delequip2 .@menu;
 			close;
-		} else if(.@soket >= 2 && .@rand < 15) {
+//		} else if(.@soket >= 2 && .@rand < 15) {
+		} else if(.@soket >= 2 && .@rand < 3) {
 			misceffect 246,"";
 			mes "[アーティファクトの研究者]";
 			mes "アーティファクトの能力が";
