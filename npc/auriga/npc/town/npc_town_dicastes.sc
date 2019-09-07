@@ -12867,6 +12867,12 @@ dic_in01,354,37,3	script	ブラル	449,{
 			mes "また来てください。";
 			close;
 		}
+		if (getequipid2(.@pos) != 2844 ||
+			getequipcardid2(.@pos,0) != .@card[1] ||
+			getequipcardid2(.@pos,1) != .@card[2] ||
+			getequipcardid2(.@pos,2) != .@card[3] ||
+			getequipcardid2(.@pos,3) != .@card[4]
+		) close;
 		delitem 6304,.@cost;
 		delequip2 .@pos;
 		misceffect 101,"";
@@ -12971,6 +12977,12 @@ dic_in01,354,37,3	script	ブラル	449,{
 			mes "また来てください。";
 			close;
 		}
+		if (getequipid2(.@pos) != 2844 ||
+			getequipcardid2(.@pos,0) != .@card[1] ||
+			getequipcardid2(.@pos,1) != .@card[2] ||
+			getequipcardid2(.@pos,2) != .@card[3] ||
+			getequipcardid2(.@pos,3) != .@card[4]
+		) close;
 		// 未調査
 		delitem 6304,5;
 		delequip2 .@pos;
