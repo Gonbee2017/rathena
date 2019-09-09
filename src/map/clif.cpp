@@ -14920,8 +14920,10 @@ void clif_parse_AutoRevive(int fd, struct map_session_data *sd)
 			return;
 	}
 
-	if (sd->sc.data[SC_HELLPOWER]) //Cannot res while under the effect of SC_HELLPOWER.
-		return;
+	// [GonBee]
+	// ƒAƒCƒeƒ€‚É‚æ‚é‘h¶‚È‚çƒwƒ‹‚ÌŒ ”\ó‘Ô‚Å‚à‘h¶‚Å‚«‚éB
+	//if (sd->sc.data[SC_HELLPOWER]) //Cannot res while under the effect of SC_HELLPOWER.
+	//	return;
 
 	if (!status_revive(&sd->bl, hp, sp))
 		return;

@@ -6381,7 +6381,15 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			break;
 		{
 			int per = 0, sper = 0;
-			if (tsc && tsc->data[SC_HELLPOWER]) {
+
+			// [GonBee]
+			// ƒAƒCƒeƒ€‚É‚æ‚é‘h¶‚È‚çƒwƒ‹‚ÌŒ ”\ó‘Ô‚Å‚à‘h¶‚Å‚«‚éB
+			//if (tsc && tsc->data[SC_HELLPOWER]) {
+			if (tsc &&
+				tsc->data[SC_HELLPOWER] &&
+				sd->skillitem != ALL_RESURRECTION
+			) {
+
 				clif_skill_nodamage(src, bl, ALL_RESURRECTION, skill_lv, 1);
 				break;
 			}

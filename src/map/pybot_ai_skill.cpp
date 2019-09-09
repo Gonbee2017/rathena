@@ -202,7 +202,8 @@ AI_SKILL_USE_FUNC(ALL_RESURRECTION) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid, klv] (block_if* mem) -> bool {
 		return bot->can_reach_block(mem) &&
 			mem->is_dead() &&
-			!mem->reject_skills()->find(ALL_RESURRECTION);
+			!mem->reject_skills()->find(ALL_RESURRECTION) &&
+			!mem->sc()->data[SC_HELLPOWER];
 	});
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
@@ -556,6 +557,7 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 					!mem->is_hiding() &&
 					!mem->is_invincible() &&
 					!mem->reject_skills()->find(kid) &&
+					!mem->sc()->data[SC_HELLPOWER] &&
 					mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid) &&
 					mem->attacked_enemies().empty();
 			});
@@ -568,6 +570,7 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 						!mem->is_hiding() &&
 						!mem->is_invincible() &&
 						!mem->reject_skills()->find(kid) &&
+						!mem->sc()->data[SC_HELLPOWER] &&
 						mem->sc_rest(SC_DEVOTION) <= bot->get_skill_tail(kid);
 				});
 			}
