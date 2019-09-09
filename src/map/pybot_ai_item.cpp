@@ -231,9 +231,11 @@ AI_ITEM_USE_FUNC(VIT_DISH10) {
 AI_ITEM_USE_FUNC(WATER_OF_DARKNESS) {
 	if (bot->battle_mode() != BM_NONE) {
 		e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+		block_if* tar_ene = bot->target_enemy();
 		if (ele &&
 			*ele == ELE_DARK &&
-			bot->attack_element_ratio(bot->target_enemy(), ELE_DARK) > 0
+			tar_ene &&
+			bot->attack_element_ratio(tar_ene, ELE_DARK) > bot->weapon_attack_element_ratio(tar_ene)
 		) {
 			status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
 			if (!ea_sce ||
