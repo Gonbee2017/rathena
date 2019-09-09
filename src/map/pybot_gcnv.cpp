@@ -3683,6 +3683,8 @@ const std::unordered_map<
 	{std::type_index(typeid(const equip_pos))         , SQLDT_INT      },
 	{std::type_index(typeid(equip_pos_orders))        , SQLDT_INT      },
 	{std::type_index(typeid(const equip_pos_orders))  , SQLDT_INT      },
+	{std::type_index(typeid(quest_state))             , SQLDT_INT      },
+	{std::type_index(typeid(const quest_state))       , SQLDT_INT      },
 	{std::type_index(typeid(time_t))                  , SQLDT_UINT32   },
 	{std::type_index(typeid(const time_t))            , SQLDT_UINT32   },
 };

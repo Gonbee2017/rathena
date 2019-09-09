@@ -3683,6 +3683,34 @@ bot_login(
 			"WHERE `char_id` = ", construct<sql_param>(sd->status.char_id)
 		);
 
+		quest que{};
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("quest_id", que.quest_id), "`,"
+			" `", construct<sql_column>("state"   , que.state   ), "`,"
+			" `", construct<sql_column>("time"    , que.time    ), "`,"
+			" `", construct<sql_column>("count1"  , que.count[0]), "`,"
+			" `", construct<sql_column>("count2"  , que.count[1]), "`,"
+			" `", construct<sql_column>("count3"  , que.count[2]), "` "
+			"FROM `quest` "
+			"WHERE `char_id` = ", construct<sql_param>(sd->status.char_id), " "
+			"ORDER BY `state` ASC"
+		);
+		std::vector<quest> ques;
+		while (ses->next_row()) ques.push_back(que);
+		if (!ques.empty()) {
+			CREATE(sd->quest_log, struct quest, ques.size());
+			for (int i = 0; i < ques.size(); ++i) {
+				if (quest_search(ques[i].quest_id) == &quest_dummy) {
+					ShowError("bot_login: quest %d not found in DB.\n", ques[i].quest_id);
+					continue;
+				}
+				sd->quest_log[i] = ques[i];
+				++sd->num_quests;
+				if(ques[i].state != Q_COMPLETE)	++sd->avail_quests;
+			}
+		}
+
 		if (lea->sd()->status.party_id &&
 			sd->status.party_id != lea->sd()->status.party_id
 		) {

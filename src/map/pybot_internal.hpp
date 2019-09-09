@@ -31,6 +31,7 @@
 #include "pc_groups.hpp"
 #include "pet.hpp"
 #include "pybot_external.hpp"
+#include "quest.hpp"
 #include "skill.hpp"
 #include "status.hpp"
 #include "storage.hpp"
