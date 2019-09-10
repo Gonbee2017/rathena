@@ -3696,6 +3696,11 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 				if (!wa->ele) // Do not overwrite element from previous bonuses.
 					wa->ele = (sd->inventory.u.items_inventory[index].card[1]&0x0f);
 			}
+
+			// [GonBee]
+			// 両手武器の精錬はDefとMdefも増加する。
+			if (sd->inventory_data[index]->equip == EQP_ARMS) refinedef += refine_info[REFINE_TYPE_ARMOR].bonus[r - 1];
+
 		} else if(sd->inventory_data[index]->type == IT_ARMOR) {
 			int r;
 
@@ -5152,9 +5157,21 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		else
 			status->cri = status_calc_critical(bl, sc, b_status->cri + 3*(status->luk - b_status->luk));
 
-		/// After status_calc_critical so the bonus is applied despite if you have or not a sc bugreport:5240
-		if( bl->type == BL_PC && ((TBL_PC*)bl)->status.weapon == W_KATAR )
-			status->cri <<= 1;
+		// [GonBee]
+		// カタールに限らず、すべての近接両手武器でクリティカルを2倍にする。
+		///// After status_calc_critical so the bonus is applied despite if you have or not a sc bugreport:5240
+		//if( bl->type == BL_PC && ((TBL_PC*)bl)->status.weapon == W_KATAR )
+		//	status->cri <<= 1;
+		map_session_data* sd = BL_CAST(BL_PC, bl);
+		if (sd) {
+			int wep_ind = sd->equip_index[EQI_HAND_R];
+			if (wep_ind >= 0) {
+				item_data* idb = sd->inventory_data[wep_ind];
+				if (idb->equip == EQP_ARMS &&
+					idb->range <= 3
+				) status->cri <<= 1;
+			}
+		}
 	}
 
 	if(flag&SCB_FLEE2 && b_status->flee2) {

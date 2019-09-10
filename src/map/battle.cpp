@@ -2427,10 +2427,13 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 	if (skill_id == NPC_CRITICALSLASH || skill_id == LG_PINPOINTATTACK) //Always critical skills
 		return true;
 
-	if( !(wd->type&DMG_MULTI_HIT) && sstatus->cri && (!skill_id ||
-		skill_id == KN_AUTOCOUNTER || skill_id == SN_SHARPSHOOTING ||
-		skill_id == MA_SHARPSHOOTING || skill_id == NJ_KIRIKAGE))
-	{
+	// [GonBee]
+	// スキル攻撃でもクリティカルを有効にする。
+	//if( !(wd->type&DMG_MULTI_HIT) && sstatus->cri && (!skill_id ||
+	//	skill_id == KN_AUTOCOUNTER || skill_id == SN_SHARPSHOOTING ||
+	//	skill_id == MA_SHARPSHOOTING || skill_id == NJ_KIRIKAGE))
+	//{
+
 		short cri = sstatus->cri;
 
 		if (sd) {
@@ -2475,7 +2478,9 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 		if(tsd && tsd->bonus.critical_def)
 			cri = cri * ( 100 - tsd->bonus.critical_def ) / 100;
 		return (rnd()%1000 < cri);
-	}
+
+	//}
+
 	return 0;
 }
 
@@ -6299,6 +6304,11 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				sd->bonus.ignore_mdef_ele & ( 1 << tstatus->def_ele ) || sd->bonus.ignore_mdef_ele & ( 1 << ELE_ALL ) ||
 				sd->bonus.ignore_mdef_race & ( 1 << tstatus->race ) || sd->bonus.ignore_mdef_race & ( 1 << RC_ALL ) ||
 				sd->bonus.ignore_mdef_class & ( 1 << tstatus->class_ ) || sd->bonus.ignore_mdef_class & ( 1 << CLASS_ALL )
+
+				// [GonBee]
+				// 魔法スキル攻撃でもクリティカルを有効にする。
+				|| is_attack_critical(&ad, src, target, skill_id, skill_lv, true)
+
 			))
 				flag.imdef = 1;
 		}
