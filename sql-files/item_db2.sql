@@ -222,6 +222,7 @@ REPLACE INTO `item_db2` VALUES (4130, 'Scorpion_King_Card', 'ÉXÉRÅ[ÉsÉIÉìÉLÉìÉOÉ
 REPLACE INTO `item_db2` VALUES (4150, 'Goat_Card', 'ÉSÅ[ÉgÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 16, NULL, NULL, NULL, NULL, '{ bonus bDef,2; bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4200, 'Megalith_Card', 'ÉÅÉKÉäÉXÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, '{ bonus bMdef,7; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4240, 'Arclouse_Card', 'ÉAÉNÉâÉEÉXÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus bDef,2; bonus bMdef,3; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4268, 'Injustice_Card', 'ÉCÉìÉWÉÉÉXÉeÉBÉXÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ set .@lv,max(getskilllv("AS_SONICBLOW"),1); bonus3 bAutoSpell,"AS_SONICBLOW",.@lv,50; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4278, 'Gibbet_Card', 'ÉWÉrÉbÉgÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4287, 'Kapha_Card', 'âÕì∂ÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, '{ bonus bMdef,8; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4505, 'Scaraba_Card', 'ÉXÉJÉâÉoÉJÅ[Éh', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 136, NULL, NULL, NULL, NULL, '{ bonus bMatk,20; bonus bMaxSPrate,-1; }', '{}', '{}');
