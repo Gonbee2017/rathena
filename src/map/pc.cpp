@@ -7316,7 +7316,14 @@ void pc_skillup(struct map_session_data *sd,uint16 skill_id)
 			int lv, range, upgradable;
 			sd->status.skill[idx].lv++;
 			sd->status.skill_point--;
-			if( !skill_get_inf(skill_id) )
+
+			// [GonBee]
+			// 影分身でもステータスを再計算する。
+			//if( !skill_get_inf(skill_id) )
+			if (!skill_get_inf(skill_id) ||
+				skill_id == NJ_BUNSINJYUTSU
+			)
+
 				status_calc_pc(sd,SCO_NONE); // Only recalculate for passive skills.
 			else if( sd->status.skill_point == 0 && pc_is_taekwon_ranker(sd) )
 				pc_calc_skilltree(sd); // Required to grant all TK Ranker skills.

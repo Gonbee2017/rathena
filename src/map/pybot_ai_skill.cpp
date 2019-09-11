@@ -694,9 +694,7 @@ AI_SKILL_USE_FUNC(DC_WINKCHARM) {
 
 // アジャストメントを使う。
 AI_SKILL_USE_FUNC(GS_ADJUSTMENT) {
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		tar_ene->is_great(leader) &&
+	if (!bot->sc()->data[SC_MADNESSCANCEL] &&
 		bot->sc_rest(SC_ADJUSTMENT) <= bot->get_skill_tail(kid) &&
 		bot->collect_coins(2)
 	) bot->use_skill_self(kid, klv);
@@ -801,20 +799,9 @@ AI_SKILL_USE_FUNC(GS_PIERCINGSHOT) {
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
-// ガトリングフィーバー状態になる。
-AI_SKILL_USE_FUNC_T(GS_GATLINGFEVER, activate) {
-	if (!bot->sc()->data[SC_GATLINGFEVER] &&
-		bot->is_best_pos()
-	) bot->use_skill_self(kid, klv);
-}
-
-// ガトリングフィーバー状態を解除する。
-AI_SKILL_USE_FUNC_T(GS_GATLINGFEVER, deactivate) {
-	if (bot->sc()->data[SC_GATLINGFEVER] &&
-		(bot->battle_mode() == BM_NONE ||
-			!bot->is_best_pos()
-		)
-	) bot->use_skill_self(kid, klv);
+// ガトリングフィーバーを使用する。
+AI_SKILL_USE_FUNC(GS_GATLINGFEVER) {
+	if (bot->sc_rest(SC_GATLINGFEVER) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
 }
 
 // フリップザコインを使う。
@@ -853,24 +840,11 @@ AI_SKILL_USE_FUNC(GS_INCREASING) {
 	) bot->use_skill_self(kid, klv);
 }
 
-// マッドネスキャンセラー状態になる。
-AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, activate) {
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		!bot->sc()->data[SC_MADNESSCANCEL] &&
-		bot->is_best_pos() &&
-		tar_ene->fullpower(leader) &&
+// マッドネスキャンセラーを使用する。
+AI_SKILL_USE_FUNC(GS_MADNESSCANCEL) {
+	if (!bot->sc()->data[SC_ADJUSTMENT] &&
+		bot->sc_rest(SC_MADNESSCANCEL) <= bot->get_skill_tail(kid) &&
 		bot->collect_coins(1)
-	) bot->use_skill_self(kid, klv);
-}
-
-// マッドネスキャンセラー状態を解除する。
-AI_SKILL_USE_FUNC_T(GS_MADNESSCANCEL, deactivate) {
-	if (bot->sc()->data[SC_MADNESSCANCEL] &&
-		(bot->battle_mode() == BM_NONE ||
-			!bot->is_best_pos() ||
-			!bot->target_enemy()->fullpower(leader)
-		)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -3406,8 +3380,7 @@ AI_SKILL_USE_DEF(spirit)(
 ) {
 	return [mid] (ai_t* ai, e_skill kid, int klv) {
 		block_if* mem = pybot::find_if(ALL_RRANGE(ai->members), [mid, ai, kid] (block_if* mem) -> bool {
-			return mem != ai->bot &&
-				!mem->is_dead() &&
+			return !mem->is_dead() &&
 				!mem->is_hiding() &&
 				!mem->reject_skills()->find(kid) &&
 				mem->sc_rest(SC_SPIRIT) <= ai->bot->get_skill_tail(kid) &&

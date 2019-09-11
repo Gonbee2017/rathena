@@ -1438,7 +1438,11 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_CLOSECONFINE2]		|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_TINDER_BREAKER]		|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_TINDER_BREAKER2]		|= SCS_NOMOVE;
-	StatusChangeStateTable[SC_MADNESSCANCEL]		|= SCS_NOMOVE;
+
+	// [GonBee]
+	// マッドネスキャンセラーを使用しても移動できる。
+	//StatusChangeStateTable[SC_MADNESSCANCEL]		|= SCS_NOMOVE;
+
 	StatusChangeStateTable[SC_GRAVITATION]			|= SCS_NOMOVE|SCS_NOMOVECOND;
 	StatusChangeStateTable[SC_WHITEIMPRISON]		|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOMOVE;
@@ -3715,6 +3719,16 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 				if (!calculating) // Abort, run_script retriggered this. [Skotlex]
 					return 1;
 			}
+
+			// [GonBee]
+			// 靴の精錬はTaekwon KidとStar GladiatorならLv4武器の精錬と同じ効果がある。
+			if (r &&
+				sd->inventory_data[index]->equip == EQP_SHOES &&
+				(sd->status.class_ == JOB_TAEKWON ||
+					sd->status.class_ == JOB_STAR_GLADIATOR
+				) 
+			) base_status->rhw.atk2 += refine_info[4].bonus[r - 1] / 100;;
+
 		} else if( sd->inventory_data[index]->type == IT_SHADOWGEAR ) { // Shadow System
 			if (sd->inventory_data[index]->script && (pc_has_permission(sd,PC_PERM_USE_ALL_EQUIPMENT) || !itemdb_isNoEquip(sd->inventory_data[index],sd->bl.m))) {
 				run_script(sd->inventory_data[index]->script,0,sd->bl.id,0);
@@ -4116,6 +4130,11 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 
 	if (pc_checkskill(sd, SU_POWEROFLIFE) > 0)
 		base_status->flee += 20;
+
+	// [GonBee]
+	// 影分身はFleeが増加する。
+	if ((skill = pc_checkskill(sd, NJ_BUNSINJYUTSU)) > 0)
+		base_status->flee += skill * 3;
 
 // ----- EQUIPMENT-DEF CALCULATION -----
 
@@ -6930,8 +6949,12 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 				val = max( val, 75 );
 			if( sc->data[SC_SLOWDOWN] ) // Slow Potion
 				val = max( val, sc->data[SC_SLOWDOWN]->val1 );
-			if( sc->data[SC_GATLINGFEVER] )
-				val = max( val, 100 );
+
+			// [GonBee]
+			// ガトリングフィーバーを使用しても移動速度が低下しない。
+			//if( sc->data[SC_GATLINGFEVER] )
+			//	val = max( val, 100 );
+
 			if( sc->data[SC_SUITON] )
 				val = max( val, sc->data[SC_SUITON]->val3 );
 			if( sc->data[SC_SWOO] )
