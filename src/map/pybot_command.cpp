@@ -3175,13 +3175,14 @@ bot_limit(
 	static const std::string SCH_GLD     = "sch_gld";
 	static const std::string ARU_GLD     = "aru_gld";
 
-	int lim = pybot::find_map_data(JOB_BOT_LIMITS, e_job(sd->status.class_), 0);
+	int job_lim = pybot::find_map_data(JOB_BOT_LIMITS, e_job(sd->status.class_), 0);
+	int lim = job_lim;
 	if (pc_is_maxbaselv(sd)) ++lim;
 	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()))
-	) ++lim;
+	) lim += 5 - job_lim;
 	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + SCH_GLD   ).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()))
 	) ++lim;
