@@ -3721,12 +3721,12 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			}
 
 			// [GonBee]
-			// ŒC‚Ì¸˜B‚ÍTaekwon Kid‚ÆStar Gladiator‚È‚çLv4•Ší‚Ì¸˜B‚Æ“¯‚¶Œø‰Ê‚ª‚ ‚éB
+			// ŒC‚Ì¸˜B‚Í‘fŽè‚ÌTaekwon Kid‚ÆStar Gladiator‚È‚çLv4•Ší‚Ì¸˜B‚Æ“¯‚¶Œø‰Ê‚ª‚ ‚éB
 			if (r &&
 				sd->inventory_data[index]->equip == EQP_SHOES &&
 				(sd->status.class_ == JOB_TAEKWON ||
 					sd->status.class_ == JOB_STAR_GLADIATOR
-				) 
+				) && sd->equip_index[EQI_HAND_R] < 0
 			) base_status->rhw.atk2 += refine_info[4].bonus[r - 1] / 100;;
 
 		} else if( sd->inventory_data[index]->type == IT_SHADOWGEAR ) { // Shadow System
