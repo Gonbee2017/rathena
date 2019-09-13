@@ -188,8 +188,9 @@ AI_SKILL_USE_FUNC(AL_PNEUMA) {
 	) {
 		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
 			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
-				ene->has_long_weapon_skill() ||
-				ene->is_long_range_attacker();
+				(ene->has_long_weapon_skill() ||
+					ene->is_long_range_attacker()
+				);
 		});
 		if (ene &&
 			!skill_check_unit_range(bot->bl(), bot->bl()->x, bot->bl()->y, kid, klv)
