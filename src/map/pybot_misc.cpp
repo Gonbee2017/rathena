@@ -1461,6 +1461,7 @@ sift_block_path(
 	block_pred inn_pre // “à•”‚ÌqŒêB
 ) {
 	auto ids = initialize<std::unordered_set<int>>();
+	ids->insert(sk_tar->bl()->id);
 	yield_bl_func add_id = [ids] (block_list* bl) -> int {
 		ids->insert(bl->id);
 		return 1;
@@ -1493,7 +1494,6 @@ sift_block_path(
 			BL_CHAR,
 			&add_id
 		);
-	if (ids->empty()) ids->insert(sk_tar->bl()->id);
 	return [inn_pre, ids] (block_if* blo) -> bool {
 		return KEY_EXISTS(*ids, blo->bl()->id) &&
 			inn_pre(blo);
