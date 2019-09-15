@@ -1902,7 +1902,7 @@ AI_SKILL_USE_FUNC(PF_FOGWALL) {
 // 生命力変換を使う。
 AI_SKILL_USE_FUNC(PF_HPCONVERSION) {
 	if (bot->check_hp(2) &&
-		!check_quad_ratio(bot->sp(), bot->max_sp(), 2)
+		!check_quad_ratio(bot->sp(), bot->max_sp(), 3)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1927,10 +1927,8 @@ AI_SKILL_USE_FUNC(PF_MINDBREAKER) {
 
 // ソウルチェンジを使う。
 AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
-	if (check_quad_ratio(bot->sp(), bot->max_sp(), 2) &&
-		(bot->party_id() ||
-			bot->guild_id()
-		)
+	if (bot->party_id() ||
+		bot->guild_id()
 	) {
 		block_if* bat = pybot::find_if(ALL_RRANGE(battlers), [this, kid] (block_if* bat) -> bool {
 			return bat != bot &&
@@ -1944,7 +1942,11 @@ AI_SKILL_USE_FUNC(PF_SOULCHANGE) {
 				!bat->is_invincible() &&
 				!bat->is_magic_immune() &&
 				!bat->reject_skills()->find(kid) &&
-				bat->check_supply_sp();
+				bat->check_supply_sp() &&
+				bot->sp() > bat->sp() &&
+				(check_quad_ratio(bot->sp(), bot->max_sp(), 3) ||
+					bot->sp() >= bat->max_sp()
+				);
 		});
 		if (bat) bot->use_skill_block(kid, klv, bat);
 	}
