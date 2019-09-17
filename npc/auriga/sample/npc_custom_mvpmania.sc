@@ -67,7 +67,7 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 		for (set .@i, 0; .@i < .@mids_siz; ++.@i) {
 			if (!.@ind) mes "------ MVPリスト (" + (.@i / 5 + 1) + ") ------"; 
 			set .@acq, pchasacquiredmvp(.@mids[.@i]);
-			if (!.@acq) set .@not_all, 1;
+			if (.@acq) ++.@j;
 			mes .@cols$[.@acq] + strmobinfo(2, .@mids[.@i]) + " " + .@vals$[.@acq] + "^000000";
 			set .@ind, .@ind + 1;
 			if (.@ind >= 5 ||
@@ -77,8 +77,12 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 				set .@ind, 0;
 			}
 		}
-		if (!.@not_all) {
-			if (.@rou) {
+		if (.@j >= 40) {
+			if (.@j < .@mids_siz) {
+				mes "[コレット]";
+				mes "もうかなり獲得したみたいだね。";
+				next;
+			} else if (.@rou) {
 				mes "[コレット]";
 				mes "えっ、また全部倒したの？！";
 				mes "さすが～、もう楽勝じゃん♪";
@@ -102,7 +106,7 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			
 			set .@pla_rid, getcharid(3);
 			mes "[コレット]";
-			mes "今回の^4040FFオールMVP^000000達成の報酬として";
+			mes "たくさん獲得した見返りに";
 			mes "メンバーのうちの誰か^FF40401人だけ^000000を";
 			mes "^4040FF強化^000000することができるよ。";
 			next;
@@ -160,8 +164,10 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			}
 			
 			// アトミック
-			if(checkitemblank() < 6 ||
-				(MaxWeight - Weight) < .rews_wei
+			if(.@j == .@mids_siz &&
+				(checkitemblank() < 6 ||
+					(MaxWeight - Weight) < .rews_wei
+				)
 			) {
 				mes "[コレット]";
 				mes "……って荷物が多すぎてお祝いを";
@@ -169,62 +175,69 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 				mes "少し倉庫に預けてきてね。";
 				close;
 			}
-			if (attachrid(.@mem_rids[.@mem_ind])) {
+			if (!MVP_MANIA_ALMOST &&
+				attachrid(.@mem_rids[.@mem_ind])
+			) {
 				if (!MVP_MANIA_ENHANCE) {
 					set MVP_MANIA_ENHANCE, 1;
 					addstatuspoint 200;
 					addskillpoint 10;
-					attachrid .@pla_rid;
-					advancemvpround;
-					++.@rou;
-					for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
-						getitem .rews[.@i], 1;
-					
-					specialeffect2 EF_POK_JAP;
-					emotion ET_CONGRATULATION;
-					soundeffect "complete.wav", 0;
-					announce "[ " + strcharinfo(0) + " ]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
+					specialeffect2 EF_ENHANCE;
+				}
+				attachrid .@pla_rid;
+				set MVP_MANIA_ALMOST, 1;
+			}
+			if (.@j == .@mids_siz) {
+				advancemvpround;
+				set MVP_MANIA_ALMOST, 0;
+				++.@rou;
+				for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
+					getitem .rews[.@i], 1;
+				
+				specialeffect2 EF_POK_JAP;
+				emotion ET_CONGRATULATION;
+				soundeffect "complete.wav", 0;
+				announce "[ " + strcharinfo(0) + " ]さんが" + .@rou + "回目のオールMVPを達成しました。", 0;
+				mes "[コレット]";
+				mes "^4040FFオールMVP^000000、おめでとう！";
+				mes "^4040FF" + strcharinfo(0) + "^000000さんの功績は";
+				mes "バッチリ記録しとくからね！";
+				next;
+				if (.@rou == 1) {
 					mes "[コレット]";
-					mes "^4040FFオールMVP^000000、おめでとう！";
-					mes "^4040FF" + strcharinfo(0) + "^000000さんの功績は";
-					mes "バッチリ記録しとくからね！";
-					next;
-					if (.@rou == 1) {
-						mes "[コレット]";
-						mes "これで全部獲得したわけだけど";
-						mes "まだ終わりじゃないよ。";
-						next;
-						mes "[コレット]";
-						mes "MVPが好きで好きでたまらない。";
-						mes "そんなあなたならきっと";
-						mes "1周じゃ物足りないはず……";
-						next;
-						mes "[コレット]";
-						mes "というわけで、お望みなら";
-						mes "何周でもできちゃいます。";
-						next;
-						emotion ET_SMILE;
-						mes "[コレット]";
-						mes "MVPマニアの道はどこまでも";
-						mes "果てしなく続いていくのよ！";
-						mes "なーんてね、ウフフッ♪";
-						next;
-					}
-					mes "[コレット]";
-					mes "とりあえず次の周回に向けて";
-					mes "リストはクリアしておくね。";
+					mes "これで全部獲得したわけだけど";
+					mes "まだ終わりじゃないよ。";
 					next;
 					mes "[コレット]";
-					mes "あと私から今回のお祝いに";
-					mes "アイテムを^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
+					mes "MVPが好きで好きでたまらない。";
+					mes "そんなあなたならきっと";
+					mes "1周じゃ物足りないはず……";
+					next;
+					mes "[コレット]";
+					mes "というわけで、お望みなら";
+					mes "何周でもできちゃいます。";
 					next;
 					emotion ET_SMILE;
 					mes "[コレット]";
-					mes "なんでも冒険者なら誰もがよだれを";
-					mes "垂らす神装備なんだって。";
-					mes "よかったら使ってね。";
+					mes "MVPマニアの道はどこまでも";
+					mes "果てしなく続いていくのよ！";
+					mes "なーんてね、ウフフッ♪";
 					next;
-				} else attachrid .@pla_rid;
+				}
+				mes "[コレット]";
+				mes "とりあえず次の周回に向けて";
+				mes "リストはクリアしておくね。";
+				next;
+				mes "[コレット]";
+				mes "あと私から今回のお祝いに";
+				mes "アイテムを^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
+				next;
+				emotion ET_SMILE;
+				mes "[コレット]";
+				mes "なんでも冒険者なら誰もがよだれを";
+				mes "垂らして欲しがる神装備なんだって。";
+				mes "よかったら使ってね。";
+				next;
 			}
 		}
 	}
