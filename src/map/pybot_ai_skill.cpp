@@ -1011,8 +1011,6 @@ AI_SKILL_USE_FUNC(HT_SANDMAN) {
 // ガンバンテインを使う。
 AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 	static const skill_unit_key_map KEYS = {
-		SKILL_UNIT_KEY(AL_PNEUMA),
-		SKILL_UNIT_KEY(MG_SAFETYWALL),
 		SKILL_UNIT_KEY(NPC_EVILLAND),
 		SKILL_UNIT_KEY(PF_FOGWALL),
 		SKILL_UNIT_KEY(SA_LANDPROTECTOR),
@@ -1021,7 +1019,10 @@ AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
 		tar_ene->is_great(leader) &&
 		!tar_ene->is_walking() &&
-		skill_unit_exists_block(tar_ene, KEYS)
+		(tar_ene->sc()->data[SC_PNEUMA] ||
+			tar_ene->sc()->data[SC_SAFETYWALL] ||
+			skill_unit_exists_block(tar_ene, KEYS)
+		)
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 }
 

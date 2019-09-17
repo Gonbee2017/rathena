@@ -78,87 +78,90 @@ prontera,267,48,1	script	MVPマニア::MVPMania	862,{
 			}
 		}
 		if (.@j >= 40) {
-			if (.@j < .@mids_siz) {
+			if (.@j == .@mids_siz) {
+				if (.@rou) {
+					mes "[コレット]";
+					mes "えっ、また全部倒したの？！";
+					mes "さすが～、もう楽勝じゃん♪";
+					next;
+					emotion ET_SMILE;
+					mes "[コレット]";
+					mes "こんなにMVPを獲得するなんて";
+					mes "あなたも立派なMVPマニアだね。";
+					next;
+				} else {
+					mes "[コレット]";
+					mes "わっ、すごーい！";
+					mes "全部獲得してるじゃん！";
+					next;
+					emotion ET_THROB;
+					mes "[コレット]";
+					mes "あなたとっても強かったのね。";
+					mes "ちょっと見直しちゃった……";
+					next;
+				}
+			} else if (!MVP_MANIA_ALMOST) {
 				mes "[コレット]";
 				mes "もうかなり獲得したみたいだね。";
 				next;
-			} else if (.@rou) {
-				mes "[コレット]";
-				mes "えっ、また全部倒したの？！";
-				mes "さすが～、もう楽勝じゃん♪";
-				next;
-				emotion ET_SMILE;
-				mes "[コレット]";
-				mes "こんなにMVPを獲得するなんて";
-				mes "あなたも立派なMVPマニアだね。";
-				next;
-			} else {
-				mes "[コレット]";
-				mes "わっ、すごーい！";
-				mes "全部獲得してるじゃん！";
-				next;
-				emotion ET_THROB;
-				mes "[コレット]";
-				mes "あなたとっても強かったのね。";
-				mes "ちょっと見直しちゃった……";
-				next;
 			}
-			
-			set .@pla_rid, getcharid(3);
-			mes "[コレット]";
-			mes "たくさん獲得した見返りに";
-			mes "メンバーのうちの誰か^FF40401人だけ^000000を";
-			mes "^4040FF強化^000000することができるよ。";
-			next;
-			mes "[コレット]";
-			mes "メンバーの^4040FF強化^000000を行うと";
-			mes "まずステータスポイントを";
-			mes "^FF4040200ポイント^000000貰えるよ。";
-			mes "一気にパワーアップだね。";
-			next;
-			mes "[コレット]";
-			mes "さらにスキルポイントを";
-			mes "^FF404010ポイント^000000も貰えちゃう。";
-			mes "これで足りなかったスキルを";
-			mes "ゲットできるかも？";
-			next;
-			set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
-			for (set .@i, 0; .@i < .@mem_siz; ++.@i)
-				set .@mem_lis$[.@i], "^4040FF" + .@mem_nams$[.@i] + "^000000";
-			set .@mem_lis$[.@i], "やめる";
-			while (1) {
+			if (!MVP_MANIA_ALMOST) {
+				set .@pla_rid, getcharid(3);
 				mes "[コレット]";
-				mes "^4040FF強化^000000はとても大事なことだから";
-				mes "よく考えて慎重に選んでね。";
-				mes "どのメンバーを^4040FF強化^000000するの？";
+				mes "たくさん獲得した見返りに";
+				mes "メンバーのうちの誰か^FF40401人だけ^000000を";
+				mes "^4040FF強化^000000することができるよ。";
 				next;
-				set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
-				if (.@mem_ind >= .@mem_siz) {
+				mes "[コレット]";
+				mes "メンバーの^4040FF強化^000000を行うと";
+				mes "まずステータスポイントを";
+				mes "^FF4040200ポイント^000000貰えるよ。";
+				mes "一気にパワーアップだね。";
+				next;
+				mes "[コレット]";
+				mes "さらにスキルポイントを";
+				mes "^FF404010ポイント^000000も貰えちゃう。";
+				mes "これで足りなかったスキルを";
+				mes "ゲットできるかも？";
+				next;
+				set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
+				for (set .@i, 0; .@i < .@mem_siz; ++.@i)
+					set .@mem_lis$[.@i], "^4040FF" + .@mem_nams$[.@i] + "^000000";
+				set .@mem_lis$[.@i], "やめる";
+				while (1) {
 					mes "[コレット]";
-					mes "じっくり考えたほうがいいよ。";
-					mes "決まったらまた声をかけてね。";
-					close;
-				}
-				if (attachrid(.@mem_rids[.@mem_ind])) {
-					set .@mem_enh, MVP_MANIA_ENHANCE;
-					attachrid .@pla_rid;
-					set .@mem_cla, .@mem_clas[.@mem_ind];
-					if (.@mem_enh) {
+					mes "^4040FF強化^000000はとても大事なことだから";
+					mes "よく考えて慎重に選んでね。";
+					mes "どのメンバーを^4040FF強化^000000するの？";
+					next;
+					set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
+					if (.@mem_ind >= .@mem_siz) {
 						mes "[コレット]";
-						mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
-						mes "もう^FF4040強化済み^000000だからダメだよ。";
-						next;
-					} else if (!canenhance(.@mem_cla)) {
-						mes "[コレット]";
-						mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
-						mes "^FF4040強化できない職業^000000だからダメだよ。";
-						next;
-					} else {
-						mes "[コレット]";
-						mes "本当に^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんを";
-						mes "^4040FF強化^000000していいの？";
-						next;
-						if (select("はい", "いいえ") == 1) break;
+						mes "じっくり考えたほうがいいよ。";
+						mes "決まったらまた声をかけてね。";
+						close;
+					}
+					if (attachrid(.@mem_rids[.@mem_ind])) {
+						set .@mem_enh, MVP_MANIA_ENHANCE;
+						attachrid .@pla_rid;
+						set .@mem_cla, .@mem_clas[.@mem_ind];
+						if (.@mem_enh) {
+							mes "[コレット]";
+							mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
+							mes "もう^FF4040強化済み^000000だからダメだよ。";
+							next;
+						} else if (!canenhance(.@mem_cla)) {
+							mes "[コレット]";
+							mes "^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんは";
+							mes "^FF4040強化できない職業^000000だからダメだよ。";
+							next;
+						} else {
+							mes "[コレット]";
+							mes "本当に^4040FF" + .@mem_nams$[.@mem_ind] + "^000000さんを";
+							mes "^4040FF強化^000000していいの？";
+							next;
+							if (select("はい", "いいえ") == 1) break;
+						}
 					}
 				}
 			}
