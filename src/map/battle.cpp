@@ -5432,6 +5432,14 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 		int i = 0;
 
 		battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
+
+		// [GonBee]
+		// カードの効果はダメージではなく武器Atkに適用する。
+		int nk = battle_skill_get_damage_properties(skill_id, wd.miscflag);
+		wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, int64(sd->base_status.rhw.atk) + int64(sd->base_status.rhw.atk2), 2, wd.flag);
+		if (is_attack_left_handed(src, skill_id))
+			wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, int64(sd->base_status.lhw.atk) + int64(sd->base_status.lhw.atk2), 3, wd.flag);
+
 		ratio = battle_calc_attack_skill_ratio(&wd, src, target, skill_id, skill_lv); // skill level ratios
 
 		ATK_RATE(wd.damage, wd.damage2, ratio);
@@ -5585,11 +5593,15 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 						wd.damage2 = wd.damage2 * (100 + sd->bonus.long_attack_atk_rate) / 100;
 				}
 				break;
-			default:
-				wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage, 2, wd.flag);
-				if( is_attack_left_handed(src, skill_id ))
-					wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage2, 3, wd.flag);
-				break;
+
+			// [GonBee]
+			// カードの効果はダメージではなく武器Atkに適用する。
+			//default:
+			//	wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage, 2, wd.flag);
+			//	if( is_attack_left_handed(src, skill_id ))
+			//		wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage2, 3, wd.flag);
+			//	break;
+
 		}
 #endif
 	}
