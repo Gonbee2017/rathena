@@ -11947,8 +11947,16 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			}
 			break;
 		case SC_BOSSMAPINFO:
-			if (sd)
-				clif_bossmapinfo(sd, map_id2boss(sce->val1), BOSS_INFO_ALIVE_WITHMSG); // First Message
+
+			// [GonBee]
+			// ボスモンスターが存在しない場合は何もメッセージを送らない。
+			//if (sd)
+			//	clif_bossmapinfo(sd, map_id2boss(sce->val1), BOSS_INFO_ALIVE_WITHMSG); // First Message
+			if (sd) {
+				mob_data* md = map_id2boss(sce->val1);
+				if (md) clif_bossmapinfo(sd, md, BOSS_INFO_ALIVE_WITHMSG);
+			}
+
 			break;
 		case SC_MERC_HPUP:
 			status_percent_heal(bl, 100, 0); // Recover Full HP

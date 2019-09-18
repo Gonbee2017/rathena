@@ -1156,6 +1156,7 @@ uint8 pc_isequip(struct map_session_data *sd,int n)
  *------------------------------------------*/
 bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_time, int group_id, struct mmo_charstatus *st, bool changing_mapservers)
 {
+CS_ENTER;
 	int i;
 	t_tick tick = gettick();
 	uint32 ip = session[sd->fd]->client_addr;

@@ -2015,7 +2015,12 @@ static int battle_calc_base_weapon_attack(struct block_list *src, struct status_
  *	Initial refactoring by Baalberith
  *	Refined and optimized by helvetica
  */
-static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag)
+
+// [GonBee]
+// ベースAtkを加算するかを制御する。
+//static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag)
+static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag, bool add_batk = true)
+
 {
 	unsigned int atkmin = 0, atkmax = 0;
 	short type = 0;
@@ -2111,7 +2116,12 @@ static int64 battle_calc_base_damage(struct block_list *src, struct status_data 
 	//Finally, add baseatk
 	if(flag&4)
 		damage += status->matk_min;
-	else
+
+	// [GonBee]
+	// ベースAtkを加算するかどうかを制御する。
+	//else
+	else if (add_batk)
+
 		damage += status->batk;
 
 	if (sd)
@@ -3104,7 +3114,12 @@ static void battle_calc_damage_parts(struct Damage* wd, struct block_list *src,s
  *	Initial refactoring by Baalberith
  *	Refined and optimized by helvetica
  */
-static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv)
+
+// [GonBee]
+// ベースAtkを加算するかどうかを制御する。
+//static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv)
+static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv, bool add_batk = true)
+
 {
 	struct status_change *sc = status_get_sc(src);
 	struct status_data *sstatus = status_get_status_data(src);
@@ -3289,9 +3304,16 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 						break;
 				}
 			}
-			wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i);
+
+			// [GonBee]
+			// ベースAtkを加算するかどうかを制御する。
+			//wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i);
+			//if (is_attack_left_handed(src, skill_id))
+			//	wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i);
+			wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i, add_batk);
 			if (is_attack_left_handed(src, skill_id))
-				wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i);
+				wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i, add_batk);
+
 #endif
 			if (nk&NK_SPLASHSPLIT){ // Divide ATK among targets
 				if(wd->miscflag > 0) {
@@ -5435,10 +5457,12 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 
 		// [GonBee]
 		// カードの効果はダメージではなく武器Atkに適用する。
+		Damage wd2 = wd;
+		battle_calc_skill_base_damage(&wd2, src, target, skill_id, skill_lv, false);
 		int nk = battle_skill_get_damage_properties(skill_id, wd.miscflag);
-		wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, int64(sd->base_status.rhw.atk) + int64(sd->base_status.rhw.atk2), 2, wd.flag);
+		wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, wd2.damage, 2, wd.flag);
 		if (is_attack_left_handed(src, skill_id))
-			wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, int64(sd->base_status.lhw.atk) + int64(sd->base_status.lhw.atk2), 3, wd.flag);
+			wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, wd2.damage2, 3, wd.flag);
 
 		ratio = battle_calc_attack_skill_ratio(&wd, src, target, skill_id, skill_lv); // skill level ratios
 
