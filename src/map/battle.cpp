@@ -2017,7 +2017,7 @@ static int battle_calc_base_weapon_attack(struct block_list *src, struct status_
  */
 
 // [GonBee]
-// ベースAtkを加算するかを制御する。
+// ベースAtkを加算するかどうかを選べるようにする。
 //static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag)
 static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag, bool add_batk = true)
 
@@ -2118,7 +2118,7 @@ static int64 battle_calc_base_damage(struct block_list *src, struct status_data 
 		damage += status->matk_min;
 
 	// [GonBee]
-	// ベースAtkを加算するかどうかを制御する。
+	// ベースAtkを加算するかどうかを選べるようにする。
 	//else
 	else if (add_batk)
 
@@ -3116,7 +3116,7 @@ static void battle_calc_damage_parts(struct Damage* wd, struct block_list *src,s
  */
 
 // [GonBee]
-// ベースAtkを加算するかどうかを制御する。
+// ベースAtkを加算するかどうかを選べるようにする。
 //static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv)
 static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv, bool add_batk = true)
 
@@ -3306,7 +3306,7 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 			}
 
 			// [GonBee]
-			// ベースAtkを加算するかどうかを制御する。
+			// ベースAtkを加算するかどうかを選べるようにする。
 			//wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i);
 			//if (is_attack_left_handed(src, skill_id))
 			//	wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i);
@@ -5453,11 +5453,11 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 		int64 ratio = 0;
 		int i = 0;
 
-		battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
-
 		// [GonBee]
 		// カードの効果はダメージではなく武器Atkに適用する。
+		//battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
 		Damage wd2 = wd;
+		battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
 		battle_calc_skill_base_damage(&wd2, src, target, skill_id, skill_lv, false);
 		int nk = battle_skill_get_damage_properties(skill_id, wd.miscflag);
 		wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, wd2.damage, 2, wd.flag);
