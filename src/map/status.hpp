@@ -865,6 +865,10 @@ enum sc_type : int16 {
 	SC_EXTREMITYFIST2, //! NOTE: This SC should be right before SC_MAX, so it doesn't disturb if RENEWAL is disabled
 #endif
 
+	// [GonBee]
+	// qç‰Ìó‘Ô‚ğ’Ç‰ÁB
+	SC_LULLABY,
+
 	SC_MAX, //Automatically updated max, used in for's to check we are within bounds.
 };
 

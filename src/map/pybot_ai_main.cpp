@@ -763,8 +763,7 @@ void ai_t::bot_play_skill() {
 		!bot->is_walking() &&
 		!bot->sc()->cant.cast &&
 		bot->can_act() &&
-		!bot->is_paralysis() &&
-		!bot->sc()->data[SC_DANCING]
+		!bot->is_paralysis()
 	) {
 		e_skill kid = e_skill(0);
 		if (bot->battle_mode() != BM_NONE) {
@@ -813,19 +812,22 @@ void ai_t::bot_play_skill() {
 			bot->load_play_skill(MM_SIZE + tar_ene->size_(), &kid);
 			bot->load_play_skill(MM_BASE, &kid);
 		} else bot->load_play_skill(MM_REST, &kid);
-		if (kid) {
+		if (kid &&
+			!bot->sc()->data[SC_DANCING]
+		) {
 			int klv = battler->check_skill(kid);
+			e_skill dan_kid = e_skill(bot->sd()->skill_id_dance);
+			int dan_dur = 0;
+			if (dan_kid) dan_dur = skill_get_time2(dan_kid, bot->sd()->skill_lv_dance);
 			if (klv &&
 				battler->can_use_skill(kid, klv) &&
-				(!(skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL) ||
-					(bot->battle_mode() != BM_NONE &&
-						(bot->distance_policy_value() == DPV_AWAY ||
-							bot->check_attack(bot->target_enemy())
-						)
-					)
+				(bot->battle_mode() == BM_NONE ||
+					bot->check_attack(bot->target_enemy())
 				) && (skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL ||
-					(bot->check_skill_used_tick(BD_ADAPTATION, 20 * 1000) &&
-						bot->check_skill_used_tick(BD_ENCORE, 20 * 1000)
+					!(skill_get_unit_flag(kid) & UF_NOMOB) ||
+					dan_kid != kid ||
+					(bot->check_skill_used_tick(BD_ADAPTATION, dan_dur) &&
+						bot->check_skill_used_tick(BD_ENCORE, dan_dur)
 					)
 				)
 			) {
@@ -833,6 +835,7 @@ void ai_t::bot_play_skill() {
 				bot->use_skill_self(kid, klv);
 			}
 		}
+		bot->want_to_play() = kid;
 	}
 }
 

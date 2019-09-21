@@ -67,6 +67,7 @@ bool bot_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_emotion_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_reloaded_equipset_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
+e_skill& bot_if::want_to_play() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 std::vector<block_if*>& enemy_if::attacked_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int enemy_if::away_distance(block_if* lea) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -633,6 +634,11 @@ bot_impl::teleport(
 		done = true;
 	}
 	return done;
+}
+
+// Botが演奏したいスキル。
+e_skill& bot_impl::want_to_play() {
+	return want_to_play_;
 }
 
 // クライアントにおいて2つのブロックリストが距離範囲内かを判定する。

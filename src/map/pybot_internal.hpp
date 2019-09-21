@@ -1263,6 +1263,7 @@ struct bot_if {
 	virtual t_tick& last_emotion_tick();
 	virtual t_tick& last_reloaded_equipset_tick();
 	virtual void respawn();
+	virtual e_skill& want_to_play();
 };
 
 // 敵モンスターのインターフェイス。
@@ -1570,9 +1571,10 @@ struct battler_impl : virtual block_if {
 
 // Botの実装。
 struct bot_impl : virtual block_if {
-	int bot_index_;                         // Botのインデックス。
-	t_tick last_emotion_tick_;              // 最後にエモーションを表示したチック。
-	t_tick last_reloaded_equipset_tick_;    // 最後に武具一式をリロードしたチック。
+	int bot_index_;                      // Botのインデックス。
+	t_tick last_emotion_tick_;           // 最後にエモーションを表示したチック。
+	t_tick last_reloaded_equipset_tick_; // 最後に武具一式をリロードしたチック。
+	e_skill want_to_play_;               // 演奏したいスキル。
 
 	virtual int& bot_index() override;
 	virtual bool is_sit() override;
@@ -1580,6 +1582,7 @@ struct bot_impl : virtual block_if {
 	virtual t_tick& last_reloaded_equipset_tick() override;
 	virtual void respawn() override;
 	virtual bool teleport(block_list* bl_) override;
+	virtual e_skill& want_to_play() override;
 };
 
 // クライアントの実装。

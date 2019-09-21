@@ -11,6 +11,9 @@
 
 #include "map.hpp" // struct block_list
 
+// [GonBee]
+#include <functional>
+
 enum damage_lv : uint8;
 enum sc_type : int16;
 enum send_target : uint8;
@@ -281,6 +284,14 @@ struct skill_unit_group {
 	uint16 skill_id, /// Skill ID
 		skill_lv; /// Skill level
 	int val1, val2, val3; /// Values
+
+	// [GonBee]
+	// ƒTƒuó‘Ô‚ğ’Ç‰ÁB
+	struct {
+		sc_type type;
+		int val1, val2, val3;
+	} sub;
+
 	char *valstr; /// String value, used for HT_TALKIEBOX & RG_GRAFFITI
 	int unit_id; /// Unit ID (for client effect)
 	int group_id; /// Skill Group ID
@@ -457,7 +468,11 @@ int skill_break_equip(struct block_list *src,struct block_list *bl, unsigned sho
 int skill_strip_equip(struct block_list *src,struct block_list *bl, unsigned short where, int rate, int lv, int time);
 // Skills unit
 struct skill_unit_group *skill_id2group(int group_id);
-struct skill_unit_group *skill_unitsetting(struct block_list* src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag);
+
+// [GonBee]
+//struct skill_unit_group *skill_unitsetting(struct block_list* src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag);
+struct skill_unit_group *skill_unitsetting(struct block_list* src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag, std::function<void(int,int,int)> yield = nullptr);
+
 struct skill_unit *skill_initunit (struct skill_unit_group *group, int idx, int x, int y, int val1, int val2, bool hidden);
 int skill_delunit(struct skill_unit *unit);
 struct skill_unit_group *skill_initunitgroup(struct block_list* src, int count, uint16 skill_id, uint16 skill_lv, int unit_id, t_tick limit, int interval);
@@ -2244,6 +2259,7 @@ int skill_check_unit_range(struct block_list *bl, int x, int y, uint16 skill_id,
 int skill_check_unit_range2 (struct block_list *bl, int x, int y, uint16 skill_id, uint16 skill_lv, bool isNearNPC);
 struct s_skill_unit_layout *skill_get_unit_layout(uint16 skill_id, uint16 skill_lv, struct block_list* src, int x, int y);
 int skill_get_unit_range( uint16 skill_id, uint16 skill_lv );
+int skill_get_unit_flag( uint16 skill_id );
 int skill_unit_move_sub(struct block_list* bl, va_list ap);
 
 #endif /* SKILL_HPP */

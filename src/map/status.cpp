@@ -78,6 +78,18 @@ int StatusRelevantBLTypes[EFST_MAX];
 unsigned int StatusChangeStateTable[SC_MAX];
 unsigned int StatusDisplayType[SC_MAX];
 
+// [GonBee]
+static const std::unordered_map<e_skill,std::array<e_skill,2>> SOLO_DANCES = {
+	{BD_LULLABY        , {DC_HUMMING      , BA_WHISTLE      }},
+	{BD_INTOABYSS      , {DC_HUMMING      , BA_WHISTLE      }},
+	{BD_ROKISWEIL      , {DC_DONTFORGETME , BA_ASSASSINCROSS}},
+	{BD_ETERNALCHAOS   , {DC_DONTFORGETME , BA_ASSASSINCROSS}},
+	{BD_SIEGFRIED      , {DC_FORTUNEKISS  , BA_POEMBRAGI    }},
+	{BD_RICHMANKIM     , {DC_FORTUNEKISS  , BA_POEMBRAGI    }},
+	{BD_DRUMBATTLEFIELD, {DC_SERVICEFORYOU, BA_APPLEIDUN    }},
+	{BD_RINGNIBELUNGEN , {DC_SERVICEFORYOU, BA_APPLEIDUN    }},
+};
+
 static unsigned short status_calc_str(struct block_list *,struct status_change *,int);
 static unsigned short status_calc_agi(struct block_list *,struct status_change *,int);
 static unsigned short status_calc_vit(struct block_list *,struct status_change *,int);
@@ -381,6 +393,7 @@ void initChangeTables(void)
 	add_sc( SA_REVERSEORCISH	, SC_ORCISH		);
 	add_sc( SA_COMA			, SC_COMA		);
 	set_sc( BD_ENCORE		, SC_DANCING		, EFST_BDPLAYING		, SCB_SPEED|SCB_REGEN );
+
 	set_sc( BD_RICHMANKIM		, SC_RICHMANKIM		, EFST_RICHMANKIM	, SCB_NONE	);
 	set_sc( BD_ETERNALCHAOS		, SC_ETERNALCHAOS	, EFST_ETERNALCHAOS	, SCB_DEF2 );
 	set_sc( BD_DRUMBATTLEFIELD	, SC_DRUMBATTLE		, EFST_DRUMBATTLEFIELD	,
@@ -398,6 +411,11 @@ void initChangeTables(void)
 	set_sc( BD_ROKISWEIL		, SC_ROKISWEIL	, EFST_ROKISWEIL	, SCB_NONE );
 	set_sc( BD_INTOABYSS		, SC_INTOABYSS	, EFST_INTOABYSS	, SCB_NONE );
 	set_sc( BD_SIEGFRIED		, SC_SIEGFRIED		, EFST_SIEGFRIED	, SCB_ALL );
+
+	// [GonBee]
+	// 子守歌状態を追加。
+	set_sc( BD_LULLABY	, SC_LULLABY	, EFST_BLANK	, SCB_NONE );
+
 	add_sc( BA_FROSTJOKER		, SC_FREEZE		);
 	set_sc( BA_WHISTLE		, SC_WHISTLE		, EFST_WHISTLE		, SCB_FLEE|SCB_FLEE2 );
 	set_sc( BA_ASSASSINCROSS	, SC_ASSNCROS		, EFST_ASSASSINCROSS		, SCB_ASPD );
@@ -6715,7 +6733,14 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 
 	if(sc->data[SC_BERSERK])
 		return 0;
-	if(sc->data[SC_ETERNALCHAOS])
+
+	// [GonBee]
+	// 永遠の混沌はモンスターにだけ有効。
+	//if(sc->data[SC_ETERNALCHAOS])
+	if(sc->data[SC_ETERNALCHAOS] &&
+		bl->type == BL_MOB
+	)
+
 		return 0;
 	if(sc->data[SC_DEFSET])
 		return sc->data[SC_DEFSET]->val1;
@@ -8878,7 +8903,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			return 0; // Mado is immune to Wind Walk, Cart Boost, etc (others above) [Ind]
 		if (sc->data[SC_QUAGMIRE])
 			return 0;
-	break;
+		break;
 	case SC_CLOAKING:
 		// Avoid cloaking with no wall and low skill level. [Skotlex]
 		// Due to the cloaking card, we have to check the wall versus to known
@@ -11899,6 +11924,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 	sce->val2 = val2;
 	sce->val3 = val3;
 	sce->val4 = val4;
+
 	if (tick >= 0)
 		sce->timer = add_timer(gettick() + tick, status_change_timer, bl->id, type);
 	else
@@ -12019,6 +12045,41 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 
 	if( opt_flag&2 && sd && sd->touching_id )
 		npc_touchnext_areanpc(sd,false); // Run OnTouch_ on next char in range
+
+	// [GonBee]
+	// 合奏スキルは前提となる独奏スキルの効果を併せ持つ。
+	map_session_data* ssd = BL_CAST(BL_PC, src);
+	if (ssd) {
+		auto pla = [src, bl, ssd, tick] (e_skill dan_kid) {
+			if (battle_check_target(src, bl, skill_get_unit_target(dan_kid)) > 0 &&
+				(bl->type != BL_PC ||
+					!(skill_get_unit_flag(dan_kid) & UF_NOPC)
+				) && (bl->type != BL_MOB ||
+					!(skill_get_unit_flag(dan_kid) & UF_NOMOB)
+				)
+			) {
+				int val1, val2, val3;
+				auto yie = [&val1, &val2, &val3](int val1_, int val2_, int val3_) {
+					val1 = val1_;
+					val2 = val2_;
+					val3 = val3_;
+				};
+				int klv = pc_checkskill(ssd, dan_kid);
+				skill_unitsetting(src, dan_kid, klv, 0, 0, 0, yie);
+				sc_type dan_typ = status_skill2sc(dan_kid);
+				status_change_end(bl, dan_typ, INVALID_TIMER);
+				sc_start4(src, bl, dan_typ, 100, klv, val1, val2, 0, tick);
+			}
+		};
+		auto dans_ite = SOLO_DANCES.find(e_skill(status_sc2skill(type)));
+		if (dans_ite != SOLO_DANCES.end()) {
+			const auto& dans = dans_ite->second;
+			pla(dans[ssd->status.sex]);
+			if (sc->data[SC_SPIRIT] &&
+				sc->data[SC_SPIRIT]->val2 == SL_BARDDANCER
+			) pla(dans[ssd->status.sex ^ 1]);
+		}
+	}
 
 	return 1;
 }
@@ -13027,6 +13088,15 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 
 	if(opt_flag&2 && sd && !sd->state.warping && map_getcell(bl->m,bl->x,bl->y,CELL_CHKNPC))
 		npc_touch_areanpc(sd,bl->m,bl->x,bl->y); // Trigger on-touch event.
+
+	// [GonBee]
+	// 合奏スキルは前提となる独奏スキルの効果を併せ持つ。
+	auto dans_ite = SOLO_DANCES.find(e_skill(status_sc2skill(type)));
+	if (dans_ite != SOLO_DANCES.end()) {
+		const auto& dans = dans_ite->second;
+		for (e_skill dan_kid : dans_ite->second)
+			status_change_end(bl, status_skill2sc(dan_kid), INVALID_TIMER);
+	}
 
 	ers_free(sc_data_ers, sce);
 	return 1;

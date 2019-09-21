@@ -1386,7 +1386,13 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 
 	case BD_LULLABY:
-		sc_start(src,bl,SC_SLEEP,15+sstatus->int_/3,skill_lv,skill_get_time2(skill_id,skill_lv)); //(custom chance) "Chance is increased with INT", iRO Wiki
+
+		// [GonBee]
+		// 子守歌は敵にのみ有効。
+		//sc_start(src,bl,SC_SLEEP,15+sstatus->int_/3,skill_lv,skill_get_time2(skill_id,skill_lv)); //(custom chance) "Chance is increased with INT", iRO Wiki
+		if (battle_check_target(src, bl, BCT_ENEMY) > 0)
+			sc_start(src,bl,SC_SLEEP,15+sstatus->int_/3,skill_lv,skill_get_time2(skill_id,skill_lv)); //(custom chance) "Chance is increased with INT", iRO Wiki
+
 		break;
 
 	case DC_UGLYDANCE:
@@ -12883,7 +12889,11 @@ static bool skill_dance_switch(struct skill_unit* unit, int flag)
  *		xx_METEOR: flag &1 contains if the unit can cause curse, flag is also the duration of the unit in milliseconds
  * @return skill_unit_group
  */
-struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag)
+
+// [GonBee]
+//struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag)
+struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_id, uint16 skill_lv, int16 x, int16 y, int flag, std::function<void(int,int,int)> yield)
+
 {
 	struct skill_unit_group *group;
 	int i, val1 = 0, val2 = 0, val3 = 0;
@@ -12898,6 +12908,10 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 	int subunt = 0;
 	bool hidden = false;
 	struct map_data *mapdata;
+
+	// [GonBee]
+	sc_type sub_type = SC_NONE;
+	int sub_val1 = 0, sub_val2 = 0, sub_val3 = 0;
 
 	nullpo_retr(NULL, src);
 
@@ -13327,6 +13341,12 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		break;
 	}
 
+	// [GonBee]
+	if (yield) {
+		yield(val1, val2, val3);
+		return nullptr;
+	}
+
 	// Init skill unit group
 	nullpo_retr(NULL, (group = skill_initunitgroup(src,layout->count,skill_id,skill_lv,skill_get_unit_id(skill_id,flag&1)+subunt, limit, interval)));
 	group->val1 = val1;
@@ -13702,11 +13722,16 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 		case UNT_ROKISWEIL:
 		case UNT_INTOABYSS:
 		case UNT_SIEGFRIED:
+
+		// [GonBee]
+		case UNT_LULLABY:
+
 			 //Needed to check when a dancer/bard leaves their ensemble area.
 			if (sg->src_id==bl->id && !(sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_BARDDANCER))
 				return skill_id;
 			if (!sce)
 				sc_start4(ss, bl,type,100,sg->skill_lv,sg->val1,sg->val2,0,sg->limit);
+
 			break;
 		case UNT_WHISTLE:
 		case UNT_ASSASSINCROSS:
@@ -14197,6 +14222,32 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 					heal = ~heal + 1;
 				clif_skill_nodamage(&unit->bl, bl, AL_HEAL, heal, 1);
 				status_heal(bl, heal, 0, 0);
+			}
+			break;
+
+		// [GonBee]
+		// バード系の戦太鼓の響きとニーベルングの指輪はイドゥンの林檎の効果になる。
+		case UNT_DRUMBATTLEFIELD:
+		case UNT_RINGNIBELUNGEN:
+			{
+				map_session_data* ssd = BL_CAST(BL_PC, ss);
+				if (ssd &&
+					ssd->status.sex
+				) {
+					int heal;
+					if (sg->src_id == bl->id &&
+						!(tsc &&
+							tsc->data[SC_SPIRIT] &&
+							tsc->data[SC_SPIRIT]->val2 == SL_BARDDANCER
+						)
+					) break;
+					heal = skill_calc_heal(ss, bl, BA_APPLEIDUN, pc_checkskill(ssd, BA_APPLEIDUN), true);
+					if (tsc->data[SC_AKAITSUKI] &&
+						heal
+					) heal = ~heal + 1;
+					clif_skill_nodamage(&unit->bl, bl, AL_HEAL, heal, 1);
+					status_heal(bl, heal, 0, 0);
+				}
 			}
 			break;
 
@@ -14877,10 +14928,12 @@ int skill_check_condition_char_sub (struct block_list *bl, va_list ap)
 
 	c=va_arg(ap,int *);
 	p_sd = va_arg(ap, int *);
+
 	// [GonBee]
 	// 可変長引数のサイズを間違えているので修正。
 	//skill_id = va_arg(ap,int);
 	skill_id = va_arg(ap,uint16);
+
 	inf2 = skill_get_inf2(skill_id);
 
 	if (skill_id == PR_BENEDICTIO) {
@@ -15261,22 +15314,12 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 
 		// [GonBee]
 		// 聖体降福のパートナーチェックは後で行う。
-		if (skill_id != PR_BENEDICTIO) {
-
-		// [GonBee]
-		// 合奏は展開するスキルユニット上にパートナーがいればよいことにする。
+		// また、合奏スキルは一人でも使用できる。
 	    //if (skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0) < 1) {
-		int ran = 1;
-		int lay = skill_get_unit_layout_type(skill_id, skill_lv);
-		if (lay >= 1) ran = lay;
-	    if (skill_check_pc_partner(sd, skill_id, &skill_lv, ran, 0) < 1) {
-
-		    clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
-		    return false;
-	    }
-
-		// [GonBee]
-		}
+		//    clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
+		//    return false;
+	    //}
+		if (sd->sc.data[SC_DANCING]) sd->sc.data[SC_DANCING]->val4 = sd->bl.id;
 
 	}
 
@@ -16749,9 +16792,9 @@ int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
 
 			// [GonBee]
 			// ブラギポーションによる詠唱時間短縮効果。
-			else if (!(flag&2) &&
+			if (!(flag&2) &&
 				sc->data[SC_BRAGIPOTION]
-			) reduce_cast_rate += sc->data[SC_BRAGIPOTION]->val1;
+			) reduce_cast_rate += (100 - reduce_cast_rate) * sc->data[SC_BRAGIPOTION]->val1 / 100;
 
 			// Foresight halves the cast time, it does not stack additively
 			if (sc->data[SC_MEMORIZE]) {
@@ -17029,7 +17072,7 @@ int skill_delayfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv)
 
 			// [GonBee]
 			// ブラギポーションによるディレイ短縮効果。
-			else if (sc->data[SC_BRAGIPOTION]) time -= time * sc->data[SC_BRAGIPOTION]->val2 / 100;
+			if (sc->data[SC_BRAGIPOTION]) time -= time * sc->data[SC_BRAGIPOTION]->val2 / 100;
 
 			if (sc->data[SC_WIND_INSIGNIA] && sc->data[SC_WIND_INSIGNIA]->val1 == 3 && skill_get_type(skill_id) == BF_MAGIC && skill_get_ele(skill_id, skill_lv) == ELE_WIND)
 				time /= 2; // After Delay of Wind element spells reduced by 50%.
@@ -20743,17 +20786,52 @@ void skill_init_unit_layout (void) {
 					}
 					break;
 				case PA_GOSPEL: {
+						//static const int dx[] = {
+						//	-1, 0, 1,-1, 0, 1,-3,-2,-1, 0,
+						//	 1, 2, 3,-3,-2,-1, 0, 1, 2, 3,
+						//	-3,-2,-1, 0, 1, 2, 3,-1, 0, 1,
+						//	-1, 0, 1};
+						//static const int dy[] = {
+						//	-3,-3,-3,-2,-2,-2,-1,-1,-1,-1,
+						//	-1,-1,-1, 0, 0, 0, 0, 0, 0, 0,
+						//	 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
+						//	 3, 3, 3};
+						//skill_unit_layout[pos].count = 33;
 						static const int dx[] = {
-							-1, 0, 1,-1, 0, 1,-3,-2,-1, 0,
-							 1, 2, 3,-3,-2,-1, 0, 1, 2, 3,
-							-3,-2,-1, 0, 1, 2, 3,-1, 0, 1,
-							-1, 0, 1};
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-7,-6,-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5, 6, 7,
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+							-3,-2,-1, 0, 1, 2, 3,
+						};
 						static const int dy[] = {
-							-3,-3,-3,-2,-2,-2,-1,-1,-1,-1,
-							-1,-1,-1, 0, 0, 0, 0, 0, 0, 0,
-							 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
-							 3, 3, 3};
-						skill_unit_layout[pos].count = 33;
+							-7,-7,-7,-7,-7,-7,-7,
+							-6,-6,-6,-6,-6,-6,-6,
+							-5,-5,-5,-5,-5,-5,-5,
+							-4,-4,-4,-4,-4,-4,-4,
+							-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,
+							-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,
+							-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+							 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+							 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+							 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+							 4, 4, 4, 4, 4, 4, 4,
+							 5, 5, 5, 5, 5, 5, 5,
+							 6, 6, 6, 6, 6, 6, 6,
+							 7, 7, 7, 7, 7, 7, 7,
+						};
+						skill_unit_layout[pos].count = 161;
 						memcpy(skill_unit_layout[pos].dx,dx,sizeof(dx));
 						memcpy(skill_unit_layout[pos].dy,dy,sizeof(dy));
 					}
