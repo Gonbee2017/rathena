@@ -735,6 +735,210 @@ function	script	Refine4	{
 	return;
 	//closeで終了
 }
+
+function	script	Refine5	{
+	mes "["+getarg(0)+"]";
+	mes "俺は武器と防具を精錬する鍛冶屋だ！";
+	mes "お前が装備しているアイテムを";
+	mes "精錬できるってわけだ。";
+	mes "ただし、改良型濃縮オリデオコンか";
+	mes "改良型濃縮エルニウムが必要だぞ。";
+	mes "どの装備アイテムを精錬したい？";
+	next;
+	set .@i,select(getequipname2(1),getequipname2(2),getequipname2(3),getequipname2(4),getequipname2(5),
+				getequipname2(6),getequipname2(7),getequipname2(8),getequipname2(9),getequipname2(10));
+	mes "["+getarg(0)+"]";
+	if(getequipisequiped2(.@i)==0) {
+		switch(.@i) {
+		case 1:
+			mes "お前の悪い頭を精錬してあげようか？";
+			break;
+		case 2:
+			mes "俺の熱い体でお前の体を";
+			mes "精錬してあげるぜ。";
+			break;
+		case 3:
+			mes "残念ながら、お前の左手を";
+			mes "ロケットパンチにする能力はないね。";
+			break;
+		case 4:
+			mes "現代科学技術でもお前の右手を";
+			mes "ロケットパンチにする事はできないぜ。";
+			break;
+		case 5:
+			mes "持っているローブがないじゃないか？";
+			break;
+		case 6:
+			mes "お前、足のにおいがすごいね。";
+			break;
+		case 7:
+		case 8:
+			mes "どのアクセサリーを言ってるんだろ？";
+			break;
+		case 9:
+			mes "何を精錬してほしいんだ？";
+			mes "もしかして、頭の他の所？";
+			break;
+		case 10:
+			mes "お前の頭蓋骨を精錬してやろうか？";
+			break;
+		}
+		return;
+	}
+	if(getequipisenableref2(.@i)==0) {
+		mes "ふむ、これは精錬できる";
+		mes "アイテムじゃないんだぜ……";
+		return;
+	}
+	if(getequipisidentify(.@i)==0) {
+		mes "未鑑定だから精錬できないな。";
+		return;
+	}
+	if(getequiprefinerycnt2(.@i)>=10) {
+		mes "これ以上は精錬できないな。";
+		return;
+	}
+	set .@id, getequipid2(.@i);
+	//初回呼び出し時のみ料金とアイテムIDをそれぞれ格納
+	if(.price[0]==0) {
+		setarray .price,100000,2000,10000,100000,200000;
+		setarray .itemid,6241,6240,6240,6240,6240;
+	}
+	set .@wlv,getequipweaponlv2(.@i);
+	switch(.@wlv) {
+	case 0:
+		mes "お前が選んだ装備を";
+		mes "精錬するためには";
+		mes "^FF9C9C改良型濃縮エルニウム^000000と";
+		mes "手数料100000Zenyが必要だぜ？";
+		mes "精錬するか？";
+		break;
+	case 1:
+		mes "レベル1の武器を";
+		mes "精錬しようとしてるんだね。";
+		mes "精錬のためには";
+		mes "^FF9C9C改良型濃縮オリデオコン^000000と";
+		mes "手数料2000Zenyが必要だぜ？";
+		mes "精錬するか？";
+		break;
+	case 2:
+		mes "レベル2の武器を";
+		mes "精錬しようとしてるんだね。";
+		mes "精錬のためには";
+		mes "^FF9C9C改良型濃縮オリデオコン^000000と";
+		mes "手数料10000Zenyが必要だぜ？";
+		mes "精錬するか？";
+		break;
+	case 3:
+		mes "レベル3の武器を";
+		mes "精錬しようとしてるんだね。";
+		mes "精錬のためには";
+		mes "^FF9C9C改良型濃縮オリデオコン^000000と";
+		mes "手数料100000Zenyが必要だぜ？";
+		mes "精錬するか？";
+		break;
+	case 4:
+		mes "レベル4の武器を";
+		mes "精錬しようとしてるんだね。";
+		mes "精錬のためには";
+		mes "^FF9C9C改良型濃縮オリデオコン^000000と";
+		mes "手数料200000Zenyが必要だぜ？";
+		mes "精錬するか？";
+		break;
+	}
+	next;
+	if(select("はい","いいえ")==2) {
+		mes "["+getarg(0)+"]";
+		mes "お前がいやだったら仕方ないしな。";
+		return;
+	}
+	while (1) {
+		if(getequipid2(.@i) != .@id ||
+			getequiprefinerycnt2(.@i)>=10
+		) return;
+		if(getequippercentrefinery2(.@i, 1) < 100) {
+			mes "["+getarg(0)+"]";
+			if(.@wlv==0) {	//防具のとき
+				mes "あらら！";
+				mes "この防具はもう";
+				mes "何回も精錬されちゃったね。";
+				mes "これ以上精錬すると";
+				mes "失敗する恐れがある……";
+				next;
+				mes "["+getarg(0)+"]";
+				mes "まあ、たとえ失敗しても";
+				mes "防具が壊れちゃうことはないし";
+				mes "劣化したりもしないけどな。";
+				mes "じゃあ、精錬してもいいか？";
+			} else {		//武器のとき
+				mes "あらら！";
+				mes "この武器はもう";
+				mes "何回も精錬されちゃったね。";
+				mes "これ以上精錬すると";
+				mes "失敗する恐れがある……";
+				next;
+				mes "["+getarg(0)+"]";
+				mes "まあ、たとえ失敗しても";
+				mes "武器が壊れちゃうことはないし";
+				mes "劣化したりもしないけどな。";
+				mes "じゃあ、精錬してもいいか？";
+			}
+			next;
+			if(select("はい","いいえ")==2) {
+				mes "["+getarg(0)+"]";
+				mes "そうだな、改良型は貴重だからな。";
+				return;
+			}
+		}
+		if(getequipid2(.@i) != .@id ||
+			getequiprefinerycnt2(.@i)>=10
+		) return;
+		if(countitem(.itemid[.@wlv])<1 || Zeny<.price[.@wlv]) {
+			mes "["+getarg(0)+"]";
+			mes "これがお前が持ってるすべてか？";
+			mes "残念だけど、材料が足りないと";
+			mes "精錬してあげられないぜ。";
+			mes "俺も仕事をした代価くらい";
+			mes "貰わないとな……。";
+			return;
+		}
+		delitem .itemid[.@wlv],1;
+		set Zeny,Zeny-.price[.@wlv];
+		mes "["+getarg(0)+"]";
+		mes "カン！ カン！ カン！";
+		if(getequippercentrefinery2(.@i, 1) > rand(100)) {
+			successrefitem2 .@i;
+			next;
+			emotion getarg(1);
+			mes "["+getarg(0)+"]";
+			mes "さ！ 無事に精錬が終わったぜ。";
+			mes "俺の腕はまだ使えるぜ！";
+			mes "自分で言うのもなんだが、";
+			mes "なかなか良い出来じゃないか！";
+			if(getequiprefinerycnt2(.@i)>=10) return;
+		}
+		else {
+			failedrefitem4 .@i;
+			next;
+			emotion getarg(2);
+			mes "["+getarg(0)+"]";
+			mes "あ、あら……";
+			mes "失敗しちゃった。ご、ごめん……";
+			mes "ま、まあ、でも……";
+			mes "装備に変化はないからな……";
+		}
+		mes "まだ精錬するかい？";
+		next;
+		if(select("はい","いいえ")==2) {
+			mes "[" +strnpcinfo(1)+ "]";
+			mes "そうかい……";
+			mes "また来てくれよ。";
+			return;
+		}
+	}
+	return;
+	//closeで終了
+}
 //==============================================================================
 // RagnarokOnline Original Refine Script Ver0.5   by Blaze
 //==============================================================================
@@ -996,8 +1200,14 @@ ein_in01,24,87,5	script	マンダスマン	826,{
 }
 
 // ----- プロンテラ -----
-prontera,123,65,1	script	フランツ	85,{
+prontera,123,65,3	script	フランツ	85,{
 	callfunc "Refine4","フランツ",21,23;
+	close;
+}
+
+// ----- プロンテラ -----
+prontera,123,62,3	script	ヴィルヘルム	85,{
+	callfunc "Refine5","ヴィルヘルム",21,23;
 	close;
 }
 

@@ -958,6 +958,27 @@ BUILDIN_FUNC(failedrefitem3) {
 	script_pushint(st, res);
 	return SCRIPT_CMD_SUCCESS;
 }
+BUILDIN_FUNC(failedrefitem4) {
+	int res = 0;
+	map_session_data* sd;
+	if (script_rid2sd(sd)) {
+		equip_index equ_ind = equip_index(pybot::equip_pos_order_to_index(script_getnum(st, 2) - 1));
+		if (equip_index_check(equ_ind)) {
+			int inv_ind = pc_checkequip(sd, equip_bitmask[equ_ind]);
+			if (inv_ind >= 0) {
+				item* itm = &sd->inventory.u.items_inventory[inv_ind];
+				int ntf = 1;
+				if (script_hasdata(st, 3)) ntf = script_getnum(st, 3);
+				if (ntf) clif_refine(sd->fd, 1, inv_ind, itm->refine);
+				if (ntf) clif_misceffect(&sd->bl, 2);
+				achievement_update_objective(sd, AG_REFINE_FAIL, 1, 1);
+				res = itm->refine;
+			}
+		}
+	}
+	script_pushint(st, res);
+	return SCRIPT_CMD_SUCCESS;
+}
 BUILDIN_FUNC(failedremovecards2) {
 	int i=-1,c,cardflag=0;
 

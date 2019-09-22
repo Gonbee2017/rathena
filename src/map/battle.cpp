@@ -3219,6 +3219,11 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 #ifdef RENEWAL
 					ATK_ADD(wd->weaponAtk, wd->weaponAtk2, sd->inventory_data[index]->weight / 10);
 #endif
+
+					// [GonBee]
+					// シールドブーメランとシールドチェーンは盾の精錬でAtkが増加する。
+					ATK_ADD(wd->damage, wd->damage2, 10 * sd->inventory.u.items_inventory[index].refine);
+
 				}
 			} else
 				ATK_ADD(wd->damage, wd->damage2, sstatus->rhw.atk2); //Else use Atk2

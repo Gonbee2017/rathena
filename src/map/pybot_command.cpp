@@ -3178,6 +3178,11 @@ bot_limit(
 	int job_lim = pybot::find_map_data(JOB_BOT_LIMITS, e_job(sd->status.class_), 0);
 	int lim = job_lim;
 	if (pc_is_maxbaselv(sd)) ++lim;
+	if ((sd->status.class_ == JOB_SUPER_NOVICE ||
+			sd->status.class_ == JOB_GUNSLINGER ||
+			sd->status.class_ == JOB_NINJA
+		) && pc_is_maxjoblv(sd)
+	) ++lim;
 	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str())) &&
 		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str())) &&

@@ -52,4 +52,4 @@
 	close;
 }
 
-prontera,125,62,3	duplicate(ChangeEnrich)	エンリッヒ	84
+prontera,126,62,3	duplicate(ChangeEnrich)	エンリッヒ	84

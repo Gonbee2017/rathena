@@ -638,6 +638,8 @@ REPLACE INTO `item_db2` VALUES (10905, 'Coating_Potion', 'コーティングポーション
 REPLACE INTO `item_db2` VALUES (12920, 'Enriched_Elunium_Box', '濃縮エルニウムの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 7619,1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12921, 'Enriched_Oridecon_Box', '濃縮オリデオコンの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 7620,1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (16682, 'Boarding_Halter_Box', '騎乗用手綱の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 12622,1; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (17104, 'HD_Oridecon_50Box', '改良型濃縮オリデオコンの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 6240,1; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (17105, 'HD_Elunium_50Box', '改良型濃縮エルニウムの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 6241,1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (17290, 'Orleans_Full_Course_Box', 'オルレアンのフルコースの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 14646,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19513, 'Chicken_Beak_19513', '[衣装] ニワトリのクチバシ', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 4096, 0, 1, 0, 699, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19515, 'Yellow_Hat_19515', '[衣装] 黄色いミニハット', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 701, '{}', '{}', '{}');

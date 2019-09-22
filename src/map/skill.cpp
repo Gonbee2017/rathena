@@ -20786,6 +20786,9 @@ void skill_init_unit_layout (void) {
 					}
 					break;
 				case PA_GOSPEL: {
+
+						// [GonBee]
+						// ƒSƒXƒyƒ‹‚ÌŒø‰Ê”ÍˆÍ‚ğŠg‘å‚·‚éB
 						//static const int dx[] = {
 						//	-1, 0, 1,-1, 0, 1,-3,-2,-1, 0,
 						//	 1, 2, 3,-3,-2,-1, 0, 1, 2, 3,
@@ -20832,6 +20835,7 @@ void skill_init_unit_layout (void) {
 							 7, 7, 7, 7, 7, 7, 7,
 						};
 						skill_unit_layout[pos].count = 161;
+
 						memcpy(skill_unit_layout[pos].dx,dx,sizeof(dx));
 						memcpy(skill_unit_layout[pos].dy,dy,sizeof(dy));
 					}
