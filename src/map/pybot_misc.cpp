@@ -76,7 +76,7 @@ equipset_t::equipset_t(
 // アイテムのキーを構築する。
 item_key::item_key(
 	uint16_t nid // アイテムID。
-) : nameid(nid), refine(CHAR_MIN), attribute(0), idb(nullptr) {
+) : nameid(nid), identify(CHAR_MIN), refine(CHAR_MIN), attribute(0), idb(nullptr) {
 	std::fill(ALL_RANGE(card), 0);
 	if (nameid) {
 		idb = itemdb_exists(nameid);
@@ -739,10 +739,12 @@ find_item(
 	for (int i = 0; i < cap; ++i) {
 		item* itm = &sto->u.items_inventory[i];
 		if (itm->nameid != key.nameid ||
-			(equ != INT_MIN &&
-				itm->equip != equ
+			(key.identify != CHAR_MIN &&
+				itm->identify != key.identify
 			) || (key.refine != CHAR_MIN &&
 				itm->refine != key.refine
+			) || (equ != INT_MIN &&
+				itm->equip != equ
 			)
 		) continue;
 		item_data* idb;

@@ -952,6 +952,7 @@ load_equipset_func(
 				equ_set = construct<equipset_t>(mid);
 			}
 			auto ik = construct<item_key>(nid, car);
+			ik->identify = 1;
 			auto ei = initialize<equipset_item>(equip_pos_orders(ord), equip_pos(equ), ik);
 			equ_set->items.push_back(ei);
 		}

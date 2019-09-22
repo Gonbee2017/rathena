@@ -536,6 +536,7 @@ SUBCMD_FUNC(Bot, EquipSet) {
 			esi->order = equip_pos_orders(i);
 			esi->equip = equip_pos(itm->equip);
 			esi->key = construct<item_key>(itm->nameid, itm->card);
+			esi->key->identify = 1;
 			es->items.push_back(esi);
 			equ |= esi->equip;
 		}

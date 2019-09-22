@@ -2201,6 +2201,7 @@ template <
 // アイテムのキー。
 struct item_key {
 	uint16_t nameid;                     // ID。
+	char identify;                       // 鑑定済みか。
 	char refine;                         // 精錬値。
 	char attribute;                      // 状態。
 	std::array<uint16_t,MAX_SLOTS> card; // スロット。
