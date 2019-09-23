@@ -202,6 +202,8 @@ OnTimer3900000:
 	announce "ヴァルキリー・ウィッシュメイデンの『ヴァルキリーの贈り物』召喚儀式は全て終了しました。",8;
 	donpcevent "ルミィ・ラビセフ#god_se::OnStop";
 	end;
+OnKilled:
+	end;
 }
 
 //============================================================
@@ -403,5 +405,7 @@ OnTimer2708000:OnTimer3008000:OnTimer3308000:
 OnTimer3900000:
 	announce "ヴァルキリー・ウィッシュメイデンの『ヴァルキリーの贈り物』召喚儀式は全て終了しました。",8;
 	donpcevent "ルフィ・ラビセフ#god_se::OnStop";
+	end;
+OnKilled:
 	end;
 }

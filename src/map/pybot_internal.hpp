@@ -388,43 +388,43 @@ namespace pybot {
 
 // 攻撃されているフラグ。
 enum attacked_flags {
-	AF_TRUE  = 0x1,                // 真。
-	AF_FALSE = 0x2,                // 偽。
+	AF_TRUE  = 0x1               , // 真。
+	AF_FALSE = 0x2               , // 偽。
 	AF_ALL   = AF_TRUE | AF_FALSE, // すべて。
 };
 
 // 戦闘モードのフラグ。
 enum battle_mode_flags {
-	BMF_NONE   = 0x1,                    // なし。
-	BMF_TAUNT  = 0x2,                    // 挑発。
-	BMF_ASSIST = 0x4,                    // アシスト。
+	BMF_NONE   = 0x1                   , // なし。
+	BMF_TAUNT  = 0x2                   , // 挑発。
+	BMF_ASSIST = 0x4                   , // アシスト。
 	BMF_COMBAT = BMF_TAUNT | BMF_ASSIST, // 戦闘中。
-	BMF_ALL    = BMF_NONE | BMF_COMBAT,  // すべて。
+	BMF_ALL    = BMF_NONE | BMF_COMBAT , // すべて。
 };
 
 // 戦闘モード。
 enum battle_modes {
-	BM_NONE,   // なし。
-	BM_TAUNT,  // 挑発。
+	BM_NONE  , // なし。
+	BM_TAUNT , // 挑発。
 	BM_ASSIST, // アシスト。
-	BM_MAX,
+	BM_MAX   ,
 };
 
 // コマンド要素のタイプ。
 enum command_element_types {
-    CET_LITERAL,   // リテラル。
+    CET_LITERAL  , // リテラル。
     CET_SEPARATOR, // 区切る記号。
-    CET_OPEN,      // 開く記号。
-    CET_CLOSE,     // 閉じる記号。
-    CET_MAX,
+    CET_OPEN     , // 開く記号。
+    CET_CLOSE    , // 閉じる記号。
+    CET_MAX      ,
 };
 
 // 距離ポリシーの値。
 enum distance_policy_values {
 	DPV_PENDING, // 保留。
-	DPV_CLOSE,   // 近接。
-	DPV_AWAY,    // 遠隔。
-	DPV_MAX
+	DPV_CLOSE  , // 近接。
+	DPV_AWAY   , // 遠隔。
+	DPV_MAX    ,
 };
 
 // 装備部位の順序。
@@ -445,6 +445,14 @@ enum equip_pos_orders {
 	EPO_COSTUME_GARMENT , // 衣肩。
 	EPO_AMMO            , // 矢/弾。
 	EPO_MAX             ,
+};
+
+// フィーバーの種類。
+enum fever_types {
+	FT_NONE  , // なし。
+	FT_NORMAL, // 通常。
+	FT_MVP   , // MVP。
+	FT_MAX   ,
 };
 
 // 追加のアイテムID。
@@ -585,26 +593,26 @@ enum nation_types {
 
 // 通常攻撃ポリシーの値。
 enum normal_attack_policy_values {
-	NAPV_PENDING,    // 保留。
+	NAPV_PENDING   , // 保留。
 	NAPV_CONTINUOUS, // 連続。
-	NAPV_SINGLE,     // 単発。
-	NAPV_MAX
+	NAPV_SINGLE    , // 単発。
+	NAPV_MAX       ,
 };
 
 // 一次バトラーのフラグ。
 enum primary_flags {
-	PF_TRUE  = 0x1,                // 真。
-	PF_FALSE = 0x2,                // 偽。
+	PF_TRUE  = 0x1               , // 真。
+	PF_FALSE = 0x2               , // 偽。
 	PF_ALL   = PF_TRUE | PF_FALSE, // すべて。
 };
 
 // レジストリの変更状態。
 enum registry_dirties {
-	RD_CLEAN,  // なし。
+	RD_CLEAN , // なし。
 	RD_INSERT, // 挿入。
 	RD_UPDATE, // 更新。
 	RD_DELETE, // 削除。
-	RD_MAX,
+	RD_MAX   ,
 };
 
 // ステータスのタイプ。
@@ -615,13 +623,13 @@ enum status_types {
 	ST_INT, // INT。
 	ST_DEX, // DEX。
 	ST_LUK, // LUK。
-	ST_MAX
+	ST_MAX,
 };
 
 // 歩行中のフラグ。
 enum walking_flags {
-	WF_TRUE  = 0x1,               // 真。
-	WF_FALSE = 0x2,               // 偽。
+	WF_TRUE  = 0x1              , // 真。
+	WF_FALSE = 0x2              , // 偽。
 	WF_ALL  = WF_TRUE | WF_FALSE, // すべて。
 };
 
@@ -2254,9 +2262,8 @@ struct pybot_map {
 	std::string name_japanese; // 日本語名。
 	nation_types nation_type;  // 国の種類。
 	map_types map_type;        // マップの種類。
-	bool fever_flag;           // フィーバーフラグ。
+	fever_types fever_type;    // フィーバーの種類。
 	int average_level;         // 平均レベル。
-	bool mvp_flag;             // MVPフラグ。
 };
 
 // スコープから抜けるときの処理。

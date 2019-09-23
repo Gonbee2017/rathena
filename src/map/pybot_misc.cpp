@@ -966,18 +966,16 @@ void load_maps() {
 		char nam_jap[100 + 1];
 		int nat_typ;
 		int map_typ;
-		int fev_fla;
+		int  fev_typ;
 		int avg_lv;
-		int mvp_fla;
 		ses->execute(
 			"SELECT"
 			" m.`", construct<sql_column>("name_english" , nam_eng), "`,"
 			" m.`", construct<sql_column>("name_japanese", nam_jap), "`,"
 			" m.`", construct<sql_column>("nation_type"  , nat_typ), "`,"
 			" m.`", construct<sql_column>("map_type"     , map_typ), "`,"
-			" m.`", construct<sql_column>("fever_flag"   , fev_fla), "`,"
-			" ROUND(SUM(IFNULL(mdb2.lv, IFNULL(mdb.lv, 0)) * IFNULL(s.amount, 0)) / SUM(IFNULL(s.amount, 1))) AS `", construct<sql_column>("avg_lv," , avg_lv ), "`,"
-			" CASE WHEN SUM(IFNULL(mdb2.mexp, IFNULL(mdb.mexp, 0))) > 0 THEN TRUE ELSE FALSE END AS `"             , construct<sql_column>("mvp_flag", mvp_fla), "` "
+			" m.`", construct<sql_column>("fever_type"   , fev_typ), "`,"
+			" ROUND(SUM(IFNULL(mdb2.lv, IFNULL(mdb.lv, 0)) * IFNULL(s.amount, 0)) / SUM(IFNULL(s.amount, 1))) AS `", construct<sql_column>("avg_lv," , avg_lv ), "` "
 			"FROM"
 			" `pybot_map` AS m "
 			" LEFT OUTER JOIN `pybot_spawn` AS s ON m.`name_english` = s.`map`"
@@ -995,9 +993,8 @@ void load_maps() {
 					nam_jap,
 					nation_types(nat_typ),
 					map_types(map_typ),
-					bool(fev_fla),
-					avg_lv,
-					bool(mvp_fla)
+					fever_types(fev_typ),
+					avg_lv
 				);
 				id_maps.insert(std::make_pair(id, map));
 				type_maps[NATION_MAP_TYPE(nat_typ, map_typ)].push_back(map);

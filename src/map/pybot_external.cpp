@@ -296,7 +296,11 @@ double // 取得した倍率。
 map_rate(
 	int m // マップID。
 ) {
-	return find_map_data(fever_rates, m, 100) / 100.;
+	double rat = 0.;
+	std::string map_nam(mapindex_id2name(map_id2index(m)));
+	if (map_nam.find('@') != std::string::npos) rat = 2.;
+	else rat = find_map_data(fever_rates, m, 100) / 100.;
+	return rat;
 }
 
 // PCがMVPを獲得したことを記録する。
@@ -650,7 +654,7 @@ void update_fever() {
 				if (i >= maps.size()) break;
 				for (;;) {
 					auto map = maps[rnd() % maps.size()];
-					if (map->fever_flag &&
+					if (map->fever_type != FT_NONE &&
 						!KEY_EXISTS(fever_rates, map->id)
 					) {
 						fever_rates[map->id] = fev_rat;
@@ -672,10 +676,9 @@ void update_fever() {
 				int ind = rnd() % fev_ids.size();
 				int id = fev_ids[ind];
 				auto map = id_maps.at(id);
-				if (dou_fev_ids.find(id) == dou_fev_ids.end() &&
-					(ind < DOUBLE_FEVER_MAPS_SIZE ||
-						map->mvp_flag
-					)
+				if ((ind < DOUBLE_FEVER_MAPS_SIZE ||
+						map->fever_type == FT_MVP
+					) && !KEY_EXISTS(dou_fev_ids, id)
 				) {
 					fever_rates[id] = dou_fev_rat;
 					dou_fev_ids.insert(id);
