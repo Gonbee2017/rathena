@@ -17,7 +17,12 @@ struct guardian_data;
 //The number of drops all mobs have and the max drop-slot that the steal skill will attempt to steal from.
 #define MAX_MOB_DROP 10
 #define MAX_MVP_DROP 3
-#define MAX_MOB_DROP_ADD 5
+
+// [GonBee]
+// 追加ドロップ可能なアイテム数を増やす。
+//#define MAX_MOB_DROP_ADD 5
+#define MAX_MOB_DROP_ADD 10
+
 #define MAX_MVP_DROP_ADD 2
 #define MAX_MOB_DROP_TOTAL (MAX_MOB_DROP+MAX_MOB_DROP_ADD)
 #define MAX_MVP_DROP_TOTAL (MAX_MVP_DROP+MAX_MVP_DROP_ADD)

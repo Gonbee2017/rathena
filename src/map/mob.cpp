@@ -5124,10 +5124,16 @@ static bool mob_readdb_drop(char* str[], int columns, int current) {
 
 		if (columns > 3) {
 			int randomopt_group = -1;
-			if (!script_get_constant(trim(str[3]), &randomopt_group)) {
-				ShowError("mob_readdb_drop: Invalid 'randopt_groupid' '%s' for monster '%hu'.\n", str[3], mobid);
-				return false;
-			}
+
+			// [GonBee]
+			// グループの指定が無効なら指定なしとみなす。
+			//if (!script_get_constant(trim(str[3]), &randomopt_group)) {
+			//	ShowError("mob_readdb_drop: Invalid 'randopt_groupid' '%s' for monster '%hu'.\n", str[3], mobid);
+			//	return false;
+			//}
+			if (!script_get_constant(trim(str[3]), &randomopt_group))
+				randomopt_group = RDMOPTG_None;
+
 			if (randomopt_group == RDMOPTG_None)
 				return true;
 			if (!itemdb_randomopt_group_exists(randomopt_group)) {
