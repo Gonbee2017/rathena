@@ -13201,7 +13201,12 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		val1 = 25 + 11*skill_lv; //Exp increase bonus.
 		break;
 	case BD_SIEGFRIED:
-		val1 = 55 + skill_lv*5;	//Elemental Resistance
+
+		// [GonBee]
+		// 不死身のジークフリードをLv5で50%に弱体化。
+		//val1 = 55 + skill_lv*5;	//Elemental Resistance
+		val1 = 25 + skill_lv * 5;
+
 		val2 = skill_lv*10;	//Status ailment resistance
 		break;
 	case WE_CALLPARTNER:

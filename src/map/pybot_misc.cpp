@@ -1380,8 +1380,7 @@ void query_login_data(
 			" c.`char_id` = ", construct<sql_param>(cid), " "
 			"LIMIT 1"
 		);
-		if (!ses->next_row()) RAISE_RUNTIME_ERROR("Cann't found login data.");
-		yie(aid, sex_string2number(sex_str), gid, unb_tim, sta, nam);
+		if (ses->next_row()) yie(aid, sex_string2number(sex_str), gid, unb_tim, sta, nam);
 	});
 }
 

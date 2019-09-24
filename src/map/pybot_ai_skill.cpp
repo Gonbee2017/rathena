@@ -465,7 +465,7 @@ AI_SKILL_USE_FUNC(CG_LONGINGFREEDOM) {
 AI_SKILL_USE_FUNC(CH_CHAINCRUSH) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		bot->collect_spirits(2)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -491,7 +491,7 @@ AI_SKILL_USE_FUNC(CH_SOULCOLLECT) {
 AI_SKILL_USE_FUNC(CH_TIGERFIST) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -681,7 +681,7 @@ AI_SKILL_USE_FUNC(DC_WINKCHARM) {
 AI_SKILL_USE_FUNC(GS_ADJUSTMENT) {
 	if (!bot->sc()->data[SC_MADNESSCANCEL] &&
 		bot->sc_rest(SC_ADJUSTMENT) <= bot->get_skill_tail(kid) &&
-		bot->collect_coins(2)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -693,7 +693,7 @@ AI_SKILL_USE_FUNC(GS_BULLSEYE) {
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->race() & (RC_BRUTE | RC_DEMIHUMAN) &&
-		bot->collect_coins(1)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -708,7 +708,7 @@ AI_SKILL_USE_FUNC(GS_CRACKER) {
 			!ene->is_long_weapon_immune();
 	});
 	if (ene &&
-		bot->collect_coins(1)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, ene);
 }
 
@@ -767,7 +767,7 @@ AI_SKILL_USE_FUNC(GS_FLING) {
 		tar_ene->def() < 100 &&
 		!tar_ene->has_status_immune() &&
 		!tar_ene->sc()->data[GS_FLING] &&
-		bot->collect_coins(5)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -821,7 +821,7 @@ AI_SKILL_USE_FUNC(GS_GROUNDDRIFT) {
 // インクリージングアキュラシーを使う。
 AI_SKILL_USE_FUNC(GS_INCREASING) {
 	if (bot->sc_rest(SC_INCREASING) <= bot->get_skill_tail(kid) &&
-		bot->collect_coins(4)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -829,7 +829,7 @@ AI_SKILL_USE_FUNC(GS_INCREASING) {
 AI_SKILL_USE_FUNC(GS_MADNESSCANCEL) {
 	if (!bot->sc()->data[SC_ADJUSTMENT] &&
 		bot->sc_rest(SC_MADNESSCANCEL) <= bot->get_skill_tail(kid) &&
-		bot->collect_coins(1)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -840,7 +840,7 @@ AI_SKILL_USE_FUNC(GS_MAGICALBULLET) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->attack_element_ratio(tar_ene, ELE_GHOST) > 100 &&
-		bot->collect_coins(1)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -862,7 +862,7 @@ AI_SKILL_USE_FUNC(GS_TRIPLEACTION) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		bot->collect_coins(1)
+		bot->collect_coins(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1434,7 +1434,7 @@ AI_SKILL_USE_FUNC(MO_BLADESTOP) {
 		bot->attacked_enemies().size() == 1 &&
 		bot->attacked_enemies().front() == tar_ene &&
 		!tar_ene->is_boss() &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1459,9 +1459,12 @@ AI_SKILL_USE_FUNC(MO_CALLSPIRITS) {
 // コンボに備えて気功を使う。
 AI_SKILL_USE_FUNC_T(MO_CALLSPIRITS, ready) {
 	int ned = 0;
-	if (bot->check_skill(MO_COMBOFINISH)) ned += 1;
-	if (bot->check_skill(CH_TIGERFIST)) ned += 1;
-	if (bot->check_skill(CH_CHAINCRUSH)) ned += 2;
+	if (bot->check_skill(MO_COMBOFINISH))
+		ned += skill_get_spiritball(MO_COMBOFINISH, bot->check_skill(MO_COMBOFINISH));
+	if (bot->check_skill(CH_TIGERFIST))
+		ned += skill_get_spiritball(CH_TIGERFIST, bot->check_skill(CH_TIGERFIST));
+	if (bot->check_skill(CH_CHAINCRUSH))
+		ned += skill_get_spiritball(CH_CHAINCRUSH, bot->check_skill(CH_CHAINCRUSH));
 	if (ned > bot->sd()->spiritball) bot->use_skill_self(kid, klv);
 }
 
@@ -1476,14 +1479,14 @@ AI_SKILL_USE_FUNC(MO_CHAINCOMBO) {
 AI_SKILL_USE_FUNC(MO_COMBOFINISH) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
 // 爆裂波動を使う。
 AI_SKILL_USE_FUNC(MO_EXPLOSIONSPIRITS) {
 	if (bot->sc_rest(SC_EXPLOSIONSPIRITS) <= bot->get_skill_tail(kid) &&
-		bot->collect_spirits(5)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1496,7 +1499,7 @@ AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		tar_ene->fullpower(leader) &&
 		!tar_ene->sc()->data[SC_FOGWALL] &&
-		bot->collect_spirits(5)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1509,12 +1512,9 @@ AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 		) && bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->fullpower(leader) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
-		!tar_ene->sc()->data[SC_FOGWALL]
-	) {
-		skill_condition req = skill_get_requirement(bot->sd(), kid, klv);
-		if (bot->collect_spirits(req.spiritball))
-			bot->use_skill_block(kid, klv, tar_ene);
-	}
+		!tar_ene->sc()->data[SC_FOGWALL] &&
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // 指弾を使う。
@@ -1540,7 +1540,7 @@ AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, crush) {
 			skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(WZ_STORMGUST, BL_PC, 2)});
 	});
 	if (ene &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(klv)
 	) bot->use_skill_block(kid, klv, ene);
 }
 
@@ -1555,7 +1555,7 @@ AI_SKILL_USE_FUNC_T(MO_FINGEROFFENSIVE, first_attack) {
 			!ene->is_long_weapon_immune();
 	});
 	if (ene &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(klv)
 	) bot->use_skill_block(kid, klv, ene);
 }
 
@@ -1568,7 +1568,7 @@ AI_SKILL_USE_FUNC(MO_INVESTIGATE) {
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
 		tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit() &&
 		tar_ene->def() < 100 &&
-		bot->collect_spirits(1)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1579,7 +1579,7 @@ AI_SKILL_USE_FUNC(MO_STEELBODY) {
 		!bot->sc()->data[SC_STEELBODY] &&
 		tar_ene->is_great(leader) &&
 		tar_ene->target_battler() == bot &&
-		bot->collect_spirits(5)
+		bot->collect_spirits(skill_get_spiritball(kid, klv))
 	) bot->use_skill_self(kid, klv);
 }
 
