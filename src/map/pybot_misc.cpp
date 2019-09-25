@@ -862,8 +862,8 @@ get_source_mapid(
 	int m // マップID。
 ) {
 	int res = m;
-	map_data* md = map_getmapdata(m);
-	if (md->instance_src_map) res = md->instance_src_map;
+	map_data* mpd = map_getmapdata(m);
+	if (mpd->instance_src_map) res = mpd->instance_src_map;
 	return res;
 }
 
@@ -1688,14 +1688,14 @@ wall_exists(
 	block_list* cen, // 中心。
 	int rad          // 半径。
 ) {
-	map_data* md = map_getmapdata(cen->m);
+	map_data* mpd = map_getmapdata(cen->m);
 	int x0 = cen->x - rad;
 	int x1 = cen->x + rad;
 	int y0 = cen->y - rad;
 	int y1 = cen->y + rad;
 	for (int y = y0; y <= y1; y++) {
 		for (int x = x0; x <= x1; x++) {
-			if (map_getcellp(md, x, y, CELL_CHKNOPASS)) return true;
+			if (map_getcellp(mpd, x, y, CELL_CHKNOPASS)) return true;
 		}
 	}
 	return false;

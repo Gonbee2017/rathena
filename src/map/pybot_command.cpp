@@ -1788,6 +1788,33 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackTransport) {
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
+// ショップポイントを回収する。
+SUBCMD_FUNC(Bot, ShopPointCollect) {
+	CS_ENTER;
+	auto imp = [lea] (block_if* bot, int poi = INT_MIN) -> int {
+		if (poi == INT_MIN) poi = bot->sd()->cashPoints;
+		pc_paycash(bot->sd(), poi, 0, LOG_TYPE_PICKDROP_PLAYER);
+		pc_getcash(lea->sd(), poi, 0, LOG_TYPE_PICKDROP_PLAYER);
+		return poi;
+	};
+	if (args.empty()) {
+		int sum = 0;
+		for (auto bot : lea->bots()) sum += imp(bot.get());
+		show_client(lea->fd(), print(
+			"すべてのBotから合計", sum, "ショップポイントを回収しました。"
+		));
+	} else {
+		block_if* bot = shift_arguments_then_find_bot(lea, args);
+		int poi = INT_MIN;
+		if (!args.empty())
+			poi = shift_arguments_then_parse_int(args, "ポイント", 1, bot->sd()->cashPoints);
+		int act_poi = imp(bot, poi);
+		show_client(lea->fd(), print(
+			"「", bot->name(), "」から", act_poi, "ショップポイントを回収しました。"
+		));
+	}
+}
+
 // メンバーのスキルを一覧表示、または使う。
 SUBCMD_FUNC(Bot, sKill) {
 	CS_ENTER;
@@ -2442,11 +2469,8 @@ SUBCMD_FUNC(Bot, Status) {
 				mem->sd()->status.job_exp * 100. / pc_nextjobexp(mem->sd())
 			) << "%) ";
 	lea->output_buffer() << "Status Point " << mem->sd()->status.status_point;
-	int cas_exp = pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str()));
-	if (cas_exp ||
-		mem->sd()->cashPoints
-	) lea->output_buffer() << " Shop Point " << mem->sd()->cashPoints << " "
-		"(" << cas_exp << "/" << MAX_LEVEL_BASE_EXP << ")";
+	lea->output_buffer() << " Shop Point " << print_zeny(mem->sd()->cashPoints) << " "
+		"(" << pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str())) << "/" << MAX_LEVEL_BASE_EXP << ")";
 	lea->output_buffer() << "\n";
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
 	lea->output_buffer() << STORAGE_TYPE_NAME_TABLE[TABLE_INVENTORY - 1] << " " <<
@@ -2840,7 +2864,8 @@ SUBCMD_FUNC(Bot, Team) {
 		       "SP "  << print(std::setw(3), std::setfill('0'), mem->sp_ratio()             ) << "% " <<
 		       mem->name() << " " <<
 		       "<" << job_name(mem->sd()->status.class_) << "> "
-		       "Zeny " << print_zeny(mem->sd()->status.zeny) << "\n";
+		       "Zeny " << print_zeny(mem->sd()->status.zeny) << " "
+		       "ShP " << print_zeny(mem->sd()->cashPoints) << "\n";
 		return buf.str();
 	};
 

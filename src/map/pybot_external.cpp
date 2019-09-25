@@ -297,8 +297,8 @@ map_rate(
 	int m // マップID。
 ) {
 	double rat = 0.;
-	std::string map_nam(mapindex_id2name(map_id2index(m)));
-	if (map_nam.find('@') != std::string::npos) rat = 2.;
+	map_data* mpd = map_getmapdata(m);
+	if (mpd->instance_id) rat = 2.;
 	else rat = find_map_data(fever_rates, m, 100) / 100.;
 	return rat;
 }

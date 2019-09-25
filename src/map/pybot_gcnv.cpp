@@ -1665,6 +1665,14 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ PolicyNormalAttackTransport (pdt) サブコマンド ------\n"
 		"通常攻撃ポリシーを転送する。\n"
 		"入力例 [@bot policynormalattacktransport ハイプリ チャンプ]\n"
+	), SUBCMD_DESC(Bot, ShopPointCollect           , spc ,
+		"------ ShopPointCollect (spc) サブコマンド ------\n"
+		"すべてのBotから全ショップポイントを回収する。\n"
+		"入力例 [@bot shoppointcollect]\n"
+		"特定のBotから全ショップポイントを回収する。\n"
+		"入力例 [@bot shoppointcollect ハイプリ]\n"
+		"特定のBotから特定ショップポイントを回収する。\n"
+		"入力例 [@bot shoppointcollect ハイプリ 100]\n"
 	), SUBCMD_DESC(Bot, sKill                      , k   ,
 		"------ sKill (k) サブコマンド ------\n"
 		"スキルを一覧表示する。\n"
@@ -1976,6 +1984,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttack         , pna ),
 	SUBCMD_PROC(Bot, PolicyNormalAttackClear    ,     ),
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
+	SUBCMD_PROC(Bot, ShopPointCollect           , spc ),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
 	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew ),
 	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,     ),

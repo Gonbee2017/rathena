@@ -2496,6 +2496,7 @@ SUBCMD_FUNC(Bot, PolicyDistanceTransport);
 SUBCMD_FUNC(Bot, PolicyNormalAttack);
 SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
+SUBCMD_FUNC(Bot, ShopPointCollect);
 SUBCMD_FUNC(Bot, sKill);
 SUBCMD_FUNC(Bot, sKillEnchantWeapon);
 SUBCMD_FUNC(Bot, sKillEnchantWeaponClear);
