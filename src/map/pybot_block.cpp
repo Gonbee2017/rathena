@@ -119,6 +119,7 @@ int general_if::hp_ratio() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_attacking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_casting() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_ensemble() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool general_if::is_gospel() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_hiding() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_long_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_long_weapon_immune() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -515,6 +516,7 @@ void battler_impl::start_walking() {
 			status_change_end(bl(), SC_DANCING, INVALID_TIMER);
 			skill_used_ticks()[BD_ADAPTATION] = now;
 		}
+		if (is_gospel()) status_change_end(bl(), SC_GOSPEL, INVALID_TIMER);
 	}
 }
 
@@ -568,8 +570,9 @@ battler_impl::walk_xy(
 		stop_walking();
 		return false;
 	}
-	if (!is_walking() ||
-		!check_range_xy(ud()->to_x, ud()->to_y, x, y, ran)
+	if ((!is_walking() ||
+			!check_range_xy(ud()->to_x, ud()->to_y, x, y, ran)
+		) && can_move()
 	) {
 		start_walking();
 		ud()->target_to = -1;
@@ -834,7 +837,8 @@ general_impl::can_act() {
 bool // 結果。
 general_impl::can_move() {
 	return (unit_can_move(bl()) ||
-			is_ensemble()
+			is_ensemble() ||
+			is_gospel()
 		) && DIFF_TICK(now, ud()->canmove_tick) >= 0;
 }
 
@@ -988,6 +992,13 @@ bool // 結果。
 general_impl::is_ensemble() {
 	return sc()->data[SC_DANCING] &&
 		sc()->data[SC_DANCING]->val4;
+}
+
+// ゴスペルしているかを判定する。
+bool // 結果。
+general_impl::is_gospel() {
+	return sc()->data[SC_GOSPEL] &&
+		sc()->data[SC_GOSPEL]->val4 == BCT_SELF;
 }
 
 // ハイディング状態かを判定する。

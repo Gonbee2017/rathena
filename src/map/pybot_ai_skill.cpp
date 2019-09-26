@@ -348,7 +348,9 @@ AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 		if (dan_kid != bot->want_to_play() ||
 			(bot->is_solo() &&
 				bot->battle_mode() != BM_NONE &&
-				skill_get_unit_flag(kid) & UF_NOMOB
+				(!(skill_get_unit_target(dan_kid) & BCT_ENEMY) ||
+					skill_get_unit_flag(dan_kid) & UF_NOMOB
+				)
 			)
 		) bot->use_skill_self(kid, klv);
 	}
@@ -1828,7 +1830,7 @@ AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, deactivate) {
 AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		!bot->sc()->data[SC_GOSPEL] &&
+		!bot->is_gospel() &&
 		bot->check_hp(3) &&
 		bot->is_best_pos() &&
 		tar_ene->is_great(leader)
@@ -1837,9 +1839,8 @@ AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
 
 // ƒSƒXƒyƒ‹ó‘Ô‚ğ‰ğœ‚·‚éB
 AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate) {
-	if (bot->sc()->data[SC_GOSPEL] &&
+	if (bot->is_gospel() &&
 		(bot->battle_mode() == BM_NONE ||
-			!bot->is_best_pos() ||
 			!bot->target_enemy()->is_great(leader)
 		) 
 	) bot->use_skill_self(kid, klv);

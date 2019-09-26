@@ -490,7 +490,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_LORD_KNIGHT, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_D     (KN_SPEARSTAB, AC_CHARGEARROW                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (LK_BERSERK                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (LK_BERSERK                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SM_PROVOKE                                     ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC_DT    (KN_SPEARBOOMERANG, TF_THROWSTONE, first_attack ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (SM_PROVOKE, first_attack                       ,  1,  1, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
@@ -607,7 +607,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (NV_FIRSTAID                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 1)
 	)}, {JOB_PALADIN, initialize<ai_t::skill_use_proc_vector>(					 	 
-		AI_SKILL_USE_PROC_T     (PA_GOSPEL, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (PA_GOSPEL, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (CR_DEFENDER, deactivate                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (CR_SHIELDCHARGE, AC_CHARGEARROW                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1126,23 +1126,8 @@ const std::unordered_map<
 	)},
 };
 
-// AIにおけるメンバー一時スキル使用手続きのベクタ。
-const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS = {
-	AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (AL_CURE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, first_attack,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_T     (TF_THROWSTONE, first_attack              ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, crush       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_T     (TF_THROWSTONE, crush                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_HEAL  (3                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (TF_DETOXIFY                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC_T     (TF_HIDING, activate                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 3),
-	AI_SKILL_USE_PROC       (WZ_FROSTNOVA                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (MG_FROSTDIVER                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (MG_STONECURSE                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (MG_SIGHT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
-	AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+// AIにおけるメンバー一時スキル使用手続きのベクタ(後処理)。
+const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS = {
 	AI_SKILL_USE_PROC       (SM_MAGNUM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (WZ_METEOR                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC       (MG_FIREBALL                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -1156,6 +1141,25 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS = {
 	AI_SKILL_USE_PROC       (SM_BASH                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 	AI_SKILL_USE_PROC       (TF_PICKSTONE                             ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC_HEAL  (4                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
+};
+
+// AIにおけるメンバー一時スキル使用手続きのベクタ(前処理)。
+const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS = {
+	AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (AL_CURE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, first_attack,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_T     (TF_THROWSTONE, first_attack              ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, crush       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_T     (TF_THROWSTONE, crush                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_HEAL  (3                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (TF_DETOXIFY                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC_T     (TF_HIDING, activate                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 3),
+	AI_SKILL_USE_PROC       (WZ_FROSTNOVA                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (MG_FROSTDIVER                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (MG_STONECURSE                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (MG_SIGHT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
+	AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 };
 
 // 味方スキルアドバンテージのマップ(遠隔)。

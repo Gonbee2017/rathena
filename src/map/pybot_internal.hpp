@@ -1330,6 +1330,7 @@ struct general_if {
 	virtual bool is_attacking();
 	virtual bool is_casting();
 	virtual bool is_ensemble();
+	virtual bool is_gospel();
 	virtual bool is_hiding();
 	virtual bool is_long_range_attacker();
 	virtual bool is_long_weapon_immune();
@@ -1668,6 +1669,7 @@ struct general_impl : virtual block_if {
 	virtual bool is_attacking() override;
 	virtual bool is_casting() override;
 	virtual bool is_ensemble() override;
+	virtual bool is_gospel() override;
 	virtual bool is_hiding() override;
 	virtual bool is_long_range_attacker() override;
 	virtual bool is_long_weapon_immune() override;
@@ -2758,7 +2760,8 @@ bool wall_exists(block_list* cen, int rad);
 
 extern const std::vector<ai_t::item_use_proc> AI_ITEM_USE_PROCS;
 extern const std::unordered_map<e_job,ptr<ai_t::skill_use_proc_vector>> AI_MEMBER_SKILL_USE_PROCS;
-extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS;
+extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS;
+extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS;
 extern const std::unordered_map<homun_mapid,ptr<ai_t::skill_use_proc_vector>> AI_HOMUN_SKILL_USE_PROCS;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE;

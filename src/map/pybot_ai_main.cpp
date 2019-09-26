@@ -1099,6 +1099,7 @@ void ai_t::battler_use_skill() {
 		battler->can_act() &&
 		!battler->is_paralysis()
 	) {
+		if (dynamic_cast<member_impl*>(battler)) ite_sk_pros(&AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS, true);
 		const ai_t::skill_use_proc_vector* pros = nullptr;
 		if (dynamic_cast<member_impl*>(battler)) {
 			int mem_cla = battler->sd()->status.class_;
@@ -1109,7 +1110,7 @@ void ai_t::battler_use_skill() {
 		} else if (dynamic_cast<homun_impl*>(battler)) 
 			pros = find_map_data(AI_HOMUN_SKILL_USE_PROCS, battler->homun_mapid_()).get();
 		if (pros) ite_sk_pros(pros);
-		if (dynamic_cast<member_impl*>(battler)) ite_sk_pros(&AI_MEMBER_TEMPORARY_SKILL_USE_PROCS, true);
+		if (dynamic_cast<member_impl*>(battler)) ite_sk_pros(&AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS, true);
 	}
 }
 
