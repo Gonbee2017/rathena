@@ -1,5 +1,5 @@
 prontera,152,192,5	script	ƒŠƒZƒbƒgEˆõ	860,{
-	setarray .@fee, 1000000;
+	set .@fee, 1000000;
 	if (RESET_FEE_RATE) set .@fee, .@fee * RESET_FEE_RATE;
 	
 	cutin "kafra_08",2;

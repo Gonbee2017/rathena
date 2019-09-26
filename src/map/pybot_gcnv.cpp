@@ -490,7 +490,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_LORD_KNIGHT, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_D     (KN_SPEARSTAB, AC_CHARGEARROW                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (LK_BERSERK                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (LK_BERSERK                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SM_PROVOKE                                     ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC_DT    (KN_SPEARBOOMERANG, TF_THROWSTONE, first_attack ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (SM_PROVOKE, first_attack                       ,  1,  1, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
@@ -1129,7 +1129,7 @@ const std::unordered_map<
 // AIにおけるメンバー一時スキル使用手続きのベクタ。
 const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_USE_PROCS = {
 	AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC       (AL_CURE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, first_attack,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC_T     (TF_THROWSTONE, first_attack              ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
@@ -1685,6 +1685,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ アスムプティオ アサクロ]\n"
 		"ターゲットスキルを特定レベルで使用する。\n"
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
+	), SUBCMD_DESC(Bot, sKillBerserkRate           , kbr ,
+		"------ sKillBerserkRate (kbr) サブコマンド ------\n"
+		"バーサーク発動率を設定する。\n"
+		"入力例 [@bot skillberserkrate ドナ 25]\n"
 	), SUBCMD_DESC(Bot, sKillEnchantWeapon         , kew ,
 		"------ sKillEnchantWeapon (kew) サブコマンド ------\n"
 		"武器属性付与を一覧表示する。\n"
@@ -1986,6 +1990,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
 	SUBCMD_PROC(Bot, ShopPointCollect           , spc ),
 	SUBCMD_PROC(Bot, sKill                      , k   ),
+	SUBCMD_PROC(Bot, sKillBerserkRate           , kbr ),
 	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew ),
 	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,     ),
 	SUBCMD_PROC(Bot, sKillEnchantWeaponTransport, kewt),

@@ -1,5 +1,6 @@
 // Card removal NPC by TyrNemesis^ 日本語訳：胡蝶蘭
 prt_in,28,73,4	script	賢い老女	78,{
+	set .@fee, 1000000;
 	mes "[賢い老女]";
 	mes "いい天気だね、若いの。";
 	mes "ところで、アタシは武具に装着している";
@@ -45,42 +46,67 @@ prt_in,28,73,4	script	賢い老女	78,{
 			mes "一応聞いて置くけど、比べるなら";
 			mes "カードと武具のどっちが大切だい？";
 			next;
-			set .@failtype, select("それならやめます","武具の方が大切です","カードの方が大切です") - 1;
+			set .@failtype, select("どっちも大切です","武具の方が大切です","カードの方が大切です") - 1;
+			if (!.@failtype) {
+				mes "[賢い老女]";
+				mes "壊さないように外す魔法もあるには";
+				mes "あるけど……^4040FF" + .@fee + "Zeny^000000かかるよ？";
+				next;
+				if (select("それならやめます","支払います") == 2) set .@failtype, 3;
+			}
 			if(.@failtype) {
 				mes "[賢い老女]";
 				mes "よし、始めるよ。";
 				next;
 				set .@rate, rand(100);
-				if(.@rate <= 1) {
-					failedremovecards2 .@part,0;
-					mes "[賢い老女]";
-					mes "残念だけど完全に失敗したよ。";
-					mes "武具もカードも壊れてしまった。";
-					close;
-				}
-				if(.@rate <= 1 + 2) {
-					failedremovecards2 .@part, .@failtype;
-					if(.@failtype == 1) {
+				if (.@failtype == 3) {
+					if (Zeny < .@fee) {
 						mes "[賢い老女]";
-						mes "頑張ったけどね、";
-						mes "カードのほうは全部壊れてしまったよ。";
-						mes "でも武具の方は無事だったよ。";
+						mes "若いの、お金が足りないよ。";
+						mes "それじゃアタシの出番はないさ。";
+						close;
 					}
-					else {
+					set Zeny, Zeny - .@fee;
+					if (.@rate <= 1 + 2 + 4) {
+						failedremovecards2 .@part, 3;
 						mes "[賢い老女]";
-						mes "不運だったね。";
-						mes "カードを取り外すのはうまくいったけど";
-						mes "武具が壊れてしまったよ。";
+						mes "カードを取り外すのに失敗したよ。";
+						mes "でも、お金をかけただけはあるね。";
+						mes "武具もカードも無事だよ。";
+						close;
 					}
-					close;
-				}
-				if(.@rate <= 1 + 2 + 4) {
-					failedremovecards2 .@part, 3;
-					mes "[賢い老女]";
-					mes "カードを取り外すのに失敗したよ。";
-					mes "でも、不幸中の幸いさ。";
-					mes "武具もカードも無事だよ。";
-					close;
+				} else {
+					if(.@rate <= 1) {
+						failedremovecards2 .@part,0;
+						mes "[賢い老女]";
+						mes "残念だけど完全に失敗したよ。";
+						mes "武具もカードも壊れてしまった。";
+						close;
+					}
+					if(.@rate <= 1 + 2) {
+						failedremovecards2 .@part, .@failtype;
+						if(.@failtype == 1) {
+							mes "[賢い老女]";
+							mes "頑張ったけどね、";
+							mes "カードのほうは全部壊れてしまったよ。";
+							mes "でも武具の方は無事だったよ。";
+						}
+						else {
+							mes "[賢い老女]";
+							mes "不運だったね。";
+							mes "カードを取り外すのはうまくいったけど";
+							mes "武具が壊れてしまったよ。";
+						}
+						close;
+					}
+					if(.@rate <= 1 + 2 + 4) {
+						failedremovecards2 .@part, 3;
+						mes "[賢い老女]";
+						mes "カードを取り外すのに失敗したよ。";
+						mes "でも、不幸中の幸いさ。";
+						mes "武具もカードも無事だよ。";
+						close;
+					}
 				}
 				successremovecards2 .@part;
 				mes "[賢い老女]";

@@ -1094,8 +1094,10 @@ AI_SKILL_USE_FUNC(LK_AURABLADE) {
 
 // バーサークを使う。
 AI_SKILL_USE_FUNC(LK_BERSERK) {
-	if (!bot->check_hp(1) &&
-		!bot->sc()->data[SC_BERSERK]
+	if (!bot->sc()->data[SC_BERSERK] &&
+		(!bot->berserk_rate()->get() ||
+			bot->hp() * 100 < bot->max_hp() * bot->berserk_rate()->get() 
+		)
 	) bot->use_skill_self(kid, klv);
 }
 

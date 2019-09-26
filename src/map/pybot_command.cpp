@@ -1798,10 +1798,14 @@ SUBCMD_FUNC(Bot, ShopPointCollect) {
 		return poi;
 	};
 	if (args.empty()) {
-		int sum = 0;
-		for (auto bot : lea->bots()) sum += imp(bot.get());
+		int cou = 0, sum = 0;
+		for (auto bot : lea->bots()) {
+			int poi = imp(bot.get());
+			if (poi) ++cou;
+			sum += poi;
+		}
 		show_client(lea->fd(), print(
-			"すべてのBotから合計", sum, "ショップポイントを回収しました。"
+			cou, "人のBotから合計", sum, "ショップポイントを回収しました。"
 		));
 	} else {
 		block_if* bot = shift_arguments_then_find_bot(lea, args);
@@ -1821,6 +1825,25 @@ SUBCMD_FUNC(Bot, sKill) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) skill_user_show_skills(mem);
 	else skill_user_use_skill(lea, args, mem);
+}
+
+// バーサーク発動率を設定する。
+SUBCMD_FUNC(Bot, sKillBerserkRate) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int rat = shift_arguments_then_parse_int(
+		args, print("発動率"), 0, 100
+	);
+	if (!rat)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」は常にバーサークを使用します。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はHPが", rat, "%未満のときにバーサークを使用します。"
+		));
+	mem->berserk_rate()->set(rat);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
 // メンバーの武器属性付与を一覧表示、または登録、または抹消する。

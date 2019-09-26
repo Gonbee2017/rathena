@@ -177,6 +177,7 @@ void leader_if::update_bot_indices() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::update_member_indices() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 int& member_if::account_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::berserk_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::can_ka(block_if* tar_mem) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::char_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1596,6 +1597,11 @@ int& member_impl::account_id() {
 	return account_id_;
 }
 
+// バーサーク発動率の登録値。
+ptr<regnum_t<int>>& member_impl::berserk_rate() {
+	return berserk_rate_;
+}
+
 // メンバーのブロックリストを取得する。
 block_list* // 取得したブロックリスト。
 member_impl::bl() {
@@ -2633,6 +2639,7 @@ member_t::member_t(
 	account_id() = sd()->status.account_id;
 	char_id() = sd()->status.char_id;
 	leader() = lea;
+	berserk_rate() = construct<regnum_t<int>>(sd(), "pybot_berserk_rate");
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
 	hold_mobs() = construct<regnum_t<int>>(sd(), "pybot_hold_mobs");
 	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");

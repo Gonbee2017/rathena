@@ -1399,6 +1399,7 @@ struct leader_if {
 // メンバーのインターフェイス。
 struct member_if {
 	virtual int& account_id();
+	virtual ptr<regnum_t<int>>& berserk_rate();
 	virtual bool can_ka(block_if* tar_mem);
 	virtual ptr<registry_t<int>>& cart_auto_get_items();
 	virtual int& char_id();
@@ -1788,6 +1789,7 @@ struct leader_impl : virtual block_if {
 // メンバーの実装。
 struct member_impl : virtual block_if {
 	int account_id_;                              // アカウントID。
+	ptr<regnum_t<int>> berserk_rate_;             // バーサーク発動率の登録値。
 	ptr<registry_t<int>> cart_auto_get_items_;    // カート自動補充アイテムのレジストリ。
 	int char_id_;                                 // キャラクターID。
 	ptr<regnum_t<int>> distance_max_;             // 最大距離の登録値。
@@ -1828,6 +1830,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,int>> storage_get_items_;  // 倉庫補充アイテムのレジストリ。
 
 	virtual int& account_id() override;
+	virtual ptr<regnum_t<int>>& berserk_rate() override;
 	virtual block_list* bl() override;
 	virtual bool can_use_skill(e_skill kid, int klv) override;
 	virtual bool can_ka(block_if* tar_mem) override;
@@ -2498,6 +2501,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackClear);
 SUBCMD_FUNC(Bot, PolicyNormalAttackTransport);
 SUBCMD_FUNC(Bot, ShopPointCollect);
 SUBCMD_FUNC(Bot, sKill);
+SUBCMD_FUNC(Bot, sKillBerserkRate);
 SUBCMD_FUNC(Bot, sKillEnchantWeapon);
 SUBCMD_FUNC(Bot, sKillEnchantWeaponClear);
 SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport);
