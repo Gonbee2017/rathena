@@ -3491,6 +3491,10 @@ int npc_instanceinit(struct npc_data* nd)
 	return 0;
 }
 
+static int vars_clear_sub(DBKey key, DBData* data, va_list ap) {
+	npc_data* nd = va_arg(ap, npc_data*);
+}
+
 int npc_instancedestroy(struct npc_data* nd)
 {
 	struct event_data *ev;

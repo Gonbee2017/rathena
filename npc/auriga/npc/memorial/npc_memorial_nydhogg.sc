@@ -1,5 +1,5 @@
 //= Auriga Script ==============================================================
-// Ragnarok Online Nydhogg.s Nest Script	by refis
+// Ragnarok Online Nydhogg's Nest Script	by refis
 //- Registry -------------------------------------------------------------------
 // NYD_2QUE -> 0～2
 //==============================================================================
@@ -359,9 +359,9 @@ OnTouch:
 //------------------------------------------------------------
 1@nyd,0,0,0	script	NydControl	-1,{
 OnStart:
-	if(.active > 0)
+	if('active > 0)
 		end;
-	set .active,1;
+	set 'active,1;
 	donpcevent getmdnpcname("nyd_call_mon_1")+ "::OnStart";
 	donpcevent getmdnpcname("nyd_boss_enter_call")+ "::OnStart";
 	donpcevent getmdnpcname("nyd_crystal_red")+ "::OnClose";
@@ -571,8 +571,8 @@ OnStart:
 	areamonster .@mdmap$,0,0,0,0,"ダークピンギキュラ",2015,15,.@mdnpc$+ "::OnKilled5";
 	end;
 OnStart2:
-	if(.flag) end;
-	set .flag,1;
+	if('flag) end;
+	set 'flag,1;
 	set .@mdmap$,getmdmapname("1@nyd");
 	set .@mdnpc$,getmdnpcname("nyd_call_mon_1");
 	monster .@mdmap$,220,250,"ニーズヘッグの護衛兵",2020,1,.@mdnpc$+ "::OnKilled";
@@ -590,14 +590,14 @@ OnStart2:
 	announce "ニーズヘッグの護衛兵 : 守護者の聖所を守れ！ 進入者を排除せよ！",0x9,0x00FF99;
 	end;
 OnKilled:
-	set .mob,getmapmobs(getmdmapname("1@nyd"),getmdnpcname("nyd_call_mon_1")+ "::OnKilled");
-	if(.mob <= 0) {
+	set 'mob,getmapmobs(getmdmapname("1@nyd"),getmdnpcname("nyd_call_mon_1")+ "::OnKilled");
+	if('mob <= 0) {
 		announce "ニーズヘッグの護衛兵を全て倒した！",0x9,0x00FF99;
 		hideoffnpc getmdnpcname("nyd_to2f_warp");
 //		setpartyinmap NYD_2QUE,2;
 		set 'NYD_2QUE,2;
 	} else
-		announce "残り [" +.mob+ "]体",0x9,0x00FF99;
+		announce "残り [" +'mob+ "]体",0x9,0x00FF99;
 	end;
 OnKilled1:
 	areamonster getmdmapname("1@nyd"),0,0,0,0,"エンシェントツリー",2019,1,getmdnpcname("nyd_call_mon_1")+ "::OnKilled1";
@@ -919,8 +919,8 @@ OnClose:
 	killmonster getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_red_c")+ "::OnKilled";
 	end;
 OnKilled:
-	set .mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_red_c")+ "::OnKilled");
-	if(.mob <= 0) {
+	set 'mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_red_c")+ "::OnKilled");
+	if('mob <= 0) {
 		announce "ニーズヘッグの影 : ほう、なかなかやるな…… では今度はこの俺が相手だっ！",0x9,0x00FF00;
 		donpcevent getmdnpcname("nyd_crystal_red")+ "::OnClose";
 		donpcevent getmdnpcname("nyd_boss_enter_call")+ "::OnReset";
@@ -1005,8 +1005,8 @@ OnClose:
 	killmonster getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_white_c")+ "::OnKilled";
 	end;
 OnKilled:
-	set .mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_white_c")+ "::OnKilled");
-	if(.mob <= 0) {
+	set 'mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_white_c")+ "::OnKilled");
+	if('mob <= 0) {
 		announce "ニーズヘッグの影 : 突破したか！ ならばこの俺が相手してやろう！ ここまで来るがいい！",0x9,0x00FF00;
 		donpcevent getmdnpcname("nyd_crystal_white")+ "::OnClose";
 		donpcevent getmdnpcname("nyd_boss_enter_call")+ "::OnReset";
@@ -1092,8 +1092,8 @@ OnClose:
 	killmonster getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_yellow_")+ "::OnKilled";
 	end;
 OnKilled:
-	set .mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_yellow_")+ "::OnKilled");
-	if(.mob <= 0) {
+	set 'mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_yellow_")+ "::OnKilled");
+	if('mob <= 0) {
 		announce "ニーズヘッグの影 : ほう、なかなかやるな……よかろう。この俺自ら葬ってやろう！",0x9,0x00FF00;
 		donpcevent getmdnpcname("nyd_crystal_yellow")+ "::OnClose";
 		donpcevent getmdnpcname("nyd_boss_enter_call")+ "::OnReset";
@@ -1178,8 +1178,8 @@ OnClose:
 	killmonster getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_green_c")+ "::OnKilled";
 	end;
 OnKilled:
-	set .mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_green_c")+ "::OnKilled");
-	if(.mob <= 0) {
+	set 'mob,getmapmobs(getmdmapname("2@nyd"),getmdnpcname("nyd_crystal_green_c")+ "::OnKilled");
+	if('mob <= 0) {
 		announce "ニーズヘッグの影 : 突破したか…… そんなにこの俺の手で葬って欲しいのか？ いいだろう、ここまで来るがいい！",0x9,0x00FF00;
 		donpcevent getmdnpcname("nyd_crystal_green")+ "::OnClose";
 		donpcevent getmdnpcname("nyd_boss_enter_call")+ "::OnReset";

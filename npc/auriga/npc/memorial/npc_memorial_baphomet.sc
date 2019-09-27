@@ -522,9 +522,9 @@ monk_test,306,151,3	script	••ˆóÎ	111,{
 //------------------------------------------------------------
 1@cata,0,0,0	script	BaphometControl1-1	-1,{
 OnStart:
-	if(.flag > 0)
+	if('flag > 0)
 		end;
-	set .flag,1;
+	set 'flag,1;
 
 	hideonnpc getmdnpcname("æ‘ã‰p—Y‚Ì°#1F");
 	hideonnpc getmdnpcname("BaphometGate");

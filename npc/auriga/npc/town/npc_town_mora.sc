@@ -3845,7 +3845,7 @@ OnKilled:
 			mes "ロキに話しかけよう)";
 			close;
 		}
-		if(.flag) {
+		if('flag_Young) {
 			mes "[ロキ]";
 			mes "竜に変化があったようだな。";
 			mes "……";
@@ -4187,7 +4187,7 @@ OnTimer25000:
 	misceffect 91,getmdnpcname("mora_ensyutu_6");
 	end;
 OnTimer30000:
-	set .flag,1;
+	set 'flag_Young,1;
 	donpcevent getmdnpcname("ロキ#mist")+ "::OnStart";
 	stopnpctimer;
 	announce "竜の叫び : この歌は……あ、頭が……割れる……そ、そうだ……私は、守護者……",0x9,0xFFFF00;
@@ -4207,7 +4207,7 @@ OnTimer30000:
 			mes "ニーズヘッグ。";
 		}
 		else {
-			if(.flag == 1) {
+			if('flag_Roki == 1) {
 				mes "[ロキ]";
 				mes "また会ったな。";
 				mes "ここは危険な地域。";
@@ -4273,7 +4273,7 @@ OnTimer30000:
 		close;
 	}
 OnStart:
-	set .flag,1;
+	set 'flag_Roki,1;
 	end;
 }
 
@@ -14188,7 +14188,8 @@ mora,147,98,3	script	アーティファクト研究者	521,{
 			mes "どちらのエンチャントを";
 			mes "行いますか？";
 			next;
-			if(select(.@categoryname$[.@category[0]],.@categoryname$[.@category[0]]+ "^FF0000(精錬値9以上)^000000") == 2)
+//			if(select(.@categoryname$[.@category[0]],.@categoryname$[.@category[0]]+ "^FF0000(精錬値9以上)^000000") == 2)
+			if(select(.@categoryname$[.@category[0]],.@categoryname$[.@category[1]]+ "^FF0000(精錬値9以上)^000000") == 2)
 				set .@category[0],.@category[1];
 		} else {
 			mes "[アーティファクトの研究者]";

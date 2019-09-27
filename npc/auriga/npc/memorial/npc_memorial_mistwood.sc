@@ -38,14 +38,14 @@ bif_fild01,158,340,5	script	霧の森の監視兵	447,{
 	}
 	if(checkquest2(7211)) {
 		if(checkquest2(7211) & 0x2) {
-			mes "[霧の森の監視兵]";
-			mes "この先は、入る者を惑わす";
-			mes "^0000FF霧の森^000000。";
-			mes "非常に危険な場所です。";
-			mes "私はスプレンディッドの住民が";
-			mes "ここに迷いこまないよう";
-			mes "見張っています。";
-			next;
+			//mes "[霧の森の監視兵]";
+			//mes "この先は、入る者を惑わす";
+			//mes "^0000FF霧の森^000000。";
+			//mes "非常に危険な場所です。";
+			//mes "私はスプレンディッドの住民が";
+			//mes "ここに迷いこまないよう";
+			//mes "見張っています。";
+			//next;
 			mes "[霧の森の監視兵]";
 			mes "……";
 			mes "どうやら霧の森が";
@@ -176,9 +176,9 @@ bif_fild01,161,355,0	script	丸太のトンネル	844,{
 //------------------------------------------------------------
 1@mist,0,0,0	script	MistwoodControl	-1,{
 OnStart:
-	if(.flag > 0)
+	if('flag_MistwoodControl > 0)
 		end;
-	set .flag,1;
+	set 'flag_MistwoodControl,1;
 
 //	hideonnpc getmdnpcname("ロキ#mist");
 //	hideonnpc getmdnpcname("倒れている女性#mist");
@@ -254,7 +254,7 @@ OnKilled5:
 
 1@mist,251,121,3	script	ちびっこトームの庭園::Mistwood#1	858,{}
 1@mist,247,123,0	script	ちびっこトームの庭木::GardenTree#1	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_1 <= 0) {
 		announce "ちびっこトーム : ん？私の庭木に嫌がらせをするつもり!?",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　ちびっこトームの力で";
@@ -280,14 +280,14 @@ OnKilled5:
 	hideonnpc getmdnpcname("GardenTree#1");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_1,1;
 	announce "森の囁き : ちびっこトームが倒された……「ちびっこトームの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,226,95,3	script	木登りトームバーの庭::Mistwood#2	858,{}
 1@mist,225,98,0	script	木登りトームバーの庭木::GardenTree#2	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_2 <= 0) {
 		announce "木登りトームバー : 私の庭木に手を出すな！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　木登りトームバーの力で";
@@ -313,14 +313,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#2");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_2,1;
 	announce "森の囁き : 木登りトームバーが倒された……「木登りトームバーの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,157,183,3	script	お疲れレミの庭園::Mistwood#3	858,{}
 1@mist,159,184,0	script	お疲れレミの庭木::GardenTree#3	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_3 <= 0) {
 		announce "お疲れレミ : 私の庭木に近づかないで！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　お疲れレミの力で";
@@ -346,14 +346,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#3");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_3,1;
 	announce "森の囁き : お疲れレミが倒された……「お疲れレミの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,58,39,3	script	うたた寝レムの庭::Mistwood#4	858,{}
 1@mist,61,39,0	script	うたた寝レムの庭木::GardenTree#4	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_4 <= 0) {
 		announce "うたた寝レム : ああっ！僕の庭木に触らないでよ!!",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　うたた寝レムの力で";
@@ -380,7 +380,7 @@ OnKilled:
 	initnpctimer;
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_4,1;
 	announce "森の囁き : うたた寝レムが倒された……「うたた寝レムの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 OnTimer10000:
@@ -397,7 +397,7 @@ OnTimer20000:
 
 1@mist,227,179,3	script	怖がりロンの庭園::Mistwood#5	858,{}
 1@mist,230,179,0	script	怖がりロンの庭木::GardenTree#5	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_5 <= 0) {
 		announce "怖がりロン : これ以上、先には行かせないよ！君は僕の庭木を壊せない！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　怖がりロンの力で";
@@ -423,14 +423,14 @@ OnTimer20000:
 	hideonnpc getmdnpcname("GardenTree#5");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_5,1;
 	announce "森の囁き : 怖がりロンが倒された……「怖がりロンの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,288,226,3	script	杞憂のローバーの庭園::Mistwood#6	858,{}
 1@mist,285,225,0	script	杞憂のローバーの庭木::GardenTree#6	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_6 <= 0) {
 		announce "杞憂のローバー : ロンを倒すなんて信じられない！僕も倒すの!?",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　杞憂のローバーの力で";
@@ -456,14 +456,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#6");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_6,1;
 	announce "森の囁き : 杞憂のローバーが倒された……「杞憂のローバーの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,159,318,3	script	幸せなナモの庭園::Mistwood#7	858,{}
 1@mist,161,316,0	script	幸せなナモの庭木::GardenTree#7	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_7 <= 0) {
 		announce "幸せなナモ : 私の大事な庭木に手を出そうとしてるのは誰!?",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　幸せなナモの力で";
@@ -489,14 +489,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#7");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_7,1;
 	announce "森の囁き : 幸せなナモが倒された……「幸せなナモの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,205,300,3	script	勇敢なナモンの庭園::Mistwood#8	858,{}
 1@mist,204,299,0	script	勇敢なナモンの庭木::GardenTree#8	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_8 <= 0) {
 		announce "勇敢なナモン : 俺の庭木に手出しさせないぜ！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　勇敢なナモンの力で";
@@ -522,14 +522,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#8");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_8,1;
 	announce "森の囁き : 勇敢なナモンが倒された……「勇敢なナモンの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,219,232,3	script	憂鬱なニョロンの庭園::Mistwood#9	858,{}
 1@mist,221,236,0	script	憂鬱なニョロンの庭木::GardenTree#9	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_9 <= 0) {
 		announce "憂鬱なニョロン : ゆううつだぁ……ゆううつだなぁ……ぼくの庭に来ないでよ……",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　憂鬱なニョロンの力で";
@@ -555,14 +555,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#9");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_9,1;
 	announce "森の囁き : 憂鬱なニョロンが倒された……「憂鬱なニョロンの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,206,202,3	script	優越ゲミの庭園::Mistwood#10	858,{}
 1@mist,206,200,0	script	優越ゲミの庭木::GardenTree#10	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_10 <= 0) {
 		announce "優越ゲミ : 私の大切な庭から出て行きなさい！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　優越ゲミの力で";
@@ -589,7 +589,7 @@ OnKilled:
 	initnpctimer;
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_10,1;
 	announce "森の囁き : 優越ゲミが倒された……「優越ゲミの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 OnTimer5000:
@@ -609,7 +609,7 @@ OnTimer17000:
 
 1@mist,96,288,3	script	暴虐のティトの庭園::Mistwood#11	858,{}
 1@mist,95,287,0	script	暴虐のティトの庭木::GardenTree#11	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_11 <= 0) {
 		announce "暴虐のティト : 私の庭にまで来るなんて！なんて奴！なんて奴だ！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　暴虐のティトの力で";
@@ -635,14 +635,14 @@ OnTimer17000:
 	hideonnpc getmdnpcname("GardenTree#11");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_11,1;
 	announce "森の囁き : 暴虐のティトが倒された……「暴虐のティトの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,326,325,3	script	働き者プムバーの庭園::Mistwood#12	858,{}
 1@mist,324,325,0	script	働き者プムバーの庭木::GardenTree#12	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_12 <= 0) {
 		announce "働き者プムバー : 僕が毎日毎日大切に育ててる庭に近づくな！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　働き者プムバーの力で";
@@ -668,14 +668,14 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#12");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_12,1;
 	announce "森の囁き : 働き者プムバーが倒された……「働き者プムバーの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,278,345,3	script	卓越したテテの庭園::Mistwood#13	858,{}
 1@mist,280,344,0	script	卓越したテテの庭木::GardenTree#13	527,{
-	if(.flag <= 0) {
+	if('flag_GardenTree_13 <= 0) {
 		announce "卓越したテテ : ここまで来たら、ちゃんと仕事しなきゃね！君はここで終わりだよ！",0x9,0xccffcc;
 		mes "‐この庭木を倒せば先に進めそうだが、";
 		mes "　卓越したテテの力で";
@@ -701,13 +701,13 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#13");
 	close;
 OnKilled:
-	set .flag,1;
+	set 'flag_GardenTree_13,1;
 	announce "森の囁き : 卓越したテテが倒された……「卓越したテテの庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
 
 1@mist,345,186,0	script	全ての庭師の庭木::GardenTree#14	527,{
-	if(.flag < 13) {
+	if('flag_GardenTree_14 < 13) {
 		announce "庭師たち : 君を倒すため、再び13人の庭師が大集合！みんなの力で君を倒す！僕たちのいる場所までおいで！",0x9,0xccffcc;
 		mes "‐これが最後の庭木のようだ。";
 		mes "　13人の庭師の力で護られている。";
@@ -718,7 +718,7 @@ OnKilled:
 		mes "‐^FF000013人の庭師全てを倒して、";
 		mes "　この庭木を破壊しよう。^000000";
 		mes "　";
-		mes "　残りの庭師：^FF0000" +(13 - .flag)+ "人^000000‐";
+		mes "　残りの庭師：^FF0000" +(13 - 'flag_GardenTree_14)+ "人^000000‐";
 		close;
 	}
 	mes "‐庭木を護る者はいない。";
@@ -737,8 +737,8 @@ OnKilled:
 	hideonnpc getmdnpcname("GardenTree#14");
 	close;
 OnKilled:
-	set .flag,.flag + 1;
-	if(.flag >= 13)
+	set 'flag_GardenTree_14,'flag_GardenTree_14 + 1;
+	if('flag_GardenTree_14 >= 13)
 		announce "森の囁き : 全ての庭師が倒された……「全ての庭師の庭木」を護る者がいない……壊されちゃう……",0x9,0xFFFF00;
 	end;
 }
@@ -840,7 +840,7 @@ OnTimer180000:
 }
 
 1@mist,109,70,0		script	a1_a2	45,1,1,{
-	if(.flag <= 0) {
+	if('flag_a1_a2 <= 0) {
 		mes "‐この先から";
 		mes "　モンスターの気配を感じる。";
 		mes "　先に進むとモンスターが現れそうだ‐";
@@ -851,9 +851,9 @@ OnTimer180000:
 		}
 		mes "‐進むことにした‐";
 		close2;
-		if(.flag <= 0)
+		if('flag_a1_a2 <= 0)
 			donpcevent getmdnpcname("MistwoodControl")+"::OnStart";
-		set .flag,1;
+		set 'flag_a1_a2,1;
 	}
 	warp getmdmapname("1@mist"),116,40;
 	end;

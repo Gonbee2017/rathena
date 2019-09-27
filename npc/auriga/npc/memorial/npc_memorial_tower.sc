@@ -537,11 +537,11 @@ e_tower,81,105,0	script	塔の守護石	406,{
 
 1@tower,0,0,0	script	TowerControl1	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,1;
-//	setarray .mob[0][0],	// 1F
-	setarray .mob[getarraysize(.mob)],
+	set 'lv,1;
+//	setarray 'mob[0][0],	// 1F
+	setarray 'mob[getarraysize('mob)],
 		1613,15,	// メタリン
 		1242,5,		// マーリン
 		1031,5,		// ポポリン
@@ -549,16 +549,16 @@ OnStart:
 		1090,1,		// マスターリング
 		1002,5		// ポリン
 	;
-	set .mob_bous[1], getarraysize(.mob);
-//	setarray .mob[1][0],	// 2F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[1], getarraysize('mob);
+//	setarray 'mob[1][0],	// 2F
+	setarray 'mob[getarraysize('mob)],
 		1106,20,	// デザートウルフ
 		1092,1,		// さすらい狼
 		1107,10		// 子デザートウルフ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[2][0],	// 3F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[2][0],	// 3F
+	setarray 'mob[getarraysize('mob)],
 		1016,5,		// アーチャースケルトン
 		1169,5,		// スケルワーカー
 		1028,5,		// ソルジャースケルトン
@@ -566,9 +566,9 @@ OnStart:
 		1071,5,		// パイレーツスケル
 		1076,5		// スケルトン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[3][0],	// 4F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[3][0],	// 4F
+	setarray 'mob[getarraysize('mob)],
 		1099,15,	// アルギオペ
 		1139,5,		// マンティス
 		1100,5,		// アルゴス
@@ -576,9 +576,9 @@ OnStart:
 		1052,5,		// ロッカー
 		1004,5		// ホーネット
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[4][0],	// 5F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[4][0],	// 5F
+	setarray 'mob[getarraysize('mob)],
 		//1086,1,	// 黄金蟲
 		//1054,15,	// 雄盗蟲
 		//1053,15,	// 雌盗蟲
@@ -590,75 +590,75 @@ OnStart:
 		1306,5,		// レイブオルマイ
 		1517,5		// 虎人
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[5][0],	// 6F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[5][0],	// 6F
+	setarray 'mob[getarraysize('mob)],
 		1721,5,		// ドラゴンの卵
 		1048,5,		// 盗蟲の卵
 		1097,5,		// 蟻の卵
 		1008,5		// プパ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[6][0],	// 7F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[6][0],	// 7F
+	setarray 'mob[getarraysize('mob)],
 		1383,15,	// エクスプロージョン
 		1111,15,	// ドレインリアー
 		1627,15,	// ウィレス
 		1005,15		// ファミリアー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[7][0],	// 8F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[7][0],	// 8F
+	setarray 'mob[getarraysize('mob)],
 		1403,15,	// 銃奇兵
 		1248,15		// クルーザー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[8][0],	// 9F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[8][0],	// 9F
+	setarray 'mob[getarraysize('mob)],
 		1615,15,	// オブシディアン
 		1040,15,	// ゴーレム
 		1784,10		// スタポ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[9][0],	// 10F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[9][0],	// 10F
+	setarray 'mob[getarraysize('mob)],
 		1059,1,		// ミストレス
 		1303,25,	// ジャイアントホーネット
 		1004,20		// ホーネット
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[10][0],	// 11F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[10][0],	// 11F
+	setarray 'mob[getarraysize('mob)],
 		1493,15,	// ドリアード
 		1500,15,	// フェアリーフ
 		1413,15,	// 老人参
 		1162,5		// ラフレシア
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[11][0],	// 12F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[11][0],	// 12F
+	setarray 'mob[getarraysize('mob)],
 		1378,25,	// デーモンパンク
 		1199,25		// パンク
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[12][0],	// 13F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[12][0],	// 13F
+	setarray 'mob[getarraysize('mob)],
 		1512,15,	// ヒェグン
 		1188,15,	// ボンゴン
 		1026,10		// ムナック
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[13][0],	// 14F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[13][0],	// 14F
+	setarray 'mob[getarraysize('mob)],
 		1213,15,	// ハイオーク
 		1189,10,	// オークアーチャー
 		1273,10,	// オークレディ
 		1023,5,		// オークウォリアー
 		1686,5		// オークベイビー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[14][0],	// 15F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[14][0],	// 15F
+	setarray 'mob[getarraysize('mob)],
 		//1147,1,	// マヤー
 		//1059,1,	// フリオニ
 		//1105,15,	// デニーロ
@@ -673,54 +673,54 @@ OnStart:
 		1095,15,	// アンドレ
 		1097,5		// 蟻の卵
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[15][0],	// 16F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[15][0],	// 16F
+	setarray 'mob[getarraysize('mob)],
 		1276,10,	// レイドリックアーチャー
 		1189,10,	// オークアーチャー
 		1253,10,	// ガーゴイル
 		1016,10		// アーチャースケルトン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[16][0],	// 17F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[16][0],	// 17F
+	setarray 'mob[getarraysize('mob)],
 		1264,10,	// 半漁人
-		1101,10,	// バフォメット.Jr
+		1101,10,	// バフォメット'Jr
 		1065,15,	// ストラウフ
 		1629,5		// ヒルウィンド(槍)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[17][0],	// 18F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[17][0],	// 18F
+	setarray 'mob[getarraysize('mob)],
 		1209,25,	// クランプ
 		1175,15		// タロウ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[18][0],	// 19F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[18][0],	// 19F
+	setarray 'mob[getarraysize('mob)],
 		1108,10,	// デビアス
 		1064,10,	// メガロドン
 		1069,10,	// ソードフィッシュ
 		1158,10		// フェン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[19][0],	// 20F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[19][0],	// 20F
+	setarray 'mob[getarraysize('mob)],
 		1112,1,		// ドレイク
 		1071,50		// パイレーツスケル
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[20][0],	// 21F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[20][0],	// 21F
+	setarray 'mob[getarraysize('mob)],
 		1693,10,	// プラズマ(黄)
 		1696,10,	// プラズマ(紫)
 		1695,5,		// プラズマ(緑)
 		1697,5,		// プラズマ(青)
 		1694,5		// プラズマ(赤)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[21][0],	// 22F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[21][0],	// 22F
+	setarray 'mob[getarraysize('mob)],
 		1780,15,	// マスキプラー
 		1781,15,	// ドロセラ
 		1118,15,	// フローラ
@@ -728,59 +728,59 @@ OnStart:
 		1020,10,	// マンドラゴラ
 		1162,10		// ラフレシア
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[22][0],	// 23F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[22][0],	// 23F
+	setarray 'mob[getarraysize('mob)],
 		1216,15,	// ペノメナ
 		1044,10,	// オボンヌ
 		1144,10,	// マルス
 		1069,10,	// ソードフィッシュ
 		1068,5		// ヒドラ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[23][0],	// 24F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[23][0],	// 24F
+	setarray 'mob[getarraysize('mob)],
 		1131,15,	// ジョーカー
 		1267,15,	// ジェスター
 		1130,10		// ジャック
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[24][0],	// 25F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[24][0],	// 25F
+	setarray 'mob[getarraysize('mob)],
 		1307,15,	// キャットナインテイル
 		1150,1,		// 月夜花
 		1180,15		// 九尾狐
 	;
-	setarray .x,  9, 93,181,267,352;
-	setarray .y,351,267,180, 96,  9;
+	setarray 'x,  9, 93,181,267,352;
+	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +.lv);
-	set .@idx,.lv-1;
-//	set .@max,getarraysize(.mob[.@idx][0])/2;
-	if (.@idx + 1 == getarraysize(.mob_bous)) set .@max, (getarraysize(.mob) - .mob_bous[.@idx]) / 2;
-	else set .@max, (.mob_bous[.@idx + 1] - .mob_bous[.@idx]) / 2;
+	disablenpc getmdnpcname("TowerGate" +'lv);
+	set .@idx,'lv-1;
+//	set .@max,getarraysize('mob[.@idx][0])/2;
+	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
+	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
 	for(set .@i,0; .@i < .@max; set .@i,.@i+1)
-//		areamonster getmdmapname("1@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.@idx][.@i*2],.mob[.@idx][.@i*2+1],getmdnpcname("TowerControl1")+ "::OnKilled";
-		areamonster getmdmapname("1@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.mob_bous[.@idx] + .@i*2],.mob[.mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl1")+ "::OnKilled";
+//		areamonster getmdmapname("1@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@i*2],'mob[.@idx][.@i*2+1],getmdnpcname("TowerControl1")+ "::OnKilled";
+		areamonster getmdmapname("1@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob['mob_bous[.@idx] + .@i*2],'mob['mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl1")+ "::OnKilled";
 	end;
 OnKilled:
 	initnpctimer;
 	end;
 OnTimer1000:
 	stopnpctimer;
-	set .count,getmapmobs(getmdmapname("1@tower"),getmdnpcname("TowerControl1")+ "::OnKilled");
-	if(.count <= 0) {
-		announce .lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+.lv);
-		if(.lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+.lv);
+	set 'count,getmapmobs(getmdmapname("1@tower"),getmdnpcname("TowerControl1")+ "::OnKilled");
+	if('count <= 0) {
+		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv);
+		if('lv%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv);
 		else {
-			set .lv,.lv+1;
+			set 'lv,'lv+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce .lv+ "階に残ったモンスター [" +.count+ "]体",0x9,0x00FF99;
+		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -824,20 +824,20 @@ OnTimer120000:
 //------------------------------------------------------------
 2@tower,0,0,0	script	TowerControl2	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,26;
-//	setarray .mob[0][0],	// 26F
-	setarray .mob[getarraysize(.mob)],
+	set 'lv,26;
+//	setarray 'mob[0][0],	// 26F
+	setarray 'mob[getarraysize('mob)],
 		1503,10,	// ジビット
 		1410,10,	// 人面桃樹
 		1497,10,	// ウドゥンゴーレム
 		1495,10,	// フレイムシューター
 		1033,5		// エルダーウィロー
 	;
-	set .mob_bous[1], getarraysize(.mob);
-//	setarray .mob[1][0],	// 27F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[1], getarraysize('mob);
+//	setarray 'mob[1][0],	// 27F
+	setarray 'mob[getarraysize('mob)],
 		1258,10,	// ゴブリンアーチャー
 		1122,10,	// ゴブリン長男
 		1123,5,		// ゴブリン次男
@@ -845,17 +845,17 @@ OnStart:
 		1125,5,		// ゴブリン四男
 		1126,5		// ゴブリン五男
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[2][0],	// 28F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[2][0],	// 28F
+	setarray 'mob[getarraysize('mob)],
 		1194,30,	// アクラウス
 		1255,15,	// ネレイド
 		1256,15,	// ペスト
 		1070,10		// ククレ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[3][0],	// 29F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[3][0],	// 29F
+	setarray 'mob[getarraysize('mob)],
 		1260,10,	// ダークフレーム
 		1375,10,	// 一反木綿
 		1510,10,	// ハイローゾイスト
@@ -863,9 +863,9 @@ OnStart:
 		1509,5,		// ルード
 		1179,10		// ウィスパー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[4][0],	// 30F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[4][0],	// 30F
+	setarray 'mob[getarraysize('mob)],
 		//1630,1,	// ペクソジン
 		//1416,30,	// 天仙娘々
 		// jRO配置
@@ -873,17 +873,17 @@ OnStart:
 		1166,20,	// サベージ
 		1311,10		// グリンブルスティ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[5][0],	// 31F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[5][0],	// 31F
+	setarray 'mob[getarraysize('mob)],
 		1387,20,	// ギグ
 		1212,15,	// アイアンフィスト
 		1099,10,	// アルギオペ
 		1001,5		// スコーピオン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[6][0],	// 32F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[6][0],	// 32F
+	setarray 'mob[getarraysize('mob)],
 		1299,1,		// ゴブリンリーダー
 		1258,10,	// ゴブリンアーチャー
 		1122,10,	// ゴブリン長男
@@ -892,63 +892,63 @@ OnStart:
 		1125,5,		// ゴブリン四男
 		1126,5		// ゴブリン五男
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[7][0],	// 33F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[7][0],	// 33F
+	setarray 'mob[getarraysize('mob)],
 		1296,1,		// コボルドリーダー
 		1133,15,	// コボルド(斧)
 		1282,15,	// コボルドアーチャー
 		1134,10,	// コボルド(槌)
 		1135,5		// コボルド(毬)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[8][0],	// 34F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[8][0],	// 34F
+	setarray 'mob[getarraysize('mob)],
 		1869,20,	// フレームスカル
 		1179,10,	// ウィスパー
 		1186,10		// 巨大ウィスパー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[9][0],	// 35F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[9][0],	// 35F
+	setarray 'mob[getarraysize('mob)],
 		1312,1,		// タートルジェネラル
 		1319,10,	// フリーズタートル
 		1316,10,	// ソリッドタートル
 		1318,10,	// ヒートタートル
 		1314,10		// パーメットタートル
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[10][0],	// 36F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[10][0],	// 36F
+	setarray 'mob[getarraysize('mob)],
 		1206,30,	// アノリアン
 		1687,10,	// グリーンイグアナ
 		1271,10		// アリゲーター
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[11][0],	// 37F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[11][0],	// 37F
+	setarray 'mob[getarraysize('mob)],
 		1270,5,		// 時計塔管理者
 		1269,10,	// クロック
 		1193,30		// アラーム
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[12][0],	// 38F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[12][0],	// 38F
+	setarray 'mob[getarraysize('mob)],
 		1698,25,	// デスワード
 		1195,25		// ライドワード
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[13][0],	// 39F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[13][0],	// 39F
+	setarray 'mob[getarraysize('mob)],
 		1416,10,	// 天仙娘々
 		1513,10,	// ミョグェ
 		1412,10,	// 天邪仙人
 		1514,10,	// 小龍舞
 		1517,5		// 虎人
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[14][0],	// 40F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[14][0],	// 40F
+	setarray 'mob[getarraysize('mob)],
 		//1492,1,	// 怨霊武士
 		//1401,10,	// カブキ忍者
 		//1405,10,	// 酒天狗
@@ -962,114 +962,114 @@ OnStart:
 		1775,15,	// スノウアー
 		1777,15		// アイスタイタン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[15][0],	// 41F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[15][0],	// 41F
+	setarray 'mob[getarraysize('mob)],
 		1587,50		// クラベン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[16][0],	// 42F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[16][0],	// 42F
+	setarray 'mob[getarraysize('mob)],
 		1386,20,	// スリーパー
 		1207,10,	// スティング
 		1516,10,	// 土精
 		1165,5,		// サンドマン
 		1127,5		// ホード
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[17][0],	// 43F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[17][0],	// 43F
+	setarray 'mob[getarraysize('mob)],
 		1148,10,	// メデューサ
 		1037,40,	// サイドワインダー
 		1030,5,		// アナコンダク
 		1025,5		// スネイク
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[18][0],	// 44F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[18][0],	// 44F
+	setarray 'mob[getarraysize('mob)],
 		1515,20,	// ハティーベベ
-		1101,20,	// バフォメット.Jr
+		1101,20,	// バフォメット'Jr
 		1686,1,		// オークベイビー
 		1107,10,	// 子デザートウルフ
 		1167,10		// サベージベベ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[19][0],	// 45F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[19][0],	// 45F
+	setarray 'mob[getarraysize('mob)],
 		1038,1,		// オシリス
 		1297,15,	// エンシェントマミー
 		1032,15,	// ベリット
 		1041,20		// マミー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[20][0],	// 46F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[20][0],	// 46F
+	setarray 'mob[getarraysize('mob)],
 		1774,20,	// シーカー
 		1633,20		// ビホルダー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[21][0],	// 47F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[21][0],	// 47F
+	setarray 'mob[getarraysize('mob)],
 		1384,20,	// デリーター(空)
 		1385,10,	// デリーター(地)
 		1156,10,	// プティット(空)
 		1155,10		// プティット(地)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[22][0],	// 48F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[22][0],	// 48F
+	setarray 'mob[getarraysize('mob)],
 		1305,10,	// エンシェントワーム
 		1297,10,	// エンシェントマミー
 		1699,10		// エンシェントミミック
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[23][0],	// 49F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[23][0],	// 49F
+	setarray 'mob[getarraysize('mob)],
 		1381,20,	// グリズリー
 		1306,7,		// レイブオルマイ
 		1417,5,		// チャッキー
 		1243,5,		// サスカッチ
 		1060,5		// ビッグフット
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[24][0],	// 50F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[24][0],	// 50F
+	setarray 'mob[getarraysize('mob)],
 		1157,1,		// ファラオ
 		1511,1,		// アモンラー
 		1098,10,	// アヌビス
 		1140,10,	// マルドゥーク
 		1146,10		// マーター
 	;
-	setarray .x,  9, 93,181,267,352;
-	setarray .y,351,267,180, 96,  9;
+	setarray 'x,  9, 93,181,267,352;
+	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +.lv);
-	set .@idx,.lv-26;
-//	set .@max,getarraysize(.mob[.@idx][0])/2;
-	if (.@idx + 1 == getarraysize(.mob_bous)) set .@max, (getarraysize(.mob) - .mob_bous[.@idx]) / 2;
-	else set .@max, (.mob_bous[.@idx + 1] - .mob_bous[.@idx]) / 2;
+	disablenpc getmdnpcname("TowerGate" +'lv);
+	set .@idx,'lv-26;
+//	set .@max,getarraysize('mob[.@idx][0])/2;
+	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
+	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
 	for(set .@i,0; .@i < .@max; set .@i,.@i+1)
-//		areamonster getmdmapname("2@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.@idx][.@i*2],.mob[.@idx][.@i*2+1],getmdnpcname("TowerControl2")+ "::OnKilled";
-		areamonster getmdmapname("2@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.mob_bous[.@idx] + .@i*2],.mob[.mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl2")+ "::OnKilled";
+//		areamonster getmdmapname("2@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@i*2],'mob[.@idx][.@i*2+1],getmdnpcname("TowerControl2")+ "::OnKilled";
+		areamonster getmdmapname("2@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob['mob_bous[.@idx] + .@i*2],'mob['mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl2")+ "::OnKilled";
 	end;
 OnKilled:
 	initnpctimer;
 	end;
 OnTimer1000:
 	stopnpctimer;
-	set .count,getmapmobs(getmdmapname("2@tower"),getmdnpcname("TowerControl2")+ "::OnKilled");
-	if(.count <= 0) {
-		announce .lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+.lv);
-		if(.lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+.lv);
+	set 'count,getmapmobs(getmdmapname("2@tower"),getmdnpcname("TowerControl2")+ "::OnKilled");
+	if('count <= 0) {
+		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv);
+		if('lv%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv);
 		else {
-			set .lv,.lv+1;
+			set 'lv,'lv+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce .lv+ "階に残ったモンスター [" +.count+ "]体",0x9,0x00FF99;
+		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1113,18 +1113,18 @@ OnTimer120000:
 //------------------------------------------------------------
 3@tower,0,0,0	script	TowerControl3	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,51;
-//	setarray .mob[0][0],	// 51F
-	setarray .mob[getarraysize(.mob)],
+	set 'lv,51;
+//	setarray 'mob[0][0],	// 51F
+	setarray 'mob[getarraysize('mob)],
 		1292,20,	// ミニデモ
 		1382,20,	// ディアボリック
 		1109,10		// デビルチ
 	;
-	set .mob_bous[1], getarraysize(.mob);
-//	setarray .mob[1][0],	// 52F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[1], getarraysize('mob);
+//	setarray 'mob[1][0],	// 52F
+	setarray 'mob[getarraysize('mob)],
 		1376,20,	// ハーピー
 		1369,10,	// グランペコ
 		1408,10,	// パピヨン
@@ -1132,39 +1132,39 @@ OnStart:
 		1680,5,		// ヒルウィンド(羽)
 		1629,5		// ヒルウィンド(槍)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[2][0],	// 53F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[2][0],	// 53F
+	setarray 'mob[getarraysize('mob)],
 		1315,25,	// アサルトタートル
 		1401,30		// カブキ忍者
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[3][0],	// 54F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[3][0],	// 54F
+	setarray 'mob[getarraysize('mob)],
 		1250,10,	// チェペット
 		1143,10,	// マリオネット
 		1404,10		// 雅人形
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[4][0],	// 55F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[4][0],	// 55F
+	setarray 'mob[getarraysize('mob)],
 		1148,25,	// メデューサ
 		1418,1,		// 黒蛇王
 		1029,15,	// イシス
 		1037,15		// サイドワインダー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[5][0],	// 56F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[5][0],	// 56F
+	setarray 'mob[getarraysize('mob)],
 		1319,10,	// フリーズタートル
 		1515,10,	// ハティーベベ
 		1777,15,	// アイスタイタン
 		1775,10,	// スノウアー
 		1778,10		// ゲイズティ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[6][0],	// 57F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[6][0],	// 57F
+	setarray 'mob[getarraysize('mob)],
 		1388,1,		// アークエンジェリング
 		1582,1,		// デビルリング
 		1096,1,		// エンジェリング
@@ -1175,25 +1175,25 @@ OnStart:
 		1031,5,		// ポポリン
 		1113,5		// ドロップス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[7][0],	// 58F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[7][0],	// 58F
+	setarray 'mob[getarraysize('mob)],
 		1202,20,	// フェンダーク
 		1201,10,	// リビオ
 		1197,10,	// ゾンビプリズナー
 		1196,5,		// スケルプリズナー
 		1257,5		// インジャスティス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[8][0],	// 59F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[8][0],	// 59F
+	setarray 'mob[getarraysize('mob)],
 		1699,30,	// エンシェントミミック
 		1191,20,	// ミミック
 		1249,10		// ミストケース
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[9][0],	// 60F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[9][0],	// 60F
+	setarray 'mob[getarraysize('mob)],
 		1658,1,		// イグニゼム=セニア(MVP)
 		1046,1,		// ドッペルゲンガー
 		1654,10,	// アルマイア=デュンゼ
@@ -1203,9 +1203,9 @@ OnStart:
 		1655,10,	// イレンド=エベシ
 		1652,10		// イグニゼム=セニア
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[10][0],	// 61F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[10][0],	// 61F
+	setarray 'mob[getarraysize('mob)],
 		1769,10,	// アガヴ
 		1770,10,	// エキオ
 		1772,5,		// アイシラ
@@ -1213,23 +1213,23 @@ OnStart:
 		1154,10,	// パサナ
 		1771,5		// ヴァンベルク
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[11][0],	// 62F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[11][0],	// 62F
+	setarray 'mob[getarraysize('mob)],
 		1208,35		// 彷徨う者
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[12][0],	// 63F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[12][0],	// 63F
+	setarray 'mob[getarraysize('mob)],
 		1865,20,	// ラギッドゾンビ
 		1298,10,	// ゾンビマスター
 		1197,5,		// ゾンビプリズナー
 		1153,5,		// オークゾンビ
 		1015,5		// ゾンビ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[13][0],	// 64F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[13][0],	// 64F
+	setarray 'mob[getarraysize('mob)],
 		1618,30,	// ウンゴリアント
 		1305,2,		// エンシェントワーム
 		1300,2,		// キャタピラー
@@ -1237,49 +1237,49 @@ OnStart:
 		1294,2,		// キラーマンティス
 		1303,2		// ジャイアントホーネット
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[14][0],	// 65F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[14][0],	// 65F
+	setarray 'mob[getarraysize('mob)],
 		1785,1,		// アトロス
 		1783,20		// ガリオン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[15][0],	// 66F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[15][0],	// 66F
+	setarray 'mob[getarraysize('mob)],
 		1374,20,	// インキュバス
 		1736,20,	// エリオット
 		1257,10		// インジャスティス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[16][0],	// 67F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[16][0],	// 67F
+	setarray 'mob[getarraysize('mob)],
 		1716,10,	// オシドス(青)
 		1713,10,	// オシドス(金)
 		1384,5,		// デリーター(空)
 		1262,10,	// ミュータントドラゴン
 		1156,5		// プティット(空)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[17][0],	// 68F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[17][0],	// 68F
+	setarray 'mob[getarraysize('mob)],
 		1366,10,	// ラーヴァゴーレム
 		1278,10,	// スタラクタイトゴーレム
 		1777,10,	// アイスタイタン
 		1497,5,		// ウドゥンゴーレム
 		1040,5		// ゴーレム
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[18][0],	// 69F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[18][0],	// 69F
+	setarray 'mob[getarraysize('mob)],
 		1700,20,	// 監視する者
 		1701,10,	// 保護する者
 		1702,10,	// 執行する者
 		1703,10,	// 慰める者
 		1371,10		// フェイクエンジェル
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[19][0],	// 70F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[19][0],	// 70F
+	setarray 'mob[getarraysize('mob)],
 		//1087,1,	// オークヒーロー
 		//1190,1,	// オークロード
 		//1686,20,	// オークベイビー
@@ -1294,25 +1294,25 @@ OnStart:
 		1672,5,		// ディミック(地)
 		1673,10		// ディミック(火)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[20][0],	// 71F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[20][0],	// 71F
+	setarray 'mob[getarraysize('mob)],
 		1370,20,	// サキュバス
 		1379,20,	// ナイトメアテラー
 		1374,20,	// インキュバス
 		1061,5		// ナイトメア
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[21][0],	// 72F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[21][0],	// 72F
+	setarray 'mob[getarraysize('mob)],
 		1637,10,	// マーガレッタ=ソリン
 		1314,10,	// パーメットタートル
 		1655,10,	// イレンド=エベシ
 		1410,10		// 人面桃樹
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[22][0],	// 73F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[22][0],	// 73F
+	setarray 'mob[getarraysize('mob)],
 		1370,10,	// サキュバス
 		1505,20,	// ロリルリ
 		1737,10,	// エリザ
@@ -1320,9 +1320,9 @@ OnStart:
 		1275,5,		// アリス
 		1631,10		// チュンイー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[23][0],	// 74F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[23][0],	// 74F
+	setarray 'mob[getarraysize('mob)],
 		1671,6,		// ディミック(水)
 		1673,6,		// ディミック(火)
 		1672,6,		// ディミック(地)
@@ -1333,44 +1333,44 @@ OnStart:
 		1679,6,		// ヴェナート(水)
 		1676,6		// ヴェナート(無)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[24][0],	// 75F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[24][0],	// 75F
+	setarray 'mob[getarraysize('mob)],
 		1039,1,		// バフォメット
 		1272,1,		// ダークロード
-		1101,20,	// バフォメット.Jr
+		1101,20,	// バフォメット'Jr
 		1302,10		// ダークイリュージョン
 	;
-	setarray .x,  9, 93,181,267,352;
-	setarray .y,351,267,180, 96,  9;
+	setarray 'x,  9, 93,181,267,352;
+	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +.lv);
-	set .@idx,.lv-51;
-//	set .@max,getarraysize(.mob[.@idx][0])/2;
-	if (.@idx + 1 == getarraysize(.mob_bous)) set .@max, (getarraysize(.mob) - .mob_bous[.@idx]) / 2;
-	else set .@max, (.mob_bous[.@idx + 1] - .mob_bous[.@idx]) / 2;
+	disablenpc getmdnpcname("TowerGate" +'lv);
+	set .@idx,'lv-51;
+//	set .@max,getarraysize('mob[.@idx][0])/2;
+	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
+	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
 	for(set .@i,0; .@i < .@max; set .@i,.@i+1)
-//		areamonster getmdmapname("3@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.@idx][.@i*2],.mob[.@idx][.@i*2+1],getmdnpcname("TowerControl3")+ "::OnKilled";
-		areamonster getmdmapname("3@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.mob_bous[.@idx] + .@i*2],.mob[.mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl3")+ "::OnKilled";
+//		areamonster getmdmapname("3@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@i*2],'mob[.@idx][.@i*2+1],getmdnpcname("TowerControl3")+ "::OnKilled";
+		areamonster getmdmapname("3@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob['mob_bous[.@idx] + .@i*2],'mob['mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl3")+ "::OnKilled";
 	end;
 OnKilled:
 	initnpctimer;
 	end;
 OnTimer1000:
 	stopnpctimer;
-	set .count,getmapmobs(getmdmapname("3@tower"),getmdnpcname("TowerControl3")+ "::OnKilled");
-	if(.count <= 0) {
-		announce .lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+.lv);
-		if(.lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+.lv);
+	set 'count,getmapmobs(getmdmapname("3@tower"),getmdnpcname("TowerControl3")+ "::OnKilled");
+	if('count <= 0) {
+		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv);
+		if('lv%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv);
 		else {
-			set .lv,.lv+1;
+			set 'lv,'lv+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce .lv+ "階に残ったモンスター [" +.count+ "]体",0x9,0x00FF99;
+		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1414,184 +1414,184 @@ OnTimer120000:
 //------------------------------------------------------------
 4@tower,0,0,0	script	TowerControl4	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,76;
-//	setarray .mob[0][0],	// 76F
-	setarray .mob[getarraysize(.mob)],
+	set 'lv,76;
+//	setarray 'mob[0][0],	// 76F
+	setarray 'mob[getarraysize('mob)],
 		1219,30,	// 深淵の騎士
 		1379,20,	// ナイトメアテラー
 		1061,10		// ナイトメア
 	;
-	set .mob_bous[1], getarraysize(.mob);
-//	setarray .mob[1][0],	// 77F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[1], getarraysize('mob);
+//	setarray 'mob[1][0],	// 77F
+	setarray 'mob[getarraysize('mob)],
 		1867,30,	// バンシー
 		1291,10,	// デッドリーレイス
 		1117,10,	// イビルドルイド
 		1192,10,	// レイス
 		1263,10		// ウィンドゴースト
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[2][0],	// 78F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[2][0],	// 78F
+	setarray 'mob[getarraysize('mob)],
 		1829,5,		// ソードガーディアン
 		1268,10,	// ブラッディナイト
 		1219,5,		// 深淵の騎士
 		1504,10,	// デュラハン
 		1163,20		// レイドリック
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[3][0],	// 79F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[3][0],	// 79F
+	setarray 'mob[getarraysize('mob)],
 		1720,10,	// ハイドラランサー
 		1714,10,	// ペロス(赤)
 		1717,10,	// ペロス(緑)
 		1385,10,	// デリーター(地)
 		1155,10		// プティット(地)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[4][0],	// 80F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[4][0],	// 80F
+	setarray 'mob[getarraysize('mob)],
 		1871,1,		// 堕ちた大神官ヒバム
 		1870,15		// ネクロマンサー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[5][0],	// 81F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[5][0],	// 81F
+	setarray 'mob[getarraysize('mob)],
 		1203,20,	// ミステルテイン
 		1204,20,	// オーガトゥース
 		1205,20		// エクスキューショナー
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[6][0],	// 82F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[6][0],	// 82F
+	setarray 'mob[getarraysize('mob)],
 		1268,10,	// ブラッディナイト
 		1769,10,	// アガヴ
 		1507,10,	// ブラッディマーダー
 		1752,10,	// スコグル
 		1257,10		// インジャスティス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[7][0],	// 83F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[7][0],	// 83F
+	setarray 'mob[getarraysize('mob)],
 		1754,10,	// スケゴルト
 		1302,10,	// ダークイリュージョン
 		1259,10,	// グリフォン
 		1283,10		// キメラ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[8][0],	// 84F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[8][0],	// 84F
+	setarray 'mob[getarraysize('mob)],
 		1370,10,	// サキュバス
 		1302,20,	// ダークイリュージョン
 		1320,10,	// オウルデューク
 		1295,10,	// オウルバロン
 		1374,10		// インキュバス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[9][0],	// 85F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[9][0],	// 85F
+	setarray 'mob[getarraysize('mob)],
 		1832,1		// イフリート
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[10][0],	// 86F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[10][0],	// 86F
+	setarray 'mob[getarraysize('mob)],
 		1720,10,	// ハイドラランサー
 		1259,10,	// グリフォン
 		1283,10,	// キメラ
 		1310,10		// ごっついミノタウロス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[11][0],	// 87F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[11][0],	// 87F
+	setarray 'mob[getarraysize('mob)],
 		1831,15,	// サラマンダー
 		1833,20,	// カーサ
 		1366,15,	// ラーヴァゴーレム
 		1309,10		// ガジョマート
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[12][0],	// 88F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[12][0],	// 88F
+	setarray 'mob[getarraysize('mob)],
 		1870,15,	// ネクロマンサー
 		1098,15,	// アヌビス
 		1291,10,	// デッドリーレイス
 		1297,10,	// エンシェントマミー
 		1132,10		// カーリッツバーグ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[13][0],	// 89F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[13][0],	// 89F
+	setarray 'mob[getarraysize('mob)],
 		1704,6,		// タナトスの憎悪
 		1705,6,		// タナトスの絶望
 		1707,6,		// タナトスの苦悩
 		1706,6		// タナトスの悲しみ
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[14][0],	// 90F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[14][0],	// 90F
+	setarray 'mob[getarraysize('mob)],
 		1751,1,		// ランドグリス
 		1702,10,	// 執行する者
 		1703,10,	// 慰める者
 		1371,10		// フェイクエンジェル
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[15][0],	// 91F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[15][0],	// 91F
+	setarray 'mob[getarraysize('mob)],
 		1638,10,	// セシル=ディモン
 		1830,10,	// ボウガーディアン
 		1656,30		// カヴァク=イカルス
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[16][0],	// 92F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[16][0],	// 92F
+	setarray 'mob[getarraysize('mob)],
 		1639,15,	// カトリーヌ=ケイロン
 		1377,10,	// エルダー
 		1657,10,	// ラウレル=ヴィンダー
 		1263,10,	// ウィンドゴースト
 		1140,10		// マルドゥーク
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[17][0],	// 93F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[17][0],	// 93F
+	setarray 'mob[getarraysize('mob)],
 		1634,15,	// セイレン=ウィンザー
 		1268,10,	// ブラッディナイト
 		1219,10,	// 深淵の騎士
 		1208,10		// 彷徨う者
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[18][0],	// 94F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[18][0],	// 94F
+	setarray 'mob[getarraysize('mob)],
 		1829,15,	// ソードガーディアン
 		1830,15		// ボウガーディアン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[19][0],	// 95F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[19][0],	// 95F
+	setarray 'mob[getarraysize('mob)],
 		1873,1,		// ヴェルゼブブ
 		1035,30,	// ハンターフライ
 		1042,5,		// スチールチョンチョン
 		1091,5,		// ドラゴンフライ
 		1011,5		// チョンチョン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[20][0],	// 96F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[20][0],	// 96F
+	setarray 'mob[getarraysize('mob)],
 		1765,5,		// ランドグリスゴースト
 		1755,10,	// スケゴルト(青)
 		1754,10		// スケゴルト(茶)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[21][0],	// 97F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[21][0],	// 97F
+	setarray 'mob[getarraysize('mob)],
 		1918,5,		// モロクの現身(天使型)
 		1919,5,		// モロクの現身(物質型)
 		1920,5,		// モロクの現身(人間型)
 		1921,5		// モロクの現身(精霊型)
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[22][0],	// 98F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[22][0],	// 98F
+	setarray 'mob[getarraysize('mob)],
 		1639,2,		// カトリーヌ=ケイロン
 		1634,2,		// セイレン=ウィンザー
 		1637,2,		// マーガレッタ=ソリン
@@ -1599,9 +1599,9 @@ OnStart:
 		1636,2,		// ハワード=アルトアイゼン
 		1638,2		// セシル=ディモン
 	;
-	set .mob_bous[getarraysize(.mob_bous)], getarraysize(.mob);
-//	setarray .mob[23][0],	// 99F
-	setarray .mob[getarraysize(.mob)],
+	set 'mob_bous[getarraysize('mob_bous)], getarraysize('mob);
+//	setarray 'mob[23][0],	// 99F
+	setarray 'mob[getarraysize('mob)],
 		1639,2,		// カトリーヌ=ケイロン
 		1634,2,		// セイレン=ウィンザー
 		1637,2,		// マーガレッタ=ソリン
@@ -1633,25 +1633,25 @@ OnStart:
 		1703,10,	// 慰める者
 		1371,10		// フェイクエンジェル
 	;
-	setarray .x,  9, 93,181,267,352;
-	setarray .y,351,267,180, 96,  9;
+	setarray 'x,  9, 93,181,267,352;
+	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +.lv);
-	set .@idx,.lv-76;
-//	set .@max,getarraysize(.mob[.@idx][0])/2;
-	if (.@idx + 1 == getarraysize(.mob_bous)) set .@max, (getarraysize(.mob) - .mob_bous[.@idx]) / 2;
-	else set .@max, (.mob_bous[.@idx + 1] - .mob_bous[.@idx]) / 2;
-	if(.lv == 99) {
+	disablenpc getmdnpcname("TowerGate" +'lv);
+	set .@idx,'lv-76;
+//	set .@max,getarraysize('mob[.@idx][0])/2;
+	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
+	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
+	if('lv == 99) {
 		for(set .@i,0; .@i < 7; set .@i,.@i+1) {
 			set .@r,rand(.@max);
-//			areamonster getmdmapname("4@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.@idx][.@r*2],.mob[.@idx][.@r*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
-			areamonster getmdmapname("4@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.mob_bous[.@idx] + .@r*2],.mob[.mob_bous[.@idx] + .@r*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
+//			areamonster getmdmapname("4@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@r*2],'mob[.@idx][.@r*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
+			areamonster getmdmapname("4@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob['mob_bous[.@idx] + .@r*2],'mob['mob_bous[.@idx] + .@r*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
 		}
 	}
 	else {
 		for(set .@i,0; .@i < .@max; set .@i,.@i+1)
-//			areamonster getmdmapname("4@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.@idx][.@i*2],.mob[.@idx][.@i*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
-			areamonster getmdmapname("4@tower"),.x[.@idx%5],.y[.@idx/5],.x[.@idx%5]+10,.y[.@idx/5]+36,"--ja--",.mob[.mob_bous[.@idx] + .@i*2],.mob[.mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
+//			areamonster getmdmapname("4@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@i*2],'mob[.@idx][.@i*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
+			areamonster getmdmapname("4@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob['mob_bous[.@idx] + .@i*2],'mob['mob_bous[.@idx] + .@i*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
 	}
 	end;
 OnKilled:
@@ -1659,19 +1659,19 @@ OnKilled:
 	end;
 OnTimer1000:
 	stopnpctimer;
-	set .count,getmapmobs(getmdmapname("4@tower"),getmdnpcname("TowerControl4")+ "::OnKilled");
-	if(.count <= 0) {
-		announce .lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+.lv);
-		if(.lv == 99)
-			initnpctimer "TowerGate" +.lv;
+	set 'count,getmapmobs(getmdmapname("4@tower"),getmdnpcname("TowerControl4")+ "::OnKilled");
+	if('count <= 0) {
+		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv);
+		if('lv == 99)
+			initnpctimer "TowerGate" +'lv;
 		else {
-			set .lv,.lv+1;
+			set 'lv,'lv+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce .lv+ "階に残ったモンスター [" +.count+ "]体",0x9,0x00FF99;
+		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1715,9 +1715,9 @@ OnTimer120000:
 //------------------------------------------------------------
 5@tower,0,0,0	script	TowerControl5	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,100;
+	set 'lv,100;
 	set .@mdmap$,getmdmapname("5@tower");
 	set .@mdnpc$,getmdnpcname("TowerControl5");
 	monster .@mdmap$,83,85,"エントヴァイエン",1957,1,.@mdnpc$+ "::OnKilled";
@@ -1817,14 +1817,14 @@ OnTimer2000:
 
 6@tower,0,0,0	script	TowerControl6	-1,{
 OnStart:
-	if(.lv > 0)
+	if('lv > 0)
 		end;
-	set .lv,102;
+	set 'lv,102;
 	areamonster getmdmapname("6@tower"),154,73,156,75,"監視者ウィレス",1627,10,getmdnpcname("TowerControl6")+ "::OnKilled";
 	end;
 OnKilled:
-	set .count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled");
-	if(.count > 0)
+	set 'count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled");
+	if('count > 0)
 		end;
 	sleep 500;
 	announce "正体不明の声 : 来たか……ここがどんな場所かも知らずに……",0x9,0x00FFCC;
@@ -1840,9 +1840,9 @@ OnKilled:
 	areamonster getmdmapname("6@tower"),159,66,159,106,"骨の守護兵",1152,50,getmdnpcname("TowerControl6")+ "::OnKilled2";
 	end;
 OnKilled2:
-	set .count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled2");
-	if(.count > 0) {
-		announce "残り[" +.count+ "]匹",0x9,0x00FF99;
+	set 'count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled2");
+	if('count > 0) {
+		announce "残り[" +'count+ "]匹",0x9,0x00FF99;
 		end;
 	}
 	sleep 500;
@@ -1855,9 +1855,9 @@ OnKilled2:
 	areamonster getmdmapname("6@tower"),159,66,159,106,"風の守護兵",1263,30,getmdnpcname("TowerControl6")+ "::OnKilled3";
 	end;
 OnKilled3:
-	set .count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled3");
-	if(.count > 0) {
-		announce "残り[" +.count+ "]匹",0x9,0x00FF99;
+	set 'count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled3");
+	if('count > 0) {
+		announce "残り[" +'count+ "]匹",0x9,0x00FF99;
 		end;
 	}
 	sleep 500;
@@ -1870,9 +1870,9 @@ OnKilled3:
 	areamonster getmdmapname("6@tower"),159,66,159,106,"刃の守護兵",1132,20,getmdnpcname("TowerControl6")+ "::OnKilled4";
 	end;
 OnKilled4:
-	set .count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled4");
-	if(.count > 0) {
-		announce "残り[" +.count+ "]匹",0x9,0x00FF99;
+	set 'count,getmapmobs(getmdmapname("6@tower"),getmdnpcname("TowerControl6")+ "::OnKilled4");
+	if('count > 0) {
+		announce "残り[" +'count+ "]匹",0x9,0x00FF99;
 		end;
 	}
 	sleep 500;
