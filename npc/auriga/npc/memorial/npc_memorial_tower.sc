@@ -537,9 +537,11 @@ e_tower,81,105,0	script	塔の守護石	406,{
 
 1@tower,0,0,0	script	TowerControl1	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_1 > 0)
 		end;
-	set 'lv,1;
+	set 'lv_1,1;
+	deletearray 'mob;
+	deletearray 'mob_bous;
 //	setarray 'mob[0][0],	// 1F
 	setarray 'mob[getarraysize('mob)],
 		1613,15,	// メタリン
@@ -754,8 +756,8 @@ OnStart:
 	setarray 'x,  9, 93,181,267,352;
 	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +'lv);
-	set .@idx,'lv-1;
+	disablenpc getmdnpcname("TowerGate" +'lv_1);
+	set .@idx,'lv_1-1;
 //	set .@max,getarraysize('mob[.@idx][0])/2;
 	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
 	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
@@ -770,17 +772,17 @@ OnTimer1000:
 	stopnpctimer;
 	set 'count,getmapmobs(getmdmapname("1@tower"),getmdnpcname("TowerControl1")+ "::OnKilled");
 	if('count <= 0) {
-		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+'lv);
-		if('lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+'lv);
+		announce 'lv_1+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv_1);
+		if('lv_1%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv_1);
 		else {
-			set 'lv,'lv+1;
+			set 'lv_1,'lv_1+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
+		announce 'lv_1+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -824,9 +826,11 @@ OnTimer120000:
 //------------------------------------------------------------
 2@tower,0,0,0	script	TowerControl2	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_2 > 0)
 		end;
-	set 'lv,26;
+	set 'lv_2,26;
+	deletearray 'mob;
+	deletearray 'mob_bous;
 //	setarray 'mob[0][0],	// 26F
 	setarray 'mob[getarraysize('mob)],
 		1503,10,	// ジビット
@@ -1043,8 +1047,8 @@ OnStart:
 	setarray 'x,  9, 93,181,267,352;
 	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +'lv);
-	set .@idx,'lv-26;
+	disablenpc getmdnpcname("TowerGate" +'lv_2);
+	set .@idx,'lv_2-26;
 //	set .@max,getarraysize('mob[.@idx][0])/2;
 	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
 	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
@@ -1059,17 +1063,17 @@ OnTimer1000:
 	stopnpctimer;
 	set 'count,getmapmobs(getmdmapname("2@tower"),getmdnpcname("TowerControl2")+ "::OnKilled");
 	if('count <= 0) {
-		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+'lv);
-		if('lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+'lv);
+		announce 'lv_2+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv_2);
+		if('lv_2%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv_2);
 		else {
-			set 'lv,'lv+1;
+			set 'lv_2,'lv_2+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
+		announce 'lv_2+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1113,9 +1117,11 @@ OnTimer120000:
 //------------------------------------------------------------
 3@tower,0,0,0	script	TowerControl3	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_3 > 0)
 		end;
-	set 'lv,51;
+	set 'lv_3,51;
+	deletearray 'mob;
+	deletearray 'mob_bous;
 //	setarray 'mob[0][0],	// 51F
 	setarray 'mob[getarraysize('mob)],
 		1292,20,	// ミニデモ
@@ -1344,8 +1350,8 @@ OnStart:
 	setarray 'x,  9, 93,181,267,352;
 	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +'lv);
-	set .@idx,'lv-51;
+	disablenpc getmdnpcname("TowerGate" +'lv_3);
+	set .@idx,'lv_3-51;
 //	set .@max,getarraysize('mob[.@idx][0])/2;
 	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
 	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
@@ -1360,17 +1366,17 @@ OnTimer1000:
 	stopnpctimer;
 	set 'count,getmapmobs(getmdmapname("3@tower"),getmdnpcname("TowerControl3")+ "::OnKilled");
 	if('count <= 0) {
-		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+'lv);
-		if('lv%25 == 0)
-			initnpctimer getmdnpcname("TowerGate"+'lv);
+		announce 'lv_3+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv_3);
+		if('lv_3%25 == 0)
+			initnpctimer getmdnpcname("TowerGate"+'lv_3);
 		else {
-			set 'lv,'lv+1;
+			set 'lv_3,'lv_3+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
+		announce 'lv_3+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1414,9 +1420,11 @@ OnTimer120000:
 //------------------------------------------------------------
 4@tower,0,0,0	script	TowerControl4	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_4 > 0)
 		end;
-	set 'lv,76;
+	set 'lv_4,76;
+	deletearray 'mob;
+	deletearray 'mob_bous;
 //	setarray 'mob[0][0],	// 76F
 	setarray 'mob[getarraysize('mob)],
 		1219,30,	// 深淵の騎士
@@ -1636,12 +1644,12 @@ OnStart:
 	setarray 'x,  9, 93,181,267,352;
 	setarray 'y,351,267,180, 96,  9;
 L_MobCall:
-	disablenpc getmdnpcname("TowerGate" +'lv);
-	set .@idx,'lv-76;
+	disablenpc getmdnpcname("TowerGate" +'lv_4);
+	set .@idx,'lv_4-76;
 //	set .@max,getarraysize('mob[.@idx][0])/2;
 	if (.@idx + 1 == getarraysize('mob_bous)) set .@max, (getarraysize('mob) - 'mob_bous[.@idx]) / 2;
 	else set .@max, ('mob_bous[.@idx + 1] - 'mob_bous[.@idx]) / 2;
-	if('lv == 99) {
+	if('lv_4 == 99) {
 		for(set .@i,0; .@i < 7; set .@i,.@i+1) {
 			set .@r,rand(.@max);
 //			areamonster getmdmapname("4@tower"),'x[.@idx%5],'y[.@idx/5],'x[.@idx%5]+10,'y[.@idx/5]+36,"--ja--",'mob[.@idx][.@r*2],'mob[.@idx][.@r*2+1],getmdnpcname("TowerControl4")+ "::OnKilled";
@@ -1661,17 +1669,17 @@ OnTimer1000:
 	stopnpctimer;
 	set 'count,getmapmobs(getmdmapname("4@tower"),getmdnpcname("TowerControl4")+ "::OnKilled");
 	if('count <= 0) {
-		announce 'lv+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
-		enablenpc getmdnpcname("TowerGate"+'lv);
-		if('lv == 99)
-			initnpctimer "TowerGate" +'lv;
+		announce 'lv_4+ "階のすべてのモンスターを倒しました",0x9,0xFFFF00;
+		enablenpc getmdnpcname("TowerGate"+'lv_4);
+		if('lv_4 == 99)
+			initnpctimer "TowerGate" +'lv_4;
 		else {
-			set 'lv,'lv+1;
+			set 'lv_4,'lv_4+1;
 			callsub L_MobCall;
 		}
 	}
 	else
-		announce 'lv+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
+		announce 'lv_4+ "階に残ったモンスター [" +'count+ "]体",0x9,0x00FF99;
 	end;
 }
 
@@ -1715,9 +1723,9 @@ OnTimer120000:
 //------------------------------------------------------------
 5@tower,0,0,0	script	TowerControl5	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_5 > 0)
 		end;
-	set 'lv,100;
+	set 'lv_5,100;
 	set .@mdmap$,getmdmapname("5@tower");
 	set .@mdnpc$,getmdnpcname("TowerControl5");
 	monster .@mdmap$,83,85,"エントヴァイエン",1957,1,.@mdnpc$+ "::OnKilled";
@@ -1817,9 +1825,9 @@ OnTimer2000:
 
 6@tower,0,0,0	script	TowerControl6	-1,{
 OnStart:
-	if('lv > 0)
+	if('lv_6 > 0)
 		end;
-	set 'lv,102;
+	set 'lv_6,102;
 	areamonster getmdmapname("6@tower"),154,73,156,75,"監視者ウィレス",1627,10,getmdnpcname("TowerControl6")+ "::OnKilled";
 	end;
 OnKilled:
