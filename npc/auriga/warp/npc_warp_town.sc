@@ -646,7 +646,8 @@ pay_arche,71,156,0		warp	payonwarp1041		2,2,payon_in02,82,41
 pay_arche,92,170,0		warp	payonwarp1042		2,2,payon_in02,50,7
 pay_arche,145,165,0		warp	payonwarp1043		2,2,payon_in02,64,60
 payon_in02,10,25,0		warp	payonwarp1044		2,2,payon_in02,72,67
-payon_in02,35,67,0		warp	payonwarp1045		2,2,payon_in02,55,67
+//payon_in02,35,67,0		warp	payonwarp1045		2,2,payon_in02,55,67
+payon_in02,35,67,0		warp	payonwarp1045		2,2,payon_in02,56,67
 payon_in02,50,4,0		warp	payonwarp1046		3,1,pay_arche,92,166
 payon_in02,52,67,0		warp	payonwarp1047		2,2,payon_in02,32,67
 payon_in02,61,33,0		warp	payonwarp1048		2,2,payon_in02,73,33

@@ -333,6 +333,7 @@ bool // 結果。
 battler_impl::check_attack(
 	block_if* ene // 敵モンスター。
 ) {
+	block_if* tan = ene->target_battler();
 	return battle_mode() == BM_TAUNT ||
 		!ene->has_can_attack() ||
 		ene->is_long_range_attacker() ||
@@ -342,9 +343,10 @@ battler_impl::check_attack(
 		(ene->is_berserk() && 
 			(!ene->is_great(leader()) ||
 				!around_wall_exists() ||
-				!ene->target_battler() ||
-				!ene->target_battler()->attacked_by_blower() ||
-				ene->target_battler()->is_wall_side()
+				!tan ||
+				!tan->is_primary() ||
+				!tan->attacked_by_blower() ||
+				tan->is_wall_side()
 			)
 		);
 }

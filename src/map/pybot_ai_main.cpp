@@ -1249,12 +1249,13 @@ ai_t::find_best_assist_pos() {
 				) && (!tar_ene->is_great(leader) ||
 					!battler->around_wall_exists() ||
 					!tan ||
+					!tan->is_primary() ||
 					!tan->attacked_by_blower() ||
 					tan->is_wall_side()
 				)
 			)
 		) {
-			int max_rad = std::min(battler->attack_range() + 1, battler->distance_max_value() + 1);
+			int max_rad = std::max(std::min(battler->attack_range() + 1, battler->distance_max_value() + 1), tar_ene->attack_range() + 1);
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
@@ -1321,8 +1322,7 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			battler->check_skill(RG_BACKSTAP) &&
 			tan &&
 			tan->battle_index() < battler->battle_index();
-		bool ned_lea = tar_ene->need_to_leave() &&
-			tar_ene->target_battler() == battlers.front();
+		bool ned_lea = tar_ene->need_to_leave();
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
@@ -1365,9 +1365,8 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 	return [this, &pos] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
-		bool ned_lea = tar_ene->need_to_leave();
 		if (check_wall_side(battler->bl()->m, x, y) &&
-			(!ned_lea ||
+			(!tar_ene->need_to_leave() ||
 				!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 			) && battler->can_reach_xy(x, y) &&
 			leader->can_reach_xy(x, y, true) &&

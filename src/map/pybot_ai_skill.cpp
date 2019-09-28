@@ -1057,6 +1057,7 @@ AI_SKILL_USE_FUNC(KN_CHARGEATK) {
 		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		!tar_ene->need_to_leave() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->has_knockback_immune()
 	) bot->use_skill_block(kid, klv, tar_ene);
@@ -1449,6 +1450,7 @@ AI_SKILL_USE_FUNC(MO_BODYRELOCATION) {
 		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		!tar_ene->need_to_leave() &&
 		bot->check_attack(tar_ene) &&
 		bot->sc()->data[SC_EXPLOSIONSPIRITS]
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
@@ -2897,6 +2899,7 @@ AI_SKILL_USE_FUNC(TK_JUMPKICK) {
 		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		!tar_ene->need_to_leave() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->sc()->data[SC_SPURT]
 	) bot->use_skill_block(kid, klv, tar_ene);
