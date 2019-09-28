@@ -1961,17 +1961,11 @@ member_impl::is_wall_side() {
 void member_impl::iterate_skill(
 	yield_skill_func yie // スキル獲得ハンドラ。
 ) {
-	for (int i = 0; i < MAX_SKILL_TREE; ++i) {
-		int kid = skill_tree[pc_class2idx(sd()->status.class_)][i].skill_id;
-		if (kid) {
-			int kind = skill_get_index(kid);
-			if (kind >= 0) {
-				s_skill* sk = &sd()->status.skill[kind];
-				if (sk->id &&
-					!yie(sk)
-				) break;
-			}
-		}
+	for (int i = 0; i < MAX_SKILL; ++i) {
+		s_skill* sk = &sd()->status.skill[i];
+		if (sk->id &&
+			!yie(sk)
+		) break; 
 	}
 }
 

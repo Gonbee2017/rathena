@@ -77,6 +77,9 @@ void update_fever();
 // ŠO•”‚©‚çQÆ‚³‚ê‚é’è”‚ÌéŒ¾
 
 extern const std::string CASH_EXP;
+extern const std::string EXTRA_SKILL_POINT;
+extern const std::string EXTRA_STATUS_POINT;
+extern const std::string MVP_MANIA_ENHANCE;
 extern const std::string PYBOT_DUMMY_NPC_NAME;
 
 }

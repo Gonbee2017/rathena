@@ -1255,7 +1255,7 @@ ai_t::find_best_assist_pos() {
 				)
 			)
 		) {
-			int max_rad = std::max(std::min(battler->attack_range() + 1, battler->distance_max_value() + 1), tar_ene->attack_range() + 1);
+			int max_rad = std::max(std::min(battler->attack_range() + 1, battler->distance_max_value() + 1), 4);
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));

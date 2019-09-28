@@ -2012,11 +2012,15 @@ void pc_updateweightstatus(struct map_session_data *sd)
 	nullpo_retv(sd);
 
 	old_overweight = (sd->sc.data[SC_WEIGHT90]) ? 2 : (sd->sc.data[SC_WEIGHT50]) ? 1 : 0;
-#ifdef RENEWAL
+
+// [GonBee]
+// 自然回復停止重量はR化後と同じにする。
+//#ifdef RENEWAL
+//	new_overweight = (pc_is90overweight(sd)) ? 2 : (pc_is70overweight(sd)) ? 1 : 0;
+//#else
+//	new_overweight = (pc_is90overweight(sd)) ? 2 : (pc_is50overweight(sd)) ? 1 : 0;
+//#endif
 	new_overweight = (pc_is90overweight(sd)) ? 2 : (pc_is70overweight(sd)) ? 1 : 0;
-#else
-	new_overweight = (pc_is90overweight(sd)) ? 2 : (pc_is50overweight(sd)) ? 1 : 0;
-#endif
 
 	if( old_overweight == new_overweight )
 		return; // no change
@@ -7498,8 +7502,8 @@ int pc_resetstate(struct map_session_data* sd)
 
 		// [GonBee]
 		// 拡張ステータスポイントを追加する。
-		sd->status.status_point += pc_readglobalreg(sd, add_str("EXTRA_STATUS_POINT"));
-		if (pc_readglobalreg(sd, add_str("MVP_MANIA_ENHANCE")))	sd->status.status_point += 200;
+		sd->status.status_point += pc_readglobalreg(sd, add_str(pybot::EXTRA_STATUS_POINT.c_str()));
+		if (pc_readglobalreg(sd, add_str(pybot::MVP_MANIA_ENHANCE.c_str())))	sd->status.status_point += 200;
 
 	}
 	else

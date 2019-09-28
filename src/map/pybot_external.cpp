@@ -708,6 +708,15 @@ void update_fever() {
 // キャッシュ経験値の登録名。
 const std::string CASH_EXP = "CASH_EXP";
 
+// 拡張スキルポイントの登録名。
+const std::string EXTRA_SKILL_POINT = "EXTRA_SKILL_POINT";
+
+// 拡張ステータスポイントの登録名。
+const std::string EXTRA_STATUS_POINT = "EXTRA_STATUS_POINT";
+
+// MVPマニアのメンバー強化の登録名。
+const std::string MVP_MANIA_ENHANCE = "MVP_MANIA_ENHANCE";
+
 // PyBot用ダミーNPC名。
 const std::string PYBOT_DUMMY_NPC_NAME = "PyBotDummy";
 

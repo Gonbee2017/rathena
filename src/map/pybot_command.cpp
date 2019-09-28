@@ -2491,8 +2491,11 @@ SUBCMD_FUNC(Bot, Status) {
 				std::setprecision(1),
 				mem->sd()->status.job_exp * 100. / pc_nextjobexp(mem->sd())
 			) << "%) ";
-	lea->output_buffer() << "Status Point " << mem->sd()->status.status_point;
-	lea->output_buffer() << " Shop Point " << print_zeny(mem->sd()->cashPoints) << " "
+	lea->output_buffer() << "Status Point " << mem->sd()->status.status_point << " "
+		"(種+" << pc_readglobalreg(mem->sd(), add_str(pybot::EXTRA_STATUS_POINT.c_str()));
+	if (pc_readglobalreg(mem->sd(), add_str(pybot::MVP_MANIA_ENHANCE.c_str())))
+		lea->output_buffer() << "E";
+	lea->output_buffer() << ") Shop Point " << print_zeny(mem->sd()->cashPoints) << " "
 		"(" << pc_readglobalreg(mem->sd(), add_str(CASH_EXP.c_str())) << "/" << MAX_LEVEL_BASE_EXP << ")";
 	lea->output_buffer() << "\n";
 	int inv_num = MAX_INVENTORY - pc_inventoryblank(mem->sd());
@@ -4012,8 +4015,16 @@ void skill_user_show_skills(
 		++cou;
 		return true;
 	});
-	lea->output_buffer() << cou << "件のスキルが見つかりました。(スキルポイント " <<
-		sk_use->skill_point() << ")\n";
+	lea->output_buffer() << cou << "件のスキルが見つかりました。\n";
+	lea->output_buffer() << "スキルポイント " << sk_use->skill_point();
+	block_if* mem = dynamic_cast<member_impl*>(sk_use);
+	if (mem) {
+		lea->output_buffer() << " (種+" << pc_readglobalreg(mem->sd(), add_str(pybot::EXTRA_SKILL_POINT.c_str()));
+		if (pc_readglobalreg(mem->sd(), add_str(pybot::MVP_MANIA_ENHANCE.c_str())))
+			lea->output_buffer() << "E";
+		lea->output_buffer() << ")";
+	}
+	lea->output_buffer() << "\n";
 	lea->show_next();
 }
 
