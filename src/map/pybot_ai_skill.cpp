@@ -2375,19 +2375,22 @@ AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 
 // ランドプロテクターを使う。
 AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
-	static const skill_unit_key_map KEYS = {SKILL_UNIT_KEY(SA_LANDPROTECTOR)};
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		tar_ene->is_great(leader) &&
-		bot->is_best_pos() &&
-		bot->check_attack(tar_ene) &&
-		!skill_unit_exists_block(bot, KEYS)
+	if (bot->is_best_pos() &&
+		bot->check_attack(bot->target_enemy())
 	) {
-		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
-			return ene->has_layout_skill() &&
-				ene->is_great(leader);
-		});
-		if (ene) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
+		block_if* pri_bat = battlers.front();
+		if (!skill_unit_exists_block(pri_bat, {SKILL_UNIT_KEY(SA_LANDPROTECTOR)})) {
+			block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
+				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+					ene->has_layout_skill() &&
+					ene->is_great(leader);
+			});
+			if (ene) {
+				int mx = (bot->bl()->x + pri_bat->bl()->x) / 2;
+				int my = (bot->bl()->y + pri_bat->bl()->y) / 2;
+				bot->use_skill_xy(kid, klv, mx, my);
+			}
+		}
 	}
 }
 

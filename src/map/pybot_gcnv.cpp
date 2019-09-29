@@ -1165,12 +1165,12 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS = {
 // 味方スキルアドバンテージのマップ(遠隔)。
 const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 	{PR_SANCTUARY      ,    2},
-	{AL_PNEUMA         ,  100},
+	{AL_PNEUMA         ,  400},
 	{WZ_QUAGMIRE       ,  -20},
 	{SA_VOLCANO        ,    1},
 	{SA_DELUGE         ,    1},
 	{SA_VIOLENTGALE    ,    1},
-	{SA_LANDPROTECTOR  ,  200},
+	{SA_LANDPROTECTOR  , 2000},
 	{BD_LULLABY        ,   30},
 	{BD_RICHMANKIM     ,   30},
 	{BD_ETERNALCHAOS   ,   30},
@@ -1189,10 +1189,10 @@ const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 	{DC_DONTFORGETME   ,   20},
 	{DC_FORTUNEKISS    ,   20},
 	{DC_SERVICEFORYOU  ,   20},
-	{PA_GOSPEL         , 1000},
+	{PA_GOSPEL         ,  100},
 	{HP_BASILICA       , 4000},
-	{CG_MOONLIT        , 2000},
-	{PF_FOGWALL        ,  400},
+	{CG_MOONLIT        , 1000},
+	{PF_FOGWALL        ,  200},
 	{NJ_SUITON         ,    1},
 };
 
@@ -1200,7 +1200,6 @@ const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE = {
 	{MG_SAFETYWALL     ,  100},
 	{WZ_QUAGMIRE       ,  -20},
-	{PA_GOSPEL         , 1000},
 };
 
 // 矢/弾タイプ名のテーブル。
@@ -1691,7 +1690,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
 	), SUBCMD_DESC(Bot, sKillBerserkRate           , kbr ,
 		"------ sKillBerserkRate (kbr) サブコマンド ------\n"
-		"バーサーク発動率を設定する。\n"
+		"バーサークの発動HP率を設定する。\n"
 		"入力例 [@bot skillberserkrate ドナ 25]\n"
 	), SUBCMD_DESC(Bot, sKillEnchantWeapon         , kew ,
 		"------ sKillEnchantWeapon (kew) サブコマンド ------\n"

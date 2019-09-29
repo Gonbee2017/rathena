@@ -3,7 +3,7 @@ OnStart:
 	set dupvar(.rid), getcharid(3, dupvar(.nic$));
 	set dupvar(.cid), getcharid(0, dupvar(.nic$));
 	attachrid dupvar(.rid);
-	set @act_cas_tri$, strnpcinfo(2);
+	set CASTLE_TRIAL_ACTIVE$, strnpcinfo(2);
 	killmonsterall "this";
 	for (set .@i, 0; .@i < 3; ++.@i) {
 		set .@are_bas, 4 * .@i;
@@ -38,7 +38,7 @@ OnStart:
 	initnpctimer;
 	end;
 OnAbort:
-	specialeffect2 EF_TEMP_FAIL, AREA, strcharinfo(0, dupvar(.cid));
+	specialeffect2 EF_TEMP_FAIL, AREA, dupvar(.nic$);
 	announce "挑戦者が攻略を断念しました、試練を中止します。", 0x9, 0xff0000;
 	callsub Stop;
 OnFixedMobDead:
@@ -79,43 +79,38 @@ OnBossMobDead:
 	}
 	end;
 OnRewardOpen:
-	if (isactive(dupvar(.rid))) {
+	if (isactive(dupvar(.cid))) {
 		attachrid dupvar(.rid);
 		set dupvar(CAPTURED), 1;
 		set CASTLE_TRIAL_RETRY, 0;
-		specialeffect2 EF_TEMP_OK, AREA, strcharinfo(0, dupvar(.cid));
+		specialeffect2 EF_TEMP_OK, AREA, dupvar(.nic$);
 	}
 	announce "おめでとうございます、砦の攻略に成功しました！！", 0x9, 0x00ffff;
 	callsub Stop;
 OnTimer1000:
-	if (isactive(dupvar(.rid))) {
-		set dupvar(.tim_rem), dupvar(.tim_rem) - 1;
-		if (dupvar(.tim_rem)) {
-			set .@tim_pois_siz, getarraysize(dupvar(.tim_pois));
-			for (set .@i, 1; .@i < .@tim_pois_siz; ++.@i) {
-				set .@tim_poi, dupele(.tim_pois, .@i);
-				if (dupvar(.tim_rem) == .@tim_poi * 60) {
-					announce "タイムリミットまで残り" + .@tim_poi + "分です。", 0x9, 0xff0000;
-					break;
-				}
+	set dupvar(.tim_rem), dupvar(.tim_rem) - 1;
+	if (dupvar(.tim_rem)) {
+		set .@tim_pois_siz, getarraysize(dupvar(.tim_pois));
+		for (set .@i, 1; .@i < .@tim_pois_siz; ++.@i) {
+			set .@tim_poi, dupele(.tim_pois, .@i);
+			if (dupvar(.tim_rem) == .@tim_poi * 60) {
+				announce "タイムリミットまで残り" + .@tim_poi + "分です。", 0x9, 0xff0000;
+				break;
 			}
-			initnpctimer;
-		} else {
-			specialeffect2 EF_TEMP_FAIL, AREA, strcharinfo(0, dupvar(.cid));
-			announce "タイムオーバーです、砦の攻略に失敗しました。", 0x9, 0xff0000;
-			callsub Stop;
 		}
+		initnpctimer;
 	} else {
-		announce "挑戦者がログアウトしました、試練を中止します。", 0x9, 0xff0000;
+		if (isactive(dupvar(.cid))) specialeffect2 EF_TEMP_FAIL, AREA, dupvar(.nic$);
+		announce "タイムオーバーです、砦の攻略に失敗しました。", 0x9, 0xff0000;
 		callsub Stop;
 	}
 	end;
 Stop:
 	stopnpctimer;
 	killmonsterall "this";
-	if (isactive(dupvar(.rid))) {
+	if (isactive(dupvar(.cid))) {
 		attachrid dupvar(.rid);
-		set @act_cas_tri$, "";
+		set CASTLE_TRIAL_ACTIVE$, "";
 	}
 	sleep 5000;
 	set .@exi_nam$, "CastleExit#" + strnpcinfo(2);
@@ -1447,7 +1442,12 @@ OnInit:
 
 
 -	script	::CastlePriestess	-1,{
-	if (@act_cas_tri$ == "") {
+	if (CASTLE_TRIAL_ACTIVE$ != "") {
+		set .@cas_tri$, "CastleTrial#" + CASTLE_TRIAL_ACTIVE$;
+		if (dupvar(.nic$, .@cas_tri$) != strcharinfo(0))
+			set CASTLE_TRIAL_ACTIVE$, "";
+	}
+	if (CASTLE_TRIAL_ACTIVE$ == "") {
 		if (!CASTLE_TRIAL_INTRODUCTION) callsub Introduce;
 		if (BaseLevel < 99) {
 			mes "[" + dupvar(.pri_nam$) + "]";
@@ -1693,11 +1693,8 @@ Trial:
 				mes "^FF4040" + .@tim_lim + "分^000000以内に砦のモンスターを";
 				mes "^FF404010匹以下まで^000000倒してください。";
 				mes "最後に^FF4040宝箱^000000を開ければ終了です。";
-				next;
-				mes "------ ^4040FF砦の試練^000000 ------";
-				mes "なお^FF4040制限時間をオーバー^000000したり";
-				mes "^FF4040ログアウト^000000したりすると^FF4040失格^000000に";
-				mes "なりますのでご注意ください。";
+				mes "なお^FF4040制限時間をオーバー^000000すると";
+				mes "^FF4040失格^000000になりますのでご注意ください。";
 				next;
 				mes "[" + dupvar(.pri_nam$) + "]";
 				mes "それでは始めますよ。";
@@ -1745,7 +1742,7 @@ Wait:
 	next;
 	return;
 Abort:
-	set .@cas_tri$, "CastleTrial#" + @act_cas_tri$;
+	set .@cas_tri$, "CastleTrial#" + CASTLE_TRIAL_ACTIVE$;
 	set .@cas_nam$, dupvar(.cas_nam$, .@cas_tri$);
 	mes "[" + dupvar(.pri_nam$) + "]";
 	mes "^4040FF" + .@cas_nam$ + "^000000の攻略を";

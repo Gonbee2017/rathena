@@ -417,11 +417,11 @@ BUILDIN_FUNC(getpetintimate) {
 }
 
 // [GonBee]
-// アカウントがアクティブかを判定する。
+// キャラクターがアクティブかを判定する。
 // i キャラクターID。
 // 戻り値 結果。
 BUILDIN_FUNC(isactive) {
-	script_pushint(st, bool(map_id2sd(script_getnum(st, 2))));
+	script_pushint(st, bool(map_charid2sd(script_getnum(st, 2))));
 	return SCRIPT_CMD_SUCCESS;
 }
 

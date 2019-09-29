@@ -262,6 +262,7 @@ REPLACE INTO `item_db2` VALUES (5363, 'Helm_Of_Abyss', '深淵の兜', 4, 20, NULL, 
 REPLACE INTO `item_db2` VALUES (5389, 'Angel_Spirit', '女神の仮面', 4, 20, NULL, 200, NULL, 0, NULL, 0, 0xFFFFFFFF, 7, 2, 512, NULL, 30, 0, 394, '{ bonus bMatkRate,2; bonus2 bAddClass,Class_All,2; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5430, 'Sacred_Torch_Coronet', '聖火冠', 4, 20, NULL, 250, NULL, 3, NULL, 0, 0xFFFFFFFF, 7, 2, 256, NULL, 0, 0, 431, '{ bonus2 bSubEle,Ele_Fire,20; skill "MG_FIREBALL",5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5474, 'Notice_Board', 'お知らせ看板', 4, 20, NULL, 700, NULL, 4, NULL, 0, 0xFFFFFFFF, 63, 2, 256, NULL, 10, 1, 471, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (5485, 'Tiger_Face', 'タイガーフェイス', 4, 20, NULL, 1000, NULL, 3, NULL, 0, 0xFFFFFFFF, 7, 2, 513, NULL, 60, 1, 483, '{ bonus2 bSubRace,RC_Brute,5; bonus2 bAddRace,RC_Brute,5; bonus2 bMagicAddRace,RC_Brute,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5579, 'Wanderer''s_Sakkat', '彷徨う者の笠', 4, 20, NULL, 500, NULL, 2, NULL, 1, 0xFFFFFFFF, 7, 2, 768, NULL, 0, 1, 558, '{ bonus bFlee,3+5*(getrefine()>=5)+2*(getrefine()>=7); if(getrefine()>=7) bonus bAgi,2; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5888, 'Wedding_Veil_', 'ヴェール', 4, 23000, NULL, 100, NULL, 0, NULL, 1, 0xFFFFFFFF, 7, 0, 256, NULL, 0, 1, 44, '{ bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5889, 'L_Orc_Hero_Helm_', '大型オークヒーローの兜', 4, 20, NULL, 900, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 768, NULL, 0, 1, 381, '{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; }', '{}', '{}');

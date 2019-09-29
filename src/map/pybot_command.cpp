@@ -2506,7 +2506,8 @@ SUBCMD_FUNC(Bot, Status) {
 			std::fixed,
 			std::setprecision(1),
 			mem->sd()->weight * 100. / mem->sd()->max_weight
-		) << "%) ";
+		) << "% "
+		"ŽÀ*" << mem->check_skill(ALL_INCCARRY) << ") ";
 	if (mem->is_carton()) {
 		status_calc_cart_weight(mem->sd(), CALCWT_ITEM);
 		lea->output_buffer() << STORAGE_TYPE_NAME_TABLE[TABLE_CART - 1] << " " <<
