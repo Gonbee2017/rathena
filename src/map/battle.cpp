@@ -2448,7 +2448,12 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 
 		if (sd) {
 			cri += sd->critaddrace[tstatus->race] + sd->critaddrace[RC_ALL];
-			if(!skill_id && is_skill_using_arrow(src, skill_id)) {
+
+			// [GonBee]
+			// 遠距離物理攻撃時のクリティカル率アップをスキルにも適用。
+			//if(!skill_id && is_skill_using_arrow(src, skill_id)) {
+			if ((wd->flag & (BF_LONG | BF_MAGIC)) == BF_LONG) {
+
 				cri += sd->bonus.arrow_cri;
 				cri += sd->bonus.critical_rangeatk;
 			}
@@ -3342,7 +3347,14 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 					RE_ALLATK_ADDRATE(wd, sd->bonus.atk_rate);
 				}
 #ifndef RENEWAL
-				if(sd->bonus.crit_atk_rate && !skill_id && is_attack_critical(wd, src, target, skill_id, skill_lv, false)) { // add +crit damage bonuses here in pre-renewal mode [helvetica]
+
+				// [GonBee]
+				// クリティカルダメージアップをスキルにも適用。
+				//if(sd->bonus.crit_atk_rate && !skill_id && is_attack_critical(wd, src, target, skill_id, skill_lv, false)) { // add +crit damage bonuses here in pre-renewal mode [helvetica]
+				if(sd->bonus.crit_atk_rate &&
+					is_attack_critical(wd, src, target, skill_id, skill_lv, false)
+				) {
+
 					ATK_ADDRATE(wd->damage, wd->damage2, sd->bonus.crit_atk_rate);
 				}
 #endif
