@@ -2991,7 +2991,7 @@ REPLACE INTO `cp_itemdesc` VALUES(11014, '連合軍報告書 第２巻。<br/>時空の裂け目
 REPLACE INTO `cp_itemdesc` VALUES(11015, '連合軍報告書 第３巻。<br/>異系の生態と環境、<br/>そして異種族に関する<br/>報告が書かれている。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(11016, '連合軍報告書 第４巻。<br/>連合軍内部状況と調査状況、<br/>今後の計画に関する報告が<br/>書かれている。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12319, 'ルーンミッドガッツから<br/>連合調査団に配給される<br/>おやつ。<br/>他人にとられないように<br/>誰もいない所で密かに<br/>食べるようにしよう。<br/>―――――――――――――<br/><font color="000088">10分間 ATK、MATK +5。</font><br/>重量 : <font color="777777">30</font>');
-REPLACE INTO `cp_itemdesc` VALUES(12320, 'シュバルツバルドから<br/>連合調査団に配給される<br/>おやつ。<br/>舌が凍ってしまうほどに<br/>冷たい氷ジュースを<br/>頭がキンキンするまで<br/>一気に飲み干すのがコツ。<br/>―――――――――――――<br/><font color="000088">10分間 HIT +10、<br/>回避 +20。</font><br/>重量 : <font color="777777">30</font>');
+REPLACE INTO `cp_itemdesc` VALUES(12320, 'シュバルツバルドから<br/>連合調査団に配給される<br/>おやつ。<br/>舌が凍ってしまうほどに<br/>冷たい氷ジュースを<br/>頭がキンキンするまで<br/>一気に飲み干すのがコツ。<br/>―――――――――――――<br/><font color="000088">10分間 HIT +10、<br/>完全回避 +20。</font><br/>重量 : <font color="777777">30</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12321, 'アルナべルツから<br/>連合調査団に配給される<br/>おやつ。<br/>スタミナ増強のためか、<br/>口から火を噴く位に<br/>辛い香辛料がまじっている。<br/>―――――――――――――<br/><font color="000088">10分間クリティカル +7。</font><br/>重量 : <font color="777777">30</font>');
 REPLACE INTO `cp_itemdesc` VALUES(12322, 'チョコレートがどっぷり<br/>ついているパイ。<br/>見た目よりとてもおいしく、<br/>一口かめば故郷を思い出す。<br/>―――――――――――――<br/><font color="000088">HP、SP 5% 回復。</font><br/>重量 : <font color="777777">5</font>');
 REPLACE INTO `cp_itemdesc` VALUES(6048, 'ミッドガルド大陸にはない<br/>未知の鉱石。<br/>高尚な研究のために要する。<br/>―――――――――――――<br/>重量 : <font color="777777">0</font>');

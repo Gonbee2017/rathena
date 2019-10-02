@@ -2,6 +2,12 @@
 // Ragnarok Online Slot Enchant Script     by Blaze
 //==============================================================================
 
+function	script	CorrectSuccess	{
+	set .@rat, (getiteminfo(getarg(1), 12) + 1) * 10 / 20;
+	if (.@rat < 10) set .@rat, 10;
+	return getarg(0) * .@rat / 10;
+}
+
 -	script	セヤブルレム#slot	84,{
 	mes "[セヤブルレム]";
 	mes "私は一般的な武器や防具に";
@@ -697,26 +703,11 @@
 	mes "精錬・カード・属性等の付与効果は";
 	mes "全て消滅します。";
 	next;
-	
-	//if(select("スロットエンチャントを頼む","話をやめる")==2) {
-	//	mes "[セヤブルレム]";
-	//	mes "また来てください。";
-	//	close;
-	//}
-	mes "[セヤブルレム]";
-	mes "……ですが、もし手数料を倍の";
-	mes "^FF0000" + (.@zeny * 2 / 10000) + "万Zeny^000000いただけるのであれば、";
-	mes "失敗しても装備だけは消滅しない";
-	mes "特別な方法で行いましょう。";
-	next;
-	set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
-	if (.@method == 2) {
+	if(select("スロットエンチャントを頼む","話をやめる")==2) {
 		mes "[セヤブルレム]";
 		mes "また来てください。";
 		close;
 	}
-	if (!.@method) set .@zeny, .@zeny * 2;
-	
 	if((countitem(.@delid[0]) < 1 && countitem(.@delid[1]) < 1) || Zeny < .@zeny) {
 		mes "[セヤブルレム]";
 		mes "材料かお金が足りませんよ？";
@@ -729,32 +720,21 @@
 			close;
 		}
 	}
-	
-	//if(countitem(.@delid))
-	//	delitem .@delid,1;
-	//else
-	//	delitem .@delid[1],1;
-	
+	if(countitem(.@delid))
+		delitem .@delid,1;
+	else
+		delitem .@delid[1],1;
 	for(set .@i,0; .@amount[.@i]!=0; set .@i,.@i+1)
 		delitem .@need[.@i],.@amount[.@i];
 	set Zeny,Zeny-.@zeny;
 	switch(.@class) {
-		//case 1: set .@success,25; break; //C級
-		//case 2: set .@success,20; break; //B級
-		//case 3: set .@success,20; break; //A級
-		//case 4: set .@success,10; break; //S級
-		case 1: set .@success, 100 * 2 / 3; break; //C級
-		case 2: set .@success, 100 * 2 / 4; break; //B級
-		case 3: set .@success, 100 * 2 / 5; break; //A級
-		case 4: set .@success, 100 * 2 / 6; break; //S級
+		case 1: set .@success,25; break; //C級
+		case 2: set .@success,20; break; //B級
+		case 3: set .@success,20; break; //A級
+		case 4: set .@success,10; break; //S級
 	}
+	set .@success, CorrectSuccess(.@success, .@delid);
 	if(rand(100) < .@success) {
-		
-		if(countitem(.@delid))
-			delitem .@delid,1;
-		else
-			delitem .@delid[1],1;
-		
 		if(.@class == 4)
 			misceffect 90;
 		else
@@ -765,14 +745,6 @@
 		getitem .@getid,1;
 	}
 	else {
-		
-		if (.@method) {
-			if(countitem(.@delid))
-				delitem .@delid,1;
-			else
-				delitem .@delid[1],1;
-		}
-		
 		misceffect 183;
 		mes "[セヤブルレム]";
 		mes "う……失敗です。";
@@ -1412,26 +1384,11 @@ lhz_in02,269,33,4	duplicate(青年#slot)	青年	97
 	mes "精錬・カード・属性等の付与効果は";
 	mes "全て消滅します。";
 	next;
-	
-	//if(select("スロットエンチャントを頼む","話をやめる")==2) {
-	//	mes "[レアブルレム]";
-	//	mes "また来てください。";
-	//	close;
-	//}
-	mes "[レアブルレム]";
-	mes "……ですが、もし手数料を倍の";
-	mes "^FF0000" + (.@zeny * 2 / 10000) + "万Zeny^000000いただけるのであれば、";
-	mes "失敗しても装備だけは消滅しない";
-	mes "特別な方法で行いましょう。";
-	next;
-	set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
-	if (.@method == 2) {
+	if(select("スロットエンチャントを頼む","話をやめる")==2) {
 		mes "[レアブルレム]";
 		mes "また来てください。";
 		close;
 	}
-	if (!.@method) set .@zeny, .@zeny * 2;
-	
 	if((countitem(.@delid[0]) < 1 && countitem(.@delid[1]) < 1) || Zeny < .@zeny) {
 		mes "[レアブルレム]";
 		mes "材料かお金が足りませんよ？";
@@ -1444,34 +1401,23 @@ lhz_in02,269,33,4	duplicate(青年#slot)	青年	97
 			close;
 		}
 	}
-	
-	//if(countitem(.@delid))
-	//	delitem .@delid,1;
-	//else
-	//	delitem .@delid[1],1;
-		
+	if(countitem(.@delid))
+		delitem .@delid,1;
+	else
+		delitem .@delid[1],1;
 	for(set .@i,0; .@amount[.@i]!=0; set .@i,.@i+1)
 		delitem .@need[.@i],.@amount[.@i];
 	set Zeny,Zeny-.@zeny;
 	switch(.@class) {
-		//case 1: set .@success,25; break; //C級
-		//case 2: set .@success,20; break; //B級
-		//case 3: set .@success,20; break; //A級
-		//case 4: set .@success,10; break; //S級
-		case 1: set .@success, 100 * 2 / 3; break; //C級
-		case 2: set .@success, 100 * 2 / 4; break; //B級
-		case 3: set .@success, 100 * 2 / 5; break; //A級
-		case 4: set .@success, 100 * 2 / 6; break; //S級
+		case 1: set .@success,25; break; //C級
+		case 2: set .@success,20; break; //B級
+		case 3: set .@success,20; break; //A級
+		case 4: set .@success,10; break; //S級
 	}
 	set .@rat, getiteminfo(.@delid, 12) * 10 / 200;
 	if (.@rat < 10) set .@rat, 10;
+	set .@success, CorrectSuccess(.@success, .@delid);
 	if(rand(100) < .@success) {
-		
-		if(countitem(.@delid))
-			delitem .@delid,1;
-		else
-			delitem .@delid[1],1;
-		
 		if(.@class == 4)
 			misceffect 90;
 		else
@@ -1482,14 +1428,6 @@ lhz_in02,269,33,4	duplicate(青年#slot)	青年	97
 		getitem .@getid,1;
 	}
 	else {
-		
-		if (.@method) {
-			if(countitem(.@delid))
-				delitem .@delid,1;
-			else
-				delitem .@delid[1],1;
-		}
-		
 		misceffect 183;
 		mes "[レアブルレム]";
 		mes "う……失敗です。";
@@ -2271,55 +2209,32 @@ prontera,81,106,6	script	プロブルレム	97,{
 		mes "^FF0000精錬値及び挿していたカードが^000000";
 		mes "^FF0000消えてしまいます。";
 		next;
-		
-		//mes "[プロブルレム]";
-		//mes "エンチャントを行いますか？";
-		//next;
-		//if(select("^FF0000今回はやめておく^000000","^3355FFお願いします^000000") == 1) {
-		//	mes "[プロブルレム]";
-		//	mes "わかりました。";
-		//	mes "もし興味がわきましたら";
-		//	mes "またお越しください。";
-		//	close;
-		//}
 		mes "[プロブルレム]";
-		mes "……ですが、もし手数料を倍の";
-		mes "^FF0000" + (.@price * 2 / 10000) + "万Zeny^000000いただけるのであれば、";
-		mes "失敗しても装備だけは消滅しない";
-		mes "特別な方法で行いましょう。";
+		mes "エンチャントを行いますか？";
 		next;
-		set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
-		if (.@method == 2) {
+		if(select("^FF0000今回はやめておく^000000","^3355FFお願いします^000000") == 1) {
 			mes "[プロブルレム]";
-			mes "また来てください。";
+			mes "わかりました。";
+			mes "もし興味がわきましたら";
+			mes "またお越しください。";
 			close;
 		}
-		if (!.@method) set .@price, .@price * 2;
-		
 		if(countitem(.@delid) < 1 || countitem(.@need) < .@amount || Zeny < .@price) {
 			mes "[プロブルレム]";
 			mes "材料かお金が足りませんよ？";
 			close;
 		}
-		
-		//delitem .@delid,1;
-		
+		delitem .@delid,1;
 		delitem .@need,.@amount;
 		set Zeny,Zeny-.@price;
 		switch(.@class) {
-			//case 1: set .@success,25; break; //C級
-			//case 2: set .@success,20; break; //B級
-			//case 3: set .@success,15; break; //A級
-			//case 4: set .@success,10; break; //S級
-			case 1: set .@success, 100 * 2 / 5; break; //C級
-			case 2: set .@success, 100 * 2 / 6; break; //B級
-			case 3: set .@success, 100 * 2 / 7; break; //A級
-			case 4: set .@success, 100 * 2 / 8; break; //S級
+			case 1: set .@success,25; break; //C級
+			case 2: set .@success,20; break; //B級
+			case 3: set .@success,15; break; //A級
+			case 4: set .@success,10; break; //S級
 		}
+		set .@success, CorrectSuccess(.@success, .@delid);
 		if(rand(100) < .@success) {
-			
-			delitem .@delid,1;
-			
 			if(.@class == 4)
 				misceffect 90;
 			else
@@ -2330,9 +2245,6 @@ prontera,81,106,6	script	プロブルレム	97,{
 			getitem .@getid,1;
 		}
 		else {
-			
-			if (.@method) delitem .@delid,1;
-			
 			misceffect 183;
 			mes "[プロブルレム]";
 			mes "う……失敗です。";
@@ -3191,55 +3103,32 @@ prontera,79,104,6	script	アラブルレム	97,{
 		mes "^FF0000精錬値及び挿していたカードが^000000";
 		mes "^FF0000消えてしまいます。";
 		next;
-		
-		//mes "[アラブルレム]";
-		//mes "エンチャントを行いますか？";
-		//next;
-		//if(select("^FF0000今回はやめておく^000000","^3355FFお願いします^000000") == 1) {
-		//	mes "[アラブルレム]";
-		//	mes "わかりました。";
-		//	mes "もし興味がわきましたら";
-		//	mes "またお越しください。";
-		//	close;
-		//}
 		mes "[アラブルレム]";
-		mes "……ですが、もし手数料を倍の";
-		mes "^FF0000" + (.@price * 2 / 10000) + "万Zeny^000000いただけるのであれば、";
-		mes "失敗しても装備だけは消滅しない";
-		mes "特別な方法で行いましょう。";
+		mes "エンチャントを行いますか？";
 		next;
-		set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
-		if (.@method == 2) {
+		if(select("^FF0000今回はやめておく^000000","^3355FFお願いします^000000") == 1) {
 			mes "[アラブルレム]";
-			mes "また来てください。";
+			mes "わかりました。";
+			mes "もし興味がわきましたら";
+			mes "またお越しください。";
 			close;
 		}
-		if (!.@method) set .@price, .@price * 2;
-		
 		if(countitem(.@delid) < 1 || countitem(.@need) < .@amount || Zeny < .@price) {
 			mes "[アラブルレム]";
 			mes "材料かお金が足りませんよ？";
 			close;
 		}
-		
-		//delitem .@delid,1;
-		
+		delitem .@delid,1;
 		delitem .@need,.@amount;
 		set Zeny,Zeny-.@price;
 		switch(.@class) {
-			//case 1: set .@success,25; break; //C級
-			//case 2: set .@success,20; break; //B級
-			//case 3: set .@success,15; break; //A級
-			//case 4: set .@success,10; break; //S級
-			case 1: set .@success, 100 * 2 / 5; break; //C級
-			case 2: set .@success, 100 * 2 / 6; break; //B級
-			case 3: set .@success, 100 * 2 / 7; break; //A級
-			case 4: set .@success, 100 * 2 / 8; break; //S級
+			case 1: set .@success,25; break; //C級
+			case 2: set .@success,20; break; //B級
+			case 3: set .@success,15; break; //A級
+			case 4: set .@success,10; break; //S級
 		}
+		set .@success, CorrectSuccess(.@success, .@delid);
 		if(rand(100) < .@success) {
-			
-			delitem .@delid,1;
-			
 			if(.@class == 4)
 				misceffect 90;
 			else
@@ -3250,9 +3139,6 @@ prontera,79,104,6	script	アラブルレム	97,{
 			getitem .@getid,1;
 		}
 		else {
-			
-			if (.@method) delitem .@delid,1;
-			
 			misceffect 183;
 			mes "[アラブルレム]";
 			mes "う……失敗です。";

@@ -151,6 +151,13 @@ AI_ITEM_USE_FUNC(PANACEA) {
 	) bot->use_item(itm_ind);
 }
 
+// シュバルツバルド産おやつを使う。
+AI_ITEM_USE_FUNC(PINEAPPLE_JUICE) {
+	if (!bot->sc()->data[SC_INCHIT] ||
+		!bot->sc()->data[SC_INCFLEE2]
+	) bot->use_item(itm_ind);
+}
+
 // 毒薬の瓶を使う。
 AI_ITEM_USE_FUNC(POISON_BOTTLE) {
 	if (bot->sd()->status.class_ == JOB_ASSASSIN_CROSS &&
@@ -217,9 +224,21 @@ AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL) {
 	if (!bot->sc()->data[SC_ENERGY_DRINK_RESERCH]) bot->use_item(itm_ind);
 }
 
+// アルナベルツ産おやつを使う。
+AI_ITEM_USE_FUNC(SPICY_SANDWICH) {
+	if (!bot->sc()->data[SC_INCCRI]) bot->use_item(itm_ind);
+}
+
 // タンの盛り合わせを使う。
 AI_ITEM_USE_FUNC(STR_DISH10) {
 	if (!bot->sc()->data[SC_FOOD_STR_CASH]) bot->use_item(itm_ind);
+}
+
+// ルーンミッドガッツ産おやつを使う。
+AI_ITEM_USE_FUNC(STRAWBERRY_CAKE) {
+	if (!bot->sc()->data[SC_MATKPOTION] ||
+		!bot->sc()->data[SC_ATKPOTION]
+	) bot->use_item(itm_ind);
 }
 
 // 不死のチゲ鍋を使う。

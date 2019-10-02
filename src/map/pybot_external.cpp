@@ -184,7 +184,7 @@ find_mobdb(
 // ドロップアイテムが無視アイテムかを判定する。
 bool // 結果。
 flooritem_to_be_ignored(
-	map_session_data* sd, // セッションデータ。
+	map_session_data* sd, // リーダーのセッションデータ。
 	flooritem_data* fit   // ドロップアイテム。
 ) {
 	auto lea = find_map_data(all_leaders, sd->status.char_id);
@@ -207,7 +207,7 @@ const char* get_equip_pos_name(equip_index equ_ind) {
 // 最後に枝召喚したIDを取得する。
 int // 取得したID。
 get_last_summoned_id(
-	map_session_data* sd // セッションデータ。
+	map_session_data* sd // リーダーのセッションデータ。
 ) {
 	auto lea = find_map_data(all_leaders, sd->status.char_id);
 	if (!lea) {
@@ -306,40 +306,28 @@ map_rate(
 // PCがMVPを獲得したことを記録する。
 // 血塗られた古木の枝、または砦の試練で出現させたモンスターの場合は記録しない。
 void pc_acquired_mvp(
-	int cid,     // キャラクターID。
-	mob_data* md // モンスターデータ。
+	map_session_data* sd, // セッションデータ。
+	mob_data* md          // モンスターデータ。
 ) {
 	if (mob_is_normal_mvp(md)) {
-		sql_session::open([cid, md] (sql_session* ses) {
+		sql_session::open([sd, md] (sql_session* ses) {
 			ses->execute(
-				"INSERT INTO `pybot_mvp` "
-				"(`char_id`,"
-				" `mob_id`) "
-				"SELECT"
-				" ", construct<sql_param>(cid       ), ","
-				" ", construct<sql_param>(md->mob_id), " "
-				"FROM dual "
-				"WHERE NOT EXISTS("
-					"SELECT * "
-					"FROM `pybot_mvp` "
-					"WHERE"
-					" `char_id` = ", construct<sql_param>(cid       ), " AND"
-					" `mob_id` = " , construct<sql_param>(md->mob_id), ")"
+				"REPLACE INTO `pybot_mvp` "
+				"VALUES"
+				"(", construct<sql_param>(sd->status.char_id), ","
+				" ", construct<sql_param>(md->mob_id        ), ")"
 			);
 			int mobs;
 			ses->execute(
 				"SELECT ", construct<sql_column>("COUNT(*)", mobs), " "
 				"FROM `pybot_mvp` "
-				"WHERE `char_id` = ", construct<sql_param>(cid)
+				"WHERE `char_id` = ", construct<sql_param>(sd->status.char_id)
 			);
 			ses->next_row();
 			ses->execute(
-				"INSERT INTO `pybot_mvp_stats`"
-				"(`char_id`,"
-				" `round`,"
-				" `mobs`) "
+				"INSERT INTO `pybot_mvp_stats` "
 				"VALUES"
-				"(", construct<sql_param>(cid), ","
+				"(", construct<sql_param>(sd->status.char_id), ","
 				" ", construct<sql_param>(0), ","
 				" ", construct<sql_param>(mobs), ") "
 				"ON DUPLICATE KEY UPDATE `mobs` = ", construct<sql_param>(mobs)
@@ -439,6 +427,40 @@ print_tick(
 	if (mins_rem) out << mins_rem << "分";
 	out               << secs_rem << "秒";
 	return out.str();
+}
+
+// メモ情報を照会する。
+std::shared_ptr<std::vector<std::shared_ptr<memo_info>>> // 照会したメモ情報のベクタ。
+query_memo_infos(
+	map_session_data* sd, // リーダーのセッションデータ。
+	nation_types nat_typ, // 国の種類。
+	map_types map_typ     // マップの種類。
+) {
+	auto res = initialize<std::vector<ptr<memo_info>>>();
+	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (!lea) {
+		lea = construct<leader_t>(sd);
+		all_leaders[lea->char_id()] = lea;
+	}
+	lea->memos()->iterate([nat_typ, map_typ, res] (int m, coords_t* xy) -> bool {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			if (map->nation_type == nat_typ &&
+				map->map_type == map_typ
+			) res->push_back(initialize<memo_info>(
+				m,
+				xy->x,
+				xy->y,
+				map->name_english,
+				map->name_japanese
+			));
+		}
+		return true;
+	});
+	std::sort(ALL_RANGE(*res), [](const ptr<memo_info>& lmi, const ptr<memo_info>& rmi) -> bool {
+		return lmi->name_english < rmi->name_english;
+	});
+	return res;
 }
 
 // MVPランキングを照会する。
@@ -568,10 +590,29 @@ void set_map_initial_position(
 ) {
 	auto pos = find_map_data(map_initial_positions, sd->status.char_id);
 	if (!pos) {
-		pos = initialize<block_list>(sd->bl);
+		pos = initialize<block_list>();
 		map_initial_positions[sd->status.char_id] = pos;
-	} else if (pos->m != sd->bl.m) *pos = sd->bl;
-
+	}
+	if (pos->m != sd->bl.m) {
+		*pos = sd->bl;
+		if (!char_is_bot(sd->status.char_id) &&
+			!map_getmapflag(sd->bl.m, MF_NOMEMO) &&
+			!map_getmapflag(sd->bl.m, MF_NOWARPTO)
+		) {
+			auto lea = find_map_data(all_leaders, sd->status.char_id);
+			if (!lea) {
+				lea = construct<leader_t>(sd);
+				all_leaders[lea->char_id()] = lea;
+			}
+			if (!lea->memos()->find(sd->bl.m)) {
+				auto map = find_map_data(id_maps, sd->bl.m);
+				if (map) show_client(sd->fd, print(
+					"「", map->name_japanese, " (", map->name_english, ")」のメモを取得しました。"
+				));
+			}
+			lea->memos()->register_(sd->bl.m, initialize<coords_t>(sd->bl.x, sd->bl.y));
+		}
+	}
 }
 
 // スキルがランドプロテクター上に設置可能かを判定する。

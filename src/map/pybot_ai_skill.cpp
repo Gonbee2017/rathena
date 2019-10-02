@@ -2375,21 +2375,20 @@ AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 
 // ランドプロテクターを使う。
 AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
+	block_if* pri_bat = battlers.front();
 	if (bot->is_best_pos() &&
-		bot->check_attack(bot->target_enemy())
+		bot->check_attack(bot->target_enemy()) &&
+		pri_bat->bl()->m == bot->bl()->m
 	) {
-		block_if* pri_bat = battlers.front();
-		if (!skill_unit_exists_block(pri_bat, {SKILL_UNIT_KEY(SA_LANDPROTECTOR)})) {
+		int mx = (bot->bl()->x + pri_bat->bl()->x) / 2;
+		int my = (bot->bl()->y + pri_bat->bl()->y) / 2;
+		if (!skill_unit_exists_xy(bot->bl()->m, mx, my, {SKILL_UNIT_KEY(SA_LANDPROTECTOR)})) {
 			block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
 				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
 					ene->has_layout_skill() &&
 					ene->is_great(leader);
 			});
-			if (ene) {
-				int mx = (bot->bl()->x + pri_bat->bl()->x) / 2;
-				int my = (bot->bl()->y + pri_bat->bl()->y) / 2;
-				bot->use_skill_xy(kid, klv, mx, my);
-			}
+			if (ene) bot->use_skill_xy(kid, klv, mx, my);
 		}
 	}
 }

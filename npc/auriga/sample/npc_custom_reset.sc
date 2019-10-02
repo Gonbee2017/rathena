@@ -14,7 +14,7 @@ prontera,152,192,5	script	リセット職員	860,{
 	mes "[リゼッタ]";
 	mes "メニューはこちらです。";
 	for (set .@i, 0; .@i < .@siz; ++.@i)
-		mes .names$[.@i] + " ^4040FF" + .@fees[.@i] + "Zeny^000000";
+		mes .names$[.@i] + " … ^4040FF" + .@fees[.@i] + "Zeny^000000";
 	mes "どれになさいますか？";
 	next;
 	for (set .@i, 0; .@i < .@siz; ++.@i)

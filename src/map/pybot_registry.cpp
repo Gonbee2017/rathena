@@ -190,6 +190,14 @@ clear_sell_item_func(
 	};
 }
 
+// DBからメモをクリアする関数を作る。
+registry_t<int,coords_t>::clear_func // 作った関数。
+clear_memo_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses) {};
+}
+
 // DBからスキル無視モンスターをクリアする関数を作る。
 registry_t<int>::clear_func // 作った関数。
 clear_skill_ignore_mob_func(
@@ -350,14 +358,14 @@ registry_t<int,e_element>::save_func // 作った関数。
 delete_kew_element_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int mid, e_element* ele) {
-		auto map_val = id_maps.find(mid);
-		if (map_val != id_maps.end()) {
+	return [cid] (sql_session* ses, int m, e_element* ele) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
 			ses->execute(
 				"DELETE FROM `pybot_kew_element` "
 				"WHERE"
-				" `char_id` = ", construct<sql_param>(cid), " AND"
-				" `map` = "    , construct<sql_param>(map_val->second->name_english.c_str())
+				" `char_id` = ", construct<sql_param>(cid                      ), " AND"
+				" `map` = "    , construct<sql_param>(map->name_english.c_str())
 			);
 		}
 	};
@@ -466,6 +474,14 @@ delete_sell_item_func(
 			" `nameid` = " , construct<sql_param>(nid)
 		);
 	};
+}
+
+// DBからメモを削除する関数を作る。
+registry_t<int,coords_t>::save_func // 作った関数。
+delete_memo_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int m, coords_t* mem) {};
 }
 
 // DBからスキル無視モンスターを削除する関数を作る。
@@ -649,15 +665,15 @@ registry_t<int,e_element>::save_func // 作った関数。
 insert_kew_element_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int mid, e_element* ele) {
-		auto map_val = id_maps.find(mid);
-		if (map_val != id_maps.end()) {
+	return [cid] (sql_session* ses, int m, e_element* ele) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
 			ses->execute(
 				"INSERT INTO `pybot_kew_element` "
 				"VALUES "
-				"(", construct<sql_param>(cid), ","
-				" ", construct<sql_param>(map_val->second->name_english.c_str()), ","
-				" ", construct<sql_param>(*ele), ")"
+				"(", construct<sql_param>(cid                      ), ","
+				" ", construct<sql_param>(map->name_english.c_str()), ","
+				" ", construct<sql_param>(*ele                     ), ")"
 			);
 		}
 	};
@@ -770,6 +786,26 @@ insert_sell_item_func(
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
+	};
+}
+
+// DBにメモを挿入する関数を作る。
+registry_t<int,coords_t>::save_func // 作った関数。
+insert_memo_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int m, coords_t* mem) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			ses->execute(
+				"INSERT INTO `pybot_memo` "
+				"VALUES "
+				"(", construct<sql_param>(cid                      ), ","
+				" ", construct<sql_param>(map->name_english.c_str()), ","
+				" ", construct<sql_param>(mem->x                   ), ","
+				" ", construct<sql_param>(mem->y                   ), ")"
+			);
+		}
 	};
 }
 
@@ -1184,6 +1220,30 @@ load_sell_item_func(
 	};
 }
 
+// DBからメモをロードする関数を作る。
+registry_t<int,coords_t>::load_func // 作った関数。
+load_memo_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<int,coords_t>* reg) {
+		char map[12];
+		int x;
+		int y;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("map", map), "`,"
+			" `", construct<sql_column>("x"  , x  ), "`,"
+			" `", construct<sql_column>("y"  , y  ), "` "
+			"FROM `pybot_memo` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) {
+			int ind = mapindex_name2id(map);
+			if (ind) reg->register_(map_mapindex2mapid(ind), initialize<coords_t>(x, y));
+		}
+	};
+}
+
 // DBから倉庫補充アイテムをロードする関数を作る。
 registry_t<int,int>::load_func // 作った関数。
 load_storage_get_item_func(
@@ -1326,15 +1386,15 @@ registry_t<int,e_element>::save_func // 作った関数。
 update_kew_element_func(
 	int cid // キャラクターID。
 ) {
-	return [cid] (sql_session* ses, int mid, e_element* ele) {
-		auto map_val = id_maps.find(mid);
-		if (map_val != id_maps.end()) {
+	return [cid] (sql_session* ses, int m, e_element* ele) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
 			ses->execute(
 				"UPDATE `pybot_kew_element` "
 				"SET `element` = ", construct<sql_param>(*ele), " "
 				"WHERE"
-				" `char_id` = ", construct<sql_param>(cid), " AND"
-				" `map` = "    , construct<sql_param>(map_val->second->name_english.c_str())
+				" `char_id` = ", construct<sql_param>(cid                      ), " AND"
+				" `map` = "    , construct<sql_param>(map->name_english.c_str())
 			);
 		}
 	};
@@ -1353,6 +1413,27 @@ update_limit_skill_func(
 			" `char_id` = " , construct<sql_param>(cid), " AND"
 			" `skill_id` = ", construct<sql_param>(kid)
 		);
+	};
+}
+
+// DBのメモを更新する関数を作る。
+registry_t<int,coords_t>::save_func // 作った関数。
+update_memo_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int m, coords_t* xy) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			ses->execute(
+				"UPDATE `pybot_memo` "
+				"SET"
+				" `x` = ", construct<sql_param>(xy->x), ","
+				" `y` = ", construct<sql_param>(xy->y), " "
+				"WHERE"
+				" `char_id` = ", construct<sql_param>(cid                      ), " AND"
+				" `map` = "    , construct<sql_param>(map->name_english.c_str())
+			);
+		}
 	};
 }
 

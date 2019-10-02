@@ -1,149 +1,141 @@
-prontera,161,193,4	script	飛行機乗り	869,{
-	mes "[ソニック]";
-	mes "どんなに離れた場所でも";
-	mes "俺のソニックイーグル号に";
-	mes "かかればひとっ飛びさ。";
-	mes "どこか行きたいところはあるかい？";
+prontera,159,192,4	script	ポタガール	721,{
+	cutin "kafra_07",2;
+	mes "[キャリー]";
+	mes "ハイハーイ、次の方ドゾー。";
+	mes "どちらまでですかー？";
+	mes "一度行ったことのあるマップなら";
+	mes "どこでもオッケーですよー？";
 	next;
-	for (set .@i, 0; .@i < getarraysize(.des_maps$); ++.@i)
-		set .@des_lis$[.@i], getmapnamejapanese(.des_maps$[.@i]);
-	set .@des_lis$[getarraysize(.@des_lis$)], "やめる";
-	set .@des_ind, select(printarray(.@des_lis$)) - 1;
-	if (.@des_ind < getarraysize(.des_maps$)) {
-		set .@des_map$, .des_maps$[.@des_ind];
-		set .@des_x, .des_xy_fees[.@des_ind * 3 + 0];
-		set .@des_y, .des_xy_fees[.@des_ind * 3 + 1];
-		set .@des_fee, .des_xy_fees[.@des_ind * 3 + 2];
-		mes "[ソニック]";
-		mes "^4040FF" + .@des_lis$[.@des_ind] + "^000000か……";
-		if ((.@des_map$ == "gefenia01" &&
-				countitem(7025)
-			) || (.@des_map$ == "kh_dun01" &&
-				countitem(7509)
-			) || (.@des_map$ == "kh_dun02" &&
-				countitem(7509)
-			) || (.@des_map$ == "lhz_dun01" &&
-				countitem(2657)
-			) || (.@des_map$ == "abbey01" &&
-				NAME_1QUE >= 20
-			) || (.@des_map$ == "ra_san02" &&
-				RA_2QUE >= 10
-			) || (.@des_map$ == "ama_dun01" &&
-				countitem(7160)
-			) || (.@des_map$ == "mosk_dun01" &&
-				MOSK_1QUE >= 39
-			) || (.@des_map$ == "bra_dun01" &&
-				BRA_3QUE >= 8
-			)
-		) set .@des_fee, 0;
-		if (.@des_fee) mes "そこなら料金は^4040FF" + .@des_fee + "^000000Zenyだね。";
-		else mes "あんたなら^4040FFタダ^000000でいいぜ。";
+	set .@nat_typs_siz, getarraysize(.nat_typs$);
+	for (set .@i, 1; .@i < .@nat_typs_siz; ++.@i)
+		set .@nat_typ_men$[getarraysize(.@nat_typ_men$)], "^4040FF" + .nat_typs$[.@i] + "^000000";
+	set .@nat_typ_men$[getarraysize(.@nat_typ_men$)], "やめまーす";
+	set .@nat_typ, select(printarray(.@nat_typ_men$));
+	if (.@nat_typ < .@nat_typs_siz) {
+		set .@map_typs_siz, getarraysize(.map_typs$);
+		for (set .@i, 1; .@i < .@map_typs_siz; ++.@i)
+			set .@map_typ_men$[getarraysize(.@map_typ_men$)], "^4040FF" + .map_typs$[.@i] + "^000000";
+		set .@map_typ_men$[getarraysize(.@map_typ_men$)], "やめまーす";
+		set .@map_typ, select(printarray(.@map_typ_men$));
+		if (.@map_typ < .@map_typs_siz) {
+			set .@maps_siz, querymemoinfos(.@nat_typ, .@map_typ, .@ids, .@xs, .@ys, .@enams$, .@jnams$);
+			if (!.@maps_siz) {
+				mes "[キャリー]";
+				mes "そちら方面は転送可能なマップが";
+				mes "まだひとつもないみたいですねー。";
+				next;
+				mes "[キャリー]";
+				mes "一度マップに足を運んでいただいて";
+				mes "そこのメモを取ってきていただければ";
+				mes "転送できるようになりますよー。";
+				next;
+			} else {
+				for (set .@i, 0; .@i < .@maps_siz; ++.@i)
+					set .@map_men$[getarraysize(.@map_men$)], .@enams$[.@i];
+				set .@map_men$[getarraysize(.@map_men$)], "やめまーす";
+				set .@map_ind, select(printarray(.@map_men$)) - 1;
+				if (.@map_ind < .@maps_siz) {
+					mes "[キャリー]";
+					mes "ご注文の転送先は";
+					mes "^4040FF" + .@jnams$[.@map_ind] + " (" + .@enams$[.@map_ind] + ")^000000";
+					mes "でよろしいですねー？";
+					mes "かしこまりましたー。";
+					mes "お会計^4040FF" + .fee + "Zeny^000000になりまーす。";
+					next;
+					if (select("払いまーす", "やめまーす") == 1) {
+						if (Zeny < .fee) {
+							mes "[キャリー]";
+							mes "お客さまー、大変失礼ですが";
+							mes "所持金が足りてませーん。";
+							next;
+						} else {
+							emotion ET_WRAP;
+							mes "[キャリー]";
+							mes "ちょうだいいたしまーす。";
+							mes "それでは転送しますよー。";
+							mes "いってらっしゃいませー。";
+							close2;
+							cutin "",255;
+							if (Zeny >= .fee) {
+								set Zeny, Zeny - .fee;
+								specialeffect2 EF_TELEPORTATION2;
+								warp .@enams$[.@map_ind], .@xs[.@map_ind], .@ys[.@map_ind];
+							}
+							end;
+						}
+					}
+				}
+			}
+		}
+	}
+	mes "[キャリー]";
+	mes "またどうぞー。";
+	close2;
+	cutin "",255;
+	end;
+OnInit:
+	setarray .nat_typs$, "不明", "ルーンミッドガッツ王国", "シュバルツバルド共和国", "アルナベルツ教国", "その他の国々";
+	setarray .map_typs$, "不明", "街", "フィールド", "ダンジョン";
+	set .fee, 10000;
+}
+prontera,161,193,4	script	遺跡荒らし	448,{
+	mes "[レイ]";
+	mes "俺様は遺跡荒らしのレイだ。";
+	mes "ダンジョン潜入も朝飯前さ。";
+	mes "よければいくつか案内するぜ？";
+	next;
+	for (set .@i, 0; .@i < getarraysize(.maps$); ++.@i)
+		set .@map_men$[getarraysize(.@map_men$)], "^4040FF" + getmapnamejapanese(.maps$[.@i]) + " (" + .maps$[.@i] + ")^000000";
+	set .@map_men$[getarraysize(.@map_men$)], "やめる";
+	set .@map_ind, select(printarray(.@map_men$)) - 1;
+	if (.@map_ind < getarraysize(.maps$)) {
+		set .@x, .xy_fees[.@map_ind * 3 + 0];
+		set .@y, .xy_fees[.@map_ind * 3 + 1];
+		set .@fee, .xy_fees[.@map_ind * 3 + 2];
+		mes "[レイ]";
+		mes "^4040FF" + getmapnamejapanese(.maps$[.@map_ind]) + "^000000か……";
+		mes "そこなら^4040FF" + .@fee + "^000000Zenyは";
+		mes "もらわないと割に合わねーな。";
 		next;
-		if (select("お願いします", "やめときます") == 1) {
-			if (Zeny < .@des_fee) {
-				mes "[ソニック]";
-				mes "おっと所持金が足りてないぜ。";
+		if (select("頼む", "やめる") == 1) {
+			if (Zeny < .@fee) {
+				mes "[レイ]";
+				mes "おっと金が足りてないぜ。";
 				mes "また今度来てくれよな。";
 				close;
 			}
 			emotion ET_DELIGHT;
-			mes "[ソニック]";
-			if (.@des_fee) mes "毎度ありー。";
-			mes "さぁ、乗った乗った！";
-			mes "大空に向かってテイクオフだ。";
+			mes "[レイ]";
+			mes "よーし、引き受けたぜ。";
+			mes "さっそく出発するぞ。";
+			mes "俺様のあとについてきな。";
 			close2;
-			set Zeny, Zeny - .@des_fee;
-			warp .@des_map$, .@des_x, .@des_y;
+			if (Zeny >= .@fee) {
+				set Zeny, Zeny - .@fee;
+				specialeffect2 EF_TELEPORTATION2;
+				warp .maps$[.@map_ind], .@x, .@y;
+			}
 			end;
 		}
 	}
-	mes "[ソニック]";
-	mes "いつでもどうぞ。";
+	mes "[レイ]";
+	mes "いつでも来なよ。";
 	close;
 OnInit:
-	setarray .des_maps$[getarraysize(.des_maps$)], "einbroch";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 64,204, 30000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "lighthalzen";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 262,75, 30000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "hugel";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 181,146, 30000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ra_fild12";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 292,204, 30000;
-	
-	setarray .des_maps$[getarraysize(.des_maps$)], "anthell01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 35,263, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "beach_dun";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 266,67, 20000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "c_tower1";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 199,159, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "gef_dun00";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 104,99, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "gefenia01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 58,169, 2000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "glast_01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 376,304, 20000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "in_sphinx1";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 288,9, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "iz_dun00";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 168,168, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "mjo_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 52,17, 20000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "moc_pryd01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 192,9, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "orcsdun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 32,170, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "pay_dun00";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 21,183, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "prt_maze01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 99,31, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "prt_sewb1";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 131,247, 10000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "treasure01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 69,24, 20000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "um_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 42,30, 30000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "niflheim";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 23,154, 50000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "xmas_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 205,16, 20000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "abyss_01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 260,268, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ein_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 22,14, 50000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "juperos_01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 55,246, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "kh_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 3,230, 1000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "kh_dun02";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 41,198, 2000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "lhz_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 149,285, 500000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "mag_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 126,69, 50000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "odin_tem01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 100,146, 50000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "tha_t01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 149,38, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "abbey01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 51,15, 2000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ice_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 157,15, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ra_san02";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 213,275, 5000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "thor_v01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 21,229, 200000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ama_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 229,10, 200000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "ayo_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 275,18, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "gon_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 153,48, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "lou_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 218,195, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "mosk_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 201,269, 1000000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "tur_dun02";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 148,264, 100000;
-	setarray .des_maps$[getarraysize(.des_maps$)], "bra_dun01";
-	setarray .des_xy_fees[getarraysize(.des_xy_fees)], 87,47, 500000;
+	setarray .maps$[getarraysize(.maps$)], "abbey01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 51,15, 5000000;
+	setarray .maps$[getarraysize(.maps$)], "ama_dun01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 229,10, 500000;
+	setarray .maps$[getarraysize(.maps$)], "bra_dun01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 87,47, 1000000;
+	setarray .maps$[getarraysize(.maps$)], "gefenia01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 58,169, 5000000;
+	setarray .maps$[getarraysize(.maps$)], "kh_dun02";
+	setarray .xy_fees[getarraysize(.xy_fees)], 41,198, 5000000;
+	setarray .maps$[getarraysize(.maps$)], "lhz_dun01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 149,285, 1000000;
+	setarray .maps$[getarraysize(.maps$)], "mosk_dun01";
+	setarray .xy_fees[getarraysize(.xy_fees)], 201,269, 2000000;
+	setarray .maps$[getarraysize(.maps$)], "ra_san02";
+	setarray .xy_fees[getarraysize(.xy_fees)], 213,275, 10000000;
 }

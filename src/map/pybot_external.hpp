@@ -16,6 +16,26 @@ struct map_session_data;
 struct mob_data;
 
 namespace pybot {
+
+// -----------------------------------------------------------------------------
+// 列挙の定義
+
+// マップの種類。
+enum map_types {
+	MT_UNKNOWN, // 不明。
+	MT_CITY   , // 街。
+	MT_FIELD  , // フィールド。
+	MT_DUNGEON, // ダンジョン。
+};
+
+// 国の種類。
+enum nation_types {
+	NT_UNKNOWN    , // 不明。
+	NT_MIDGARD    , // ルーンミッドガッツ王国。
+	NT_SCHWARZWALD, // シュバルツバルド共和国。
+	NT_ARUNAFELTZ , // アルナベルツ教国。
+	NT_OTHER      , // その他の国々。
+};
 	
 // -----------------------------------------------------------------------------
 // 型の定義
@@ -34,6 +54,15 @@ struct member_info {
 	int char_id;           // キャラクターID。
 	std::string char_name; // キャラクター名。
 	e_job class_;          // 職業。
+};
+
+// メモ情報。
+struct memo_info {
+	int m;                     // マップID。
+	int x;                     // X座標。
+	int y;                     // Y座標。
+	std::string name_english;  // マップ名(英語)。
+	std::string name_japanese; // マップ名(日本語)。
 };
 
 // -----------------------------------------------------------------------------
@@ -60,10 +89,11 @@ std::shared_ptr<std::vector<std::shared_ptr<member_info>>> get_member_list(map_s
 bool letter_is_jlead(uint8_t let);
 double map_rate(int m);
 bool mob_is_normal_mvp(mob_data* md);
-void pc_acquired_mvp(int cid, mob_data* md);
+void pc_acquired_mvp(map_session_data* sd, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);
 std::string print_tick(t_tick tic);
+std::shared_ptr<std::vector<std::shared_ptr<memo_info>>> query_memo_infos(map_session_data* sd, nation_types nat_typ, map_types map_typ);
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> query_mvp_ranking(const std::vector<e_job>& jobs, int lim);
 std::shared_ptr<mvp_stats> query_mvp_stats(int cid);
 void reload_equipset_in_battle(int cid);

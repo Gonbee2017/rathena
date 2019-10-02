@@ -1245,6 +1245,15 @@ int party_share_loot(struct party_data* p, struct map_session_data* sd, struct i
 	if( p && battle_config.party_show_share_picker && battle_config.show_picker_item_type&(1<<itemdb_type(item->nameid)) )
 		clif_party_show_picker(target, item);
 
+	// [GonBee]
+	// Botはカードを拾ったときに楽しいエモーションを表示する。
+	if (pybot::char_is_bot(sd->status.char_id)) {
+		item_data* idb = itemdb_exists(item->nameid);
+		if (idb &&
+			idb->type == IT_CARD
+		) clif_emotion(&sd->bl, ET_DELIGHT);
+	}
+
 	return 0;
 }
 

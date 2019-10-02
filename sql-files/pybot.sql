@@ -65,6 +65,15 @@ CREATE TABLE IF NOT EXISTS `pybot_limit_skill` (
   PRIMARY KEY (`char_id`, `skill_id`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_memo`;
+CREATE TABLE `pybot_memo` (
+  `char_id` int(11) unsigned NOT NULL,
+  `map` varchar(11) NOT NULL,
+  `x` smallint(4) unsigned NOT NULL,
+  `y` smallint(4) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `map`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_mvp`;
 CREATE TABLE `pybot_mvp` (
   `char_id` int(11) unsigned NOT NULL,

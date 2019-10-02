@@ -1,4 +1,4 @@
-prontera,267,48,1	script	MVPマニア::MVPMania	862,{
+prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 	if (!MVP_MANIA_INTRODUCTION) {
 		mes "[コレット]";
 		mes "MVPっていいよね……";

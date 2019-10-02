@@ -1101,13 +1101,9 @@ void ai_t::battler_use_skill() {
 	) {
 		if (dynamic_cast<member_impl*>(battler)) ite_sk_pros(&AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS, true);
 		const ai_t::skill_use_proc_vector* pros = nullptr;
-		if (dynamic_cast<member_impl*>(battler)) {
-			int mem_cla = battler->sd()->status.class_;
-			if (mem_cla >= JOB_NOVICE_HIGH &&
-				mem_cla <= JOB_THIEF_HIGH
-			) mem_cla -= 4001;
-			pros = find_map_data(AI_MEMBER_SKILL_USE_PROCS, e_job(mem_cla)).get();
-		} else if (dynamic_cast<homun_impl*>(battler)) 
+		if (dynamic_cast<member_impl*>(battler))
+			pros = find_map_data(AI_MEMBER_SKILL_USE_PROCS, battler->substancial_job()).get();
+		else if (dynamic_cast<homun_impl*>(battler)) 
 			pros = find_map_data(AI_HOMUN_SKILL_USE_PROCS, battler->homun_mapid_()).get();
 		if (pros) ite_sk_pros(pros);
 		if (dynamic_cast<member_impl*>(battler)) ite_sk_pros(&AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS, true);
@@ -1122,13 +1118,9 @@ ai_t::away_other_battlers(
 ) {
 	bool res = false;
 	if (check_distance_blxy(leader->bl(), x, y, AREA_SIZE)) {
-		for (int i = 0; i < battlers.size(); i++)	{
+		for (int i = 0; i < battler->battle_index(); i++)	{
 			block_if* oth_bat = battlers[i];
-			if ((oth_bat->is_primary() ||
-					(oth_bat != leader &&
-						oth_bat != leader->homun().get()
-					)
-				) && i < battler->battle_index() &&
+			if (oth_bat != leader &&
 				!oth_bat->is_walking() &&
 				(!check_distance_client_blxy(oth_bat->bl(), x, y, battle_config.pybot_around_distance) ||
 					!oth_bat->can_reach_xy(x, y)
@@ -1165,11 +1157,10 @@ ai_t::check_line_other_battlers(
 	int y  // Yç¿ïWÅB
 ) {
 	bool res = true;
-	for (int i = 0; i < battlers.size(); i++)	{
+	for (int i = 0; i < battler->battle_index(); i++)	{
 		block_if* oth_bat = battlers[i];
-		if ((oth_bat == leader ||
-				i < battler->battle_index()
-			) && !oth_bat->is_walking() &&
+		if (oth_bat != leader &&
+			!oth_bat->is_walking() &&
 			!oth_bat->check_line_xy(x, y)
 		) {
 			res = false;

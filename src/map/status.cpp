@@ -5221,6 +5221,10 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 			status->flee2 = status_calc_flee2(bl, sc, b_status->flee2 +(status->luk - b_status->luk));
 	}
 
+	// [GonBee]
+	// Š®‘S‰ñ”ğ‚ğãŒÀ’l‚Å§ŒÀ‚·‚éB
+	status->flee2 = cap_value(status->flee2, 0, battle_config.max_flee2);
+
 	if(flag&SCB_ATK_ELE) {
 		status->rhw.ele = status_calc_attack_element(bl, sc, b_status->rhw.ele);
 		if (sd) sd->state.lr_flag = 1;

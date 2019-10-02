@@ -363,11 +363,13 @@ function	script	KafraGuildStorage	{
 // < プロンテラ - 中央 >
 //----------------------------------
 
-prontera,146,89,6	script	カプラ職員	117,{
+//prontera,146,89,6	script	カプラ職員	117,{
+prontera,147,173,6	script	カプラ職員	117,{
 	cutin "kafra_01",2;
 	setarray .@code,2,3,4,5,6,8,7;
 	setarray .@price,600,1200,1200,1200,1800,2000,1700;
-	callfunc "KafraMain",1,0xff,"prontera",116,72,"NULL",0,0,40,80,800,.@code,.@price;
+//	callfunc "KafraMain",1,0xff,"prontera",116,72,"NULL",0,0,40,80,800,.@code,.@price;
+	callfunc "KafraMain",1,0xff,"prontera",156,183,"NULL",0,0,40,80,800,.@code,.@price;
 	close2;
 	viewpoint 1,146,89,1,0x0000FF;
 	viewpoint 1,282,200,2,0x0000FF;

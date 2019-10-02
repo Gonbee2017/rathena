@@ -154,4 +154,4 @@ payon_in01,5,134,4	script	発明家ゼックス	89,{
 	close;
 }
 
-prontera,139,98,6	duplicate(発明家ゼックス)	発明家ゼックス#prontera	89
+prontera,147,161,6	duplicate(発明家ゼックス)	発明家ゼックス#prontera	89

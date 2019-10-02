@@ -164,6 +164,7 @@ ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,coords_t>>& leader_if::memos() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -224,6 +225,7 @@ ptr<regnum_t<int>>& member_if::skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& member_if::skill_tails() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::stand() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::storage_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+e_job member_if::substancial_job() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 bool mob_if::has_can_attack() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool mob_if::can_be_provoke() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1535,6 +1537,11 @@ std::vector<block_if*>& leader_impl::members() {
 	return members_;
 }
 
+// メモのレジストリ。
+ptr<registry_t<int,coords_t>>& leader_impl::memos() {
+	return memos_;
+}
+
 // 次の重たいコマンドまでのチックを計算する。
 t_tick leader_impl::next_heaby_tick() {
 	t_tick hev_tic = DIFF_TICK(last_heaby_tick() + battle_config.pybot_heaby_cool_time, now);
@@ -1686,13 +1693,13 @@ member_impl::combo_skill_id() {
 // メンバーのデフォルト距離ポリシー値を取得する。
 distance_policy_values // 取得した距離ポリシー値。
 member_impl::default_distance_policy_value() {
-	return find_map_data(DEFAULT_DISTANCE_POLICY_VALUES, e_job(sd()->status.class_));
+	return find_map_data(DEFAULT_DISTANCE_POLICY_VALUES, substancial_job());
 }
 
 // メンバーのデフォルト通常攻撃ポリシー値を取得する。
 normal_attack_policy_values // 取得した通常攻撃ポリシー値。
 member_impl::default_normal_attack_policy_value() {
-	return find_map_data(DEFAULT_NORMAL_ATTACK_POLICY_VALUES, e_job(sd()->status.class_));
+	return find_map_data(DEFAULT_NORMAL_ATTACK_POLICY_VALUES, substancial_job());
 }
 
 // 最大距離の登録値。
@@ -2199,6 +2206,17 @@ ptr<registry_t<int,int>>& member_impl::storage_get_items() {
 	return storage_get_items_;
 }
 
+// 実質的な職業を取得する。
+// 転生1次職は1次職に変換される。
+e_job // 取得した職業。
+member_impl::substancial_job() {
+	int job = sd()->status.class_;
+	if (job >= JOB_NOVICE_HIGH &&
+		job <= JOB_THIEF_HIGH
+	) job -= 4001;
+	return e_job(job);
+}
+
 // メンバーの武器攻撃の属性を取得する。
 e_element // 取得した属性。
 member_impl::weapon_attack_element() {
@@ -2435,10 +2453,12 @@ skill_user_impl::collect_spirits(
 	if (!res) {
 		int cs_lv = check_skill(MO_CALLSPIRITS);
 		int sc_lv = check_skill(CH_SOULCOLLECT);
-		if (sd()->spiritball <= 3 &&
-			sc_lv
+		if ((!cs_lv ||
+				sd()->spiritball <= 3
+			) && sc_lv
 		) use_skill_self(CH_SOULCOLLECT, sc_lv);
-		if (cs_lv) use_skill_self(MO_CALLSPIRITS, cs_lv);
+		if (cs_lv >= sd()->spiritball + cou)
+			use_skill_self(MO_CALLSPIRITS, cs_lv);
 	}
 	return res;
 }
@@ -2810,6 +2830,13 @@ leader_t::leader_t(
 		insert_ignore_item_func(char_id()),
 		delete_ignore_item_func(char_id()),
 		clear_ignore_item_func(char_id())
+	);
+	memos() = construct<registry_t<int,coords_t>>(
+		load_memo_func(char_id()),
+		insert_memo_func(char_id()),
+		update_memo_func(char_id()),
+		delete_memo_func(char_id()),
+		clear_memo_func(char_id())
 	);
 	sell_items() = construct<registry_t<int>>(
 		load_sell_item_func(char_id()),

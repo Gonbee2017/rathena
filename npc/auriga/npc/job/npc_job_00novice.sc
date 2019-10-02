@@ -2670,6 +2670,12 @@ new_1-2,38,182,3	script	受付要員	92,{
 		getitem 2112,1;
 		getitem 611,2;
 		getitem 569,30;
+		
+		getitem 1247,1;
+		getitem 1248,1;
+		getitem 1249,1;
+		getitem 13000,1;
+		
 	}
 	else {
 		mes "[ケーン]";

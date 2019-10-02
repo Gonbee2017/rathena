@@ -100,6 +100,9 @@ const std::vector<
 	AI_ITEM_USE_PROC     (INT_DISH10                                  ),
 	AI_ITEM_USE_PROC     (DEX_DISH10                                  ),
 	AI_ITEM_USE_PROC     (LUK_DISH10                                  ),
+	AI_ITEM_USE_PROC     (STRAWBERRY_CAKE                             ),
+	AI_ITEM_USE_PROC     (PINEAPPLE_JUICE                             ),
+	AI_ITEM_USE_PROC     (SPICY_SANDWICH                              ),
 };
 
 // AIにおけるメンバースキル使用手続きのマップ。

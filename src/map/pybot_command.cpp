@@ -1860,9 +1860,9 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 		lea->output_buffer() = std::stringstream();
 		lea->output_buffer() << "------ 「" <<	mem->name() << "」の武器属性付与 ------\n";
 		for (kew_val_t kew_val : kew_vals) {
-			int mid = kew_val.first;
+			int m = kew_val.first;
 			e_element* ele = kew_val.second;
-			auto map = id_maps.at(mid);
+			auto map = id_maps.at(m);
 			lea->output_buffer() << map->name_japanese << " (" << map->name_english << ") " <<
 				ELEMENT_NAME_TABLE[*ele] << "\n";
 		}
@@ -1870,14 +1870,14 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 		lea->show_next();
 	} else {
 		std::string map_str = shift_arguments(args);
-		int mid = map_mapname2mapid(lowercase(map_str).c_str());
-		if (!mid) 
+		int m = map_mapname2mapid(lowercase(map_str).c_str());
+		if (!m) 
 			throw command_error{print(
 				"「", map_str, "」というマップIDは見つかりませんでした。"
 			)};
-		auto map = id_maps.at(mid);
+		auto map = id_maps.at(m);
 		if (args.empty()) {
-			mem->kew_elements()->unregister(mid);
+			mem->kew_elements()->unregister(m);
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", map->name_japanese, " (", map->name_english, ")"
 				"」で武器に対する属性付与を許可しません。"
@@ -1894,7 +1894,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 				throw command_error{print(
 					"「", ELEMENT_NAME_TABLE[ele], "」は指定できません。"
 				)};
-			mem->kew_elements()->register_(mid, initialize<e_element>(ele));
+			mem->kew_elements()->register_(m, initialize<e_element>(ele));
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", map->name_japanese, " (", map->name_english, ")"
 				"」で武器に対する「",  ELEMENT_NAME_TABLE[ele], "」の付与を許可します。"

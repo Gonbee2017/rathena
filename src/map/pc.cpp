@@ -5415,7 +5415,7 @@ bool pc_steal_item(struct map_session_data *sd,struct block_list *bl, uint16 ski
 			itemdb_exists(md->db->dropitem[i].nameid)
 		) {
 			int suc_rat = int(md->db->dropitem[i].p * rate / 100.);
-			suc_rat = min(suc_rat, battle_config.steal_rate_max);
+			suc_rat = min(suc_rat, battle_config.max_steal_rate);
 			if (rnd() % 10000 < suc_rat) break;
 		}
 	}
@@ -8190,6 +8190,10 @@ int pc_dead(struct map_session_data *sd,struct block_list *src)
 			}
 		}
 	}
+
+	// [GonBee]
+	// Botは死んだときにショックエモーションを表示する。
+	if (pybot::char_is_bot(sd->status.char_id)) clif_emotion(&sd->bl, ET_HUK);
 
 	// pvp
 	// disable certain pvp functions on pk_mode [Valaris]

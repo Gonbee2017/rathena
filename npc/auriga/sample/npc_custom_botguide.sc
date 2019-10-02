@@ -183,4 +183,3 @@ new_2-1,57,115,4	duplicate(BotGuide)	Botガイド#new_3-1	861
 new_3-1,57,115,4	duplicate(BotGuide)	Botガイド#new_3-1	861
 new_4-1,57,115,4	duplicate(BotGuide)	Botガイド#new_4-1	861
 new_5-1,57,115,4	duplicate(BotGuide)	Botガイド#new_5-1	861
-prontera,159,192,3	duplicate(BotGuide)	Botガイド#prontera	861

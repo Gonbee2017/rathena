@@ -449,6 +449,117 @@ BUILDIN_FUNC(printseconds) {
 }
 
 // [GonBee]
+// メモ情報を照会する。
+// i      国の種類。
+// i      マップの種類。
+// r      照会したマップIDの配列。
+// r      照会したX座標の配列。
+// r      照会したY座標の配列。
+// r      照会したマップ名(英語)の配列。
+// r      照会したマップ名(日本語)の配列。
+// 戻り値 照会した行数。
+BUILDIN_FUNC(querymemoinfos) {
+	pybot::nation_types nat_typ = pybot::nation_types(script_getnum(st, 2));
+	pybot::map_types map_typ = pybot::map_types(script_getnum(st, 3));
+	script_data* que_ids = script_getdata(st, 4);
+	if (!data_isreference(que_ids)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(que_ids);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* que_xs = script_getdata(st, 5);
+	if (!data_isreference(que_xs)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(que_xs);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* que_ys = script_getdata(st, 6);
+	if (!data_isreference(que_ys)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(que_ys);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* que_enams = script_getdata(st, 7);
+	if (!data_isreference(que_enams)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(que_enams);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	script_data* que_jnams = script_getdata(st, 8);
+	if (!data_isreference(que_jnams)) {
+		ShowError("script:querymvpranking: not a variable\n");
+		script_reportdata(que_jnams);
+		st->state = END;
+		return SCRIPT_CMD_FAILURE;
+	}
+	map_session_data* sd;
+	int siz = 0;
+	if (!is_string_variable(reference_getname(que_ids)) &&
+		!is_string_variable(reference_getname(que_xs)) &&
+		!is_string_variable(reference_getname(que_ys)) &&
+		is_string_variable(reference_getname(que_enams)) &&
+		is_string_variable(reference_getname(que_jnams)) &&
+		script_rid2sd(sd)
+	) {
+		auto mem_infs = pybot::query_memo_infos(sd, nat_typ, map_typ);
+		uint32 que_ids_ind = reference_getindex(que_ids);
+		uint32 que_xs_ind = reference_getindex(que_xs);
+		uint32 que_ys_ind = reference_getindex(que_ys);
+		uint32 que_enams_ind = reference_getindex(que_enams);
+		uint32 que_jnams_ind = reference_getindex(que_jnams);
+		for (auto mem_inf : *mem_infs) {
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(que_ids), que_ids_ind++),
+				reference_getname(que_ids),
+				(void*)__64BPRTSIZE(mem_inf->m),
+				reference_getref(que_ids)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(que_xs), que_xs_ind++),
+				reference_getname(que_xs),
+				(void*)__64BPRTSIZE(mem_inf->x),
+				reference_getref(que_xs)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(que_ys), que_ys_ind++),
+				reference_getname(que_ys),
+				(void*)__64BPRTSIZE(mem_inf->y),
+				reference_getref(que_ys)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(que_enams), que_enams_ind++),
+				reference_getname(que_enams),
+				(void*)(mem_inf->name_english.c_str()),
+				reference_getref(que_enams)
+			);
+			set_reg(
+				st,
+				sd,
+				reference_uid(reference_getid(que_jnams), que_jnams_ind++),
+				reference_getname(que_jnams),
+				(void*)(mem_inf->name_japanese.c_str()),
+				reference_getref(que_jnams)
+			);
+		}
+		siz = mem_infs->size();
+	}
+	script_pushint(st, siz);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // MVPランキングを照会する。
 // r 職業の配列。
 // i 最大行数。

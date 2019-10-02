@@ -526,6 +526,9 @@ enum item_ids {
 	ITEMID_BLOOD_CARTRIDGE         = 12150, // ブラッドバレットケース。
 	ITEMID_SILVER_CARTRIDGE        = 12151, // シルバーバレットケース。
 	ITEMID_HOLY_ARROW_QUIVER       = 12183, // 聖なる矢筒。
+	ITEMID_STRAWBERRY_CAKE         = 12319, // ルーンミッドガッツ産おやつ。
+	ITEMID_PINEAPPLE_JUICE         = 12320, // シュバルツバルド産おやつ。
+	ITEMID_SPICY_SANDWICH          = 12321, // アルナベルツ産おやつ。
 	ITEMID_HP_INCREASE_POTIONS     = 12422, // HP増加ポーション(小)。
 	ITEMID_HP_INCREASE_POTIONM     = 12423, // HP増加ポーション(中)。
 	ITEMID_HP_INCREASE_POTIONL     = 12424, // HP増加ポーション(大)。
@@ -544,14 +547,6 @@ enum item_ids {
 	ITEMID_BLIND_SPHERE            = 13206, // ダークスフィア。
 	ITEMID_FREEZING_SPHERE         = 13207, // アイススフィア。
 	ITEMID_ORLEANS_FULL_COURSE     = 14646, // オルレアンのフルコース。
-};
-
-// マップの種類。
-enum map_types {
-	MT_UNKNOWN, // 不明。
-	MT_CITY   , // 街。
-	MT_FIELD  , // フィールド。
-	MT_DUNGEON, // ダンジョン。
 };
 
 // メタモンスター。
@@ -580,15 +575,6 @@ enum meta_mobs {
 	MM_HP_DECLINE1  =   203, // HP低下1。
 	MM_INDIVIDUAL   =   500, // 個別。
 	MM_CAUTION      = 10000, // 警戒。
-};
-
-// 国の種類。
-enum nation_types {
-	NT_UNKNOWN    , // 不明。
-	NT_MIDGARD    , // ルーンミッドガッツ王国。
-	NT_SCHWARZWALD, // シュバルツバルド共和国。
-	NT_ARUNAFELTZ , // アルナベルツ教国。
-	NT_OTHER      , // その他の国々。
 };
 
 // 通常攻撃ポリシーの値。
@@ -684,6 +670,7 @@ struct card_exchanger;
 struct cart_context;
 struct command_element;
 struct command_error;
+struct coords_t;
 struct equipset_t;
 struct equipset_item;
 struct fever_size;
@@ -921,15 +908,18 @@ struct ai_t {
 	AI_ITEM_USE_FUNC(LUK_DISH10);
 	AI_ITEM_USE_FUNC(ORLEANS_FULL_COURSE);
 	AI_ITEM_USE_FUNC(PANACEA);
+	AI_ITEM_USE_FUNC(PINEAPPLE_JUICE);
 	AI_ITEM_USE_FUNC(POISON_BOTTLE);
 	AI_ITEM_USE_FUNC(REINS_OF_MOUNT);
 	AI_ITEM_USE_FUNC(RESIST_EARTH);
 	AI_ITEM_USE_FUNC(RESIST_FIRE);
 	AI_ITEM_USE_FUNC(RESIST_WATER);
 	AI_ITEM_USE_FUNC(RESIST_WIND);
-	AI_ITEM_USE_FUNC(STR_DISH10);
-	AI_ITEM_USE_FUNC(VIT_DISH10);
 	AI_ITEM_USE_FUNC(SP_INCREASE_POTIONL);
+	AI_ITEM_USE_FUNC(SPICY_SANDWICH);
+	AI_ITEM_USE_FUNC(STR_DISH10);
+	AI_ITEM_USE_FUNC(STRAWBERRY_CAKE);
+	AI_ITEM_USE_FUNC(VIT_DISH10);
 	AI_ITEM_USE_FUNC(WATER_OF_DARKNESS);
 
 	static ai_t::item_use_func AI_ITEM_USE_DEF(ammo_container)(int amm_id);
@@ -1383,6 +1373,7 @@ struct leader_if {
 	virtual t_tick& last_heaby_tick();
 	virtual int& last_summoned_id();
 	virtual std::vector<block_if*>& members();
+	virtual ptr<registry_t<int,coords_t>>& memos();
 	virtual t_tick next_heaby_tick();
 	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
@@ -1443,6 +1434,7 @@ struct member_if {
 	virtual ptr<registry_t<int>>& skill_ignore_mobs();
 	virtual ptr<regnum_t<int>>& skill_mobs();
 	virtual ptr<registry_t<e_skill,int>>& skill_tails();
+	virtual e_job substancial_job();
 	virtual ptr<regnum_t<int>>& supply_sp_rate();
 	virtual void stand();
 	virtual ptr<registry_t<int,int>>& storage_get_items();
@@ -1753,6 +1745,7 @@ struct leader_impl : virtual block_if {
 	t_tick last_heaby_tick_;                          // 最後に重たいコマンドを実行したチック。
 	int last_summoned_id_;                            // 最後に枝召喚したID。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
+	ptr<registry_t<int,coords_t>> memos_;             // メモのレジストリ。
 	std::stringstream output_buffer_;                 // 出力バッファ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
 	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
@@ -1774,6 +1767,7 @@ struct leader_impl : virtual block_if {
 	virtual t_tick& last_heaby_tick() override;
 	virtual int& last_summoned_id() override;
 	virtual std::vector<block_if*>& members() override;
+	virtual ptr<registry_t<int,coords_t>>& memos();
 	virtual t_tick next_heaby_tick() override;
 	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
@@ -1906,6 +1900,7 @@ struct member_impl : virtual block_if {
 	virtual int skill_point() override;
 	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
 	virtual void skill_up(e_skill kid) override;
+	virtual e_job substancial_job() override;
 	virtual ptr<regnum_t<int>>& supply_sp_rate() override;
 	virtual void stand() override;
 	virtual ptr<registry_t<int,int>>& storage_get_items() override;
@@ -2171,6 +2166,12 @@ struct command_element {
 // コマンドエラー。
 struct command_error {
 	std::string what; // 原因。
+};
+
+// 座標。
+struct coords_t {
+	int x; // X座標。
+	int y; // Y座標。
 };
 
 // 武具一式。
@@ -2585,6 +2586,7 @@ registry_t<int,int>::clear_func clear_recover_sp_item_func(int cid);
 registry_t<e_skill>::clear_func clear_reject_skill_func(int cid);
 registry_t<int>::clear_func clear_skill_ignore_mob_func(int cid);
 registry_t<int>::clear_func clear_sell_item_func(int cid);
+registry_t<int,coords_t>::clear_func clear_memo_func(int cid);
 registry_t<e_skill,int>::clear_func clear_skill_tail_func(int cid);
 registry_t<int,int>::clear_func clear_storage_get_item_func(int cid);
 registry_t<int>::clear_func clear_storage_put_item_func(int cid);
@@ -2604,6 +2606,7 @@ registry_t<int,int>::save_func delete_recover_sp_item_func(int cid);
 registry_t<e_skill>::save_func delete_reject_skill_func(int cid);
 registry_t<int>::save_func delete_skill_ignore_mob_func(int cid);
 registry_t<int>::save_func delete_sell_item_func(int cid);
+registry_t<int,coords_t>::save_func delete_memo_func(int cid);
 registry_t<e_skill,int>::save_func delete_skill_tail_func(int cid);
 registry_t<int,int>::save_func delete_storage_get_item_func(int cid);
 registry_t<int>::save_func delete_storage_put_item_func(int cid);
@@ -2622,6 +2625,7 @@ registry_t<int,int>::save_func insert_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func insert_recover_sp_item_func(int cid);
 registry_t<e_skill>::save_func insert_reject_skill_func(int cid);
 registry_t<int>::save_func insert_sell_item_func(int cid);
+registry_t<int,coords_t>::save_func insert_memo_func(int cid);
 registry_t<int>::save_func insert_skill_ignore_mob_func(int cid);
 registry_t<e_skill,int>::save_func insert_skill_tail_func(int cid);
 registry_t<int,int>::save_func insert_storage_get_item_func(int cid);
@@ -2641,6 +2645,7 @@ registry_t<int,int>::load_func load_recover_hp_item_func(int cid);
 registry_t<int,int>::load_func load_recover_sp_item_func(int cid);
 registry_t<e_skill>::load_func load_reject_skill_func(int cid);
 registry_t<int>::load_func load_sell_item_func(int cid);
+registry_t<int,coords_t>::load_func load_memo_func(int cid);
 registry_t<int>::load_func load_skill_ignore_mob_func(int cid);
 registry_t<e_skill,int>::load_func load_skill_tail_func(int cid);
 registry_t<int,int>::load_func load_storage_get_item_func(int cid);
@@ -2651,6 +2656,7 @@ registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
 registry_t<int,e_skill>::save_func update_first_skill_func(int cid);
 registry_t<int,e_element>::save_func update_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func update_limit_skill_func(int cid);
+registry_t<int,coords_t>::save_func update_memo_func(int cid);
 registry_t<int,normal_attack_policy>::save_func update_normal_attack_policy_func(int cid);
 registry_t<int,play_skill>::save_func update_play_skill_func(int cid);
 registry_t<int,int>::save_func update_recover_hp_item_func(int cid);

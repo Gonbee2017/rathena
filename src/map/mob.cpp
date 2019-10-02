@@ -3014,7 +3014,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		// PC‚ªMVP‚ðŠl“¾‚µ‚½‚±‚Æ‚ð‹L˜^‚·‚éB
 		act_mvp_sd = pybot::get_leader(mvp_sd->status.char_id);
 		if (!act_mvp_sd) act_mvp_sd = mvp_sd;
-		pybot::pc_acquired_mvp(act_mvp_sd->status.char_id, md);
+		pybot::pc_acquired_mvp(act_mvp_sd, md);
 
 		if( !(map_getmapflag(m, MF_NOMVPLOOT) || type&1) ) {
 			//Order might be random depending on item_drop_mvp_mode config setting
