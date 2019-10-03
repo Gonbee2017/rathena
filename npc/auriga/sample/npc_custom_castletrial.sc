@@ -357,7 +357,7 @@ gefg_cas05,194,171,0	warp	CastleExit#gefg_cas05	1,1,gef_fild13,305,87
 -	script	CastleTrialInit#gefg_cas01	-1,{
 OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
-	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦";
+	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 179, 88;
 	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 135, 100, 195;
