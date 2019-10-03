@@ -14590,7 +14590,8 @@ que_god01,154,112,4	script	グルンブルティ#god	826,{
 	mes "使うことになるとはな!!";
 	mes "フン！　少し待ってろ！";
 	next;
-	if(Weight*100/MaxWeight >= 50) {
+//	if(Weight*100/MaxWeight >= 50) {
+	if(MaxWeight - Weight < 8000) {
 		mes "‐所持アイテムの重量が重い為";
 		mes "　危険です。";
 		mes "　所持アイテムを減らしてから、";
