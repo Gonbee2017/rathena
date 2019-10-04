@@ -166,6 +166,7 @@ int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,coords_t>>& leader_if::memos() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1549,6 +1550,11 @@ t_tick leader_impl::next_heaby_tick() {
 	return hev_tic;
 }
 
+// 非無視アイテムのレジストリ。
+ptr<registry_t<int>>& leader_impl::not_ignore_items() {
+	return not_ignore_items_;
+}
+
 // 出力バッファ。
 std::stringstream& leader_impl::output_buffer() {
 	return output_buffer_;
@@ -2837,6 +2843,12 @@ leader_t::leader_t(
 		update_memo_func(char_id()),
 		delete_memo_func(char_id()),
 		clear_memo_func(char_id())
+	);
+	not_ignore_items() = construct<registry_t<int>>(
+		load_not_ignore_item_func(char_id()),
+		insert_not_ignore_item_func(char_id()),
+		delete_not_ignore_item_func(char_id()),
+		clear_not_ignore_item_func(char_id())
 	);
 	sell_items() = construct<registry_t<int>>(
 		load_sell_item_func(char_id()),

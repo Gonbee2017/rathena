@@ -125,6 +125,19 @@ clear_normal_attack_policy_func(
 	};
 }
 
+// DBから非無視アイテムをクリアする関数を作る。
+registry_t<int>::clear_func // 作った関数。
+clear_not_ignore_item_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_not_ignore_item` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBから演奏スキルをクリアする関数を作る。
 registry_t<int,play_skill>::clear_func // 作った関数。
 clear_play_skill_func(
@@ -397,6 +410,21 @@ delete_normal_attack_policy_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBから非無視アイテムを削除する関数を作る。
+registry_t<int>::save_func // 作った関数。
+delete_not_ignore_item_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int nid) {
+		ses->execute(
+			"DELETE FROM `pybot_not_ignore_item` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `nameid` = " , construct<sql_param>(nid)
 		);
 	};
 }
@@ -707,6 +735,21 @@ insert_normal_attack_policy_func(
 			"(", construct<sql_param>(cid                    ), ","
 			" ", construct<sql_param>(mid                    ), ","
 			" ", construct<sql_param>(int(nor_att_pol->value)), ")"
+		);
+	};
+}
+
+// DBに非無視アイテムを挿入する関数を作る。
+registry_t<int>::save_func // 作った関数。
+insert_not_ignore_item_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int nid) {
+		ses->execute(
+			"INSERT INTO `pybot_not_ignore_item` "
+			"VALUES "
+			"(", construct<sql_param>(cid), ","
+			" ", construct<sql_param>(nid), ")"
 		);
 	};
 }
@@ -1087,6 +1130,23 @@ load_normal_attack_policy_func(
 		);
 		while (ses->next_row())
 			reg->register_(mid, construct<normal_attack_policy>(mid, normal_attack_policy_values(val)));
+	};
+}
+
+// DBから非無視アイテムをロードする関数を作る。
+registry_t<int>::load_func // 作った関数。
+load_not_ignore_item_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<int>* reg) {
+		int nid;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("nameid", nid), "` "
+			"FROM `pybot_not_ignore_item` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) reg->register_(nid);
 	};
 }
 

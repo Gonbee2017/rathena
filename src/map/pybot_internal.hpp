@@ -1375,6 +1375,7 @@ struct leader_if {
 	virtual std::vector<block_if*>& members();
 	virtual ptr<registry_t<int,coords_t>>& memos();
 	virtual t_tick next_heaby_tick();
+	virtual ptr<registry_t<int>>& not_ignore_items();
 	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
 	virtual ptr<regnum_t<bool>>& rush();
@@ -1746,6 +1747,7 @@ struct leader_impl : virtual block_if {
 	int last_summoned_id_;                            // 最後に枝召喚したID。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
 	ptr<registry_t<int,coords_t>> memos_;             // メモのレジストリ。
+	ptr<registry_t<int>> not_ignore_items_;           // 非無視アイテムのレジストリ。
 	std::stringstream output_buffer_;                 // 出力バッファ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
 	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
@@ -1769,6 +1771,7 @@ struct leader_impl : virtual block_if {
 	virtual std::vector<block_if*>& members() override;
 	virtual ptr<registry_t<int,coords_t>>& memos();
 	virtual t_tick next_heaby_tick() override;
+	virtual ptr<registry_t<int>>& not_ignore_items() override;
 	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
 	virtual ptr<regnum_t<bool>>& rush() override;
@@ -2471,6 +2474,9 @@ SUBCMD_FUNC(Bot, ItemDrop);
 SUBCMD_FUNC(Bot, ItemIgnore);
 SUBCMD_FUNC(Bot, ItemIgnoreClear);
 SUBCMD_FUNC(Bot, ItemIgnoreImport);
+SUBCMD_FUNC(Bot, ItemNotIgnore);
+SUBCMD_FUNC(Bot, ItemNotIgnoreClear);
+SUBCMD_FUNC(Bot, ItemNotIgnoreImport);
 SUBCMD_FUNC(Bot, ItemRecoverHp);
 SUBCMD_FUNC(Bot, ItemRecoverHpClear);
 SUBCMD_FUNC(Bot, ItemRecoverHpTransport);
@@ -2580,6 +2586,7 @@ registry_t<int>::clear_func clear_ignore_item_func(int cid);
 registry_t<int,e_element>::clear_func clear_kew_element_func(int cid);
 registry_t<e_skill,int>::clear_func clear_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::clear_func clear_normal_attack_policy_func(int cid);
+registry_t<int>::clear_func clear_not_ignore_item_func(int cid);
 registry_t<int,play_skill>::clear_func clear_play_skill_func(int cid);
 registry_t<int,int>::clear_func clear_recover_hp_item_func(int cid);
 registry_t<int,int>::clear_func clear_recover_sp_item_func(int cid);
@@ -2600,6 +2607,7 @@ registry_t<int>::save_func delete_ignore_item_func(int cid);
 registry_t<int,e_element>::save_func delete_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func delete_normal_attack_policy_func(int cid);
+registry_t<int>::save_func delete_not_ignore_item_func(int cid);
 registry_t<int,play_skill>::save_func delete_play_skill_func(int cid);
 registry_t<int,int>::save_func delete_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func delete_recover_sp_item_func(int cid);
@@ -2620,6 +2628,7 @@ registry_t<int>::save_func insert_ignore_item_func(int cid);
 registry_t<int,e_element>::save_func insert_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func insert_normal_attack_policy_func(int cid);
+registry_t<int>::save_func insert_not_ignore_item_func(int cid);
 registry_t<int,play_skill>::save_func insert_play_skill_func(int cid);
 registry_t<int,int>::save_func insert_recover_hp_item_func(int cid);
 registry_t<int,int>::save_func insert_recover_sp_item_func(int cid);
@@ -2640,6 +2649,7 @@ registry_t<int>::load_func load_ignore_item_func(int cid);
 registry_t<int,e_element>::load_func load_kew_element_func(int cid);
 registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::load_func load_normal_attack_policy_func(int cid);
+registry_t<int>::load_func load_not_ignore_item_func(int cid);
 registry_t<int,play_skill>::load_func load_play_skill_func(int cid);
 registry_t<int,int>::load_func load_recover_hp_item_func(int cid);
 registry_t<int,int>::load_func load_recover_sp_item_func(int cid);

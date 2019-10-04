@@ -905,16 +905,83 @@ SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 		throw command_error{print(
 			"ItemIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	auto bot_sel_itms = construct<registry_t<int>>(
+	auto bot_ign_itms = construct<registry_t<int>>(
 		load_ignore_item_func(bot->char_id()),
 		insert_ignore_item_func(bot->char_id()),
 		delete_ignore_item_func(bot->char_id()),
 		clear_ignore_item_func(bot->char_id())
 	);
-	int cou = lea->ignore_items()->import_(bot_sel_itms.get());
+	int cou = lea->ignore_items()->import_(bot_ign_itms.get());
 	show_client(lea->fd(), print(
 		"「", bot->name(), "」から",
 		cou, "件の無視アイテムを取り込みました。"
+	));
+	lea->last_heaby_tick() = now;
+}
+
+// 非無視アイテムを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, ItemNotIgnore) {
+	CS_ENTER;
+	if (args.empty()) {
+		std::vector<int> nids;
+		lea->not_ignore_items()->copy(pybot::back_inserter(nids));
+		std::sort(ALL_RANGE(nids));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 非無視アイテム ------\n";
+		for (int nid : nids) {
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+				print_itemdb(nid) << "\n";
+		}
+		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string idb_nam = shift_arguments(args);
+		int nid = find_itemdb(idb_nam);
+		if (!nid)
+			throw command_error{print(
+				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		if (nid >= FAME_OFFSET)
+			throw command_error{print(FAME_TAG, "のアイテムは登録できません。")};
+		std::string idb_str = print_itemdb(nid);
+		if (lea->not_ignore_items()->find(nid)) {
+			lea->not_ignore_items()->unregister(nid);
+			show_client(lea->fd(), print("「", idb_str, "」を必ず拾うとは限りません。"));
+		} else {
+			lea->not_ignore_items()->register_(nid);
+			show_client(lea->fd(), print("「", idb_str, "」を必ず拾います。"));
+		}
+	}
+}
+
+// 非無視アイテムをクリアする。
+SUBCMD_FUNC(Bot, ItemNotIgnoreClear) {
+	CS_ENTER;
+	int cou = lea->not_ignore_items()->clear();
+	show_client(lea->fd(), print(
+		cou, "件の非無視アイテムの登録を抹消しました。"
+	));
+}
+
+// 非無視アイテムを取り込む。
+SUBCMD_FUNC(Bot, ItemNotIgnoreImport) {
+	CS_ENTER;
+	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heaby_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"ItemNotIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
+	auto bot_not_ign_itms = construct<registry_t<int>>(
+		load_not_ignore_item_func(bot->char_id()),
+		insert_not_ignore_item_func(bot->char_id()),
+		delete_not_ignore_item_func(bot->char_id()),
+		clear_not_ignore_item_func(bot->char_id())
+	);
+	int cou = lea->not_ignore_items()->import_(bot_not_ign_itms.get());
+	show_client(lea->fd(), print(
+		"「", bot->name(), "」から",
+		cou, "件の非無視アイテムを取り込みました。"
 	));
 	lea->last_heaby_tick() = now;
 }

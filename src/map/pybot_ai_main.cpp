@@ -240,7 +240,9 @@ void ai_t::leader_collect() {
 			if (check_distance_client_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
 				((!leader->ignore_items()->find(fit->item.nameid) &&
 						!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
-					) || fit->item.card[0] ||
+					) || leader->not_ignore_items()->find(fit->item.nameid) ||
+					leader->not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) ||
+					fit->item.card[0] ||
 					fit->item.refine
 				)
 			) {

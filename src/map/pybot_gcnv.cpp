@@ -1519,6 +1519,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ ItemIgnoreImport (iii) サブコマンド ------\n"
 		"無視アイテムを取り込む。\n"
 		"入力例 [@bot itemignoreimport チャンプ]\n"
+	), SUBCMD_DESC(Bot, ItemNotIgnore              , ini ,
+		"------ ItemNotIgnore (ini) サブコマンド ------\n"
+		"非無視アイテムを一覧表示する。\n"
+		"入力例 [@bot itemnotignore]\n"
+		"非無視アイテムを登録する。\n"
+		"入力例 [@bot itemnotignore エルニウム]\n"
+		"非無視アイテムの登録を抹消する。\n"
+		"入力例 [@bot itemnotignore \"シルバーローブ [1]\"]\n"
+	), SUBCMD_DESC(Bot, ItemNotIgnoreClear         ,     ,
+		"------ ItemNotIgnoreClear サブコマンド ------\n"
+		"非無視アイテムをクリアする。\n"
+		"入力例 [@bot itemnotignoreclear]\n"
+	), SUBCMD_DESC(Bot, ItemNotIgnoreImport        , inii,
+		"------ ItemNotIgnoreImport (inii) サブコマンド ------\n"
+		"非無視アイテムを取り込む。\n"
+		"入力例 [@bot itemnotignoreimport チェイス]\n"
 	), SUBCMD_DESC(Bot, ItemRecoverHp              , irh ,
 		"------ ItemRecoverHp (irh) サブコマンド ------\n"
 		"HP回復アイテムを一覧表示する。\n"
@@ -1963,6 +1979,9 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, ItemIgnore                 , ii  ),
 	SUBCMD_PROC(Bot, ItemIgnoreClear            ,     ),
 	SUBCMD_PROC(Bot, ItemIgnoreImport           , iii ),
+	SUBCMD_PROC(Bot, ItemNotIgnore              , ini ),
+	SUBCMD_PROC(Bot, ItemNotIgnoreClear         ,     ),
+	SUBCMD_PROC(Bot, ItemNotIgnoreImport        , inii),
 	SUBCMD_PROC(Bot, ItemRecoverHp              , irh ),
 	SUBCMD_PROC(Bot, ItemRecoverHpClear         ,     ),
 	SUBCMD_PROC(Bot, ItemRecoverHpTransport     , irht),

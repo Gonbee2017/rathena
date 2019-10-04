@@ -1455,15 +1455,45 @@ ein_in01,18,82,5	duplicate(ChangeStone)	マティシュタイン	84
 		mes "言ったじゃないか。";
 		close;
 	}
-	if(checkweight(.@gain,1)==0) {
+	mes "["+strnpcinfo(3)+"]";
+	mes getitemname(.@gain)+ "を作る量はどうする？";
+	next;
+	if(select("1個分だけ作る","作れるだけ作る")==1) {
+		if(checkweight(.@gain,1)==0) {
+			mes "‐所持アイテムの重量が重い為";
+			mes "　危険です。";
+			mes "　所持アイテムを減らしてから、";
+			mes "　再度話しかけてください‐";
+			close;
+		}
+		if(countitem(.@itemid)<50) close;
+		delitem .@itemid,50;
+		getitem .@gain,1;
+		mes "["+strnpcinfo(3)+"]";
+		mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	set .@num,countitem(.@itemid)/50;
+	mes "["+strnpcinfo(3)+"]";
+	mes getitemname(.@itemid)+ "^FF0000" +(.@num*50)+ "^000000個で";
+	mes getitemname(.@gain)+ "^FF0000" +.@num+ "^000000個作ればいい？";
+	next;
+	if(select("やっぱりやめます","お願いします")==1) {
+		mes "["+strnpcinfo(3)+"]";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	if(checkweight(.@gain,.@num)==0) {
 		mes "‐所持アイテムの重量が重い為";
 		mes "　危険です。";
 		mes "　所持アイテムを減らしてから、";
 		mes "　再度話しかけてください‐";
 		close;
 	}
-	delitem .@itemid,50;
-	getitem .@gain,1;
+	if(countitem(.@itemid)<.@num*50) close;
+	delitem .@itemid,.@num*50;
+	getitem .@gain,.@num;
 	mes "["+strnpcinfo(3)+"]";
 	mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
 	mes "いつでもまた来てくれ。";
