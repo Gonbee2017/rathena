@@ -2307,8 +2307,9 @@ AI_SKILL_USE_FUNC(SA_DISPELL) {
 	block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid, klv] (block_if* ene) -> bool {
 		return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
 			bot->check_skill_range_block(kid, klv, ene) &&
-			ene->is_great(leader) &&
-			ene->check_sc_types(GREAT_SC_TYPES) &&
+			(ene->is_great(leader) ||
+				bot->is_no_gemstone()
+			) && ene->check_sc_types(GREAT_SC_TYPES) &&
 			!ene->is_magic_immune() &&
 			!ene->is_hiding();
 	});
@@ -2386,7 +2387,9 @@ AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 			block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this, kid] (block_if* ene) -> bool {
 				return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
 					ene->has_layout_skill() &&
-					ene->is_great(leader);
+					(ene->is_great(leader) ||
+						bot->is_no_gemstone()
+					);
 			});
 			if (ene) bot->use_skill_xy(kid, klv, mx, my);
 		}
@@ -2771,7 +2774,7 @@ AI_SKILL_USE_FUNC(ST_PRESERVE) {
 
 // リジェクトソードを使う。
 AI_SKILL_USE_FUNC(ST_REJECTSWORD) {
-	if (bot->sc_rest(SC_REJECTSWORD) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (!bot->sc()->data[SC_REJECTSWORD]) bot->use_skill_self(kid, klv);
 }
 
 // 解毒を使う。
