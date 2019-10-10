@@ -2275,16 +2275,6 @@ struct pybot_map {
 	int average_level;         // 平均レベル。
 };
 
-// スコープから抜けるときの処理。
-struct scope_exit {
-	// 処理。
-	using do_func = std::function<void()>;
-
-	do_func do_; // 処理。
-
-	~scope_exit();
-};
-
 // スキル所持モンスターIDのセット。
 struct skill_mobs {
 	static ptr<skill_mobs> instance;        // インスタンス。

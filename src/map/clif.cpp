@@ -2964,12 +2964,26 @@ void clif_storagelist(struct map_session_data* sd, struct item* items, int items
 
 	// Empty storage
 	if (n == 0 && ne == 0) {
+
+// [GonBee]
+// 20120925‚æ‚è‘O‚Í–¼‘O‚Ì€–Ú‚ª‚È‚¢B
+//		WFIFOHEAD(sd->fd, 4+NAME_LENGTH);
+//		WFIFOW(sd->fd,0) = cmd;
+//		WFIFOW(sd->fd,2) = 4+NAME_LENGTH;
+//#if PACKETVER >= 20120925
+//		safestrncpy(WFIFOCP(sd->fd,4), storename, NAME_LENGTH); //storename
+//#endif
+#if PACKETVER >= 20120925
 		WFIFOHEAD(sd->fd, 4+NAME_LENGTH);
 		WFIFOW(sd->fd,0) = cmd;
 		WFIFOW(sd->fd,2) = 4+NAME_LENGTH;
-#if PACKETVER >= 20120925
 		safestrncpy(WFIFOCP(sd->fd,4), storename, NAME_LENGTH); //storename
+#else
+		WFIFOHEAD(sd->fd, 4);
+		WFIFOW(sd->fd,0) = cmd;
+		WFIFOW(sd->fd,2) = 4;
 #endif
+
 		WFIFOSET(sd->fd,WFIFOW(sd->fd,2));
 	}
 

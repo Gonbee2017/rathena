@@ -3875,8 +3875,8 @@ bot_login(
 			status_calc_cart_weight(sd, (e_status_calc_weight_opt)(CALCWT_ITEM|CALCWT_MAXBONUS|CALCWT_CARTSTATE));
 		}
 
-		map_id_exi.do_ = nullptr;
-		fd_exi.do_ = nullptr;
+		map_id_exi.cancel();
+		fd_exi.cancel();
 	});
 	return sd;
 }

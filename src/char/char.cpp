@@ -1743,6 +1743,7 @@ enum e_char_del_response char_delete(struct char_session_data* sd, uint32 char_i
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp_stats` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_normal_attack_policy` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_not_ignore_item` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_play_skill` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_recover_hp_item` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_recover_sp_item` WHERE `char_id`='%d'", char_id) ||

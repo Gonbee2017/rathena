@@ -3187,6 +3187,7 @@ AI_SKILL_USE_FUNC(WZ_WATERBALL) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 100 &&
+		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)}) &&
 		(bot->on_water() ||
 			skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
 		) && bot->use_magicpower()
@@ -3200,6 +3201,7 @@ AI_SKILL_USE_FUNC_T(WZ_WATERBALL, compromise) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 50 &&
+		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)}) &&
 		(bot->on_water() ||
 			skill_unit_exists_block(bot, WATERBALL_SKILL_UNIT_KEYS)
 		) && bot->use_magicpower()

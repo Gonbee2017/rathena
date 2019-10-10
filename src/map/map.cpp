@@ -231,6 +231,7 @@ int map_usercount(void)
 			!sd->group_id
 		) ++cou;
 	}
+	mapit_free(ite);
 	return cou;
 
 }
@@ -503,6 +504,16 @@ int map_moveblock(struct block_list *bl, int x1, int y1, t_tick tick)
 	bl->x = x1;
 	bl->y = y1;
 	if (moveblock) {
+
+		// [GonBee]
+		// 移動先がマップ外なら追加しない。
+		map_data* mpd = map_getmapdata(bl->m);
+		if (x1 < 0 ||
+			x1 >= mpd->xs ||
+			y1 < 0 ||
+			y1 >= mpd->ys
+		) return 0;
+
 		if(map_addblock(bl))return 1;
 	}
 #ifdef CELL_NOSTACK

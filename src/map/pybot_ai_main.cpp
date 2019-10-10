@@ -22,7 +22,7 @@ TIMER_FUNC(ai_t::timer_func) {
 				show_error(err.what());
 			}
 			++lea_val_ite;
-		} else all_leaders.erase(lea_val_ite++);
+		} else lea_val_ite = all_leaders.erase(lea_val_ite);
 	}
 	return 0;
 }

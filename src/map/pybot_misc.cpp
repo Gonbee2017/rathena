@@ -232,11 +232,6 @@ pos_t::pos_t(
 	int adv  // アドバンテージ。
 ) : x(x_), y(y_), value(val), advantage(adv) {}
 
-// スコープから抜けるときの処理を実行する。
-scope_exit::~scope_exit() {
-	if (do_) do_();
-}
-
 ptr<skill_mobs> skill_mobs::instance;
 
 // スキル所持モンスターIDのセットを構築する。

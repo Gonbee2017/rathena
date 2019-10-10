@@ -8,6 +8,9 @@
 
 #include "cbasetypes.hpp"
 
+// [GonBee]
+#include <functional>
+
 // generate a hex dump of the first 'length' bytes of 'buffer'
 void WriteDump(FILE* fp, const void* buffer, size_t length);
 void ShowDump(const void* buffer, size_t length);
@@ -46,5 +49,14 @@ extern uint16 GetUShort(const unsigned char* buf);
 extern uint32 GetULong(const unsigned char* buf);
 extern int32 GetLong(const unsigned char* buf);
 extern float GetFloat(const unsigned char* buf);
+
+// [GonBee]
+// スコープから抜けるときの処理。
+struct scope_exit {
+	std::function<void()> handler;
+	~scope_exit();
+	void cancel();
+	void close();
+};
 
 #endif /* UTILS_HPP */

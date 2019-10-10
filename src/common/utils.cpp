@@ -379,3 +379,21 @@ unsigned int get_percentage(const unsigned int A, const unsigned int B)
 
 	return (unsigned int)floor(result);
 }
+
+// [GonBee]
+scope_exit::~scope_exit() {
+	close();
+}
+
+// [GonBee]
+void scope_exit::cancel() {
+	handler = nullptr;
+}
+
+// [GonBee]
+void scope_exit::close() {
+	if (handler) {
+		handler();
+		handler = nullptr;
+	}
+}

@@ -11307,7 +11307,9 @@ BUILDIN_FUNC(getunits)
 	int size = 0;
 	int32 idx, id;
 	int16 m = 0, x0 = 0, y0 = 0, x1 = 0, y1 = 0;
-	struct s_mapiterator *iter = mapit_alloc(MAPIT_NORMAL, bl_type(type));
+
+	// [GonBee]
+	//struct s_mapiterator *iter = mapit_alloc(MAPIT_NORMAL, bl_type(type));
 
 	if (!strcmp(command, "getmapunits"))
 	{
@@ -11367,6 +11369,9 @@ BUILDIN_FUNC(getunits)
 		idx = reference_getindex(data);
 		name = reference_getname(data);
 	}
+
+	// [GonBee]
+	struct s_mapiterator *iter = mapit_alloc(MAPIT_NORMAL, bl_type(type));
 
 	for (bl = (struct block_list*)mapit_first(iter); mapit_exists(iter); bl = (struct block_list*)mapit_next(iter))
 	{
@@ -12470,6 +12475,9 @@ BUILDIN_FUNC(addrid)
 		bl = map_id2bl(st->rid); //if run without rid it'd error,also oid if npc, else rid for map
 	iter = mapit_getallusers();
 
+	// [GonBee]
+	scope_exit iter_exi{[iter] () { mapit_free(iter); }};
+
 	switch(script_getnum(st,2)) {
 		case 0:
 			for( sd = (TBL_PC*)mapit_first(iter); mapit_exists(iter); sd = (TBL_PC*)mapit_next(iter)) {
@@ -12542,7 +12550,10 @@ BUILDIN_FUNC(addrid)
 			}
 			return SCRIPT_CMD_SUCCESS;
 	}
-	mapit_free(iter);
+
+	// [GonBee]
+	//mapit_free(iter);
+
 	script_pushint(st,1);
 	return SCRIPT_CMD_SUCCESS;
 }

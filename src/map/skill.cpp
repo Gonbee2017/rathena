@@ -16150,7 +16150,11 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
  * @param skill_lv Level of used skill
  * @return true: All condition passed, false: Failed
  */
-bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv)
+
+// [GonBee]
+//bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv)
+bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv, int cast_flag)
+
 {
 	struct skill_condition require;
 	struct status_data *status;
@@ -16201,7 +16205,11 @@ bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id,
 	// perform skill-specific checks (and actions)
 	switch( skill_id ) {
 		case PR_BENEDICTIO:
-			skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 1);
+
+			// [GonBee]
+			//skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 1);
+			skill_check_pc_partner(sd, skill_id, &skill_lv, 1, cast_flag);
+
 			break;
 		case AM_CANNIBALIZE:
 		case AM_SPHEREMINE: {

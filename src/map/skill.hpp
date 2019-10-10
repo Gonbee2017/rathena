@@ -497,7 +497,11 @@ void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id);
 
 // Skill conditions check and remove [Inkfish]
 bool skill_check_condition_castbegin(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
-bool skill_check_condition_castend(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
+
+// [GonBee]
+//bool skill_check_condition_castend(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
+bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv, int cast_flag = 1);
+
 int skill_check_condition_char_sub (struct block_list *bl, va_list ap);
 void skill_consume_requirement(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv, short type);
 struct skill_condition skill_get_requirement(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
