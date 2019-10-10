@@ -1769,6 +1769,12 @@ void read_petdb()
 			pet->attack_rate=atoi(str[17]);
 			pet->defence_attack_rate=atoi(str[18]);
 			pet->change_target_rate=atoi(str[19]);
+
+			// [GonBee]
+			// すでにスクリプトをロードしていれば解放する。
+			if (pet->pet_script) script_free_code(pet->pet_script);
+			if (pet->pet_loyal_script) script_free_code(pet->pet_loyal_script);
+
 			pet->pet_script = nullptr;
 			pet->pet_loyal_script = nullptr;
 
