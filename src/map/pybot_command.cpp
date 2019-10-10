@@ -3472,12 +3472,6 @@ bot_login(
 		sd->idletime = last_tick;
 		for (int i = 0; i < MAX_SPIRITBALL; i++)
 			sd->spirit_timer[i] = INVALID_TIMER;
-		for (int i = 0; i < ARRAYLENGTH(sd->autobonus); i++)
-			sd->autobonus[i].active = INVALID_TIMER;
-		for (int i = 0; i < ARRAYLENGTH(sd->autobonus2); i++)
-			sd->autobonus2[i].active = INVALID_TIMER;
-		for (int i = 0; i < ARRAYLENGTH(sd->autobonus3); i++)
-			sd->autobonus3[i].active = INVALID_TIMER;
 		if (battle_config.item_auto_get) sd->state.autoloot = 10000;
 		if (battle_config.disp_experience) sd->state.showexp = 1;
 		if (battle_config.disp_zeny) sd->state.showzeny = 1;
