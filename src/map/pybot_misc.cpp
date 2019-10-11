@@ -591,6 +591,19 @@ check_wall_side(
 	return false;
 }
 
+// リーダーを確保する。
+block_if* // 確保したリーダー。
+ensure_leader(
+	map_session_data* sd // セッションデータ。
+) {
+	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (!lea) {
+		lea = construct<leader_t>(sd);
+		all_leaders[lea->char_id()] = lea;
+	}
+	return lea.get();
+}
+
 // アイテムデータを探す。
 int // 見つかったアイテムID。見つからなかったら0。
 find_itemdb(

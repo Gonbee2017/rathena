@@ -9378,6 +9378,9 @@ BUILDIN_FUNC(autobonus)
 	if( script_hasdata(st,6) )
 		other_script = script_getstr(st,6);
 
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
+
 	if( pc_addautobonus(sd->autobonus, bonus_script, rate, dur, atk_type, other_script, pos, false) )
 	{
 		script_add_autobonus(bonus_script);
@@ -9417,6 +9420,9 @@ BUILDIN_FUNC(autobonus2)
 		atk_type = script_getnum(st,5);
 	if( script_hasdata(st,6) )
 		other_script = script_getstr(st,6);
+
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
 
 	if( pc_addautobonus(sd->autobonus2, bonus_script, rate,dur, atk_type, other_script, pos, false) )
 	{
@@ -9458,6 +9464,9 @@ BUILDIN_FUNC(autobonus3)
 
 	if( script_hasdata(st,6) )
 		other_script = script_getstr(st,6);
+
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
 
 	if( pc_addautobonus(sd->autobonus3, bonus_script, rate, dur, atk_type, other_script, pos, true) )
 	{

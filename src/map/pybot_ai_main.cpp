@@ -18,7 +18,7 @@ TIMER_FUNC(ai_t::timer_func) {
 			try {
 				ai_t ai;
 				ai.leader_main(lea.get());
-			} catch (std::runtime_error& err) {
+			} catch (const std::runtime_error& err) {
 				show_error(err.what());
 			}
 			++lea_val_ite;

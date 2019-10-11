@@ -17,14 +17,10 @@ command_bot(
 ) {
 	CS_ENTER;
 	try {
-		auto lea = find_map_data(all_leaders, sd->status.char_id);
-		if (!lea) {
-			lea = construct<leader_t>(sd);
-			all_leaders[lea->char_id()] = lea;
-		}
+		block_if* lea = ensure_leader(sd);
 		command_argument_list args;
 		command_parse_arguments(mes, pybot::back_inserter(args));
-		if (args.empty()) show_bot_subcommands(lea.get());
+		if (args.empty()) show_bot_subcommands(lea);
 		else {
 			std::string sc_nam = shift_arguments(args);
 			std::string sc_nam_lc = lowercase(sc_nam);
@@ -39,7 +35,7 @@ command_bot(
 					"「", sc_nam, "」というサブコマンドはありません。"
 				)};
 			now = gettick();
-			sc_pro->func(lea.get(), args);
+			sc_pro->func(lea, args);
 		}
 	} catch (const command_error& err) {
 		show_client(fd, err.what);
@@ -2958,8 +2954,9 @@ SUBCMD_FUNC(Bot, Team) {
 		       "SP "  << print(std::setw(3), std::setfill('0'), mem->sp_ratio()             ) << "% " <<
 		       mem->name() << " " <<
 		       "<" << job_name(mem->sd()->status.class_) << "> "
-		       "Zeny " << print_zeny(mem->sd()->status.zeny) << " "
-		       "ShP " << print_zeny(mem->sd()->cashPoints) << "\n";
+		       "W " << (mem->sd()->weight * 100 / mem->sd()->max_weight) << "% "
+		       "Z " << print_zeny(mem->sd()->status.zeny) << " "
+		       "Sh " << print_zeny(mem->sd()->cashPoints) << "\n";
 		return buf.str();
 	};
 
@@ -3343,6 +3340,7 @@ bot_login(
 		sd->status.account_id = bot_aid;
 		sd->status.char_id = bot_cid;
 		sd->status.sex = bot_sex;
+		sd->autobonus_freed = false;
 
 		auto set_map = [] (point* poi, const char* nam) {
 			poi->map = mapindex_name2id(nam);
@@ -3863,7 +3861,6 @@ bot_login(
 		}
 
 		sd->state.pc_loaded = true;
-		clif_parse_LoadEndAck(fd, sd);
 		if (pc_iscarton(sd)) {
 			sd->cart_weight_max = 0;
 			status_calc_cart_weight(sd, (e_status_calc_weight_opt)(CALCWT_ITEM|CALCWT_MAXBONUS|CALCWT_CARTSTATE));

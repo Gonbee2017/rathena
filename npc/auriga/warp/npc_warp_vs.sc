@@ -456,7 +456,8 @@ aldeg_cas05,70,189,0	warp	aldebaranwarp3504	1,1,aldeg_cas05,166,81
 aldeg_cas05,150,67,0	warp	aldebaranwarp3505	1,1,aldeg_cas05,9,187
 aldeg_cas05,5,187,0		warp	aldebaranwarp3506	1,1,aldeg_cas05,151,62
 aldeg_cas05,165,232,0	warp	aldebaranwarp3507	1,1,aldeg_cas05,193,49
-aldeg_cas05,188,49,0	warp	aldebaranwarp3508	1,1,aldeg_cas05,165,288
+//aldeg_cas05,188,49,0	warp	aldebaranwarp3508	1,1,aldeg_cas05,165,288
+aldeg_cas05,188,49,0	warp	aldebaranwarp3508	1,1,aldeg_cas05,165,228
 aldeg_cas05,195,42,0	warp	aldebaranwarp3509	1,1,aldeg_cas05,19,227
 aldeg_cas05,15,227,0	warp	aldebaranwarp3510	1,1,aldeg_cas05,195,46
 aldeg_cas05,13,175,0	warp	aldebaranwarp3511	1,1,aldeg_cas05,162,194

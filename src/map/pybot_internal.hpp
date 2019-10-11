@@ -2690,6 +2690,7 @@ template <class I, class O> void command_print_all(I eles_fir, I eles_las, O tex
 template <class I> std::string command_print(I ele_fir, I ele_las);
 template <class I> std::string concatinate_strings(I str_fir, I str_las, const std::string& sep = "");
 template <class T, class ...A> ptr<T> construct(A&& ...args);
+block_if* ensure_leader(map_session_data* sd);
 template <class I, class P> typename I::value_type find_if(I fir, I las, P pre, typename I::value_type def = typename I::value_type());
 int find_item(s_storage* sto, int cap, const item_key& key, item_data** idbs = nullptr, int equ = INT_MIN);
 int find_itemdb(const std::string& nam);

@@ -1245,7 +1245,9 @@ homun_impl::exists() {
 // ホムンクルスが抱えることのできるモンスター数を取得する。
 int // 取得したモンスター数。
 homun_impl::get_hold_mobs() {
-	return INT_MAX;
+	int res = INT_MAX;
+	if (distance_policy_value() == DPV_AWAY) res = 0;
+	return res;
 }
 
 // ホムンクルスのモンスターの高Defを取得する。
@@ -2797,6 +2799,7 @@ bot_t::bot_t(
 		" Group '" CL_WHITE, sd()->group_id, CL_RESET "'"
 		")."
 	));
+	clif_parse_LoadEndAck(sd_->fd, sd_);
 }
 
 // Botを破棄する。

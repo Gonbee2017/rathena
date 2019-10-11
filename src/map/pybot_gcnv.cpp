@@ -111,6 +111,7 @@ const std::unordered_map<
 	ptr<ai_t::skill_use_proc_vector> // スキル使用手続きのベクタ。
 > AI_MEMBER_SKILL_USE_PROCS = {
 	{JOB_ACOLYTE, initialize<ai_t::skill_use_proc_vector>(
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (2                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -120,7 +121,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AL_BLESSING                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_INCAGI                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_ANGELUS                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_T     (AL_BLESSING, curse                             ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
@@ -222,6 +222,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CH_TIGERFIST                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (CH_CHAINCRUSH                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (MO_EXTREMITYFIST, combo                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MO_STEELBODY                                   ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
@@ -236,7 +237,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AL_BLESSING                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_INCAGI                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_ANGELUS                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_T     (AL_BLESSING, curse                             ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
@@ -374,6 +374,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (DC_THROWARROW, AC_DOUBLE                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (AC_DOUBLE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_HIGH_PRIEST, initialize<ai_t::skill_use_proc_vector>(				 	 
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (HP_ASSUMPTIO, primary                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -398,7 +399,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_IMPOSITIO                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PR_KYRIE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_MAGNUS                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -414,6 +414,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_HIGH_WIZARD, initialize<ai_t::skill_use_proc_vector>(				 	 
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_FROSTNOVA                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FIREWALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_ICEWALL                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -422,7 +423,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (HW_GANBANTEIN                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
 		AI_SKILL_USE_PROC       (MG_SAFETYWALL                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_ENERGYCOAT                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_QUAGMIRE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_FIREPILLAR                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -521,12 +521,12 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (KN_PIERCE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5)
 	)}, {JOB_MAGE, initialize<ai_t::skill_use_proc_vector>(						 	 
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FIREWALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FROSTDIVER                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_STONECURSE                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SAFETYWALL                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_ENERGYCOAT                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_FIREBALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_THUNDERSTORM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -547,6 +547,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (MO_CHAINCOMBO                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (MO_COMBOFINISH                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (MO_EXTREMITYFIST, combo                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MO_STEELBODY                                   ,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
@@ -561,7 +562,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AL_BLESSING                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_INCAGI                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_ANGELUS                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_T     (AL_BLESSING, curse                             ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
@@ -650,6 +650,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_PRIEST, initialize<ai_t::skill_use_proc_vector>(					 	 
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (2                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -672,7 +673,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_IMPOSITIO                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PR_KYRIE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 2),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PR_MAGNUS                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -688,6 +688,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_PROFESSOR, initialize<ai_t::skill_use_proc_vector>(				 	 
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SA_LANDPROTECTOR                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
 		AI_SKILL_USE_PROC       (PF_FOGWALL                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (SA_DISPELL, cure                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
@@ -702,7 +703,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (MG_STONECURSE                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SAFETYWALL                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_ENERGYCOAT                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SA_VOLCANO                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_VIOLENTGALE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_DELUGE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -807,6 +807,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4),
 		AI_SKILL_USE_PROC       (TF_PICKSTONE                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_SAGE, initialize<ai_t::skill_use_proc_vector>(						 	 
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SA_LANDPROTECTOR                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
 		AI_SKILL_USE_PROC_T     (SA_DISPELL, cure                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 0),
 		AI_SKILL_USE_PROC       (SA_DISPELL                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 0),
@@ -817,7 +818,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (MG_STONECURSE                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SAFETYWALL                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_ENERGYCOAT                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (SA_VOLCANO                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_VIOLENTGALE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SA_DELUGE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -993,6 +993,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_SUPER_NOVICE, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (2                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1012,8 +1014,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AL_INCAGI                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_ANGELUS                                     ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC_T     (TF_HIDING, activate                            ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_ENDURE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
 		AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -1093,6 +1093,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (WS_CARTTERMINATION, MC_MAMMONITE               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_WIZARD, initialize<ai_t::skill_use_proc_vector>(					 	 
+		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (WZ_FROSTNOVA                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FIREWALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_ICEWALL                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -1101,7 +1102,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (WZ_QUAGMIRE                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SAFETYWALL                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MG_ENERGYCOAT                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (WZ_FIREPILLAR                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (WZ_METEOR                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
@@ -1149,6 +1149,7 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS = {
 // AIにおけるメンバー一時スキル使用手続きのベクタ(前処理)。
 const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS = {
 	AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+	AI_SKILL_USE_PROC       (MG_SIGHT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC       (AL_CURE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC_DT    (ITM_TOMAHAWK, TF_THROWSTONE, first_attack,  1,  0, BMF_COMBAT, PF_TRUE , WF_ALL  , AF_ALL  , 0),
@@ -1161,7 +1162,6 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS = {
 	AI_SKILL_USE_PROC       (WZ_FROSTNOVA                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 	AI_SKILL_USE_PROC       (MG_FROSTDIVER                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 	AI_SKILL_USE_PROC       (MG_STONECURSE                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-	AI_SKILL_USE_PROC       (MG_SIGHT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 	AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 };
 

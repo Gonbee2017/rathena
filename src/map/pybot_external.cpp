@@ -187,11 +187,7 @@ flooritem_to_be_ignored(
 	map_session_data* sd, // リーダーのセッションデータ。
 	flooritem_data* fit   // ドロップアイテム。
 ) {
-	auto lea = find_map_data(all_leaders, sd->status.char_id);
-	if (!lea) {
-		lea = construct<leader_t>(sd);
-		all_leaders[lea->char_id()] = lea;
-	}
+	block_if* lea = ensure_leader(sd);
 	item_data* idb = itemdb_exists(fit->item.nameid);
 	return (lea->ignore_items()->find(fit->item.nameid) ||
 			lea->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
@@ -211,12 +207,7 @@ int // 取得したID。
 get_last_summoned_id(
 	map_session_data* sd // リーダーのセッションデータ。
 ) {
-	auto lea = find_map_data(all_leaders, sd->status.char_id);
-	if (!lea) {
-		lea = construct<leader_t>(sd);
-		all_leaders[lea->char_id()] = lea;
-	}
-	return lea->last_summoned_id();
+	return ensure_leader(sd)->last_summoned_id();
 }
 
 // Botのリーダーを取得する。
@@ -265,11 +256,7 @@ std::shared_ptr<std::vector<std::shared_ptr<member_info>>> // 取得したメンバーリ
 get_member_list(
 	map_session_data* sd // リーダーのセッションデータ。
 ) {
-	auto lea = find_map_data(all_leaders, sd->status.char_id);
-	if (!lea) {
-		lea = construct<leader_t>(sd);
-		all_leaders[lea->char_id()] = lea;
-	}
+	block_if* lea = ensure_leader(sd);
 	auto lis = initialize<std::vector<std::shared_ptr<member_info>>>();
 	for (block_if* mem : lea->members())
 		lis->push_back(initialize<member_info>(
@@ -439,11 +426,7 @@ query_memo_infos(
 	map_types map_typ     // マップの種類。
 ) {
 	auto res = initialize<std::vector<ptr<memo_info>>>();
-	auto lea = find_map_data(all_leaders, sd->status.char_id);
-	if (!lea) {
-		lea = construct<leader_t>(sd);
-		all_leaders[lea->char_id()] = lea;
-	}
+	block_if* lea = ensure_leader(sd);
 	lea->memos()->iterate([nat_typ, map_typ, res] (int m, coords_t* xy) -> bool {
 		auto map = find_map_data(id_maps, m);
 		if (map) {
@@ -578,12 +561,7 @@ void set_last_summoned_id(
 	map_session_data* sd, // セッションデータ。
 	int bid               // 枝召喚したモンスターのID。
 ) {
-	auto lea = find_map_data(all_leaders, sd->status.char_id);
-	if (!lea) {
-		lea = construct<leader_t>(sd);
-		all_leaders[lea->char_id()] = lea;
-	}
-	lea->last_summoned_id() = bid;
+	ensure_leader(sd)->last_summoned_id() = bid;
 }
 
 // 現在のマップの初期位置を設定する。
@@ -601,11 +579,7 @@ void set_map_initial_position(
 			!map_getmapflag(sd->bl.m, MF_NOMEMO) &&
 			!map_getmapflag(sd->bl.m, MF_NOWARPTO)
 		) {
-			auto lea = find_map_data(all_leaders, sd->status.char_id);
-			if (!lea) {
-				lea = construct<leader_t>(sd);
-				all_leaders[lea->char_id()] = lea;
-			}
+			block_if* lea = ensure_leader(sd);
 			if (!lea->memos()->find(sd->bl.m)) {
 				auto map = find_map_data(id_maps, sd->bl.m);
 				if (map) show_client(sd->fd, print(
