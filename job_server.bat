@@ -3,7 +3,7 @@ rem サーバージョブ by GonBee
 
 cd /d %~dp0
 
-echo>%1-server.run
+echo 0>%1-server.run
 :execute
 %1-server
 if exist %1-server.stop (
@@ -11,7 +11,7 @@ if exist %1-server.stop (
 	goto end
 )
 if errorlevel 2 (
-	echo>%1-server.stop
+	echo 0>%1-server.end
 	goto end
 )
 if errorlevel 1 goto execute

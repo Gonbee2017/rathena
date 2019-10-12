@@ -16,7 +16,8 @@ TIMER_FUNC(ai_t::timer_func) {
 	for (const auto& lea_val : all_leaders)
 		lea_ptrs.push_back(lea_val.second.get());
 	for (block_if* lea : lea_ptrs) {
-		if (map_id2sd(lea->account_id())) {
+		map_session_data* sd = map_id2sd(lea->account_id());
+		if (sd == lea->sd()) {
 			try {
 				ai_t().leader_main(lea);
 			} catch (const std::runtime_error& err) {

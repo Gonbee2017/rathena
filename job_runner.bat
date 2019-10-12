@@ -5,6 +5,7 @@ cd /d %~dp0
 call job_config.bat
 del *.run>nul 2>&1
 del *.stop>nul 2>&1
+del *.end>nul 2>&1
 
 :run
 if exist map-server.run call :check login %login_server_port%
@@ -15,7 +16,7 @@ if exist map-server.run goto run
 call :stop_server char
 call :stop_server login
 call :backup
-if exist map-server.stop exit /b
+if exist map-server.end exit /b
 call :start
 timeout /t %check_interval% /nobreak>nul 2>&1
 goto run

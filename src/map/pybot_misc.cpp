@@ -597,6 +597,12 @@ ensure_leader(
 	map_session_data* sd // セッションデータ。
 ) {
 	auto lea = find_map_data(all_leaders, sd->status.char_id);
+	if (lea &&
+		lea->sd() != sd
+	) {
+		all_leaders.erase(sd->status.char_id);
+		lea.reset();
+	}
 	if (!lea) {
 		lea = construct<leader_t>(sd);
 		all_leaders[lea->char_id()] = lea;

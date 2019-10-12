@@ -3340,7 +3340,6 @@ bot_login(
 		sd->status.account_id = bot_aid;
 		sd->status.char_id = bot_cid;
 		sd->status.sex = bot_sex;
-		sd->autobonus_freed = false;
 
 		auto set_map = [] (point* poi, const char* nam) {
 			poi->map = mapindex_name2id(nam);
