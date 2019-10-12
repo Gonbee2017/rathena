@@ -7,16 +7,15 @@ del *.run>nul 2>&1
 del *.stop>nul 2>&1
 
 :run
-if exist map-server.run (
-	call :check login %login_server_port%
-	call :check char %char_server_port%
-	call :check map %map_server_port%
-	timeout /t %check_interval% /nobreak>nul 2>&1
-	goto run
-)
+if exist map-server.run call :check login %login_server_port%
+if exist map-server.run call :check char %char_server_port%
+if exist map-server.run call :check map %map_server_port%
+if exist map-server.run timeout /t %check_interval% /nobreak>nul 2>&1
+if exist map-server.run goto run
 call :stop_server char
 call :stop_server login
 call :backup
+if exist map-server.stop exit /b
 call :start
 timeout /t %check_interval% /nobreak>nul 2>&1
 goto run

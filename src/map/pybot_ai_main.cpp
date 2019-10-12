@@ -12,17 +12,19 @@ namespace pybot {
 TIMER_FUNC(ai_t::timer_func) {
 	CS_ENTER;
 	now = gettick();
-	for (auto lea_val_ite = all_leaders.begin(); lea_val_ite != all_leaders.end();) {
-		auto lea = lea_val_ite->second;
+	std::vector<block_if*> lea_ptrs;
+	for (const auto& lea_val : all_leaders)
+		lea_ptrs.push_back(lea_val.second.get());
+	for (block_if* lea : lea_ptrs) {
 		if (map_id2sd(lea->account_id())) {
 			try {
-				ai_t ai;
-				ai.leader_main(lea.get());
+				ai_t().leader_main(lea);
 			} catch (const std::runtime_error& err) {
 				show_error(err.what());
+			} catch (...) {
+				show_error(UNEXPECTED_ERROR);
 			}
-			++lea_val_ite;
-		} else lea_val_ite = all_leaders.erase(lea_val_ite);
+		} else all_leaders.erase(lea->char_id());
 	}
 	return 0;
 }
