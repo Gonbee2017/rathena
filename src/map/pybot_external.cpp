@@ -12,6 +12,7 @@ namespace pybot {
 void advance_mvp_round(
 	int cid // キャラクターID。
 ) {
+	CS_ENTER;
 	sql_session::open([cid] (sql_session* ses) {
 		ses->execute(
 			"UPDATE `pybot_mvp_stats` "
@@ -37,6 +38,7 @@ void bot_identify_equip(
 	int cid,
 	item* itm
 ) {
+	CS_ENTER;
 	block_if* bot = find_map_data(all_bots, cid);
 	if (bot) bot->identify_equip(itm);
 }
@@ -47,6 +49,7 @@ calculate_level_rate(
 	block_list* bl, // ブロックリスト。
 	mob_data* md    // モンスターデータ。
 ) {
+	CS_ENTER;
 	int lv = status_get_lv(bl);
 	if (md &&
 		mob_is_pure_flora(md)
@@ -69,6 +72,7 @@ int // 変換したカードID。
 convert_card(
 	int car_id // カードID。
 ) {
+	CS_ENTER;
 	return card_converter::instance->convert(car_id);
 }
 
@@ -79,6 +83,7 @@ void do_final() {
 
 // パーティーBOT機能を初期化する。
 void do_init() {
+	CS_ENTER;
 	load_maps();
 	update_fever();
 	skill_mobs::instance = construct<skill_mobs>();
@@ -110,6 +115,7 @@ int // 見つかったモンスターID。見つからなかったら0。
 find_mobdb(
 	const std::string& nam // モンスター名。
 ) {
+	CS_ENTER;
 	using ele_lis = std::list<ptr<command_element>>;
 	using ele_lis_lis = std::list<ptr<ele_lis>>;
 	using str_lis = std::vector<std::string>;
@@ -187,6 +193,7 @@ flooritem_to_be_ignored(
 	map_session_data* sd, // リーダーのセッションデータ。
 	flooritem_data* fit   // ドロップアイテム。
 ) {
+	CS_ENTER;
 	block_if* lea = ensure_leader(sd);
 	item_data* idb = itemdb_exists(fit->item.nameid);
 	return (lea->ignore_items()->find(fit->item.nameid) ||
@@ -207,6 +214,7 @@ int // 取得したID。
 get_last_summoned_id(
 	map_session_data* sd // リーダーのセッションデータ。
 ) {
+	CS_ENTER;
 	return ensure_leader(sd)->last_summoned_id();
 }
 
@@ -216,6 +224,7 @@ map_session_data* // 取得したリーダー。
 get_leader(
 	int cid // キャラクターID。
 ) {
+	CS_ENTER;
 	block_if* bot = find_map_data(all_bots, cid);
 	map_session_data* lea = nullptr;
 	if (bot) lea = map_id2sd(bot->leader()->account_id());
@@ -227,6 +236,7 @@ block_list* // 取得した位置。
 get_map_initial_position(
 	map_session_data* sd // セッションデータ。
 ) {
+	CS_ENTER;
 	auto pos = find_map_data(map_initial_positions, sd->status.char_id);
 	if (pos) return pos.get();
 	else return &sd->bl;
@@ -237,6 +247,7 @@ std::string // 取得した日本語のマップ名。
 get_map_name_japanese(
 	int mid // マップID。
 ) {
+	CS_ENTER;
 	std::string nam_jap;
 	auto map = find_map_data(id_maps, mid);
 	if (map) nam_jap = map->name_japanese;
@@ -248,6 +259,7 @@ std::string // 取得した日本語のマップ名。
 get_map_name_japanese(
 	const std::string& nam_eng // 英語のマップ名。
 ) {
+	CS_ENTER;
 	return get_map_name_japanese(map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
 }
 
@@ -256,6 +268,7 @@ std::shared_ptr<std::vector<std::shared_ptr<member_info>>> // 取得したメンバーリ
 get_member_list(
 	map_session_data* sd // リーダーのセッションデータ。
 ) {
+	CS_ENTER;
 	block_if* lea = ensure_leader(sd);
 	auto lis = initialize<std::vector<std::shared_ptr<member_info>>>();
 	for (block_if* mem : lea->members())
@@ -285,6 +298,7 @@ double // 取得した倍率。
 map_rate(
 	int m // マップID。
 ) {
+	CS_ENTER;
 	double rat = 0.;
 	map_data* mpd = map_getmapdata(m);
 	if (mpd->instance_id) rat = 2.;
@@ -298,6 +312,7 @@ void pc_acquired_mvp(
 	map_session_data* sd, // セッションデータ。
 	mob_data* md          // モンスターデータ。
 ) {
+	CS_ENTER;
 	if (mob_is_normal_mvp(md)) {
 		sql_session::open([sd, md] (sql_session* ses) {
 			ses->execute(
@@ -342,6 +357,7 @@ pc_can_takeitem(
 	map_session_data* sd, // セッションデータ。
 	flooritem_data* fit   // ドロップアイテム。
 ) {
+	CS_ENTER;
 	now = gettick();
 	struct party_data *p = NULL;
 	if (sd->status.party_id)
@@ -385,6 +401,7 @@ pc_has_acquired_mvp(
 	int cid,
 	int mid
 ) {
+	CS_ENTER;
 	bool res = false;
 	sql_session::open([cid, mid, &res] (sql_session* ses) {
 		int cou;
@@ -425,6 +442,7 @@ query_memo_infos(
 	nation_types nat_typ, // 国の種類。
 	map_types map_typ     // マップの種類。
 ) {
+	CS_ENTER;
 	auto res = initialize<std::vector<ptr<memo_info>>>();
 	block_if* lea = ensure_leader(sd);
 	lea->memos()->iterate([nat_typ, map_typ, res] (int m, coords_t* xy) -> bool {
@@ -454,6 +472,7 @@ query_mvp_ranking(
 	const std::vector<e_job>& jobs, // 職業のベクタ。
 	int lim                         // 最大行数。
 ) {
+	CS_ENTER;
 	auto res = initialize<std::vector<ptr<mvp_stats>>>();
 	if (jobs.size() == 1 &&
 		jobs.front() == -1
@@ -523,6 +542,7 @@ std::shared_ptr<mvp_stats> // 照会したMVP統計。
 query_mvp_stats(
 	int cid // キャラクターID。
 ) {
+	CS_ENTER;
 	ptr<mvp_stats> res;
 	sql_session::open([cid, &res] (sql_session* ses) {
 		char nam[NAME_LENGTH];
@@ -552,6 +572,7 @@ query_mvp_stats(
 void reload_equipset_in_battle(
 	int cid // キャラクターID。
 ) {
+	CS_ENTER;
 	block_if* bot = find_map_data(all_bots, cid);
 	if (bot) bot->last_reloaded_equipset_tick() = 0;
 }
@@ -561,6 +582,7 @@ void set_last_summoned_id(
 	map_session_data* sd, // セッションデータ。
 	int bid               // 枝召喚したモンスターのID。
 ) {
+	CS_ENTER;
 	ensure_leader(sd)->last_summoned_id() = bid;
 }
 
@@ -568,6 +590,7 @@ void set_last_summoned_id(
 void set_map_initial_position(
 	map_session_data* sd // セッションデータ。
 ) {
+	CS_ENTER;
 	auto pos = find_map_data(map_initial_positions, sd->status.char_id);
 	if (!pos) {
 		pos = initialize<block_list>();
@@ -601,6 +624,7 @@ skill_is_layable_on_lp(
 
 // 2バイト目が色指定エスケープの全角文字を含む文字列を置き換える。
 std::string unescape(const std::string& tex) {
+	CS_ENTER;
 	std::stringstream out;
 	for (int i = 0; i < tex.length();) {
 		int j;
@@ -626,6 +650,7 @@ std::string unescape(const std::string& tex) {
 
 // フィーバーに関する情報を更新する。
 void update_fever() {
+	CS_ENTER;
 	fever_rates.clear();
 	sql_session::open([] (sql_session* ses) {
 		int fev_rat = 2;

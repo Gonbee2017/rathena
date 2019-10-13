@@ -35,7 +35,7 @@ int runflag = CORE_ST_RUN;
 char db_path[12] = "db"; /// relative path for db from server
 
 // [GonBee]
-int exitcode = 0;
+int exitcode = EXIT_SUCCESS;
 
 char *SERVER_NAME = NULL;
 char SERVER_TYPE = ATHENA_SERVER_NONE;

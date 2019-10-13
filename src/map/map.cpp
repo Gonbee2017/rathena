@@ -2037,6 +2037,10 @@ void map_deliddb(struct block_list *bl)
  * Standard call when a player connection is closed.
  *------------------------------------------*/
 int map_quit(struct map_session_data *sd) {
+
+	// [GonBee]
+	CS_ENTER;
+
 	int i;
 
 	if (sd->state.keepshop == false) { // Close vending/buyingstore
@@ -5041,6 +5045,15 @@ static int map_abort_sub(struct map_session_data* sd, va_list ap)
 //------------------------------
 void do_abort(void)
 {
+
+	// [GonBee]
+	// コールスタックのログを出力する。
+	ShowDebug("CallStack...\n");
+	while (!CallStack::log.empty()) {
+		ShowDebug("Call: %s\n", CallStack::log.top().c_str());
+		CallStack::log.pop();
+	}
+
 	static int run = 0;
 	//Save all characters and then flush the inter-connection.
 	if (run) {
@@ -5050,18 +5063,15 @@ void do_abort(void)
 	run = 1;
 	if (!chrif_isconnected())
 	{
-		if (pc_db->size(pc_db))
-			ShowFatalError("Server has crashed without a connection to the char-server, %u characters can't be saved!\n", pc_db->size(pc_db));
+
+		// [GonBee]
+		//if (pc_db->size(pc_db))
+		//	ShowFatalError("Server has crashed without a connection to the char-server, %u characters can't be saved!\n", pc_db->size(pc_db));
+		ShowFatalError("Server has crashed without a connection to the char-server, Character data can't be saved!\n");
+
 		return;
 	}
 	ShowError("Server received crash signal! Attempting to save all online characters!\n");
-
-	// [GonBee]
-	// コールスタックのログを出力する。
-	while (!CallStack::log.empty()) {
-		ShowError("Call: %s\n", CallStack::log.top().c_str());
-		CallStack::log.pop();
-	}
 
 	map_foreachpc(map_abort_sub);
 	chrif_flush_fifo();

@@ -2992,7 +2992,9 @@ AI_SKILL_USE_FUNC(WS_MELTDOWN) {
 
 // オーバートラストマックスを使う。
 AI_SKILL_USE_FUNC(WS_OVERTHRUSTMAX) {
-	if (bot->sc_rest(SC_MAXOVERTHRUST) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (bot->distance_policy_value() == DPV_CLOSE &&
+		bot->sc_rest(SC_MAXOVERTHRUST) <= bot->get_skill_tail(kid)
+	) bot->use_skill_self(kid, klv);
 }
 
 // アイスウォールを使う。

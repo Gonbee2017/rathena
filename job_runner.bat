@@ -55,6 +55,7 @@ exit /b
 :start
 del *.run>nul 2>&1
 del *.stop>nul 2>&1
+del *.end>nul 2>&1
 echo %date% %time:~0,8% - loginサーバージョブを起動します。
 call :start_server login
 echo %date% %time:~0,8% - charサーバージョブを起動します。

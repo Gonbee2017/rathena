@@ -2804,6 +2804,7 @@ bot_t::bot_t(
 
 // Botを破棄する。
 bot_t::~bot_t() {
+	CS_ENTER;
 	show_info(print("Bot '" CL_WHITE , name(), CL_RESET "' logged off."));
 	map_quit(sd());
 	do_close(fd());
@@ -2878,6 +2879,7 @@ leader_t::leader_t(
 
 // リーダーを破棄する。
 leader_t::~leader_t() {
+	CS_ENTER;
 	if (!bots().empty()) save_team(this, 0);
 }
 
