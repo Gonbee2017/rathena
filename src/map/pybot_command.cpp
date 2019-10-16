@@ -1349,7 +1349,7 @@ SUBCMD_FUNC(Bot, LogOut) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
 	if (lea->bots().size() == 1) {
-		save_team(lea, 0);
+		lea->save_team(0);
 		lea->passive() = false;
 		lea->stay() = false;
 	}
@@ -2977,10 +2977,10 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 		throw command_error{print(
 			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
 		)};
-	lea->members().clear();
 	int num = 0;
 	if (!args.empty()) num = shift_arguments_then_parse_int(args, "チームの番号", 0, TEAM_MAX - 1);
 	team_t* tea = lea->teams()->find(num);
+	lea->members().clear();
 	if (tea) {
 		for (auto mem : tea->members) {
 			if (mem->char_id == lea->char_id()) lea->members().push_back(lea);
@@ -3021,7 +3021,7 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	CS_ENTER;
 	if (lea->bots().empty())
 		throw command_error{"あなたはまだチームを編成していません。"};
-	save_team(lea, 0);
+	lea->save_team(0);
 	lea->stay() = false;
 	lea->passive() = false;
 	show_client(lea->fd(), print(
@@ -3070,7 +3070,7 @@ SUBCMD_FUNC(Bot, TeamNumber) {
 				print("チーム", num, "の登録を抹消しました。")
 			);
 		} else {
-			save_team(lea, num);
+			lea->save_team(num);
 			show_client(
 				lea->fd(),
 				print("現在の編成をチーム", num, "に登録しました。")

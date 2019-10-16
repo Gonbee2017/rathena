@@ -1379,6 +1379,7 @@ struct leader_if {
 	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
 	virtual ptr<regnum_t<bool>>& rush();
+	virtual void save_team(int tea_num);
 	virtual ptr<registry_t<int>>& sell_items();
 	virtual void show_next();
 	virtual bool& sp_suppliable();
@@ -1775,6 +1776,7 @@ struct leader_impl : virtual block_if {
 	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
 	virtual ptr<regnum_t<bool>>& rush() override;
+	virtual void save_team(int tea_num) override;
 	virtual ptr<registry_t<int>>& sell_items() override;
 	virtual void show_next() override;
 	virtual bool& sp_suppliable() override;
@@ -1976,7 +1978,7 @@ struct skill_user_impl : virtual block_if {
 
 // 下僕の実装。
 struct slave_impl : virtual block_if {
-	block_if* master_;      // 主人。
+	block_if* master_; // 主人。
 
 	virtual int guild_id() override;
 	virtual block_if*& leader() override;
@@ -2734,7 +2736,6 @@ template <class ...A> std::string print_with(const std::string& sep, A&& ...args
 std::string print_zeny(int zen);
 int query_char_id(const std::string& uid, const std::string& upas, const std::string& cnam);
 void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
-void save_team(block_if* lea, int tea_num);
 int sex_string2number(const std::string& str);
 void show_debug(const std::string& mes);
 void show_error(const std::string& mes);

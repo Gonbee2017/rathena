@@ -1398,17 +1398,6 @@ void query_login_data(
 	});
 }
 
-// チームを保存する。
-void save_team(
-	block_if* lea, // リーダー。
-	int tea_num    // チームの番号。
-) {
-	auto tea = initialize<team_t>(tea_num);
-	for (block_if* mem : lea->members())
-		tea->members.push_back(initialize<team_member>(mem->char_id(), mem->name()));
-	lea->teams()->register_(tea_num, tea);
-}
-
 // 性別の文字列を数値に変換する。
 int // 変換した数値。
 sex_string2number(

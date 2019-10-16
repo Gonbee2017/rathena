@@ -14,5 +14,6 @@
 // パケットは公式サポートの中で最も古い2012年4月10日版にのみ対応。
 #define PRERE
 #define PACKETVER 20120410
+//#define PACKETVER 20151104
 
 #endif /* CONFIG_CUSTOM_DEFINES_PRE_HPP */

@@ -432,6 +432,9 @@ struct map_session_data {
 	std::vector<s_addele2> subele2;
 	std::vector<s_autobonus> autobonus, autobonus2, autobonus3; //Auto script on attack, when attacked, on skill usage
 
+	// [GonBee]
+	bool autobonus_freed;
+
 	// zeroed structures start here
 	struct s_regen {
 		short value;

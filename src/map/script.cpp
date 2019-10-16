@@ -9359,6 +9359,9 @@ BUILDIN_FUNC(autobonus)
 	if( !script_rid2sd(sd) )
 		return SCRIPT_CMD_SUCCESS; // no player attached
 
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
+
 	if (current_equip_combo_pos)
 		pos = current_equip_combo_pos;
 	else
@@ -9399,6 +9402,9 @@ BUILDIN_FUNC(autobonus2)
 	if( !script_rid2sd(sd) )
 		return SCRIPT_CMD_SUCCESS; // no player attached
 
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
+
 	if (current_equip_combo_pos)
 		pos = current_equip_combo_pos;
 	else
@@ -9438,6 +9444,9 @@ BUILDIN_FUNC(autobonus3)
 
 	if( !script_rid2sd(sd) )
 		return SCRIPT_CMD_SUCCESS; // no player attached
+
+	// [GonBee]
+	if (sd->autobonus_freed) return SCRIPT_CMD_SUCCESS;
 
 	if (current_equip_combo_pos)
 		pos = current_equip_combo_pos;

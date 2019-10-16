@@ -170,6 +170,7 @@ ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void leader_if::save_team(int tea_num) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::show_next() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::sp_suppliable() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1572,6 +1573,17 @@ ptr<regnum_t<bool>>& leader_impl::rush() {
 	return rush_;
 }
 
+// チームを保存する。
+void leader_impl::save_team(
+	int tea_num // チームの番号。
+) {
+	CS_ENTER;
+	auto tea = initialize<team_t>(tea_num);
+	for (block_if* mem : members())
+		tea->members.push_back(initialize<team_member>(mem->char_id(), mem->name()));
+	teams()->register_(tea_num, tea);
+}
+
 // 売却アイテムのレジストリ。
 ptr<registry_t<int>>& leader_impl::sell_items() {
 	return sell_items_;
@@ -2880,7 +2892,8 @@ leader_t::leader_t(
 // リーダーを破棄する。
 leader_t::~leader_t() {
 	CS_ENTER;
-	if (!bots().empty()) save_team(this, 0);
+	if (!bots().empty()) save_team(0);
+	bots().clear();
 }
 
 // モンスターを構築する。

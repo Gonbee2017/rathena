@@ -3315,6 +3315,9 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 			pc_delautobonus(sd, sd->autobonus2, false);
 			pc_delautobonus(sd, sd->autobonus3, false);
 
+			// [GonBee]
+			sd->autobonus_freed = true;
+
 			if( sd->followtimer != INVALID_TIMER )
 				pc_stop_following(sd);
 

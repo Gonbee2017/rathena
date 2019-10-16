@@ -70,7 +70,7 @@ call :wait_start_server %1
 exit /b
 
 :stop_server
-echo>%1-server.stop
+echo 1>%1-server.stop
 taskkill /f /im %1-server.exe>nul 2>&1
 call :wait_stop_server %1
 exit /b

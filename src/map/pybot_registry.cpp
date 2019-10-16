@@ -595,7 +595,7 @@ insert_cart_auto_get_item_func(
 	return [cid] (sql_session* ses, int nid) {
 		ses->execute(
 			"INSERT INTO `pybot_cart_auto_get_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(nid ), ")"
 		);
@@ -610,7 +610,7 @@ insert_distance_policy_func(
 	return [cid] (sql_session* ses, int mid, distance_policy* dis_pol) {
 		ses->execute(
 			"INSERT INTO `pybot_distance_policy` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid                ), ","
 			" ", construct<sql_param>(mid                ), ","
 			" ", construct<sql_param>(int(dis_pol->value)), ")"
@@ -626,7 +626,7 @@ insert_first_skill_func(
 	return [cid] (sql_session* ses, int mid, e_skill* kid) {
 		ses->execute(
 			"INSERT INTO `pybot_first_skill` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(mid ), ","
 			" ", construct<sql_param>(*kid), ")"
@@ -643,7 +643,7 @@ insert_equipset_func(
 		for (auto esi : equ_set->items) {
 			ses->execute(
 				"INSERT INTO `pybot_equipset` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid              ), ","
 				" ", construct<sql_param>(mid              ), ","
 				" ", construct<sql_param>(esi->order       ), ","
@@ -666,7 +666,7 @@ insert_great_mob_func(
 	return [cid] (sql_session* ses, int mid) {
 		ses->execute(
 			"INSERT INTO `pybot_great_mob` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(mid), ")"
 		);
@@ -681,7 +681,7 @@ insert_ignore_item_func(
 	return [cid] (sql_session* ses, int nid) {
 		ses->execute(
 			"INSERT INTO `pybot_ignore_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
@@ -698,7 +698,7 @@ insert_kew_element_func(
 		if (map) {
 			ses->execute(
 				"INSERT INTO `pybot_kew_element` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid                      ), ","
 				" ", construct<sql_param>(map->name_english.c_str()), ","
 				" ", construct<sql_param>(*ele                     ), ")"
@@ -715,7 +715,7 @@ insert_limit_skill_func(
 	return [cid] (sql_session* ses, e_skill kid, int* klv) {
 		ses->execute(
 			"INSERT INTO `pybot_limit_skill` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(kid ), ","
 			" ", construct<sql_param>(*klv), ")"
@@ -731,7 +731,7 @@ insert_normal_attack_policy_func(
 	return [cid] (sql_session* ses, int mid, normal_attack_policy* nor_att_pol) {
 		ses->execute(
 			"INSERT INTO `pybot_normal_attack_policy` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid                    ), ","
 			" ", construct<sql_param>(mid                    ), ","
 			" ", construct<sql_param>(int(nor_att_pol->value)), ")"
@@ -747,7 +747,7 @@ insert_not_ignore_item_func(
 	return [cid] (sql_session* ses, int nid) {
 		ses->execute(
 			"INSERT INTO `pybot_not_ignore_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
@@ -762,7 +762,7 @@ insert_play_skill_func(
 	return [cid] (sql_session* ses, int mid, play_skill* pla_ski) {
 		ses->execute(
 			"INSERT INTO `pybot_play_skill` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid                   ), ","
 			" ", construct<sql_param>(mid                   ), ","
 			" ", construct<sql_param>(int(pla_ski->skill_id)), ")"
@@ -778,7 +778,7 @@ insert_recover_hp_item_func(
 	return [cid] (sql_session* ses, int nid, int* thr) {
 		ses->execute(
 			"INSERT INTO `pybot_recover_hp_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(nid ), ","
 			" ", construct<sql_param>(*thr), ")"
@@ -794,7 +794,7 @@ insert_recover_sp_item_func(
 	return [cid] (sql_session* ses, int nid, int* thr) {
 		ses->execute(
 			"INSERT INTO `pybot_recover_sp_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(nid ), ","
 			" ", construct<sql_param>(*thr), ")"
@@ -810,7 +810,7 @@ insert_reject_skill_func(
 	return [cid] (sql_session* ses, e_skill kid) {
 		ses->execute(
 			"INSERT INTO `pybot_reject_skill` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(kid), ")"
 		);
@@ -825,7 +825,7 @@ insert_sell_item_func(
 	return [cid] (sql_session* ses, int nid) {
 		ses->execute(
 			"INSERT INTO `pybot_sell_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
@@ -842,7 +842,7 @@ insert_memo_func(
 		if (map) {
 			ses->execute(
 				"INSERT INTO `pybot_memo` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid                      ), ","
 				" ", construct<sql_param>(map->name_english.c_str()), ","
 				" ", construct<sql_param>(mem->x                   ), ","
@@ -860,7 +860,7 @@ insert_skill_ignore_mob_func(
 	return [cid] (sql_session* ses, int sim) {
 		ses->execute(
 			"INSERT INTO `pybot_skill_ignore_mob` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid                ), ","
 			" ", construct<sql_param>(SKILL_FROM_KIM(sim)), ","
 			" ", construct<sql_param>(MOB_FROM_KIM(sim)  ), ")"
@@ -876,7 +876,7 @@ insert_skill_tail_func(
 	return [cid] (sql_session* ses, e_skill kid, int* dur) {
 		ses->execute(
 			"INSERT INTO `pybot_skill_tail` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(kid ), ","
 			" ", construct<sql_param>(*dur), ")"
@@ -892,7 +892,7 @@ insert_storage_get_item_func(
 	return [cid] (sql_session* ses, int nid, int* amo) {
 		ses->execute(
 			"INSERT INTO `pybot_storage_get_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid ), ","
 			" ", construct<sql_param>(nid ), ","
 			" ", construct<sql_param>(*amo), ")"
@@ -908,7 +908,7 @@ insert_storage_put_item_func(
 	return [cid] (sql_session* ses, int nid) {
 		ses->execute(
 			"INSERT INTO `pybot_storage_put_item` "
-			"VALUES "
+			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
 		);
@@ -925,7 +925,7 @@ insert_team_func(
 			auto mem = tea->members[i];
 			ses->execute(
 				"INSERT INTO `pybot_team` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid         ), ","
 				" ", construct<sql_param>(tea_num     ), ","
 				" ", construct<sql_param>(i           ), ","
@@ -1426,7 +1426,7 @@ update_equipset_func(
 		for (auto esi : equ_set->items) {
 			ses->execute(
 				"INSERT INTO `pybot_equipset` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid              ), ","
 				" ", construct<sql_param>(mid              ), ","
 				" ", construct<sql_param>(esi->order       ), ","
@@ -1604,14 +1604,14 @@ update_team_func(
 		ses->execute(
 			"DELETE FROM `pybot_team` "
 			"WHERE"
-			" `leader_char_id` = ", construct<sql_param>(cid), " AND"
+			" `leader_char_id` = ", construct<sql_param>(cid    ), " AND"
 			" `team_number` = "   , construct<sql_param>(tea_num)
 		);
 		for (int i = 0; i < tea->members.size(); ++i) {
 			auto mem = tea->members[i];
 			ses->execute(
 				"INSERT INTO `pybot_team` "
-				"VALUES "
+				"VALUES"
 				"(", construct<sql_param>(cid         ), ","
 				" ", construct<sql_param>(tea_num     ), ","
 				" ", construct<sql_param>(i           ), ","
