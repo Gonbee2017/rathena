@@ -1811,6 +1811,7 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> mob_high_flee_;            // モンスターの高Fleeの登録値。
 	ptr<regnum_t<int>> mob_high_hit_;             // モンスターの高Hitの登録値。
 	ptr<regnum_t<int>> mob_high_mdef_;            // モンスターの高Mdefの登録値。
+	std::string name_;                            // 名前。
 	ptr<registry_t<int,normal_attack_policy>>	  
 		normal_attack_policies_;                  // 通常攻撃ポリシーのレジストリ。
 	ptr<block_if> pet_;                           // ペット。

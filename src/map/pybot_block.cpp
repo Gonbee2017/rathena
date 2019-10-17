@@ -2108,7 +2108,7 @@ ptr<regnum_t<int>>& member_impl::mob_high_mdef() {
 // メンバーの名前を取得する。
 std::string // 取得した名前。
 member_impl::name() {
-	return sd()->status.name;
+	return name_;
 }
 
 // 通常攻撃ポリシーのレジストリ。
@@ -2695,6 +2695,7 @@ member_t::member_t(
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
 	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
 	mob_high_mdef() = construct<regnum_t<int>>(sd(), "pybot_mob_high_mdef");
+	name_ = std::string(sd()->status.name);
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");
