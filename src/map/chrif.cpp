@@ -175,6 +175,9 @@ bool chrif_auth_delete(uint32 account_id, uint32 char_id, enum sd_state state) {
 			if (node->sd->regs.arrays)
 				node->sd->regs.arrays->destroy(node->sd->regs.arrays, script_free_array_db);
 
+			// [GonBee]
+			pc_delete_session_data(node->sd);
+
 			aFree(node->sd);
 		}
 
@@ -1976,6 +1979,9 @@ int auth_db_final(DBKey key, DBData *data, va_list ap) {
 
 		if (node->sd->regs.arrays)
 			node->sd->regs.arrays->destroy(node->sd->regs.arrays, script_free_array_db);
+
+		// [GonBee]
+		pc_delete_session_data(node->sd);
 
 		aFree(node->sd);
 	}

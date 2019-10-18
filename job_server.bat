@@ -3,11 +3,11 @@ rem サーバージョブ by GonBee
 
 cd /d %~dp0
 
-echo 1>%1-server.run
+echo .>%1-server.run
 :execute
 %1-server
 if errorlevel 3 (
-	echo 1>%1-server.end>nul 2>&1
+	echo .>%1-server.end
 	goto end
 )
 if exist %1-server.stop (

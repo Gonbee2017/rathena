@@ -3328,6 +3328,7 @@ bot_login(
 		}};
 		CREATE(sd, TBL_PC, 1);
 		session[fd]->session_data = sd;
+		session[fd]->func_del = DelFunc(pc_delete_session_data);
 
 		sd->client_tick = now;
 		sd->fd = fd;

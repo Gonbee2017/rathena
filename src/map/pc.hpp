@@ -432,9 +432,6 @@ struct map_session_data {
 	std::vector<s_addele2> subele2;
 	std::vector<s_autobonus> autobonus, autobonus2, autobonus3; //Auto script on attack, when attacked, on skill usage
 
-	// [GonBee]
-	bool autobonus_freed;
-
 	// zeroed structures start here
 	struct s_regen {
 		short value;
@@ -1349,6 +1346,7 @@ int32 pc_attendance_counter( struct map_session_data* sd );
 void pc_attendance_claim_reward( struct map_session_data* sd );
 
 // [GonBee]
+void pc_delete_session_data(map_session_data* sd);
 int pc_getstat(struct map_session_data* sd, int type);
 bool pc_isUseitem(struct map_session_data *sd,int n);
 

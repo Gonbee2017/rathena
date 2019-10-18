@@ -10298,6 +10298,9 @@ void clif_parse_WantToConnection(int fd, struct map_session_data* sd)
 #endif
 	session[fd]->session_data = sd;
 
+	// [GonBee]
+	session[fd]->func_del = DelFunc(pc_delete_session_data);
+
 	pc_setnewpc(sd, account_id, char_id, login_id1, client_tick, sex, fd);
 
 #if PACKETVER < 20070521

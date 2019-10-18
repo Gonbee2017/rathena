@@ -13302,3 +13302,19 @@ void do_init_pc(void) {
 	ers_chunk_size(num_reg_ers, 300);
 	ers_chunk_size(str_reg_ers, 50);
 }
+
+// [GonBee]
+// セッションデータを削除する。
+void pc_delete_session_data(map_session_data* sd) {
+	static const auto del = [] (std::vector<s_autobonus>& bons) {
+		while (!bons.empty()) {
+			s_autobonus& bon = bons.back();
+			if (bon.bonus_script) aFree(bon.bonus_script);
+			if (bon.other_script) aFree(bon.other_script);
+			bons.pop_back();
+		}
+	};
+	del(sd->autobonus);
+	del(sd->autobonus2);
+	del(sd->autobonus3);
+}

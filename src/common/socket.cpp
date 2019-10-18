@@ -730,6 +730,10 @@ static int create_session(int fd, RecvFunc func_recv, SendFunc func_send, ParseF
 	session[fd]->func_send  = func_send;
 	session[fd]->func_parse = func_parse;
 	session[fd]->rdata_tick = last_tick;
+
+	// [GonBee]
+	session[fd]->func_del = nullptr;
+
 	return 0;
 }
 
@@ -743,6 +747,12 @@ static void delete_session(int fd)
 #endif
 		aFree(session[fd]->rdata);
 		aFree(session[fd]->wdata);
+
+		// [GonBee]
+		if (session[fd]->session_data &&
+			session[fd]->func_del
+		) session[fd]->func_del(session[fd]->session_data);
+
 		aFree(session[fd]->session_data);
 		aFree(session[fd]);
 		session[fd] = NULL;

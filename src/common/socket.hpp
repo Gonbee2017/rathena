@@ -77,6 +77,9 @@ typedef int (*RecvFunc)(int fd);
 typedef int (*SendFunc)(int fd);
 typedef int (*ParseFunc)(int fd);
 
+// [GonBee]
+using DelFunc = void(*)(void*);
+
 struct socket_data
 {
 	struct {
@@ -98,6 +101,9 @@ struct socket_data
 	ParseFunc func_parse;
 
 	void* session_data; // stores application-specific data related to the session
+
+	// [GonBee]
+	DelFunc func_del; // セッションデータ削除関数。
 };
 
 

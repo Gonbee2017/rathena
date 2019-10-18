@@ -2818,9 +2818,13 @@ bot_t::bot_t(
 // Bot‚ð”jŠü‚·‚éB
 bot_t::~bot_t() {
 	CS_ENTER;
-	show_info(print("Bot '" CL_WHITE , name(), CL_RESET "' logged off."));
-	map_quit(sd());
-	do_close(fd());
+	if (session[fd()] &&
+		session[fd()]->session_data == sd()
+	) {
+		show_info(print("Bot '" CL_WHITE , name(), CL_RESET "' logged off."));
+		map_quit(sd());
+		do_close(fd());
+	}
 	all_bots.erase(char_id());
 }
 
