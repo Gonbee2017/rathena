@@ -1870,7 +1870,8 @@ prt_monk,230,106,3	script	アステ	79,{
 		mes "[アステ]";
 		mes "ブレッシング!!";
 		npcskillsupport 34,0;
-		sc_start 10,240000,10;
+		//sc_start 10,240000,10;
+		sc_start 30,240000,10;
 		next;
 		mes "[アステ]";
 		mes "次にお教えするスキルは";

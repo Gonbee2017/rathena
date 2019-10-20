@@ -78,6 +78,7 @@ bool& enemy_if::has_knockback_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_layout_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_long_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_long_weapon_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool& enemy_if::has_path_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_summon_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_unequip_armor_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& enemy_if::has_unequip_helm_skill() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -740,6 +741,11 @@ bool& enemy_impl::has_long_weapon_skill() {
 	return has_long_weapon_skill_;
 }
 
+// パススキル所持か。
+bool& enemy_impl::has_path_skill() {
+	return has_path_skill_;
+}
+
 // 召喚スキル所持か。
 bool& enemy_impl::has_summon_skill() {
 	return has_summon_skill_;
@@ -793,10 +799,10 @@ block_if*& enemy_impl::skill_target_battler() {
 
 // 敵モンスターを待ち受ける位置を取得する。
 pos_t enemy_impl::waiting_position() {
-	pos_t pos = pos_t(bl()->x, bl()->y);
+	pos_t pos{0, bl()->x, bl()->y};
 	if (is_short_range_attacker() &&
 		is_walking()
-	) pos = pos_t(ud()->to_x, ud()->to_y);
+	) pos = pos_t(0, ud()->to_x, ud()->to_y);
 	return pos;
 }
 
@@ -1170,7 +1176,7 @@ pos_t // 取得した位置。
 general_impl::walkpath_pos(
 	int stes // 歩数。
 ) {
-	pos_t pos(bl()->x, bl()->y, stes);
+	pos_t pos(0, bl()->x, bl()->y, stes);
 	for (int i = 0; i < stes; ++i) {
 		directions dir = ud()->walkpath.path[ud()->walkpath.path_pos + i];
 		pos.x += dirx[dir];

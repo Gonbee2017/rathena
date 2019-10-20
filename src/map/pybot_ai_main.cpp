@@ -143,6 +143,7 @@ void ai_t::leader_collect() {
 			ene->has_layout_skill()         = KEY_EXISTS(skill_mobs::instance->layout        , md->mob_id);
 			ene->has_long_skill()           = KEY_EXISTS(skill_mobs::instance->long_         , md->mob_id);
 			ene->has_long_weapon_skill()    = KEY_EXISTS(skill_mobs::instance->long_weapon   , md->mob_id);
+			ene->has_path_skill()           = KEY_EXISTS(skill_mobs::instance->path          , md->mob_id);
 			ene->has_summon_skill()         = KEY_EXISTS(skill_mobs::instance->summon        , md->mob_id);
 			ene->has_unequip_weapon_skill() = KEY_EXISTS(skill_mobs::instance->unequip_weapon, md->mob_id);
 			ene->has_unequip_shield_skill() = KEY_EXISTS(skill_mobs::instance->unequip_shield, md->mob_id);
@@ -980,7 +981,7 @@ void ai_t::battler_positioning() {
 					int dis = distance_client_blxy(att_ene->bl(), x, y);
 					if (esc_pos.advantage == INT_MIN ||
 						dis > esc_pos.value
-					) esc_pos = pos_t(x, y, dis);
+					) esc_pos = pos_t(0, x, y, dis);
 					return true;
 				});
 				if (esc_pos.advantage != INT_MIN &&
@@ -1219,7 +1220,7 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 				int dis = distance_client_blxy(battler->bl(), x, y);
 				if (adv > pos.advantage ||
 					dis < pos.value
-				) pos = pos_t(x, y, dis, adv);
+				) pos = pos_t(adv, x, y, dis);
 			}
 		}
 		return true;
@@ -1256,7 +1257,7 @@ ai_t::find_best_assist_pos() {
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
 		} else pos = find_best_away_pos();
-	} else pos = pos_t(battler->bl()->x, battler->bl()->y);
+	} else pos = pos_t(0, battler->bl()->x, battler->bl()->y);
 	return pos;
 }
 
@@ -1266,7 +1267,7 @@ ai_t::find_best_away_pos() {
 	pos_t pos;
 	block_if* tar_ene = battler->target_enemy();
 	if (tar_ene->target_battler() == battler)
-		pos = pos_t(battler->bl()->x, battler->bl()->y);
+		pos = pos_t(0, battler->bl()->x, battler->bl()->y);
 	else {
 		int min_rad = std::min(tar_ene->away_distance(leader) + 1, battler->distance_max_value());
 		for (int rad = min_rad; rad <= battler->distance_max_value() + 1; ++rad)
@@ -1339,17 +1340,17 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 					int dis = distance_client_blxy(tar_ene->bl(), x, y);
 					if (adv > pos.advantage ||
 						dis < pos.value
-					) pos = pos_t(x, y, dis, adv);
+					) pos = pos_t(adv, x, y, dis);
 				} else if (bac) {
 					int dis = distance_client_blxy(tan->bl(), x, y);
 					if (adv > pos.advantage ||
 						dis > pos.value
-					) pos = pos_t(x, y, dis, adv);
+					) pos = pos_t(adv, x, y, dis);
 				} else {
 					int dis = distance_client_blxy(battler->bl(), x, y);
 					if (adv > pos.advantage ||
 						dis < pos.value
-					) pos = pos_t(x, y, dis, adv);
+					) pos = pos_t(adv, x, y, dis);
 				}
 			}
 		}
@@ -1372,7 +1373,7 @@ yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 			away_warp_portals(x, y)
 		) {
 			int dis = distance_client_blxy(battler->bl(), x, y);
-			if (dis < pos.value) pos = pos_t(x, y, dis);
+			if (dis < pos.value) pos = pos_t(0, x, y, dis);
 		}
 		return true;
 	};

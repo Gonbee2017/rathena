@@ -222,15 +222,16 @@ play_skill::play_skill(
 }
 
 // 位置を構築する。
-pos_t::pos_t() : x(0), y(0), value(0), advantage(INT_MIN) {}
+pos_t::pos_t() : advantage(INT_MIN), x(0), y(0), value(0), value2(0) {}
 
 // 位置を構築する。
 pos_t::pos_t(
+	int adv, // アドバンテージ。
 	int x_,  // X座標。
 	int y_,  // Y座標。
 	int val, // 値。
-	int adv  // アドバンテージ。
-) : x(x_), y(y_), value(val), advantage(adv) {}
+	int val2 // 値2。
+) : advantage(adv), x(x_), y(y_), value(val), value2(val2) {}
 
 ptr<skill_mobs> skill_mobs::instance;
 
@@ -258,6 +259,9 @@ skill_mobs::skill_mobs() {
 		return skill_get_unit_id(kid, 0) &&
 			!KEY_EXISTS(LAYABLE_ON_LP_SKILLS, kid);
 	};
+	auto is_pat_sk = [] (e_skill kid, int klv) -> bool {
+		return KEY_EXISTS(PATH_SKILLS, kid);
+	};
 	auto is_une_arm_sk = [] (e_skill kid, int klv) -> bool {
 		return KEY_EXISTS(UNEQUIP_ARMOR_SKILLS, kid);
 	};
@@ -279,6 +283,7 @@ skill_mobs::skill_mobs() {
 	ini_set(layout, is_lay_sk);
 	ini_set(long_, mob_skill_is_long);
 	ini_set(long_weapon, mob_skill_is_long_weapon);
+	ini_set(path, is_pat_sk);
 	ini_set(unequip_armor, is_une_arm_sk);
 	ini_set(unequip_helm, is_une_hel_sk);
 	ini_set(unequip_shield, is_une_shi_sk);

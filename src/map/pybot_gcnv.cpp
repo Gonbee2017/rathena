@@ -3626,6 +3626,16 @@ const std::array<
 // 1ページの行数。
 const int PAGE_LINES = 100;
 
+// パススキルのセット。
+const skill_id_set PATH_SKILLS = {
+	NPC_ACIDBREATH    ,
+	NPC_DARKNESSBREATH,
+	NPC_FIREBREATH    ,
+	NPC_ICEBREATH     ,
+	NPC_THUNDERBREATH ,
+	SN_SHARPSHOOTING  ,
+};
+
 // ペット用アクセサリータイプ名。
 const std::string PET_ACCESSORY_TYPE_NAME = "ペット用アクセサリー";
 

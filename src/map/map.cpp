@@ -4935,6 +4935,7 @@ static int cleanup_db_sub(DBKey key, DBData *data, va_list va)
  * map destructor
  *------------------------------------------*/
 void do_final(void){
+	CS_ENTER;
 	ShowStatus("Terminating...\n");
 	channel_config.closing = true;
 
@@ -5192,6 +5193,7 @@ const char* map_msg_txt(struct map_session_data *sd, int msg_number){
 /// Called when a terminate signal is received.
 void do_shutdown(void)
 {
+	CS_ENTER;
 	if( runflag != MAPSERVER_ST_SHUTDOWN )
 	{
 		runflag = MAPSERVER_ST_SHUTDOWN;

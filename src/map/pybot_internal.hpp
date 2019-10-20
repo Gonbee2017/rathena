@@ -1275,6 +1275,7 @@ struct enemy_if {
 	virtual bool& has_layout_skill();
 	virtual bool& has_long_skill();
 	virtual bool& has_long_weapon_skill();
+	virtual bool& has_path_skill();
 	virtual bool& has_summon_skill();
 	virtual bool& has_unequip_armor_skill();
 	virtual bool& has_unequip_helm_skill();
@@ -1605,6 +1606,7 @@ struct enemy_impl : virtual block_if {
 	bool has_layout_skill_;                    // レイアウトスキル所持。
 	bool has_long_skill_;                      // 遠隔スキル所持。
 	bool has_long_weapon_skill_;               // 遠隔物理スキル所持。
+	bool has_path_skill_;                      // パススキル所持。
 	bool has_summon_skill_;                    // 召喚スキル所持。
 	bool has_unequip_armor_skill_;             // 武器解除スキル所持。
 	bool has_unequip_helm_skill_;              // 盾解除スキル所持。
@@ -1624,6 +1626,7 @@ struct enemy_impl : virtual block_if {
 	virtual bool& has_layout_skill() override;
 	virtual bool& has_long_skill() override;
 	virtual bool& has_long_weapon_skill() override;
+	virtual bool& has_path_skill() override;
 	virtual bool& has_summon_skill() override;
 	virtual bool& has_unequip_armor_skill() override;
 	virtual bool& has_unequip_helm_skill() override;
@@ -2259,12 +2262,12 @@ template <
 
 // 位置。
 struct pos_t {
-	int x, y;      // 座標。
-	int value;     // 値。
-	int advantage; // アドバンテージ。
+	int advantage;     // アドバンテージ。
+	int x, y;          // 座標。
+	int value, value2; // 値。
 
 	pos_t();
-	pos_t(int x_, int y_, int val = 0, int adv = 0);
+	pos_t(int adv, int x_, int y_, int val = 0, int val2 = 0);
 };
 
 // マップ。
@@ -2286,6 +2289,7 @@ struct skill_mobs {
 	std::unordered_set<int> layout;         // レイアウト。
 	std::unordered_set<int> long_;          // 遠隔。
 	std::unordered_set<int> long_weapon;    // 遠隔物理。
+	std::unordered_set<int> path;           // パス。
 	std::unordered_set<int> summon;         // 召喚。
 	std::unordered_set<int> unequip_armor;  // 鎧解除。
 	std::unordered_set<int> unequip_helm;   // 兜解除。
@@ -2821,6 +2825,7 @@ extern const std::array<std::string,CLASS_MAX> MOB_CLASS_NAME_TABLE;
 extern const skill_id_set MOB_SHORT_SKILLS;
 extern const std::array<std::string,NAPV_MAX> NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE;
 extern const int PAGE_LINES;
+extern const skill_id_set PATH_SKILLS;
 extern const std::string PET_ACCESSORY_TYPE_NAME;
 extern const std::array<std::string,10> RACE_NAME_TABLE;
 extern const int REPAIR_COST;
