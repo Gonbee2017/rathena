@@ -117,6 +117,7 @@ int general_if::flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::hp_ratio() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int general_if::inner_product(const coords_t& a, const coords_t& b) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_attacking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_casting() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_ensemble() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -155,6 +156,7 @@ void item_user_if::use_item(int ind, bool exc) {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 std::unordered_map<int,ptr<block_if>>& leader_if::ally_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& leader_if::attack_target() {RAISE_NOT_IMPLEMENTED_ERROR;}
+coords_t leader_if::back_base() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<ptr<block_if>>& leader_if::bots() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_list& leader_if::center() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::unordered_map<int,ptr<block_if>>& leader_if::enemies() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -987,6 +989,13 @@ general_impl::hp_ratio() {
 	return hp() * 100 / max_hp();
 }
 
+// このブロックを原点として、2点の内積を計算する。
+int general_impl::inner_product(const coords_t& a, const coords_t& b) {
+	coords_t A{a.x - bl()->x, a.y - bl()->y};
+	coords_t B{b.x - bl()->x, b.y - bl()->y};
+	return A.x * B.x + A.y * B.y;
+}
+
 // 攻撃中かを判定する。
 bool general_impl::is_attacking() {
 	return ud()->target &&
@@ -1458,6 +1467,27 @@ std::unordered_map<int,ptr<block_if>>& leader_impl::ally_mobs() {
 // 攻撃対象とするモンスターのブロックID。
 int& leader_impl::attack_target() {
 	return attack_target_;
+}
+
+// 後衛陣地を取得する。
+coords_t leader_impl::back_base() {
+	coords_t res{};
+	int bacs_siz = 0;
+	for (block_if* mem : members()) {
+		if (!mem->is_dead() &&
+			mem->distance_policy_value() == DPV_AWAY
+		) {
+			res.x += mem->bl()->x;
+			res.y += mem->bl()->y;
+			++bacs_siz;
+		}
+	}
+	if (bacs_siz) {
+		int hal_siz = bacs_siz >> 1;
+		res.x = (res.x + hal_siz) / bacs_siz;
+		res.y = (res.y + hal_siz) / bacs_siz;
+	} else res = coords_t{bl()->x, bl()->y};
+	return res;
 }
 
 // Botのベクタ。

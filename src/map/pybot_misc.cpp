@@ -1071,6 +1071,16 @@ mob_skill_is_long_weapon(
 		skill_get_type(kid) & BF_WEAPON;
 }
 
+// 数値の標準符号を取得する。
+int normal_sign(
+	int num // 数値。
+) {
+	int res = 0;
+	if (num < 0) res = -1;
+	else if (num > 0) res = 1;
+	return res;
+}
+
 // NPCの表示名を取得する。
 std::string // 取得した表示名。
 npc_display_name(

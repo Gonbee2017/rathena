@@ -2378,7 +2378,6 @@ AI_SKILL_USE_FUNC(SA_FLAMELAUNCHER) {
 AI_SKILL_USE_FUNC(SA_LANDPROTECTOR) {
 	block_if* pri_bat = battlers.front();
 	if (bot->is_best_pos() &&
-		bot->check_attack(bot->target_enemy()) &&
 		pri_bat->bl()->m == bot->bl()->m
 	) {
 		int mx = (bot->bl()->x + pri_bat->bl()->x) / 2;

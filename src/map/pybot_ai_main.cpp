@@ -1208,7 +1208,6 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
 			battler->can_reach_xy(x, y) &&
-			leader->can_reach_xy(x, y, true) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
@@ -1216,12 +1215,12 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 			away_warp_portals(x, y)
 		) {
 			int adv = battler->skill_advantage(x, y);
-			if (adv >= pos.advantage) {
-				int dis = distance_client_blxy(battler->bl(), x, y);
-				if (adv > pos.advantage ||
+			int dis = distance_client_blxy(battler->bl(), x, y);
+			if (adv > pos.advantage ||
+				(adv == pos.advantage &&
 					dis < pos.value
-				) pos = pos_t(adv, x, y, dis);
-			}
+				)
+			) pos = pos_t(adv, x, y, dis);
 		}
 		return true;
 	};
@@ -1283,6 +1282,7 @@ ai_t::find_best_tanut_pos() {
 	if (battler->distance_policy_value() == DPV_CLOSE) {
 		block_if* tar_ene = battler->target_enemy();
 		if (!leader->rush()->get() &&
+			!battler->sd()->special_state.no_knockback &&
 			battler->is_primary() &&
 			tar_ene->is_short_range_attacker() &&
 			!tar_ene->is_flora() &&
@@ -1310,7 +1310,8 @@ ai_t::find_best_tanut_pos() {
 
 // バトラーが近接に位置取る述語を作る。
 yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
-	return [this, &pos] (int x, int y) -> bool {
+	coords_t bac_bas = leader->back_base();
+	return [this, &pos, bac_bas] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
 		block_if* tan = tar_ene->target_battler();
 		bool wai = !battler->check_attack_range(tar_ene) &&
@@ -1327,7 +1328,6 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
 				)
 			) && battler->can_reach_xy(x, y) &&
-			leader->can_reach_xy(x, y, true) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
 			!away_other_battlers(x, y) &&
@@ -1335,23 +1335,42 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			away_warp_portals(x, y)
 		) {
 			int adv = battler->skill_advantage(x, y);
-			if (adv >= pos.advantage) {
-				if (wai) {
-					int dis = distance_client_blxy(tar_ene->bl(), x, y);
-					if (adv > pos.advantage ||
+			if (wai) {
+				int dis = distance_client_blxy(tar_ene->bl(), x, y);
+				if (adv > pos.advantage ||
+					(adv == pos.advantage &&
 						dis < pos.value
-					) pos = pos_t(adv, x, y, dis);
-				} else if (bac) {
-					int dis = distance_client_blxy(tan->bl(), x, y);
-					if (adv > pos.advantage ||
+					)
+				) pos = pos_t(adv, x, y, dis);
+			} else if (bac) {
+				int dis = distance_client_blxy(tan->bl(), x, y);
+				if (adv > pos.advantage ||
+					(adv == pos.advantage &&
 						dis > pos.value
-					) pos = pos_t(adv, x, y, dis);
-				} else {
-					int dis = distance_client_blxy(battler->bl(), x, y);
-					if (adv > pos.advantage ||
+					)
+				) pos = pos_t(adv, x, y, dis);
+			} else {
+				int dis = distance_client_blxy(battler->bl(), x, y);
+				if (battler->battle_mode() == BM_TAUNT &&
+					tar_ene->has_path_skill()
+				) {
+					int ips = normal_sign(tar_ene->inner_product(bac_bas, coords_t{x, y}));
+					if (pos.advantage == INT_MIN ||
+						(ips < pos.value2 ||
+							(ips == pos.value2 &&
+								(adv > pos.advantage ||
+									(adv == pos.advantage &&
+										dis < pos.value
+									)
+								)
+							)
+						)
+					) pos = pos_t(adv, x, y, dis, ips);
+				} else if (adv > pos.advantage ||
+					(adv == pos.advantage &&
 						dis < pos.value
-					) pos = pos_t(adv, x, y, dis);
-				}
+					)
+				) pos = pos_t(adv, x, y, dis);
 			}
 		}
 		return true;
@@ -1360,20 +1379,27 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 
 // バトラーが壁際に位置取る述語を作る。
 yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
-	return [this, &pos] (int x, int y) -> bool {
+	coords_t bac_bas = leader->back_base();
+	return [this, &pos, bac_bas] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
 		if (check_wall_side(battler->bl()->m, x, y) &&
-			(!tar_ene->need_to_leave() ||
-				!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())
-			) && battler->can_reach_xy(x, y) &&
-			leader->can_reach_xy(x, y, true) &&
+			battler->can_reach_xy(x, y) &&
 			!check_stuck(x, y) &&
-			!away_other_battlers(x, y) &&
-			check_line_other_battlers(x, y) &&
 			away_warp_portals(x, y)
 		) {
 			int dis = distance_client_blxy(battler->bl(), x, y);
-			if (dis < pos.value) pos = pos_t(0, x, y, dis);
+			if (tar_ene->has_path_skill()) {
+				int ips = normal_sign(tar_ene->inner_product(bac_bas, coords_t{x, y}));
+				if (pos.advantage == INT_MIN ||
+					(ips < pos.value2 ||
+						(ips == pos.value2 &&
+							dis < pos.value
+						)
+					)
+				) pos = pos_t(0, x, y, dis, ips);
+			} else if (pos.advantage == INT_MIN ||
+				dis < pos.value
+			) pos = pos_t(0, x, y, dis);
 		}
 		return true;
 	};

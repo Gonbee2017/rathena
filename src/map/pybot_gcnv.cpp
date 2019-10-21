@@ -3628,6 +3628,7 @@ const int PAGE_LINES = 100;
 
 // パススキルのセット。
 const skill_id_set PATH_SKILLS = {
+	NJ_KAMAITACHI     ,
 	NPC_ACIDBREATH    ,
 	NPC_DARKNESSBREATH,
 	NPC_FIREBREATH    ,

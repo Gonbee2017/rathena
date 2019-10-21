@@ -1318,6 +1318,7 @@ struct general_if {
 	virtual int hit();
 	virtual int hp();
 	virtual int hp_ratio();
+	virtual int inner_product(const coords_t& a, const coords_t& b);
 	virtual bool is_attacking();
 	virtual bool is_casting();
 	virtual bool is_ensemble();
@@ -1364,6 +1365,7 @@ struct item_user_if {
 struct leader_if {
 	virtual std::unordered_map<int,ptr<block_if>>& ally_mobs();
 	virtual int& attack_target();
+	virtual coords_t back_base();
 	virtual std::vector<ptr<block_if>>& bots();
 	virtual block_list& center();
 	virtual std::unordered_map<int,ptr<block_if>>& enemies();
@@ -1663,6 +1665,7 @@ struct general_impl : virtual block_if {
 	virtual int hit() override;
 	virtual int hp() override;
 	virtual int hp_ratio() override;
+	virtual int inner_product(const coords_t& a, const coords_t& b) override;
 	virtual bool is_attacking() override;
 	virtual bool is_casting() override;
 	virtual bool is_ensemble() override;
@@ -1763,6 +1766,7 @@ struct leader_impl : virtual block_if {
 
 	virtual std::unordered_map<int,ptr<block_if>>& ally_mobs() override;
 	virtual int& attack_target() override;
+	virtual coords_t back_base() override;
 	virtual std::vector<ptr<block_if>>& bots() override;
 	virtual block_list& center() override;
 	virtual std::unordered_map<int,ptr<block_if>>& enemies() override;
@@ -2723,6 +2727,7 @@ std::string lowercase(const std::string& str);
 bool mob_is_pure_flora(mob_data* md);
 bool mob_skill_is_long(e_skill kid, int klv);
 bool mob_skill_is_long_weapon(e_skill kid, int klv);
+int normal_sign(int num);
 std::string npc_display_name(const std::string& npc_name);
 int parse_id(const std::string& nam);
 int parse_index(const std::string& nam);

@@ -5270,7 +5270,13 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		else
 			status->max_hp = status_calc_maxhp(bl, b_status->max_hp);
 
-		if( status->hp > status->max_hp ) { // !FIXME: Should perhaps a status_zap should be issued?
+		// [GonBee]
+		// HP増加ポーションの効果を維持する。
+		//if( status->hp > status->max_hp ) { // !FIXME: Should perhaps a status_zap should be issued?
+		if (sd->state.pc_loaded &&
+			status->hp > status->max_hp
+		) {
+
 			status->hp = status->max_hp;
 			if( sd ) clif_updatestatus(sd,SP_HP);
 		}
@@ -5288,7 +5294,13 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		else
 			status->max_sp = status_calc_maxsp(bl, b_status->max_sp);
 
-		if( status->sp > status->max_sp ) {
+		// [GonBee]
+		// SP増加ポーションの効果を維持する。
+		//if( status->sp > status->max_sp ) {
+		if (sd->state.pc_loaded &&
+			status->sp > status->max_sp
+		) {
+
 			status->sp = status->max_sp;
 			if( sd ) clif_updatestatus(sd,SP_SP);
 		}
