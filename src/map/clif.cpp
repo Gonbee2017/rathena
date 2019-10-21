@@ -10322,6 +10322,7 @@ void clif_parse_WantToConnection(int fd, struct map_session_data* sd)
 /// 007d
 void clif_parse_LoadEndAck(int fd,struct map_session_data *sd)
 {
+CS_ENTER;
 	bool guild_notice = false;
 
 	if(sd->bl.prev != NULL)

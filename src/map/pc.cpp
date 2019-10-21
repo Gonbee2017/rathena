@@ -1419,6 +1419,7 @@ bool pc_set_hate_mob(struct map_session_data *sd, int pos, struct block_list *bl
  *------------------------------------------*/
 void pc_reg_received(struct map_session_data *sd)
 {
+CS_ENTER;
 	uint8 i;
 
 	sd->vars_ok = true;

@@ -5273,8 +5273,9 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		// [GonBee]
 		// HP増加ポーションの効果を維持する。
 		//if( status->hp > status->max_hp ) { // !FIXME: Should perhaps a status_zap should be issued?
-		if (sd->state.pc_loaded &&
-			status->hp > status->max_hp
+		if ((!sd ||
+				sd->state.pc_loaded
+			) && status->hp > status->max_hp
 		) {
 
 			status->hp = status->max_hp;
@@ -5297,8 +5298,9 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		// [GonBee]
 		// SP増加ポーションの効果を維持する。
 		//if( status->sp > status->max_sp ) {
-		if (sd->state.pc_loaded &&
-			status->sp > status->max_sp
+		if ((!sd ||
+				sd->state.pc_loaded
+			) && status->sp > status->max_sp
 		) {
 
 			status->sp = status->max_sp;

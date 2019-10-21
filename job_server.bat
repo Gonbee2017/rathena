@@ -6,10 +6,10 @@ cd /d %~dp0
 echo .>%1-server.run
 :execute
 %1-server
-if errorlevel 3 (
-	echo .>%1-server.end
-	goto end
-)
+rem if errorlevel 3 (
+rem 	echo .>%1-server.end
+rem 	goto end
+rem )
 if exist %1-server.stop (
 	del %1-server.stop>nul 2>&1
 	goto end
