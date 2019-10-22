@@ -48,6 +48,7 @@ bool battler_if::is_wall_side() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::leader() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::member_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::no_knockback() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values& battler_if::normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::party_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill>>& battler_if::reject_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1328,8 +1329,9 @@ homun_impl::is_dead() {
 		status_isdead(bl());
 }
 
-// ホムンクルスが無敵かを判断する。
-bool homun_impl::is_invincible() {
+// ホムンクルスが無敵状態かを判定する。
+bool // 結果。
+homun_impl::is_invincible() {
 	return false;
 }
 
@@ -1389,6 +1391,12 @@ void homun_impl::load_policy(
 std::string // 取得した名前。
 homun_impl::name() {
 	return hd()->homunculus.name;
+}
+
+// ホムンクルスがノックバック耐性状態かを判定する。
+bool // 結果。
+homun_impl::no_knockback() {
+	return false;
 }
 
 // 主人の拒否スキルのレジストリ。
@@ -2016,7 +2024,7 @@ bool member_impl::is_no_gemstone() {
 bool // 結果。
 member_impl::is_wall_side() {
 	return this == leader() ||
-		sd()->special_state.no_knockback ||
+		no_knockback() ||
 		check_wall_side(bl()->m, bl()->x, bl()->y);
 }
 
@@ -2145,6 +2153,12 @@ ptr<regnum_t<int>>& member_impl::mob_high_mdef() {
 std::string // 取得した名前。
 member_impl::name() {
 	return name_;
+}
+
+// メンバーがノックバック耐性状態かを判定する。
+bool // 結果。
+member_impl::no_knockback() {
+	return sd()->special_state.no_knockback;
 }
 
 // 通常攻撃ポリシーのレジストリ。

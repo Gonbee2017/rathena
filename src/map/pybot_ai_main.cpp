@@ -1281,8 +1281,9 @@ ai_t::find_best_tanut_pos() {
 	pos_t pos;
 	if (battler->distance_policy_value() == DPV_CLOSE) {
 		block_if* tar_ene = battler->target_enemy();
-		if (!leader->rush()->get() &&
-			!battler->sd()->special_state.no_knockback &&
+		if (!gvg &&
+			!leader->rush()->get() &&
+			!battler->no_knockback() &&
 			battler->is_primary() &&
 			tar_ene->is_short_range_attacker() &&
 			!tar_ene->is_flora() &&

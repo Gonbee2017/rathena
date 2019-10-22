@@ -1239,6 +1239,7 @@ struct battler_if {
 	virtual block_if*& leader();
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val);
 	virtual int& member_index();
+	virtual bool no_knockback();
 	virtual normal_attack_policy_values& normal_attack_policy_value();
 	virtual int party_id();
 	virtual ptr<registry_t<e_skill>>& reject_skills();
@@ -1725,6 +1726,7 @@ struct homun_impl : virtual block_if {
 	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual std::string name() override;
+	virtual bool no_knockback() override;
 	virtual ptr<registry_t<e_skill>>& reject_skills() override;
 	virtual s_skill* skill(e_skill kid) override;
 	virtual int skill_point() override;
@@ -1896,6 +1898,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<int>>& mob_high_hit() override;
 	virtual ptr<regnum_t<int>>& mob_high_mdef() override;
 	virtual std::string name() override;
+	virtual bool no_knockback() override;
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies() override;
 	virtual int party_id() override;
 	virtual ptr<block_if>& pet() override;

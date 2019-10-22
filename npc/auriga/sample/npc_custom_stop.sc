@@ -9,5 +9,5 @@ OnInit:
 	sleep 20000;
 	announce "サーバー停止まで残り10秒です。", 0;
 	sleep 10000;
-	atcommand "@mapexit 3";
+	atcommand "@mapexit 2";
 }
