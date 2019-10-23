@@ -3231,48 +3231,74 @@ SUBCMD_FUNC(Bot, Warp) {
 				"「", mem->name(), "」は現在「",
 				war_des, "」を使えません。"
 			)};
+		point* sav_poi = &mem->sd()->status.save_point;
+		point* mem_pois = mem->sd()->status.memo_point;
 		int mind = 0;
 		int max_mem;
-		ARR_FIND(0, MAX_MEMOPOINTS, max_mem, !mem->sd()->status.memo_point[max_mem].map);
-		std::string war_loc_str = shift_arguments(
-			args, "ワープ位置を指定してください。"
+		ARR_FIND(0, MAX_MEMOPOINTS, max_mem, !mem_pois[max_mem].map);
+		std::string des_str = shift_arguments(
+			args, "マップを指定してください。"
 		);
-		int i = parse_index(war_loc_str);
+		int i = parse_index(des_str);
 		if (i == -1) {
-			std::string lc_war_loc_str = pybot::lowercase(war_loc_str);
+			std::string lc_des_str = pybot::lowercase(des_str);
 			for (int j = 0; j <= max_mem; ++j) {
 				int mind2;
-				if (j) mind2 = mem->sd()->status.memo_point[j - 1].map;
-				else mind2 = mem->sd()->status.save_point.map;
+				if (j) mind2 = mem_pois[j - 1].map;
+				else mind2 = sav_poi->map;
 				auto map = id_maps.at(map_mapindex2mapid(mind2));
-				if (pybot::lowercase(map->name_english) == lc_war_loc_str ||
-					pybot::lowercase(map->name_japanese) == lc_war_loc_str
+				if (pybot::lowercase(map->name_english) == lc_des_str ||
+					pybot::lowercase(map->name_japanese) == lc_des_str
 				) {
-					mind = mind2;
+					i = j;
 					break;
 				}
 			}
-		} else if (i <= max_mem) {
-			if (i) mind = mem->sd()->status.memo_point[i - 1].map;
-			else mind = mem->sd()->status.save_point.map;
+		}
+		if (i >= 0 &&
+			i <= max_mem
+		) {
+			if (i) mind = mem_pois[i - 1].map;
+			else mind = sav_poi->map;
 		}
 		if (!mind) throw command_error{print(
-			"「", war_loc_str, "」というワープ位置はありません。"
+			"「", des_str, "」というマップはありません。"
 		)};
 		int16_t x, y;
 		if (!map_search_freecell(lea->bl(), 0, &x, &y, 1, 1, 0))
 			throw command_error{print(
 				"あなたの周囲に空いているセルがありません。"
 			)};
+		int m = map_mapindex2mapid(mind);
+		point* des_poi;
+		if (i) des_poi = &mem_pois[i - 1];
+		else des_poi = sav_poi;
+		int des_x = des_poi->x;
+		int des_y = des_poi->y;
+		if (!args.empty()) {
+			des_x = shift_arguments_then_parse_int(args, "X座標");
+			des_y = shift_arguments_then_parse_int(args, "Y座標");
+			if (map_getcell(m, des_x, des_y, CELL_CHKNOPASS)) throw command_error{print(
+				"「", id_maps.at(m)->name_japanese,
+				" (", mapindex_id2name(mind), ") ; ", des_x, ",", des_y, "」"
+				"にはワープできません。"
+			)};
+		}
 		if (mem->is_sit()) mem->stand();
-		mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [mind] (ai_t* ai, void* fun) {
+		mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [mind, des_poi, des_x, des_y] (ai_t* ai, void* fun) {
+			int old_x = des_poi->x;
+			int old_y = des_poi->y;
+			des_poi->x = des_x;
+			des_poi->y = des_y;
 			skill_castend_map(ai->bot->sd(), AL_WARP, mapindex_id2name(mind));
+			des_poi->x = old_x;
+			des_poi->y = old_y;
 		});
 		show_client(
 			lea->fd(),
 			print("「", mem->name(), "」は"
-				"「", id_maps.at(map_mapindex2mapid(mind))->name_japanese,
-				" (", mapindex_id2name(mind), ")」"
+				"「", id_maps.at(m)->name_japanese,
+				" (", mapindex_id2name(mind), ") ; ", des_x, ",", des_y, "」"
 				"へのワープポータルを開きます。"
 			)
 		);

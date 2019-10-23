@@ -17803,6 +17803,14 @@ static int skill_cell_overlap(struct block_list *bl, va_list ap)
 				break;
 		case HW_GANBANTEIN:
 		case LG_EARTHDRIVE:
+
+			// [GonBee]
+			// ‰‰‘t‚ÆƒSƒXƒyƒ‹‚ÍƒKƒ“ƒoƒ“ƒeƒCƒ“‚ÅÁ‚¦‚È‚¢B
+			if (skill_get_unit_flag(unit->group->skill_id) & (UF_DANCE | UF_ENSEMBLE | UF_SONG) ||
+				unit->group->skill_id == PA_GOSPEL
+			)
+				return 0;
+
 			// Officially songs/dances are removed
 			if (skill_get_unit_flag(unit->group->skill_id)&UF_RANGEDSINGLEUNIT) {
 				if (unit->val2&UF_RANGEDSINGLEUNIT)

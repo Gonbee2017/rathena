@@ -1947,6 +1947,8 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot warp ハイプリ]\n"
 		"ワープポータルを開く。\n"
 		"入力例 [@bot warp ハイプリ prt_fild08]\n"
+		"座標を指定して、ワープポータルを開く。\n"
+		"入力例 [@bot warp ハイプリ prt_fild08 100 200]\n"
 	),
 };
 
