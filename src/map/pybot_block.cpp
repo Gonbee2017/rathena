@@ -64,7 +64,6 @@ e_element battler_if::weapon_attack_element() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::weapon_attack_element_ratio(block_if* tar) {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 int& bot_if::bot_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
-bool bot_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_emotion_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_reloaded_equipset_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -206,6 +205,7 @@ ptr<regnum_t<int>>& member_if::hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -603,12 +603,6 @@ battler_impl::weapon_attack_element_ratio(
 // Botのインデックス。
 int& bot_impl::bot_index() {
 	return bot_index_;
-}
-
-// 座っているかを判定する。
-bool // 結果。
-bot_impl::is_sit() {
-	return pc_issit(sd());
 }
 
 // 最後にエモーションを表示したチック。
@@ -2018,6 +2012,12 @@ bool member_impl::is_no_castcancel() {
 // メンバーがジェムストーン消費なしかを判定する。
 bool member_impl::is_no_gemstone() {
 	return sd()->special_state.no_gemstone;
+}
+
+// 座っているかを判定する。
+bool // 結果。
+member_impl::is_sit() {
+	return pc_issit(sd());
 }
 
 // メンバーが壁際にいるかを判定する。

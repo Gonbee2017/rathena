@@ -12257,7 +12257,8 @@ int status_change_clear(struct block_list* bl, int type)
 			case SC_DAILYSENDMAILCNT:
 
 			// [GonBee]
-			// ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			// ブラギポーション、消化促進ポーション、濃縮サラマインジュース、
+			// HP増加ポーション、SP増加ポーション、レジストポーション、プリザーブ状態を追加。
 			case SC_BRAGIPOTION:
 			case SC_DIGESTPOTION:
 			case SC_EXTRACT_SALAMINE_JUICE:
@@ -12267,6 +12268,7 @@ int status_change_clear(struct block_list* bl, int type)
 			case SC_ARMOR_ELEMENT_EARTH:
 			case SC_ARMOR_ELEMENT_FIRE:
 			case SC_ARMOR_ELEMENT_WIND:
+			case SC_PRESERVE:
 
 				continue;
 			}
@@ -14322,7 +14324,8 @@ void status_change_clear_buffs(struct block_list* bl, uint8 type)
 			case SC_MAGICAL_FEATHER:
 
 			// [GonBee]
-			// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション、レジストポーション状態を追加。
+			// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、
+			// HP増加ポーション、SP増加ポーション、レジストポーション、プリザーブ状態を追加。
 			case SC_ATKPOTION:
 			case SC_MATKPOTION:
 			case SC_BRAGIPOTION:
@@ -14334,6 +14337,7 @@ void status_change_clear_buffs(struct block_list* bl, uint8 type)
 			case SC_ARMOR_ELEMENT_EARTH:
 			case SC_ARMOR_ELEMENT_FIRE:
 			case SC_ARMOR_ELEMENT_WIND:
+			case SC_PRESERVE:
 
 				continue;
 			// Chemical Protection is only removed by some skills

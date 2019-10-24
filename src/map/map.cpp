@@ -2144,7 +2144,10 @@ int map_quit(struct map_session_data *sd) {
 			status_change_end(&sd->bl, SC_MAXIMIZEPOWER, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_MAXOVERTHRUST, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_STEELBODY, INVALID_TIMER);
-			status_change_end(&sd->bl, SC_PRESERVE, INVALID_TIMER);
+
+			// [GonBee]
+			//status_change_end(&sd->bl, SC_PRESERVE, INVALID_TIMER);
+
 			status_change_end(&sd->bl, SC_KAAHI, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_SPIRIT, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_HEAT_BARREL, INVALID_TIMER);
@@ -4953,7 +4956,9 @@ void do_final(void){
 		struct map_data *mapdata = map_getmapdata(i);
 
 		ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);
+ShowDebug("%d %d\n", __LINE__, i);
 		map_foreachinmap(cleanup_sub, i, BL_ALL);
+ShowDebug("%d\n", __LINE__);
 		channel_delete(mapdata->channel,false);
 	}
 	ShowStatus("Cleaned up %d maps." CL_CLL "\n", map_num);

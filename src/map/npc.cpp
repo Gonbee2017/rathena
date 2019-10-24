@@ -2255,40 +2255,29 @@ void npc_unload_duplicates(struct npc_data* nd)
 //Removes an npc from map and db.
 //Single is to free name (for duplicates).
 int npc_unload(struct npc_data* nd, bool single) {
-ShowDebug("%d\n", __LINE__);
 	nullpo_ret(nd);
 
 	status_change_clear(&nd->bl, 1);
-ShowDebug("%d\n", __LINE__);
 	npc_remove_map(nd);
-ShowDebug("%d\n", __LINE__);
 	map_deliddb(&nd->bl);
-ShowDebug("%d\n", __LINE__);
 	if( single )
 		strdb_remove(npcname_db, nd->exname);
 
-ShowDebug("%d\n", __LINE__);
 	if (nd->chat_id) // remove npc chatroom object and kick users
 		chat_deletenpcchat(nd);
 
-ShowDebug("%d\n", __LINE__);
 #ifdef PCRE_SUPPORT
 	npc_chat_finalize(nd); // deallocate npc PCRE data structures
 #endif
 
-ShowDebug("%d\n", __LINE__);
 	if( single && nd->path ) {
 		struct npc_path_data* npd = NULL;
-ShowDebug("%d\n", __LINE__);
 		if( nd->path ) {
 			npd = (struct npc_path_data*)strdb_get(npc_path_db, nd->path);
 		}
 
-ShowDebug("%d\n", __LINE__);
 		if( npd && --npd->references == 0 ) {
-ShowDebug("%d\n", __LINE__);
 			strdb_remove(npc_path_db, nd->path);/* remove from db */
-ShowDebug("%d\n", __LINE__);
 			aFree(nd->path);/* remove now that no other instances exist */
 
 			if (npd == npc_last_npd) {
@@ -2299,22 +2288,18 @@ ShowDebug("%d\n", __LINE__);
 		}
 	}
 	
-ShowDebug("%d\n", __LINE__);
 	if( single && nd->bl.m != -1 )
 		map_remove_questinfo(nd->bl.m, nd);
 
-ShowDebug("%d\n", __LINE__);
 	if( (nd->subtype == NPCTYPE_SHOP || nd->subtype == NPCTYPE_CASHSHOP || nd->subtype == NPCTYPE_ITEMSHOP || nd->subtype == NPCTYPE_POINTSHOP || nd->subtype == NPCTYPE_MARKETSHOP) && nd->src_id == 0) //src check for duplicate shops [Orcao]
 		aFree(nd->u.shop.shop_item);
 	else if( nd->subtype == NPCTYPE_SCRIPT ) {
-ShowDebug("%d\n", __LINE__);
 		struct s_mapiterator* iter;
 		struct block_list* bl;
 
 		if( single )
 			ev_db->foreach(ev_db,npc_unload_ev,nd->exname); //Clean up all events related
 
-ShowDebug("%d\n", __LINE__);
 		iter = mapit_geteachpc();
 		for( bl = (struct block_list*)mapit_first(iter); mapit_exists(iter); bl = (struct block_list*)mapit_next(iter) ) {
 			struct map_session_data *sd = ((TBL_PC*)bl);
@@ -2332,60 +2317,41 @@ ShowDebug("%d\n", __LINE__);
 		}
 		mapit_free(iter);
 
-ShowDebug("%d\n", __LINE__);
 		if (nd->u.scr.timerid != INVALID_TIMER) {
-ShowDebug("%d\n", __LINE__);
 			const struct TimerData *td;
 			td = get_timer(nd->u.scr.timerid);
-ShowDebug("%d\n", __LINE__);
 			if (td && td->data)
 				ers_free(timer_event_ers, (void*)td->data);
-ShowDebug("%d\n", __LINE__);
 			delete_timer(nd->u.scr.timerid, npc_timerevent);
 		}
-ShowDebug("%d\n", __LINE__);
 		if (nd->u.scr.timer_event)
 			aFree(nd->u.scr.timer_event);
-ShowDebug("%d\n", __LINE__);
 		if (nd->src_id == 0) {
-ShowDebug("%d\n", __LINE__);
 			if(nd->u.scr.script) {
-ShowDebug("%d\n", __LINE__);
 				script_free_code(nd->u.scr.script);
 				nd->u.scr.script = NULL;
 			}
-ShowDebug("%d\n", __LINE__);
 			if (nd->u.scr.label_list) {
-ShowDebug("%d\n", __LINE__);
 				aFree(nd->u.scr.label_list);
 				nd->u.scr.label_list = NULL;
 				nd->u.scr.label_list_num = 0;
 			}
 		}
-ShowDebug("%d\n", __LINE__);
 		if( nd->u.scr.guild_id )
 			guild_flag_remove(nd);
-ShowDebug("%d\n", __LINE__);
 		if( nd->sc_display_count ){
-ShowDebug("%d\n", __LINE__);
 			unsigned char i;
 
 			for( i = 0; i < nd->sc_display_count; i++ )
 				ers_free(npc_sc_display_ers, nd->sc_display[i]);
-ShowDebug("%d\n", __LINE__);
 			nd->sc_display_count = 0;
-ShowDebug("%d\n", __LINE__);
 			aFree(nd->sc_display);
 			nd->sc_display = NULL;
 		}
 	}
 
-ShowDebug("%d\n", __LINE__);
 	script_stop_sleeptimers(nd->bl.id);
-ShowDebug("%d\n", __LINE__);
 	aFree(nd);
-
-ShowDebug("%d\n", __LINE__);
 	return 0;
 }
 

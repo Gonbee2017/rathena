@@ -3222,10 +3222,6 @@ SUBCMD_FUNC(Bot, Warp) {
 		lea->output_buffer() << cou << "件のワープ位置が見つかりました。\n";
 		lea->show_next();
 	} else {
-		if (mem == lea)
-			throw command_error{print(
-				"自分で「", war_des, "」を使ってください。"
-			)};
 		if (!mem->can_use_skill(AL_WARP, war_lv))
 			throw command_error{print(
 				"「", mem->name(), "」は現在「",
@@ -3273,32 +3269,27 @@ SUBCMD_FUNC(Bot, Warp) {
 		point* des_poi;
 		if (i) des_poi = &mem_pois[i - 1];
 		else des_poi = sav_poi;
-		int des_x = des_poi->x;
-		int des_y = des_poi->y;
 		if (!args.empty()) {
-			des_x = shift_arguments_then_parse_int(args, "X座標");
-			des_y = shift_arguments_then_parse_int(args, "Y座標");
+			int des_x = shift_arguments_then_parse_int(args, "X座標");
+			int des_y = shift_arguments_then_parse_int(args, "Y座標");
 			if (map_getcell(m, des_x, des_y, CELL_CHKNOPASS)) throw command_error{print(
 				"「", id_maps.at(m)->name_japanese,
 				" (", mapindex_id2name(mind), ") ; ", des_x, ",", des_y, "」"
 				"にはワープできません。"
 			)};
-		}
-		if (mem->is_sit()) mem->stand();
-		mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [mind, des_poi, des_x, des_y] (ai_t* ai, void* fun) {
-			int old_x = des_poi->x;
-			int old_y = des_poi->y;
 			des_poi->x = des_x;
 			des_poi->y = des_y;
+		}
+		if (mem->is_sit()) mem->stand();
+		if (mem == lea) mem->use_skill_xy(AL_WARP, war_lv, x, y, false);
+		else mem->use_skill_xy(AL_WARP, war_lv, x, y, false, [mind] (ai_t* ai, void* fun) {
 			skill_castend_map(ai->bot->sd(), AL_WARP, mapindex_id2name(mind));
-			des_poi->x = old_x;
-			des_poi->y = old_y;
 		});
 		show_client(
 			lea->fd(),
 			print("「", mem->name(), "」は"
 				"「", id_maps.at(m)->name_japanese,
-				" (", mapindex_id2name(mind), ") ; ", des_x, ",", des_y, "」"
+				" (", mapindex_id2name(mind), ") ; ", des_poi->x, ",", des_poi->y, "」"
 				"へのワープポータルを開きます。"
 			)
 		);
@@ -4272,14 +4263,15 @@ shift_arguments_then_parse_int(
 		nam, "を指定してください。"
 	));
 	int int_ = pybot::stoi(int_str, INT_MIN);
-	if (int_ < min)
-		throw command_error{print(
-			nam, "は ", min, " 以上でなければなりません。"
-		)};
-	if (int_ > max)
-		throw command_error{print(
-			nam, "は ", max, " 以下でなければなりません。"
-		)};
+	if (int_ == INT_MIN) throw command_error{print(
+		nam, "は数値でなければなりません。"
+	)};
+	if (int_ < min) throw command_error{print(
+		nam, "は ", min, " 以上でなければなりません。"
+	)};
+	if (int_ > max) throw command_error{print(
+		nam, "は ", max, " 以下でなければなりません。"
+	)};
 	return int_;
 }
 

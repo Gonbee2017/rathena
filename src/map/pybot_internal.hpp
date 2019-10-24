@@ -1258,7 +1258,6 @@ struct battler_if {
 // Botのインターフェイス。
 struct bot_if {
 	virtual int& bot_index();
-	virtual bool is_sit();
 	virtual t_tick& last_emotion_tick();
 	virtual t_tick& last_reloaded_equipset_tick();
 	virtual void respawn();
@@ -1418,6 +1417,7 @@ struct member_if {
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
 	virtual bool is_carton();
+	virtual bool is_sit();
 	virtual ptr<registry_t<int,e_element>>& kew_elements();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
@@ -1585,7 +1585,6 @@ struct bot_impl : virtual block_if {
 	e_skill want_to_play_;               // 演奏したいスキル。
 
 	virtual int& bot_index() override;
-	virtual bool is_sit() override;
 	virtual t_tick& last_emotion_tick() override;
 	virtual t_tick& last_reloaded_equipset_tick() override;
 	virtual void respawn() override;
@@ -1881,6 +1880,7 @@ struct member_impl : virtual block_if {
 	virtual bool is_magic_immune() override;
 	virtual bool is_no_castcancel() override;
 	virtual bool is_no_gemstone() override;
+	virtual bool is_sit() override;
 	virtual bool is_wall_side() override;
 	virtual void iterate_skill(yield_skill_func yie) override;
 	virtual ptr<registry_t<int,e_element>>& kew_elements() override;

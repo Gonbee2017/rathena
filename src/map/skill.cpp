@@ -6805,7 +6805,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case NJ_NEN:
 	case NPC_DEFENDER:
 	case NPC_MAGICMIRROR:
-	case ST_PRESERVE:
+
+	// [GonBee]
+	//case ST_PRESERVE:
+
 	case NPC_INVINCIBLE:
 	case NPC_INVINCIBLEOFF:
 	case MER_INVINCIBLEOFF2:
@@ -6839,6 +6842,13 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case NPC_MAXPAIN:
 		clif_skill_nodamage(src,bl,skill_id,skill_lv,
 			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
+		break;
+
+	// [GonBee]
+	case ST_PRESERVE:
+		if (tsce) i = status_change_end(bl, type, INVALID_TIMER);
+		else i = sc_start(src, bl, type, 100, skill_lv, INFINITE_TICK);
+		clif_skill_nodamage(src, bl, skill_id, skill_lv, i);
 		break;
 
 	case NPC_HALLUCINATION:
@@ -8077,7 +8087,8 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_LHZ_DUN_N1:		case SC_LHZ_DUN_N2:			case SC_LHZ_DUN_N3:			case SC_LHZ_DUN_N4:
 
 					// [GonBee]
-					// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、HP増加ポーション、SP増加ポーション状態を追加。
+					// Atk上昇、Matk上昇、ブラギポーション、消化促進ポーション、濃縮サラマインジュース、
+					// HP増加ポーション、SP増加ポーション、プリザーブ状態を追加。
 					case SC_ATKPOTION:
 					case SC_MATKPOTION:
 					case SC_BRAGIPOTION:
@@ -8085,6 +8096,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_EXTRACT_SALAMINE_JUICE:
 					case SC_PROMOTE_HEALTH_RESERCH:
 					case SC_ENERGY_DRINK_RESERCH:
+					case SC_PRESERVE:
 
 						continue;
 					case SC_WHISTLE:
