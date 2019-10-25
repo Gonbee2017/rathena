@@ -2773,7 +2773,7 @@ AI_SKILL_USE_FUNC(ST_FULLSTRIP) {
 
 // プリザーブを使う。
 AI_SKILL_USE_FUNC(ST_PRESERVE) {
-	if (bot->sc_rest(SC_PRESERVE) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (!bot->sc()->data[SC_PRESERVE]) bot->use_skill_self(kid, klv);
 }
 
 // リジェクトソードを使う。

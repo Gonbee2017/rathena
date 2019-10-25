@@ -4470,6 +4470,9 @@ int cleanup_sub(struct block_list *bl, va_list ap)
 {
 	nullpo_ret(bl);
 
+	// [GonBee]
+	if (!bl) return 0;
+
 	switch(bl->type) {
 		case BL_PC:
 			map_quit((struct map_session_data *) bl);

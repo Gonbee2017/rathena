@@ -1105,15 +1105,17 @@ general_impl::sc() {
 }
 
 // 状態変化の残り時間を取得する。
-t_tick // 取得した残り時間。
+t_tick // 取得した残り時間。永続ならINFINITE_TICK。
 general_impl::sc_rest(
 	sc_type typ // 状態。
 ) {
-	t_tick res = 0;
+	t_tick res = INFINITE_TICK;
 	status_change_entry* sce = sc()->data[typ];
 	if (sce) {
 		const TimerData * td = get_timer(sce->timer);
-		if (td) res = DIFF_TICK(td->tick, now);
+		if (td &&
+			td->tick != INFINITE_TICK
+		) res = DIFF_TICK(td->tick, now);
 	}
 	return res;
 }
