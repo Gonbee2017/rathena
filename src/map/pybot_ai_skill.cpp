@@ -293,7 +293,6 @@ AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_ENCPOISON] &&
-			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
 			ele &&
 			*ele == ELE_POISON &&
 			tar_ene &&
@@ -1973,7 +1972,6 @@ AI_SKILL_USE_FUNC(PR_ASPERSIO) {
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_ASPERSIO] &&
-			pc_checkequip(mem->sd(), EQP_WEAPON) >= 0 &&
 			ele &&
 			*ele == ELE_HOLY &&
 			tar_ene &&
@@ -2301,7 +2299,7 @@ AI_SKILL_USE_FUNC(SA_DELUGE) {
 		bot->attack_element_ratio(tar_ene, ELE_WATER) > 100 &&
 		(tar_ene->element() != ELE_UNDEAD ||
 			!bot->check_skill(SA_VOLCANO)
-		) && !skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		) && !skill_unit_exists_block(bot, ELEMENTAL_UNLAYABLE_SKILL_UNIT_KEYS)
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 
@@ -2462,7 +2460,7 @@ AI_SKILL_USE_FUNC(SA_VIOLENTGALE) {
 		!bot->sc()->data[SC_VIOLENTGALE] &&
 		bot->check_attack(tar_ene) &&
 		bot->attack_element_ratio(tar_ene, ELE_WIND) > 100 &&
-		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		!skill_unit_exists_block(bot, ELEMENTAL_UNLAYABLE_SKILL_UNIT_KEYS)
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 
@@ -2473,7 +2471,7 @@ AI_SKILL_USE_FUNC(SA_VOLCANO) {
 		!bot->sc()->data[SC_VOLCANO] &&
 		bot->check_attack(tar_ene) &&
 		bot->attack_element_ratio(tar_ene, ELE_FIRE) > 100 &&
-		!skill_unit_exists_block(bot, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)})
+		!skill_unit_exists_block(bot, ELEMENTAL_UNLAYABLE_SKILL_UNIT_KEYS)
 	) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 }
 

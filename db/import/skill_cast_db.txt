@@ -16,10 +16,11 @@
 // - Modified: 6,0,0,0,30000,0,1000:2500:3000:...
 // Gives Level 1 1000ms cool down, Level 2 2500ms, Level 3 3000ms, and so on.
 
-//===== Clown / Gypsy ======================
+//-- SA_REVERSEORCISH
+294,0,0,0,180000,0,0
+
 //-- CG_ARROWVULCAN
 394,2000:2200:2400:2600:2800:3000:3200:3400:3600:3800,2000,1000,0,0,0
 
-//===== Mixed Advanced Skills ==============
 //-- ST_PRESERVE
 475,0,0,0,0,0,0

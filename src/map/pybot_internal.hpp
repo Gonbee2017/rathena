@@ -2811,6 +2811,7 @@ extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
 extern const int DOUBLE_FEVER_MAPS_SIZE;
 extern const std::array<std::string,10> ELEMENT_NAME_TABLE;
 extern const skill_unit_key_map ELEMENTAL_SKILL_UNIT_KEYS;
+extern const skill_unit_key_map ELEMENTAL_UNLAYABLE_SKILL_UNIT_KEYS;
 extern const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_AWAY;
 extern const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_CLOSE;
 extern const std::array<equip_index,EPO_MAX> EPO2EQI_TABLE;

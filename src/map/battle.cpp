@@ -2443,6 +2443,7 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 	//	skill_id == KN_AUTOCOUNTER || skill_id == SN_SHARPSHOOTING ||
 	//	skill_id == MA_SHARPSHOOTING || skill_id == NJ_KIRIKAGE))
 	//{
+	if (sstatus->cri) {
 
 		short cri = sstatus->cri;
 
@@ -2493,9 +2494,7 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 		if(tsd && tsd->bonus.critical_def)
 			cri = cri * ( 100 - tsd->bonus.critical_def ) / 100;
 		return (rnd()%1000 < cri);
-
-	//}
-
+	}
 	return 0;
 }
 
@@ -6359,7 +6358,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				sd->bonus.ignore_mdef_class & ( 1 << tstatus->class_ ) || sd->bonus.ignore_mdef_class & ( 1 << CLASS_ALL )
 
 				// [GonBee]
-				// 魔法スキル攻撃でもクリティカルを有効にする。
+				// PCは魔法スキル攻撃でもクリティカルを有効にする。
 				|| is_attack_critical(&ad, src, target, skill_id, skill_lv, true)
 
 			))
