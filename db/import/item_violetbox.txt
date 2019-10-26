@@ -1,0 +1,9 @@
+// Old Violet Box Obtainable Items Database
+//
+// Structure of Database:
+// GroupID,ItemID,Rate
+
+IG_VioletBox,7619,17	// 濃縮エルニウム
+IG_VioletBox,7620,17	// 濃縮オリデオコン
+IG_VioletBox,2202,5	// サングラス [1]
+IG_VioletBox,2204,5	// グラス [1]

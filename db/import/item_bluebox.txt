@@ -1,0 +1,7 @@
+// Old Blue Box Obtainable Items Database
+//
+// Structure of Database:
+// GroupID,ItemID,Rate
+
+IG_BlueBox,7619,12	// 濃縮エルニウム
+IG_BlueBox,7620,12	// 濃縮オリデオコン

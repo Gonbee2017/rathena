@@ -1,0 +1,25 @@
+//
+// Structure of Database:
+// GroupID,ItemID,Rate
+//
+
+// Ores
+IG_Ore,7289,1	// かんらん石
+IG_Ore,7290,1	// 金雲母
+IG_Ore,7291,1	// めのう
+IG_Ore,7292,1	// 白雲母
+IG_Ore,7293,1	// 薔薇水晶
+IG_Ore,7294,1	// トルコ石
+IG_Ore,7295,1	// 黄水晶
+IG_Ore,7296,1	// 輝石
+IG_Ore,7297,1	// 黒雲母
+IG_Ore,7619,1	// 濃縮エルニウム
+IG_Ore,7620,1	// 濃縮オリデオコン
+
+// Set Of Taiming Item
+IG_Taming,12225,1	// 甘いスティックキャンディ
+
+// コインホルダー
+IG_CoinHolder,6080,1	// マヌクコイン
+IG_CoinHolder,6081,1	// スプレンディッドコイン
+IG_CoinHolder,6380,1	// モーラコイン

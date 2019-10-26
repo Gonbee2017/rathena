@@ -1,0 +1,8 @@
+// Dead Branch Summonable Monsters Database
+//
+// Structure of Database:
+// MobRandomGroupID,MobID,DummyName,Rate
+
+MOBG_Branch_Of_Dead_Tree,1815,Rice Cake,71428
+MOBG_Branch_Of_Dead_Tree,1519,Green Maiden,71428
+MOBG_Branch_Of_Dead_Tree,1963,New Year Doll,71428

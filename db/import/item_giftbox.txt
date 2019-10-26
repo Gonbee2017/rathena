@@ -1,0 +1,6 @@
+// Gift Box Obtainable Items Database
+//
+// Structure of Database:
+// GroupID,ItemID,Rate
+
+IG_GiftBox,12105,19	// テイミングプレゼントセット

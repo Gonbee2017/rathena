@@ -1,0 +1,241 @@
+// [GonBee]
+
+// -----------------------------------------------------------------------------
+// pybot
+
+pybot_around_distance: 9              // 周辺距離。
+pybot_away_distance: 3                // 敵モンスターから離れていると言える最短距離。
+pybot_away_distance_great: 6          // グレートモンスターから離れていると言える最短距離。
+pybot_heaby_cool_time: 5000           // Botが重たいコマンドを実行できるようになるまでのクールタイム。
+pybot_reload_equipset_cool_time: 2500 // 武具一式をリロードするまでのクールタイム。
+pybot_restart_cool_time: 60000        // Botが死亡してからリスタートまでのクールタイム。
+pybot_think_time: 250                 // AIを実行する間隔時間。
+
+clear_skills_on_death: 2              // 死亡するとスキルユニットを除去するブロックのタイプ。
+max_flee2: 950                        // 完全回避の上限。
+max_steal_rate: 5000                  // スティール成功率の上限。
+retaliate_to_master: 0                // モンスターは主人をターゲットしない。
+skillrange_from_weapon: 1             // スキルの射程に通常攻撃の射程を使用するブロックのタイプ。
+
+// -----------------------------------------------------------------------------
+// battle.conf
+
+// Should ammo be unequipped when unequipping a weapon?
+// Official behavior is "yes".
+ammo_unequip: no
+
+// Should a suitable weapon be equipped when equipping ammo?
+// Official behavior is "yes".
+ammo_check_weapon: no
+
+// -----------------------------------------------------------------------------
+// client.conf
+
+// Show rAthena version to users when the login?
+display_version: no
+
+// -----------------------------------------------------------------------------
+// drops.conf
+
+// How long does it take for an item to disappear from the floor after it is dropped? (in milliseconds)
+flooritem_lifetime: 30000
+
+// The rate the common items are dropped (Items that are in the ETC tab, besides card)
+item_rate_common: 200
+item_rate_common_boss: 200
+item_rate_common_mvp: 200
+item_drop_common_min: 1
+item_drop_common_max: 10000
+
+// The rate healing items are dropped (items that restore HP or SP)
+item_rate_heal: 200
+item_rate_heal_boss: 200
+item_rate_heal_mvp: 200
+item_drop_heal_min: 1
+item_drop_heal_max: 10000
+
+// The rate at which usable items (in the item tab) other then healing items are dropped.
+item_rate_use: 200
+item_rate_use_boss: 200
+item_rate_use_mvp: 200
+item_drop_use_min: 1
+item_drop_use_max: 10000
+
+// The rate at which equipment is dropped.
+item_rate_equip: 200
+item_rate_equip_boss: 200
+item_rate_equip_mvp: 200
+item_drop_equip_min: 1
+item_drop_equip_max: 10000
+
+// The rate at which cards are dropped
+item_rate_card: 200
+item_rate_card_boss: 200
+item_rate_card_mvp: 200
+item_drop_card_min: 1
+item_drop_card_max: 10000
+
+// The rate adjustment for the MVP items that the MVP gets directly in their inventory
+// Mode: 0 - official order, 1 - random order, 2 - all items
+item_rate_mvp: 200
+item_drop_mvp_min: 1
+item_drop_mvp_max: 10000
+item_drop_mvp_mode: 0
+
+// The rate adjustment for card-granted item drops.
+item_rate_adddrop: 200
+item_drop_add_min: 1
+item_drop_add_max: 10000
+
+// Rate adjustment for Treasure Box drops (these override all other modifiers)
+item_rate_treasure: 200
+item_drop_treasure_min: 1
+item_drop_treasure_max: 10000
+
+// The rate of monsters dropping ores by the skill Ore Discovery (Default is 100)
+finding_ore_rate: 200
+
+// -----------------------------------------------------------------------------
+// exp.conf
+
+// Rate at which exp. is given. (Note 2)
+base_exp_rate: 200
+
+// Rate at which job exp. is given. (Note 2)
+job_exp_rate: 200
+
+// Experience increase per attacker. That is, every additional attacker to the
+// monster makes it give this much more experience
+// (eg: 5 people attack with 25 here, +(25*4)% -> +100% exp)
+exp_bonus_attacker: 0
+
+// MVP bonus exp rate. (Note 2)
+mvp_exp_rate: 200
+
+// Rate of base/job exp given by NPCs. (Note 2)
+quest_exp_rate: 200
+
+// When a player dies, how should we penalize them?
+// 0 = No penalty.
+// 1 = Lose % of current level when killed.
+// 2 = Lose % of total experience when killed.
+death_penalty_type: 0
+
+// EXP cost for cast PR_REDEMPTIO (Note 2)
+exp_cost_redemptio: 0
+
+// -----------------------------------------------------------------------------
+// feature.conf
+
+// Banking (Note 1)
+// Requires: 2013-07-24aRagexe or later
+feature.banking: off
+
+// Roulette (Note 1)
+// Requires: 2014-10-22bRagexe or later
+feature.roulette: off
+
+// Achievement (Note 1)
+// Requires: 2015-05-13aRagexe or later
+feature.achievement: off
+
+// Equipment Switch (Note 1)
+// Requires: 2017-02-08bRagexeRE or later
+feature.equipswitch: off
+
+// Homunculues Autofeeding (Note 1)
+// Requires: 2017-09-20bRagexeRE or later
+feature.homunculus_autofeed: off
+
+// Attendance System (Note 1)
+// Requires: 2018-03-07bRagexeRE or later
+feature.attendance: off
+
+// Private Airship System (Note 1)
+// Requires: 2018-03-21aRagexeRE or later
+feature.privateairship: off
+
+// -----------------------------------------------------------------------------
+// misc.conf
+
+// Choose if server begin with night (yes) or day (no)
+night_at_start: no
+
+// Define duration in msec of the day (default: 7200000 = 2 hours)
+// Set to 0 to disable day cycle (but not @day GM command).
+// Except 0, minimum is 60000 (1 minute)
+day_duration: 3600000
+
+// Define duration in msec of the night (default: 1800000 = 30 min)
+// Set to 0 to disable night cycle (but not @night GM command).
+// Except 0, minimum is 60000 (1 minute)
+night_duration: 3600000
+
+// -----------------------------------------------------------------------------
+// monster.conf
+
+// Should the mob_db names override the mob names specified in the spawn files?
+// 0: No
+// 1: always use the mob_db Name column (english mob name)
+// 2: always use the mob_db JName column (original Kro mob name)
+override_mob_names: 2
+
+// Respawn rate of monsters on a map. 50 would make mobs respawn twice as fast (half delay time) (Note 2)
+//Note: This does not affects mobs with immediate respawn (most normal mobs)
+mob_spawn_delay: 100
+plant_spawn_delay: 100
+boss_spawn_delay: 25
+
+// Should HP bars be shown for monsters?
+// 2012-04-04aRagexeRE or higher client required.
+monster_hp_bars_info: no
+
+// -----------------------------------------------------------------------------
+// party.conf
+
+// Give additional experience bonus per party-member involved on even-share parties (excluding yourself)?
+// ex. If set to 10, an even-share party of 5 people will receive +40% exp (4 members * 10% exp):
+//     140% party experience in total, so each member receives 140%/5 = 28% exp (instead of 20%).
+party_even_share_bonus: 100
+
+// -----------------------------------------------------------------------------
+// pet.conf
+
+// When the master attacks a monster, whether or not the pet will also attack. (Note 1)
+pet_attack_support: yes
+
+// When the master receives damage from the monster, whether or not the pet attacks back. (Note 1)
+pet_damage_support: yes
+
+// Whether or not the pet's will use skills. (Note 1)
+// Note: Offensive pet skills need at least pet_attack_support or 
+// pet_damage_support to work (they trigger while the pet is attacking).
+pet_status_support: yes
+
+// -----------------------------------------------------------------------------
+// player.conf
+
+// Max armor def/mdef
+// NOTE: This setting have no effect if server is run on Renewal Mode (RENEWAL) 
+// NOTE: does not affects skills and status effects like Mental Strength
+// If weapon_defense_type is non-zero, it won't apply to max def.
+// If magic_defense_type is non-zero, it won't apply to max mdef.
+max_def: 97
+max_mdef: 100
+
+// -----------------------------------------------------------------------------
+// skill.conf
+
+// Max Level Difference for Devotion
+devotion_level_difference: 99
+
+// Guild Aura Skills setting (add as appropriate).
+// (This affects GD_LEADERSHIP, GD_GLORYWOUNDS, GD_SOULCOLD and GD_HAWKEYES)
+// Note that for the skill to be usable at all, 
+// you need at least one of 1/2 and 4/8
+// 1: Skill works outside of woe.
+// 2: Skill works during woe.
+// 4: Skill works outside of GvG grounds
+// 8: Skill works on GvG grounds
+//16: Disable skill from affecting Guild Master
+guild_aura: 15

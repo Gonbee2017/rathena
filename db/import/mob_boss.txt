@@ -1,0 +1,13 @@
+// Bloody Branch Summonable Monsters Database
+//
+// Structure of Database:
+// MobRandomGroupID,MobID,DummyName,Rate
+
+// [GonBee]
+MOBG_Bloody_Dead_Branch,1646,セイレン=ウィンザー,500000
+MOBG_Bloody_Dead_Branch,1647,エレメス=ガイル,500000
+MOBG_Bloody_Dead_Branch,1648,ハワード=アルトアイゼン,500000
+MOBG_Bloody_Dead_Branch,1649,マーガレッタ=ソリン,500000
+MOBG_Bloody_Dead_Branch,1650,セシル=ディモン,500000
+MOBG_Bloody_Dead_Branch,1651,カトリーヌ=ケイロン,500000
+MOBG_Bloody_Dead_Branch,2068,ボイタタ,500000

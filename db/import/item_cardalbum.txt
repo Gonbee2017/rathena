@@ -1,0 +1,7 @@
+// Old Card Album Obtainable Items Database
+//
+// Structure of Database:
+// GroupID,ItemID,Rate
+
+IG_CardAlbum,4059,1		// 兵隊アンドレカード
+IG_CardAlbum,4130,1		// スコーピオンキングカード

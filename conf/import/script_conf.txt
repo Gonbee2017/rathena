@@ -1,0 +1,6 @@
+// [GonBee]
+
+// Default value of the 'max' argument of the script command 'input'.
+// When the 'max' argument isn't provided, this value is used instead.
+// Defaults to INT_MAX.
+input_max_value: 2147483647
