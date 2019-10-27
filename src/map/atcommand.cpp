@@ -10656,8 +10656,10 @@ bool is_atcommand(const int fd, struct map_session_data* sd, const char* message
 	//Grab the command information and check for the proper GM level required to use it or if the command exists
 	info = get_atcommandinfo_byname(atcommand_checkalias(command + 1));
 	if (info == NULL) {
-		if (pc_get_group_level(sd) == 0) // TODO: remove or replace with proper permission
-			return false;
+
+		// [GonBee]
+		//if (pc_get_group_level(sd) == 0) // TODO: remove or replace with proper permission
+		//	return false;
 
 		sprintf(output, msg_txt(sd,153), command); // "%s is Unknown Command."
 		clif_displaymessage(fd, output);
