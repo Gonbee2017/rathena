@@ -10658,6 +10658,7 @@ bool is_atcommand(const int fd, struct map_session_data* sd, const char* message
 	if (info == NULL) {
 
 		// [GonBee]
+		// æ“ª@‚Í”­Œ¾‚µ‚È‚¢B
 		//if (pc_get_group_level(sd) == 0) // TODO: remove or replace with proper permission
 		//	return false;
 
