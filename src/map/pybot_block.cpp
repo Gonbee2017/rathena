@@ -208,7 +208,7 @@ bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<bool>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -2109,7 +2109,7 @@ void member_impl::load_policy(
 }
 
 // ドロップアイテムを拾うかの登録値。
-ptr<regnum_t<bool>>& member_impl::loot() {
+ptr<regnum_t<loot_modes>>& member_impl::loot() {
 	return loot_;
 }
 
@@ -2741,7 +2741,7 @@ member_t::member_t(
 	berserk_rate() = construct<regnum_t<int>>(sd(), "pybot_berserk_rate");
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
 	hold_mobs() = construct<regnum_t<int>>(sd(), "pybot_hold_mobs");
-	loot() = construct<regnum_t<bool>>(sd(), "pybot_loot");
+	loot() = construct<regnum_t<loot_modes>>(sd(), "pybot_loot");
 	mob_high_def() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def");
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");

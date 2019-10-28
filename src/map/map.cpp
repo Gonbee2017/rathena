@@ -4955,10 +4955,12 @@ void do_final(void){
 	for (int i = 0; i < map_num; i++) {
 		struct map_data *mapdata = map_getmapdata(i);
 
-		ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);
-ShowDebug("%d %d\n", __LINE__, i);
+		// [GonBee]
+		// ループカウンタをインクリメントしてしまっている！
+		//ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);
+		ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i, map_num, mapdata->name);
+
 		map_foreachinmap(cleanup_sub, i, BL_ALL);
-ShowDebug("%d\n", __LINE__);
 		channel_delete(mapdata->channel,false);
 	}
 	ShowStatus("Cleaned up %d maps." CL_CLL "\n", map_num);

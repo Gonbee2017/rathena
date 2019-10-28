@@ -549,6 +549,14 @@ enum item_ids {
 	ITEMID_ORLEANS_FULL_COURSE     = 14646, // オルレアンのフルコース。
 };
 
+// 拾得モード。
+enum loot_modes {
+	LM_NO        , // 拾わない。
+	LM_YES_REST  , // 休息時にだけ拾う。
+	LM_YES_ALWAYS, // 常に拾う。
+	LM_MAX       ,
+};
+
 // メタモンスター。
 enum meta_mobs {
 	MM_REST         =   100, // 休息。
@@ -1421,7 +1429,7 @@ struct member_if {
 	virtual ptr<registry_t<int,e_element>>& kew_elements();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
-	virtual ptr<regnum_t<bool>>& loot();
+	virtual ptr<regnum_t<loot_modes>>& loot();
 	virtual bool magicpower_is_active();
 	virtual ptr<regnum_t<int>>& mob_high_def();
 	virtual ptr<regnum_t<int>>& mob_high_def_vit();
@@ -1812,7 +1820,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
-	ptr<regnum_t<bool>> loot_;                    // ドロップアイテムを拾うかの登録値。
+	ptr<regnum_t<loot_modes>> loot_;              // 拾得モードの登録値。
 	int member_index_;                            // メンバーのインデックス。
 	ptr<regnum_t<int>> mob_high_def_;             // モンスターの高Defの登録値。
 	ptr<regnum_t<int>> mob_high_def_vit_;         // モンスターの高DefVitの登録値。
@@ -1889,7 +1897,7 @@ struct member_impl : virtual block_if {
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr) override;
 	virtual void load_play_skill(int mid, e_skill* kid) override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
-	virtual ptr<regnum_t<bool>>& loot() override;
+	virtual ptr<regnum_t<loot_modes>>& loot() override;
 	virtual bool magicpower_is_active() override;
 	virtual int& member_index() override;
 	virtual ptr<regnum_t<int>>& mob_high_def() override;

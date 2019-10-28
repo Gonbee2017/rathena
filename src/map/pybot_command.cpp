@@ -1363,18 +1363,18 @@ SUBCMD_FUNC(Bot, LogOut) {
 	lea->last_heaby_tick() = now;
 }
 
-// メンバーがアイテムを拾う、または拾わない。
+// メンバーの拾得モードを設定する。
 SUBCMD_FUNC(Bot, Loot) {
 	CS_ENTER;
+	static const std::array<std::string, LM_MAX> MESS = {
+		"はドロップアイテムを拾いません。",
+		"はドロップアイテムを休息時にだけ拾います。",
+		"はドロップアイテムを常に拾います。",
+	};
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	auto& loot = mem->loot();
-	loot->set(!loot->get());
-	if (loot->get()) show_client(lea->fd(), print(
-		"「", mem->name(), "」はドロップアイテムを拾います。"
-	));
-	else show_client(lea->fd(), print(
-		"「", mem->name(), "」はドロップアイテムを拾いません。"
-	));
+	loot->set(loot_modes((loot->get() + 1) % LM_MAX));
+	show_client(lea->fd(), print("「", mem->name(), "」は", MESS[loot->get()]));
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 

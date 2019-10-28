@@ -660,9 +660,11 @@ void ai_t::bot_use_item() {
 // Botがドロップアイテムを拾う。
 void ai_t::bot_pickup_flooritem() {
 	CS_ENTER;
-	if (bot->loot()->get() &&
-		bot->battle_mode() != BM_TAUNT &&
-		!bot->sc()->data[SC_WEIGHT90] &&
+	if ((bot->loot()->get() == LM_YES_ALWAYS ||
+			(bot->loot()->get() == LM_YES_REST &&
+				bot->battle_mode() == BM_NONE
+			)
+		) && !bot->sc()->data[SC_WEIGHT90] &&
 		pc_inventoryblank(bot->sd())
 	) {
 		flooritem_data* nea_fit = nullptr;
