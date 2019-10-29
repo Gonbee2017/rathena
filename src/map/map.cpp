@@ -4939,19 +4939,23 @@ static int cleanup_db_sub(DBKey key, DBData *data, va_list va)
  *------------------------------------------*/
 void do_final(void){
 	CS_ENTER;
+ShowDebug("%d\n", __LINE__);
 	ShowStatus("Terminating...\n");
 	channel_config.closing = true;
 
 	//Ladies and babies first.
+ShowDebug("%d\n", __LINE__);
 	struct s_mapiterator* iter = mapit_getallusers();
 	for( struct map_session_data* sd = (TBL_PC*)mapit_first(iter); mapit_exists(iter); sd = (TBL_PC*)mapit_next(iter) )
 		map_quit(sd);
 	mapit_free(iter);
 
 	/* prepares npcs for a faster shutdown process */
+ShowDebug("%d\n", __LINE__);
 	do_clear_npc();
 
 	// remove all objects on maps
+ShowDebug("%d\n", __LINE__);
 	for (int i = 0; i < map_num; i++) {
 		struct map_data *mapdata = map_getmapdata(i);
 
@@ -4965,47 +4969,84 @@ void do_final(void){
 	}
 	ShowStatus("Cleaned up %d maps." CL_CLL "\n", map_num);
 
+ShowDebug("%d\n", __LINE__);
 	id_db->foreach(id_db,cleanup_db_sub);
+ShowDebug("%d\n", __LINE__);
 	chrif_char_reset_offline();
+ShowDebug("%d\n", __LINE__);
 	chrif_flush_fifo();
 
+ShowDebug("%d\n", __LINE__);
 	do_final_atcommand();
+ShowDebug("%d\n", __LINE__);
 	do_final_battle();
+ShowDebug("%d\n", __LINE__);
 	do_final_chrif();
+ShowDebug("%d\n", __LINE__);
 	do_final_clan();
+ShowDebug("%d\n", __LINE__);
 	do_final_clif();
+ShowDebug("%d\n", __LINE__);
 	do_final_npc();
+ShowDebug("%d\n", __LINE__);
 	do_final_quest();
+ShowDebug("%d\n", __LINE__);
 	do_final_achievement();
+ShowDebug("%d\n", __LINE__);
 	do_final_script();
+ShowDebug("%d\n", __LINE__);
 	do_final_instance();
+ShowDebug("%d\n", __LINE__);
 	do_final_itemdb();
+ShowDebug("%d\n", __LINE__);
 	do_final_storage();
+ShowDebug("%d\n", __LINE__);
 	do_final_guild();
+ShowDebug("%d\n", __LINE__);
 	do_final_party();
+ShowDebug("%d\n", __LINE__);
 	do_final_pc();
+ShowDebug("%d\n", __LINE__);
 	do_final_pet();
+ShowDebug("%d\n", __LINE__);
 	do_final_homunculus();
+ShowDebug("%d\n", __LINE__);
 	do_final_mercenary();
+ShowDebug("%d\n", __LINE__);
 	do_final_mob(false);
+ShowDebug("%d\n", __LINE__);
 	do_final_msg();
+ShowDebug("%d\n", __LINE__);
 	do_final_skill();
+ShowDebug("%d\n", __LINE__);
 	do_final_status();
+ShowDebug("%d\n", __LINE__);
 	do_final_unit();
+ShowDebug("%d\n", __LINE__);
 	do_final_battleground();
+ShowDebug("%d\n", __LINE__);
 	do_final_duel();
+ShowDebug("%d\n", __LINE__);
 	do_final_elemental();
+ShowDebug("%d\n", __LINE__);
 	do_final_cashshop();
+ShowDebug("%d\n", __LINE__);
 	do_final_channel(); //should be called after final guild
+ShowDebug("%d\n", __LINE__);
 	do_final_vending();
+ShowDebug("%d\n", __LINE__);
 	do_final_buyingstore();
+ShowDebug("%d\n", __LINE__);
 	do_final_path();
 
 	// [GonBee]
+ShowDebug("%d\n", __LINE__);
 	pybot::do_final();
 
+ShowDebug("%d\n", __LINE__);
 	map_db->destroy(map_db, map_db_final);
 
+ShowDebug("%d\n", __LINE__);
 	for (int i = 0; i < map_num; i++) {
 		struct map_data *mapdata = map_getmapdata(i);
 
@@ -5022,10 +5063,13 @@ void do_final(void){
 		mapdata->damage_adjust = {};
 	}
 
+ShowDebug("%d\n", __LINE__);
 	mapindex_final();
+ShowDebug("%d\n", __LINE__);
 	if(enable_grf)
 		grfio_final();
 
+ShowDebug("%d\n", __LINE__);
 	id_db->destroy(id_db, NULL);
 	pc_db->destroy(pc_db, NULL);
 	mobid_db->destroy(mobid_db, NULL);
@@ -5035,9 +5079,11 @@ void do_final(void){
 	iwall_db->destroy(iwall_db, NULL);
 	regen_db->destroy(regen_db, NULL);
 
+ShowDebug("%d\n", __LINE__);
 	map_sql_close();
 
 	ShowStatus("Finished.\n");
+ShowDebug("%d\n", __LINE__);
 }
 
 static int map_abort_sub(struct map_session_data* sd, va_list ap)

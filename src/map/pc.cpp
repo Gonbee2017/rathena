@@ -5575,7 +5575,11 @@ enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, in
 			status_change_end(&sd->bl, SC_SUN_COMFORT, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_MOON_COMFORT, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_STAR_COMFORT, INVALID_TIMER);
-			status_change_end(&sd->bl, SC_MIRACLE, INVALID_TIMER);
+
+			// [GonBee]
+			// 太陽と月と星の奇跡はマップ移動で解除されない。
+			//status_change_end(&sd->bl, SC_MIRACLE, INVALID_TIMER);
+
 			if (sd->sc.data[SC_KNOWLEDGE]) {
 				struct status_change_entry *sce = sd->sc.data[SC_KNOWLEDGE];
 				if (sce->timer != INVALID_TIMER)

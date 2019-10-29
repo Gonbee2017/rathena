@@ -537,7 +537,6 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 		if (i < cou) {
 			block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 				return mem->party_id() == bot->party_id() &&
-					mem != bot &&
 					(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
 					!mem->is_dead() &&
 					!mem->is_hiding() &&
@@ -550,7 +549,6 @@ AI_SKILL_USE_FUNC(CR_DEVOTION) {
 			if (!mem) {
 				mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
 					return mem->party_id() == bot->party_id() &&
-						mem != bot &&
 						(mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
 						!mem->is_dead() &&
 						!mem->is_hiding() &&
@@ -613,7 +611,7 @@ AI_SKILL_USE_FUNC_T(CR_GRANDCROSS, effective) {
 // プロヴィデンスを使う。
 AI_SKILL_USE_FUNC(CR_PROVIDENCE) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return mem != bot &&
+		return (mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_CRUSADER &&
 			!mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
@@ -2499,7 +2497,6 @@ AI_SKILL_USE_FUNC(SG_SUN_COMFORT) {
 AI_SKILL_USE_FUNC(SG_SUN_WARM) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		!bot->sc()->data[SC_FUSION] &&
 		bot->sc_rest(SC_WARM) <= bot->get_skill_tail(kid) &&
 		(gvg ||
 			tar_ene->has_knockback_immune()

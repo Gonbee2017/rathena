@@ -5204,18 +5204,22 @@ static void battle_calc_weapon_final_atk_modifiers(struct Damage* wd, struct blo
 	}
 
 	if( sc ) {
-		//SC_FUSION hp penalty [Komurka]
-		if (sc->data[SC_FUSION]) {
-			unsigned int hp = sstatus->max_hp;
 
-			if (sd && tsd) {
-				hp = hp / 13;
-				if (((int64)sstatus->hp * 100) <= ((int64)sstatus->max_hp * 20))
-					hp = sstatus->hp;
-			} else
-				hp = 2*hp/100; //2% hp loss per hit
-			status_zap(src, hp, 0);
-		}
+		// [GonBee]
+		// ‘¾—z‚ÆŒŽ‚Æ¯‚Ì—Z‡‚ÌHPŒ¸­ƒyƒiƒ‹ƒeƒB‚ð”pŽ~B
+		////SC_FUSION hp penalty [Komurka]
+		//if (sc->data[SC_FUSION]) {
+		//	unsigned int hp = sstatus->max_hp;
+		//
+		//	if (sd && tsd) {
+		//		hp = hp / 13;
+		//		if (((int64)sstatus->hp * 100) <= ((int64)sstatus->max_hp * 20))
+		//			hp = sstatus->hp;
+		//	} else
+		//		hp = 2*hp/100; //2% hp loss per hit
+		//	status_zap(src, hp, 0);
+		//}
+
 		// Only affecting non-skills
 		if (!skill_id && wd->dmg_lv > ATK_BLOCK) {
 
