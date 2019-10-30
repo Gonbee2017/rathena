@@ -79,6 +79,8 @@ void ai_t::leader_organize() {
 	bool arr_wal_exi = wall_exists(&leader->center(), battle_config.pybot_around_distance);
 	for (block_if* bat : battlers) {
 		bat->around_wall_exists() = arr_wal_exi;
+		bat->target_enemy() = nullptr;
+		bat->battle_mode() = BM_NONE;
 		bat->attacked_enemies().clear();
 		bat->attacked_short_range_attacker() = nullptr;
 		bat->attacked_short_range_attackers() = 0;
@@ -93,14 +95,17 @@ void ai_t::leader_organize() {
 		if (dis_pol_val == DPV_PENDING) dis_pol_val = bat->default_distance_policy_value();
 		bat->distance_policy_value() = dis_pol_val;
 	}
-	std::sort(ALL_RANGE(battlers), [this] (block_if* lbt, block_if* rbt) -> bool {
-		if (lbt->is_dead() != rbt->is_dead()) return rbt->is_dead();
-		if (lbt->distance_policy_value() != rbt->distance_policy_value())
-			return lbt->distance_policy_value() < rbt->distance_policy_value();
-		if (lbt->member_index() != rbt->member_index())
-			return lbt->member_index() < rbt->member_index();
-		return dynamic_cast<member_impl*>(lbt);
-	});
+	std::sort(
+		ALL_RANGE(battlers),
+		[this] (block_if* lbt, block_if* rbt) -> bool {
+			if (lbt->is_dead() != rbt->is_dead()) return rbt->is_dead();
+			if (lbt->distance_policy_value() != rbt->distance_policy_value())
+				return lbt->distance_policy_value() < rbt->distance_policy_value();
+			if (lbt->member_index() != rbt->member_index())
+				return lbt->member_index() < rbt->member_index();
+			return dynamic_cast<member_impl*>(lbt);
+		}
+	);
 	for (int i = 0; i < battlers.size(); ++i) battlers[i]->battle_index() = i;
 }
 
@@ -930,8 +935,6 @@ void ai_t::battler_target() {
 		}
 	);
 
-	battler->target_enemy() = nullptr;
-	battler->battle_mode() = BM_NONE;
 	if (!enemies.empty() &&
 		!battler->is_dead() &&
 		battler->bl()->m == leader->center().m
