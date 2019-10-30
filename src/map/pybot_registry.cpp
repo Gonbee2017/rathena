@@ -34,19 +34,6 @@ clear_distance_policy_func(
 	};
 }
 
-// DBから優先スキルをクリアする関数を作る。
-registry_t<int,e_skill>::clear_func // 作った関数。
-clear_first_skill_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses) {
-		ses->execute(
-			"DELETE FROM `pybot_first_skill` "
-			"WHERE `char_id` = ", construct<sql_param>(cid)
-		);
-	};
-}
-
 // DBから武具一式をクリアする関数を作る。
 registry_t<int,equipset_t>::clear_func // 作った関数。
 clear_equipset_func(
@@ -55,6 +42,32 @@ clear_equipset_func(
 	return [cid] (sql_session* ses) {
 		ses->execute(
 			"DELETE FROM `pybot_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
+// DBから優先モンスターをクリアする関数を作る。
+registry_t<int>::clear_func // 作った関数。
+clear_first_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_first_mob` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
+// DBから優先スキルをクリアする関数を作る。
+registry_t<int,e_skill>::clear_func // 作った関数。
+clear_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_first_skill` "
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 	};
@@ -81,6 +94,19 @@ clear_ignore_item_func(
 	return [cid] (sql_session* ses) {
 		ses->execute(
 			"DELETE FROM `pybot_ignore_item` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
+// DBから無視モンスターをクリアする関数を作る。
+registry_t<int>::clear_func // 作った関数。
+clear_ignore_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_ignore_mob` "
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 	};
@@ -306,21 +332,6 @@ delete_distance_policy_func(
 	};
 }
 
-// DBから優先スキルを削除する関数を作る。
-registry_t<int,e_skill>::save_func // 作った関数。
-delete_first_skill_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, int mid, e_skill* kid) {
-		ses->execute(
-			"DELETE FROM `pybot_first_skill` "
-			"WHERE"
-			" `char_id` = ", construct<sql_param>(cid), " AND"
-			" `mob_id` = " , construct<sql_param>(mid)
-		);
-	};
-}
-
 // DBから武具一式を削除する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 delete_equipset_func(
@@ -329,6 +340,36 @@ delete_equipset_func(
 	return [cid] (sql_session* ses, int mid, equipset_t* equ_set) {
 		ses->execute(
 			"DELETE FROM `pybot_equipset` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBから優先モンスターを削除する関数を作る。
+registry_t<int>::save_func // 作った関数。
+delete_first_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid) {
+		ses->execute(
+			"DELETE FROM `pybot_first_mob` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `mob_id` =  " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBから優先スキルを削除する関数を作る。
+registry_t<int,e_skill>::save_func // 作った関数。
+delete_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int mid, e_skill* kid) {
+		ses->execute(
+			"DELETE FROM `pybot_first_skill` "
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
@@ -362,6 +403,21 @@ delete_ignore_item_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `nameid` = " , construct<sql_param>(nid)
+		);
+	};
+}
+
+// DBから無視モンスターを削除する関数を作る。
+registry_t<int>::save_func // 作った関数。
+delete_ignore_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid) {
+		ses->execute(
+			"DELETE FROM `pybot_ignore_mob` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid), " AND"
+			" `mob_id` =  " , construct<sql_param>(mid)
 		);
 	};
 }
@@ -618,22 +674,6 @@ insert_distance_policy_func(
 	};
 }
 
-// DBに優先スキルを挿入する関数を作る。
-registry_t<int,e_skill>::save_func // 作った関数。
-insert_first_skill_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, int mid, e_skill* kid) {
-		ses->execute(
-			"INSERT INTO `pybot_first_skill` "
-			"VALUES"
-			"(", construct<sql_param>(cid ), ","
-			" ", construct<sql_param>(mid ), ","
-			" ", construct<sql_param>(*kid), ")"
-		);
-	};
-}
-
 // DBに武具一式を挿入する関数を作る。
 registry_t<int,equipset_t>::save_func // 作った関数。
 insert_equipset_func(
@@ -655,6 +695,37 @@ insert_equipset_func(
 				" ", construct<sql_param>(esi->key->card[3]), ")"
 			);
 		}
+	};
+}
+
+// DBに優先モンスターを挿入する関数を作る。
+registry_t<int>::save_func // 作った関数。
+insert_first_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid) {
+		ses->execute(
+			"INSERT INTO `pybot_first_mob` "
+			"VALUES"
+			"(", construct<sql_param>(cid), ","
+			" ", construct<sql_param>(mid), ")"
+		);
+	};
+}
+
+// DBに優先スキルを挿入する関数を作る。
+registry_t<int,e_skill>::save_func // 作った関数。
+insert_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int mid, e_skill* kid) {
+		ses->execute(
+			"INSERT INTO `pybot_first_skill` "
+			"VALUES"
+			"(", construct<sql_param>(cid ), ","
+			" ", construct<sql_param>(mid ), ","
+			" ", construct<sql_param>(*kid), ")"
+		);
 	};
 }
 
@@ -684,6 +755,21 @@ insert_ignore_item_func(
 			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(nid), ")"
+		);
+	};
+}
+
+// DBに無視モンスターを挿入する関数を作る。
+registry_t<int>::save_func // 作った関数。
+insert_ignore_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, int mid) {
+		ses->execute(
+			"INSERT INTO `pybot_ignore_mob` "
+			"VALUES"
+			"(", construct<sql_param>(cid), ","
+			" ", construct<sql_param>(mid), ")"
 		);
 	};
 }
@@ -972,26 +1058,6 @@ load_distance_policy_func(
 	};
 }
 
-// DBから優先スキルをロードする関数を作る。
-registry_t<int,e_skill>::load_func // 作った関数。
-load_first_skill_func(
-	int cid // キャラクターID。              
-) {
-	return [cid] (sql_session* ses, registry_t<int,e_skill>* reg) {
-		int mid;
-		e_skill kid;
-		ses->execute(
-			"SELECT"
-			" `", construct<sql_column>("mob_id"  , mid), "`,"
-			" `", construct<sql_column>("skill_id", kid), "` "
-			"FROM `pybot_first_skill` "
-			"WHERE `char_id` = ", construct<sql_param>(cid)
-		);
-		while (ses->next_row())
-			reg->register_(mid, initialize<e_skill>(kid));
-	};
-}
-
 // DBから武具一式をロードする関数を作る。
 registry_t<int,equipset_t>::load_func // 作った関数。
 load_equipset_func(
@@ -1039,6 +1105,42 @@ load_equipset_func(
 	};
 }
 
+// DBから優先モンスターをロードする関数を作る。
+registry_t<int>::load_func // 作った関数。
+load_first_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<int>* reg) {
+		int mid;
+		ses->execute(
+			"SELECT `", construct<sql_column>("mob_id", mid), "` "
+			"FROM `pybot_first_mob` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) reg->register_(mid);
+	};
+}
+
+// DBから優先スキルをロードする関数を作る。
+registry_t<int,e_skill>::load_func // 作った関数。
+load_first_skill_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int,e_skill>* reg) {
+		int mid;
+		e_skill kid;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("mob_id"  , mid), "`,"
+			" `", construct<sql_column>("skill_id", kid), "` "
+			"FROM `pybot_first_skill` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row())
+			reg->register_(mid, initialize<e_skill>(kid));
+	};
+}
+
 // DBからグレートモンスターをロードする関数を作る。
 registry_t<int>::load_func // 作った関数。
 load_great_mob_func(
@@ -1069,6 +1171,22 @@ load_ignore_item_func(
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) reg->register_(nid);
+	};
+}
+
+// DBから無視モンスターをロードする関数を作る。
+registry_t<int>::load_func // 作った関数。
+load_ignore_mob_func(
+	int cid // キャラクターID。
+) {
+	return [cid] (sql_session* ses, registry_t<int>* reg) {
+		int mid;
+		ses->execute(
+			"SELECT `", construct<sql_column>("mob_id", mid), "` "
+			"FROM `pybot_ignore_mob` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row()) reg->register_(mid);
 	};
 }
 

@@ -4470,6 +4470,7 @@ int cleanup_sub(struct block_list *bl, va_list ap)
 {
 	nullpo_ret(bl);
 
+ShowDebug("%d %d\n", __LINE__, bl->type);
 	switch(bl->type) {
 		case BL_PC:
 			map_quit((struct map_session_data *) bl);
@@ -4491,6 +4492,7 @@ int cleanup_sub(struct block_list *bl, va_list ap)
 			break;
 	}
 
+ShowDebug("%d\n", __LINE__);
 	return 1;
 }
 

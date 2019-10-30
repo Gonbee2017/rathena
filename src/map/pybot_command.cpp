@@ -1395,6 +1395,76 @@ SUBCMD_FUNC(Bot, Memo) {
 	clif_emotion(mem->bl(), ET_OK);
 }
 
+// メンバーの優先モンスターを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, MonsterFirst) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<int> mids;
+		mem->first_mobs()->copy(pybot::back_inserter(mids));
+		std::sort(ALL_RANGE(mids));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」の優先モンスター ------\n";
+		for (int mid : mids) {
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << "\n";
+		}
+		lea->output_buffer() << mids.size() << "件の優先モンスターが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string mob_nam = shift_arguments(args);
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		if (mid < MM_INDIVIDUAL ||
+			mid >= MM_CAUTION
+		) throw command_error{print("「", mob_str, "」は指定できません。")};
+		if (mem->first_mobs()->find(mid)) {
+			mem->first_mobs()->unregister(mid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str, "」を"
+				"優先的に攻撃しません。"
+			));
+		} else {
+			mem->first_mobs()->register_(mid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str, "」を"
+				"優先的に攻撃します。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーの優先モンスターをクリアする。
+SUBCMD_FUNC(Bot, MonsterFirstClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->first_mobs()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件の優先モンスターの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーの優先モンスターを転送する。
+SUBCMD_FUNC(Bot, MonsterFirstTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->first_mobs()->import_(mem1->first_mobs().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件の優先モンスターを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // グレートモンスターを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, MonsterGreat) {
 	CS_ENTER;
@@ -1542,6 +1612,76 @@ SUBCMD_FUNC(Bot, MonsterHighMdef) {
 	if (mdef == DEFAULT_MOB_HIGH_MDEF) mdef = 0;
 	mem->mob_high_mdef()->set(mdef);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーの無視モンスターを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, MonsterIgnore) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<int> mids;
+		mem->ignore_mobs()->copy(pybot::back_inserter(mids));
+		std::sort(ALL_RANGE(mids));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」の無視モンスター ------\n";
+		for (int mid : mids) {
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << "\n";
+		}
+		lea->output_buffer() << mids.size() << "件の無視モンスターが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string mob_nam = shift_arguments(args);
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		if (mid < MM_INDIVIDUAL ||
+			mid >= MM_CAUTION
+		) throw command_error{print("「", mob_str, "」は指定できません。")};
+		if (mem->ignore_mobs()->find(mid)) {
+			mem->ignore_mobs()->unregister(mid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str, "」を"
+				"無視しません。"
+			));
+		} else {
+			mem->ignore_mobs()->register_(mid);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", mob_str, "」を"
+				"無視します。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーの無視モンスターをクリアする。
+SUBCMD_FUNC(Bot, MonsterIgnoreClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->ignore_mobs()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件の無視モンスターの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーの無視モンスターを転送する。
+SUBCMD_FUNC(Bot, MonsterIgnoreTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->ignore_mobs()->import_(mem1->ignore_mobs().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件の無視モンスターを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
 // 次のページを表示する。

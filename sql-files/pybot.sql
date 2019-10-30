@@ -27,6 +27,13 @@ CREATE TABLE `pybot_equipset` (
   PRIMARY KEY (`char_id`, `mob_id`, `order`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_first_mob`;
+CREATE TABLE `pybot_first_mob` (
+  `char_id` int(11) unsigned NOT NULL,
+  `mob_id` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `mob_id`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_first_skill`;
 CREATE TABLE IF NOT EXISTS `pybot_first_skill` (
   `char_id` int(11) unsigned NOT NULL,
@@ -47,6 +54,13 @@ CREATE TABLE `pybot_ignore_item` (
   `char_id` int(11) unsigned NOT NULL,
   `nameid` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`char_id`, `nameid`)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `pybot_ignore_mob`;
+CREATE TABLE `pybot_ignore_mob` (
+  `char_id` int(11) unsigned NOT NULL,
+  `mob_id` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `mob_id`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pybot_kew_element`;

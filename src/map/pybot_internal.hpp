@@ -830,7 +830,8 @@ struct ai_t {
 		block_if* // ブロック。		             
 	> blocks;                                // ブロックのマップ。
 	block_if* bot;                           // Bot。
-	std::vector<block_if*> enemies;          // 敵モンスターのベクタ。
+	std::vector<block_if*> team_enemies;     // チーム全体の敵モンスターのベクタ。
+	std::vector<block_if*> enemies;          // メンバー個別の敵モンスターのベクタ。
 	std::vector<flooritem_data*> flooritems; // ドロップアイテムのベクタ。
 	bool gvg;                                // 砦マップか。
 	block_if* homun;                         // ホムンクルス。
@@ -846,7 +847,6 @@ struct ai_t {
 	void leader_main(block_if* lea);
 	void leader_organize();
 	void leader_collect();
-	void leader_target();
 	void leader_battler();
 	void leader_pet();
 
@@ -855,6 +855,7 @@ struct ai_t {
 	void bot_dead();
 	void bot_lost();
 	void bot_emotion();
+	void bot_target();
 	void bot_stand();
 	void bot_cast_cancel();
 	void bot_walk_end();
@@ -874,6 +875,7 @@ struct ai_t {
 	void homun_main(block_if* hom);
 	void homun_lost();
 	void homun_feed();
+	void homun_target();
 	void homun_positioning();
 	void homun_follow();
 	void homun_attack();
@@ -883,6 +885,7 @@ struct ai_t {
 	void pet_feed();
 	void pet_perform();
 
+	void battler_target();
 	void battler_positioning();
 	void battler_attack();
 	void battler_use_skill();
@@ -1247,6 +1250,8 @@ struct battler_if {
 	virtual block_if*& leader();
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val);
 	virtual int& member_index();
+	virtual bool mob_is_first(int mid);
+	virtual bool mob_is_ignore(int mid);
 	virtual bool no_knockback();
 	virtual normal_attack_policy_values& normal_attack_policy_value();
 	virtual int party_id();
@@ -1418,12 +1423,14 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual ptr<registry_t<int>>& first_mobs();
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
 	virtual int get_skill_mobs();
 	virtual t_tick get_skill_tail(e_skill kid);
 	virtual ptr<regnum_t<int>>& hold_mobs();
 	virtual ptr<block_if>& homun();
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr);
+	virtual ptr<registry_t<int>>& ignore_mobs();
 	virtual bool is_carton();
 	virtual bool is_sit();
 	virtual ptr<registry_t<int,e_element>>& kew_elements();
@@ -1732,6 +1739,8 @@ struct homun_impl : virtual block_if {
 	virtual void iterate_skill(yield_skill_func yie) override;
 	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
+	virtual bool mob_is_first(int mid) override;
+	virtual bool mob_is_ignore(int mid) override;
 	virtual std::string name() override;
 	virtual bool no_knockback() override;
 	virtual ptr<registry_t<e_skill>>& reject_skills() override;
@@ -1814,9 +1823,11 @@ struct member_impl : virtual block_if {
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
+	ptr<registry_t<int>> first_mobs_;             // 優先モンスターのレジストリ。
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
 	ptr<regnum_t<int>> hold_mobs_;                // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                         // ホムンクルス。
+	ptr<registry_t<int>> ignore_mobs_;            // 無視モンスターのレジストリ。
 	ptr<registry_t<int,e_element>> kew_elements_; // 武器属性付与のレジストリ。
 	block_if* leader_;                            // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;   // 制限スキルのレジストリ。
@@ -1868,6 +1879,7 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual ptr<registry_t<int>>& first_mobs() override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_hold_mobs() override;
 	virtual int get_mob_high_def() override;
@@ -1882,6 +1894,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<int>>& hold_mobs() override;
 	virtual ptr<block_if>& homun() override;
 	virtual void identify_equip(item* itm, storage_context* inv_con = nullptr, storage_context* car_con = nullptr) override;
+	virtual ptr<registry_t<int>>& ignore_mobs() override;
 	virtual bool is_carton() override;
 	virtual bool is_dead() override;
 	virtual bool is_invincible() override;
@@ -1905,6 +1918,8 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<int>>& mob_high_flee() override;
 	virtual ptr<regnum_t<int>>& mob_high_hit() override;
 	virtual ptr<regnum_t<int>>& mob_high_mdef() override;
+	virtual bool mob_is_first(int mid) override;
+	virtual bool mob_is_ignore(int mid) override;
 	virtual std::string name() override;
 	virtual bool no_knockback() override;
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies() override;
@@ -2503,6 +2518,9 @@ SUBCMD_FUNC(Bot, LogIn);
 SUBCMD_FUNC(Bot, LogOut);
 SUBCMD_FUNC(Bot, Loot);
 SUBCMD_FUNC(Bot, Memo);
+SUBCMD_FUNC(Bot, MonsterFirst);
+SUBCMD_FUNC(Bot, MonsterFirstClear);
+SUBCMD_FUNC(Bot, MonsterFirstTransport);
 SUBCMD_FUNC(Bot, MonsterGreat);
 SUBCMD_FUNC(Bot, MonsterGreatClear);
 SUBCMD_FUNC(Bot, MonsterGreatImport);
@@ -2511,6 +2529,9 @@ SUBCMD_FUNC(Bot, MonsterHighDefVit);
 SUBCMD_FUNC(Bot, MonsterHighFlee);
 SUBCMD_FUNC(Bot, MonsterHighHit);
 SUBCMD_FUNC(Bot, MonsterHighMdef);
+SUBCMD_FUNC(Bot, MonsterIgnore);
+SUBCMD_FUNC(Bot, MonsterIgnoreClear);
+SUBCMD_FUNC(Bot, MonsterIgnoreTransport);
 SUBCMD_FUNC(Bot, Next);
 SUBCMD_FUNC(Bot, PetEquip);
 SUBCMD_FUNC(Bot, PetStatus);
@@ -2592,9 +2613,11 @@ int shift_arguments_then_parse_int(command_argument_list& args, const std::strin
 registry_t<int>::clear_func clear_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::clear_func clear_distance_policy_func(int cid);
 registry_t<int,equipset_t>::clear_func clear_equipset_func(int cid);
+registry_t<int>::clear_func clear_first_mob_func(int cid);
 registry_t<int,e_skill>::clear_func clear_first_skill_func(int cid);
 registry_t<int>::clear_func clear_great_mob_func(int cid);
 registry_t<int>::clear_func clear_ignore_item_func(int cid);
+registry_t<int>::clear_func clear_ignore_mob_func(int cid);
 registry_t<int,e_element>::clear_func clear_kew_element_func(int cid);
 registry_t<e_skill,int>::clear_func clear_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::clear_func clear_normal_attack_policy_func(int cid);
@@ -2613,9 +2636,11 @@ registry_t<int,team_t>::clear_func clear_team_func(int cid);
 registry_t<int>::save_func delete_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func delete_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
+registry_t<int>::save_func delete_first_mob_func(int cid);
 registry_t<int,e_skill>::save_func delete_first_skill_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
+registry_t<int>::save_func delete_ignore_mob_func(int cid);
 registry_t<int,e_element>::save_func delete_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func delete_normal_attack_policy_func(int cid);
@@ -2634,9 +2659,11 @@ registry_t<int,team_t>::save_func delete_team_func(int cid);
 registry_t<int>::save_func insert_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func insert_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
+registry_t<int>::save_func insert_first_mob_func(int cid);
 registry_t<int,e_skill>::save_func insert_first_skill_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
+registry_t<int>::save_func insert_ignore_mob_func(int cid);
 registry_t<int,e_element>::save_func insert_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::save_func insert_normal_attack_policy_func(int cid);
@@ -2653,11 +2680,13 @@ registry_t<int,int>::save_func insert_storage_get_item_func(int cid);
 registry_t<int>::save_func insert_storage_put_item_func(int cid);
 registry_t<int,team_t>::save_func insert_team_func(int cid);
 registry_t<int>::load_func load_cart_auto_get_item_func(int cid);
-registry_t<int,e_skill>::load_func load_first_skill_func(int cid);
-registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
 registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
+registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
+registry_t<int>::load_func load_first_mob_func(int cid);
+registry_t<int,e_skill>::load_func load_first_skill_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
 registry_t<int>::load_func load_ignore_item_func(int cid);
+registry_t<int>::load_func load_ignore_mob_func(int cid);
 registry_t<int,e_element>::load_func load_kew_element_func(int cid);
 registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::load_func load_normal_attack_policy_func(int cid);

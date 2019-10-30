@@ -48,6 +48,8 @@ bool battler_if::is_wall_side() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::leader() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::member_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::mob_is_first(int mid) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::mob_is_ignore(int mid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::no_knockback() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values& battler_if::normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::party_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -198,12 +200,14 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& member_if::first_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::homun() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::identify_equip(item* itm, storage_context* inv_con, storage_context* car_con) {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& member_if::ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1383,6 +1387,22 @@ void homun_impl::load_policy(
 	normal_attack_policy_values* nor_att_pol_val // 攻撃ポリシー値。
 ) {}
 
+// 優先モンスターかを判定する。
+bool // 結果。
+homun_impl::mob_is_first(
+	int mid // モンスターID。
+) {
+	return master()->mob_is_first(mid);
+}
+
+// 無視モンスターかを判定する。
+bool // 結果。
+homun_impl::mob_is_ignore(
+	int mid // モンスターID。
+) {
+	return master()->mob_is_ignore(mid);
+}
+
 // ホムンクルスの名前を取得する。
 std::string // 取得した名前。
 homun_impl::name() {
@@ -1851,6 +1871,11 @@ member_impl::find_inventory(
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
 }
 
+// 優先モンスターのレジストリ。
+ptr<registry_t<int>>& member_impl::first_mobs() {
+	return first_mobs_;
+}
+
 // 優先スキルのレジストリ。
 ptr<registry_t<int,e_skill>>& member_impl::first_skills() {
 	return first_skills_;
@@ -1981,6 +2006,11 @@ void member_impl::identify_equip(
 			}
 		}
 	}
+}
+
+// 無視モンスターのレジストリ。
+ptr<registry_t<int>>& member_impl::ignore_mobs() {
+	return ignore_mobs_;
 }
 
 // カートを引いているかを判定する。
@@ -2149,6 +2179,22 @@ ptr<regnum_t<int>>& member_impl::mob_high_hit() {
 // モンスターの高Mdefの登録値。
 ptr<regnum_t<int>>& member_impl::mob_high_mdef() {
 	return mob_high_mdef_;
+}
+
+// 優先モンスターかを判定する。
+bool // 結果。
+member_impl::mob_is_first(
+	int mid // モンスターID。
+) {
+	return first_mobs()->find(mid);
+}
+
+// 無視モンスターかを判定する。
+bool // 結果。
+member_impl::mob_is_ignore(
+	int mid // モンスターID。
+) {
+	return ignore_mobs()->find(mid);
 }
 
 // メンバーの名前を取得する。
@@ -2773,12 +2819,24 @@ member_t::member_t(
 		delete_equipset_func(char_id()),
 		clear_equipset_func(char_id())
 	);
+	first_mobs() = construct<registry_t<int>>(
+		load_first_mob_func(char_id()),
+		insert_first_mob_func(char_id()),
+		delete_first_mob_func(char_id()),
+		clear_first_mob_func(char_id())
+	);
 	first_skills() = construct<registry_t<int,e_skill>>(
 		load_first_skill_func(char_id()),
 		insert_first_skill_func(char_id()),
 		update_first_skill_func(char_id()),
 		delete_first_skill_func(char_id()),
 		clear_first_skill_func(char_id())
+	);
+	ignore_mobs() = construct<registry_t<int>>(
+		load_ignore_mob_func(char_id()),
+		insert_ignore_mob_func(char_id()),
+		delete_ignore_mob_func(char_id()),
+		clear_ignore_mob_func(char_id())
 	);
 	kew_elements() = construct<registry_t<int,e_element>>(
 		load_kew_element_func(char_id()),

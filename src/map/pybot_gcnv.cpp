@@ -1605,12 +1605,28 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ Memo (m) サブコマンド ------\n"
 		"現在の位置をメモする。\n"
 		"入力例 [@bot memo ハイプリ]\n"
+	), SUBCMD_DESC(Bot, MonsterFirst               , mf  ,
+		"------ MonsterFirst (mf) サブコマンド ------\n"
+		"優先モンスターを一覧表示する。\n"
+		"入力例 [@bot monsterfirst クリエ]\n"
+		"優先モンスターを登録する。\n"
+		"入力例 [@bot monsterfirst クリエ タナトスの憎悪]\n"
+		"優先モンスターの登録を抹消する。\n"
+		"入力例 [@bot monsterfirst クリエ タナトスの絶望]\n"
+	), SUBCMD_DESC(Bot, MonsterFirstClear          ,     ,
+		"------ MonsterFirstClear サブコマンド ------\n"
+		"優先モンスターをクリアする。\n"
+		"入力例 [@bot monsterfirstclear クリエ]\n"
+	), SUBCMD_DESC(Bot, MonsterFirstTransport      , mft ,
+		"------ MonsterFirstTransport (mft) サブコマンド ------\n"
+		"優先モンスターを転送する。\n"
+		"入力例 [@bot monsterfirsttransport クリエ スミス]\n"
 	), SUBCMD_DESC(Bot, MonsterGreat               , mg  ,
 		"------ MonsterGreat (mg) サブコマンド ------\n"
 		"グレートモンスターを一覧表示する。\n"
 		"入力例 [@bot monstergreat]\n"
 		"グレートモンスターを登録する。\n"
-		"入力例 [@bot monstergreat モンスター]\n"
+		"入力例 [@bot monstergreat ナハトズィーガー]\n"
 		"グレートモンスターの登録を抹消する。\n"
 		"入力例 [@bot monstergreat モロクの現身（天使型）]\n"
 	), SUBCMD_DESC(Bot, MonsterGreatClear          ,     ,
@@ -1641,6 +1657,22 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ MonsterHighMdef (mhmd) サブコマンド ------\n"
 		"モンスターの高Mdefを設定する。\n"
 		"入力例 [@bot monsterhighmdef アサクロ 40]\n"
+	), SUBCMD_DESC(Bot, MonsterIgnore              , mi  ,
+		"------ MonsterIgnore (mi) サブコマンド ------\n"
+		"無視モンスターを一覧表示する。\n"
+		"入力例 [@bot monsterignore クリエ]\n"
+		"無視モンスターを登録する。\n"
+		"入力例 [@bot monsterignore クリエ モロクの現身（物質型）]\n"
+		"無視モンスターの登録を抹消する。\n"
+		"入力例 [@bot monsterignore クリエ モロクの現身（精霊型）]\n"
+	), SUBCMD_DESC(Bot, MonsterIgnoreClear         ,     ,
+		"------ MonsterIgnoreClear サブコマンド ------\n"
+		"無視モンスターをクリアする。\n"
+		"入力例 [@bot monsterignoreclear クリエ]\n"
+	), SUBCMD_DESC(Bot, MonsterIgnoreTransport     , mit ,
+		"------ MonsterIgnoreTransport (mit) サブコマンド ------\n"
+		"無視モンスターを転送する。\n"
+		"入力例 [@bot monsterignoretransport クリエ スミス]\n"
 	), SUBCMD_DESC(Bot, Next                       , n   ,
 		"------ Next (n) サブコマンド ------\n"
 		"次のページを表示する。\n"
@@ -1998,6 +2030,9 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, LogOut                     , lo  ),
 	SUBCMD_PROC(Bot, Loot                       , l   ),
 	SUBCMD_PROC(Bot, Memo                       , m   ),
+	SUBCMD_PROC(Bot, MonsterFirst               , mf  ),
+	SUBCMD_PROC(Bot, MonsterFirstClear          ,     ),
+	SUBCMD_PROC(Bot, MonsterFirstTransport      , mft ),
 	SUBCMD_PROC(Bot, MonsterGreat               , mg  ),
 	SUBCMD_PROC(Bot, MonsterGreatClear          ,     ),
 	SUBCMD_PROC(Bot, MonsterGreatImport         , mgi ),
@@ -2006,6 +2041,9 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf ),
 	SUBCMD_PROC(Bot, MonsterHighHit             , mhh ),
 	SUBCMD_PROC(Bot, MonsterHighMdef            , mhmd),
+	SUBCMD_PROC(Bot, MonsterIgnore              , mi  ),
+	SUBCMD_PROC(Bot, MonsterIgnoreClear         ,     ),
+	SUBCMD_PROC(Bot, MonsterIgnoreTransport     , mit ),
 	SUBCMD_PROC(Bot, Next                       , n   ),
 	SUBCMD_PROC(Bot, PetEquip                   , pe  ),
 	SUBCMD_PROC(Bot, PetStatus                  , ps  ),
