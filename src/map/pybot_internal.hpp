@@ -1225,6 +1225,7 @@ struct battler_if {
 	virtual bool check_hp(int rat);
 	virtual bool check_normal_attack(block_if* ene);
 	virtual bool check_sp(int rat);
+	virtual bool check_supply_hp();
 	virtual bool check_supply_sp();
 	virtual bool check_use_skill(e_skill kid, int klv, block_if* ene);
 	virtual bool check_use_taunt_skill(block_if* ene);
@@ -1238,6 +1239,7 @@ struct battler_if {
 	virtual int get_mob_high_flee();
 	virtual int get_mob_high_hit();
 	virtual int get_mob_high_mdef();
+	virtual int get_supply_hp_rate();
 	virtual int get_supply_sp_rate();
 	virtual int guild_id();
 	virtual bool& is_best_pos();
@@ -1456,6 +1458,7 @@ struct member_if {
 	virtual ptr<regnum_t<int>>& skill_mobs();
 	virtual ptr<registry_t<e_skill,int>>& skill_tails();
 	virtual e_job substancial_job();
+	virtual ptr<regnum_t<int>>& supply_hp_rate();
 	virtual ptr<regnum_t<int>>& supply_sp_rate();
 	virtual void stand();
 	virtual ptr<registry_t<int,int>>& storage_get_items();
@@ -1572,6 +1575,7 @@ struct battler_impl : virtual block_if {
 	virtual bool check_hp(int rat) override;
 	virtual bool check_normal_attack(block_if* ene) override;
 	virtual bool check_sp(int rat) override;
+	virtual bool check_supply_hp() override;
 	virtual bool check_supply_sp() override;
 	virtual bool check_use_skill(e_skill kid, int klv, block_if* ene) override;
 	virtual bool check_use_taunt_skill(block_if* ene) override;
@@ -1726,6 +1730,7 @@ struct homun_impl : virtual block_if {
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
 	virtual int get_mob_high_mdef() override;
+	virtual int get_supply_hp_rate() override;
 	virtual int get_supply_sp_rate() override;
 	virtual homun_data* hd() override;
 	virtual homun_mapid homun_mapid_() override;
@@ -1855,6 +1860,7 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> skill_mobs_;               // 範囲スキルの発動モンスター数の登録値。
 	ptr<regnum_t<e_element>> skill_seven_wind_;   // 暖かい風で選択する属性の登録値。
 	ptr<registry_t<e_skill,int>> skill_tails_;    // 掛け直し時間のレジストリ。
+	ptr<regnum_t<int>> supply_hp_rate_;           // HPの供給を許可するHP率の登録値。
 	ptr<regnum_t<int>> supply_sp_rate_;           // SPの供給を許可するSP率の登録値。
 	ptr<registry_t<int,int>> storage_get_items_;  // 倉庫補充アイテムのレジストリ。
 
@@ -1889,6 +1895,7 @@ struct member_impl : virtual block_if {
 	virtual int get_mob_high_mdef() override;
 	virtual int get_skill_mobs() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
+	virtual int get_supply_hp_rate() override;
 	virtual int get_supply_sp_rate() override;
 	virtual int guild_id() override;
 	virtual ptr<regnum_t<int>>& hold_mobs() override;
@@ -1940,6 +1947,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
 	virtual void skill_up(e_skill kid) override;
 	virtual e_job substancial_job() override;
+	virtual ptr<regnum_t<int>>& supply_hp_rate() override;
 	virtual ptr<regnum_t<int>>& supply_sp_rate() override;
 	virtual void stand() override;
 	virtual ptr<registry_t<int,int>>& storage_get_items() override;
@@ -2562,6 +2570,7 @@ SUBCMD_FUNC(Bot, sKillReject);
 SUBCMD_FUNC(Bot, sKillRejectClear);
 SUBCMD_FUNC(Bot, sKillRejectTransport);
 SUBCMD_FUNC(Bot, sKillSafeCastTime);
+SUBCMD_FUNC(Bot, sKillSupplyHpRate);
 SUBCMD_FUNC(Bot, sKillSupplySpRate);
 SUBCMD_FUNC(Bot, sKillTail);
 SUBCMD_FUNC(Bot, sKillTailClear);
@@ -2843,6 +2852,7 @@ extern const int DEFAULT_MOB_HIGH_MDEF;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
 extern const int DEFAULT_SKILL_MONSTERS;
+extern const int DEFAULT_SUPPLY_HP_RATE;
 extern const int DEFAULT_SUPPLY_SP_RATE;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;
 extern const int DOUBLE_FEVER_MAPS_SIZE;

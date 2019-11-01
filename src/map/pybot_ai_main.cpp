@@ -734,7 +734,7 @@ void ai_t::bot_play_skill() {
 			int klv = battler->check_skill(kid);
 			e_skill dan_kid = e_skill(bot->sd()->skill_id_dance);
 			int dan_dur = 0;
-			if (dan_kid) dan_dur = skill_get_time2(dan_kid, bot->sd()->skill_lv_dance);
+			if (dan_kid) dan_dur = skill_get_time2(dan_kid, bot->sd()->skill_lv_dance) - int(bot->get_skill_tail(dan_kid));
 			if (klv &&
 				battler->can_use_skill(kid, klv) &&
 				(bot->battle_mode() == BM_NONE ||

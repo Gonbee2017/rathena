@@ -891,10 +891,10 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (RG_RAID, SM_MAGNUM                             ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (NJ_KIRIKAGE                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC       (ST_PRESERVE                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (CR_SHIELDCHARGE, AC_CHARGEARROW                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC       (ST_PRESERVE                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (2                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (ALL_RESURRECTION                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (3                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1837,7 +1837,11 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillSafeCastTime (ksct) サブコマンド ------\n"
 		"安全に詠唱できる時間を設定する。\n"
 		"入力例 [@bot skillsafecasttime ハイウィズ 500]\n"
-	), SUBCMD_DESC(Bot, sKillSupplySpRate          , kssr,
+	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kshr,
+		"------ sKillSupplyHpRate (kshr) サブコマンド ------\n"
+		"HPの供給を許可するHP率を設定する。\n"
+		"入力例 [@bot skillsupplyhprate アサクロ 90]\n"
+	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kssr,
 		"------ sKillSupplySpRate (kssr) サブコマンド ------\n"
 		"SPの供給を許可するSP率を設定する。\n"
 		"入力例 [@bot skillsupplysprate アサクロ 10]\n"
@@ -2074,6 +2078,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
 	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
 	SUBCMD_PROC(Bot, sKillSafeCastTime          , ksct),
+	SUBCMD_PROC(Bot, sKillSupplyHpRate          , kshr),
 	SUBCMD_PROC(Bot, sKillSupplySpRate          , kssr),
 	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
 	SUBCMD_PROC(Bot, sKillTailClear             ,     ),
@@ -2230,6 +2235,9 @@ const int DEFAULT_SKILL_LOW_RATE = 100;
 
 // デフォルトの範囲スキルの発動条件となるモンスター数。
 const int DEFAULT_SKILL_MONSTERS = 3;
+
+// デフォルトのHPの供給を許可するHP率。
+const int DEFAULT_SUPPLY_HP_RATE = 100;
 
 // デフォルトのSPの供給を許可するSP率。
 const int DEFAULT_SUPPLY_SP_RATE = 25;

@@ -1524,6 +1524,7 @@ int map_foreachindir(int(*func)(struct block_list*, va_list), int16 m, int16 x0,
 // Copy of map_foreachincell, but applied to the whole map. [Skotlex]
 int map_foreachinmap(int (*func)(struct block_list*,va_list), int16 m, int type,...)
 {
+	CS_ENTER;
 	int b, bsize;
 	int returnCount = 0;  //total sum of returned values of func() [Skotlex]
 	struct block_list *bl;
@@ -4470,7 +4471,6 @@ int cleanup_sub(struct block_list *bl, va_list ap)
 {
 	nullpo_ret(bl);
 
-ShowDebug("%d %d\n", __LINE__, bl->type);
 	switch(bl->type) {
 		case BL_PC:
 			map_quit((struct map_session_data *) bl);
@@ -4492,7 +4492,6 @@ ShowDebug("%d %d\n", __LINE__, bl->type);
 			break;
 	}
 
-ShowDebug("%d\n", __LINE__);
 	return 1;
 }
 
@@ -4961,6 +4960,7 @@ ShowDebug("%d\n", __LINE__);
 	for (int i = 0; i < map_num; i++) {
 		struct map_data *mapdata = map_getmapdata(i);
 
+ShowDebug("%d %d\n", __LINE__, i);
 		// [GonBee]
 		// ループカウンタをインクリメントしてしまっている！
 		//ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);

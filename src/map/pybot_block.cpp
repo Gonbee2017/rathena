@@ -23,6 +23,7 @@ bool battler_if::check_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_hp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_normal_attack(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_sp(int rat) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::check_supply_hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_supply_sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_skill(e_skill kid, int klv, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -36,6 +37,7 @@ int battler_if::get_mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_supply_hp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::guild_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& battler_if::is_best_pos() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -227,6 +229,7 @@ ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_E
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::supply_hp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -368,7 +371,8 @@ bool // 結果。
 battler_impl::check_hp(
 	int rat // HPの四分率。
 ) {
-	return check_quad_ratio(hp(), max_hp(), rat);
+	return check_quad_ratio(hp(), max_hp(), rat) ||
+		!check_supply_hp();
 }
 
 // バトラーが敵モンスターを通常攻撃しても大丈夫かを判定する。
@@ -392,6 +396,12 @@ battler_impl::check_sp(
 				sc()->data[SC_DIGESTPOTION]
 			) && !check_supply_sp()
 		) || check_quad_ratio(sp(), max_sp(), rat);
+}
+
+// バトラーがHPの供給を許可するかを判定する。
+bool // 結果。
+battler_impl::check_supply_hp() {
+	return hp() * 100 < get_supply_hp_rate() * max_hp();
 }
 
 // バトラーがSPの供給を許可するかを判定する。
@@ -1297,8 +1307,14 @@ homun_impl::get_mob_high_mdef() {
 	return master()->get_mob_high_mdef();
 }
 
+// ホムンクルスのHPの供給を許可するHP率を取得する。
+int // 取得したHP率。
+homun_impl::get_supply_hp_rate() {
+	return DEFAULT_SUPPLY_HP_RATE;
+}
+
 // ホムンクルスのSPの供給を許可するSP率を取得する。
-int // 取得した高Hit。
+int // 取得したSP率。
 homun_impl::get_supply_sp_rate() {
 	return DEFAULT_SUPPLY_SP_RATE;
 }
@@ -1944,6 +1960,14 @@ member_impl::get_skill_tail(
 	return dur ? *dur : 0;
 }
 
+// メンバーのHPの供給を許可するHP率を取得する。
+int // 取得したHP率。
+member_impl::get_supply_hp_rate() {
+	int res = supply_hp_rate()->get();
+	if (!res) res = DEFAULT_SUPPLY_HP_RATE;
+	return res;
+}
+
 // メンバーのSPの供給を許可するSP率を取得する。
 int // 取得したSP率。
 member_impl::get_supply_sp_rate() {
@@ -2258,6 +2282,11 @@ ptr<regnum_t<int>>& member_impl::safe_cast_time() {
 // セッションデータ。
 map_session_data*& member_impl::sd() {
 	return sd_;
+}
+
+// HPの供給を許可するHP率の登録値。
+ptr<regnum_t<int>>& member_impl::supply_hp_rate() {
+	return supply_hp_rate_;
 }
 
 // SPの供給を許可するSP率の登録値。
@@ -2796,6 +2825,7 @@ member_t::member_t(
 	name_ = std::string(sd()->status.name);
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
+	supply_hp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_hp_rate");
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);

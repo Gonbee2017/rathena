@@ -2565,6 +2565,21 @@ SUBCMD_FUNC(Bot, sKillSafeCastTime) {
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
+// HPの供給を許可するHP率を設定する。
+SUBCMD_FUNC(Bot, sKillSupplyHpRate) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int rat = shift_arguments_then_parse_int(
+		args, print("HP率"), 1, 100
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はHPが", rat, "%未満のときにHPの供給を許可します。"
+	));
+	if (rat == DEFAULT_SUPPLY_HP_RATE) rat = 0;
+	mem->supply_hp_rate()->set(rat);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // SPの供給を許可するSP率を設定する。
 SUBCMD_FUNC(Bot, sKillSupplySpRate) {
 	CS_ENTER;
