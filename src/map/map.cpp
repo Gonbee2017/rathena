@@ -4960,7 +4960,7 @@ ShowDebug("%d\n", __LINE__);
 	for (int i = 0; i < map_num; i++) {
 		struct map_data *mapdata = map_getmapdata(i);
 
-ShowDebug("%d %d\n", __LINE__, i);
+ShowDebug("%d %d %d %s\n", __LINE__, i, map_num, mapdata->name);
 		// [GonBee]
 		// ループカウンタをインクリメントしてしまっている！
 		//ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);

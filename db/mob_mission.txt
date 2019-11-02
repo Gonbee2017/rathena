@@ -54,7 +54,7 @@ MOBG_Taekwon_Mission,1057,Yoyo,1
 MOBG_Taekwon_Mission,1058,Metaller,1
 MOBG_Taekwon_Mission,1060,Bigfoot,1
 MOBG_Taekwon_Mission,1061,Nightmare,1
-MOBG_Taekwon_Mission,1062,Santa Poring,1
+//MOBG_Taekwon_Mission,1062,Santa Poring,1
 MOBG_Taekwon_Mission,1063,Lunatic,1
 MOBG_Taekwon_Mission,1064,Megalodon,1
 MOBG_Taekwon_Mission,1065,Strouf,1
@@ -69,15 +69,15 @@ MOBG_Taekwon_Mission,1073,Crab,1
 MOBG_Taekwon_Mission,1074,Shellfish,1
 MOBG_Taekwon_Mission,1076,Skeleton,1
 MOBG_Taekwon_Mission,1077,Poison Spore,1
-MOBG_Taekwon_Mission,1088,Vocal,1
-MOBG_Taekwon_Mission,1089,Toad,1
-MOBG_Taekwon_Mission,1090,Mastering,1
-MOBG_Taekwon_Mission,1091,Dragon Fly,1
-MOBG_Taekwon_Mission,1092,Vagabond Wolf,1
-MOBG_Taekwon_Mission,1093,Eclipse,1
+//MOBG_Taekwon_Mission,1088,Vocal,1
+//MOBG_Taekwon_Mission,1089,Toad,1
+//MOBG_Taekwon_Mission,1090,Mastering,1
+//MOBG_Taekwon_Mission,1091,Dragon Fly,1
+//MOBG_Taekwon_Mission,1092,Vagabond Wolf,1
+//MOBG_Taekwon_Mission,1093,Eclipse,1
 MOBG_Taekwon_Mission,1094,Ambernite,1
 MOBG_Taekwon_Mission,1095,Andre,1
-MOBG_Taekwon_Mission,1096,Angeling,1
+//MOBG_Taekwon_Mission,1096,Angeling,1
 MOBG_Taekwon_Mission,1097,Ant Egg,1
 MOBG_Taekwon_Mission,1098,Anubis,1
 MOBG_Taekwon_Mission,1099,Argiope,1
@@ -99,7 +99,7 @@ MOBG_Taekwon_Mission,1116,Eggyra,1
 MOBG_Taekwon_Mission,1117,Evil Druid,1
 MOBG_Taekwon_Mission,1118,Flora,1
 MOBG_Taekwon_Mission,1119,Frilldora,1
-MOBG_Taekwon_Mission,1120,Ghostring,1
+//MOBG_Taekwon_Mission,1120,Ghostring,1
 MOBG_Taekwon_Mission,1121,Giearth,1
 MOBG_Taekwon_Mission,1122,Goblin,1
 MOBG_Taekwon_Mission,1123,Goblin,1
@@ -150,10 +150,10 @@ MOBG_Taekwon_Mission,1177,Zenorc,1
 MOBG_Taekwon_Mission,1178,Zerom,1
 MOBG_Taekwon_Mission,1179,Whisper,1
 MOBG_Taekwon_Mission,1180,Nine Tail,1
-MOBG_Taekwon_Mission,1183,Chonchon,1
-MOBG_Taekwon_Mission,1184,Fabre,1
-MOBG_Taekwon_Mission,1185,Whisper,1
-MOBG_Taekwon_Mission,1186,Giant Whisper,1
+//MOBG_Taekwon_Mission,1183,Chonchon,1
+//MOBG_Taekwon_Mission,1184,Fabre,1
+//MOBG_Taekwon_Mission,1185,Whisper,1
+//MOBG_Taekwon_Mission,1186,Giant Whisper,1
 MOBG_Taekwon_Mission,1188,Bongun,1
 MOBG_Taekwon_Mission,1189,Orc Archer,1
 MOBG_Taekwon_Mission,1191,Mimic,1
@@ -180,10 +180,10 @@ MOBG_Taekwon_Mission,1216,Penomena,1
 MOBG_Taekwon_Mission,1219,Knight of Abyss,1
 MOBG_Taekwon_Mission,1248,Cruiser,1
 MOBG_Taekwon_Mission,1249,Myst Case,1
-MOBG_Taekwon_Mission,1250,Chepet,1
+//MOBG_Taekwon_Mission,1250,Chepet,1
 MOBG_Taekwon_Mission,1253,Gargoyle,1
 MOBG_Taekwon_Mission,1254,Raggler,1
-MOBG_Taekwon_Mission,1255,Neraid,1
+//MOBG_Taekwon_Mission,1255,Neraid,1
 MOBG_Taekwon_Mission,1256,Pest,1
 MOBG_Taekwon_Mission,1257,Injustice,1
 MOBG_Taekwon_Mission,1258,Goblin Archer,1
@@ -208,18 +208,18 @@ MOBG_Taekwon_Mission,1280,Steam Goblin,1
 MOBG_Taekwon_Mission,1281,Sage Worm,1
 MOBG_Taekwon_Mission,1282,Kobold Archer,1
 MOBG_Taekwon_Mission,1283,Chimera,1
-MOBG_Taekwon_Mission,1285,Archer Guardian,1
-MOBG_Taekwon_Mission,1287,Soldier Guardian,1
+//MOBG_Taekwon_Mission,1285,Archer Guardian,1
+//MOBG_Taekwon_Mission,1287,Soldier Guardian,1
 MOBG_Taekwon_Mission,1290,Skeleton General,1
 MOBG_Taekwon_Mission,1291,Wraith Dead,1
 MOBG_Taekwon_Mission,1292,Mini Demon,1
 MOBG_Taekwon_Mission,1293,Creamy Fear,1
 MOBG_Taekwon_Mission,1294,Killer Mantis,1
 MOBG_Taekwon_Mission,1295,Owl Baron,1
-MOBG_Taekwon_Mission,1296,Kobold Leader,1
+//MOBG_Taekwon_Mission,1296,Kobold Leader,1
 MOBG_Taekwon_Mission,1297,Ancient Mummy,1
 MOBG_Taekwon_Mission,1298,Zombie Master,1
-MOBG_Taekwon_Mission,1299,Goblin Leader,1
+//MOBG_Taekwon_Mission,1299,Goblin Leader,1
 MOBG_Taekwon_Mission,1300,Caterpillar,1
 MOBG_Taekwon_Mission,1301,Am Mut,1
 MOBG_Taekwon_Mission,1302,Dark Illusion,1
@@ -265,7 +265,7 @@ MOBG_Taekwon_Mission,1384,Deleter,1
 MOBG_Taekwon_Mission,1385,Deleter,1
 MOBG_Taekwon_Mission,1386,Sleeper,1
 MOBG_Taekwon_Mission,1387,Gig,1
-MOBG_Taekwon_Mission,1388,Archangeling,1
+//MOBG_Taekwon_Mission,1388,Archangeling,1
 MOBG_Taekwon_Mission,1390,Violy,1
 MOBG_Taekwon_Mission,1391,Galapago,1
 MOBG_Taekwon_Mission,1392,Rotar Zairo,1
@@ -305,37 +305,37 @@ MOBG_Taekwon_Mission,1514,Dancing Dragon,1
 MOBG_Taekwon_Mission,1515,Garm Baby,1
 MOBG_Taekwon_Mission,1516,Increase Soil,1
 MOBG_Taekwon_Mission,1517,Li Me Mang Ryang,1
-MOBG_Taekwon_Mission,1519,Chung E,1
-MOBG_Taekwon_Mission,1520,Boiled Rice,1
-MOBG_Taekwon_Mission,1582,Deviling,1
+//MOBG_Taekwon_Mission,1519,Chung E,1
+//MOBG_Taekwon_Mission,1520,Boiled Rice,1
+//MOBG_Taekwon_Mission,1582,Deviling,1
 MOBG_Taekwon_Mission,1584,Tamruan,1
-MOBG_Taekwon_Mission,1585,Mime Monkey,1
+//MOBG_Taekwon_Mission,1585,Mime Monkey,1
 MOBG_Taekwon_Mission,1586,Leaf Cat,1
 MOBG_Taekwon_Mission,1587,Kraben,1
-MOBG_Taekwon_Mission,1588,Christmas Orc,1
-MOBG_Taekwon_Mission,1609,Dancing Dragon,1
+//MOBG_Taekwon_Mission,1588,Christmas Orc,1
+//MOBG_Taekwon_Mission,1609,Dancing Dragon,1
 MOBG_Taekwon_Mission,1613,Metaling,1
 MOBG_Taekwon_Mission,1614,Mineral,1
 MOBG_Taekwon_Mission,1615,Obsidian,1
 MOBG_Taekwon_Mission,1616,Pitman,1
 MOBG_Taekwon_Mission,1617,Waste Stove,1
-MOBG_Taekwon_Mission,1618,Ungoliant,1
+//MOBG_Taekwon_Mission,1618,Ungoliant,1
 MOBG_Taekwon_Mission,1619,Porcellio,1
 MOBG_Taekwon_Mission,1620,Noxious,1
 MOBG_Taekwon_Mission,1621,Venomous,1
 MOBG_Taekwon_Mission,1622,Teddy Bear,1
-MOBG_Taekwon_Mission,1625,Porcellio,1
-MOBG_Taekwon_Mission,1626,Hellion Revenant,1
+//MOBG_Taekwon_Mission,1625,Porcellio,1
+//MOBG_Taekwon_Mission,1626,Hellion Revenant,1
 MOBG_Taekwon_Mission,1627,Anopheles,1
 MOBG_Taekwon_Mission,1628,Mole,1
 MOBG_Taekwon_Mission,1629,Hill Wind,1
 MOBG_Taekwon_Mission,1631,Chung E,1
 MOBG_Taekwon_Mission,1632,Gremlin,1
 MOBG_Taekwon_Mission,1633,Beholder,1
-MOBG_Taekwon_Mission,1664,Photon Cannon,1
-MOBG_Taekwon_Mission,1665,Photon Cannon,1
-MOBG_Taekwon_Mission,1666,Photon Cannon,1
-MOBG_Taekwon_Mission,1667,Photon Cannon,1
+//MOBG_Taekwon_Mission,1664,Photon Cannon,1
+//MOBG_Taekwon_Mission,1665,Photon Cannon,1
+//MOBG_Taekwon_Mission,1666,Photon Cannon,1
+//MOBG_Taekwon_Mission,1667,Photon Cannon,1
 MOBG_Taekwon_Mission,1668,Archdam,1
 MOBG_Taekwon_Mission,1670,Dimik,1
 MOBG_Taekwon_Mission,1671,Dimik,1
