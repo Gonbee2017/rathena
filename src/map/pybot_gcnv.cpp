@@ -414,6 +414,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (PR_SUFFRAGIUM                                  ,  1,  1, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 2),
 		AI_SKILL_USE_PROC       (AL_HOLYWATER                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_HIGH_WIZARD, initialize<ai_t::skill_use_proc_vector>(				 	 
+		AI_SKILL_USE_PROC_T     (WZ_HEAVENDRIVE, exposure                       ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (WZ_FROSTNOVA                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FIREWALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -729,6 +730,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (RG_RAID, SM_MAGNUM                             ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (NJ_KIRIKAGE                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (WZ_HEAVENDRIVE, exposure                       ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (CR_SHIELDCHARGE, AC_CHARGEARROW                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -892,6 +894,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (NJ_KIRIKAGE                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (ST_PRESERVE                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (WZ_HEAVENDRIVE, exposure                       ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (CR_SHIELDCHARGE, AC_CHARGEARROW                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AC_CHARGEARROW                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -994,7 +997,7 @@ const std::unordered_map<
 	)}, {JOB_SUPER_NOVICE, initialize<ai_t::skill_use_proc_vector>(				 	 
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
+		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AL_PNEUMA                                      ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (2                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1093,6 +1096,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (WS_CARTTERMINATION, MC_MAMMONITE               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1)
 	)}, {JOB_WIZARD, initialize<ai_t::skill_use_proc_vector>(					 	 
+		AI_SKILL_USE_PROC_T     (WZ_HEAVENDRIVE, exposure                       ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_SIGHT                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (WZ_FROSTNOVA                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (MG_FIREWALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
@@ -2379,6 +2383,12 @@ const std::array<
 // 2バイト目がエスケープ指定文字の全角文字を含む文字列を置き換えるためのテーブル。
 const std::vector<std::pair<std::string, std::string>> ESCAPING_TABLE = {
 	{"タ", "ﾀ"},
+};
+
+// 暴露スキルのセット。
+const skill_id_set EXPOSURE_SKILLS = {
+	AL_RUWACH,
+	MG_SIGHT ,
 };
 
 // 名声付きであることを示すオフセット。

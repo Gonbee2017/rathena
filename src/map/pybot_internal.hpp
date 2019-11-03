@@ -738,6 +738,15 @@ using skill_id_set = std::unordered_set<e_skill>;
 // スキルユニットキーのセット。
 using skill_unit_key_map = std::unordered_map<e_skill,skill_unit_key>;
 
+// ブロックリスト間の距離を判定する術語。
+using check_distance_pred = std::function<
+	bool( // 結果。
+		block_list*, // 1つ目のブロックリスト。
+		block_list*, // 2つ目のブロックリスト。
+		int          // 距離。
+	)
+>;
+
 // サブコマンドハンドラ。
 using subcommand_func = std::function<void(
 	block_if*,             // リーダー。
@@ -1175,6 +1184,7 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(WZ_ICEWALL);
 	AI_SKILL_USE_FUNC(WZ_FIREPILLAR);
 	AI_SKILL_USE_FUNC(WZ_FROSTNOVA);
+	AI_SKILL_USE_FUNC_T(WZ_HEAVENDRIVE, exposure);
 	AI_SKILL_USE_FUNC(WZ_JUPITEL);
 	AI_SKILL_USE_FUNC_T(WZ_JUPITEL, compromise);
 	AI_SKILL_USE_FUNC_T(WZ_JUPITEL, crush);
@@ -1263,7 +1273,7 @@ struct battler_if {
 	virtual void stop_walking(int typ = USW_FIXPOS);
 	virtual block_if*& target_enemy();
 	virtual bool teleport(block_list* bl_);
-	virtual bool walk_bl(block_list* tbl, int ran = 0);
+	virtual bool walk_bl(block_list* tbl, int ran = 0, const check_distance_pred& nea = nullptr);
 	virtual ai_t::done_func& walk_end_func();
 	virtual bool walk_xy(int x, int y, int ran = 0);
 	virtual e_element weapon_attack_element();
@@ -1590,7 +1600,7 @@ struct battler_impl : virtual block_if {
 	virtual void stop_attacking() override;
 	virtual void stop_walking(int typ = USW_FIXPOS) override;
 	virtual block_if*& target_enemy() override;
-	virtual bool walk_bl(block_list* tbl, int ran = 0) override;
+	virtual bool walk_bl(block_list* tbl, int ran = 0, const check_distance_pred& nea = nullptr) override;
 	virtual ai_t::done_func& walk_end_func() override;
 	virtual bool walk_xy(int x, int y, int ran = 0) override;
 	virtual int weapon_attack_element_ratio(block_if* tar) override;
@@ -2864,6 +2874,7 @@ extern const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_CLOSE;
 extern const std::array<equip_index,EPO_MAX> EPO2EQI_TABLE;
 extern const std::array<std::string,EQI_MAX> EQUIP_POS_NAME_TABLE;
 extern const std::vector<std::pair<std::string, std::string>> ESCAPING_TABLE;
+extern const skill_id_set EXPOSURE_SKILLS;
 extern const int FAME_OFFSET;
 extern const std::string FAME_TAG;
 extern const std::string FEVER_RATE_KEY;

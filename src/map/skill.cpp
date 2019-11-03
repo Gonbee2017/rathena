@@ -13400,7 +13400,12 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 			sc_start4(src, src, SC_DANCING, 100, skill_id, group->group_id, skill_lv, (group->state.song_dance&2?BCT_SELF:0), limit+1000) &&
 			sd && group->state.song_dance&2 && skill_id != CG_HERMODE //Hermod is a encore with a warp!
 		)
-			skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 1);
+
+			// [GonBee]
+			// パートナーを自分にする。
+			//skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 1);
+			sd->sc.data[SC_DANCING]->val4 = sd->bl.id;
+
 	}
 
 	// Set skill unit
@@ -15014,24 +15019,28 @@ int skill_check_condition_char_sub (struct block_list *bl, va_list ap)
 				if( ( sd->class_&MAPID_THIRDMASK ) == MAPID_WARLOCK )
 					p_sd[(*c)++] = tsd->bl.id;
 				return 1;
-			default: //Warning: Assuming Ensemble Dance/Songs for code speed. [Skotlex]
-				{
-					uint16 skill_lv;
-					if(pc_issit(tsd) || !unit_can_move(&tsd->bl))
-						return 0;
-					if (sd->status.sex != tsd->status.sex &&
-							(tsd->class_&MAPID_UPPERMASK) == MAPID_BARDDANCER &&
-							(skill_lv = pc_checkskill(tsd, skill_id)) > 0 &&
-							(tsd->weapontype1==W_MUSICAL || tsd->weapontype1==W_WHIP) &&
-							sd->status.party_id && tsd->status.party_id &&
-							sd->status.party_id == tsd->status.party_id &&
-							!tsd->sc.data[SC_DANCING])
-					{
-						p_sd[(*c)++]=tsd->bl.id;
-						return skill_lv;
-					}
-				}
-				break;
+
+			// [GonBee]
+			// 合奏は1人でも使用できる。
+			//default: //Warning: Assuming Ensemble Dance/Songs for code speed. [Skotlex]
+			//	{
+			//		uint16 skill_lv;
+			//		if(pc_issit(tsd) || !unit_can_move(&tsd->bl))
+			//			return 0;
+			//		if (sd->status.sex != tsd->status.sex &&
+			//				(tsd->class_&MAPID_UPPERMASK) == MAPID_BARDDANCER &&
+			//				(skill_lv = pc_checkskill(tsd, skill_id)) > 0 &&
+			//				(tsd->weapontype1==W_MUSICAL || tsd->weapontype1==W_WHIP) &&
+			//				sd->status.party_id && tsd->status.party_id &&
+			//				sd->status.party_id == tsd->status.party_id &&
+			//				!tsd->sc.data[SC_DANCING])
+			//		{
+			//			p_sd[(*c)++]=tsd->bl.id;
+			//			return skill_lv;
+			//		}
+			//	}
+			//	break;
+
 		}
 
 	}
@@ -15068,25 +15077,42 @@ int skill_check_pc_partner(struct map_session_data *sd, uint16 skill_id, uint16 
 					if ((tsd = map_id2sd(p_sd[i])) != NULL)
 						status_charge(&tsd->bl, 0, 10);
 				}
-				return c;
+
+				// [GonBee]
+				//return c;
+				break;
+
 			case AB_ADORAMUS:
 				if( c > 0 && (tsd = map_id2sd(p_sd[0])) != NULL ) {
 					i = 2 * (*skill_lv);
 					status_charge(&tsd->bl, 0, i);
 				}
 				break;
-			default: //Warning: Assuming Ensemble skills here (for speed)
-				if( is_chorus )
-					break;//Chorus skills are not to be parsed as ensambles
-				if (c > 0 && sd->sc.data[SC_DANCING] && (tsd = map_id2sd(p_sd[0])) != NULL) {
-					sd->sc.data[SC_DANCING]->val4 = tsd->bl.id;
-					sc_start4(&sd->bl,&tsd->bl,SC_DANCING,100,skill_id,sd->sc.data[SC_DANCING]->val2,*skill_lv,sd->bl.id,skill_get_time(skill_id,*skill_lv)+1000);
-					clif_skill_nodamage(&tsd->bl, &sd->bl, skill_id, *skill_lv, 1);
-					tsd->skill_id_dance = skill_id;
-					tsd->skill_lv_dance = *skill_lv;
-				}
-				return c;
+
+			// [GonBee]
+			//default: //Warning: Assuming Ensemble skills here (for speed)
+			//	if( is_chorus )
+			//		break;//Chorus skills are not to be parsed as ensambles
+			//	if (c > 0 && sd->sc.data[SC_DANCING] && (tsd = map_id2sd(p_sd[0])) != NULL) {
+			//		sd->sc.data[SC_DANCING]->val4 = tsd->bl.id;
+			//		sc_start4(&sd->bl,&tsd->bl,SC_DANCING,100,skill_id,sd->sc.data[SC_DANCING]->val2,*skill_lv,sd->bl.id,skill_get_time(skill_id,*skill_lv)+1000);
+			//		clif_skill_nodamage(&tsd->bl, &sd->bl, skill_id, *skill_lv, 1);
+			//		tsd->skill_id_dance = skill_id;
+			//		tsd->skill_lv_dance = *skill_lv;
+			//	}
+			//	return c;
 		}
+
+		// [GonBee]
+		// パートナーのデータをクリア。
+		//return c;
+		if (skill_id != AB_ADORAMUS) {
+			int cc = c;
+			c = 0;
+			memset(p_sd, 0, sizeof(p_sd));
+			return cc;
+		}
+
 	}
 
 	//Else: new search for partners.
@@ -15336,7 +15362,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		//    clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 		//    return false;
 	    //}
-		if (sd->sc.data[SC_DANCING]) sd->sc.data[SC_DANCING]->val4 = sd->bl.id;
+		skill_check_pc_partner(sd, skill_id, &skill_lv, 1, 0);
 
 	}
 

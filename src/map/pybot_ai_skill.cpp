@@ -1349,13 +1349,11 @@ AI_SKILL_USE_FUNC(MG_SAFETYWALL) {
 
 // サイトを使う。
 AI_SKILL_USE_FUNC(MG_SIGHT) {
-	block_if* ene = pybot::find_if(ALL_RANGE(enemies),
-		sift_block_splash(bot, kid, klv, [this, kid] (block_if* ene) -> bool {
-			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
-				ene->is_hiding();
-		})
-	);
-	if (ene) bot->use_skill_self(kid, klv);
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		tar_ene->is_hiding() &&
+		!tar_ene->is_summoned()
+	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
 // ストーンカースを使う。
@@ -3054,6 +3052,19 @@ AI_SKILL_USE_FUNC(WZ_FROSTNOVA) {
 		})
 	);
 	if (ene) bot->use_skill_self(kid, klv);
+}
+
+// ヘブンズドライブでハイディング状態のモンスターを暴露する。
+AI_SKILL_USE_FUNC_T(WZ_HEAVENDRIVE, exposure) {
+	block_if* ene = pybot::find_if(ALL_RANGE(enemies),
+		[this, kid, klv] (block_if* ene) -> bool {
+			return !bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, ene->md()->mob_id)) &&
+				bot->skill_ratio(kid, klv, ene) > 0 &&
+				ene->is_hiding() &&
+				!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
+		}
+	);
+	if (ene) bot->use_skill_xy(kid, klv, ene->bl()->x, ene->bl()->y);
 }
 
 // ユピテルサンダーを使う。

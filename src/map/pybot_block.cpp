@@ -61,7 +61,7 @@ void battler_if::stop_attacking() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::stop_walking(int typ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::target_enemy() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::teleport(block_list* bl_) {RAISE_NOT_IMPLEMENTED_ERROR;}
-bool battler_if::walk_bl(block_list* tbl, int ran) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::walk_bl(block_list* tbl, int ran, const check_distance_pred& nea) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ai_t::done_func& battler_if::walk_end_func() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::walk_xy(int x, int y, int ran) {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_element battler_if::weapon_attack_element() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -562,10 +562,16 @@ block_if*& battler_impl::target_enemy() {
 // バトラーがブロックに向かって歩く。
 bool // 離れているか。
 battler_impl::walk_bl(
-	block_list* tbl, // ターゲットのブロック。
-	int ran          // 近づく距離。
+	block_list* tbl,               // ターゲットのブロック。
+	int ran,                       // 近づく距離。
+	const check_distance_pred& nea // 近いか。
 ) {
-	if (check_range_bl(bl(), tbl, ran)) {
+	if ((nea &&
+			nea(bl(), tbl, ran)
+		) || (!nea &&
+			check_range_bl(bl(), tbl, ran)
+		)
+	) {
 		stop_walking();
 		return false;
 	}
@@ -2649,9 +2655,6 @@ void skill_user_impl::use_skill_bl(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
 	auto use = [this, kid, klv, cas_end_fun] (block_list* bl_) {
 		if (unit_skilluse_id(bl(), bl_->id, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
@@ -2660,6 +2663,9 @@ void skill_user_impl::use_skill_bl(
 			skill_used_ticks()[kid] = now;
 		}
 	};
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
 	if (walk_bl(bl_, skill_range(kid, klv))) {
 		int bid = bl_->id;
 		walk_end_func() = [this, kid, klv, use, bid] (ai_t* ai, void* fun) {
@@ -2685,11 +2691,18 @@ void skill_user_impl::use_skill_block(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
-	auto use = [this, kid, klv, cas_end_fun] (block_if* blo) {
-		if (unit_skilluse_id(bl(), blo->bl()->id, kid, klv)) {
+	block_list* tar_bl = blo->bl();
+	int ran = skill_range(kid, klv);
+	check_distance_pred nea = nullptr;
+	if (KEY_EXISTS(EXPOSURE_SKILLS, kid)) {
+		tar_bl = bl();
+		ran = skill_get_splash(kid, klv);
+		nea = [] (block_list* bl1, block_list* bl2, int ran) -> bool {
+			return check_distance_bl(bl1, bl2, ran);
+		};
+	}
+	auto use = [this, kid, klv, cas_end_fun, tar_bl] (block_if* blo) {
+		if (unit_skilluse_id(bl(), tar_bl->id, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
 				pc_delinvincibletimer(sd());
 			cast_end_func() = cas_end_fun;
@@ -2697,7 +2710,10 @@ void skill_user_impl::use_skill_block(
 			if (kid == NJ_KASUMIKIRI) blo->skill_used_ticks()[TF_HIDING] = now;
 		}
 	};
-	if (walk_bl(blo->bl(), skill_range(kid, klv))) {
+	if (dynamic_cast<bot_impl*>(this) &&
+		is_sit()
+	) stand();
+	if (walk_bl(blo->bl(), ran, nea)) {
 		int blo_bid = blo->bl()->id;
 		walk_end_func() = [this, kid, klv, use, blo_bid] (ai_t* ai, void* fun) {
 			block_if* blo = ai->find_block<skill_target_impl>(blo_bid);

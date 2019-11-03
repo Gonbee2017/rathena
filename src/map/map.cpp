@@ -4964,6 +4964,9 @@ ShowDebug("%d %d %d %s\n", __LINE__, i, map_num, mapdata->name);
 		// [GonBee]
 		// ループカウンタをインクリメントしてしまっている！
 		//ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i++, map_num, mapdata->name);
+		if (!mapdata->name ||
+			!*mapdata->name
+		) continue;
 		ShowStatus("Cleaning up maps [%d/%d]: %s..." CL_CLL "\r", i, map_num, mapdata->name);
 
 		map_foreachinmap(cleanup_sub, i, BL_ALL);
