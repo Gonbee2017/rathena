@@ -11986,8 +11986,18 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			{
 				struct unit_data *ud = unit_bl2ud(bl);
 
-				if( ud )
-					ud->state.running = unit_run(bl, NULL, SC_RUN);
+				// [GonBee]
+				// Bot‚Í‘–‚ç‚È‚¢B
+				//if( ud )
+				//	ud->state.running = unit_run(bl, NULL, SC_RUN);
+				if (ud) {
+					map_session_data* sd = BL_CAST(BL_PC, bl);
+					if (sd &&
+						pybot::char_is_bot(sd->status.char_id)
+					) ud->state.running = 1;
+					else ud->state.running = unit_run(bl, NULL, SC_RUN);
+				}
+
 			}
 			break;
 		case SC_BOSSMAPINFO:

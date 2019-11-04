@@ -1741,7 +1741,7 @@ member_impl::can_use_skill(
 	sd()->spiritball = req.spiritball;
 	bool res = !(sc()->option & OPTION_INVISIBLE) &&
 		!skill_isNotOk(kid, sd()) &&
-		skill_check_condition_castbegin(sd(), kid, klv) &&
+		skill_check_condition_castbegin(sd(), kid, klv, 0) &&
 		skill_check_condition_castend(sd(), kid, klv, 0);
 	sd()->spiritball = old_spi;
 	return res;

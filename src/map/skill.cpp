@@ -15238,7 +15238,11 @@ static bool skill_check_condition_sc_required(struct map_session_data *sd, unsig
  * @param skill_lv Level of used skill
  * @return true: All condition passed, false: Failed
  */
-bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv)
+
+// [GonBee]
+//bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv)
+bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_id, uint16 skill_lv, int cast_flag)
+
 {
 	struct status_data *status;
 	struct status_change *sc;
@@ -15647,6 +15651,10 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		case SG_FUSION:
 			if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR)
 				break;
+
+			// [GonBee]
+			if (!cast_flag) return false;
+
 			//Auron insists we should implement SP consumption when you are not Soul Linked. [Skotlex]
 			//Only invoke on skill begin cast (instant cast skill). [Kevin]
 			if( require.sp > 0 ) {

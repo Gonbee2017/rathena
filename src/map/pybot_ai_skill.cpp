@@ -2473,7 +2473,9 @@ AI_SKILL_USE_FUNC(SA_VOLCANO) {
 
 // 太陽と月と星の融合を使う。
 AI_SKILL_USE_FUNC(SG_FUSION) {
-	if (bot->sc_rest(SC_FUSION) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	if (bot->sc()->data[SC_SPIRIT] &&
+		bot->sc_rest(SC_FUSION) <= bot->get_skill_tail(kid)
+	) bot->use_skill_self(kid, klv);
 }
 
 // 月の安楽を使う。
