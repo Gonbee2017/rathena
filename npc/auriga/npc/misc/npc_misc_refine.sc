@@ -1504,6 +1504,96 @@ prontera,164,165,2	duplicate(ChangeEnrich)	エンリッヒ	84
 
 
 //====================================================================
+//改良型濃縮精錬アイテム交換NPC
+//--------------------------------------------------------------------
+
+-	script	::ChangeImprovedEnrich	-1,{
+	if(checkitemblank()==0) {
+		mes "- 所持アイテムの種類数が -";
+		mes "- 多いため、アイテムを受けとる -";
+		mes "- ことができません。 -";
+		mes "- 所持アイテムを減らしてから -";
+		mes "- 再度話しかけてください。 -";
+		close;
+	}
+	mes "["+strnpcinfo(3)+"]";	//識別子を参照
+	mes "濃縮オリデオコンや濃縮エルニウムを";
+	mes "僕に持ってきたら、すぐに";
+	mes "改良型濃縮オリデオコンや改良型";
+	mes "濃縮エルニウムにしてあげる。";
+	mes "但し、濃縮オリデオコンや濃縮エル";
+	mes "ニウムは各20個持ってくるように。";
+	next;
+	switch (select("改良型濃縮オリデオコンを作る","改良型濃縮エルニウムを作る","やめる")) {
+	case 1:
+		set .@itemid,7620;
+		set .@gain,6240;
+		break;
+	case 2:
+		set .@itemid,7619;
+		set .@gain,6241;
+		break;
+	case 3:
+		mes "["+strnpcinfo(3)+"]";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	if(countitem(.@itemid)<20) {
+		mes "["+strnpcinfo(3)+"]";
+		mes "え？冗談でしょ？";
+		mes getitemname(.@itemid)+ "が20個無いと";
+		mes getitemname(.@gain)+ "が作れないと";
+		mes "言ったじゃないか。";
+		close;
+	}
+	mes "["+strnpcinfo(3)+"]";
+	mes getitemname(.@gain)+ "を作る量はどうする？";
+	next;
+	if(select("1個分だけ作る","作れるだけ作る")==1) {
+		if(checkweight(.@gain,1)==0) {
+			mes "‐所持アイテムの重量が重い為";
+			mes "　危険です。";
+			mes "　所持アイテムを減らしてから、";
+			mes "　再度話しかけてください‐";
+			close;
+		}
+		if(countitem(.@itemid)<20) close;
+		delitem .@itemid,20;
+		getitem .@gain,1;
+		mes "["+strnpcinfo(3)+"]";
+		mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	set .@num,countitem(.@itemid)/20;
+	mes "["+strnpcinfo(3)+"]";
+	mes getitemname(.@itemid)+ "^FF0000" +(.@num*20)+ "^000000個で";
+	mes getitemname(.@gain)+ "^FF0000" +.@num+ "^000000個作ればいい？";
+	next;
+	if(select("やっぱりやめます","お願いします")==1) {
+		mes "["+strnpcinfo(3)+"]";
+		mes "いつでもまた来てくれ。";
+		close;
+	}
+	if(checkweight(.@gain,.@num)==0) {
+		mes "‐所持アイテムの重量が重い為";
+		mes "　危険です。";
+		mes "　所持アイテムを減らしてから、";
+		mes "　再度話しかけてください‐";
+		close;
+	}
+	if(countitem(.@itemid)<.@num*20) close;
+	delitem .@itemid,.@num*20;
+	getitem .@gain,.@num;
+	mes "["+strnpcinfo(3)+"]";
+	mes "ほら、約束の" +getitemname(.@gain)+ "だ。";
+	mes "いつでもまた来てくれ。";
+	close;
+}
+
+prontera,164,161,2	duplicate(ChangeImprovedEnrich)	アインリッヒ	84
+
+//====================================================================
 //オリデオコン/エルニウム交換NPC
 //--------------------------------------------------------------------
 
@@ -1588,7 +1678,7 @@ prontera,164,165,2	duplicate(ChangeEnrich)	エンリッヒ	84
 	close;
 }
 
-prontera,164,161,2	duplicate(TradeOriElu)	マッシモ	84
+prt_in,63,69,4	duplicate(TradeOriElu)	マッシモ	83
 
 //====================================================================
 //武具修理NPC
