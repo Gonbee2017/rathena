@@ -840,7 +840,9 @@ struct ai_t {
 	> blocks;                                // ブロックのマップ。
 	block_if* bot;                           // Bot。
 	std::vector<block_if*> team_enemies;     // チーム全体の敵モンスターのベクタ。
-	std::vector<block_if*> enemies;          // メンバー個別の敵モンスターのベクタ。
+	std::vector<std::vector<block_if*>>
+		member_enemies;                      // メンバーの敵モンスターのベクタ。
+	std::vector<block_if*>* enemies;         // バトラー個別の敵モンスターのベクタ。
 	std::vector<flooritem_data*> flooritems; // ドロップアイテムのベクタ。
 	bool gvg;                                // 砦マップか。
 	block_if* homun;                         // ホムンクルス。
@@ -856,6 +858,7 @@ struct ai_t {
 	void leader_main(block_if* lea);
 	void leader_organize();
 	void leader_collect();
+	void leader_target();
 	void leader_battler();
 	void leader_pet();
 
@@ -864,7 +867,6 @@ struct ai_t {
 	void bot_dead();
 	void bot_lost();
 	void bot_emotion();
-	void bot_target();
 	void bot_stand();
 	void bot_cast_cancel();
 	void bot_walk_end();
@@ -884,7 +886,6 @@ struct ai_t {
 	void homun_main(block_if* hom);
 	void homun_lost();
 	void homun_feed();
-	void homun_target();
 	void homun_positioning();
 	void homun_follow();
 	void homun_attack();
@@ -894,7 +895,6 @@ struct ai_t {
 	void pet_feed();
 	void pet_perform();
 
-	void battler_target();
 	void battler_positioning();
 	void battler_attack();
 	void battler_use_skill();

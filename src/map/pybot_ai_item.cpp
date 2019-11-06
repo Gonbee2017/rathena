@@ -37,7 +37,7 @@ AI_ITEM_USE_FUNC(COATING_POTION) {
 			!(bot->sd()->bonus.unbreakable_equip & EQP_WEAPON) &&
 			pc_checkequip(bot->sd(), EQP_WEAPON) >= 0
 		) bot->use_item(itm_ind);
-		block_if* ene = pybot::find_if(ALL_RANGE(enemies), [this] (block_if* ene) -> bool {
+		block_if* ene = pybot::find_if(ALL_RANGE(*enemies), [this] (block_if* ene) -> bool {
 			return ene->target_battler() == bot &&
 				((ene->has_unequip_weapon_skill() &&
 						!bot->sc()->data[SC_CP_WEAPON] &&

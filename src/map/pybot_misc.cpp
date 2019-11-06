@@ -262,6 +262,9 @@ skill_mobs::skill_mobs() {
 	auto is_pat_sk = [] (e_skill kid, int klv) -> bool {
 		return KEY_EXISTS(PATH_SKILLS, kid);
 	};
+	auto is_sum_sk = [] (e_skill kid, int klv) -> bool {
+		return KEY_EXISTS(SUMMON_SKILLS, kid);
+	};
 	auto is_une_arm_sk = [] (e_skill kid, int klv) -> bool {
 		return KEY_EXISTS(UNEQUIP_ARMOR_SKILLS, kid);
 	};
@@ -284,6 +287,7 @@ skill_mobs::skill_mobs() {
 	ini_set(long_, mob_skill_is_long);
 	ini_set(long_weapon, mob_skill_is_long_weapon);
 	ini_set(path, is_pat_sk);
+	ini_set(summon, is_sum_sk);
 	ini_set(unequip_armor, is_une_arm_sk);
 	ini_set(unequip_helm, is_une_hel_sk);
 	ini_set(unequip_shield, is_une_shi_sk);

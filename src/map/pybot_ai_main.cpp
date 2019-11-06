@@ -38,6 +38,7 @@ void ai_t::leader_main(
 	leader = lea;
 	leader_organize();
 	leader_collect();
+	leader_target();
 	leader_battler();
 	leader_pet();
 }
@@ -167,20 +168,22 @@ void ai_t::leader_collect() {
 		[this] (block_if* len, block_if* ren) -> bool {
 			if (len->is_hiding() != ren->is_hiding())
 				return ren->is_hiding();
+			if (!battlers.empty()) {
+				block_if* pri_bat = battlers.front();
+				if ((pri_bat == leader ||
+						pri_bat == leader->homun().get()
+					) && pri_bat->is_attacking()
+				) {
+					bool llt = len->bl()->id == pri_bat->ud()->target;
+					bool rlt = ren->bl()->id == pri_bat->ud()->target;
+					if (llt != rlt) return llt;
+				}
+			}
 			if (bool(len->md()->master_id) != bool(ren->md()->master_id))
 				return ren->md()->master_id;
 			bool ltr = len->is_great(leader);
 			bool rtr = ren->is_great(leader);
 			if (ltr != rtr)	return ltr;
-			if (!battlers.empty() &&
-				(battlers.front() == leader ||
-					battlers.front() == leader->homun().get()
-				)
-			) {
-				bool llt = len->bl()->id == battlers.front()->ud()->target;
-				bool rlt = ren->bl()->id == battlers.front()->ud()->target;
-				if (llt != rlt) return llt;
-			}
 			if (len->has_summon_skill() != ren->has_summon_skill())
 				return len->has_summon_skill();
 			if (len->md()->tdmg != ren->md()->tdmg) return len->md()->tdmg > ren->md()->tdmg;
@@ -290,10 +293,136 @@ void ai_t::leader_collect() {
 	);
 }
 
+// リーダーがターゲットを決める。
+void ai_t::leader_target() {
+	CS_ENTER;
+	auto rel_pol = [] (
+		block_if* bat,
+		block_if* ene,
+		distance_policy_values* dis_pol_val,
+		normal_attack_policy_values* nor_att_pol_val
+	) {
+		bat->load_policy(ene->md()->mob_id, dis_pol_val, nor_att_pol_val);
+		if (!bat->check_hp(4)) {
+			if (!bat->check_hp(3)) {
+				if (!bat->check_hp(2)) {
+					if (!bat->check_hp(1)) {
+						bat->load_policy(MM_HP_DECLINE1, dis_pol_val, nor_att_pol_val);
+					}
+					bat->load_policy(MM_HP_DECLINE2, dis_pol_val, nor_att_pol_val);
+				}
+				bat->load_policy(MM_HP_DECLINE3, dis_pol_val, nor_att_pol_val);
+			}
+			bat->load_policy(MM_HP_DECLINE4, dis_pol_val, nor_att_pol_val);
+		}
+		if (!bat->check_sp(4)) {
+			if (!bat->check_sp(3)) {
+				if (!bat->check_sp(2)) {
+					if (!bat->check_sp(1)) {
+						bat->load_policy(MM_SP_DECLINE1, dis_pol_val, nor_att_pol_val);
+					}
+					bat->load_policy(MM_SP_DECLINE2, dis_pol_val, nor_att_pol_val);
+				}
+				bat->load_policy(MM_SP_DECLINE3, dis_pol_val, nor_att_pol_val);
+			}
+			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
+		}
+		if (ene->hit() >= bat->get_mob_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
+		if (ene->flee() >= bat->get_mob_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
+		if (ene->def() + ene->vit() >= bat->get_mob_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
+		if (ene->def() >= bat->get_mob_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
+		if (ene->mdef() >= bat->get_mob_high_mdef()) bat->load_policy(MM_HIGH_MDEF, dis_pol_val, nor_att_pol_val);
+		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
+		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
+		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
+		bat->load_policy(MM_RACE + ene->race(), dis_pol_val, nor_att_pol_val);
+		bat->load_policy(MM_ELEMENT + ene->element(), dis_pol_val, nor_att_pol_val);
+		bat->load_policy(MM_SIZE + ene->size_(), dis_pol_val, nor_att_pol_val);
+		bat->load_policy(MM_BASE, dis_pol_val, nor_att_pol_val);
+		if (*dis_pol_val == DPV_PENDING) *dis_pol_val = bat->default_distance_policy_value();
+		if (*nor_att_pol_val == NAPV_PENDING) *nor_att_pol_val = bat->default_normal_attack_policy_value();
+	};
+
+	member_enemies.clear();
+	member_enemies.resize(leader->members().size());
+	for (block_if* mem : members) {
+		enemies = &member_enemies[mem->member_index()];
+		for (block_if* ene : team_enemies) {
+			if (!mem->mob_is_ignore(ene->md()->mob_id))
+				enemies->push_back(ene);
+		}
+		std::stable_sort(
+			ALL_RANGE(*enemies),
+			[mem] (block_if* len, block_if* ren) -> bool {
+				bool lfi = mem->mob_is_first(len->md()->mob_id);
+				bool rfi = mem->mob_is_first(ren->md()->mob_id);
+				return lfi > rfi;
+			}
+		);
+	}
+	for (block_if* bat : battlers) {
+		enemies = &member_enemies[bat->member_index()];
+		if (!enemies->empty() &&
+			!bat->is_dead() &&
+			bat->bl()->m == leader->center().m
+		) {
+			block_if* tar_ene = nullptr;
+			if (bat == leader) {
+				if (bat->is_attacking())
+					tar_ene = find_block<enemy_impl>(bat->ud()->target);
+			} else if (!bat->is_primary()) {
+				for (block_if* ene : *enemies) {
+					distance_policy_values dis_pol_val = DPV_PENDING;
+					normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
+					rel_pol(bat, ene, &dis_pol_val, &nor_att_pol_val);
+					if ((dis_pol_val == DPV_CLOSE ||
+							nor_att_pol_val == NAPV_CONTINUOUS
+						) && !ene->is_flora() &&
+						ene->is_short_range_attacker() &&
+						!ene->need_to_leave() &&
+						ene->target_battler() &&
+						ene->target_battler()->battle_index() > bat->battle_index() &&
+						ene->attacked_battlers().empty()
+					) {
+						tar_ene = ene;
+						bat->battle_mode() = BM_TAUNT;
+						bat->distance_policy_value() = dis_pol_val;
+						bat->normal_attack_policy_value() = nor_att_pol_val;
+						break;
+					}
+				}
+			}
+			if (!tar_ene) {
+				tar_ene = enemies->front();
+				if (leader->rush()->get() ||
+					bat->mob_is_first(tar_ene->md()->mob_id) ||
+					((battlers.front()->distance_policy_value() == DPV_AWAY ||
+							bat->is_primary()
+						) && (tar_ene->target_battler() ||
+							!tar_ene->is_berserk()
+						)
+					)
+				) bat->battle_mode() = BM_TAUNT;
+				else bat->battle_mode() = BM_ASSIST;
+				distance_policy_values dis_pol_val = DPV_PENDING;
+				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
+				rel_pol(bat, tar_ene, &dis_pol_val, &nor_att_pol_val);
+				bat->distance_policy_value() = dis_pol_val;
+				bat->normal_attack_policy_value() = nor_att_pol_val;
+			}
+			if (bat->distance_policy_value() == DPV_CLOSE ||
+				bat->normal_attack_policy_value() == NAPV_CONTINUOUS
+			) tar_ene->attacked_battlers().push_back(bat);
+			bat->target_enemy() = tar_ene;
+		}
+	}
+}
+
 // リーダーがバトラーのAIを呼ぶ。
 void ai_t::leader_battler() {
 	CS_ENTER;
 	for (block_if* bat : battlers) {
+		enemies = &member_enemies[bat->member_index()];
 		if (bat != leader &&
 			bat != leader->homun().get()
 		) {
@@ -324,7 +453,6 @@ void ai_t::bot_main(
 	bot_dead();
 	bot_lost();
 	bot_emotion();
-	bot_target();
 	bot_stand();
 	bot_cast_cancel();
 	bot_walk_end();
@@ -403,12 +531,6 @@ void ai_t::bot_emotion() {
 	}
 }
 
-// Botがターゲットを決める。
-void ai_t::bot_target() {
-	CS_ENTER;
-	battler_target();
-}
-
 // Botが立つ。
 void ai_t::bot_stand() {
 	CS_ENTER;
@@ -482,7 +604,7 @@ void ai_t::bot_reload_equipset() {
 		}
 	} else if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
 		int pre_mid = 0;
-		for (block_if* ene : enemies) {
+		for (block_if* ene : *enemies) {
 			if (ene->md()->mob_id == pre_mid) continue;
 			bot->load_equipset(MM_CAUTION + ene->md()->mob_id, &equ);
 			pre_mid = ene->md()->mob_id;
@@ -684,7 +806,7 @@ void ai_t::bot_play_skill() {
 		e_skill kid = e_skill(0);
 		if (bot->battle_mode() != BM_NONE) {
 			int pre_mid = 0;
-			for (block_if* ene : enemies) {
+			for (block_if* ene : *enemies) {
 				if (ene->md()->mob_id == pre_mid) continue;
 				bot->load_play_skill(MM_CAUTION + ene->md()->mob_id, &kid);
 				pre_mid = ene->md()->mob_id;
@@ -783,7 +905,6 @@ void ai_t::homun_main(block_if* hom) {
 	battler = homun = hom;
 	homun_lost();
 	homun_feed();
-	homun_target();
 	homun_positioning();
 	homun_follow();
 	homun_attack();
@@ -807,12 +928,6 @@ void ai_t::homun_feed() {
 		if (homun->master()->find_inventory(foo_key) != INT_MIN)
 			hom_food(homun->master()->sd(), homun->hd());
 	}
-}
-
-// ホムンクルスがターゲットを決める。
-void ai_t::homun_target() {
-	CS_ENTER;
-	battler_target();
 }
 
 // ホムンクルスが位置取る。
@@ -868,122 +983,6 @@ void ai_t::pet_perform() {
 	) {
 		pet_menu(pet->master()->sd(), 2);
 		pet->act_end();
-	}
-}
-
-// バトラーがターゲットを決める。
-void ai_t::battler_target() {
-	CS_ENTER;
-	auto rel_pol = [] (
-		block_if* bat,
-		block_if* ene,
-		distance_policy_values* dis_pol_val,
-		normal_attack_policy_values* nor_att_pol_val
-	) {
-		bat->load_policy(ene->md()->mob_id, dis_pol_val, nor_att_pol_val);
-		if (!bat->check_hp(4)) {
-			if (!bat->check_hp(3)) {
-				if (!bat->check_hp(2)) {
-					if (!bat->check_hp(1)) {
-						bat->load_policy(MM_HP_DECLINE1, dis_pol_val, nor_att_pol_val);
-					}
-					bat->load_policy(MM_HP_DECLINE2, dis_pol_val, nor_att_pol_val);
-				}
-				bat->load_policy(MM_HP_DECLINE3, dis_pol_val, nor_att_pol_val);
-			}
-			bat->load_policy(MM_HP_DECLINE4, dis_pol_val, nor_att_pol_val);
-		}
-		if (!bat->check_sp(4)) {
-			if (!bat->check_sp(3)) {
-				if (!bat->check_sp(2)) {
-					if (!bat->check_sp(1)) {
-						bat->load_policy(MM_SP_DECLINE1, dis_pol_val, nor_att_pol_val);
-					}
-					bat->load_policy(MM_SP_DECLINE2, dis_pol_val, nor_att_pol_val);
-				}
-				bat->load_policy(MM_SP_DECLINE3, dis_pol_val, nor_att_pol_val);
-			}
-			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
-		}
-		if (ene->hit() >= bat->get_mob_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
-		if (ene->flee() >= bat->get_mob_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
-		if (ene->def() + ene->vit() >= bat->get_mob_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
-		if (ene->def() >= bat->get_mob_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
-		if (ene->mdef() >= bat->get_mob_high_mdef()) bat->load_policy(MM_HIGH_MDEF, dis_pol_val, nor_att_pol_val);
-		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
-		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
-		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_RACE + ene->race(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_ELEMENT + ene->element(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_SIZE + ene->size_(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_BASE, dis_pol_val, nor_att_pol_val);
-		if (*dis_pol_val == DPV_PENDING) *dis_pol_val = bat->default_distance_policy_value();
-		if (*nor_att_pol_val == NAPV_PENDING) *nor_att_pol_val = bat->default_normal_attack_policy_value();
-	};
-
-	enemies.clear();
-	for (block_if* ene : team_enemies) {
-		if (!battler->mob_is_ignore(ene->md()->mob_id))
-			enemies.push_back(ene);
-	}
-	std::stable_sort(
-		ALL_RANGE(enemies),
-		[this] (block_if* len, block_if* ren) -> bool {
-			bool lfi = battler->mob_is_first(len->md()->mob_id);
-			bool rfi = battler->mob_is_first(ren->md()->mob_id);
-			return lfi > rfi;
-		}
-	);
-
-	if (!enemies.empty() &&
-		!battler->is_dead() &&
-		battler->bl()->m == leader->center().m
-	) {
-		block_if* tar_ene = nullptr;
-		if (!battler->is_primary()) {
-			for (block_if* ene : enemies) {
-				distance_policy_values dis_pol_val = DPV_PENDING;
-				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-				rel_pol(battler, ene, &dis_pol_val, &nor_att_pol_val);
-				if ((dis_pol_val == DPV_CLOSE ||
-						nor_att_pol_val == NAPV_CONTINUOUS
-					) && !ene->is_flora() &&
-					ene->is_short_range_attacker() &&
-					!ene->need_to_leave() &&
-					ene->target_battler() &&
-					ene->target_battler()->battle_index() > battler->battle_index() &&
-					ene->attacked_battlers().empty()
-				) {
-					tar_ene = ene;
-					battler->battle_mode() = BM_TAUNT;
-					battler->distance_policy_value() = dis_pol_val;
-					battler->normal_attack_policy_value() = nor_att_pol_val;
-					break;
-				}
-			}
-		}
-		if (!tar_ene) {
-			tar_ene = enemies.front();
-			if (leader->rush()->get() ||
-				battler->mob_is_first(tar_ene->md()->mob_id) ||
-				((battlers.front()->distance_policy_value() == DPV_AWAY ||
-						battler->is_primary()
-					) && (tar_ene->target_battler() ||
-						!tar_ene->is_berserk()
-					)
-				)
-			) battler->battle_mode() = BM_TAUNT;
-			else battler->battle_mode() = BM_ASSIST;
-			distance_policy_values dis_pol_val = DPV_PENDING;
-			normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-			rel_pol(battler, tar_ene, &dis_pol_val, &nor_att_pol_val);
-			battler->distance_policy_value() = dis_pol_val;
-			battler->normal_attack_policy_value() = nor_att_pol_val;
-		}
-		if (battler->distance_policy_value() == DPV_CLOSE ||
-			battler->normal_attack_policy_value() == NAPV_CONTINUOUS
-		) tar_ene->attacked_battlers().push_back(battler);
-		battler->target_enemy() = tar_ene;
 	}
 }
 
@@ -1047,7 +1046,7 @@ void ai_t::battler_attack() {
 		)
 	) {
 		block_if* att_ene = nullptr;
-		for (block_if* ene : enemies) {
+		for (block_if* ene : *enemies) {
 			block_if* tar_bat = ene->target_battler();
 			if (ene->is_short_range_attacker() &&
 				tar_bat &&
@@ -1442,7 +1441,7 @@ yield_xy_func ai_t::find_wall_side_pos_pred(pos_t& pos) {
 // 敵モンスター数に連動するSP四分率を取得する。
 int // 取得した四分率。
 ai_t::sp_ratio_by_enemies() {
-	return std::max(5 - int(enemies.size()), 1);
+	return std::max(5 - int(enemies->size()), 1);
 }
 
 }
