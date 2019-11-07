@@ -2157,13 +2157,7 @@ AI_SKILL_USE_FUNC_T(PR_STRECOVERY, blind) {
 AI_SKILL_USE_FUNC(PR_SUFFRAGIUM) {
 	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
 		return mem != bot &&
-			(!mem->check_skill(HW_MAGICPOWER) ||
-				(mem->is_casting() &&
-					mem->ud()->skill_id == HW_MAGICPOWER
-				) || (!mem->is_casting() &&
-					mem->magicpower_is_active()
-				)
-			) && !mem->is_dead() &&
+			!mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
