@@ -2694,13 +2694,12 @@ SUBCMD_FUNC(Bot, Status) {
 	lea->output_buffer() = std::stringstream();
 	lea->output_buffer() << "------ 「" << mem->name() << "」のステータス ------\n";
 	lea->output_buffer() << "BaseLv " << mem->sd()->status.base_level << " ";
-	if (!pc_is_maxbaselv(mem->sd()))
-		lea->output_buffer() << "(" << mem->sd()->status.base_exp << "/" << pc_nextbaseexp(mem->sd()) <<	" " <<
-			print(
-				std::fixed,
-				std::setprecision(1),
-				mem->sd()->status.base_exp * 100. / pc_nextbaseexp(mem->sd())
-			) << "%) ";
+	lea->output_buffer() << "(" << mem->sd()->status.base_exp << "/" << pc_nextbaseexp(mem->sd()) <<	" " <<
+		print(
+			std::fixed,
+			std::setprecision(1),
+			mem->sd()->status.base_exp * 100. / pc_nextbaseexp(mem->sd())
+		) << "%) ";
 	lea->output_buffer() << "JobLv " << mem->sd()->status.job_level << " ";
 	if (!pc_is_maxjoblv(mem->sd()))
 		lea->output_buffer() << "(" << mem->sd()->status.job_exp << "/" << pc_nextjobexp(mem->sd()) << " " <<

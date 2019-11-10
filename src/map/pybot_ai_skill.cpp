@@ -1495,6 +1495,7 @@ AI_SKILL_USE_FUNC(MO_EXPLOSIONSPIRITS) {
 AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
+		!bot->check_skill(MO_COMBOFINISH) &&
 		bot->can_move() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
@@ -1507,14 +1508,22 @@ AI_SKILL_USE_FUNC(MO_EXTREMITYFIST) {
 // ˆ¢C—…”e™€Œ‚ğƒRƒ“ƒ{‚Åg‚¤B
 AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 	block_if* tar_ene = bot->target_enemy();
+	skill_condition req = skill_get_requirement(bot->sd(), kid, klv);
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
 		(bot->sc()->data[SC_BLADESTOP] ||
-			bot->sc()->data[SC_COMBO]
+			bot->combo_skill_id() == CH_CHAINCRUSH ||
+			(!bot->check_skill(CH_CHAINCRUSH) &&
+				(bot->combo_skill_id() == CH_TIGERFIST ||
+					(!bot->check_skill(CH_TIGERFIST) &&
+						bot->combo_skill_id() == MO_COMBOFINISH
+					)
+				)
+			)
 		) && bot->check_use_skill(kid, klv, tar_ene) &&
 		tar_ene->fullpower(leader) &&
 		bot->skill_ratio(kid, klv, tar_ene) >= 100 &&
 		!tar_ene->sc()->data[SC_FOGWALL] &&
-		bot->collect_spirits(skill_get_spiritball(kid, klv))
+		bot->collect_spirits(req.spiritball)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 

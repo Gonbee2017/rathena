@@ -874,10 +874,13 @@ struct ai_t {
 	void bot_cart_auto_get();
 	void bot_reload_equipset();
 	void bot_use_item();
-	void bot_pickup_flooritem();
+	void bot_loot();
+	void bot_greed();
+	void bot_pickup();
 	void bot_positioning();
 	void bot_follow();
 	void bot_remove_enchant();
+	void bot_explosion();
 	void bot_attack();
 	void bot_play_skill();
 	void bot_use_skill();

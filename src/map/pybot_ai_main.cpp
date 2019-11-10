@@ -460,10 +460,11 @@ void ai_t::bot_main(
 	bot_cart_auto_get();
 	bot_reload_equipset();
 	bot_use_item();
-	bot_pickup_flooritem();
+	bot_loot();
 	bot_positioning();
 	bot_follow();
 	bot_remove_enchant();
+	bot_explosion();
 	bot_attack();
 	bot_play_skill();
 	bot_use_skill();
@@ -687,57 +688,124 @@ void ai_t::bot_use_item() {
 	}
 }
 
-// Botがドロップアイテムを拾う。
-void ai_t::bot_pickup_flooritem() {
+// Botがドロップアイテムを収集する。
+void ai_t::bot_loot() {
 	CS_ENTER;
-	if ((bot->loot()->get() == LM_YES_ALWAYS ||
+	if (!bot->is_walking() &&
+		(bot->loot()->get() == LM_YES_ALWAYS ||
 			(bot->loot()->get() == LM_YES_REST &&
 				bot->battle_mode() == BM_NONE
 			)
 		) && !bot->sc()->data[SC_WEIGHT90] &&
 		pc_inventoryblank(bot->sd())
 	) {
-		flooritem_data* nea_fit = nullptr;
-		int nea_dis;
-		for (flooritem_data* fit : flooritems) {
-			const TimerData* td = get_timer(fit->cleartimer);
-			if (td &&
-				td->func
+		if (bot->check_skill(BS_GREED) &&
+			bot->check_sp(2) &&
+			bot->can_use_skill(BS_GREED, 1)
+		) bot_greed();
+		bot_pickup();
+	}
+}
+
+// Botがグリードを使用する。
+void ai_t::bot_greed() {
+	CS_ENTER;
+	int edg_len = AREA_SIZE * 2 + 1;
+	std::vector<int> cou_map(edg_len * edg_len, 0);
+	auto coods_to_ind = [this, &edg_len] (int x, int y) -> int {
+		return (AREA_SIZE + y - bot->bl()->y) * edg_len + (AREA_SIZE + x - bot->bl()->x);
+	};
+	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
+	for (flooritem_data* fit : flooritems) {
+		const TimerData* td = get_timer(fit->cleartimer);
+		if (td &&
+			td->func
+		) {
+			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+			if (pc_can_takeitem(bot->sd(), fit) &&
+				bot->can_reach_bl(&fit->bl) &&
+				wei <= wei_rem
 			) {
-				int dis = distance_client_bl(&fit->bl, bot->bl());
-				int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-				int rem = bot->sd()->max_weight - bot->sd()->weight;
-				if ((!nea_fit ||
-						dis < nea_dis
-					) && pc_can_takeitem(bot->sd(), fit) &&
-					//away_warp_portals(fit->bl.x, fit->bl.y) &&
-					bot->can_reach_bl(&fit->bl) &&
-					wei <= rem
-				) {
-					nea_fit = fit;
-					nea_dis = dis;
+				for (int rel_y = -2; rel_y <= 2; ++rel_y) {
+					for (int rel_x = -2; rel_x <= 2; ++rel_x)
+						++cou_map[coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y)];
 				}
 			}
 		}
-		if (nea_fit) {
-			int gre_lv = bot->check_skill(BS_GREED);
-			if (gre_lv &&
-				(bot->sc()->cant.cast ||
-					!bot->can_use_skill(BS_GREED, gre_lv) ||
-					!bot->check_sp(2)
-				)
-			) gre_lv = 0;
-			int ran = gre_lv ? 0 : 1;
-			if (bot->is_sit()) bot->stand();
-			if (bot->can_move() &&
-				!bot->walk_bl(&nea_fit->bl, ran) &&
-				bot->can_act()
-			) {
-				if (gre_lv) bot->use_skill_self(BS_GREED, gre_lv);
-				if (pc_takeitem(bot->sd(), nea_fit)) bot->act_end();
+	}
+	auto ind_to_coords = [this, &edg_len] (int ind) -> coords_t {
+		coords_t res;
+		res.x = bot->bl()->x - AREA_SIZE + (ind % edg_len);
+		res.y = bot->bl()->y - AREA_SIZE + (ind / edg_len);
+		return res;
+	};
+	int gre_ind = -1;
+	int gre_cou = 2;
+	coords_t gre_xy;
+	int gre_dis;
+	for (int i = 0; i < cou_map.size(); ++i) {
+		int cou = cou_map[i];
+		if (cou >= gre_cou) {
+			coords_t xy = ind_to_coords(i);
+			if (bot->can_reach_xy(xy.x, xy.y)) {
+				int dis = distance_client_blxy(bot->bl(), xy.x, xy.y);
+				if (gre_ind < 0 ||
+					cou > gre_cou ||
+					dis < gre_dis
+				) {
+					gre_ind = i;
+					gre_cou = cou;
+					gre_xy = xy;
+					gre_dis = dis;
+				}
 			}
-			throw turn_end_exception();
 		}
+	}
+	if (gre_ind >= 0) {
+		if (bot->is_sit()) bot->stand();
+		if (bot->can_move()) {
+			if (bot->walk_xy(gre_xy.x, gre_xy.y)) {
+				bot->walk_end_func() = [this] (ai_t* ai, void* fun) {
+					bot->use_skill_self(BS_GREED, 1);
+				};
+			} else bot->use_skill_self(BS_GREED, 1);
+		}
+		throw turn_end_exception();
+	}
+}
+
+// Botがドロップアイテムを拾う。
+void ai_t::bot_pickup() {
+	CS_ENTER;
+	flooritem_data* nea_fit = nullptr;
+	int nea_dis;
+	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
+	for (flooritem_data* fit : flooritems) {
+		const TimerData* td = get_timer(fit->cleartimer);
+		if (td &&
+			td->func
+		) {
+			int dis = distance_client_bl(&fit->bl, bot->bl());
+			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+			if ((!nea_fit ||
+					dis < nea_dis
+				) && pc_can_takeitem(bot->sd(), fit) &&
+				bot->can_reach_bl(&fit->bl) &&
+				wei <= wei_rem
+			) {
+				nea_fit = fit;
+				nea_dis = dis;
+			}
+		}
+	}
+	if (nea_fit) {
+		if (bot->is_sit()) bot->stand();
+		if (bot->can_move() &&
+			!bot->walk_bl(&nea_fit->bl, 1) &&
+			bot->can_act() &&
+			pc_takeitem(bot->sd(), nea_fit)
+		) bot->act_end();
+		throw turn_end_exception();
 	}
 }
 
@@ -786,6 +854,14 @@ void ai_t::bot_remove_enchant() {
 			) status_change_end(bot->bl(), enc.typ, INVALID_TIMER);
 		}
 	}
+}
+
+// Botが爆裂波動を使用する。
+void ai_t::bot_explosion() {
+	if (!bot->sc()->data[SC_EXPLOSIONSPIRITS] &&
+		battler->can_act() &&
+		!battler->is_paralysis()
+	) clif_parse_NoviceExplosionSpirits(bot->fd(), bot->sd());
 }
 
 // Botが攻撃する。

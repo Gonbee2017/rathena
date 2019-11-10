@@ -1120,5 +1120,6 @@ void clif_equipswitch_reply( struct map_session_data* sd, bool failed );
 
 // [GonBee]
 void clif_parse_AutoRevive(int fd, struct map_session_data *sd);
+void clif_parse_NoviceExplosionSpirits(int fd, struct map_session_data *sd);
 
 #endif /* CLIF_HPP */

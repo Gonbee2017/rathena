@@ -3426,6 +3426,7 @@ static bool intif_parse_StorageReceived(int fd)
 			return false;
 		}
 	}
+
 	if (RFIFOW(fd,2)-10 != sz_stor) {
 		ShowError("intif_parse_StorageReceived: data size error %d %" PRIuPTR "\n",RFIFOW(fd,2)-10 , sz_stor);
 		stor->status = false;
