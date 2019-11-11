@@ -987,7 +987,13 @@ static int itemdb_combo_split_atoi (char *str, int *val) {
  * <combo{:combo{:combo:{..}}}>,<{ script }>
  **/
 static void itemdb_read_combos(const char* basedir, bool silent) {
-	uint32 lines = 0, count = 0;
+
+	// [GonBee]
+	// id‚ª’Êí‚Æimport‚Åd•¡‚µ‚Ä‚µ‚Ü‚Á‚Ä‚¢‚éI
+	//uint32 lines = 0, count = 0;
+	uint32 lines = 0;
+	static uint32 count = 0;
+
 	char line[1024];
 
 	char path[256];

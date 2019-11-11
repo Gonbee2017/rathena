@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cbasetypes.hpp" />
+    <ClInclude Include="chunk.hpp" />
     <ClInclude Include="cli.hpp" />
     <ClInclude Include="conf.hpp" />
     <ClInclude Include="core.hpp" />
