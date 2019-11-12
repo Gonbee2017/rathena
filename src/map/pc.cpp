@@ -380,6 +380,13 @@ unsigned char pc_famerank(uint32 char_id, int job)
 {
 	uint8 i;
 
+	// [GonBee]
+	// ブラックスミスとアルケミストはログインしていればランカーとみなす。
+	if ((job == MAPID_BLACKSMITH ||
+			job == MAPID_ALCHEMIST
+		) && map_charid2sd(char_id)
+	) return 1;
+
 	switch(job){
 		case MAPID_BLACKSMITH: // Blacksmith
 		    for(i = 0; i < MAX_FAME_LIST; i++){

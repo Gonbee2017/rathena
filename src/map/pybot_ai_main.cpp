@@ -710,10 +710,11 @@ void ai_t::bot_loot() {
 // Botがグリードを使用する。
 void ai_t::bot_greed() {
 	CS_ENTER;
-	int edg_len = AREA_SIZE * 2 + 1;
+	int ran = AREA_SIZE + 2;
+	int edg_len = 1 + ran * 2;
 	std::vector<int> cou_map(edg_len * edg_len, 0);
-	auto coods_to_ind = [this, &edg_len] (int x, int y) -> int {
-		return (AREA_SIZE + y - bot->bl()->y) * edg_len + (AREA_SIZE + x - bot->bl()->x);
+	auto coods_to_ind = [this, ran, edg_len] (int x, int y) -> int {
+		return (ran + y - bot->bl()->y) * edg_len + (ran + x - bot->bl()->x);
 	};
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
@@ -733,10 +734,10 @@ void ai_t::bot_greed() {
 			}
 		}
 	}
-	auto ind_to_coords = [this, &edg_len] (int ind) -> coords_t {
+	auto ind_to_coords = [this, ran, edg_len] (int ind) -> coords_t {
 		coords_t res;
-		res.x = bot->bl()->x - AREA_SIZE + (ind % edg_len);
-		res.y = bot->bl()->y - AREA_SIZE + (ind / edg_len);
+		res.x = bot->bl()->x - ran + (ind % edg_len);
+		res.y = bot->bl()->y - ran + (ind / edg_len);
 		return res;
 	};
 	int gre_ind = -1;
