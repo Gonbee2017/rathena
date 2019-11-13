@@ -249,7 +249,7 @@ void ai_t::leader_collect() {
 			fit->item.nameid
 		) {
 			item_data* idb = itemdb_exists(fit->item.nameid);
-			if (check_distance_client_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
+			if (check_distance_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
 				((!leader->ignore_items()->find(fit->item.nameid) &&
 						!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
 					) || leader->not_ignore_items()->find(fit->item.nameid) ||
@@ -714,7 +714,7 @@ void ai_t::bot_greed() {
 	int edg_len = 1 + ran * 2;
 	std::vector<int> cou_map(edg_len * edg_len, 0);
 	auto coods_to_ind = [this, ran, edg_len] (int x, int y) -> int {
-		return (ran + y - bot->bl()->y) * edg_len + (ran + x - bot->bl()->x);
+		return (ran + y - leader->center().y) * edg_len + (ran + x - leader->center().x);
 	};
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
@@ -728,16 +728,20 @@ void ai_t::bot_greed() {
 				wei <= wei_rem
 			) {
 				for (int rel_y = -2; rel_y <= 2; ++rel_y) {
-					for (int rel_x = -2; rel_x <= 2; ++rel_x)
-						++cou_map[coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y)];
+					for (int rel_x = -2; rel_x <= 2; ++rel_x) {
+						int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
+						if (ind >= 0 &&
+							ind < cou_map.size()
+						) ++cou_map[ind];
+					}
 				}
 			}
 		}
 	}
 	auto ind_to_coords = [this, ran, edg_len] (int ind) -> coords_t {
 		coords_t res;
-		res.x = bot->bl()->x - ran + (ind % edg_len);
-		res.y = bot->bl()->y - ran + (ind / edg_len);
+		res.x = leader->center().x - ran + (ind % edg_len);
+		res.y = leader->center().y - ran + (ind / edg_len);
 		return res;
 	};
 	int gre_ind = -1;
