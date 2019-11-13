@@ -2133,6 +2133,161 @@ SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport) {
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
+// メンバーのスキル武具一式を一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, sKillEquipSet) {
+	CS_ENTER;
+	using es_val_t = std::pair<e_skill,skill_equipset*>;
+	auto pri_equ_poss = [] (std::vector<ptr<equipset_item>>* itms) -> std::string {
+		std::vector<std::string> toks;
+		for (auto itm : *itms) toks.push_back(print_equip_pos(itm->equip));
+		return concatinate_strings(ALL_RANGE(toks), "+");
+	};
+
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<es_val_t> es_vals;
+		mem->skill_equipsets()->copy(pybot::back_inserter(es_vals));
+		std::sort(ALL_RANGE(es_vals), [lea] (es_val_t lval, es_val_t rval) -> bool {
+			return lval.first > rval.first;
+		});
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のスキル武具一式 ------\n";
+		for (es_val_t es_val : es_vals) {
+			e_skill kid = es_val.first;
+			skill_equipset* es = es_val.second;
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) << " - " <<
+				skill_get_desc(kid) << " " <<
+				es->items.size() << "個"
+				"@" << pri_equ_poss(&es->items) << "\n";
+		}
+		lea->output_buffer() << es_vals.size() << "件のスキル武具一式が見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string sk_nam = shift_arguments(args);
+		s_skill* sk = mem->find_skill(sk_nam);
+		if (!sk)
+			throw command_error{print(
+				"「", mem->name(), "」のスキル一覧に「",
+				sk_nam, "」がありません。"
+			)};
+		std::string sk_des = skill_get_desc(sk->id);
+		if (!skill_get_inf(sk->id))
+			throw command_error{print(
+				"「", sk_des, "」はアクティブスキルではありません。"
+			)};
+		int equ = 0;
+		auto es = initialize<skill_equipset>(e_skill(sk->id));
+		for (int i = 0; i < EPO_MAX; ++i) {
+			if (i >= EPO_COSTUME_HEAD_TOP &&
+				i <= EPO_COSTUME_GARMENT
+			) continue;
+			int equ_ind = mem->sd()->equip_index[EPO2EQI_TABLE[i]];
+			if (equ_ind < 0) continue;
+			item* itm = &mem->sd()->inventory.u.items_inventory[equ_ind];
+			if (itm->equip & equ) continue;
+			auto esi = initialize<equipset_item>();
+			esi->order = equip_pos_orders(i);
+			esi->equip = equip_pos(itm->equip);
+			esi->key = construct<item_key>(itm->nameid, itm->card);
+			esi->key->identify = 1;
+			es->items.push_back(esi);
+			equ |= esi->equip;
+		}
+		if (es->items.empty()) {
+			skill_equipset* old_es = mem->skill_equipsets()->find(e_skill(sk->id));
+			if (!old_es)
+				throw command_error{print(
+					"「", mem->name(), "」の「", sk_des, "」用スキル武具一式はありません。"
+				)};
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」用スキル武具一式の登録を抹消しました。"
+			));
+			mem->skill_equipsets()->unregister(e_skill(sk->id));
+		} else {
+			mem->skill_equipsets()->register_(e_skill(sk->id), es);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sk_des, "」用スキル武具一式として「",
+				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのスキル武具一式をクリアする。
+SUBCMD_FUNC(Bot, sKillEquipSetClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->skill_equipsets()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou, "件のスキル武具一式の登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのスキル武具一式をロードする。
+SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	std::string sk_nam = shift_arguments(args);
+	s_skill* sk = mem->find_skill(sk_nam);
+	std::string sk_des = skill_get_desc(sk->id);
+	skill_equipset* es = mem->skill_equipsets()->find(e_skill(sk->id));
+	if (!es)
+		throw command_error{print(
+			"「", mem->name(), "」の「", sk_des, "」用スキル武具一式はありません。"
+		)};
+	mem->load_skill_equipset(e_skill(sk->id));
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" <<	mem->name() << "」がロードした「" <<
+		sk_des << "」用スキル武具一式 ------\n";
+	int cou = 0;
+	unsigned int equ = 0;
+	for (int i = 0; i < EPO2EQI_TABLE.size(); ++i) {
+		equip_index equ_ind = EPO2EQI_TABLE[i];
+		ptr<equipset_item> esi;
+		for (auto esi2 : es->items) {
+			if (esi2->equip & equip_bitmask[equ_ind]) {
+				esi = esi2;
+				break;
+			}
+		}
+		if (esi &&
+			!(esi->equip & equ)
+		) {
+			equ |= (unsigned int)(esi->equip);
+			int inv_ind = mem->find_inventory(*esi->key, esi->equip);
+			lea->output_buffer() << ID_PREFIX << esi->key->idb->nameid << " - " <<
+				print_item_key(*esi->key) << " "
+				"(" << print_equip_type(esi->key->idb);
+			if (inv_ind != INT_MIN) {
+				lea->output_buffer() << "@" << print_equip_pos(esi->equip);
+				++cou;
+			}
+			lea->output_buffer() << ")";
+			if (inv_ind == INT_MIN) lea->output_buffer() << " ※装備失敗";
+			lea->output_buffer() << "\n";
+		}
+	}
+	lea->output_buffer() << cou << "個の武具を装備しました。";
+	lea->show_next();
+	if (mem != lea) clif_emotion(mem->bl(), ET_HNG);
+}
+
+// メンバーのスキル武具一式を転送する。
+SUBCMD_FUNC(Bot, sKillEquipSetTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->skill_equipsets()->import_(mem1->skill_equipsets().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のスキル武具一式を転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // メンバーの優先スキルを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, sKillFirst) {
 	CS_ENTER;

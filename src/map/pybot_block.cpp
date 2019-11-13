@@ -196,6 +196,7 @@ e_skill member_if::combo_skill_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::distance_max() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,distance_policy>>& member_if::distance_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,equipset_t>>& member_if::equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<e_skill,skill_equipset>>& member_if::skill_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::fd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_broken_equip(int bas) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -213,6 +214,7 @@ ptr<registry_t<int>>& member_if::ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1827,6 +1829,11 @@ ptr<registry_t<int,equipset_t>>& member_impl::equipsets() {
 	return equipsets_;
 }
 
+// スキル武具一式のレジストリ。
+ptr<registry_t<e_skill,skill_equipset>>& member_impl::skill_equipsets() {
+	return skill_equipsets_;
+}
+
 // ソケットの記述子。
 int& member_impl::fd() {
 	return fd_;
@@ -2125,6 +2132,33 @@ void member_impl::load_equipset(
 	equip_pos dum_equ = equip_pos(0);
 	if (!equ) equ = &dum_equ;
 	equipset_t* es = equipsets()->find(mid);
+	if (es) {
+		for (auto es_itm : es->items) {
+			if (!(es_itm->equip & *equ)) {
+				int inv_ind = find_inventory(*es_itm->key, es_itm->equip);
+				if (inv_ind == INT_MIN) {
+					inv_ind = find_inventory(*es_itm->key, 0);
+					if (inv_ind == INT_MIN) {
+						if (dynamic_cast<bot_impl*>(this))
+							request_items().insert(es_itm->key->nameid);
+						continue;
+					}
+					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
+				}
+				*equ = equip_pos(*equ | es_itm->equip);
+			}
+		}
+	}
+}
+
+// メンバーがスキル武具一式をロードする。
+void member_impl::load_skill_equipset(
+	e_skill kid,   // スキルID。
+	equip_pos* equ // 装備済み部位
+) {
+	equip_pos dum_equ = equip_pos(0);
+	if (!equ) equ = &dum_equ;
+	skill_equipset* es = skill_equipsets()->find(kid);
 	if (es) {
 		for (auto es_itm : es->items) {
 			if (!(es_itm->equip & *equ)) {
@@ -2864,6 +2898,13 @@ member_t::member_t(
 		update_equipset_func(char_id()),
 		delete_equipset_func(char_id()),
 		clear_equipset_func(char_id())
+	);
+	skill_equipsets() = construct<registry_t<e_skill,skill_equipset>>(
+		load_skill_equipset_func(char_id()),
+		insert_skill_equipset_func(char_id()),
+		update_skill_equipset_func(char_id()),
+		delete_skill_equipset_func(char_id()),
+		clear_skill_equipset_func(char_id())
 	);
 	first_mobs() = construct<registry_t<int>>(
 		load_first_mob_func(char_id()),

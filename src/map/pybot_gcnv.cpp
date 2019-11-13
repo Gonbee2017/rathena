@@ -105,11 +105,11 @@ const std::vector<
 	AI_ITEM_USE_PROC     (SPICY_SANDWICH                              ),
 };
 
-// AIにおけるメンバースキル使用手続きのマップ。
+// AIにおけるBotスキル使用手続きのマップ。
 const std::unordered_map<
 	e_job,                           // 職業。
 	ptr<ai_t::skill_use_proc_vector> // スキル使用手続きのベクタ。
-> AI_MEMBER_SKILL_USE_PROCS = {
+> AI_BOT_SKILL_USE_PROCS = {
 	{JOB_ACOLYTE, initialize<ai_t::skill_use_proc_vector>(
 		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_HEAL  (1                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1133,8 +1133,8 @@ const std::unordered_map<
 	)},
 };
 
-// AIにおけるメンバー一時スキル使用手続きのベクタ(後処理)。
-const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS = {
+// AIにおけるBot一時スキル使用手続きのベクタ(後処理)。
+const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_POST_USE_PROCS = {
 	AI_SKILL_USE_PROC       (SM_MAGNUM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (WZ_METEOR                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC       (MG_FIREBALL                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -1150,8 +1150,8 @@ const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS = {
 	AI_SKILL_USE_PROC_HEAL  (4                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 };
 
-// AIにおけるメンバー一時スキル使用手続きのベクタ(前処理)。
-const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS = {
+// AIにおけるBot一時スキル使用手続きのベクタ(前処理)。
+const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_PRE_USE_PROCS = {
 	AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 	AI_SKILL_USE_PROC       (MG_SIGHT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (LK_BERSERK                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -1763,6 +1763,26 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillEnchantWeaponTransport (kewt) サブコマンド ------\n"
 		"武器属性付与を転送する。\n"
 		"入力例 [@bot skillenchantweapontransport アサクロ チェイス]\n"
+	), SUBCMD_DESC(Bot, sKillEquipSet              , kes ,
+		"------ sKillEquipSet (kes) サブコマンド ------\n"
+		"スキル武具一式を一覧表示する。\n"
+		"入力例 [@bot skillequipset ドナ]\n"
+		"スキル武具一式を登録する。\n"
+		"入力例 [@bot skillequipset ドナ ボウリングバッシュ]\n"
+		"スキル武具一式の登録を抹消する。\n"
+		"入力例 [@bot skillequipset ドナ スパイラルピアース]\n"
+	), SUBCMD_DESC(Bot, sKillEquipSetClear         ,     ,
+		"------ sKillEquipSetClear サブコマンド ------\n"
+		"スキル武具一式をクリアする。\n"
+		"入力例 [@bot skillequipsetclear ドナ]\n"
+	), SUBCMD_DESC(Bot, sKillEquipSetLoad          , kesl,
+		"------ sKillEquipSetLoad (kesl) サブコマンド ------\n"
+		"スキル武具一式をロードする。\n"
+		"入力例 [@bot skillequipsetload ドナ ボウリングバッシュ\n"
+	), SUBCMD_DESC(Bot, sKillEquipSetTransport     , kest,
+		"------ sKillEquipSetTransport (kest) サブコマンド ------\n"
+		"スキル武具一式を転送する。\n"
+		"入力例 [@bot skillequipsettransport ドナ ドナ2]\n"
 	), SUBCMD_DESC(Bot, sKillFirst                  , kf  ,
 		"------ sKillFirst (kf) サブコマンド ------\n"
 		"優先スキルを一覧表示する。\n"
@@ -2067,6 +2087,10 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew ),
 	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,     ),
 	SUBCMD_PROC(Bot, sKillEnchantWeaponTransport, kewt),
+	SUBCMD_PROC(Bot, sKillEquipSet              , kes ),
+	SUBCMD_PROC(Bot, sKillEquipSetClear         ,     ),
+	SUBCMD_PROC(Bot, sKillEquipSetLoad          , kesl),
+	SUBCMD_PROC(Bot, sKillEquipSetTransport     , kest),
 	SUBCMD_PROC(Bot, sKillFirst                 , kf  ),
 	SUBCMD_PROC(Bot, sKillFirstClear            ,     ),
 	SUBCMD_PROC(Bot, sKillFirstTransport        , kft ),

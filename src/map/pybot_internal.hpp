@@ -680,6 +680,7 @@ struct command_element;
 struct command_error;
 struct coords_t;
 struct equipset_t;
+struct skill_equipset;
 struct equipset_item;
 struct fever_size;
 struct guild_storage_context;
@@ -1432,6 +1433,7 @@ struct member_if {
 	virtual ptr<regnum_t<int>>& distance_max();
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies();
 	virtual ptr<registry_t<int,equipset_t>>& equipsets();
+	virtual ptr<registry_t<e_skill,skill_equipset>>& skill_equipsets();
 	virtual int& fd();
 	virtual int find_broken_equip(int bas = 0);
 	virtual int find_cart(const std::string& nam);
@@ -1450,6 +1452,7 @@ struct member_if {
 	virtual bool is_sit();
 	virtual ptr<registry_t<int,e_element>>& kew_elements();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
+	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual ptr<regnum_t<loot_modes>>& loot();
 	virtual bool magicpower_is_active();
@@ -1840,6 +1843,8 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,distance_policy>>		  
 		distance_policies_;                       // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;   // 武具一式のレジストリ。
+	ptr<registry_t<e_skill,skill_equipset>>
+		skill_equipsets_;                         // スキル武具一式のレジストリ。
 	int fd_;                                      // ソケットの記述子。
 	ptr<registry_t<int>> first_mobs_;             // 優先モンスターのレジストリ。
 	ptr<registry_t<int,e_skill>> first_skills_;   // 優先スキルのレジストリ。
@@ -1892,6 +1897,7 @@ struct member_impl : virtual block_if {
 	virtual int distance_max_value() override;
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies() override;
 	virtual ptr<registry_t<int,equipset_t>>& equipsets() override;
+	virtual ptr<registry_t<e_skill,skill_equipset>>& skill_equipsets() override;
 	virtual int& fd() override;
 	virtual int find_broken_equip(int bas = 0) override;
 	virtual int find_cart(const std::string& nam) override;
@@ -1928,6 +1934,7 @@ struct member_impl : virtual block_if {
 	virtual block_if*& leader() override;
 	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr) override;
+	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr) override;
 	virtual void load_play_skill(int mid, e_skill* kid) override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual ptr<regnum_t<loot_modes>>& loot() override;
@@ -2242,6 +2249,12 @@ struct equipset_t {
 	std::vector<ptr<equipset_item>> items; // アイテムのベクタ。
 
 	explicit equipset_t(int16_t mid);
+};
+
+// スキル武具一式。
+struct skill_equipset {
+	e_skill skill_id;                      // スキルID。
+	std::vector<ptr<equipset_item>> items; // アイテムのベクタ。
 };
 
 // チームメンバー。
@@ -2568,6 +2581,10 @@ SUBCMD_FUNC(Bot, sKillBerserkRate);
 SUBCMD_FUNC(Bot, sKillEnchantWeapon);
 SUBCMD_FUNC(Bot, sKillEnchantWeaponClear);
 SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport);
+SUBCMD_FUNC(Bot, sKillEquipSet);
+SUBCMD_FUNC(Bot, sKillEquipSetClear);
+SUBCMD_FUNC(Bot, sKillEquipSetLoad);
+SUBCMD_FUNC(Bot, sKillEquipSetTransport);
 SUBCMD_FUNC(Bot, sKillFirst);
 SUBCMD_FUNC(Bot, sKillFirstClear);
 SUBCMD_FUNC(Bot, sKillFirstTransport);
@@ -2635,6 +2652,7 @@ int shift_arguments_then_parse_int(command_argument_list& args, const std::strin
 registry_t<int>::clear_func clear_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::clear_func clear_distance_policy_func(int cid);
 registry_t<int,equipset_t>::clear_func clear_equipset_func(int cid);
+registry_t<e_skill,skill_equipset>::clear_func clear_skill_equipset_func(int cid);
 registry_t<int>::clear_func clear_first_mob_func(int cid);
 registry_t<int,e_skill>::clear_func clear_first_skill_func(int cid);
 registry_t<int>::clear_func clear_great_mob_func(int cid);
@@ -2658,6 +2676,7 @@ registry_t<int,team_t>::clear_func clear_team_func(int cid);
 registry_t<int>::save_func delete_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func delete_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func delete_equipset_func(int cid);
+registry_t<e_skill,skill_equipset>::save_func delete_skill_equipset_func(int cid);
 registry_t<int>::save_func delete_first_mob_func(int cid);
 registry_t<int,e_skill>::save_func delete_first_skill_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
@@ -2681,6 +2700,7 @@ registry_t<int,team_t>::save_func delete_team_func(int cid);
 registry_t<int>::save_func insert_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::save_func insert_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func insert_equipset_func(int cid);
+registry_t<e_skill,skill_equipset>::save_func insert_skill_equipset_func(int cid);
 registry_t<int>::save_func insert_first_mob_func(int cid);
 registry_t<int,e_skill>::save_func insert_first_skill_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
@@ -2704,6 +2724,7 @@ registry_t<int,team_t>::save_func insert_team_func(int cid);
 registry_t<int>::load_func load_cart_auto_get_item_func(int cid);
 registry_t<int,distance_policy>::load_func load_distance_policy_func(int cid);
 registry_t<int,equipset_t>::load_func load_equipset_func(int cid);
+registry_t<e_skill,skill_equipset>::load_func load_skill_equipset_func(int cid);
 registry_t<int>::load_func load_first_mob_func(int cid);
 registry_t<int,e_skill>::load_func load_first_skill_func(int cid);
 registry_t<int>::load_func load_great_mob_func(int cid);
@@ -2726,6 +2747,7 @@ registry_t<int>::load_func load_storage_put_item_func(int cid);
 registry_t<int,team_t>::load_func load_team_func(int cid);
 registry_t<int,distance_policy>::save_func update_distance_policy_func(int cid);
 registry_t<int,equipset_t>::save_func update_equipset_func(int cid);
+registry_t<e_skill,skill_equipset>::save_func update_skill_equipset_func(int cid);
 registry_t<int,e_skill>::save_func update_first_skill_func(int cid);
 registry_t<int,e_element>::save_func update_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func update_limit_skill_func(int cid);
@@ -2839,9 +2861,9 @@ bool wall_exists(block_list* cen, int rad);
 // 定数の宣言
 
 extern const std::vector<ai_t::item_use_proc> AI_ITEM_USE_PROCS;
-extern const std::unordered_map<e_job,ptr<ai_t::skill_use_proc_vector>> AI_MEMBER_SKILL_USE_PROCS;
-extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_POST_USE_PROCS;
-extern const ai_t::skill_use_proc_vector AI_MEMBER_TEMPORARY_SKILL_PRE_USE_PROCS;
+extern const std::unordered_map<e_job,ptr<ai_t::skill_use_proc_vector>> AI_BOT_SKILL_USE_PROCS;
+extern const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_POST_USE_PROCS;
+extern const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_PRE_USE_PROCS;
 extern const std::unordered_map<homun_mapid,ptr<ai_t::skill_use_proc_vector>> AI_HOMUN_SKILL_USE_PROCS;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE;

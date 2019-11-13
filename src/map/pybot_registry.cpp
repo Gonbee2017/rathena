@@ -47,6 +47,19 @@ clear_equipset_func(
 	};
 }
 
+// DBからスキル武具一式をクリアする関数を作る。
+registry_t<e_skill,equipset_t>::clear_func // 作った関数。
+clear_skill_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_skill_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBから優先モンスターをクリアする関数を作る。
 registry_t<int>::clear_func // 作った関数。
 clear_first_mob_func(
@@ -343,6 +356,21 @@ delete_equipset_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` = " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBからスキル武具一式を削除する関数を作る。
+registry_t<e_skill,skill_equipset>::save_func // 作った関数。
+delete_skill_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, e_skill kid, skill_equipset* equ_set) {
+		ses->execute(
+			"DELETE FROM `pybot_skill_equipset` "
+			"WHERE"
+			" `char_id` = "  , construct<sql_param>(cid), " AND"
+			" `skill_id` = " , construct<sql_param>(kid)
 		);
 	};
 }
@@ -686,6 +714,30 @@ insert_equipset_func(
 				"VALUES"
 				"(", construct<sql_param>(cid              ), ","
 				" ", construct<sql_param>(mid              ), ","
+				" ", construct<sql_param>(esi->order       ), ","
+				" ", construct<sql_param>(esi->equip       ), ","
+				" ", construct<sql_param>(esi->key->nameid ), ","
+				" ", construct<sql_param>(esi->key->card[0]), ","
+				" ", construct<sql_param>(esi->key->card[1]), ","
+				" ", construct<sql_param>(esi->key->card[2]), ","
+				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
+// DBにスキル武具一式を挿入する関数を作る。
+registry_t<e_skill,skill_equipset>::save_func // 作った関数。
+insert_skill_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, e_skill kid, skill_equipset* equ_set) {
+		for (auto esi : equ_set->items) {
+			ses->execute(
+				"INSERT INTO `pybot_skill_equipset` "
+				"VALUES"
+				"(", construct<sql_param>(cid              ), ","
+				" ", construct<sql_param>(kid              ), ","
 				" ", construct<sql_param>(esi->order       ), ","
 				" ", construct<sql_param>(esi->equip       ), ","
 				" ", construct<sql_param>(esi->key->nameid ), ","
@@ -1095,6 +1147,53 @@ load_equipset_func(
 			) {
 				flu();
 				equ_set = construct<equipset_t>(mid);
+			}
+			auto ik = construct<item_key>(nid, car);
+			ik->identify = 1;
+			auto ei = initialize<equipset_item>(equip_pos_orders(ord), equip_pos(equ), ik);
+			equ_set->items.push_back(ei);
+		}
+		flu();
+	};
+}
+
+// DBからスキル武具一式をロードする関数を作る。
+registry_t<e_skill,skill_equipset>::load_func // 作った関数。
+load_skill_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<e_skill,skill_equipset>* reg) {
+		e_skill kid;
+		int ord;
+		int equ;
+		uint16_t nid;
+		uint16_t car[MAX_SLOTS];
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("skill_id", kid   ), "`,"
+			" `", construct<sql_column>("order"   , ord   ), "`,"
+			" `", construct<sql_column>("equip"   , equ   ), "`,"
+			" `", construct<sql_column>("nameid"  , nid   ), "`,"
+			" `", construct<sql_column>("card0"   , car[0]), "`,"
+			" `", construct<sql_column>("card1"   , car[1]), "`,"
+			" `", construct<sql_column>("card2"   , car[2]), "`,"
+			" `", construct<sql_column>("card3"   , car[3]), "` "
+			"FROM `pybot_skill_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid), " "
+			"ORDER BY"
+			" `skill_id`,"
+			" `order`"
+		);
+		ptr<skill_equipset> equ_set;
+		auto flu = [reg, &equ_set] () {
+			if (equ_set) reg->register_(equ_set->skill_id, equ_set);
+		};
+		while (ses->next_row()) {
+			if (!equ_set ||
+				kid != equ_set->skill_id
+			) {
+				flu();
+				equ_set = initialize<skill_equipset>(kid);
 			}
 			auto ik = construct<item_key>(nid, car);
 			ik->identify = 1;
@@ -1547,6 +1646,36 @@ update_equipset_func(
 				"VALUES"
 				"(", construct<sql_param>(cid              ), ","
 				" ", construct<sql_param>(mid              ), ","
+				" ", construct<sql_param>(esi->order       ), ","
+				" ", construct<sql_param>(esi->equip       ), ","
+				" ", construct<sql_param>(esi->key->nameid ), ","
+				" ", construct<sql_param>(esi->key->card[0]), ","
+				" ", construct<sql_param>(esi->key->card[1]), ","
+				" ", construct<sql_param>(esi->key->card[2]), ","
+				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
+// DBのスキル武具一式を更新する関数を作る。
+registry_t<e_skill,skill_equipset>::save_func // 作った関数。
+update_skill_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, e_skill kid, skill_equipset* equ_set) {
+		ses->execute(
+			"DELETE FROM `pybot_skill_equipset` "
+			"WHERE"
+			" `char_id` = "  , construct<sql_param>(cid), " AND"
+			" `skill_id` = " , construct<sql_param>(kid)
+		);
+		for (auto esi : equ_set->items) {
+			ses->execute(
+				"INSERT INTO `pybot_skill_equipset` "
+				"VALUES"
+				"(", construct<sql_param>(cid              ), ","
+				" ", construct<sql_param>(kid              ), ","
 				" ", construct<sql_param>(esi->order       ), ","
 				" ", construct<sql_param>(esi->equip       ), ","
 				" ", construct<sql_param>(esi->key->nameid ), ","
