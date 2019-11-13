@@ -3066,7 +3066,11 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			break;
 		case SP_CLASSCHANGE: // [Valaris]
 			if(sd->state.lr_flag !=2)
-				sd->bonus.classchange=val;
+
+				// [GonBee]
+				//sd->bonus.classchange=val;
+				sd->bonus.classchange+=val;
+
 			break;
 		case SP_LONG_ATK_RATE:
 			if(sd->state.lr_flag != 2)	//[Lupus] it should stack, too. As any other cards rate bonuses
