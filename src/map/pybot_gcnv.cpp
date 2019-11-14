@@ -1173,7 +1173,6 @@ const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_PRE_USE_PROCS = {
 const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 	{PR_SANCTUARY      ,    2},
 	{AL_PNEUMA         ,  400},
-	{WZ_QUAGMIRE       ,  -20},
 	{SA_VOLCANO        ,    1},
 	{SA_DELUGE         ,    1},
 	{SA_VIOLENTGALE    ,    1},

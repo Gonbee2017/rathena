@@ -357,19 +357,36 @@ AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 
 // アドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE) {
-	if (bot->sc_rest(SC_ADRENALINE) <= bot->get_skill_tail(kid) &&
-		!bot->sc()->data[SC_ADRENALINE2] &&
-		!bot->sc()->data[SC_DECREASEAGI] &&
-		!bot->sc()->data[SC_QUAGMIRE]
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
+			!mem->is_hiding() &&
+			pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
+			!mem->sc()->data[SC_ADRENALINE2] &&
+			mem->sc_rest(SC_ADRENALINE) <= bot->get_skill_tail(kid) &&
+			!mem->sc()->data[SC_DECREASEAGI] &&
+			!mem->sc()->data[SC_QUAGMIRE];
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // フルアドレナリンラッシュを使う。
 AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
-	if (bot->sc_rest(SC_ADRENALINE2) <= bot->get_skill_tail(kid) &&
-		!bot->sc()->data[SC_DECREASEAGI] &&
-		!bot->sc()->data[SC_QUAGMIRE]
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RRANGE(members), [this, kid] (block_if* mem) -> bool {
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
+			!mem->is_hiding() &&
+			mem->sc_rest(SC_ADRENALINE2) <= bot->get_skill_tail(kid) &&
+			!mem->sc()->data[SC_DECREASEAGI] &&
+			!mem->sc()->data[SC_QUAGMIRE];
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // ハンマーフォールを使う。
