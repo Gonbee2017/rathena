@@ -116,6 +116,7 @@ void ai_t::leader_collect() {
 	std::vector<mob_data*> ene_mds;
 	std::vector<mob_data*> aly_mds;
 	yield_bl_func yie_md = [this, &ene_mds, &aly_mds] (block_list* bl) -> int {
+		int res = 0;
 		mob_data* md = (mob_data*)(bl);
 		if (!md->sc.data[SC_WINKCHARM]) {
 			if (md->master_id &&
@@ -126,9 +127,12 @@ void ai_t::leader_collect() {
 					md->target_id &&
 					find_block<battler_impl>(md->target_id)
 				) || bl->id == leader->attack_target()
-			) ene_mds.push_back(md);
+			) {
+				ene_mds.push_back(md);
+				res = 1;
+			}
 		}
-		return 0;
+		return res;
 	};
 	map_foreachinshootrange(
 		callback_yield_bl,
@@ -244,25 +248,31 @@ void ai_t::leader_collect() {
 	}
 
 	yield_bl_func yie_fit = [this] (block_list* bl) -> int	{
+		int res = 0;
 		flooritem_data* fit = (flooritem_data*)(bl);
 		if (fit &&
 			fit->item.nameid
 		) {
-			item_data* idb = itemdb_exists(fit->item.nameid);
-			if (check_distance_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
-				((!leader->ignore_items()->find(fit->item.nameid) &&
-						!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
-					) || leader->not_ignore_items()->find(fit->item.nameid) ||
-					leader->not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) ||
-					fit->item.card[0] ||
-					fit->item.refine
-				)
+			const TimerData* td = get_timer(fit->cleartimer);
+			if (td &&
+				td->func
 			) {
-				flooritems.push_back(fit);
-				return 1;
+				item_data* idb = itemdb_exists(fit->item.nameid);
+				if (check_distance_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
+					((!leader->ignore_items()->find(fit->item.nameid) &&
+							!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
+						) || leader->not_ignore_items()->find(fit->item.nameid) ||
+						leader->not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) ||
+						fit->item.card[0] ||
+						fit->item.refine
+					)
+				) {
+					flooritems.push_back(fit);
+					res = 1;
+				}
 			}
 		}
-		return 0;
+		return res;
 	};
 	map_foreachinshootrange(
 		callback_yield_bl,
@@ -273,6 +283,7 @@ void ai_t::leader_collect() {
 	);
 
 	yield_bl_func yie_war_por = [this] (block_list* bl) -> int {
+		int res = 0;
 		npc_data* npc = (npc_data*)(bl);
 		if (npc &&
 			npc->subtype == NPCTYPE_WARP &&
@@ -280,9 +291,9 @@ void ai_t::leader_collect() {
 			check_distance_client_bl(&npc->bl, &leader->center(), AREA_SIZE)
 		) {
 			warp_portals.push_back(npc);
-			return 1;
+			res = 1;
 		}
-		return 0;
+		return res;
 	};
 	map_foreachinshootrange(
 		callback_yield_bl,
@@ -718,22 +729,17 @@ void ai_t::bot_greed() {
 	};
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
-		const TimerData* td = get_timer(fit->cleartimer);
-		if (td &&
-			td->func
+		int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+		if (pc_can_takeitem(bot->sd(), fit) &&
+			bot->can_reach_bl(&fit->bl) &&
+			wei <= wei_rem
 		) {
-			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-			if (pc_can_takeitem(bot->sd(), fit) &&
-				bot->can_reach_bl(&fit->bl) &&
-				wei <= wei_rem
-			) {
-				for (int rel_y = -2; rel_y <= 2; ++rel_y) {
-					for (int rel_x = -2; rel_x <= 2; ++rel_x) {
-						int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
-						if (ind >= 0 &&
-							ind < cou_map.size()
-						) ++cou_map[ind];
-					}
+			for (int rel_y = -2; rel_y <= 2; ++rel_y) {
+				for (int rel_x = -2; rel_x <= 2; ++rel_x) {
+					int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
+					if (ind >= 0 &&
+						ind < cou_map.size()
+					) ++cou_map[ind];
 				}
 			}
 		}
@@ -786,21 +792,16 @@ void ai_t::bot_pickup() {
 	int nea_dis;
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
-		const TimerData* td = get_timer(fit->cleartimer);
-		if (td &&
-			td->func
+		int dis = distance_client_bl(&fit->bl, bot->bl());
+		int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+		if ((!nea_fit ||
+				dis < nea_dis
+			) && pc_can_takeitem(bot->sd(), fit) &&
+			bot->can_reach_bl(&fit->bl) &&
+			wei <= wei_rem
 		) {
-			int dis = distance_client_bl(&fit->bl, bot->bl());
-			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-			if ((!nea_fit ||
-					dis < nea_dis
-				) && pc_can_takeitem(bot->sd(), fit) &&
-				bot->can_reach_bl(&fit->bl) &&
-				wei <= wei_rem
-			) {
-				nea_fit = fit;
-				nea_dis = dis;
-			}
+			nea_fit = fit;
+			nea_dis = dis;
 		}
 	}
 	if (nea_fit) {
