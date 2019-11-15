@@ -362,11 +362,11 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE) {
 				(bot->party_id() &&
 					mem->party_id() == bot->party_id()
 				)
-			) && !mem->is_dead() &&
+			) && pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
+			!mem->is_dead() &&
 			!mem->is_hiding() &&
-			pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
-			!mem->sc()->data[SC_ADRENALINE2] &&
 			mem->sc_rest(SC_ADRENALINE) <= bot->get_skill_tail(kid) &&
+			!mem->sc()->data[SC_ADRENALINE2] &&
 			!mem->sc()->data[SC_DECREASEAGI] &&
 			!mem->sc()->data[SC_QUAGMIRE];
 	});
@@ -380,7 +380,8 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
 				(bot->party_id() &&
 					mem->party_id() == bot->party_id()
 				)
-			) && !mem->is_dead() &&
+			) && pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
+			!mem->is_dead() &&
 			!mem->is_hiding() &&
 			mem->sc_rest(SC_ADRENALINE2) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_DECREASEAGI] &&
