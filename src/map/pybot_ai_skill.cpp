@@ -930,7 +930,7 @@ AI_SKILL_USE_FUNC(HT_DETECTING) {
 			bot->check_skill_range_block(kid, klv, ene) &&
 			ene->is_hiding();
 	});
-	if (ene) bot->use_skill_block(kid, klv, ene);
+	if (ene) bot->use_skill_xy(kid, klv, ene->bl()->x, ene->bl()->y);
 }
 
 // フリージングトラップを使う。

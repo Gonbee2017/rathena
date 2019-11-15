@@ -867,7 +867,7 @@ REPLACE INTO `cp_itemdesc` VALUES(4140, 'ボスモンスターに25%の追加ダメージ。<br/
 REPLACE INTO `cp_itemdesc` VALUES(4142, '攻撃速度増加。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4143, '絶対にスタンにならない。<br/>VIT+3<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">兜</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4146, 'ターゲッティングされた魔法を50%の確率で使用者にはね返す。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">盾</font><br/>重量 : <font color="777777">1</font>');
-REPLACE INTO `cp_itemdesc` VALUES(4147, '全ての攻撃が９セルの範囲攻撃になる。<br/>命中率-10<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(4147, '全ての攻撃が９セルの範囲攻撃になり、<br/>三段掌が発動しなくなる。<br/>命中率-10<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4148, 'スキル使用時、SP消費量を30%減らす。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">兜</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(1753, '鋼鉄から作られた矢。高い攻撃力を持っている。<br/>系列 : <font color="777777">矢</font>    攻撃 : <font color="777777">40</font><br/>重量 : <font color="777777">0.2</font>      属性 : <font color="777777">無</font>');
 REPLACE INTO `cp_itemdesc` VALUES(1094, '少し短く感じられるピッグテールリボン。収集品商人に売ることができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
