@@ -7352,7 +7352,14 @@ enum damage_lv battle_weapon_attack(struct block_list* src, struct block_list* t
 		}
 	}
 
-	if(sd && (skillv = pc_checkskill(sd,MO_TRIPLEATTACK)) > 0) {
+	// [GonBee]
+	// スプラッシュ攻撃のときは三段掌が発動しない。
+	//if(sd && (skillv = pc_checkskill(sd,MO_TRIPLEATTACK)) > 0) {
+	if(sd &&
+		(skillv = pc_checkskill(sd,MO_TRIPLEATTACK)) > 0 &&
+		!sd->bonus.splash_range
+	) {
+
 		int triple_rate= 30 - skillv; //Base Rate
 		if (sc && sc->data[SC_SKILLRATE_UP] && sc->data[SC_SKILLRATE_UP]->val1 == MO_TRIPLEATTACK) {
 			triple_rate+= triple_rate*(sc->data[SC_SKILLRATE_UP]->val2)/100;
