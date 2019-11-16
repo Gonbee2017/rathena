@@ -1212,7 +1212,13 @@ void ai_t::battler_use_skill() {
 							sk_use_pro.func(this, kid, klv);
 						}
 					}
-					if (dynamic_cast<bot_impl*>(battler)) battler->using_skills().erase(kid);
+					if (dynamic_cast<bot_impl*>(battler)) {
+						auto usi = battler->using_skills().find(kid);
+						if (usi != battler->using_skills().end()) {
+							battler->using_skills().erase(usi);
+							battler->last_reloaded_equipset_tick() = 0;
+						}
+					}
 				}
 			}
 		}
