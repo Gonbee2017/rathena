@@ -20942,7 +20942,11 @@ static int clif_parse(int fd)
 
 	// filter out invalid / unsupported packets
 	if (cmd > MAX_PACKET_DB || cmd < MIN_PACKET_DB || packet_db[cmd].len == 0) {
-		ShowWarning("clif_parse: Received unsupported packet (packet 0x%04x, %d bytes received), disconnecting session #%d.\n", cmd, RFIFOREST(fd), fd);
+
+		// [GonBee]
+		// 不明なパケットはIPアドレスを表示する。
+		//ShowWarning("clif_parse: Received unsupported packet (packet 0x%04x, %d bytes received), disconnecting session #%d.\n", cmd, RFIFOREST(fd), fd);
+		ShowWarning("clif_parse: Received unsupported packet (packet 0x%04x, %d bytes received), disconnecting session #%d(%s).\n", cmd, RFIFOREST(fd), fd, ip2str(session[fd]->client_addr, NULL));
 
 #ifdef DUMP_INVALID_PACKET
 		ShowDump(RFIFOP(fd,0), RFIFOREST(fd));

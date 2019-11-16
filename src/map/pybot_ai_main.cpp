@@ -253,23 +253,12 @@ void ai_t::leader_collect() {
 		if (fit &&
 			fit->item.nameid
 		) {
-			const TimerData* td = get_timer(fit->cleartimer);
-			if (td &&
-				td->func
+			item_data* idb = itemdb_exists(fit->item.nameid);
+			if (check_distance_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
+				!leader->flooritem_to_be_ignored(fit)
 			) {
-				item_data* idb = itemdb_exists(fit->item.nameid);
-				if (check_distance_bl(&fit->bl, &leader->center(), AREA_SIZE) &&
-					((!leader->ignore_items()->find(fit->item.nameid) &&
-							!leader->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
-						) || leader->not_ignore_items()->find(fit->item.nameid) ||
-						leader->not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) ||
-						fit->item.card[0] ||
-						fit->item.refine
-					)
-				) {
-					flooritems.push_back(fit);
-					res = 1;
-				}
+				flooritems.push_back(fit);
+				res = 1;
 			}
 		}
 		return res;
@@ -729,17 +718,22 @@ void ai_t::bot_greed() {
 	};
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
-		int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-		if (pc_can_takeitem(bot->sd(), fit) &&
-			bot->can_reach_bl(&fit->bl) &&
-			wei <= wei_rem
+		const TimerData* td = get_timer(fit->cleartimer);
+		if (td &&
+			td->func
 		) {
-			for (int rel_y = -2; rel_y <= 2; ++rel_y) {
-				for (int rel_x = -2; rel_x <= 2; ++rel_x) {
-					int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
-					if (ind >= 0 &&
-						ind < cou_map.size()
-					) ++cou_map[ind];
+			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+			if (pc_can_takeitem(bot->sd(), fit) &&
+				bot->can_reach_bl(&fit->bl) &&
+				wei <= wei_rem
+			) {
+				for (int rel_y = -2; rel_y <= 2; ++rel_y) {
+					for (int rel_x = -2; rel_x <= 2; ++rel_x) {
+						int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
+						if (ind >= 0 &&
+							ind < cou_map.size()
+						) ++cou_map[ind];
+					}
 				}
 			}
 		}
@@ -792,16 +786,21 @@ void ai_t::bot_pickup() {
 	int nea_dis;
 	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
-		int dis = distance_client_bl(&fit->bl, bot->bl());
-		int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-		if ((!nea_fit ||
-				dis < nea_dis
-			) && pc_can_takeitem(bot->sd(), fit) &&
-			bot->can_reach_bl(&fit->bl) &&
-			wei <= wei_rem
+		const TimerData* td = get_timer(fit->cleartimer);
+		if (td &&
+			td->func
 		) {
-			nea_fit = fit;
-			nea_dis = dis;
+			int dis = distance_client_bl(&fit->bl, bot->bl());
+			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+			if ((!nea_fit ||
+					dis < nea_dis
+				) && pc_can_takeitem(bot->sd(), fit) &&
+				bot->can_reach_bl(&fit->bl) &&
+				wei <= wei_rem
+			) {
+				nea_fit = fit;
+				nea_dis = dis;
+			}
 		}
 	}
 	if (nea_fit) {

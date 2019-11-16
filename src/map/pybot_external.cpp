@@ -195,13 +195,7 @@ flooritem_to_be_ignored(
 ) {
 	CS_ENTER;
 	block_if* lea = ensure_leader(sd);
-	item_data* idb = itemdb_exists(fit->item.nameid);
-	return (lea->ignore_items()->find(fit->item.nameid) ||
-			lea->ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
-		) && !lea->not_ignore_items()->find(fit->item.nameid) &&
-		!lea->not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) &&
-		!fit->item.card[0] &&
-		!fit->item.refine;
+	return lea->flooritem_to_be_ignored(fit);
 }
 
 // ‘•”õ•”ˆÊ–¼‚ğæ“¾‚·‚éB

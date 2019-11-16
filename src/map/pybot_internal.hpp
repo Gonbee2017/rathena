@@ -1400,6 +1400,7 @@ struct leader_if {
 	virtual std::unordered_map<int,ptr<block_if>>& enemies();
 	virtual block_if* find_bot(const std::string& nam);
 	virtual block_if* find_member(const std::string& nam);
+	virtual bool flooritem_to_be_ignored(flooritem_data* fit);
 	virtual ptr<registry_t<int>>& great_mobs();
 	virtual ptr<registry_t<int>>& ignore_items();
 	virtual t_tick& last_heaby_tick();
@@ -1811,6 +1812,7 @@ struct leader_impl : virtual block_if {
 	virtual std::unordered_map<int,ptr<block_if>>& enemies() override;
 	virtual block_if* find_bot(const std::string& nam) override;
 	virtual block_if* find_member(const std::string& nam) override;
+	virtual bool flooritem_to_be_ignored(flooritem_data* fit) override;
 	virtual ptr<registry_t<int>>& great_mobs() override;
 	virtual ptr<registry_t<int>>& ignore_items() override;
 	virtual t_tick& last_heaby_tick() override;

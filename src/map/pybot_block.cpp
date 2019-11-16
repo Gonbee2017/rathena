@@ -166,6 +166,7 @@ block_list& leader_if::center() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::unordered_map<int,ptr<block_if>>& leader_if::enemies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if* leader_if::find_bot(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if* leader_if::find_member(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool leader_if::flooritem_to_be_ignored(flooritem_data* fit) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::great_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1598,6 +1599,20 @@ leader_impl::find_member(
 		}
 	}
 	return mem;
+}
+
+// ドロップアイテムが無視アイテムかを判定する。
+bool // 結果。
+leader_impl::flooritem_to_be_ignored(
+	flooritem_data* fit // ドロップアイテム。
+) {
+	item_data* idb = itemdb_exists(fit->item.nameid);
+	return (ignore_items()->find(fit->item.nameid) ||
+			ignore_items()->find(ITEM_TYPE_OFFSET + idb->type)
+		) && !not_ignore_items()->find(fit->item.nameid) &&
+		!not_ignore_items()->find(ITEM_TYPE_OFFSET + idb->type) &&
+		!fit->item.card[0] &&
+		!fit->item.refine;
 }
 
 // グレートモンスターのレジストリ。
