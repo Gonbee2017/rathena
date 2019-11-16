@@ -70,7 +70,9 @@ int battler_if::weapon_attack_element_ratio(block_if* tar) {RAISE_NOT_IMPLEMENTE
 int& bot_if::bot_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_emotion_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_reloaded_equipset_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void bot_if::reload_skill_equipset(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
+skill_id_set& bot_if::using_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_skill& bot_if::want_to_play() {RAISE_NOT_IMPLEMENTED_ERROR;}
 
 std::vector<block_if*>& enemy_if::attacked_battlers() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -270,7 +272,6 @@ int skill_user_if::check_skill(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool skill_user_if::collect_coins(int cou) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool skill_user_if::collect_spirits(int cou) {RAISE_NOT_IMPLEMENTED_ERROR;}
 s_skill* skill_user_if::find_skill(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
-s_skill* skill_user_if::find_skill(int kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void skill_user_if::iterate_skill(yield_skill_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& skill_user_if::limit_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int skill_user_if::skill_point() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -461,44 +462,6 @@ distance_policy_values& battler_impl::distance_policy_value() {
 	return distance_policy_value_;
 }
 
-// スキルを探す。
-s_skill* // 見つかったスキル。見つからなかったらnullptr。
-battler_impl::find_skill(
-	const std::string& nam // スキル名。整数ならスキルID。
-) {
-	s_skill* res = nullptr;
-	int kid = parse_id(nam);
-	if (kid) {
-		if (kid != INT_MIN) res = find_skill(kid);
-	} else {
-		std::string nam_lc = lowercase(nam);
-		iterate_skill([nam_lc, &res] (s_skill* sk) -> bool {
-			if (lowercase(skill_get_desc(sk->id)) == nam_lc) {
-				res = sk;
-				return false;
-			}
-			return true;
-		});
-	}
-	return res;
-}
-
-// スキルを探す。
-s_skill* // 見つかったスキル。見つからなかったらnullptr。
-battler_impl::find_skill(
-	int kid // スキルID。
-) {
-	s_skill* res = nullptr;
-	iterate_skill([kid, &res] (s_skill* sk) -> bool {
-		if (sk->id == kid) {
-			res = sk;
-			return false;
-		}
-		return true;
-	});
-	return res;
-}
-
 // 最高の位置か。
 bool& battler_impl::is_best_pos() {
 	return is_best_pos_;
@@ -638,6 +601,12 @@ t_tick& bot_impl::last_reloaded_equipset_tick() {
 	return last_reloaded_equipset_tick_;
 }
 
+// スキル武具一式をリロードする。
+void bot_impl::reload_skill_equipset(e_skill kid) {
+	load_skill_equipset(kid);
+	using_skills().insert(kid);
+}
+
 // Botがリスポーンする。
 void bot_impl::respawn() {
 	walk_end_func() = cast_end_func() = nullptr;
@@ -665,6 +634,11 @@ bot_impl::teleport(
 		done = true;
 	}
 	return done;
+}
+
+// 使用中のスキルのセット。
+skill_id_set& bot_impl::using_skills() {
+	return using_skills_;
 }
 
 // Botが演奏したいスキル。
@@ -1391,7 +1365,7 @@ void homun_impl::iterate_skill(
 ) {
 	for (int kid = HM_SKILLBASE; kid < HM_SKILLBASE + MAX_HOMUNSKILL; ++kid) {
 		int kind = hom_skill_get_index(kid);
-		if (kind >= 0) {
+		if (kind) {
 			s_skill* sk = &hd()->homunculus.hskill[kind];
 			if (sk->id &&
 				!yie(sk)
@@ -1451,7 +1425,7 @@ homun_impl::skill(
 	e_skill kid
 ) {
 	int kind = hom_skill_get_index(kid);
-	if (kind >= 0) return &hd()->homunculus.hskill[kind];
+	if (kind) return &hd()->homunculus.hskill[kind];
 	return nullptr;
 }
 
@@ -1795,6 +1769,9 @@ member_impl::check_skill(
 	e_skill kid // スキルID。
 ) {
 	int klv = pc_checkskill(sd(), kid);
+	if (!klv &&
+		kid == pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM))
+	) klv = pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM_LV));
 	int* lim_slv = limit_skills()->find(kid);
 	if (lim_slv) klv = std::min(klv, *lim_slv);
 	return klv;
@@ -2116,11 +2093,21 @@ member_impl::is_wall_side() {
 void member_impl::iterate_skill(
 	yield_skill_func yie // スキル獲得ハンドラ。
 ) {
-	for (int i = 0; i < MAX_SKILL; ++i) {
+	int i;
+	for (i = 0; i < MAX_SKILL; ++i) {
 		s_skill* sk = &sd()->status.skill[i];
 		if (sk->id &&
 			!yie(sk)
 		) break; 
+	}
+	if (i == MAX_SKILL) {
+		static s_skill pla_sk;
+		pla_sk.id = pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM));
+		if (pla_sk.id) {
+			pla_sk.lv = pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM_LV));
+			pla_sk.flag = SKILL_FLAG_PLAGIARIZED;
+			yie(&pla_sk);
+		}
 	}
 }
 
@@ -2339,16 +2326,6 @@ map_session_data*& member_impl::sd() {
 	return sd_;
 }
 
-// HPの供給を許可するHP率の登録値。
-ptr<regnum_t<int>>& member_impl::supply_hp_rate() {
-	return supply_hp_rate_;
-}
-
-// SPの供給を許可するSP率の登録値。
-ptr<regnum_t<int>>& member_impl::supply_sp_rate() {
-	return supply_sp_rate_;
-}
-
 // メンバーが座る。
 void member_impl::sit() {
 	pc_setsit(sd());
@@ -2363,7 +2340,16 @@ member_impl::skill(
 	e_skill kid
 ) {
 	int kind = skill_get_index(kid);
-	if (kind >= 0) return &sd()->status.skill[kind];
+	if (kind) return &sd()->status.skill[kind];
+	else {
+		static s_skill pla_sk;
+		pla_sk.id = pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM));
+		if (pla_sk.id == kid) {
+			pla_sk.lv = pc_readglobalreg(sd(), add_str(SKILL_VAR_PLAGIARISM_LV));
+			pla_sk.flag = SKILL_FLAG_PLAGIARIZED;
+			return &pla_sk;
+		}
+	}
 	return nullptr;
 }
 
@@ -2417,6 +2403,16 @@ member_impl::substancial_job() {
 		job <= JOB_THIEF_HIGH
 	) job -= 4001;
 	return e_job(job);
+}
+
+// HPの供給を許可するHP率の登録値。
+ptr<regnum_t<int>>& member_impl::supply_hp_rate() {
+	return supply_hp_rate_;
+}
+
+// SPの供給を許可するSP率の登録値。
+ptr<regnum_t<int>>& member_impl::supply_sp_rate() {
+	return supply_sp_rate_;
 }
 
 // メンバーの武器攻撃の属性を取得する。
@@ -2665,6 +2661,28 @@ skill_user_impl::collect_spirits(
 	return res;
 }
 
+// スキルを探す。
+s_skill* // 見つかったスキル。見つからなかったらnullptr。
+skill_user_impl::find_skill(
+	const std::string& nam // スキル名。整数ならスキルID。
+) {
+	s_skill* res = nullptr;
+	int kid = parse_id(nam);
+	if (kid) {
+		if (kid != INT_MIN) res = skill(e_skill(kid));
+	} else {
+		std::string nam_lc = lowercase(nam);
+		iterate_skill([nam_lc, &res] (s_skill* sk) -> bool {
+			if (lowercase(skill_get_desc(sk->id)) == nam_lc) {
+				res = sk;
+				return false;
+			}
+			return true;
+		});
+	}
+	return res;
+}
+
 // スキルの射程を取得する。
 int // 取得した射程。
 skill_user_impl::skill_range(
@@ -2712,9 +2730,10 @@ void skill_user_impl::use_skill_bl(
 			skill_used_ticks()[kid] = now;
 		}
 	};
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
+	if (dynamic_cast<bot_impl*>(this)) {
+		if (is_sit()) stand();
+		reload_skill_equipset(kid);
+	}
 	if (walk_bl(bl_, skill_range(kid, klv))) {
 		int bid = bl_->id;
 		walk_end_func() = [this, kid, klv, use, bid] (ai_t* ai, void* fun) {
@@ -2759,9 +2778,10 @@ void skill_user_impl::use_skill_block(
 			if (kid == NJ_KASUMIKIRI) blo->skill_used_ticks()[TF_HIDING] = now;
 		}
 	};
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
+	if (dynamic_cast<bot_impl*>(this)) {
+		if (is_sit()) stand();
+		reload_skill_equipset(kid);
+	}
 	if (walk_bl(blo->bl(), ran, nea)) {
 		int blo_bid = blo->bl()->id;
 		walk_end_func() = [this, kid, klv, use, blo_bid] (ai_t* ai, void* fun) {
@@ -2786,9 +2806,10 @@ void skill_user_impl::use_skill_self(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
+	if (dynamic_cast<bot_impl*>(this)) {
+		if (is_sit()) stand();
+		reload_skill_equipset(kid);
+	}
 	if (unit_skilluse_id(bl(), bl()->id, kid, klv)) {
 		if (dynamic_cast<member_impl*>(this))
 			pc_delinvincibletimer(sd());
@@ -2816,9 +2837,6 @@ void skill_user_impl::use_skill_xy(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	if (dynamic_cast<bot_impl*>(this) &&
-		is_sit()
-	) stand();
 	auto use = [this, x, y, kid, klv, cas_end_fun] () {
 		if (unit_skilluse_pos(bl(), x, y, kid, klv)) {
 			if (dynamic_cast<member_impl*>(this))
@@ -2827,6 +2845,10 @@ void skill_user_impl::use_skill_xy(
 			skill_used_ticks()[kid] = now;
 		}
 	};
+	if (dynamic_cast<bot_impl*>(this)) {
+		if (is_sit()) stand();
+		reload_skill_equipset(kid);
+	}
 	if (walk_xy(x, y, skill_range(kid, klv))) {
 		walk_end_func() = [this, kid, klv, use, x, y] (ai_t* ai, void* fun) {
 			if (can_reach_xy(x, y) &&

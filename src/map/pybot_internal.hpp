@@ -1289,7 +1289,9 @@ struct bot_if {
 	virtual int& bot_index();
 	virtual t_tick& last_emotion_tick();
 	virtual t_tick& last_reloaded_equipset_tick();
+	virtual void reload_skill_equipset(e_skill kid);
 	virtual void respawn();
+	virtual skill_id_set& using_skills();
 	virtual e_skill& want_to_play();
 };
 
@@ -1519,7 +1521,6 @@ struct skill_user_if {
 	virtual bool collect_coins(int cou);
 	virtual bool collect_spirits(int cou);
 	virtual s_skill* find_skill(const std::string& nam);
-	virtual s_skill* find_skill(int kid);
 	virtual void iterate_skill(yield_skill_func yie);
 	virtual ptr<registry_t<e_skill,int>>& limit_skills();
 	virtual s_skill* skill(e_skill kid);
@@ -1597,8 +1598,6 @@ struct battler_impl : virtual block_if {
 	virtual bool check_use_skill(e_skill kid, int klv, block_if* ene) override;
 	virtual bool check_use_taunt_skill(block_if* ene) override;
 	virtual distance_policy_values& distance_policy_value() override;
-	virtual s_skill* find_skill(const std::string& nam) override;
-	virtual s_skill* find_skill(int kid) override;
 	virtual bool& is_best_pos() override;
 	virtual bool is_primary() override;
 	virtual normal_attack_policy_values& normal_attack_policy_value() override;
@@ -1618,13 +1617,16 @@ struct bot_impl : virtual block_if {
 	int bot_index_;                      // Botのインデックス。
 	t_tick last_emotion_tick_;           // 最後にエモーションを表示したチック。
 	t_tick last_reloaded_equipset_tick_; // 最後に武具一式をリロードしたチック。
+	skill_id_set using_skills_;          // 使用中のスキルのセット。
 	e_skill want_to_play_;               // 演奏したいスキル。
 
 	virtual int& bot_index() override;
 	virtual t_tick& last_emotion_tick() override;
 	virtual t_tick& last_reloaded_equipset_tick() override;
+	virtual void reload_skill_equipset(e_skill kid) override;
 	virtual void respawn() override;
 	virtual bool teleport(block_list* bl_) override;
+	virtual skill_id_set& using_skills() override;
 	virtual e_skill& want_to_play() override;
 };
 
@@ -2031,6 +2033,7 @@ struct skill_user_impl : virtual block_if {
 	virtual ai_t::done_func& cast_end_func() override;
 	virtual bool collect_coins(int cou) override;
 	virtual bool collect_spirits(int cou) override;
+	virtual s_skill* find_skill(const std::string& nam) override;
 	virtual int skill_range(e_skill kid, int klv) override;
 	virtual void use_encore(e_skill dan_id) override;
 	virtual bool use_magicpower() override;

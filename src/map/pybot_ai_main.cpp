@@ -597,58 +597,57 @@ void ai_t::bot_cart_auto_get() {
 // Bot‚ª•‹ïˆêŽ®‚ðƒŠƒ[ƒh‚·‚éB
 void ai_t::bot_reload_equipset() {
 	CS_ENTER;
-	equip_pos equ = equip_pos(0);
-	if (bot->battle_mode() == BM_NONE) {
-		if (bot->last_reloaded_equipset_tick()) {
-			bot->load_equipset(MM_REST, &equ);
-			bot->last_reloaded_equipset_tick() = 0;
-		}
-	} else if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
-		int pre_mid = 0;
-		for (block_if* ene : *enemies) {
-			if (ene->md()->mob_id == pre_mid) continue;
-			bot->load_equipset(MM_CAUTION + ene->md()->mob_id, &equ);
-			pre_mid = ene->md()->mob_id;
-		}
-		block_if* tar_ene = bot->target_enemy();
-		bot->load_equipset(tar_ene->md()->mob_id, &equ);
-		if (!bot->check_hp(4)) {
-			if (!bot->check_hp(3)) {
-				if (!bot->check_hp(2)) {
-					if (!bot->check_hp(1)) {
-						bot->load_equipset(MM_HP_DECLINE1, &equ);
-					}
-					bot->load_equipset(MM_HP_DECLINE2, &equ);
-				}
-				bot->load_equipset(MM_HP_DECLINE3, &equ);
+	if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
+		equip_pos equ = equip_pos(0);
+		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
+		if (bot->battle_mode() == BM_NONE) bot->load_equipset(MM_REST, &equ);
+		else {
+			int pre_mid = 0;
+			for (block_if* ene : *enemies) {
+				if (ene->md()->mob_id == pre_mid) continue;
+				bot->load_equipset(MM_CAUTION + ene->md()->mob_id, &equ);
+				pre_mid = ene->md()->mob_id;
 			}
-			bot->load_equipset(MM_HP_DECLINE4, &equ);
-		}
-		if (!bot->check_sp(4)) {
-			if (!bot->check_sp(3)) {
-				if (!bot->check_sp(2)) {
-					if (!bot->check_sp(1)) {
-						bot->load_equipset(MM_SP_DECLINE1, &equ);
+			block_if* tar_ene = bot->target_enemy();
+			bot->load_equipset(tar_ene->md()->mob_id, &equ);
+			if (!bot->check_hp(4)) {
+				if (!bot->check_hp(3)) {
+					if (!bot->check_hp(2)) {
+						if (!bot->check_hp(1)) {
+							bot->load_equipset(MM_HP_DECLINE1, &equ);
+						}
+						bot->load_equipset(MM_HP_DECLINE2, &equ);
 					}
-					bot->load_equipset(MM_SP_DECLINE2, &equ);
+					bot->load_equipset(MM_HP_DECLINE3, &equ);
 				}
-				bot->load_equipset(MM_SP_DECLINE3, &equ);
+				bot->load_equipset(MM_HP_DECLINE4, &equ);
 			}
-			bot->load_equipset(MM_SP_DECLINE4, &equ);
+			if (!bot->check_sp(4)) {
+				if (!bot->check_sp(3)) {
+					if (!bot->check_sp(2)) {
+						if (!bot->check_sp(1)) {
+							bot->load_equipset(MM_SP_DECLINE1, &equ);
+						}
+						bot->load_equipset(MM_SP_DECLINE2, &equ);
+					}
+					bot->load_equipset(MM_SP_DECLINE3, &equ);
+				}
+				bot->load_equipset(MM_SP_DECLINE4, &equ);
+			}
+			if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
+			if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
+			if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
+			if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
+			if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_equipset(MM_HIGH_MDEF, &equ);
+			if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
+			if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
+			if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
+			bot->load_equipset(MM_RACE + tar_ene->race(), &equ);
+			bot->load_equipset(MM_ELEMENT + tar_ene->element(), &equ);
+			bot->load_equipset(MM_SIZE + tar_ene->size_(), &equ);
+			bot->load_equipset(MM_BASE, &equ);
+			bot->load_equipset(MM_BACKUP, &equ);
 		}
-		if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
-		if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
-		if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
-		if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
-		if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_equipset(MM_HIGH_MDEF, &equ);
-		if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
-		if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
-		if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
-		bot->load_equipset(MM_RACE + tar_ene->race(), &equ);
-		bot->load_equipset(MM_ELEMENT + tar_ene->element(), &equ);
-		bot->load_equipset(MM_SIZE + tar_ene->size_(), &equ);
-		bot->load_equipset(MM_BASE, &equ);
-		bot->load_equipset(MM_BACKUP, &equ);
 		bot->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -1166,55 +1165,55 @@ void ai_t::battler_attack() {
 void ai_t::battler_use_skill() {
 	auto ite_sk_pros = [this] (const ai_t::skill_use_proc_vector* pros, bool tem = false) {
 		for (const ai_t::skill_use_proc& sk_use_pro : *pros) {
-			if (tem) {
-				s_skill* sk = battler->skill(sk_use_pro.skill_id);
-				if (!sk ||
-					sk->flag != SKILL_FLAG_TEMPORARY
-				) continue;
-			}
 			e_skill kid = sk_use_pro.skill_id;
 			if (kid == PB_FIRST) {
-				if (battler->battle_mode() == BM_NONE) continue;
-				e_skill* fir_kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
-				if (!fir_kid) continue;
-				kid = *fir_kid;
-			}
-			int klv = battler->check_skill(kid);
-			if (klv < sk_use_pro.min_skill_lv) continue;
-			if (sk_use_pro.max_skill_lv) klv = std::min(klv, sk_use_pro.max_skill_lv);
-			int sp_rat = sk_use_pro.sp_rat;
-			if (sp_rat > 4) sp_rat = sp_ratio_by_enemies();
-			bool att = !battler->sc()->data[SC_DEVOTION] &&
-				(battler->attacked_short_range_attacker() ||
-					battler->attacked_long_range_attacker() ||
-					battler->attacked_via_devotion()
-				);
-			if (BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
-				(battler->is_primary() ? PF_TRUE : PF_FALSE) & sk_use_pro.primary_flag &&
-				((sk_use_pro.walking_flag & WF_TRUE &&
-						battler->is_walking()
-					) || (sk_use_pro.walking_flag & WF_FALSE &&
-						!battler->is_walking()
-					) 
-				) && ((sk_use_pro.attacked_flag & AF_TRUE &&
-						att
-					) || (sk_use_pro.attacked_flag & AF_FALSE &&
-						(!att ||
-							!skill_get_castcancel(kid) ||
-							battler->is_no_castcancel() ||
-							skill_castfix(battler->bl(), kid, klv) <= battler->safe_cast_time()->get()
-						)
-					)
-				) && battler->check_sp(sp_rat) &&
-				battler->can_use_skill(kid, klv)
-			) {
-				if (dynamic_cast<bot_impl*>(battler)) {
-					equip_pos equ = equip_pos(0);
-					battler->load_skill_equipset(kid, &equ);
-					if (equ) battler->last_reloaded_equipset_tick() = 0;
+				if (battler->battle_mode() != BM_NONE) {
+					e_skill* fir_kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
+					if (fir_kid) kid = *fir_kid;
 				}
-				CS_ENTER_N(print("kid=", kid));
-				sk_use_pro.func(this, kid, klv);
+			}
+			if (kid != PB_FIRST) {
+				s_skill* sk = battler->skill(kid);
+				if (!tem ||
+					(sk &&
+						sk->flag == SKILL_FLAG_TEMPORARY
+					)
+				) {
+					int klv = battler->check_skill(kid);
+					if (klv >= sk_use_pro.min_skill_lv) {
+						if (sk_use_pro.max_skill_lv) klv = std::min(klv, sk_use_pro.max_skill_lv);
+						int sp_rat = sk_use_pro.sp_rat;
+						if (sp_rat > 4) sp_rat = sp_ratio_by_enemies();
+						bool att = !battler->sc()->data[SC_DEVOTION] &&
+							(battler->attacked_short_range_attacker() ||
+								battler->attacked_long_range_attacker() ||
+								battler->attacked_via_devotion()
+							);
+						if (BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
+							(battler->is_primary() ? PF_TRUE : PF_FALSE) & sk_use_pro.primary_flag &&
+							((sk_use_pro.walking_flag & WF_TRUE &&
+									battler->is_walking()
+								) || (sk_use_pro.walking_flag & WF_FALSE &&
+									!battler->is_walking()
+								) 
+							) && ((sk_use_pro.attacked_flag & AF_TRUE &&
+									att
+								) || (sk_use_pro.attacked_flag & AF_FALSE &&
+									(!att ||
+										!skill_get_castcancel(kid) ||
+										battler->is_no_castcancel() ||
+										skill_castfix(battler->bl(), kid, klv) <= battler->safe_cast_time()->get()
+									)
+								)
+							) && battler->check_sp(sp_rat) &&
+							battler->can_use_skill(kid, klv)
+						) {
+							CS_ENTER_N(print("kid=", kid));
+							sk_use_pro.func(this, kid, klv);
+						}
+					}
+					if (dynamic_cast<bot_impl*>(battler)) battler->using_skills().erase(kid);
+				}
 			}
 		}
 	};
