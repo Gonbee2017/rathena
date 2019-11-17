@@ -603,8 +603,10 @@ t_tick& bot_impl::last_reloaded_equipset_tick() {
 
 // スキル武具一式をリロードする。
 void bot_impl::reload_skill_equipset(e_skill kid) {
-	load_skill_equipset(kid);
-	using_skills().insert(kid);
+	if (using_skills().find(kid) == using_skills().end()) {
+		load_skill_equipset(kid);
+		using_skills().insert(kid);
+	}
 }
 
 // Botがリスポーンする。
