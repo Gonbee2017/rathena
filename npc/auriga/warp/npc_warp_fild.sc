@@ -1342,7 +1342,8 @@ ve_fild01,184,20,0		warp	veinswarp5007	1,1,ve_fild04,174,334
 ve_fild04,174,339,0		warp	veinswarp5008	1,1,ve_fild01,184,25
 //ベインスフィールド 02⇔ラヘルフィールド 13
 ve_fild02,385,308,0		warp	veinswarp5009	1,1,ra_fild13,34,308
-ra_fild13,29,308,0		warp	veinswarp5010	1,1,ve_fild02,184,25
+//ra_fild13,29,308,0		warp	veinswarp5010	1,1,ve_fild02,184,25
+ra_fild13,29,308,0		warp	veinswarp5010	1,1,ve_fild02,380,308
 //ベインスフィールド 03⇔ベインスフィールド 04
 ve_fild03,355,223,0		warp	veinswarp5011	1,1,ve_fild04,49,249
 ve_fild04,44,249,0		warp	veinswarp5012	1,1,ve_fild03,350,220
