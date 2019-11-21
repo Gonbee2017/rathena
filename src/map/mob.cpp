@@ -524,6 +524,13 @@ struct mob_data* mob_spawn_dataset(struct spawn_data *data)
 	status_change_init(&md->bl);
 	unit_dataset(&md->bl);
 
+	// [GonBee]
+	// 砦やETでルートモンスターが遠くへワープするバグが発生したため、
+	// 弥縫策としてテレポート不可マップではルートしないようにする。
+	if (status_has_mode(&md->db->status, MD_LOOTER) &&
+		map_getmapflag(md->bl.m, MF_MONSTER_NOTELEPORT)
+	) md->db->status.mode = e_mode(md->db->status.mode & ~MD_LOOTER);
+
 	map_addiddb(&md->bl);
 	return md;
 }

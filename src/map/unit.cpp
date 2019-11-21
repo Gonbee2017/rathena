@@ -617,7 +617,6 @@ static TIMER_FUNC(unit_walktoxy_timer){
 
 			// [GonBee]
 			// Botはスタックできる。
-			map_session_data* sd = BL_CAST(BL_PC, bl);
 			if (!sd ||
 				!pybot::char_is_bot(sd->status.char_id)
 			) {
