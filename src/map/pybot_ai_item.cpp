@@ -70,7 +70,6 @@ AI_ITEM_USE_FUNC(DEX_DISH10) {
 // 濃縮サラマインジュースを使う。
 AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE) {
 	if (bot->battle_mode() != BM_NONE &&
-		bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 		!bot->sc()->data[SC_EXTRACT_SALAMINE_JUICE]
 	) bot->use_item(itm_ind);
 }
@@ -162,7 +161,6 @@ AI_ITEM_USE_FUNC(PINEAPPLE_JUICE) {
 AI_ITEM_USE_FUNC(POISON_BOTTLE) {
 	if (bot->sd()->status.class_ == JOB_ASSASSIN_CROSS &&
 		bot->battle_mode() != BM_NONE &&
-		bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 		!bot->sc()->data[SC_ASPDPOTION0] &&
 		!bot->sc()->data[SC_ASPDPOTION1] &&
 		!bot->sc()->data[SC_ASPDPOTION2] &&
@@ -295,7 +293,6 @@ ai_t::item_use_func // 作った関数。
 AI_ITEM_USE_DEF(aspd_potion)() {
 	return [] (ai_t* ai, int itm_ind) {
 		if (ai->bot->battle_mode() != BM_NONE &&
-			ai->bot->normal_attack_policy_value() == NAPV_CONTINUOUS &&
 			!ai->bot->sc()->data[SC_ASPDPOTION0] &&
 			!ai->bot->sc()->data[SC_ASPDPOTION1] &&
 			!ai->bot->sc()->data[SC_ASPDPOTION2] &&

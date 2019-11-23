@@ -914,7 +914,8 @@ cmd_in01,90,174,0		warp	comodowarp1013		1,1,comodo,97,128
 comodo,236,298,0		warp	comodowarp1014		1,1,cmd_in01,179,81
 cmd_in01,183,81,0		warp	comodowarp1015		1,1,comodo,239,296
 comodo,115,291,0		warp	comodowarp1016		1,1,cmd_in02,67,132
-cmd_in02,69,129,0		warp	comodowarp1017		4,4,comodo,115,288
+//cmd_in02,69,129,0		warp	comodowarp1017		4,4,comodo,115,288
+cmd_in02,69,129,0		warp	comodowarp1017		1,1,comodo,115,288
 comodo,271,271,0		warp	comodowarp1018		1,1,cmd_in01,113,125
 cmd_in01,109,125,0		warp	comodowarp1019		1,1,comodo,269,273
 comodo,145,328,0		warp	comodowarp1020		1,1,cmd_in01,120,71
