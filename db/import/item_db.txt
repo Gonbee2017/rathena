@@ -1119,6 +1119,7 @@
 5917,Yellow_Scarf,黄色いスカーフ,4,90000,,100,,0,,0,0xFFFFFFFF,63,2,1,,90,0,1170,{},{},{}
 5943,Owlviscount_Silk_Hat,オウルヴァイカウントのシルクハット,4,99000,,500,,5,,1,0xFFFFFFFF,7,2,256,,99,1,982,{ bonus bInt,2; bonus bAspdRate,10; set .@r,getrefine(); bonus bMatk,7*.@r; autobonus "{ set .@r,getrefine(); bonus bAspdRate,.@r>=9?40:(.@r>=7?10:(.@r>=5?5:0)); }",.@r*20,30000,BF_MAGIC,"{ specialeffect2 EF_SPELLBREAKER; }"; },{},{}
 6437,Scaraba_Perfume,スカラバの香水,3,0,,0,,,,,,,,,,,,,{},{},{}
+6707,Jeremy_Beauty_Coupon,ジェレミーの美容クーポン,3,10,,10,,,,,,,,,,,,,{},{},{}
 10500,Costume_Box_10500,衣装の箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_CostumeBox),1; },{},{}
 10501,Empty_Bottle_Box_10501,空きビンの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 713,100; },{},{}
 10502,Holy_Water_Box_10502,聖水の箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 523,100; },{},{}
@@ -1340,6 +1341,7 @@
 17104,HD_Oridecon_50Box,改良型濃縮オリデオコンの箱,2,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 6240,1; },{},{}
 17105,HD_Elunium_50Box,改良型濃縮エルニウムの箱,2,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 6241,1; },{},{}
 17290,Orleans_Full_Course_Box,オルレアンのフルコースの箱,2,20,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 14646,5; },{},{}
+17336,Jeremy_Beauty_Coupon_Box_17336,ジェレミーの美容クーポンの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 6707,1; },{},{}
 18103,Mystic_Bow,ミスティックボウ,5,0,,1700,75,,5,0,0x00080800,2,2,34,3,99,1,11,{ bonus bMatk,100; bonus bInt,4; bonus2 bSkillUseSP,"CG_ARROWVULCAN",10; },{},{}
 18115,Orc_Archer_Bow_,オークアーチャーの弓,5,65000,,1600,120,,5,1,0x000A0808,7,2,34,3,65,1,11,{ bonus2 bAddMonsterDropItem,1753,200; },{},{}
 18129,Ixion_Wing_,イクシオンの羽,5,70000,,300,135,,5,3,0x00000800,2,2,34,4,70,1,11,{ autobonus "{ bonus bAspdRate,7; }",10+(getrefine()*2),7000,BF_WEAPON,"{ specialeffect2 EF_HASTEUP; }"; },{},{}

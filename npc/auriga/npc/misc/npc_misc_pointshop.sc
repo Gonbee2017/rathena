@@ -1,27 +1,29 @@
+/*
 //==============================================================================
 // Ragnarok Online PointShop Script
 //==============================================================================
 
 -	pointshop	SpecialItemShopper	-1,17634:5000,17290:9000,17289:5000,12913:1000,12914:1000,12918:1000,12917:1000,12927:1500,12910:500,12903:3000,12904:3000,12908:3000,12905:3000,12906:3000,12907:3000,12900:7500,16653:10000,13990:5000,12922:7500,16674:7500,12901:7000,13500:12000,12911:15000,12921:7000,12920:10000,14289:5000,14290:5000,16682:12000
 
-payon,153,96,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-alberta,90,56,6		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-prontera,123,68,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-geffen,114,104,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-morocc,169,80,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-aldebaran,135,123,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-yuno,167,187,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-einbroch,242,255,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-lighthalzen,187,304,3	substore(SpecialItemShopper)	スペシャルアイテム販売	73
-hugel,83,150,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-comodo,198,149,4	substore(SpecialItemShopper)	スペシャルアイテム販売	73
-rachel,132,144,2	substore(SpecialItemShopper)	スペシャルアイテム販売	73
-mid_camp,59,130,4	substore(SpecialItemShopper)	スペシャルアイテム販売	73
+payon.gat,153,96,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+alberta.gat,90,56,6		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+prontera.gat,123,68,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+geffen.gat,114,104,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+morocc.gat,169,80,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+aldebaran.gat,135,123,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+yuno.gat,167,187,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+einbroch.gat,242,255,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+lighthalzen.gat,187,304,3	substore(SpecialItemShopper)	スペシャルアイテム販売	73
+hugel.gat,83,150,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+comodo.gat,198,149,4	substore(SpecialItemShopper)	スペシャルアイテム販売	73
+rachel.gat,132,144,2	substore(SpecialItemShopper)	スペシャルアイテム販売	73
+mid_camp.gat,59,130,4	substore(SpecialItemShopper)	スペシャルアイテム販売	73
+lasagna.gat,346,244,6	substore(SpecialItemShopper)	スペシャルアイテム販売	73
 
 //============================================================
 // デフォルトカラーチケット, エクストラカラーチケット
 //------------------------------------------------------------
-prontera,123,62,5	script	服装染色師	97,{
+prontera.gat,123,62,5	script	服装染色師	97,{
 	// Jobに対応したファイル名を返す
 	function ExcolorSample {
 		switch(getarg(0)) {
@@ -131,6 +133,7 @@ prontera,123,62,5	script	服装染色師	97,{
 		case Job_ShadowChaser:	return "excolor_shadowchaser.bmp";
 		case Job_Kagerou:
 		case Job_Oboro:			return "excolor_kagerou_oboro.bmp";
+		case Job_Summoner:		return "excolor_do_summoner.bmp";
 		}
 	}
 
@@ -325,7 +328,7 @@ prontera,123,62,5	script	服装染色師	97,{
 //============================================================
 // 騎乗用手綱
 //------------------------------------------------------------
-prontera,125,62,4	script	騎乗協会広報員	832,{
+prontera.gat,125,62,4	script	騎乗協会広報員	832,{
 	if(countitem(12622) > 0) {
 		mes "[騎乗協会広報担当員]";
 		mes "やぁ、こんにちは。";
@@ -470,6 +473,7 @@ prontera,125,62,4	script	騎乗協会広報員	832,{
 	case Job_ShadowChaser:	set .@name$,"riding_shadowchaser.bmp"; break;
 	case Job_Kagerou:
 	case Job_Oboro:			set .@name$,"riding_kagerou_oboro.bmp"; break;
+	case Job_Summoner:		set .@name$,"riding_doram.bmp"; break;
 	}
 	cutin .@name$,4;
 	mes "[騎乗協会広報担当員]";
@@ -483,7 +487,7 @@ prontera,125,62,4	script	騎乗協会広報員	832,{
 //============================================================
 // コスチュームチェンジチケット
 //------------------------------------------------------------
-prontera,127,62,4	script	ファッションデザイナー	573,{
+prontera.gat,127,62,4	script	ファッションデザイナー	573,{
 	mes "[ファッションデザイナー]";
 	mes "うぉっほん！";
 	mes "私は冒険者のファッションについて";
@@ -492,6 +496,14 @@ prontera,127,62,4	script	ファッションデザイナー	573,{
 	mes "同じ職業でも服そのものを変更する";
 	mes "試みに挑戦しているのだ。";
 	next;
+	if(Job == Job_Summoner) {
+		mes "[ファッションデザイナー]";
+		mes "だがドラム族の服については";
+		mes "まだまだ研究中で";
+		mes "提供することができないんだ。";
+		mes "申し訳ない。";
+		close;
+	}
 	if(Job < Job_RuneKnight || Job > Job_ShadowChaser) {
 		mes "[ファッションデザイナー]";
 		mes "幾度となく試行錯誤を重ね、";
@@ -524,7 +536,19 @@ prontera,127,62,4	script	ファッションデザイナー	573,{
 			close;
 		}
 		mes "‐セカンドコスチューム提供済み職業‐";
-		mes "全職対応！^FF0000NEW!!^000000";
+		mes "・ルーンナイト^FF0000NEW!!^000000";
+		mes "・修羅";
+		mes "・ソーサラー";
+		mes "・シャドウチェイサー";
+		mes "・ミンストレル";
+		mes "・ワンダラー";
+		mes "・ウォーロック";
+		mes "・レンジャー";
+		mes "・アークビショップ";
+		mes "・ロイヤルガード";
+		mes "・メカニック";
+		mes "・ギロチンクロス";
+		mes "・ジェネティック";
 		mes "　";
 		mes "以上";
 		close;
@@ -661,5 +685,484 @@ prontera,127,62,4	script	ファッションデザイナー	573,{
 		mes "そうかね。";
 		mes "では、またの機会に。";
 		close;
+	}
+}
+*/
+
+//============================================================
+// ジェレミーの美容クーポン
+//------------------------------------------------------------
+//izlude.gat,136,122,6	script	シニアスタイリスト	878,{
+prontera,164,157,2	script	シニアスタイリスト	878,{
+	set .@doram,(Job==Job_Summoner? 1: 0);
+	set .@sex$,(Sex)? "m": "f";
+
+	mes "[シニアスタイリスト]";
+	mes "こんにちは、" +((Sex)? "青年よ。": "麗しのレディー。");
+	mes "私はミッドガルドでトップレベルの";
+	mes "シニアスタイリスト、";
+	mes "ジェレミーだ。";
+	next;
+	mes "[ジェレミー]";
+	mes "^FF0000ジェレミーの美容クーポン^000000を";
+	mes "お持ちならば、";
+	mes "色々なヘアスタイルをご提案しよう。";
+	next;
+	mes "[ジェレミー]";
+	mes "今ご提案できるのは男女それぞれ";
+	mes (.@doram? 6: 29)+ "種類のヘアスタイルとなるが……";
+	mes "一度サンプルを見てみないか？";
+	while(1) {
+		next;
+		switch(select("特別サンプルを見る","通常サンプルを見る","ヘアスタイルを変更する","やめておく")) {
+		case 1:
+			if(.@doram) {
+				mes "[ジェレミー]";
+				mes "ドラム族に特別サンプルはないんだ。";
+				mes "通常サンプルから";
+				mes "選んでくれるか？";
+				continue;
+			}
+			mes "[ジェレミー]";
+			mes "どちらのサンプルが見たいかな？";
+				set .@hairstr1$,(Sex)? "緊急ヒールパーマ": "アスムプティオパーマ";
+				set .@hairstr2$,(Sex)? "オーラブレイドカット": "ソウルチェンジカット";
+				set .@hairstr3$,(Sex)? "パワースイングカット": "アックストルネードカット";
+				set .@hairstr4$,(Sex)? "レノヴァティオカット": "オラティオカット";
+				set .@hairstr5$,(Sex)? "シュバリエスペシャル": "ボリュームマジックスペシャル";
+				set .@hairstr6$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
+			next;
+			switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,"やめておく")) {
+			case 1:
+				cutin "hair_" +.@sex$+ "_24",4;
+				mes "[ジェレミー]";
+				mes .@hairstr1$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 2:
+				cutin "hair_" +.@sex$+ "_25",4;
+				mes "[ジェレミー]";
+				mes .@hairstr2$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 3:
+				cutin "hair_" +.@sex$+ "_26",4;
+				mes "[ジェレミー]";
+				mes .@hairstr3$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 4:
+				cutin "hair_" +.@sex$+ "_27",4;
+				mes "[ジェレミー]";
+				mes .@hairstr4$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 5:
+				cutin "hair_" +.@sex$+ "_28",4;
+				mes "[ジェレミー]";
+				mes .@hairstr5$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 6:
+				cutin "hair_" +.@sex$+ "_29",4;
+				mes "[ジェレミー]";
+				mes .@hairstr6$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 7:
+				cutin "hair_" +.@sex$+ "_01",255;
+				mes "[ジェレミー]";
+				mes "そうかい？";
+				mes "また興味が湧いたら来てくれよ。";
+				close;
+			}
+		case 2:
+			set .@max_hair,(.@doram? 6: 23);
+			mes "[ジェレミー]";
+			mes "サンプルは1番～" +.@max_hair+ "番まで";
+			mes "用意しているから、";
+			mes "見たいヘアスタイルの";
+			mes "番号を入力してくれ。";
+			mes "特に見たい髪型がなければ";
+			mes "0番を選んでくれればいいよ。";
+			next;
+			input .@hair;
+			if(.@hair == 0) {
+				cutin "hair_" +.@sex$+ "_01", 255;
+				mes "[ジェレミー]";
+				mes "そうかい？";
+				mes "また興味が湧いたら来てくれよ。";
+				close;
+			}
+			if(.@hair < 0 || .@hair > .@max_hair) {
+				cutin "hair_" +.@sex$+ "_01", 255;
+				mes "[ジェレミー]";
+				mes "おや？";
+				mes "1～" +.@max_hair+ "の番号を入力してくれないか？";
+				close;
+			}
+			switch(.@hair) {
+			case 1:
+				set .@hair$,"01";
+				if(.@doram) set .@hairstr$,(Sex)? "ダッシュカット": "ふみふみパーマ";
+				else		set .@hairstr$,(Sex)? "死んだ振りスタイル": "応急手当スタイル";
+				break;
+			case 2:
+				set .@hair$,"02";
+				if(.@doram) set .@hairstr$,(Sex)? "キャラメルタビー": "マシュマロカット";
+				else		set .@hairstr$,(Sex)? "両手剣修練スタイル": "バッシュスタイル";
+				break;
+			case 3:
+				set .@hair$,"03";
+				if(.@doram) set .@hairstr$,(Sex)? "チャタリングカット": "グルーミングストレート";
+				else		set .@hairstr$,(Sex)? "ナパームビートスタイル": "フロストダイバースタイル";
+				break;
+			case 4:
+				set .@hair$,"04";
+				if(.@doram) set .@hairstr$,(Sex)? "警戒カット": "にゃんにゃんテール";
+				else		set .@hairstr$,(Sex)? "ダブルストレイフィングスタイル": "アローシャワースタイル";
+				break;
+			case 5:
+				set .@hair$,"05";
+				if(.@doram) set .@hairstr$,(Sex)? "チョコスタイル": "ミルクスタイル";
+				else		set .@hairstr$,(Sex)? "エンジェラススタイル": "ヒールスタイル";
+				break;
+			case 6:
+				set .@hair$,"06";
+				if(.@doram) set .@hairstr$,(Sex)? "カプチーノタビー": "クッキー＆クリームカット";
+				else		set .@hairstr$,(Sex)? "プッシュカートスタイル": "露店開設スタイル";
+				break;
+			case 7:
+				set .@hair$,"07";
+				set .@hairstr$,(Sex)? "インベナムスタイル": "ダブルアタックスタイル";
+				break;
+			case 8:
+				set .@hair$,"08";
+				set .@hairstr$,(Sex)? "ボウリングバッシュスタイル": "グロリアスタイル";
+				break;
+			case 9:
+				set .@hair$,"09";
+				set .@hairstr$,(Sex)? "ベナムダストスタイル": "SP回復力向上スタイル";
+				break;
+			case 10:
+				set .@hair$,"10";
+				set .@hairstr$,(Sex)? "ターンアンデッドスタイル": "フォーマシースタイル";
+				break;
+			case 11:
+				set .@hair$,"11";
+				set .@hairstr$,(Sex)? "ドラゴノロジースタイル": "グランドクロススタイル";
+				break;
+			case 12:
+				set .@hair$,"12";
+				set .@hairstr$,(Sex)? "メイス修練スタイル": "クローンスキルスタイル";
+				break;
+			case 13:
+				set .@hair$,"13";
+				set .@hairstr$,(Sex)? "サンダーストームスタイル": "気奪スタイル";
+				break;
+			case 14:
+				set .@hair$,"14";
+				set .@hairstr$,(Sex)? "アンコールスタイル": "サービスフォーユースタイル";
+				break;
+			case 15:
+				set .@hair$,"15";
+				set .@hairstr$,(Sex)? "グリムトゥーススタイル": "オートカウンタースタイル";
+				break;
+			case 16:
+				set .@hair$,"16";
+				set .@hairstr$,(Sex)? "ブリッツビートスタイル": "アンクルスネアスタイル";
+				break;
+			case 17:
+				set .@hair$,"17";
+				set .@hairstr$,(Sex)? "鉱石発見スタイル": "ハンマーフォールスタイル";
+				break;
+			case 18:
+				set .@hair$,"18";
+				set .@hairstr$,(Sex)? "ファイアピラースタイル": "ユピテルサンダースタイル";
+				break;
+			case 19:
+				set .@hair$,"19";
+				set .@hairstr$,(Sex)? "阿修羅覇王拳スタイル": "バイオレントゲイルスタイル";
+				break;
+			case 20:
+				set .@hair$,"20";
+				set .@hairstr$,(Sex)? "プティットスタイル": "スプリングラビットスタイル";
+				break;
+			case 21:
+				set .@hair$,"21";
+				set .@hairstr$,(Sex)? "エクスキューショナースタイル": "ハーピースタイル";
+				break;
+			case 22:
+				set .@hair$,"22";
+				set .@hairstr$,(Sex)? "プリンススタイル": "メデューサスタイル";
+				break;
+			case 23:
+				set .@hair$,"23";
+				set .@hairstr$,(Sex)? "デビアススタイル": "イシススタイル";
+				break;
+			}
+			cutin "hair_" +((.@doram)? "dr_": "")+.@sex$+ "_"+.@hair$,4;
+			mes "[ジェレミー]";
+			mes .@hairstr$+ "は";
+			mes "こんな感じになるな。";
+			mes "さて、どうする？";
+			continue;
+		case 3:
+			 if(countitem(6707) < 1) {
+				cutin "hair_" +((.@doram)? "dr_": "")+.@sex$+ "_01", 255;
+				mes "[ジェレミー]";
+				mes "そうこなくては！";
+				mes "……と思ったが、";
+				mes "^FF0000ジェレミーの美容クーポン^000000を";
+				mes "お持ちではないようだね。";
+				mes "残念だがまたの機会にということで。";
+				close;
+			}
+			mes "[ジェレミー]";
+			mes "そうこなくては！";
+			mes "では、どのヘアスタイルが";
+			mes "お好みかな？";
+			next;
+			switch(select("特別ヘアスタイルから選ぶ","通常ヘアスタイルから選ぶ","やめておく")) {
+			case 1:
+				if(.@doram) {
+					mes "[ジェレミー]";
+					mes "ドラム族に特別ヘアスタイルはないんだ。";
+					mes "通常ヘアスタイルから";
+					mes "選んでくれるか？";
+					continue;
+				}
+				set .@hairstr1$,(Sex)? "緊急ヒールパーマ": "アスムプティオパーマ";
+				set .@hairstr2$,(Sex)? "オーラブレイドカット": "ソウルチェンジカット";
+				set .@hairstr3$,(Sex)? "パワースイングカット": "アックストルネードカット";
+				set .@hairstr4$,(Sex)? "レノヴァティオカット": "オラティオカット";
+				set .@hairstr5$,(Sex)? "シュバリエスペシャル": "ボリュームマジックスペシャル";
+				set .@hairstr6$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
+				//next;
+				switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,"やめておく")) {
+				case 1:
+					set .@hair,24;
+					set .@hair$,"24";
+					set .@hairstr$,(Sex)? "緊急ヒールパーマ": "アスムプティオパーマ";
+					break;
+				case 2:
+					set .@hair,25;
+					set .@hair$,"25";
+					set .@hairstr$,(Sex)? "オーラブレイドカット": "ソウルチェンジカット";
+					break;
+				case 3:
+					set .@hair,26;
+					set .@hair$,"26";
+					set .@hairstr$,(Sex)? "パワースイングカット": "アックストルネードカット";
+					break;
+				case 4:
+					set .@hair,27;
+					set .@hair$,"27";
+					set .@hairstr$,(Sex)? "レノヴァティオカット": "オラティオカット";
+					break;
+				case 5:
+					set .@hair,28;
+					set .@hair$,"28";
+					set .@hairstr$,(Sex)? "シュバリエスペシャル": "ボリュームマジックスペシャル";
+					break;
+				case 6:
+					set .@hair,29;
+					set .@hair$,"29";
+					set .@hairstr$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
+					break;
+				case 7:
+					cutin "hair_" +.@sex$+ "_01",255;
+					mes "[ジェレミー]";
+					mes "そうかい？";
+					mes "また興味が湧いたら来てくれよ。";
+					close;
+				}
+				break;
+			case 2:
+				set .@max_hair,(.@doram? 6: 23);
+				mes "[ジェレミー]";
+				mes "それじゃ、希望のスタイルを";
+				mes "教えてくれ。";
+				mes "素敵なヘアスタイルに";
+				mes "仕上げて見せよう。";
+				mes "ヘアスタイルは";
+				mes "1番～" +.@max_hair+ "番まであるぞ。";
+				next;
+				input .@hair;
+				if(.@hair == 0) {
+					cutin "hair_" +.@sex$+ "_01", 255;
+					mes "[ジェレミー]";
+					mes "そうかい？";
+					mes "また興味が湧いたら来てくれよ。";
+					close;
+				}
+				if(.@hair < 0 || .@hair > .@max_hair) {
+					cutin "hair_" +.@sex$+ "_01", 255;
+					mes "[ジェレミー]";
+					mes "おや？";
+					mes "1～" +.@max_hair+ "の番号を入力してくれないか？";
+					close;
+				}
+				switch(.@hair) {
+				case 1:
+					set .@hair$,"01";
+					if(.@doram) set .@hairstr$,(Sex)? "ダッシュカット": "ふみふみパーマ";
+					else		set .@hairstr$,(Sex)? "死んだ振りスタイル": "応急手当スタイル";
+					break;
+				case 2:
+					set .@hair$,"02";
+					if(.@doram) set .@hairstr$,(Sex)? "キャラメルタビー": "マシュマロカット";
+					else		set .@hairstr$,(Sex)? "両手剣修練スタイル": "バッシュスタイル";
+					break;
+				case 3:
+					set .@hair$,"03";
+					if(.@doram) set .@hairstr$,(Sex)? "チャタリングカット": "グルーミングストレート";
+					else		set .@hairstr$,(Sex)? "ナパームビートスタイル": "フロストダイバースタイル";
+					break;
+				case 4:
+					set .@hair$,"04";
+					if(.@doram) set .@hairstr$,(Sex)? "警戒カット": "にゃんにゃんテール";
+					else		set .@hairstr$,(Sex)? "ダブルストレイフィングスタイル": "アローシャワースタイル";
+					break;
+				case 5:
+					set .@hair$,"05";
+					if(.@doram) set .@hairstr$,(Sex)? "チョコスタイル": "ミルクスタイル";
+					else		set .@hairstr$,(Sex)? "エンジェラススタイル": "ヒールスタイル";
+					break;
+				case 6:
+					set .@hair$,"06";
+					if(.@doram) set .@hairstr$,(Sex)? "カプチーノタビー": "クッキー＆クリームカット";
+					else		set .@hairstr$,(Sex)? "プッシュカートスタイル": "露店開設スタイル";
+					break;
+				case 7:
+					set .@hair$,"07";
+					set .@hairstr$,(Sex)? "インベナムスタイル": "ダブルアタックスタイル";
+					break;
+				case 8:
+					set .@hair$,"08";
+					set .@hairstr$,(Sex)? "ボウリングバッシュスタイル": "グロリアスタイル";
+					break;
+				case 9:
+					set .@hair$,"09";
+					set .@hairstr$,(Sex)? "ベナムダストスタイル": "SP回復力向上スタイル";
+					break;
+				case 10:
+					set .@hair$,"10";
+					set .@hairstr$,(Sex)? "ターンアンデッドスタイル": "フォーマシースタイル";
+					break;
+				case 11:
+					set .@hair$,"11";
+					set .@hairstr$,(Sex)? "ドラゴノロジースタイル": "グランドクロススタイル";
+					break;
+				case 12:
+					set .@hair$,"12";
+					set .@hairstr$,(Sex)? "メイス修練スタイル": "クローンスキルスタイル";
+					break;
+				case 13:
+					set .@hair$,"13";
+					set .@hairstr$,(Sex)? "サンダーストームスタイル": "気奪スタイル";
+					break;
+				case 14:
+					set .@hair$,"14";
+					set .@hairstr$,(Sex)? "アンコールスタイル": "サービスフォーユースタイル";
+					break;
+				case 15:
+					set .@hair$,"15";
+					set .@hairstr$,(Sex)? "グリムトゥーススタイル": "オートカウンタースタイル";
+					break;
+				case 16:
+					set .@hair$,"16";
+					set .@hairstr$,(Sex)? "ブリッツビートスタイル": "アンクルスネアスタイル";
+					break;
+				case 17:
+					set .@hair$,"17";
+					set .@hairstr$,(Sex)? "鉱石発見スタイル": "ハンマーフォールスタイル";
+					break;
+				case 18:
+					set .@hair$,"18";
+					set .@hairstr$,(Sex)? "ファイアピラースタイル": "ユピテルサンダースタイル";
+					break;
+				case 19:
+					set .@hair$,"19";
+					set .@hairstr$,(Sex)? "阿修羅覇王拳スタイル": "バイオレントゲイルスタイル";
+					break;
+				case 20:
+					set .@hair$,"20";
+					set .@hairstr$,(Sex)? "プティットスタイル": "スプリングラビットスタイル";
+					break;
+				case 21:
+					set .@hair$,"21";
+					set .@hairstr$,(Sex)? "エクスキューショナースタイル": "ハーピースタイル";
+					break;
+				case 22:
+					set .@hair$,"22";
+					set .@hairstr$,(Sex)? "プリンススタイル": "メデューサスタイル";
+					break;
+				case 23:
+					set .@hair$,"23";
+					set .@hairstr$,(Sex)? "デビアススタイル": "イシススタイル";
+					break;
+				}
+				break;
+			case 3:
+				cutin "hair_" +.@sex$+ "_01",255;
+				mes "[ジェレミー]";
+				mes "そうかい？";
+				mes "また興味が湧いたら来てくれよ。";
+				close;
+			}
+			cutin "hair_" +((.@doram)? "dr_": "")+.@sex$+ "_"+.@hair$,4;
+			mes "[ジェレミー]";
+			mes .@hairstr$+ "は";
+			mes "こんな感じになるが、";
+			mes "いいかな？";
+			next;
+			if(select("やっぱりやめる","お願いします") == 1) {
+				cutin "hair_" +.@sex$+ "_01",255;
+				mes "[ジェレミー]";
+				mes "そうかい？";
+				mes "また興味が湧いたら来てくれよ。";
+				close;
+			}
+			mes "[ジェレミー]";
+			mes "一緒にカラーもしてあげよう。";
+			mes "どの色がいいかな？";
+			next;
+			set .@color,select("黄色","紫色","紅色","緑色","青色","白色","黒色","赤色","やめる");
+			if(.@color == 9) {
+				cutin "hair_" +.@sex$+ "_01",255;
+				mes "[ジェレミー]";
+				mes "そうかい？";
+				mes "また興味が湧いたら来てくれよ。";
+				close;
+			}
+			mes "‐シャッシャッシャッシャ";
+			mes "　チョキチョキチョキ";
+			mes "　サッサッサ、サッサッサ";
+			mes "　ブォーーーーーーーーーーーン‐";
+			next;
+			cutin "hair_" +.@sex$+ "_01",255;
+			mes "[ジェレミー]";
+			mes "よし、できた！";
+			mes "うん、よく似合ってる。";
+			mes "気分を変えたくなったら";
+			mes "是非また利用してくれ。";
+			setlook 1,.@hair;
+			setlook 6,.@color;
+			delitem 6707, 1;
+			close;
+		case 4:
+			cutin "hair_" +.@sex$+ "_01",255;
+			mes "[ジェレミー]";
+			mes "そうかい？";
+			mes "また興味が湧いたら来てくれよ。";
+			close;
+		}
 	}
 }

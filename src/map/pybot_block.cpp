@@ -179,7 +179,7 @@ t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<bool>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<rush_modes>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::save_team(int tea_num) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::show_next() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -708,7 +708,7 @@ bool // 結果。
 enemy_impl::fullpower(
 	block_if* lea // リーダー。
 ) {
-	return lea->rush()->get() ||
+	return lea->rush()->get() == RM_FULL_POWER ||
 		is_great(lea);
 }
 
@@ -1644,7 +1644,7 @@ bool& leader_impl::passive() {
 }
 
 // ラッシュモードの登録値。
-ptr<regnum_t<bool>>& leader_impl::rush() {
+ptr<regnum_t<rush_modes>>& leader_impl::rush() {
 	return rush_;
 }
 
@@ -3081,7 +3081,7 @@ leader_t::leader_t(
 	last_summoned_id() = 0;
 	passive() = false;
 	stay() = false;
-	rush() = construct<regnum_t<bool>>(sd(), "pybot_rush");
+	rush() = construct<regnum_t<rush_modes>>(sd(), "pybot_rush");
 	great_mobs() = construct<registry_t<int>>(
 		load_great_mob_func(char_id()),
 		insert_great_mob_func(char_id()),

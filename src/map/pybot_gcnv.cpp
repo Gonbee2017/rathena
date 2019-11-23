@@ -1978,7 +1978,9 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot teampassive]\n"
 	), SUBCMD_DESC(Bot, TeamRush                   , tr  ,
 		"------ TeamRush (tr) サブコマンド ------\n"
-		"ラッシュモードになる。\n"
+		"モンスターをすぐに攻撃する。\n"
+		"入力例 [@bot teamrush]\n"
+		"モンスターを全力で攻撃する。\n"
 		"入力例 [@bot teamrush]\n"
 		"ラッシュモードを解除する。\n"
 		"入力例 [@bot teamrush]\n"
@@ -2810,7 +2812,7 @@ const std::array<
 	"フィアーブリーズ",
 	UNKNOWN_SYMBOL,
 	"マーシュオブアビス",
-	"リコグナイズドスペル",
+	"爆裂波動",
 	"ステイシス状態",
 	"ウォーグ騎乗中",
 	UNKNOWN_SYMBOL,

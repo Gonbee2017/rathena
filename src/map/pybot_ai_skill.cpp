@@ -2288,6 +2288,7 @@ AI_SKILL_USE_FUNC(SA_AUTOSPELL) {
 		for (const spe_t& spe : SPES) {
 			int rat = bot->attack_element_ratio(tar_ene, spe.ele);
 			if (spe.min_lv <= klv &&
+				bot->check_skill(spe.kid) &&
 				(!ele ||
 					spe.ele == *ele
 				) && rat > gre_rat

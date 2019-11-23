@@ -609,6 +609,14 @@ enum registry_dirties {
 	RD_MAX   ,
 };
 
+// ラッシュモード。
+enum rush_modes {
+	RM_NONE       , // なし。
+	RM_IMMEDIATELY, // すぐに攻撃する。
+	RM_FULL_POWER , // 全力で攻撃する。
+	RM_MAX        ,
+};
+
 // ステータスのタイプ。
 enum status_types {
 	ST_STR, // STR。
@@ -1413,7 +1421,7 @@ struct leader_if {
 	virtual ptr<registry_t<int>>& not_ignore_items();
 	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
-	virtual ptr<regnum_t<bool>>& rush();
+	virtual ptr<regnum_t<rush_modes>>& rush();
 	virtual void save_team(int tea_num);
 	virtual ptr<registry_t<int>>& sell_items();
 	virtual void show_next();
@@ -1799,7 +1807,7 @@ struct leader_impl : virtual block_if {
 	ptr<registry_t<int>> not_ignore_items_;           // 非無視アイテムのレジストリ。
 	std::stringstream output_buffer_;                 // 出力バッファ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
-	ptr<regnum_t<bool>> rush_;                        // ラッシュモードの登録値。
+	ptr<regnum_t<rush_modes>> rush_;                  // ラッシュモードの登録値。
 	ptr<registry_t<int>> sell_items_;                 // 売却アイテムのレジストリ。
 	bool sp_suppliable_;                              // SPを供給可能か。
 	bool stay_;                                       // 待機か。
@@ -1825,7 +1833,7 @@ struct leader_impl : virtual block_if {
 	virtual ptr<registry_t<int>>& not_ignore_items() override;
 	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
-	virtual ptr<regnum_t<bool>>& rush() override;
+	virtual ptr<regnum_t<rush_modes>>& rush() override;
 	virtual void save_team(int tea_num) override;
 	virtual ptr<registry_t<int>>& sell_items() override;
 	virtual void show_next() override;

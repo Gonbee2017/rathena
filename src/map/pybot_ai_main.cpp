@@ -394,7 +394,7 @@ void ai_t::leader_target() {
 			}
 			if (!tar_ene) {
 				tar_ene = enemies->front();
-				if (leader->rush()->get() ||
+				if (leader->rush()->get() != RM_NONE ||
 					bat->mob_is_first(tar_ene->md()->mob_id) ||
 					((battlers.front()->distance_policy_value() == DPV_AWAY ||
 							bat->is_primary()
@@ -1405,7 +1405,7 @@ ai_t::find_best_tanut_pos() {
 	if (battler->distance_policy_value() == DPV_CLOSE) {
 		block_if* tar_ene = battler->target_enemy();
 		if (!gvg &&
-			!leader->rush()->get() &&
+			leader->rush()->get() == RM_NONE &&
 			!battler->no_knockback() &&
 			battler->is_primary() &&
 			tar_ene->is_short_range_attacker() &&

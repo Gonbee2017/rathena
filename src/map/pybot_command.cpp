@@ -3423,13 +3423,14 @@ SUBCMD_FUNC(Bot, TeamPassive) {
 // ラッシュモードになる、または解除する。
 SUBCMD_FUNC(Bot, TeamRush) {
 	CS_ENTER;
-	lea->rush()->set(!lea->rush()->get());
-	if (lea->rush()->get()) show_client(lea->fd(), print(
-		"あなたのチームはラッシュモードになりました。"
-	));
-	else show_client(lea->fd(), print(
-		"あなたのチームはラッシュモードを解除しました。"
-	));
+	static const std::array<std::string, RM_MAX> MESS = {
+		"あなたのチームはラッシュモードを解除しました。",
+		"あなたのチームはモンスターをすぐに攻撃します。",
+		"あなたのチームはモンスターを全力で攻撃します。",
+	};
+	auto& rush = lea->rush();
+	rush->set(rush_modes((rush->get() + 1) % RM_MAX));
+	show_client(lea->fd(), MESS[rush->get()]);
 }
 
 // チームが待機、または追従する。
