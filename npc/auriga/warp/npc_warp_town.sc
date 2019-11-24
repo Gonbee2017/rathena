@@ -657,7 +657,8 @@ payon_in02,75,67,0		warp	payonwarp1051		2,2,payon_in02,13,25
 payon_in02,82,45,0		warp	payonwarp1052		2,2,pay_arche,74,153
 // ‹{“a‚Ì•ÊŠÙ
 payon,128,204,0		warp	payonwarp1053		2,2,payon_in03,82,19
-payon_in03,85,19,0		warp	payonwarp1054		2,2,payon,130,204
+//payon_in03,85,19,0		warp	payonwarp1054		2,2,payon,130,204
+payon_in03,85,19,0		warp	payonwarp1054		2,2,payon,131,204
 payon_in03,74,19,0		warp	payonwarp1055		2,2,payon_in03,64,19
 payon_in03,67,19,0		warp	payonwarp1056		2,2,payon_in03,77,19
 payon_in03,46,19,0		warp	payonwarp1057		2,2,payon_in03,36,19
