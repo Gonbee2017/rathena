@@ -171,11 +171,11 @@ block_if* leader_if::find_member(const std::string& nam) {RAISE_NOT_IMPLEMENTED_
 bool leader_if::flooritem_to_be_ignored(flooritem_data* fit) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::great_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
-t_tick& leader_if::last_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,coords_t>>& leader_if::journals() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick& leader_if::last_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<registry_t<int,coords_t>>& leader_if::memos() {RAISE_NOT_IMPLEMENTED_ERROR;}
-t_tick leader_if::next_heaby_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+t_tick leader_if::next_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -193,13 +193,12 @@ void leader_if::update_member_indices() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::account_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::berserk_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::can_ka(block_if* tar_mem) {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<registry_t<int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::char_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_skill member_if::combo_skill_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::distance_max() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,distance_policy>>& member_if::distance_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,equipset_t>>& member_if::equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<registry_t<e_skill,skill_equipset>>& member_if::skill_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::fd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_broken_equip(int bas) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -217,8 +216,8 @@ ptr<registry_t<int>>& member_if::ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
-void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -234,6 +233,7 @@ ptr<registry_t<int,int>>& member_if::recover_sp_items() {RAISE_NOT_IMPLEMENTED_E
 std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<e_skill,skill_equipset>>& member_if::skill_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::supply_hp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1601,9 +1601,14 @@ ptr<registry_t<int>>& leader_impl::ignore_items() {
 	return ignore_items_;
 }
 
+// ジャーナルのレジストリ。
+ptr<registry_t<int,coords_t>>& leader_impl::journals() {
+	return journals_;
+}
+
 // 最後にBotをログインさせたチック。
-t_tick& leader_impl::last_heaby_tick() {
-	return last_heaby_tick_;
+t_tick& leader_impl::last_heavy_tick() {
+	return last_heavy_tick_;
 }
 
 // 最後に枝召喚したID。
@@ -1616,14 +1621,9 @@ std::vector<block_if*>& leader_impl::members() {
 	return members_;
 }
 
-// メモのレジストリ。
-ptr<registry_t<int,coords_t>>& leader_impl::memos() {
-	return memos_;
-}
-
 // 次の重たいコマンドまでのチックを計算する。
-t_tick leader_impl::next_heaby_tick() {
-	t_tick hev_tic = DIFF_TICK(last_heaby_tick() + battle_config.pybot_heaby_cool_time, now);
+t_tick leader_impl::next_heavy_tick() {
+	t_tick hev_tic = DIFF_TICK(last_heavy_tick() + battle_config.pybot_heavy_cool_time, now);
 	if (hev_tic < 0) hev_tic = 0;
 	return hev_tic;
 }
@@ -1756,7 +1756,7 @@ member_impl::can_ka(
 }
 
 // カート自動補充アイテムのレジストリ。
-ptr<registry_t<int>>& member_impl::cart_auto_get_items() {
+ptr<registry_t<int,int>>& member_impl::cart_auto_get_items() {
 	return cart_auto_get_items_;
 }
 
@@ -1821,11 +1821,6 @@ ptr<registry_t<int,distance_policy>>& member_impl::distance_policies() {
 // 武具一式のレジストリ。
 ptr<registry_t<int,equipset_t>>& member_impl::equipsets() {
 	return equipsets_;
-}
-
-// スキル武具一式のレジストリ。
-ptr<registry_t<e_skill,skill_equipset>>& member_impl::skill_equipsets() {
-	return skill_equipsets_;
 }
 
 // ソケットの記述子。
@@ -2155,6 +2150,30 @@ void member_impl::load_equipset(
 	}
 }
 
+// メンバーが演奏スキルをロードする。
+void member_impl::load_play_skill(int mid, e_skill* kid) {
+	if (!*kid) {
+		auto pla_sk = play_skills()->find(mid);
+		if (pla_sk) *kid = pla_sk->skill_id;
+	}
+}
+
+// メンバーがポリシーをロードする。
+void member_impl::load_policy(
+	int mid,                                     // モンスターID。
+	distance_policy_values* dis_pol_val,         // 距離ポリシー。
+	normal_attack_policy_values* nor_att_pol_val // 通常攻撃ポリシー。
+) {
+	if (*dis_pol_val == DPV_PENDING) {
+		auto dis_pol = distance_policies()->find(mid);
+		if (dis_pol) *dis_pol_val = dis_pol->value;
+	}
+	if (*nor_att_pol_val == NAPV_PENDING) {
+		auto nor_att_pol = normal_attack_policies()->find(mid);
+		if (nor_att_pol) *nor_att_pol_val = nor_att_pol->value;
+	}
+}
+
 // メンバーがスキル武具一式をロードする。
 void member_impl::load_skill_equipset(
 	e_skill kid,   // スキルID。
@@ -2179,30 +2198,6 @@ void member_impl::load_skill_equipset(
 				*equ = equip_pos(*equ | es_itm->equip);
 			}
 		}
-	}
-}
-
-// メンバーが演奏スキルをロードする。
-void member_impl::load_play_skill(int mid, e_skill* kid) {
-	if (!*kid) {
-		auto pla_sk = play_skills()->find(mid);
-		if (pla_sk) *kid = pla_sk->skill_id;
-	}
-}
-
-// メンバーがポリシーをロードする。
-void member_impl::load_policy(
-	int mid,                                     // モンスターID。
-	distance_policy_values* dis_pol_val,         // 距離ポリシー。
-	normal_attack_policy_values* nor_att_pol_val // 通常攻撃ポリシー。
-) {
-	if (*dis_pol_val == DPV_PENDING) {
-		auto dis_pol = distance_policies()->find(mid);
-		if (dis_pol) *dis_pol_val = dis_pol->value;
-	}
-	if (*nor_att_pol_val == NAPV_PENDING) {
-		auto nor_att_pol = normal_attack_policies()->find(mid);
-		if (nor_att_pol) *nor_att_pol_val = nor_att_pol->value;
 	}
 }
 
@@ -2353,6 +2348,11 @@ member_impl::skill(
 		}
 	}
 	return nullptr;
+}
+
+// スキル武具一式のレジストリ。
+ptr<registry_t<e_skill,skill_equipset>>& member_impl::skill_equipsets() {
+	return skill_equipsets_;
 }
 
 // スキル無視モンスターのレジストリ。
@@ -2918,9 +2918,10 @@ member_t::member_t(
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
-	cart_auto_get_items() = construct<registry_t<int>>(
+	cart_auto_get_items() = construct<registry_t<int,int>>(
 		load_cart_auto_get_item_func(char_id()),
 		insert_cart_auto_get_item_func(char_id()),
+		update_cart_auto_get_item_func(char_id()),
 		delete_cart_auto_get_item_func(char_id()),
 		clear_cart_auto_get_item_func(char_id())
 	);
@@ -2937,13 +2938,6 @@ member_t::member_t(
 		update_equipset_func(char_id()),
 		delete_equipset_func(char_id()),
 		clear_equipset_func(char_id())
-	);
-	skill_equipsets() = construct<registry_t<e_skill,skill_equipset>>(
-		load_skill_equipset_func(char_id()),
-		insert_skill_equipset_func(char_id()),
-		update_skill_equipset_func(char_id()),
-		delete_skill_equipset_func(char_id()),
-		clear_skill_equipset_func(char_id())
 	);
 	first_mobs() = construct<registry_t<int>>(
 		load_first_mob_func(char_id()),
@@ -2991,6 +2985,13 @@ member_t::member_t(
 		update_play_skill_func(char_id()),
 		delete_play_skill_func(char_id()),
 		clear_play_skill_func(char_id())
+	);
+	skill_equipsets() = construct<registry_t<e_skill,skill_equipset>>(
+		load_skill_equipset_func(char_id()),
+		insert_skill_equipset_func(char_id()),
+		update_skill_equipset_func(char_id()),
+		delete_skill_equipset_func(char_id()),
+		clear_skill_equipset_func(char_id())
 	);
 	skill_ignore_mobs() = construct<registry_t<int>>(
 		load_skill_ignore_mob_func(char_id()),
@@ -3077,7 +3078,7 @@ leader_t::leader_t(
 ) : member_t(sd_, this) {
 	center() = sd_->bl;
 	attack_target() = 0;
-	last_heaby_tick() = 0;
+	last_heavy_tick() = 0;
 	last_summoned_id() = 0;
 	passive() = false;
 	stay() = false;
@@ -3094,12 +3095,12 @@ leader_t::leader_t(
 		delete_ignore_item_func(char_id()),
 		clear_ignore_item_func(char_id())
 	);
-	memos() = construct<registry_t<int,coords_t>>(
-		load_memo_func(char_id()),
-		insert_memo_func(char_id()),
-		update_memo_func(char_id()),
-		delete_memo_func(char_id()),
-		clear_memo_func(char_id())
+	journals() = construct<registry_t<int,coords_t>>(
+		load_journal_func(char_id()),
+		insert_journal_func(char_id()),
+		update_journal_func(char_id()),
+		delete_journal_func(char_id()),
+		clear_journal_func(char_id())
 	);
 	not_ignore_items() = construct<registry_t<int>>(
 		load_not_ignore_item_func(char_id()),

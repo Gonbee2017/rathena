@@ -18,7 +18,7 @@ prontera,159,192,4	script	ポタガール	721,{
 		set .@map_typ_men$[getarraysize(.@map_typ_men$)], "やめまーす";
 		set .@map_typ, select(printarray(.@map_typ_men$));
 		if (.@map_typ < .@map_typs_siz) {
-			set .@maps_siz, querymemoinfos(.@nat_typ, .@map_typ, .@ids, .@xs, .@ys, .@enams$, .@jnams$);
+			set .@maps_siz, queryjournalinfos(.@nat_typ, .@map_typ, .@ids, .@xs, .@ys, .@enams$, .@jnams$);
 			if (!.@maps_siz) {
 				mes "[キャリー]";
 				mes "そちら方面は転送可能なマップが";
@@ -26,7 +26,7 @@ prontera,159,192,4	script	ポタガール	721,{
 				next;
 				mes "[キャリー]";
 				mes "一度マップに足を運んでいただいて";
-				mes "そこのメモを取ってきていただければ";
+				mes "ジャーナルを取得していただければ";
 				mes "転送できるようになりますよー。";
 				next;
 			} else {

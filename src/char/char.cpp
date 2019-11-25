@@ -1740,9 +1740,9 @@ enum e_char_del_response char_delete(struct char_session_data* sd, uint32 char_i
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_great_mob` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_ignore_item` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_ignore_mob` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_journal` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_kew_element` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_limit_skill` WHERE `char_id`='%d'", char_id) ||
-		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_memo` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp_stats` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_normal_attack_policy` WHERE `char_id`='%d'", char_id) ||

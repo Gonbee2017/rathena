@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `pybot_cart_auto_get_item`;
 CREATE TABLE `pybot_cart_auto_get_item` (
   `char_id` int(11) unsigned NOT NULL,
   `nameid` smallint(5) unsigned NOT NULL,
+  `amount` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`char_id`, `nameid`)
 ) ENGINE=MyISAM;
 
@@ -63,6 +64,15 @@ CREATE TABLE `pybot_ignore_mob` (
   PRIMARY KEY (`char_id`, `mob_id`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_journal`;
+CREATE TABLE `pybot_memo` (
+  `char_id` int(11) unsigned NOT NULL,
+  `map` varchar(11) NOT NULL,
+  `x` smallint(4) unsigned NOT NULL,
+  `y` smallint(4) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `map`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_kew_element`;
 CREATE TABLE `pybot_kew_element` (
   `char_id` int(11) unsigned NOT NULL,
@@ -77,15 +87,6 @@ CREATE TABLE IF NOT EXISTS `pybot_limit_skill` (
   `skill_id` int(11) unsigned NOT NULL,
   `skill_lv` tinyint(4) unsigned NOT NULL,
   PRIMARY KEY (`char_id`, `skill_id`)
-) ENGINE=MyISAM;
-
-DROP TABLE IF EXISTS `pybot_memo`;
-CREATE TABLE `pybot_memo` (
-  `char_id` int(11) unsigned NOT NULL,
-  `map` varchar(11) NOT NULL,
-  `x` smallint(4) unsigned NOT NULL,
-  `y` smallint(4) unsigned NOT NULL,
-  PRIMARY KEY (`char_id`, `map`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pybot_mvp`;

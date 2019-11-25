@@ -1395,7 +1395,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"カート自動補充アイテムを一覧表示する。\n"
 		"入力例 [@bot cartautoget クリエ]\n"
 		"カート自動補充アイテムを登録する。\n"
-		"入力例 [@bot cartautoget クリエ ファイアーボトル]\n"
+		"入力例 [@bot cartautoget クリエ ファイアーボトル 1]\n"
 		"カート自動補充アイテムの登録を抹消する。\n"
 		"入力例 [@bot cartautoget クリエ アシッドボトル]\n"
 	), SUBCMD_DESC(Bot, CartAutoGetClear           ,     ,
@@ -1590,6 +1590,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ ItemSellImport (isi) サブコマンド ------\n"
 		"売却アイテムを取り込む。\n"
 		"入力例 [@bot itemsellimport スミス]\n"
+	), SUBCMD_DESC(Bot, JournalImport              , ji  ,
+		"------ JournalImport (ji) サブコマンド ------\n"
+		"ジャーナルを取り込む。\n"
+		"入力例 [@bot journalimport アサクロ]\n"
 	), SUBCMD_DESC(Bot, LogIn                      , li  ,
 		"------ LogIn (li) サブコマンド ------\n"
 		"Botをログインさせる。\n"
@@ -1702,7 +1706,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ PolicyDistanceClear サブコマンド ------\n"
 		"距離ポリシーをクリアする。\n"
 		"入力例 [@bot policydistanceclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, PolicyDistanceTransport    , pdt  ,
+	), SUBCMD_DESC(Bot, PolicyDistanceTransport    , pdt ,
 		"------ PolicyDistanceTransport (pdt) サブコマンド ------\n"
 		"距離ポリシーを転送する。\n"
 		"入力例 [@bot policydistancetransport ハイプリ チャンプ]\n"
@@ -1718,7 +1722,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ PolicyNormalAttackClear サブコマンド ------\n"
 		"通常攻撃ポリシーをクリアする。\n"
 		"入力例 [@bot policynormalattackclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, PolicyNormalAttackTransport, pdt  ,
+	), SUBCMD_DESC(Bot, PolicyNormalAttackTransport, pdt ,
 		"------ PolicyNormalAttackTransport (pdt) サブコマンド ------\n"
 		"通常攻撃ポリシーを転送する。\n"
 		"入力例 [@bot policynormalattacktransport ハイプリ チャンプ]\n"
@@ -2055,6 +2059,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, ItemSellAll                , isa ),
 	SUBCMD_PROC(Bot, ItemSellClear              ,     ),
 	SUBCMD_PROC(Bot, ItemSellImport             , isi ),
+	SUBCMD_PROC(Bot, JournalImport              , ji  ),
 	SUBCMD_PROC(Bot, LogIn                      , li  ),
 	SUBCMD_PROC(Bot, LogOut                     , lo  ),
 	SUBCMD_PROC(Bot, Loot                       , l   ),

@@ -429,22 +429,22 @@ print_tick(
 	return out.str();
 }
 
-// メモ情報を照会する。
-std::shared_ptr<std::vector<std::shared_ptr<memo_info>>> // 照会したメモ情報のベクタ。
-query_memo_infos(
+// ジャーナル情報を照会する。
+std::shared_ptr<std::vector<std::shared_ptr<journal_info>>> // 照会したジャーナル情報のベクタ。
+query_journal_infos(
 	map_session_data* sd, // リーダーのセッションデータ。
 	nation_types nat_typ, // 国の種類。
 	map_types map_typ     // マップの種類。
 ) {
 	CS_ENTER;
-	auto res = initialize<std::vector<ptr<memo_info>>>();
+	auto res = initialize<std::vector<ptr<journal_info>>>();
 	block_if* lea = ensure_leader(sd);
-	lea->memos()->iterate([nat_typ, map_typ, res] (int m, coords_t* xy) -> bool {
+	lea->journals()->iterate([nat_typ, map_typ, res] (int m, coords_t* xy) -> bool {
 		auto map = find_map_data(id_maps, m);
 		if (map) {
 			if (map->nation_type == nat_typ &&
 				map->map_type == map_typ
-			) res->push_back(initialize<memo_info>(
+			) res->push_back(initialize<journal_info>(
 				m,
 				xy->x,
 				xy->y,
@@ -454,7 +454,7 @@ query_memo_infos(
 		}
 		return true;
 	});
-	std::sort(ALL_RANGE(*res), [](const ptr<memo_info>& lmi, const ptr<memo_info>& rmi) -> bool {
+	std::sort(ALL_RANGE(*res), [](const ptr<journal_info>& lmi, const ptr<journal_info>& rmi) -> bool {
 		return lmi->name_english < rmi->name_english;
 	});
 	return res;
@@ -597,13 +597,13 @@ void set_map_initial_position(
 			!map_getmapflag(sd->bl.m, MF_NOWARPTO)
 		) {
 			block_if* lea = ensure_leader(sd);
-			if (!lea->memos()->find(sd->bl.m)) {
+			if (!lea->journals()->find(sd->bl.m)) {
 				auto map = find_map_data(id_maps, sd->bl.m);
 				if (map) show_client(sd->fd, print(
-					"「", map->name_japanese, " (", map->name_english, ")」のメモを取得しました。"
+					"「", map->name_japanese, " (", map->name_english, ")」のジャーナルを取得しました。"
 				));
 			}
-			lea->memos()->register_(sd->bl.m, initialize<coords_t>(sd->bl.x, sd->bl.y));
+			lea->journals()->register_(sd->bl.m, initialize<coords_t>(sd->bl.x, sd->bl.y));
 		}
 	}
 }

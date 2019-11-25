@@ -40,6 +40,15 @@ enum nation_types {
 // -----------------------------------------------------------------------------
 // 型の定義
 
+// ジャーナル情報。
+struct journal_info {
+	int m;                     // マップID。
+	int x;                     // X座標。
+	int y;                     // Y座標。
+	std::string name_english;  // マップ名(英語)。
+	std::string name_japanese; // マップ名(日本語)。
+};
+
 // MVPの統計。
 struct mvp_stats {
 	std::string char_name; // キャラクター名。
@@ -54,15 +63,6 @@ struct member_info {
 	int char_id;           // キャラクターID。
 	std::string char_name; // キャラクター名。
 	e_job class_;          // 職業。
-};
-
-// メモ情報。
-struct memo_info {
-	int m;                     // マップID。
-	int x;                     // X座標。
-	int y;                     // Y座標。
-	std::string name_english;  // マップ名(英語)。
-	std::string name_japanese; // マップ名(日本語)。
 };
 
 // -----------------------------------------------------------------------------
@@ -93,7 +93,7 @@ void pc_acquired_mvp(map_session_data* sd, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);
 std::string print_tick(t_tick tic);
-std::shared_ptr<std::vector<std::shared_ptr<memo_info>>> query_memo_infos(map_session_data* sd, nation_types nat_typ, map_types map_typ);
+std::shared_ptr<std::vector<std::shared_ptr<journal_info>>> query_journal_infos(map_session_data* sd, nation_types nat_typ, map_types map_typ);
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> query_mvp_ranking(const std::vector<e_job>& jobs, int lim);
 std::shared_ptr<mvp_stats> query_mvp_stats(int cid);
 void reload_equipset_in_battle(int cid);

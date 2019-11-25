@@ -449,7 +449,7 @@ BUILDIN_FUNC(printseconds) {
 }
 
 // [GonBee]
-// メモ情報を照会する。
+// ジャーナル情報を照会する。
 // i      国の種類。
 // i      マップの種類。
 // r      照会したマップIDの配列。
@@ -458,7 +458,7 @@ BUILDIN_FUNC(printseconds) {
 // r      照会したマップ名(英語)の配列。
 // r      照会したマップ名(日本語)の配列。
 // 戻り値 照会した行数。
-BUILDIN_FUNC(querymemoinfos) {
+BUILDIN_FUNC(queryjournalinfos) {
 	pybot::nation_types nat_typ = pybot::nation_types(script_getnum(st, 2));
 	pybot::map_types map_typ = pybot::map_types(script_getnum(st, 3));
 	script_data* que_ids = script_getdata(st, 4);
@@ -505,13 +505,13 @@ BUILDIN_FUNC(querymemoinfos) {
 		is_string_variable(reference_getname(que_jnams)) &&
 		script_rid2sd(sd)
 	) {
-		auto mem_infs = pybot::query_memo_infos(sd, nat_typ, map_typ);
+		auto jou_infs = pybot::query_journal_infos(sd, nat_typ, map_typ);
 		uint32 que_ids_ind = reference_getindex(que_ids);
 		uint32 que_xs_ind = reference_getindex(que_xs);
 		uint32 que_ys_ind = reference_getindex(que_ys);
 		uint32 que_enams_ind = reference_getindex(que_enams);
 		uint32 que_jnams_ind = reference_getindex(que_jnams);
-		for (auto mem_inf : *mem_infs) {
+		for (auto mem_inf : *jou_infs) {
 			set_reg(
 				st,
 				sd,
@@ -553,7 +553,7 @@ BUILDIN_FUNC(querymemoinfos) {
 				reference_getref(que_jnams)
 			);
 		}
-		siz = mem_infs->size();
+		siz = jou_infs->size();
 	}
 	script_pushint(st, siz);
 	return SCRIPT_CMD_SUCCESS;

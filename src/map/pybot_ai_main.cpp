@@ -580,12 +580,18 @@ void ai_t::bot_cart_auto_get() {
 		auto inv_con = construct<inventory_context>(bot->sd());
 		auto car_con = construct<cart_context>(bot->sd());
 		bot->cart_auto_get_items()->iterate(
-			[this, inv_con, car_con] (int nid) -> bool {
-				if (inv_con->find(nid) == INT_MIN) {
-					int car_ind = car_con->find(nid);
-					if (car_ind != INT_MIN) {
+			[this, inv_con, car_con] (int nid, int* amo) -> bool {
+				int inv_amo = inv_con->sum(nid);
+				if (inv_amo < *amo) {
+					int com = 0;
+					while (inv_amo + com < *amo) {
+						int car_ind = car_con->find(nid);
+						if (car_ind == INT_MIN) break;
 						item* itm = car_con->at(car_ind);
-						if (inv_con->add(itm, 1)) car_con->delete_(car_ind, 1);
+						int rem = std::min(*amo - (inv_amo + com), int(itm->amount));
+						if (!inv_con->add(itm, rem)) break;
+						car_con->delete_(car_ind, rem);
+						com += rem;
 					}
 				}
 				return true;

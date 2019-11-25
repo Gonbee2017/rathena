@@ -96,22 +96,27 @@ SUBCMD_FUNC(Bot, Cart) {
 // メンバーのカート自動補充アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, CartAutoGet) {
 	CS_ENTER;
+	using itm_val_t = std::pair<int,int*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (!mem->is_carton())
 		throw command_error{print(
 			"「", mem->name(), "」はカートを所有していません。"
 		)};
 	if (args.empty()) {
-		std::vector<int> nids;
-		mem->cart_auto_get_items()->copy(pybot::back_inserter(nids));
-		std::sort(ALL_RANGE(nids));
+		std::vector<itm_val_t> itm_vals;
+		mem->cart_auto_get_items()->copy(pybot::back_inserter(itm_vals));
+		std::sort(ALL_RANGE(itm_vals), [] (itm_val_t lval, itm_val_t rval) -> bool {
+			return lval.first < rval.first;
+		});
 		lea->output_buffer() = std::stringstream();
 		lea->output_buffer() << "------ 「" << mem->name() << "」のカート自動補充アイテム ------\n";
-		for (int nid : nids) {
+		for (itm_val_t itm_val : itm_vals) {
+			int nid = itm_val.first;
+			int amo = *itm_val.second;
 			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
-				print_itemdb(nid) << "\n";
+				print_itemdb(nid) << " (" << amo << ")\n";
 		}
-		lea->output_buffer() << nids.size() << "件のアイテムが見つかりました。\n";
+		lea->output_buffer() << itm_vals.size() << "件のアイテムが見つかりました。\n";
 		lea->show_next();
 	} else {
 		std::string idb_nam = shift_arguments(args);
@@ -131,7 +136,7 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 			throw command_error{print(
 				"「", idb_str, "」はスタックできません。"
 			)};
-		if (mem->cart_auto_get_items()->find(nid)) {
+		if (args.empty()) {
 			mem->cart_auto_get_items()->unregister(nid);
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", idb_str, "」を"
@@ -139,10 +144,13 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 			));
 			if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 		} else {
-			mem->cart_auto_get_items()->register_(nid);
+			int amo = shift_arguments_then_parse_int(
+				args, "アイテムの個数", 1, MAX_AMOUNT
+			);
+			mem->cart_auto_get_items()->register_(nid, initialize<int>(amo));
 			show_client(lea->fd(), print(
-				"「", mem->name(), "」は「", idb_str, "」を"
-				"カートから自動的に取り出します。"
+				"「", mem->name(), "」は「", idb_str, "」の所持数が",
+				amo, "個になるようにカートから自動的に取り出します。"
 			));
 		}
 		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
@@ -896,7 +904,7 @@ SUBCMD_FUNC(Bot, ItemIgnoreClear) {
 SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"ItemIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -912,7 +920,7 @@ SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 		"「", bot->name(), "」から",
 		cou, "件の無視アイテムを取り込みました。"
 	));
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // 非無視アイテムを一覧表示、または登録、または抹消する。
@@ -963,7 +971,7 @@ SUBCMD_FUNC(Bot, ItemNotIgnoreClear) {
 SUBCMD_FUNC(Bot, ItemNotIgnoreImport) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"ItemNotIgnoreImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -979,7 +987,7 @@ SUBCMD_FUNC(Bot, ItemNotIgnoreImport) {
 		"「", bot->name(), "」から",
 		cou, "件の非無視アイテムを取り込みました。"
 	));
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // メンバーのHP回復アイテムを一覧表示、または登録、または抹消する。
@@ -1273,7 +1281,7 @@ SUBCMD_FUNC(Bot, ItemSellClear) {
 SUBCMD_FUNC(Bot, ItemSellImport) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"ItemSellImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -1289,7 +1297,31 @@ SUBCMD_FUNC(Bot, ItemSellImport) {
 		"「", bot->name(), "」から",
 		cou, "件の売却アイテムを取り込みました。"
 	));
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
+}
+
+// ジャーナルを取り込む。
+SUBCMD_FUNC(Bot, JournalImport) {
+	CS_ENTER;
+	block_if* bot = shift_arguments_then_find_bot(lea, args);
+	t_tick hev_tic = lea->next_heavy_tick();
+	if (hev_tic)
+		throw command_error{print(
+			"JournalImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
+		)};
+	auto bot_jous = construct<registry_t<int,coords_t>>(
+		load_journal_func(bot->char_id()),
+		insert_journal_func(bot->char_id()),
+		update_journal_func(bot->char_id()),
+		delete_journal_func(bot->char_id()),
+		clear_journal_func(bot->char_id())
+	);
+	int cou = lea->journals()->import_(bot_jous.get());
+	show_client(lea->fd(), print(
+		"「", bot->name(), "」から",
+		cou, "件のジャーナルを取り込みました。"
+	));
+	lea->last_heavy_tick() = now;
 }
 
 // Botがログインする。
@@ -1311,7 +1343,7 @@ SUBCMD_FUNC(Bot, LogIn) {
 	int bot_cid = query_char_id(uid, upas, cnam);
 	if (!bot_cid)
 		throw command_error{"そのキャラクターは見つかりませんでした。"};
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"LogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -1336,7 +1368,7 @@ SUBCMD_FUNC(Bot, LogIn) {
 			lea->members().push_back(bot.get());
 			lea->update_bot_indices();
 			lea->update_member_indices();
-			lea->last_heaby_tick() = now;
+			lea->last_heavy_tick() = now;
 			show_client(lea->fd(), print(
 				"「", bot->name(), "」がログインしました。"
 			));
@@ -1360,7 +1392,7 @@ SUBCMD_FUNC(Bot, LogOut) {
 	lea->update_member_indices();
 	lea->bots().erase(lea->bots().begin() + bot->bot_index());
 	lea->update_bot_indices();
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // メンバーの拾得モードを設定する。
@@ -1520,7 +1552,7 @@ SUBCMD_FUNC(Bot, MonsterGreatClear) {
 SUBCMD_FUNC(Bot, MonsterGreatImport) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"MonsterGreatImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -1536,7 +1568,7 @@ SUBCMD_FUNC(Bot, MonsterGreatImport) {
 		"「", bot->name(), "」から",
 		cou, "件のグレートモンスターを取り込みました。"
 	));
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // モンスターの高Defを設定する。
@@ -3208,7 +3240,7 @@ SUBCMD_FUNC(Bot, StoragePutClear) {
 SUBCMD_FUNC(Bot, StoragePutImport) {
 	CS_ENTER;
 	block_if* bot = shift_arguments_then_find_bot(lea, args);
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"StoragePutImportサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -3224,7 +3256,7 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 		"「", bot->name(), "」から", cou,
 		"件の倉庫格納アイテムを取り込みました。"
 	));
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // Botを引き寄せる。
@@ -3281,7 +3313,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	CS_ENTER;
 	if (!lea->bots().empty())
 		throw command_error{"あなたはすでにチームを編成しています。"};
-	t_tick hev_tic = lea->next_heaby_tick();
+	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(
 			"TeamLogInサブコマンドを実行できるようになるまであと", print_tick(hev_tic + 1000), "です。"
@@ -3321,7 +3353,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	} else lea->members().push_back(lea);
 	lea->update_bot_indices();
 	lea->update_member_indices();
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 	show_client(lea->fd(), print(lea->bots().size(), "人のBotがログインしました。"));
 }
 
@@ -3340,7 +3372,7 @@ SUBCMD_FUNC(Bot, TeamLogOut) {
 	lea->members().push_back(lea);
 	lea->update_member_indices();
 	lea->bots().clear();
-	lea->last_heaby_tick() = now;
+	lea->last_heavy_tick() = now;
 }
 
 // チームを一覧表示する、または登録する、または登録を抹消する。
