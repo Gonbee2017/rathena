@@ -3186,7 +3186,7 @@ AI_SKILL_USE_FUNC(WZ_STORMGUST) {
 		int cou = std::count_if(ALL_RANGE(*enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
-					bot->skill_ratio(kid, klv, ene) > 50 &&
+					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->is_summoned() &&
 					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
 			})

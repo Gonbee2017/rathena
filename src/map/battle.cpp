@@ -5612,7 +5612,37 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 		if (skill_id == GS_GROUNDDRIFT)
 			ATK_ADD(wd.damage, wd.damage2, 50 * skill_lv);
 		if (skill_id != CR_SHIELDBOOMERANG) //Only Shield boomerang doesn't takes the Star Crumbs bonus.
-			ATK_ADD2(wd.damage, wd.damage2, ((wd.div_ < 1) ? 1 : wd.div_) * sd->right_weapon.star, ((wd.div_ < 1) ? 1 : wd.div_) * sd->left_weapon.star);
+
+			// [GonBee]
+			// ñºê∫ïtÇ´Ç»ÇÁAtk+30Ç∑ÇÈÅB
+			//ATK_ADD2(wd.damage, wd.damage2, ((wd.div_ < 1) ? 1 : wd.div_) * sd->right_weapon.star, ((wd.div_ < 1) ? 1 : wd.div_) * sd->left_weapon.star);
+		{
+			int right_star = sd->right_weapon.star;
+			int right_index = sd->equip_index[EQI_HAND_R];
+			if (right_index >= 0) {
+				item_data* right_data = sd->inventory_data[right_index];
+				item* right_item = &sd->inventory.u.items_inventory[right_index];
+				if (right_data &&
+					right_data->type == IT_WEAPON &&
+					right_item->card[0] == CARD0_FORGE &&
+					pc_famerank(MakeDWord(right_item->card[2], right_item->card[3]), MAPID_BLACKSMITH)
+				) right_star += 30;
+			}
+			int left_star = sd->left_weapon.star;
+			int left_index = sd->equip_index[EQI_HAND_L];
+			if (left_index >= 0) {
+				item_data* left_data = sd->inventory_data[left_index];
+				item* left_item = &sd->inventory.u.items_inventory[left_index];
+				if (left_data &&
+					left_data->type == IT_WEAPON &&
+					left_item->equip == EQP_HAND_L &&
+					left_item->card[0] == CARD0_FORGE &&
+					pc_famerank(MakeDWord(left_item->card[2], left_item->card[3]), MAPID_BLACKSMITH)
+				) left_star += 30;
+			}
+			ATK_ADD2(wd.damage, wd.damage2, ((wd.div_ < 1) ? 1 : wd.div_) * right_star, ((wd.div_ < 1) ? 1 : wd.div_) * left_star);
+		}
+
 		if (skill_id != MC_CARTREVOLUTION && pc_checkskill(sd, BS_HILTBINDING) > 0)
 			ATK_ADD(wd.damage, wd.damage2, 4);
 		if (skill_id == MO_FINGEROFFENSIVE) { //The finger offensive spheres on moment of attack do count. [Skotlex]
