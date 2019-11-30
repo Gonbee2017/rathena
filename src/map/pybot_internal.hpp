@@ -2845,6 +2845,7 @@ template <class ...A> std::string print_with(const std::string& sep, A&& ...args
 std::string print_zeny(int zen);
 int query_char_id(const std::string& uid, const std::string& upas, const std::string& cnam);
 void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
+std::string replace(const std::string& str, const std::string& sub1, const std::string& sub2);
 int sex_string2number(const std::string& str);
 void show_debug(const std::string& mes);
 void show_error(const std::string& mes);

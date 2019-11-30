@@ -125,10 +125,11 @@ item_key::item_key(
 	int slo = 0;
 	if (!slo_blos->empty()) {
 		auto slo_toks = command_collect_tokens<ele_lis_lis>(ALL_RANGE(*slo_blos->front()), "|", true);
-		slo = slo_toks->size();
-		if (slo > MAX_SLOTS) return;
 		auto slo_strs = command_print_all<str_lis>(ALL_RANGE(*slo_toks));
-		for (int i = 0; i < slo_strs->size(); ++i) {
+		if (slo_strs->size() > 1 + MAX_SLOTS) return;
+		slo = pybot::stoi(slo_strs->front());
+		if (slo > MAX_SLOTS) return;
+		for (int i = 1; i < slo_strs->size(); ++i) {
 			std::string slo_str = slo_strs->at(i);
 			if (!slo_str.empty()) {
 				item_data* car_db;
@@ -137,11 +138,16 @@ item_key::item_key(
 					if (car_nid == INT_MIN) return;
 					car_db = itemdb_exists(car_nid);
 				} else {
-					std::string car_nam = slo_str + CARD_NAME_POSTFIX;
+					std::string car_nam = slo_str;
+					car_nam = replace(replace(car_nam, "+", " + "), "-", " - ");
 					car_db = itemdb_searchname(car_nam.c_str());
+					if (!car_db) {
+						car_nam += CARD_NAME_POSTFIX;
+						car_db = itemdb_searchname(car_nam.c_str());
+					}
 				} 
 				if (!car_db) return;
-				card[i] = car_db->nameid;
+				card[i - 1] = car_db->nameid;
 			}
 		}
 	}
@@ -793,12 +799,12 @@ find_item(
 			if (itm_ele != key_ele ||
 				itm_sta != key_sta
 			) continue;
-		} else if (idb->slot) {
+		} else {
 			int j;
 			std::array<bool,MAX_SLOTS> fou{};
-			for (j = 0; j < idb->slot; ++j) {
+			for (j = 0; j < MAX_SLOTS; ++j) {
 				int k;
-				for (k = 0; k < idb->slot; ++k) {
+				for (k = 0; k < MAX_SLOTS; ++k) {
 					if (itm->card[k] == key.card[j] &&
 						!fou[k]
 					) {
@@ -806,9 +812,9 @@ find_item(
 						break;
 					}
 				}
-				if (k == idb->slot) break;
+				if (k == MAX_SLOTS) break;
 			}
-			if (j < idb->slot) continue;
+			if (j < MAX_SLOTS) continue;
 		}
 		return i;
 	}
@@ -1171,22 +1177,25 @@ print_item(
 			int sta = itm->card[1] >> 8;
 			for (int i = 0; i < sta; i += 5) for_toks.push_back(STAR_FORGED_TAG);
 			toks.push_back(print("{", concatinate_strings(ALL_RANGE(for_toks), "|"), "}"));
-		} else if (idb->slot) {
+		} else if (idb->equip) {
 			std::vector<std::string> slo_toks;
-			for (int i = 0; i < idb->slot; ++i) {
-				if (!itm->card[i]) {
-					slo_toks.push_back("");
-					continue;
-				}
-				std::string mob_nam = UNKNOWN_SYMBOL;
+			slo_toks.push_back(print(idb->slot));
+			for (int i = 0; i < MAX_SLOTS; ++i) {
+				if (!itm->card[i]) continue;
+				std::string car_nam = UNKNOWN_SYMBOL;
 				item_data* car_db = itemdb_exists(itm->card[i]);
 				if (car_db) {
-					mob_nam = car_db->jname;
-					if (mob_nam.length() >= 6) mob_nam = mob_nam.substr(0, mob_nam.length() - 6);
+					car_nam = car_db->jname;
+					if (car_nam.length() > CARD_NAME_POSTFIX.length() &&
+						car_nam.substr(car_nam.length() - CARD_NAME_POSTFIX.length()) == CARD_NAME_POSTFIX
+					) car_nam = car_nam.substr(0, car_nam.length() - CARD_NAME_POSTFIX.length());
+					car_nam = replace(replace(car_nam, " + ", "+"), " - ", "-");
 				}
-				slo_toks.push_back(mob_nam);
+				slo_toks.push_back(car_nam);
 			}
-			toks.push_back(print("[", concatinate_strings(ALL_RANGE(slo_toks), "|"), "]"));
+			if (idb->slot ||
+				slo_toks.size() >= 2
+			) toks.push_back(print("[", concatinate_strings(ALL_RANGE(slo_toks), "|"), "]"));
 		}
 		if (itm->refine > 0) tag_toks.push_back(print("+", int(itm->refine)));
 		if (itm->attribute == 1) tag_toks.push_back(BROKEN_EQUIP_TAG);
@@ -1211,22 +1220,25 @@ print_item_key(
 		int sta = key.card[1] >> 8;
 		for (int i = 0; i < sta; i += 5) for_toks.push_back(STAR_FORGED_TAG);
 		toks.push_back(print("{", concatinate_strings(ALL_RANGE(for_toks), "|"), "}"));
-	} else if (key.idb->slot) {
+	} else if (key.idb->equip) {
 		std::vector<std::string> slo_toks;
-		for (int i = 0; i < key.idb->slot; ++i) {
-			if (!key.card[i]) {
-				slo_toks.push_back("");
-				continue;
-			}
-			std::string mob_nam = UNKNOWN_SYMBOL;
+		slo_toks.push_back(print(key.idb->slot));
+		for (int i = 0; i < MAX_SLOTS; ++i) {
+			if (!key.card[i]) continue;
+			std::string car_nam = UNKNOWN_SYMBOL;
 			item_data* car_db = itemdb_exists(key.card[i]);
 			if (car_db) {
-				mob_nam = car_db->jname;
-				if (mob_nam.length() >= 6) mob_nam = mob_nam.substr(0, mob_nam.length() - 6);
+				car_nam = car_db->jname;
+				if (car_nam.length() > CARD_NAME_POSTFIX.length() &&
+					car_nam.substr(car_nam.length() - CARD_NAME_POSTFIX.length()) == CARD_NAME_POSTFIX
+				) car_nam = car_nam.substr(0, car_nam.length() - CARD_NAME_POSTFIX.length());
+				car_nam = replace(replace(car_nam, " + ", "+"), " - ", "-");
 			}
-			slo_toks.push_back(mob_nam);
+			slo_toks.push_back(car_nam);
 		}
-		toks.push_back(print("[", concatinate_strings(ALL_RANGE(slo_toks), "|"), "]"));
+		if (key.idb->slot ||
+			slo_toks.size() >= 2
+		) toks.push_back(print("[", concatinate_strings(ALL_RANGE(slo_toks), "|"), "]"));
 	}
 	return concatinate_strings(ALL_RANGE(toks), " ");
 }
@@ -1415,6 +1427,29 @@ void query_login_data(
 		);
 		if (ses->next_row()) yie(aid, sex_string2number(sex_str), gid, unb_tim, sta, nam);
 	});
+}
+
+// 文字列内の部分文字列を置き換える。
+std::string // 結果。
+replace(
+	const std::string& str,  // 文字列。
+	const std::string& sub1, // 置き換える部分文字列。
+	const std::string& sub2  // 置き換えた部分文字列。
+) {
+	std::stringstream buf;
+	for (int i = 0; i < str.length();) {
+		if (str.substr(i, sub1.length()) == sub1) {
+			buf << sub2;
+			i += sub1.length();
+		} else {
+			uint8_t let = str[i++];
+			buf << let;
+			if (i < str.length() &&
+				letter_is_jlead(let)
+			) buf << str[i++];
+		}
+	}
+	return buf.str();
 }
 
 // 性別の文字列を数値に変換する。
