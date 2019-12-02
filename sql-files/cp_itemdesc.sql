@@ -8275,7 +8275,7 @@ REPLACE INTO `cp_itemdesc` VALUES(10905, 'ƒtƒ‹ƒPƒ~ƒJƒ‹ƒ`ƒƒ[ƒW‚ÌŒø‰Ê<br/>‚ª‚ ‚é•
 REPLACE INTO `cp_itemdesc` VALUES(29600, 'Atk + 15B');
 REPLACE INTO `cp_itemdesc` VALUES(29601, 'Hit + 60B');
 REPLACE INTO `cp_itemdesc` VALUES(29602, '–hŒä—Í‚Ì50%‚ð–³Ž‹B');
-REPLACE INTO `cp_itemdesc` VALUES(29603, '–‚–@–hŒä—Í‚Ì25%‚ð–³Ž‹B');
+REPLACE INTO `cp_itemdesc` VALUES(29603, '–‚–@–hŒä—Í‚Ì5%‚ð–³Ž‹B');
 REPLACE INTO `cp_itemdesc` VALUES(29604, '–³Œ`ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29605, '•sŽ€Œ`ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29606, '“®•¨Œ`ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
@@ -8325,3 +8325,10 @@ REPLACE INTO `cp_itemdesc` VALUES(29649, '‹ßÚ•¨—UŒ‚ŽžA¬Œ^ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’
 REPLACE INTO `cp_itemdesc` VALUES(29650, '‹ßÚ•¨—UŒ‚ŽžA’†Œ^ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29651, '‹ßÚ•¨—UŒ‚ŽžA‘åŒ^ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29652, '‹ßÚ•¨—UŒ‚ŽžAƒ{ƒXƒ‚ƒ“ƒXƒ^[‚É15%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
+REPLACE INTO `cp_itemdesc` VALUES(29653, '[ƒ}ƒWƒbƒNƒNƒ‰ƒbƒVƒƒ[]A[ƒOƒ‰ƒrƒe[ƒVƒ‡ƒ“ƒtƒB[ƒ‹ƒh]‚Å—^‚¦‚éƒ_ƒ[ƒW + 100%B');
+REPLACE INTO `cp_itemdesc` VALUES(29654, '[ƒR[ƒ‹ƒhƒ{ƒ‹ƒg]A[ƒtƒƒXƒgƒ_ƒCƒo[]A[ƒEƒH[ƒ^[ƒ{[ƒ‹]A[ƒtƒƒXƒgƒmƒ”ƒ@]A[ƒXƒg[ƒ€ƒKƒXƒg]‚Å—^‚¦‚éƒ_ƒ[ƒW + 5%B');
+REPLACE INTO `cp_itemdesc` VALUES(29655, '[ƒXƒg[ƒ“ƒJ[ƒX]A[ƒA[ƒXƒXƒpƒCƒN]A[ƒwƒ”ƒ“ƒYƒhƒ‰ƒCƒu]‚Å—^‚¦‚éƒ_ƒ[ƒW + 10%B');
+REPLACE INTO `cp_itemdesc` VALUES(29656, '[ƒtƒ@ƒCƒA[ƒ{[ƒ‹]A[ƒtƒ@ƒCƒA[ƒEƒH[ƒ‹]A[ƒtƒ@ƒCƒA[ƒ{ƒ‹ƒg]A[ƒtƒ@ƒCƒA[ƒsƒ‰[]A[ƒTƒCƒgƒ‰ƒbƒVƒƒ[]A[ƒƒeƒIƒXƒg[ƒ€]‚Å—^‚¦‚éƒ_ƒ[ƒW + 5%B');
+REPLACE INTO `cp_itemdesc` VALUES(29657, '[ƒ‰ƒCƒgƒjƒ“ƒOƒ{ƒ‹ƒg]A[ƒTƒ“ƒ_[ƒXƒg[ƒ€]A[ƒ†ƒsƒeƒ‹ƒTƒ“ƒ_[]A[ƒ[ƒhƒIƒuƒ”ƒ@[ƒ~ƒŠƒIƒ“]‚Å—^‚¦‚éƒ_ƒ[ƒW + 5%B');
+REPLACE INTO `cp_itemdesc` VALUES(29658, '[ƒiƒp[ƒ€ƒr[ƒg]A[ƒ\ƒEƒ‹ƒXƒgƒ‰ƒCƒN]A[ƒiƒp[ƒ€ƒoƒ‹ƒJƒ“]‚Å—^‚¦‚éƒ_ƒ[ƒW + 10%B');
+REPLACE INTO `cp_itemdesc` VALUES(29659, '[ƒGƒXƒ}]‚Å—^‚¦‚éƒ_ƒ[ƒW + 5%B');
