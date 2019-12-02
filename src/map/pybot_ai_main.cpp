@@ -57,6 +57,7 @@ void ai_t::leader_organize() {
 			)
 		) members.push_back(mem);
 	}
+	leader->resurrectionable() = false;
 	leader->sp_suppliable() = false;
 	for (block_if* mem : members) {
 		if (mem->is_dead()) mem->skill_used_ticks().clear();
@@ -71,6 +72,10 @@ void ai_t::leader_organize() {
 			pets.push_back(mem->pet().get());
 			blocks[mem->pet()->bl()->id] = mem->pet().get();
 		}
+		leader->resurrectionable() = leader->resurrectionable() ||
+			(!mem->is_dead() &&
+				mem->check_skill(ALL_RESURRECTION)
+			);
 		leader->sp_suppliable() = leader->sp_suppliable() ||
 			(!mem->is_dead() &&
 				mem->check_skill(PF_SOULCHANGE) &&

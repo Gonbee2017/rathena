@@ -179,6 +179,7 @@ t_tick leader_if::next_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool& leader_if::resurrectionable() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<rush_modes>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::save_team(int tea_num) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::sell_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1641,6 +1642,11 @@ std::stringstream& leader_impl::output_buffer() {
 // チームがモンスターに反応しないか。
 bool& leader_impl::passive() {
 	return passive_;
+}
+
+// リザレクション可能か。
+bool& leader_impl::resurrectionable() {
+	return resurrectionable_;
 }
 
 // ラッシュモードの登録値。

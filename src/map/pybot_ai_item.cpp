@@ -108,11 +108,17 @@ AI_ITEM_USE_FUNC(INT_DISH10) {
 
 // イグドラシルの葉を使う。
 AI_ITEM_USE_FUNC(LEAF_OF_YGGDRASIL) {
-	if (battler->can_act()) {
+	if (!bot->sc()->cant.cast &&
+		bot->can_act() &&
+		!bot->is_paralysis()
+	) {
 		block_if* mem = pybot::find_if(ALL_RANGE(members), [this] (block_if* mem) -> bool {
 			return bot->can_reach_block(mem) &&
 				mem->is_dead() &&
-				!mem->reject_skills()->find(ALL_RESURRECTION);
+				!mem->reject_skills()->find(ALL_RESURRECTION) &&
+				(!leader->resurrectionable() ||
+					mem->sc()->data[SC_HELLPOWER]
+				);
 		});
 		if (mem) {
 			try {bot->use_item(itm_ind);}

@@ -1421,6 +1421,7 @@ struct leader_if {
 	virtual ptr<registry_t<int>>& not_ignore_items();
 	virtual std::stringstream& output_buffer();
 	virtual bool& passive();
+	virtual bool& resurrectionable();
 	virtual ptr<regnum_t<rush_modes>>& rush();
 	virtual void save_team(int tea_num);
 	virtual ptr<registry_t<int>>& sell_items();
@@ -1807,6 +1808,7 @@ struct leader_impl : virtual block_if {
 	ptr<registry_t<int>> not_ignore_items_;           // 非無視アイテムのレジストリ。
 	std::stringstream output_buffer_;                 // 出力バッファ。
 	bool passive_;                                    // チームがモンスターに反応しないか。
+	bool resurrectionable_;                           // リザレクション可能か。
 	ptr<regnum_t<rush_modes>> rush_;                  // ラッシュモードの登録値。
 	ptr<registry_t<int>> sell_items_;                 // 売却アイテムのレジストリ。
 	bool sp_suppliable_;                              // SPを供給可能か。
@@ -1833,6 +1835,7 @@ struct leader_impl : virtual block_if {
 	virtual ptr<registry_t<int>>& not_ignore_items() override;
 	virtual std::stringstream& output_buffer() override;
 	virtual bool& passive() override;
+	virtual bool& resurrectionable() override;
 	virtual ptr<regnum_t<rush_modes>>& rush() override;
 	virtual void save_team(int tea_num) override;
 	virtual ptr<registry_t<int>>& sell_items() override;
