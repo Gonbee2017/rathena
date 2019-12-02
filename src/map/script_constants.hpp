@@ -642,6 +642,12 @@
 	export_constant2("bSPDrainValueRace",SP_SP_DRAIN_VALUE_RACE);
 	export_constant2("bIgnoreMdefRaceRate",SP_IGNORE_MDEF_RACE_RATE);
 	export_constant2("bIgnoreDefRaceRate",SP_IGNORE_DEF_RACE_RATE);
+
+	// [GonBee]
+	export_constant2("bNearBaseAtk",SP_NEAR_BASE_ATK);
+	export_constant2("bNearHit",SP_NEAR_HIT);
+	export_constant2("bNearIgnoreDefClassRate",SP_NEAR_IGNORE_DEF_CLASS_RATE);
+
 	export_constant2("bSkillHeal2",SP_SKILL_HEAL2);
 	export_constant2("bAddEffOnSkill",SP_ADDEFF_ONSKILL);
 	export_constant2("bHealPower",SP_ADD_HEAL_RATE);
@@ -737,6 +743,12 @@
 	export_constant2("bRegenPercentHP", SP_REGEN_PERCENT_HP);
 	export_constant2("bRegenPercentSP", SP_REGEN_PERCENT_SP);
 	export_constant2("bSkillDelay",SP_SKILL_DELAY);
+
+	// [GonBee]
+	export_constant2("bNearAddEle", SP_NEAR_ADDELE);
+	export_constant2("bNearAddRace", SP_NEAR_ADDRACE);
+	export_constant2("bNearAddSize", SP_NEAR_ADDSIZE);
+	export_constant2("bNearAddClass", SP_NEAR_ADDCLASS);
 
 	/* equip indices */
 	export_constant(EQI_COMPOUND_ON);

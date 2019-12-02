@@ -1417,13 +1417,15 @@ lou_in01,14,18,0		warp	louyangwarp1033		0,0,louyang,90,254
 //秘密酒場
 jawaii,192,215	warp	jaw001	1,1,jawaii_in,27,94
 
-jawaii_in,27,91,0	script	jaw001-1	45,1,1,{
-	if(PartnerId)
-		warp "jawaii",192,218;
-	else
-		warp "jawaii_in",27,94;
-	end;
-}
+//jawaii_in,27,91,0	script	jaw001-1	45,1,1,{
+//	if(PartnerId)
+//		warp "jawaii",192,218;
+//	else
+//		warp "jawaii_in",27,94;
+//	end;
+//}
+jawaii_in,27,91,0	warp	jaw001-1	1,1,jawaii,192,218
+
 //スイートルーム
 jawaii_in,113,61	warp	jaw01	1,1,jawaii,136,203
 //アンティークルーム

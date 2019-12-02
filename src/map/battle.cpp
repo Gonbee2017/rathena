@@ -756,9 +756,22 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 					// Calculates each right & left hand weapon bonuses separatedly
 					if( !battle_config.left_cardfix_to_right ) {
 						// Right-handed weapon
-						cardfix = cardfix * (100 + sd->right_weapon.addrace[tstatus->race] + sd->right_weapon.addrace[RC_ALL]) / 100;
+
+						// [GonBee]
+						// 近接物理攻撃時の右手の種族追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addrace[tstatus->race] + sd->right_weapon.addrace[RC_ALL]) / 100;
+						int right_near_addrace = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							right_near_addrace = sd->right_weapon.near_addrace[tstatus->race] + sd->right_weapon.near_addrace[RC_ALL];
+						cardfix = cardfix * (100 + sd->right_weapon.addrace[tstatus->race] + sd->right_weapon.addrace[RC_ALL] + right_near_addrace) / 100;
+
 						if( !(nk&NK_NO_ELEFIX) ) { // Affected by Element modifier bonuses
 							int ele_fix = sd->right_weapon.addele[tstatus->def_ele] + sd->right_weapon.addele[ELE_ALL];
+
+							// [GonBee]
+							// 近接物理攻撃時の右手の属性追加ダメージを追加。
+							if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+								ele_fix += sd->right_weapon.near_addele[tstatus->def_ele] + sd->right_weapon.near_addele[ELE_ALL];
 
 							for (const auto &it : sd->right_weapon.addele2) {
 								if (it.ele != tstatus->def_ele)
@@ -771,14 +784,42 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 							}
 							cardfix = cardfix * (100 + ele_fix) / 100;
 						}
-						cardfix = cardfix * (100 + sd->right_weapon.addsize[tstatus->size] + sd->right_weapon.addsize[SZ_ALL]) / 100;
+
+						// [GonBee]
+						// 近接物理攻撃時の右手のサイズ追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addsize[tstatus->size] + sd->right_weapon.addsize[SZ_ALL]) / 100;
+						int right_near_addsize = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							right_near_addsize = sd->right_weapon.near_addsize[tstatus->size] + sd->right_weapon.near_addsize[SZ_ALL];
+						cardfix = cardfix * (100 + sd->right_weapon.addsize[tstatus->size] + sd->right_weapon.addsize[SZ_ALL] + right_near_addsize) / 100;
+
 						cardfix = cardfix * (100 + sd->right_weapon.addrace2[t_race2]) / 100;
-						cardfix = cardfix * (100 + sd->right_weapon.addclass[tstatus->class_] + sd->right_weapon.addclass[CLASS_ALL]) / 100;
+
+						// [GonBee]
+						// 近接物理攻撃時の右手の分類追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addclass[tstatus->class_] + sd->right_weapon.addclass[CLASS_ALL]) / 100;
+						int right_near_addclass = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							right_near_addclass = sd->right_weapon.near_addclass[tstatus->class_] + sd->right_weapon.near_addclass[CLASS_ALL];
+						cardfix = cardfix * (100 + sd->right_weapon.addclass[tstatus->class_] + sd->right_weapon.addclass[CLASS_ALL] + right_near_addclass) / 100;
 
 						if( left&1 ) { // Left-handed weapon
-							cardfix_ = cardfix_ * (100 + sd->left_weapon.addrace[tstatus->race] + sd->left_weapon.addrace[RC_ALL]) / 100;
+
+							// [GonBee]
+							// 近接物理攻撃時の左手の種族追加ダメージを追加。
+							//cardfix_ = cardfix_ * (100 + sd->left_weapon.addrace[tstatus->race] + sd->left_weapon.addrace[RC_ALL]) / 100;
+							int left_near_addrace = 0;
+							if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+								left_near_addrace = sd->left_weapon.near_addrace[tstatus->race] + sd->left_weapon.near_addrace[RC_ALL];
+							cardfix_ = cardfix_ * (100 + sd->left_weapon.addrace[tstatus->race] + sd->left_weapon.addrace[RC_ALL] + left_near_addrace) / 100;
+
 							if( !(nk&NK_NO_ELEFIX) ) { // Affected by Element modifier bonuses
 								int ele_fix_lh = sd->left_weapon.addele[tstatus->def_ele] + sd->left_weapon.addele[ELE_ALL];
+
+								// [GonBee]
+								// 近接物理攻撃時の左手の属性追加ダメージを追加。
+								if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+									ele_fix_lh += sd->left_weapon.near_addele[tstatus->def_ele] + sd->left_weapon.near_addele[ELE_ALL];
 
 								for (const auto &it : sd->left_weapon.addele2) {
 									if (it.ele != tstatus->def_ele)
@@ -791,9 +832,24 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 								}
 								cardfix_ = cardfix_ * (100 + ele_fix_lh) / 100;
 							}
-							cardfix_ = cardfix_ * (100 + sd->left_weapon.addsize[tstatus->size] + sd->left_weapon.addsize[SZ_ALL]) / 100;
+
+							// [GonBee]
+							// 近接物理攻撃時の左手のサイズ追加ダメージを追加。
+							//cardfix_ = cardfix_ * (100 + sd->left_weapon.addsize[tstatus->size] + sd->left_weapon.addsize[SZ_ALL]) / 100;
+							int left_near_addsize = 0;
+							if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+								left_near_addsize = sd->left_weapon.near_addsize[tstatus->size] + sd->left_weapon.near_addsize[SZ_ALL];
+							cardfix_ = cardfix_ * (100 + sd->left_weapon.addsize[tstatus->size] + sd->left_weapon.addsize[SZ_ALL] + left_near_addsize) / 100;
+
 							cardfix_ = cardfix_ * (100 + sd->left_weapon.addrace2[t_race2]) / 100;
-							cardfix_ = cardfix_ * (100 + sd->left_weapon.addclass[tstatus->class_] + sd->left_weapon.addclass[CLASS_ALL]) / 100;
+
+							// [GonBee]
+							// 近接物理攻撃時の左手の分類追加ダメージを追加。
+							//cardfix_ = cardfix_ * (100 + sd->left_weapon.addclass[tstatus->class_] + sd->left_weapon.addclass[CLASS_ALL]) / 100;
+							int left_near_addclass = 0;
+							if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+								left_near_addclass = sd->left_weapon.near_addclass[tstatus->class_] + sd->left_weapon.near_addclass[CLASS_ALL];
+							cardfix_ = cardfix_ * (100 + sd->left_weapon.addclass[tstatus->class_] + sd->left_weapon.addclass[CLASS_ALL] + left_near_addclass) / 100;
 						}
 					}
 					// Calculates right & left hand weapon as unity
@@ -802,6 +858,12 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 						//if( !(nk&NK_NO_ELEFIX) ) { // Affected by Element modifier bonuses
 							int ele_fix = sd->right_weapon.addele[tstatus->def_ele] + sd->left_weapon.addele[tstatus->def_ele]
 										+ sd->right_weapon.addele[ELE_ALL] + sd->left_weapon.addele[ELE_ALL];
+
+							// [GonBee]
+							// 近接物理攻撃時の属性追加ダメージを追加。
+							if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+								ele_fix += sd->right_weapon.near_addele[tstatus->def_ele] + sd->left_weapon.near_addele[tstatus->def_ele]
+										+ sd->right_weapon.near_addele[ELE_ALL] + sd->left_weapon.near_addele[ELE_ALL];
 
 							for (const auto &it : sd->right_weapon.addele2) {
 								if (it.ele != tstatus->def_ele)
@@ -823,13 +885,41 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 							}
 							cardfix = cardfix * (100 + ele_fix) / 100;
 						//}
+
+						// [GonBee]
+						// 近接物理攻撃時の分類追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addrace[tstatus->race] + sd->left_weapon.addrace[tstatus->race] +
+						//	sd->right_weapon.addrace[RC_ALL] + sd->left_weapon.addrace[RC_ALL]) / 100;
+						int near_addrace = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							near_addrace = sd->right_weapon.near_addrace[tstatus->race] + sd->left_weapon.near_addrace[tstatus->race] +
+								sd->right_weapon.near_addrace[RC_ALL] + sd->left_weapon.near_addrace[RC_ALL];
 						cardfix = cardfix * (100 + sd->right_weapon.addrace[tstatus->race] + sd->left_weapon.addrace[tstatus->race] +
-							sd->right_weapon.addrace[RC_ALL] + sd->left_weapon.addrace[RC_ALL]) / 100;
+							sd->right_weapon.addrace[RC_ALL] + sd->left_weapon.addrace[RC_ALL] + near_addrace) / 100;
+
+						// [GonBee]
+						// 近接物理攻撃時の分類追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addsize[tstatus->size] + sd->left_weapon.addsize[tstatus->size] +
+						//	sd->right_weapon.addsize[SZ_ALL] + sd->left_weapon.addsize[SZ_ALL]) / 100;
+						int near_addsize = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							near_addsize = sd->right_weapon.near_addsize[tstatus->size] + sd->left_weapon.near_addsize[tstatus->size] +
+								sd->right_weapon.near_addsize[SZ_ALL] + sd->left_weapon.near_addsize[SZ_ALL];
 						cardfix = cardfix * (100 + sd->right_weapon.addsize[tstatus->size] + sd->left_weapon.addsize[tstatus->size] +
-							sd->right_weapon.addsize[SZ_ALL] + sd->left_weapon.addsize[SZ_ALL]) / 100;
+							sd->right_weapon.addsize[SZ_ALL] + sd->left_weapon.addsize[SZ_ALL] + near_addsize) / 100;
+
 						cardfix = cardfix * (100 + sd->right_weapon.addrace2[t_race2] + sd->left_weapon.addrace2[t_race2]) / 100;
+
+						// [GonBee]
+						// 近接物理攻撃時の分類追加ダメージを追加。
+						//cardfix = cardfix * (100 + sd->right_weapon.addclass[tstatus->class_] + sd->left_weapon.addclass[tstatus->class_] +
+						//	sd->right_weapon.addclass[CLASS_ALL] + sd->left_weapon.addclass[CLASS_ALL]) / 100;
+						int near_addclass = 0;
+						if ((flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+							near_addclass = sd->right_weapon.near_addclass[tstatus->class_] + sd->left_weapon.near_addclass[tstatus->class_] +
+								sd->right_weapon.near_addclass[CLASS_ALL] + sd->left_weapon.near_addclass[CLASS_ALL];
 						cardfix = cardfix * (100 + sd->right_weapon.addclass[tstatus->class_] + sd->left_weapon.addclass[tstatus->class_] +
-							sd->right_weapon.addclass[CLASS_ALL] + sd->left_weapon.addclass[CLASS_ALL]) / 100;
+							sd->right_weapon.addclass[CLASS_ALL] + sd->left_weapon.addclass[CLASS_ALL] + near_addclass) / 100;
 					}
 					if( sd->status.weapon == W_KATAR && (skill = pc_checkskill(sd,ASC_KATAR)) > 0 ) // Adv. Katar Mastery functions similar to a +%ATK card on official [helvetica]
 						cardfix = cardfix * (100 + (10 + 2 * skill)) / 100;
@@ -2017,9 +2107,9 @@ static int battle_calc_base_weapon_attack(struct block_list *src, struct status_
  */
 
 // [GonBee]
-// ベースAtkを加算するかどうかを選べるようにする。
+// ダメージフラグを追加。
 //static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag)
-static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag, bool add_batk = true)
+static int64 battle_calc_base_damage(struct block_list *src, struct status_data *status, struct weapon_atk *wa, struct status_change *sc, unsigned short t_size, int flag, int damage_flag)
 
 {
 	unsigned int atkmin = 0, atkmax = 0;
@@ -2116,13 +2206,17 @@ static int64 battle_calc_base_damage(struct block_list *src, struct status_data 
 	//Finally, add baseatk
 	if(flag&4)
 		damage += status->matk_min;
+	else
 
 	// [GonBee]
-	// ベースAtkを加算するかどうかを選べるようにする。
-	//else
-	else if (add_batk)
-
+	// 近接物理攻撃時のベースAtk上昇を追加。
+	//	damage += status->batk;
+	{
 		damage += status->batk;
+		if (sd &&
+			(damage_flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON)
+		) damage += sd->near_batk;
+	}
 
 	if (sd)
 		battle_add_weapon_damage(sd, &damage, type);
@@ -2614,6 +2708,12 @@ static bool is_attack_hitting(struct Damage* wd, struct block_list *src, struct 
 
 	hitrate += sstatus->hit - flee;
 
+	// [GonBee]
+	// 近接物理攻撃時のHit上昇を追加。
+	if (sd &&
+		(wd->flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON)
+	) hitrate += sd->near_hit;
+
 	//Fogwall's hit penalty is only for normal ranged attacks.
 	if ((wd->flag&(BF_LONG|BF_MAGIC)) == BF_LONG && !skill_id && tsc && tsc->data[SC_FOGWALL])
 		hitrate -= 50;
@@ -2931,11 +3031,18 @@ static void battle_calc_element_damage(struct Damage* wd, struct block_list *src
 			wd->damage2 = battle_attr_fix(src, target, wd->damage2, left_element ,tstatus->def_ele, tstatus->ele_lv);
 		if (sc && sc->data[SC_WATK_ELEMENT] && (wd->damage || wd->damage2)) {
 			// Descriptions indicate this means adding a percent of a normal attack in another element. [Skotlex]
-			int64 damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0)) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
+
+			// [GonBee]
+			//int64 damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0)) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
+			int64 damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0), wd->flag) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
 
 			wd->damage += battle_attr_fix(src, target, damage, sc->data[SC_WATK_ELEMENT]->val1, tstatus->def_ele, tstatus->ele_lv);
 			if (is_attack_left_handed(src, skill_id)) {
-				damage = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0)) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
+
+				// [GonBee]
+				//damage = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0)) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
+				damage = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, (is_skill_using_arrow(src, skill_id)?2:0), wd->flag) * sc->data[SC_WATK_ELEMENT]->val2 / 100;
+
 				wd->damage2 += battle_attr_fix(src, target, damage, sc->data[SC_WATK_ELEMENT]->val1, tstatus->def_ele, tstatus->ele_lv);
 			}
 		}
@@ -3118,12 +3225,7 @@ static void battle_calc_damage_parts(struct Damage* wd, struct block_list *src,s
  *	Initial refactoring by Baalberith
  *	Refined and optimized by helvetica
  */
-
-// [GonBee]
-// ベースAtkを加算するかどうかを選べるようにする。
-//static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv)
-static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv, bool add_batk = true)
-
+static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv)
 {
 	struct status_change *sc = status_get_sc(src);
 	struct status_data *sstatus = status_get_status_data(src);
@@ -3193,7 +3295,11 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 
 				ATK_ADDRATE(wd->damage, wd->damage2, 50*skill_lv); //Skill modifier applies to weight only.
 			} else {
-				wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, 0); //Monsters have no weight and use ATK instead
+
+				// [GonBee]
+				//wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, 0); //Monsters have no weight and use ATK instead
+				wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, 0, wd->flag);
+
 			}
 
 			// [GonBee]
@@ -3313,16 +3419,9 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 						break;
 				}
 			}
-
-			// [GonBee]
-			// ベースAtkを加算するかどうかを選べるようにする。
-			//wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i);
-			//if (is_attack_left_handed(src, skill_id))
-			//	wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i);
-			wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i, add_batk);
+			wd->damage = battle_calc_base_damage(src, sstatus, &sstatus->rhw, sc, tstatus->size, i, wd->flag);
 			if (is_attack_left_handed(src, skill_id))
-				wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i, add_batk);
-
+				wd->damage2 = battle_calc_base_damage(src, sstatus, &sstatus->lhw, sc, tstatus->size, i, wd->flag);
 #endif
 			if (nk&NK_SPLASHSPLIT){ // Divide ATK among targets
 				if(wd->miscflag > 0) {
@@ -4759,6 +4858,12 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 	if (sd) {
 		int i = sd->ignore_def_by_race[tstatus->race] + sd->ignore_def_by_race[RC_ALL];
 		i += sd->ignore_def_by_class[tstatus->class_] + sd->ignore_def_by_class[CLASS_ALL];
+
+		// [GonBee]
+		// 近接物理攻撃時の分類Def無視を追加。
+		if ((wd->flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+			i += sd->near_ignore_def_by_class[tstatus->class_] + sd->near_ignore_def_by_class[CLASS_ALL];
+
 		if (i) {
 			i = min(i,100); //cap it to 100 for 0 def min
 			def1 -= def1 * i / 100;
@@ -5192,7 +5297,11 @@ static void battle_calc_weapon_final_atk_modifiers(struct Damage* wd, struct blo
 		int64 rdamage = 0;
 		int ratio = (int64)(status_get_hp(src) / 100) * tsc->data[SC_CRESCENTELBOW]->val1 * status_get_lv(target) / 125;
 		if (ratio > 5000) ratio = 5000; // Maximum of 5000% ATK
-		rdamage = battle_calc_base_damage(target,tstatus,&tstatus->rhw,tsc,sstatus->size,0);
+
+		// [GonBee]
+		//rdamage = battle_calc_base_damage(target,tstatus,&tstatus->rhw,tsc,sstatus->size,0);
+		rdamage = battle_calc_base_damage(target,tstatus,&tstatus->rhw,tsc,sstatus->size,0,wd->flag);
+
 		rdamage = (int64)rdamage * ratio / 100 + wd->damage * (10 + tsc->data[SC_CRESCENTELBOW]->val1 * 20 / 10) / 10;
 		skill_blown(target, src, skill_get_blewcount(SR_CRESCENTELBOW_AUTOSPELL, tsc->data[SC_CRESCENTELBOW]->val1), unit_getdir(src), BLOWN_NONE);
 		clif_skill_damage(target, src, gettick(), status_get_amotion(src), 0, rdamage,
@@ -5472,17 +5581,7 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 	else if(!(infdef = is_infinite_defense(target, wd.flag))) { //no need for math against plants
 		int64 ratio = 0;
 		int i = 0;
-
-		// [GonBee]
-		// カードの効果はダメージではなく武器Atkに適用する。
-		//battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
-		Damage wd2 = wd;
 		battle_calc_skill_base_damage(&wd, src, target, skill_id, skill_lv); // base skill damage
-		battle_calc_skill_base_damage(&wd2, src, target, skill_id, skill_lv, false);
-		int nk = battle_skill_get_damage_properties(skill_id, wd.miscflag);
-		wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, wd2.damage, 2, wd.flag);
-		if (is_attack_left_handed(src, skill_id))
-			wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, nk, right_element, left_element, wd2.damage2, 3, wd.flag);
 
 		ratio = battle_calc_attack_skill_ratio(&wd, src, target, skill_id, skill_lv); // skill level ratios
 
@@ -5667,15 +5766,11 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 						wd.damage2 = wd.damage2 * (100 + sd->bonus.long_attack_atk_rate) / 100;
 				}
 				break;
-
-			// [GonBee]
-			// カードの効果はダメージではなく武器Atkに適用する。
-			//default:
-			//	wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage, 2, wd.flag);
-			//	if( is_attack_left_handed(src, skill_id ))
-			//		wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage2, 3, wd.flag);
-			//	break;
-
+			default:
+				wd.damage += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage, 2, wd.flag);
+				if( is_attack_left_handed(src, skill_id ))
+					wd.damage2 += battle_calc_cardfix(BF_WEAPON, src, target, battle_skill_get_damage_properties(skill_id, wd.miscflag), right_element, left_element, wd.damage2, 3, wd.flag);
+				break;
 		}
 #endif
 	}

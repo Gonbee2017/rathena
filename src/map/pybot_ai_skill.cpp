@@ -1012,9 +1012,12 @@ AI_SKILL_USE_FUNC(HT_SANDMAN) {
 // ガンバンテインを使う。
 AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 	static const skill_unit_key_map KEYS = {
+		SKILL_UNIT_KEY(AM_DEMONSTRATION, BL_MOB),
+		SKILL_UNIT_KEY(AS_VENOMDUST, BL_MOB),
 		SKILL_UNIT_KEY(NPC_EVILLAND),
 		SKILL_UNIT_KEY(PF_FOGWALL),
 		SKILL_UNIT_KEY(SA_LANDPROTECTOR),
+		SKILL_UNIT_KEY(WZ_QUAGMIRE, BL_MOB),
 	};
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&

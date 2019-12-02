@@ -153,6 +153,12 @@ struct weapon_data {
 	short hp_drain_class[CLASS_MAX];
 	short sp_drain_class[CLASS_MAX];
 
+	// [GonBee]
+	int near_addele[ELE_MAX];     // 近接物理攻撃時の属性追加ダメージ。
+	int near_addrace[RC_MAX];     // 近接物理攻撃時の種族追加ダメージ。
+	int near_addclass[CLASS_MAX]; // 近接物理攻撃時の分類追加ダメージ。
+	int near_addsize[SZ_MAX];     // 近接物理攻撃時のサイズ追加ダメージ。
+
 	struct drain_data {
 		short rate; ///< Success rate 10000 = 100%
 		short per;  ///< Drain value/rate per attack
@@ -383,6 +389,10 @@ struct map_session_data {
 
 	struct weapon_data right_weapon, left_weapon;
 
+	// [GonBee]
+	unsigned short near_batk; // 近接物理攻撃時のベースAtk上昇。
+	unsigned short near_hit;  // 近接物理攻撃時のHit上昇。
+
 	// here start arrays to be globally zeroed at the beginning of status_calc_pc()
 	int param_bonus[6],param_equip[6]; //Stores card/equipment bonuses.
 	int subele[ELE_MAX];
@@ -421,6 +431,10 @@ struct map_session_data {
 	int ignore_mdef_by_race2[RC2_MAX];
 	int dropaddrace[RC_MAX];
 	int dropaddclass[CLASS_MAX];
+
+	// [GonBee]
+	int near_ignore_def_by_class[CLASS_MAX]; // 近接物理攻撃時の分類Def無視。
+
 	// zeroed arrays end here.
 
 	std::vector<s_autospell> autospell, autospell2, autospell3;

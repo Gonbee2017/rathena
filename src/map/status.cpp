@@ -3509,6 +3509,10 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 	sd->regen.state.block = 0;
 	sd->add_max_weight = 0;
 
+	// [GonBee]
+	sd->near_batk = 0;
+	sd->near_hit = 0;
+
 	// Zeroed arrays, order follows the order in pc.hpp.
 	// Add new arrays to the end of zeroed area in pc.hpp (see comments) and size here. [zzo]
 	memset (sd->param_bonus, 0, sizeof(sd->param_bonus)
@@ -3549,6 +3553,10 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 		+ sizeof(sd->ignore_mdef_by_race2)
 		+ sizeof(sd->dropaddrace)
 		+ sizeof(sd->dropaddclass)
+
+		// [GonBee]
+		+ sizeof(sd->near_ignore_def_by_class)
+
 		);
 
 	memset (&sd->right_weapon.overrefine, 0, sizeof(sd->right_weapon) - sizeof(sd->right_weapon.atkmods));
