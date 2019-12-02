@@ -1868,7 +1868,7 @@
 29600,Atk_15_29600,Atk + 15,6,20,,10,,,,,,,,,,,,,{ bonus bBaseAtk,15; },{},{}
 29601,Hit_60_29601,Hit + 60,6,20,,10,,,,,,,,,,,,,{ bonus bHit,60; },{},{}
 29602,Ignore_Def_50_29602,Def50%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}
-29603,Ignore_Mdef_5_29603,MDef5%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,5; },{},{}
+29603,Ignore_Mdef_5_29603,Mdef5%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,5; },{},{}
 29604,Add_Formless_20_29604,無形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Formless,20; },{},{}
 29605,Add_Undead_20_29605,不死形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Undead,20; },{},{}
 29606,Add_Brute_20_29606,動物形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Brute,20; },{},{}
