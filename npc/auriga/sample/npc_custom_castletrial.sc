@@ -142,7 +142,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 63, 58;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 181, 65, 253;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1213, 30,
@@ -185,7 +185,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 71, 266;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 16, 160, 95, 213;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1735, 30,
@@ -224,7 +224,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 120, 58;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 33, 210, 118, 291;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1386, 30,
@@ -263,7 +263,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 256, 259;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 153, 7, 203, 101;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1665, 30,
@@ -306,7 +306,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ルイーナ 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 242, 69;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 144, 38, 226, 107;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1390, 30,
@@ -359,7 +359,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 179, 88;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 135, 100, 195;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1865, 30,
@@ -398,7 +398,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 312, 266;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 18, 121, 141, 182;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1388, 15,
@@ -437,7 +437,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 86, 237;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 11, 156, 131, 291;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1401, 30,
@@ -480,7 +480,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 189, 311;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 10, 143, 54, 229;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1390, 30,
@@ -519,7 +519,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ブリトニア 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 294, 65;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 6, 130, 112, 206;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1707, 15,
@@ -576,7 +576,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 107, 270;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 193, 43, 243, 135;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1654, 30,
@@ -615,7 +615,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 272, 128;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 186, 16, 277, 88;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1296, 30,
@@ -654,7 +654,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 351, 293;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 219, 21, 283, 91;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1717, 30,
@@ -693,7 +693,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 135, 74;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 216, 150, 271, 276;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1318, 30,
@@ -736,7 +736,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "チュンリム湖 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 223, 285;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 14, 222, 77, 285;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1753, 30,
@@ -793,7 +793,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 102, 94;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 20, 6, 103, 85;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1317, 30,
@@ -832,7 +832,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 216, 89;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 13, 153, 85, 234;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1315, 30,
@@ -871,7 +871,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 160, 168;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 157, 7, 206, 82;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1866, 30,
@@ -914,7 +914,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 94, 224;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 22, 9, 94, 60;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1203, 15,
@@ -957,7 +957,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルキリーレルム 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 225, 224;
-	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 7, 230, 85, 279;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1698, 30,
@@ -1014,7 +1014,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 295, 75;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1716, 60,
@@ -1054,7 +1054,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 262, 274;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 221, 33, 370, 124;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1701, 30,
@@ -1098,7 +1098,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 77, 159;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 296, 249, 379, 338;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1219, 60,
@@ -1138,7 +1138,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 139, 111;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1366, 60,
@@ -1182,7 +1182,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ニダヴェリール 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 58, 315;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 126, 4, 229, 151;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1706, 30,
@@ -1236,7 +1236,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦1";
 	setarray dupvar(.cen_xy, .@tar$), 156, 275;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 231, 22, 311, 256;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1701, 30,
@@ -1276,7 +1276,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦2";
 	setarray dupvar(.cen_xy, .@tar$), 69, 45;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 8, 17, 139, 219;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1307, 30,
@@ -1316,7 +1316,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦3";
 	setarray dupvar(.cen_xy, .@tar$), 69, 137;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1707, 30,
@@ -1360,7 +1360,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦4";
 	setarray dupvar(.cen_xy, .@tar$), 290, 363;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1830, 30,
@@ -1400,7 +1400,7 @@ OnInit:
 	set .@tar$, "CastleTrial#" + strnpcinfo(2);
 	set dupvar(.cas_nam$, .@tar$), "ヴァルフレイヤ 砦5";
 	setarray dupvar(.cen_xy, .@tar$), 284, 104;
-	setarray dupvar(.tim_pois, .@tar$), 45, 30, 20, 15, 10, 5, 3, 2, 1;
+	setarray dupvar(.tim_pois, .@tar$), 30, 20, 15, 10, 5, 3, 2, 1;
 	setarray .@are[getarraysize(.@are)], 44, 40, 137, 179;
 	setarray .@are_mobs[getarraysize(.@are_mobs)], 
 		1716, 60,
