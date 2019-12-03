@@ -2191,6 +2191,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@need,969;
 						set .@amount,20;
 						set .@price,200000000;
+						set .@definite,1;
 						break;
 					case 10:	//ヴェスパーコア1
 						set .@delid,2659;
@@ -2226,6 +2227,7 @@ prontera,81,106,6	script	プロブルレム	97,{
 						set .@need,969;
 						set .@amount,20;
 						set .@price,200000000;
+						set .@definite,1;
 						break;
 					case 15:	//忍の腰帯
 						set .@delid,2654;
@@ -2263,6 +2265,21 @@ prontera,81,106,6	script	プロブルレム	97,{
 		mes "まず、手数料として^3355FF" +.@price+ "Zeny^000000と";
 		mes "^3355FF" +getitemname(.@need)+ "^000000を^3355FF" +.@amount+ "個^000000いただきます。";
 		next;
+		
+		if (.@definite) {
+			mes "[プロブルレム]";
+			mes "このエンチャントは必ず成功します。";
+			mes "エンチャントを行いますか？";
+			next;
+			if(select("^FF0000今回はやめておく^000000","^3355FFお願いします^000000") == 1) {
+				mes "[プロブルレム]";
+				mes "わかりました。";
+				mes "もし興味がわきましたら";
+				mes "またお越しください。";
+				close;
+			}
+		} else {
+		
 		mes "[プロブルレム]";
 		mes "そして、エンチャントは";
 		mes "必ずしも成功するとは限りません。";
@@ -2288,13 +2305,15 @@ prontera,81,106,6	script	プロブルレム	97,{
 		mes "失敗しても装備だけは消滅しない";
 		mes "特別な方法で行いましょう。";
 		next;
-		set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
+		set .@method, select("^3355FFその方法で頼む^000000", "^3355FF通常の方法で頼む^000000", "^FF0000話をやめる^000000") - 1;
 		if (.@method == 2) {
 			mes "[プロブルレム]";
 			mes "また来てください。";
 			close;
 		}
 		if (!.@method) set .@price, .@price * 2;
+		
+		}
 		
 		if(countitem(.@delid) < 1 || countitem(.@need) < .@amount || Zeny < .@price) {
 			mes "[プロブルレム]";
@@ -2316,7 +2335,11 @@ prontera,81,106,6	script	プロブルレム	97,{
 			case 3: set .@success, 100 * 2 / 7; break; //A級
 			case 4: set .@success, 100 * 2 / 8; break; //S級
 		}
-		if(rand(100) < .@success) {
+		
+		//if(rand(100) < .@success) {
+		if (.@definite ||
+			rand(100) < .@success
+		) {
 			
 			delitem .@delid,1;
 			
@@ -3208,7 +3231,7 @@ prontera,79,104,6	script	アラブルレム	97,{
 		mes "失敗しても装備だけは消滅しない";
 		mes "特別な方法で行いましょう。";
 		next;
-		set .@method, select("その方法で頼む", "通常の方法で頼む", "話をやめる") - 1;
+		set .@method, select("^3355FFその方法で頼む^000000", "^3355FF通常の方法で頼む^000000", "^FF0000話をやめる^000000") - 1;
 		if (.@method == 2) {
 			mes "[アラブルレム]";
 			mes "また来てください。";
