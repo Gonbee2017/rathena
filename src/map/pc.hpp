@@ -389,10 +389,6 @@ struct map_session_data {
 
 	struct weapon_data right_weapon, left_weapon;
 
-	// [GonBee]
-	unsigned short near_batk; // 近接物理攻撃時のベースAtk上昇。
-	unsigned short near_hit;  // 近接物理攻撃時のHit上昇。
-
 	// here start arrays to be globally zeroed at the beginning of status_calc_pc()
 	int param_bonus[6],param_equip[6]; //Stores card/equipment bonuses.
 	int subele[ELE_MAX];
@@ -505,6 +501,11 @@ struct map_session_data {
 		uint8 absorb_dmg_maxhp; // [Cydh]
 		short critical_rangeatk;
 		short weapon_atk_rate, weapon_matk_rate;
+
+		// [GonBee]
+		unsigned short near_batk;            // 近接物理攻撃時のベースAtk上昇。
+		unsigned short near_perfect_hit_add; // 近接物理攻撃時の必中率上昇。
+
 	} bonus;
 	// zeroed vars end here.
 

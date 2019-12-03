@@ -3863,7 +3863,7 @@ REPLACE INTO `cp_itemdesc` VALUES(4509, 'Int + 3<br/>\\\\\\\\\\\\\<
 REPLACE INTO `cp_itemdesc` VALUES(4510, '‹ßÚ•¨—UŒ‚ŽžA<br/>ˆê’èŠm—¦‚Å<br/>“G‚ð[‚¢‡–°ó‘Ô‚É‚·‚é<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4511, '–‚–@UŒ‚ŽžA<br/>ˆê’èŠm—¦‚Å<br/>“G‚ð’¾–Ùó‘Ô‚É‚·‚é<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4513, 'ƒNƒŠƒeƒBƒJƒ‹UŒ‚<br/>‚Å—^‚¦‚éƒ_ƒ[ƒW + 2%<br/>\\\\\\\\\\\\\<br/>ƒV[ƒtŒn—ñ‚Ìê‡A<br/>¸˜B’l‚ª2ã‚ª‚é“x‚ÉA<br/>’Ç‰Á‚Å<br/>ƒNƒŠƒeƒBƒJƒ‹UŒ‚<br/>‚Å—^‚¦‚éƒ_ƒ[ƒW + 1%<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">Š•</font><br/>d—Ê : <font color="777777">1</font>');
-REPLACE INTO `cp_itemdesc` VALUES(4514, '•¨—UŒ‚ŽžA<br/>•sŽ€Œ`ƒ‚ƒ“ƒXƒ^[‚Ö‚Ì<br/>ƒ_ƒ[ƒW + 25%<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(4514, '•¨—UŒ‚ŽžA<br/>•sŽ€Œ`ƒ‚ƒ“ƒXƒ^[‚Ö‚Ì<br/>ƒ_ƒ[ƒW + 30%<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4516, 'Def + 50 , Flee - 25<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">ŠZ</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4518, '•¨—UŒ‚ŽžA<br/>ˆê’èŠm—¦‚Å<br/>“G‚ð”­‰Îó‘Ô‚É‚·‚é<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4519, '•¨—UŒ‚ŽžA<br/>“VŽgŒ`ƒ‚ƒ“ƒXƒ^[‚Ö‚Ì<br/>ƒ_ƒ[ƒW + 20%<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">•Ší</font><br/>d—Ê : <font color="777777">1</font>');
@@ -8273,8 +8273,8 @@ REPLACE INTO `cp_itemdesc` VALUES(10903, 'ƒuƒ‰ƒM‚ÌŽ‚ÌŒø‰Ê‚ª‚ ‚é<br/>•sŽv‹c‚Èƒ|
 REPLACE INTO `cp_itemdesc` VALUES(10904, 'ˆÝ’°‚ð“­‚«‚ð•‚¯‚é‚±‚Æ‚ÅA<br/>‰ñ•œƒAƒCƒeƒ€‚ÌŒø‰Ê‚ð‚‚ß‚Ä<br/>‚­‚ê‚é•sŽv‹c‚Èƒ|[ƒVƒ‡ƒ“B<br/>\\\\\\\\\\\\\<br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10905, 'ƒtƒ‹ƒPƒ~ƒJƒ‹ƒ`ƒƒ[ƒW‚ÌŒø‰Ê<br/>‚ª‚ ‚é•sŽv‹c‚Èƒ|[ƒVƒ‡ƒ“B<br/>\\\\\\\\\\\\\<br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29600, 'Atk + 15B');
-REPLACE INTO `cp_itemdesc` VALUES(29601, 'Hit + 60B');
-REPLACE INTO `cp_itemdesc` VALUES(29602, '–hŒä—Í‚Ì50%‚ð–³Ž‹B');
+REPLACE INTO `cp_itemdesc` VALUES(29601, '•K’†UŒ‚ + 25%B');
+REPLACE INTO `cp_itemdesc` VALUES(29602, '–hŒä—Í‚Ì25%‚ð–³Ž‹B');
 REPLACE INTO `cp_itemdesc` VALUES(29603, '–‚–@–hŒä—Í‚Ì5%‚ð–³Ž‹B');
 REPLACE INTO `cp_itemdesc` VALUES(29604, '•¨—UŒ‚ŽžA–³Œ`ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29605, '•¨—UŒ‚ŽžA•sŽ€Œ`ƒ‚ƒ“ƒXƒ^[‚É20%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
@@ -8300,8 +8300,8 @@ REPLACE INTO `cp_itemdesc` VALUES(29624, '•¨—UŒ‚ŽžA’†Œ^ƒ‚ƒ“ƒXƒ^[‚É15%‚Ì’Ç‰Áƒ
 REPLACE INTO `cp_itemdesc` VALUES(29625, '•¨—UŒ‚ŽžA‘åŒ^ƒ‚ƒ“ƒXƒ^[‚É15%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29626, '•¨—UŒ‚ŽžAƒ{ƒXƒ‚ƒ“ƒXƒ^[‚É10%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29627, '‹ßÚ•¨—UŒ‚ŽžAAtk + 25B');
-REPLACE INTO `cp_itemdesc` VALUES(29628, '‹ßÚ•¨—UŒ‚ŽžAHit + 90B');
-REPLACE INTO `cp_itemdesc` VALUES(29629, '‹ßÚ•¨—UŒ‚ŽžA–hŒä—Í‚ð–³Ž‹B');
+REPLACE INTO `cp_itemdesc` VALUES(29628, '‹ßÚ•¨—UŒ‚ŽžA•K’†UŒ‚ + 50%B');
+REPLACE INTO `cp_itemdesc` VALUES(29629, '‹ßÚ•¨—UŒ‚ŽžA–hŒä—Í‚Ì50%‚ð–³Ž‹B');
 REPLACE INTO `cp_itemdesc` VALUES(29630, '‹ßÚ•¨—UŒ‚ŽžA–³Œ`ƒ‚ƒ“ƒXƒ^[‚É25%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29631, '‹ßÚ•¨—UŒ‚ŽžA•sŽ€Œ`ƒ‚ƒ“ƒXƒ^[‚É25%‚Ì’Ç‰Áƒ_ƒ[ƒWB');
 REPLACE INTO `cp_itemdesc` VALUES(29632, '‹ßÚ•¨—UŒ‚ŽžA“®•¨Œ`ƒ‚ƒ“ƒXƒ^[‚É25%‚Ì’Ç‰Áƒ_ƒ[ƒWB');

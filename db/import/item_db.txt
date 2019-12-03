@@ -671,7 +671,7 @@
 4511,Little_Fatum_Card,リトルファートゥムカード,6,20,,10,,,,,,,,2,,,,,{ bonus3 bAddEff,Eff_Silence,500,ATF_MAGIC; },{},{}
 4512,Parus_Card,パルスカード,6,20,,10,,,,,,,,769,,,,,{ bonus bHealPower,3; if(BaseClass==Job_Acolyte){ bonus bHealPower,getrefine()/2; } },{},{}
 4513,Angra_Mantis_Card,アングラマンティスカード,6,20,,10,,,,,,,,769,,,,,{ bonus bCritAtkRate,2; if(BaseClass==Job_Thief){ bonus bCritAtkRate,getrefine()/2; } },{},{}
-4514,Pom_Spider_Card,ポムスパイダーカード,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Undead,25; },{},{}
+4514,Pom_Spider_Card,ポムスパイダーカード,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Undead,30; },{},{}
 4768,Str1_J,Str + 1_,6,20,,10,,,,,,,,,,,,,{},{},{}
 4769,Str2_J,Str + 2_,6,20,,10,,,,,,,,,,,,,{},{},{}
 4770,Str3_J,Str + 3_,6,20,,10,,,,,,,,,,,,,{},{},{}
@@ -1866,8 +1866,8 @@
 28603,Book_Of_The_Apocalypse_,黙示録,5,60000,,800,120,,1,3,0x00410100,7,2,2,4,40,1,15,{ bonus bAtkEle,Ele_Dark; bonus2 bSubEle,Ele_Holy,-5; bonus2 bAddEle,Ele_Water,7; bonus2 bAddEle,Ele_Earth,7; bonus2 bAddEle,Ele_Fire,7; bonus2 bAddEle,Ele_Wind,7; },{},{}
 28704,Twilight_Desert_,砂漠の夕暮れ,5,70000,,600,130,,1,4,0x00001000,2,2,2,2,70,1,1,{},{},{}
 29600,Atk_15_29600,Atk + 15,6,20,,10,,,,,,,,,,,,,{ bonus bBaseAtk,15; },{},{}
-29601,Hit_60_29601,Hit + 60,6,20,,10,,,,,,,,,,,,,{ bonus bHit,60; },{},{}
-29602,Ignore_Def_50_29602,Def50%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}
+29601,Perfect_Hit_25_29601,必中 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus bPerfectHitAddRate,25; },{},{}
+29602,Ignore_Def_50_29602,Def25%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,25; },{},{}
 29603,Ignore_Mdef_5_29603,Mdef5%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,5; },{},{}
 29604,Add_Formless_20_29604,無形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Formless,20; },{},{}
 29605,Add_Undead_20_29605,不死形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Undead,20; },{},{}
@@ -1892,9 +1892,9 @@
 29624,Add_Medium_15_29624,中型 + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddSize,Size_Medium,15; },{},{}
 29625,Add_Large_15_29625,大型 + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddSize,Size_Large,15; },{},{}
 29626,Add_Boss_10_29626,ボス + 10%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddClass,Class_Boss,10; },{},{}
-29627,NearAtk_25_29627,近接Atk + 25,6,20,,10,,,,,,,,,,,,,{ bonus bNearBaseAtk,25; },{},{}
-29628,NearHit_90_29628,近接Hit + 90,6,20,,10,,,,,,,,,,,,,{ bonus bNearHit,90; },{},{}
-29629,Near_Ignore_Def_29629,近接Def無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearIgnoreDefClassRate,Class_All,100; },{},{}
+29627,Near_Atk_25_29627,近接Atk + 25,6,20,,10,,,,,,,,,,,,,{ bonus bNearBaseAtk,25; },{},{}
+29628,Near_Perfect_Hit_50_29628,近接必中 + 50%,6,20,,10,,,,,,,,,,,,,{ bonus bNearPerfectHitAddRate,50; },{},{}
+29629,Near_Ignore_Def_29629,近接Def50%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearIgnoreDefClassRate,Class_All,50; },{},{}
 29630,Near_Add_Formless_25_29630,近接無形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Formless,25; },{},{}
 29631,Near_Add_Undead_25_29631,近接不死形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Undead,25; },{},{}
 29632,Near_Add_Brute_25_29632,近接動物形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Brute,25; },{},{}

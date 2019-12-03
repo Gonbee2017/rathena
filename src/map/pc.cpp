@@ -2653,13 +2653,7 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		// [GonBee]
 		// 近接物理攻撃時のベースAtk上昇。
 		case SP_NEAR_BASE_ATK:
-			sd->near_batk += val;
-			break;
-
-		// [GonBee]
-		// 近接物理攻撃時のHit上昇。
-		case SP_NEAR_HIT:
-			sd->near_hit += val;
+			sd->bonus.near_batk += val;
 			break;
 
 		case SP_DEF1:
@@ -2903,6 +2897,13 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			if(sd->state.lr_flag != 2)
 				sd->bonus.perfect_hit_add += val;
 			break;
+
+		// [GonBee]
+		// 近接物理攻撃時の必中率上昇。
+		case SP_NEAR_PERFECT_HIT_ADD_RATE:
+			sd->bonus.near_perfect_hit_add += val;
+			break;
+
 		case SP_CRITICAL_RATE:
 			if(sd->state.lr_flag != 2)
 				sd->critical_rate+=val;

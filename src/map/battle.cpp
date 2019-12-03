@@ -2215,7 +2215,7 @@ static int64 battle_calc_base_damage(struct block_list *src, struct status_data 
 		damage += status->batk;
 		if (sd &&
 			(damage_flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON)
-		) damage += sd->near_batk;
+		) damage += sd->bonus.near_batk;
 	}
 
 	if (sd)
@@ -2666,11 +2666,24 @@ static bool is_attack_hitting(struct Damage* wd, struct block_list *src, struct 
 	int nk = battle_skill_get_damage_properties(skill_id, wd->miscflag);
 	short flee, hitrate;
 
+	// [GonBee]
+	// ‹ßÚ•¨—UŒ‚Žž‚Ì•K’†—¦‘‰Á‚ð’Ç‰ÁB
+	int perfect_hit = 0;
+	if (sd) {
+		perfect_hit = sd->bonus.perfect_hit;
+		if ((wd->flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON))
+			perfect_hit += sd->bonus.near_perfect_hit_add;
+	}
+
 	if (!first_call)
 		return (wd->dmg_lv != ATK_FLEE);
 	if (is_attack_critical(wd, src, target, skill_id, skill_lv, false))
 		return true;
-	else if(sd && sd->bonus.perfect_hit > 0 && rnd()%100 < sd->bonus.perfect_hit)
+
+	// [GonBee]
+	//else if(sd && sd->bonus.perfect_hit > 0 && rnd()%100 < sd->bonus.perfect_hit)
+	else if(sd && perfect_hit > 0 && rnd()%100 < perfect_hit)
+
 		return true;
 	else if (sc && sc->data[SC_FUSION])
 		return true;
@@ -2707,12 +2720,6 @@ static bool is_attack_hitting(struct Damage* wd, struct block_list *src, struct 
 	}
 
 	hitrate += sstatus->hit - flee;
-
-	// [GonBee]
-	// ‹ßÚ•¨—UŒ‚Žž‚ÌHitã¸‚ð’Ç‰ÁB
-	if (sd &&
-		(wd->flag & (BF_SHORT | BF_WEAPON)) == (BF_SHORT | BF_WEAPON)
-	) hitrate += sd->near_hit;
 
 	//Fogwall's hit penalty is only for normal ranged attacks.
 	if ((wd->flag&(BF_LONG|BF_MAGIC)) == BF_LONG && !skill_id && tsc && tsc->data[SC_FOGWALL])

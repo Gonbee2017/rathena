@@ -645,7 +645,7 @@
 
 	// [GonBee]
 	export_constant2("bNearBaseAtk",SP_NEAR_BASE_ATK);
-	export_constant2("bNearHit",SP_NEAR_HIT);
+	export_constant2("bNearPerfectHitAddRate",SP_NEAR_PERFECT_HIT_ADD_RATE);
 	export_constant2("bNearIgnoreDefClassRate",SP_NEAR_IGNORE_DEF_CLASS_RATE);
 
 	export_constant2("bSkillHeal2",SP_SKILL_HEAL2);

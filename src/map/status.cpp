@@ -3509,10 +3509,6 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 	sd->regen.state.block = 0;
 	sd->add_max_weight = 0;
 
-	// [GonBee]
-	sd->near_batk = 0;
-	sd->near_hit = 0;
-
 	// Zeroed arrays, order follows the order in pc.hpp.
 	// Add new arrays to the end of zeroed area in pc.hpp (see comments) and size here. [zzo]
 	memset (sd->param_bonus, 0, sizeof(sd->param_bonus)
@@ -12094,7 +12090,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 	// 合奏スキルは前提となる独奏スキルの効果を併せ持つ。
 	map_session_data* ssd = BL_CAST(BL_PC, src);
 	if (ssd) {
-		auto pla = [src, bl, ssd, tick] (e_skill dan_kid) {
+		auto pla = [src, bl, ssd, tick] (e_skill dan_kid, int dan_klv) {
 			if (battle_check_target(src, bl, skill_get_unit_target(dan_kid)) > 0 &&
 				(bl->type != BL_PC ||
 					!(skill_get_unit_flag(dan_kid) & UF_NOPC)
@@ -12108,20 +12104,21 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 					val2 = val2_;
 					val3 = val3_;
 				};
-				int klv = pc_checkskill(ssd, dan_kid);
-				skill_unitsetting(src, dan_kid, klv, 0, 0, 0, yie);
+				skill_unitsetting(src, dan_kid, dan_klv, 0, 0, 0, yie);
 				sc_type dan_typ = status_skill2sc(dan_kid);
 				status_change_end(bl, dan_typ, INVALID_TIMER);
-				sc_start4(src, bl, dan_typ, 100, klv, val1, val2, 0, tick);
+				sc_start4(src, bl, dan_typ, 100, dan_klv, val1, val2, 0, tick);
 			}
 		};
 		auto dans_ite = SOLO_DANCES.find(e_skill(status_sc2skill(type)));
 		if (dans_ite != SOLO_DANCES.end()) {
 			const auto& dans = dans_ite->second;
-			pla(dans[ssd->status.sex]);
-			if (sc->data[SC_SPIRIT] &&
-				sc->data[SC_SPIRIT]->val2 == SL_BARDDANCER
-			) pla(dans[ssd->status.sex ^ 1]);
+			e_skill dan_kid = dans[ssd->status.sex];
+			int dan_klv = pc_checkskill(ssd, dan_kid);
+			pla(dan_kid, dan_klv);
+			if (ssd->sc.data[SC_SPIRIT] &&
+				ssd->sc.data[SC_SPIRIT]->val2 == SL_BARDDANCER
+			) pla(dans[ssd->status.sex ^ 1], dan_klv);
 		}
 	}
 
