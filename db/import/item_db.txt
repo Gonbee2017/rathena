@@ -636,6 +636,7 @@
 4202,Civil_Servant_Card,ミョグェカード,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Ghost,30; },{},{}
 4240,Arclouse_Card,アクラウスカード,6,20,,10,,,,,,,,32,,,,,{ bonus bDef,2; bonus bMdef,3; },{},{}
 4253,Alice_Card,アリスカード,6,20,,10,,,,,,,,32,,,,,{ bonus2 bSubClass,Class_Boss,25; bonus2 bSubClass,Class_Normal,-25; },{},{}
+4255,Orc_Lady_Card,オークレディカード,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace2,RC2_Orc,35; },{},{}
 4268,Injustice_Card,インジャスティスカード,6,20,,10,,,,,,,,2,,,,,{ set .@lv,max(getskilllv("AS_SONICBLOW"),1); bonus3 bAutoSpell,"AS_SONICBLOW",.@lv,50; },{},{}
 4278,Gibbet_Card,ジビットカード,6,20,,10,,,,,,,,769,,,,,{ bonus bMdef,5; },{},{}
 4287,Kapha_Card,河童カード,6,20,,10,,,,,,,,4,,,,,{ bonus bMdef,8; },{},{}

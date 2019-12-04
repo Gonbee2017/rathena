@@ -664,6 +664,7 @@ REPLACE INTO `item_db2` VALUES (4200, 'Megalith_Card', 'メガリスカード', 6, 20, 
 REPLACE INTO `item_db2` VALUES (4202, 'Civil_Servant_Card', 'ミョグェカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Ghost,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4240, 'Arclouse_Card', 'アクラウスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus bDef,2; bonus bMdef,3; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4253, 'Alice_Card', 'アリスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubClass,Class_Boss,25; bonus2 bSubClass,Class_Normal,-25; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4255, 'Orc_Lady_Card', 'オークレディカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace2,RC2_Orc,35; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4268, 'Injustice_Card', 'インジャスティスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ set .@lv,max(getskilllv("AS_SONICBLOW"),1); bonus3 bAutoSpell,"AS_SONICBLOW",.@lv,50; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4278, 'Gibbet_Card', 'ジビットカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bMdef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4287, 'Kapha_Card', '河童カード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, '{ bonus bMdef,8; }', '{}', '{}');
