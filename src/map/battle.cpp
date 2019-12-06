@@ -6562,8 +6562,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				ShowError("Zero range by %d:%s, divide per 0 avoided!\n", skill_id, skill_get_name(skill_id));
 
 			// [GonBee]
-			// 距離が3セル以下ならDefでカットされる。
-			// 距離が4セル以上ならさらに50%カットされる。
+			// Defでカットされ、距離が4セル以上ならさらに50%カットされる。
 			ad.damage = ad.damage * (100 - tstatus->def) / 100 - tstatus->def2;
 			if (!check_distance_bl(src, target, 3)) ad.damage >>= 1;
 
