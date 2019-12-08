@@ -616,12 +616,12 @@ registry_t<int>::save_func // 作った関数。
 delete_skill_ignore_mob_func(
 	int cid // キャラクターID。              
 ) {
-	return [cid] (sql_session* ses, int sim) {
+	return [cid] (sql_session* ses, int kim) {
 		ses->execute(
 			"DELETE FROM `pybot_skill_ignore_mob` "
 			"WHERE"
 			" `char_id` = "  , construct<sql_param>(cid                ), " AND"
-			" `skill_id` = " , construct<sql_param>(SKILL_FROM_KIM(sim))
+			" `skill_id` = " , construct<sql_param>(SKILL_FROM_KIM(kim))
 		);
 	};
 }
@@ -1011,13 +1011,13 @@ registry_t<int>::save_func // 作った関数。
 insert_skill_ignore_mob_func(
 	int cid // キャラクターID。              
 ) {
-	return [cid] (sql_session* ses, int sim) {
+	return [cid] (sql_session* ses, int kim) {
 		ses->execute(
 			"INSERT INTO `pybot_skill_ignore_mob` "
 			"VALUES"
 			"(", construct<sql_param>(cid                ), ","
-			" ", construct<sql_param>(SKILL_FROM_KIM(sim)), ","
-			" ", construct<sql_param>(MOB_FROM_KIM(sim)  ), ")"
+			" ", construct<sql_param>(SKILL_FROM_KIM(kim)), ","
+			" ", construct<sql_param>(MOB_FROM_KIM(kim)  ), ")"
 		);
 	};
 }

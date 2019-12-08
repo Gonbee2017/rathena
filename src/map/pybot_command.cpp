@@ -2426,20 +2426,20 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	if (args.empty()) {
-		std::vector<int> sims;
-		mem->skill_ignore_mobs()->copy(pybot::back_inserter(sims));
-		std::sort(ALL_RANGE(sims));
+		std::vector<int> kims;
+		mem->skill_ignore_mobs()->copy(pybot::back_inserter(kims));
+		std::sort(ALL_RANGE(kims));
 		lea->output_buffer() = std::stringstream();
 		lea->output_buffer() << "------ 「" <<	mem->name() << "」のスキル無視モンスター ------\n";
-		for (int sim : sims) {
-			e_skill kid = e_skill(SKILL_FROM_KIM(sim));
-			int mid = MOB_FROM_KIM(sim);
+		for (int kim : kims) {
+			e_skill kid = e_skill(SKILL_FROM_KIM(kim));
+			int mid = MOB_FROM_KIM(kim);
 			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), kid) << " - " <<
 				skill_get_desc(kid) << " ; " <<
 				ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
 				print_mobdb(mid) << "\n";
 		}
-		lea->output_buffer() << sims.size() << "件のスキル無視モンスターが見つかりました。\n";
+		lea->output_buffer() << kims.size() << "件のスキル無視モンスターが見つかりました。\n";
 		lea->show_next();
 	} else {
 		std::string sk_nam = shift_arguments(args);

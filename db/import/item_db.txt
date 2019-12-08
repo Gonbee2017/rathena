@@ -1160,7 +1160,7 @@
 5816,Cowboy_Hat_J,ニューカウボーイハット,4,10000,,500,,0,,0,0xFFFFFFFF,7,2,256,,0,1,411,{ bonus bBaseAtk,15; bonus bFlee,-5; },{},{}
 5888,Wedding_Veil_,ヴェール,4,23000,,100,,0,,1,0xFFFFFFFF,7,0,256,,0,1,44,{ bonus bMdef,5; },{},{}
 5889,L_Orc_Hero_Helm_,大型オークヒーローの兜,4,10000,,900,,5,,1,0xFFFFFFFF,7,2,768,,0,1,381,{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; },{},{}
-5917,Yellow_Scarf,黄色いスカーフ,4,90000,,100,,0,,0,0xFFFFFFFF,63,2,1,,90,0,1170,{},{},{}
+5917,Yellow_Scarf,黄色いスカーフ,4,90000,,100,,0,,0,0xFFFFFFFF,63,2,1,,90,0,369,{ bonus bLongAtkDef,3; },{},{}
 5943,Owlviscount_Silk_Hat,オウルヴァイカウントのシルクハット,4,99000,,500,,5,,1,0xFFFFFFFF,7,2,256,,99,1,982,{ bonus bInt,2; bonus bAspdRate,10; set .@r,getrefine(); bonus bMatk,7*.@r; autobonus "{ set .@r,getrefine(); bonus bAspdRate,.@r>=9?40:(.@r>=7?10:(.@r>=5?5:0)); }",.@r*20,30000,BF_MAGIC,"{ specialeffect2 EF_SPELLBREAKER; }"; },{},{}
 6437,Scaraba_Perfume,スカラバの香水,3,0,,0,,,,,,,,,,,,,{},{},{}
 6707,Jeremy_Beauty_Coupon,ジェレミーの美容クーポン,3,10,,10,,,,,,,,,,,,,{},{},{}
