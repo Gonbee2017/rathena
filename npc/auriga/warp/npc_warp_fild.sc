@@ -78,7 +78,8 @@ mjolnir_09,373,288,0	warp	mjolnirwarp0511		2,2,prt_fild01,23,292
 //prt maze Entrance(Prt,Ald)
 mjolnir_12,44,17,0		warp	mjolnirwarp0512		1,1,prt_maze01,17,111	/*To No.1-11*/
 
-mjolnir_01,378,256,0	warp	mjolnirwarp5001		1,2,mjolnir_02,30,258
+//mjolnir_01,378,256,0	warp	mjolnirwarp5001		1,2,mjolnir_02,30,258
+mjolnir_01,378,256,0	warp	mjolnirwarp5001		1,2,mjolnir_02,31,258
 mjolnir_02,28,258,0		warp	mjolnirwarp5002		2,2,mjolnir_01,376,256
 mjolnir_02,326,289,0	warp	mjolnirwarp5003		1,1,mjolnir_03,24,258
 mjolnir_03,21,258,0		warp	mjolnirwarp5004		2,2,mjolnir_02,323,289

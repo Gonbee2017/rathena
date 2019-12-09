@@ -313,7 +313,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_AUTOGUARD                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_REFLECTSHIELD                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_SHRINK                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_PROVIDENCE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_SPEARQUICKEN                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_ENDURE                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 3),
@@ -328,7 +328,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_D     (CR_HOLYCROSS, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (CR_SHIELDBOOMERANG, spirit                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_DANCER, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC       (BD_ADAPTATION                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -629,7 +628,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (CR_AUTOGUARD                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_REFLECTSHIELD                               ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (CR_SHRINK                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (CR_PROVIDENCE                                  ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_T     (PA_GOSPEL, activate                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (CR_SPEARQUICKEN                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -648,7 +647,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_T     (CR_SHIELDBOOMERANG, spirit                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 		AI_SKILL_USE_PROC_D     (PA_PRESSURE, ASC_BREAKER                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-		AI_SKILL_USE_PROC       (CR_DEVOTION                                    ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_HEAL  (4                                              ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 	)}, {JOB_PRIEST, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_D     (AL_RUWACH, MG_SIGHT                            ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
