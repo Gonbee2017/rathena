@@ -1866,63 +1866,77 @@
 28351,Whike_Black_Tail_,ヒュッケの黒い尻尾,4,45000,,100,,0,,1,0xFFFFFFFF,63,2,136,,45,0,0,{ bonus bCritical,7; bonus bAspdRate,3; },{},{}
 28603,Book_Of_The_Apocalypse_,黙示録,5,60000,,800,120,,1,3,0x00410100,7,2,2,4,40,1,15,{ bonus bAtkEle,Ele_Dark; bonus2 bSubEle,Ele_Holy,-5; bonus2 bAddEle,Ele_Water,7; bonus2 bAddEle,Ele_Earth,7; bonus2 bAddEle,Ele_Fire,7; bonus2 bAddEle,Ele_Wind,7; },{},{}
 28704,Twilight_Desert_,砂漠の夕暮れ,5,70000,,600,130,,1,4,0x00001000,2,2,2,2,70,1,1,{},{},{}
-29600,Atk_15_29600,Atk + 15,6,20,,10,,,,,,,,,,,,,{ bonus bBaseAtk,15; },{},{}
-29601,Perfect_Hit_25_29601,必中 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus bPerfectHitAddRate,25; },{},{}
-29602,Ignore_Def_50_29602,Def25%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,25; },{},{}
-29603,Ignore_Mdef_5_29603,Mdef5%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,5; },{},{}
-29604,Add_Formless_20_29604,無形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Formless,20; },{},{}
-29605,Add_Undead_20_29605,不死形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Undead,20; },{},{}
-29606,Add_Brute_20_29606,動物形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Brute,20; },{},{}
-29607,Add_Plant_20_29607,植物形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Plant,20; },{},{}
-29608,Add_Insect_20_29608,昆虫形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Insect,20; },{},{}
-29609,Add_Fish_20_29609,魚貝形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Fish,20; },{},{}
-29610,Add_Demon_20_29610,悪魔形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Demon,20; },{},{}
-29611,Add_DemiHuman_20_29611,人間形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_DemiHuman,20; },{},{}
-29612,Add_Angel_20_29612,天使形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Angel,20; },{},{}
-29613,Add_Dragon_20_29613,竜形 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddRace,RC_Dragon,20; },{},{}
-29614,Add_Water_20_29614,水属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Water,20; },{},{}
-29615,Add_Earth_20_29615,地属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Earth,20; },{},{}
-29616,Add_Fire_20_29616,火属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Fire,20; },{},{}
-29617,Add_Wind_20_29617,風属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Wind,20; },{},{}
-29618,Add_Poison_20_29618,毒属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Poison,20; },{},{}
-29619,Add_Holy_20_29619,聖属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Holy,20; },{},{}
-29620,Add_Dark_20_29620,闇属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Dark,20; },{},{}
-29621,Add_Ghost_20_29621,念属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Ghost,20; },{},{}
-29622,Add_Undead_20_29622,不死属性 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddEle,Ele_Undead,20; },{},{}
-29623,Add_Samll_15_29623,小型 + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddSize,Size_Small,15; },{},{}
-29624,Add_Medium_15_29624,中型 + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddSize,Size_Medium,15; },{},{}
-29625,Add_Large_15_29625,大型 + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddSize,Size_Large,15; },{},{}
-29626,Add_Boss_10_29626,ボス + 10%,6,20,,10,,,,,,,,,,,,,{ bonus2 bAddClass,Class_Boss,10; },{},{}
-29627,Near_Atk_25_29627,近接Atk + 25,6,20,,10,,,,,,,,,,,,,{ bonus bNearBaseAtk,25; },{},{}
-29628,Near_Perfect_Hit_50_29628,近接必中 + 50%,6,20,,10,,,,,,,,,,,,,{ bonus bNearPerfectHitAddRate,50; },{},{}
-29629,Near_Ignore_Def_29629,近接Def50%無視,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearIgnoreDefClassRate,Class_All,50; },{},{}
-29630,Near_Add_Formless_25_29630,近接無形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Formless,25; },{},{}
-29631,Near_Add_Undead_25_29631,近接不死形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Undead,25; },{},{}
-29632,Near_Add_Brute_25_29632,近接動物形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Brute,25; },{},{}
-29633,Near_Add_Plant_25_29633,近接植物形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Plant,25; },{},{}
-29634,Near_Add_Insect_25_29634,近接昆虫形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Insect,25; },{},{}
-29635,Near_Add_Fish_25_29635,近接魚貝形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Fish,25; },{},{}
-29636,Near_Add_Demon_25_29636,近接悪魔形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Demon,25; },{},{}
-29637,Near_Add_DemiHuman_25_29637,近接人間形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_DemiHuman,25; },{},{}
-29638,Near_Add_Angel_25_29638,近接天使形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Angel,25; },{},{}
-29639,Near_Add_Dragon_25_29639,近接竜形 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddRace,RC_Dragon,25; },{},{}
-29640,Near_Add_Water_25_29640,近接水属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Water,25; },{},{}
-29641,Near_Add_Earth_25_29641,近接地属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Earth,25; },{},{}
-29642,Near_Add_Fire_25_29642,近接火属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Fire,25; },{},{}
-29643,Near_Add_Wind_25_29643,近接風属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Wind,25; },{},{}
-29644,Near_Add_Poison_25_29644,近接毒属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Poison,25; },{},{}
-29645,Near_Add_Holy_25_29645,近接聖属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Holy,25; },{},{}
-29646,Near_Add_Dark_25_29646,近接闇属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Dark,25; },{},{}
-29647,Near_Add_Ghost_25_29647,近接念属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Ghost,25; },{},{}
-29648,Near_Add_Undead_25_29648,近接不死属性 + 25%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddEle,Ele_Undead,25; },{},{}
-29649,Near_Add_Samll_20_29649,近接小型 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddSize,Size_Small,20; },{},{}
-29650,Near_Add_Medium_20_29650,近接中型 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddSize,Size_Medium,20; },{},{}
-29651,Near_Add_Large_20_29651,近接大型 + 20%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddSize,Size_Large,20; },{},{}
-29652,Near_Add_Boss_15_29652,近接ボス + 15%,6,20,,10,,,,,,,,,,,,,{ bonus2 bNearAddClass,Class_Boss,15; },{},{}
-29653,Magic_Neutral_100_29653,無魔法 + 100%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"HW_MAGICCRASHER",100; bonus2 bSkillAtk,"HW_GRAVITATION",100; },{},{}
-29654,Magic_Water_5_29654,水魔法 + 5%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"MG_COLDBOLT",5; bonus2 bSkillAtk,"MG_FROSTDIVER",5; bonus2 bSkillAtk,"WZ_WATERBALL",5; bonus2 bSkillAtk,"WZ_FROSTNOVA",5; bonus2 bSkillAtk,"WZ_STORMGUST",5; },{},{}
-29655,Magic_Earth_10_29655,地魔法 + 10%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"MG_STONECURSE",10; bonus2 bSkillAtk,"WZ_EARTHSPIKE",10; bonus2 bSkillAtk,"WZ_HEAVENDRIVE",10; },{},{}
-29656,Magic_Fire_5_29656,火魔法 + 5%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"MG_FIREBALL",5; bonus2 bSkillAtk,"MG_FIREWALL",5; bonus2 bSkillAtk,"MG_FIREBOLT",5; bonus2 bSkillAtk,"WZ_FIREPILLAR",5; bonus2 bSkillAtk,"WZ_SIGHTRASHER",5; bonus2 bSkillAtk,"WZ_METEOR",5; },{},{}
-29657,Magic_Wind_5_29657,風魔法 + 5%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"MG_LIGHTNINGBOLT",5; bonus2 bSkillAtk,"MG_THUNDERSTORM",5; bonus2 bSkillAtk,"WZ_JUPITEL",5; bonus2 bSkillAtk,"WZ_VERMILION",5; },{},{}
-29658,Magic_Ghost_10_29658,念魔法 + 10%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",10; bonus2 bSkillAtk,"MG_SOULSTRIKE",10; bonus2 bSkillAtk,"HW_NAPALMVULCAN",10; },{},{}
-29659,Magic_S_5_29659,エスマ + 5%,6,20,,10,,,,,,,,,,,,,{ bonus2 bSkillAtk,"SL_SMA",5; },{},{}
+29600,Atk_25_29600,Atk + 25,6,20,,10,,,,,,,,2,,,,,{ bonus bBaseAtk,25; },{},{}
+29601,Perfect_Hit_25_29601,必中 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus bPerfectHitAddRate,25; },{},{}
+29602,Ignore_Def_25_29602,Def25%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,25; },{},{}
+29603,Ignore_Mdef_5_29603,Mdef5%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,5; },{},{}
+29604,Add_Formless_20_29604,無形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Formless,20; },{},{}
+29605,Add_Undead_20_29605,不死形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Undead,20; },{},{}
+29606,Add_Brute_20_29606,動物形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Brute,20; },{},{}
+29607,Add_Plant_20_29607,植物形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Plant,20; },{},{}
+29608,Add_Insect_20_29608,昆虫形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Insect,20; },{},{}
+29609,Add_Fish_20_29609,魚貝形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Fish,20; },{},{}
+29610,Add_Demon_20_29610,悪魔形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Demon,20; },{},{}
+29611,Add_DemiHuman_20_29611,人間形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_DemiHuman,20; },{},{}
+29612,Add_Angel_20_29612,天使形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Angel,20; },{},{}
+29613,Add_Dragon_20_29613,竜形 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Dragon,20; },{},{}
+29614,Add_Water_20_29614,水属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Water,20; },{},{}
+29615,Add_Earth_20_29615,地属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Earth,20; },{},{}
+29616,Add_Fire_20_29616,火属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Fire,20; },{},{}
+29617,Add_Wind_20_29617,風属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Wind,20; },{},{}
+29618,Add_Poison_20_29618,毒属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Poison,20; },{},{}
+29619,Add_Holy_20_29619,聖属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Holy,20; },{},{}
+29620,Add_Dark_20_29620,闇属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Dark,20; },{},{}
+29621,Add_Ghost_20_29621,念属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Ghost,20; },{},{}
+29622,Add_Undead_20_29622,不死属性 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Undead,20; },{},{}
+29623,Add_Samll_15_29623,小型 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddSize,Size_Small,15; },{},{}
+29624,Add_Medium_15_29624,中型 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddSize,Size_Medium,15; },{},{}
+29625,Add_Large_15_29625,大型 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddSize,Size_Large,15; },{},{}
+29626,Add_Boss_10_29626,ボス + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddClass,Class_Boss,10; },{},{}
+29627,Near_Atk_75_29627,近接Atk + 75,6,20,,10,,,,,,,,2,,,,,{ bonus bNearBaseAtk,75; },{},{}
+29628,Near_Perfect_Hit_50_29628,近接必中 + 50%,6,20,,10,,,,,,,,2,,,,,{ bonus bNearPerfectHitAddRate,50; },{},{}
+29629,Near_Ignore_Def_50_29629,近接Def50%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearIgnoreDefClassRate,Class_All,50; },{},{}
+29630,Near_Add_Formless_25_29630,近接無形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Formless,25; },{},{}
+29631,Near_Add_Undead_25_29631,近接不死形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Undead,25; },{},{}
+29632,Near_Add_Brute_25_29632,近接動物形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Brute,25; },{},{}
+29633,Near_Add_Plant_25_29633,近接植物形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Plant,25; },{},{}
+29634,Near_Add_Insect_25_29634,近接昆虫形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Insect,25; },{},{}
+29635,Near_Add_Fish_25_29635,近接魚貝形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Fish,25; },{},{}
+29636,Near_Add_Demon_25_29636,近接悪魔形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Demon,25; },{},{}
+29637,Near_Add_DemiHuman_25_29637,近接人間形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_DemiHuman,25; },{},{}
+29638,Near_Add_Angel_25_29638,近接天使形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Angel,25; },{},{}
+29639,Near_Add_Dragon_25_29639,近接竜形 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddRace,RC_Dragon,25; },{},{}
+29640,Near_Add_Water_25_29640,近接水属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Water,25; },{},{}
+29641,Near_Add_Earth_25_29641,近接地属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Earth,25; },{},{}
+29642,Near_Add_Fire_25_29642,近接火属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Fire,25; },{},{}
+29643,Near_Add_Wind_25_29643,近接風属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Wind,25; },{},{}
+29644,Near_Add_Poison_25_29644,近接毒属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Poison,25; },{},{}
+29645,Near_Add_Holy_25_29645,近接聖属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Holy,25; },{},{}
+29646,Near_Add_Dark_25_29646,近接闇属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Dark,25; },{},{}
+29647,Near_Add_Ghost_25_29647,近接念属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Ghost,25; },{},{}
+29648,Near_Add_Undead_25_29648,近接不死属性 + 25%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddEle,Ele_Undead,25; },{},{}
+29649,Near_Add_Samll_20_29649,近接小型 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddSize,Size_Small,20; },{},{}
+29650,Near_Add_Medium_20_29650,近接中型 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddSize,Size_Medium,20; },{},{}
+29651,Near_Add_Large_20_29651,近接大型 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddSize,Size_Large,20; },{},{}
+29652,Near_Add_Boss_15_29652,近接ボス + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearAddClass,Class_Boss,15; },{},{}
+29653,Magic_Neutral_100_29653,無魔法 + 100%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"HW_MAGICCRASHER",100; bonus2 bSkillAtk,"HW_GRAVITATION",100; },{},{}
+29654,Magic_Water_5_29654,水魔法 + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_COLDBOLT",5; bonus2 bSkillAtk,"MG_FROSTDIVER",5; bonus2 bSkillAtk,"WZ_WATERBALL",5; bonus2 bSkillAtk,"WZ_FROSTNOVA",5; bonus2 bSkillAtk,"WZ_STORMGUST",5; },{},{}
+29655,Magic_Earth_10_29655,地魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_STONECURSE",10; bonus2 bSkillAtk,"WZ_EARTHSPIKE",10; bonus2 bSkillAtk,"WZ_HEAVENDRIVE",10; },{},{}
+29656,Magic_Fire_5_29656,火魔法 + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_FIREBALL",5; bonus2 bSkillAtk,"MG_FIREWALL",5; bonus2 bSkillAtk,"MG_FIREBOLT",5; bonus2 bSkillAtk,"WZ_FIREPILLAR",5; bonus2 bSkillAtk,"WZ_SIGHTRASHER",5; bonus2 bSkillAtk,"WZ_METEOR",5; },{},{}
+29657,Magic_Wind_5_29657,風魔法 + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_LIGHTNINGBOLT",5; bonus2 bSkillAtk,"MG_THUNDERSTORM",5; bonus2 bSkillAtk,"WZ_JUPITEL",5; bonus2 bSkillAtk,"WZ_VERMILION",5; },{},{}
+29658,Magic_Ghost_10_29658,念魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",10; bonus2 bSkillAtk,"MG_SOULSTRIKE",10; bonus2 bSkillAtk,"HW_NAPALMVULCAN",10; },{},{}
+29659,Magic_Sma_5_29659,エスマ + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"SL_SMA",5; },{},{}
+29900,Atk_25_29900,Atk + 50,6,20,,10,,,,,,,,2,,,,,{ bonus bBaseAtk,50; },{},{}
+29901,Perfect_Hit_50_29901,必中 + 50%,6,20,,10,,,,,,,,2,,,,,{ bonus bPerfectHitAddRate,50; },{},{}
+29902,Ignore_Def_50_29902,Def50%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}
+29903,Ignore_Mdef_10_29903,Mdef10%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreMdefClassRate,Class_All,10; },{},{}
+29904,Near_Atk_100_29904,近接Atk + 100,6,20,,10,,,,,,,,2,,,,,{ bonus bNearBaseAtk,100; },{},{}
+29905,Near_Perfect_Hit_100_29905,近接必中 + 100%,6,20,,10,,,,,,,,2,,,,,{ bonus bNearPerfectHitAddRate,100; },{},{}
+29906,Near_Ignore_Def_100_29906,近接Def100%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bNearIgnoreDefClassRate,Class_All,100; },{},{}
+29907,Magic_Neutral_200_29907,無魔法 + 200%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"HW_MAGICCRASHER",200; bonus2 bSkillAtk,"HW_GRAVITATION",200; },{},{}
+29908,Magic_Water_10_29908,水魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_COLDBOLT",10; bonus2 bSkillAtk,"MG_FROSTDIVER",10; bonus2 bSkillAtk,"WZ_WATERBALL",10; bonus2 bSkillAtk,"WZ_FROSTNOVA",10; bonus2 bSkillAtk,"WZ_STORMGUST",10; },{},{}
+29909,Magic_Earth_20_29909,地魔法 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_STONECURSE",20; bonus2 bSkillAtk,"WZ_EARTHSPIKE",20; bonus2 bSkillAtk,"WZ_HEAVENDRIVE",20; },{},{}
+29910,Magic_Fire_10_29910,火魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_FIREBALL",10; bonus2 bSkillAtk,"MG_FIREWALL",10; bonus2 bSkillAtk,"MG_FIREBOLT",10; bonus2 bSkillAtk,"WZ_FIREPILLAR",10; bonus2 bSkillAtk,"WZ_SIGHTRASHER",10; bonus2 bSkillAtk,"WZ_METEOR",10; },{},{}
+29911,Magic_Wind_10_29911,風魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_LIGHTNINGBOLT",10; bonus2 bSkillAtk,"MG_THUNDERSTORM",10; bonus2 bSkillAtk,"WZ_JUPITEL",10; bonus2 bSkillAtk,"WZ_VERMILION",10; },{},{}
+29912,Magic_Ghost_20_29912,念魔法 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; },{},{}
+29913,Magic_Sma_10_29913,エスマ + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"SL_SMA",10; },{},{}
