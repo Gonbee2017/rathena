@@ -1164,6 +1164,11 @@
 5943,Owlviscount_Silk_Hat,オウルヴァイカウントのシルクハット,4,99000,,500,,5,,1,0xFFFFFFFF,7,2,256,,99,1,982,{ bonus bInt,2; bonus bAspdRate,10; set .@r,getrefine(); bonus bMatk,7*.@r; autobonus "{ set .@r,getrefine(); bonus bAspdRate,.@r>=9?40:(.@r>=7?10:(.@r>=5?5:0)); }",.@r*20,30000,BF_MAGIC,"{ specialeffect2 EF_SPELLBREAKER; }"; },{},{}
 6437,Scaraba_Perfume,スカラバの香水,3,0,,0,,,,,,,,,,,,,{},{},{}
 6707,Jeremy_Beauty_Coupon,ジェレミーの美容クーポン,3,10,,10,,,,,,,,,,,,,{},{},{}
+9500,Cat_O_Nine_Tail_Egg,キャットナインテイルの卵,7,20,,0,,,,,,,,,,,,,{},{},{}
+9501,Gold_Acidus_Egg,ゴールドオシドスの卵,7,20,,0,,,,,,,,,,,,,{},{},{}
+9502,Red_Ferus_Egg,レッドペロスの卵,7,20,,0,,,,,,,,,,,,,{},{},{}
+9503,Blue_Acidus_Egg,ブルーオシドスの卵,7,20,,0,,,,,,,,,,,,,{},{},{}
+9504,Green_Ferus_Egg,グリーンペロスの卵,7,20,,0,,,,,,,,,,,,,{},{},{}
 10500,Costume_Box_10500,衣装の箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_CostumeBox),1; },{},{}
 10501,Empty_Bottle_Box_10501,空きビンの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 713,100; },{},{}
 10502,Holy_Water_Box_10502,聖水の箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 523,100; },{},{}

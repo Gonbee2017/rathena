@@ -58,5 +58,11 @@
 //petskillattack2) and petskillsupport (or petheal) at the same time,
 //but only one of each.
 
+1307,CAT_O_NINE_TAIL,キャットナインテイル,12225,9500,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MC_MAMMONITE",5,10,5; },{ bonus bLuk,3; }
 1370,SUCCUBUS,サキュバス,12373,9055,0,6110,80,60,10,100,250,20,200,150,0,0,300,300,800,{},{ bonus2 bHpDrainRate,50,5; }
+1630,BACSOJIN_,ペクソジン,12225,9039,0,504,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "AL_HEAL",10,60,50,100; },{ bonus bInt,1; bonus bDex,1; }
+1713,ACIDUS,ゴールドオシドス,12225,9501,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_FIREBALL",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Holy,2; }
+1714,FERUS,レッドペロス,12225,9502,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Fire,2; }
+1716,ACIDUS_,ブルーオシドス,12225,9503,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_THUNDERSTORM",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Wind,2; }
+1717,FERUS_,グリーンペロス,12225,9504,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Earth,2; }
 1837,IMP,インプ,12374,9056,10038,537,80,60,10,100,250,20,200,150,0,0,300,300,800,{},{ bonus2 bSubEle,Ele_Fire,2; bonus2 bAddEle,Ele_Fire,2; }

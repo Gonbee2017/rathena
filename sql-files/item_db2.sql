@@ -1192,6 +1192,11 @@ REPLACE INTO `item_db2` VALUES (5917, 'Yellow_Scarf', '黄色いスカーフ', 4, 90000
 REPLACE INTO `item_db2` VALUES (5943, 'Owlviscount_Silk_Hat', 'オウルヴァイカウントのシルクハット', 4, 99000, NULL, 500, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 256, NULL, 99, 1, 982, '{ bonus bInt,2; bonus bAspdRate,10; set .@r,getrefine(); bonus bMatk,7*.@r; autobonus "{ set .@r,getrefine(); bonus bAspdRate,.@r>=9?40:(.@r>=7?10:(.@r>=5?5:0)); }",.@r*20,30000,BF_MAGIC,"{ specialeffect2 EF_SPELLBREAKER; }"; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (6437, 'Scaraba_Perfume', 'スカラバの香水', 3, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (6707, 'Jeremy_Beauty_Coupon', 'ジェレミーの美容クーポン', 3, 10, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9500, 'Cat_O_Nine_Tail_Egg', 'キャットナインテイルの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9501, 'Gold_Acidus_Egg', 'ゴールドオシドスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9502, 'Red_Ferus_Egg', 'レッドペロスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9503, 'Blue_Acidus_Egg', 'ブルーオシドスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9504, 'Green_Ferus_Egg', 'グリーンペロスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10500, 'Costume_Box_10500', '衣装の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getrandgroupitem(IG_CostumeBox),1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10501, 'Empty_Bottle_Box_10501', '空きビンの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 713,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10502, 'Holy_Water_Box_10502', '聖水の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 523,100; }', '{}', '{}');
