@@ -776,13 +776,15 @@ void ai_t::bot_greed() {
 		}
 	}
 	if (gre_ind >= 0) {
-		if (bot->is_sit()) bot->stand();
-		if (bot->can_move()) {
-			if (bot->walk_xy(gre_xy.x, gre_xy.y)) {
-				bot->walk_end_func() = [this] (ai_t* ai, void* fun) {
-					bot->use_skill_self(BS_GREED, 1);
-				};
-			} else bot->use_skill_self(BS_GREED, 1);
+		if (!bot->is_walking()) {
+			if (bot->is_sit()) bot->stand();
+			if (bot->can_move()) {
+				if (bot->walk_xy(gre_xy.x, gre_xy.y)) {
+					bot->walk_end_func() = [this] (ai_t* ai, void* fun) {
+						bot->use_skill_self(BS_GREED, 1);
+					};
+				} else bot->use_skill_self(BS_GREED, 1);
+			}
 		}
 		throw turn_end_exception();
 	}
@@ -813,12 +815,14 @@ void ai_t::bot_pickup() {
 		}
 	}
 	if (nea_fit) {
-		if (bot->is_sit()) bot->stand();
-		if (bot->can_move() &&
-			!bot->walk_bl(&nea_fit->bl, 1) &&
-			bot->can_act() &&
-			pc_takeitem(bot->sd(), nea_fit)
-		) bot->act_end();
+		if (!bot->is_walking()) {
+			if (bot->is_sit()) bot->stand();
+			if (bot->can_move() &&
+				!bot->walk_bl(&nea_fit->bl, 1) &&
+				bot->can_act() &&
+				pc_takeitem(bot->sd(), nea_fit)
+			) bot->act_end();
+		}
 		throw turn_end_exception();
 	}
 }
