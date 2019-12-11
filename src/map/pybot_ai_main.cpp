@@ -719,64 +719,64 @@ void ai_t::bot_loot() {
 // Botがグリードを使用する。
 void ai_t::bot_greed() {
 	CS_ENTER;
-	int ran = AREA_SIZE + 2;
-	int edg_len = 1 + ran * 2;
-	std::vector<int> cou_map(edg_len * edg_len, 0);
-	auto coods_to_ind = [this, ran, edg_len] (int x, int y) -> int {
-		return (ran + y - leader->center().y) * edg_len + (ran + x - leader->center().x);
-	};
-	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
-	for (flooritem_data* fit : flooritems) {
-		const TimerData* td = get_timer(fit->cleartimer);
-		if (td &&
-			td->func
-		) {
-			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
-			if (pc_can_takeitem(bot->sd(), fit) &&
-				bot->can_reach_bl(&fit->bl) &&
-				wei <= wei_rem
+	if (!bot->is_walking()) {
+		int ran = AREA_SIZE + 2;
+		int edg_len = 1 + ran * 2;
+		std::vector<int> cou_map(edg_len * edg_len, 0);
+		auto coods_to_ind = [this, ran, edg_len] (int x, int y) -> int {
+			return (ran + y - leader->center().y) * edg_len + (ran + x - leader->center().x);
+		};
+		int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
+		for (flooritem_data* fit : flooritems) {
+			const TimerData* td = get_timer(fit->cleartimer);
+			if (td &&
+				td->func
 			) {
-				for (int rel_y = -2; rel_y <= 2; ++rel_y) {
-					for (int rel_x = -2; rel_x <= 2; ++rel_x) {
-						int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
-						if (ind >= 0 &&
-							ind < cou_map.size()
-						) ++cou_map[ind];
+				int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
+				if (pc_can_takeitem(bot->sd(), fit) &&
+					bot->can_reach_bl(&fit->bl) &&
+					wei <= wei_rem
+				) {
+					for (int rel_y = -2; rel_y <= 2; ++rel_y) {
+						for (int rel_x = -2; rel_x <= 2; ++rel_x) {
+							int ind = coods_to_ind(fit->bl.x + rel_x, fit->bl.y + rel_y);
+							if (ind >= 0 &&
+								ind < cou_map.size()
+							) ++cou_map[ind];
+						}
 					}
 				}
 			}
 		}
-	}
-	auto ind_to_coords = [this, ran, edg_len] (int ind) -> coords_t {
-		coords_t res;
-		res.x = leader->center().x - ran + (ind % edg_len);
-		res.y = leader->center().y - ran + (ind / edg_len);
-		return res;
-	};
-	int gre_ind = -1;
-	int gre_cou = 2;
-	coords_t gre_xy;
-	int gre_dis;
-	for (int i = 0; i < cou_map.size(); ++i) {
-		int cou = cou_map[i];
-		if (cou >= gre_cou) {
-			coords_t xy = ind_to_coords(i);
-			if (bot->can_reach_xy(xy.x, xy.y)) {
-				int dis = distance_client_blxy(bot->bl(), xy.x, xy.y);
-				if (gre_ind < 0 ||
-					cou > gre_cou ||
-					dis < gre_dis
-				) {
-					gre_ind = i;
-					gre_cou = cou;
-					gre_xy = xy;
-					gre_dis = dis;
+		auto ind_to_coords = [this, ran, edg_len] (int ind) -> coords_t {
+			coords_t res;
+			res.x = leader->center().x - ran + (ind % edg_len);
+			res.y = leader->center().y - ran + (ind / edg_len);
+			return res;
+		};
+		int gre_ind = -1;
+		int gre_cou = 2;
+		coords_t gre_xy;
+		int gre_dis;
+		for (int i = 0; i < cou_map.size(); ++i) {
+			int cou = cou_map[i];
+			if (cou >= gre_cou) {
+				coords_t xy = ind_to_coords(i);
+				if (bot->can_reach_xy(xy.x, xy.y)) {
+					int dis = distance_client_blxy(bot->bl(), xy.x, xy.y);
+					if (gre_ind < 0 ||
+						cou > gre_cou ||
+						dis < gre_dis
+					) {
+						gre_ind = i;
+						gre_cou = cou;
+						gre_xy = xy;
+						gre_dis = dis;
+					}
 				}
 			}
 		}
-	}
-	if (gre_ind >= 0) {
-		if (!bot->is_walking()) {
+		if (gre_ind >= 0) {
 			if (bot->is_sit()) bot->stand();
 			if (bot->can_move()) {
 				if (bot->walk_xy(gre_xy.x, gre_xy.y)) {
@@ -785,8 +785,8 @@ void ai_t::bot_greed() {
 					};
 				} else bot->use_skill_self(BS_GREED, 1);
 			}
+			throw turn_end_exception();
 		}
-		throw turn_end_exception();
 	}
 }
 
