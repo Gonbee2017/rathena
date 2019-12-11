@@ -701,8 +701,7 @@ void ai_t::bot_use_item() {
 // Botがドロップアイテムを収集する。
 void ai_t::bot_loot() {
 	CS_ENTER;
-	if (!bot->is_walking() &&
-		(bot->loot()->get() == LM_YES_ALWAYS ||
+	if ((bot->loot()->get() == LM_YES_ALWAYS ||
 			(bot->loot()->get() == LM_YES_REST &&
 				bot->battle_mode() == BM_NONE
 			)
