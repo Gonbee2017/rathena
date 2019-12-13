@@ -12799,7 +12799,8 @@ mjolnir_09,209,341,3	script	ƒhƒ[ƒt‚Ì’b–è‰®#“ì	826,{
 			mes "‚æ‚µAí‚¢‚¾!! ‚â‚é‚º!!";
 			next;
 			set .@n_vit,200;
-			set .@p_vit,100;
+			//set .@p_vit,100;
+			set .@p_vit,200;
 			while(1) {
 				mes "|||||||||||||||||";
 				mes "ƒXƒhƒŠ : c‚èHP@" +.@n_vit;
