@@ -689,11 +689,9 @@ void ai_t::bot_use_item() {
 				int inv_ind = inv_con->find(itm_use_pro.nameid);
 				if (inv_ind != INT_MIN) itm_use_pro.func(this, inv_ind);
 			}
-			if (bot->battle_mode() != BM_NONE) {
-				if (!bot->sc()->data[SC_BERSERK])
-					use_hea(bot->recover_hp_items().get(), bot->hp_ratio());
-				use_hea(bot->recover_sp_items().get(), bot->sp_ratio());
-			}
+			if (!bot->sc()->data[SC_BERSERK])
+				use_hea(bot->recover_hp_items().get(), bot->hp_ratio());
+			use_hea(bot->recover_sp_items().get(), bot->sp_ratio());
 		} catch (const item_used_exception&) {}
 	}
 }
