@@ -2668,7 +2668,7 @@
 5482,Dark_Knight_Mask,ダークナイトマスク,4,,,3000,,5,,0,0xFFFFFFFF,7,2,769,,80,1,479,{ bonus bStr,3; },{},{}
 5483,Odin_Mask,オーディンマスク,4,20,,100,,1,,0,0xFFFFFFFF,7,2,513,,50,0,480,{ bonus bHit,-10; bonus2 bAddRace,RC_DemiHuman,6; bonus2 bAddRace,RC_Player,6; },{},{}
 //5484,Taiwan_Flag_Hat,Holidays Hat,4,20,,500,,4,,0,0xFFFFFFFF,7,2,256,,0,0,482,{ bonus bAllStats,5; bonus2 bResEff,Eff_Stun,500; },{},{}
-5485,Tiger_Face,タイガーフェイス,4,20,,1000,,3,,0,0xFFFFFFFF,7,2,513,,60,1,483,{ bonus2 bSubRace,RC_Brute,5; bonus2 bAddRace,RC_Brute,5; bonus2 bMagicAddRace,RC_Brute,5; },{},{}
+5485,Tiger_Face,タイガーフェイス,4,20,,1000,,3,,0,0xFFFFFFFF,7,2,769,,60,1,483,{ bonus2 bSubRace,RC_Brute,5; bonus2 bAddRace,RC_Brute,5; bonus2 bMagicAddRace,RC_Brute,5; },{},{}
 5486,J_Anniversary_Hat,アニバーサリー帽,4,20,,300,,3,,0,0xFFFFFFFF,7,2,256,,0,1,395,{ bonus bAllStats, 2; },{},{}
 5487,J_Poringcake_Hat,ポリンケーキ帽,4,20,,500,,1,,0,0xFFFFFFFF,7,2,256,,0,1,417,{ bonus bLuk,2; },{},{}
 5488,J_Twin_Santahat,かわいいサンタ帽,4,20,,100,,1,,0,0xFFFFFFFF,7,2,256,,0,1,390,{ bonus bLuk,1; bonus bMdef,1; },{},{}
@@ -4467,8 +4467,8 @@
 10034,Ball_Mask,舞踏会用仮面,8,20,,0,,,,,,,,,,,,,{},{},{}
 10035,Windup_Spring,ゼンマイ,8,20,,0,,,,,,,,,,,,,{},{},{}
 10036,Hell_Horn,地獄の角,8,20,,0,,,,,,,,,,,,,{},{},{}
-10037,Black_Butterfly_Mask,Black Butterfly Mask,8,20,,0,,,,,,,,,,,,,{},{},{}
-10038,Horn_Protector,Horn Barrier,8,20,,0,,,,,,,,,,,,,{},{},{}
+10037,Black_Butterfly_Mask,マスカレード,8,20,,0,,,,,,,,,,,,,{},{},{}
+10038,Horn_Protector,ホーンガード,8,20,,0,,,,,,,,,,,,,{},{},{}
 // Misc "Etc" Books
 //===================================================================
 11000,Prontera_Book_01,プロンテラの歴史書,3,8000,,10,,,,,,,,,,,,,{},{},{}

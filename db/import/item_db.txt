@@ -1107,7 +1107,7 @@
 5436,Bride's_Corolla,フラワーヴェール,4,10000,,200,,1,,0,0xFFFFFFFF,7,2,256,,0,1,437,{ bonus bLuk,3; bonus bMdef,2; },{},{}
 5446,Cat_Foot_Hairpin,肉球のヘアピン,4,10000,,200,,0,,1,0xFFFFFFFF,7,2,256,,0,1,447,{ bonus bFlee,5; bonus bFlee2,3; },{},{}
 5447,Frog_Cap,ひきがえるの帽子,4,70000,,500,,3,,0,0xFFFFFFFF,7,2,256,,70,1,448,{ bonus bMdef,3; bonus2 bAddRace,RC_Fish,5; bonus2 bMagicAddRace,RC_Fish,5; bonus2 bSubRace,RC_Fish,5; bonus3 bAddMonsterDropItem,1051,RC_Fish,10; },{},{}
-5457,Spring_Rabbit_Hat,月ウサギの帽子,4,10000,,300,,2,,1,0xFFFFFFFF,7,2,256,,1,1,455,{ bonus bAgi,3; bonus bDex,1; if(getpetid()==1815) { bonus2 bResEff,Eff_Stun,2500; if(getpetintimate()>=9010) bonus3 bAddMonsterDropItem,554,RC_Formless,10; } else bonus2 bResEff,Eff_Stun,1500; },{},{}
+5457,Spring_Rabbit_Hat,月ウサギの帽子,4,10000,,300,,2,,1,0xFFFFFFFF,7,2,256,,1,1,455,{ bonus bAgi,3; bonus bDex,1; if(getpetid()==1815) { bonus2 bResEff,Eff_Stun,2500; if(getpetintimate()>=901) bonus3 bAddMonsterDropItem,554,RC_Formless,10; } else bonus2 bResEff,Eff_Stun,1500; },{},{}
 5458,Pinwheel_Cap,風車帽子,4,10000,,200,,2,,0,0xFFFFFFFF,7,2,256,,0,1,456,{ bonus bHPrecovRate, 5; bonus bHPrecovRate, 5; },{},{}
 5474,Notice_Board,お知らせ看板,4,10000,,700,,4,,0,0xFFFFFFFF,63,2,256,,10,1,471,{},{},{}
 5476,Hairband_Of_Grandpeco,グランペコのヘアバンド,4,30000,,800,,2,,0,0xFFFFFFFF,7,2,768,,30,1,473,{ bonus bStr,2; bonus bMaxHPrate,-10; bonus2 bAddRace2,RC2_Orc,15; },{},{}
@@ -1945,3 +1945,4 @@
 29911,Magic_Wind_10_29911,風魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_LIGHTNINGBOLT",10; bonus2 bSkillAtk,"MG_THUNDERSTORM",10; bonus2 bSkillAtk,"WZ_JUPITEL",10; bonus2 bSkillAtk,"WZ_VERMILION",10; },{},{}
 29912,Magic_Ghost_20_29912,念魔法 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; },{},{}
 29913,Magic_Sma_10_29913,エスマ + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"SL_SMA",10; },{},{}
+29914,Magic_Crasher_29914,マジッククラッシャー,6,20,,10,,,,,,,,136,,,,,{ skill "HW_MAGICCRASHER",1; },{},{}

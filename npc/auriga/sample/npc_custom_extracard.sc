@@ -175,6 +175,7 @@ OnInit:
 	set .ext_cars[getarraysize(.ext_cars)], 29911; // 風魔法 + 10%
 	set .ext_cars[getarraysize(.ext_cars)], 29912; // 念魔法 + 20%
 	set .ext_cars[getarraysize(.ext_cars)], 29913; // エスマ + 10%
+	set .ext_cars[getarraysize(.ext_cars)], 29914; // マジッククラッシャー
 	set .nor_car_fir, 4000;
 	set .nor_car_las, 4700;
 	set .rar_cars[getarraysize(.rar_cars)], 4054; // エンジェリングカード

@@ -398,7 +398,7 @@ BUILDIN_FUNC(getpetid) {
 	map_session_data* sd;
 	if (script_rid2sd(sd) &&
 		sd->pd
-	) pid = sd->pd->pet.pet_id;
+	) pid = sd->pd->get_pet_db()->class_;
 	script_pushint(st, pid);
 	return SCRIPT_CMD_SUCCESS;
 }

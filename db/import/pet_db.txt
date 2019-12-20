@@ -58,18 +58,35 @@
 //petskillattack2) and petskillsupport (or petheal) at the same time,
 //but only one of each.
 
+1014,SPORE,スポア,630,9012,10017,537,80,60,30,100,250,20,1500,150,0,0,350,500,500,{ petrecovery SC_POISON,1; },{ bonus bHit,5; bonus bAtk,-2; }
 1122,GOBLIN_1,ゴブリン長男,0,9032,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_WINDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Wind,1; }
 1123,GOBLIN_2,ゴブリン次男,0,9033,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Fire,1; }
 1125,GOBLIN_4,ゴブリン四男,0,9034,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Earth,1; }
 1208,WANDER_MAN,彷徨う者,0,9037,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_UNDEADATTACK",5,5,5; },{ bonus bAgi,3; bonus bDex,1; }
 1307,CAT_O_NINE_TAIL,キャットナインテイル,0,9500,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MC_MAMMONITE",5,10,5; },{ bonus bLuk,5; }
-1370,SUCCUBUS,サキュバス,12373,9055,0,6110,80,60,10,100,250,20,200,150,0,0,300,300,800,{},{ bonus2 bHpDrainRate,50,5; }
 1382,DIABOLIC,ディアボリック,0,9036,0,537,80,60,10,100,250,20,800,150,0,0,300,300,800,{ petskillattack "WZ_METEOR",2,5,5; },{ bonus bMaxSP,30; }
 1385,DELETER_,グラウンドデリーター,0,9035,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "SM_MAGNUM",5,5,5; },{ bonus bSPGainValue,5; }
 1519,CHUNG_E,チュンイー,0,9030,0,6115,80,60,50,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "CR_SHIELDCHARGE",5,5,5; },{ bonus bDef,1; bonus2 bSubRace,RC_DemiHuman,1; }
-1630,BACSOJIN_,ペクソジン,0,9039,0,504,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "PR_SANCTUARY",5,60,50,100; },{ bonus bMaxHP,50; bonus bHPrecovRate,10; }
 1713,ACIDUS,ゴールドオシドス,0,9501,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_FIREBALL",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Holy,2; }
 1714,FERUS,レッドペロス,0,9502,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Fire,2; }
 1716,ACIDUS_,ブルーオシドス,0,9503,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_THUNDERSTORM",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Wind,2; }
 1717,FERUS_,グリーンペロス,0,9504,0,537,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Earth,2; }
-1837,IMP,インプ,0,9056,0,537,80,60,10,100,250,20,200,150,0,0,300,300,800,{},{ bonus2 bSubEle,Ele_Fire,2; bonus2 bAddEle,Ele_Fire,2; }
+
+1040,GOLEM,ゴーレム,12371,9053,10035,6111,80,60,20,100,250,20,500,150,0,0,300,300,800,{ petskillbonus bDef,5,20,40; },{ bonus bMaxHP,100; bonus bFlee,-5; }
+1143,MARIONETTE,マリオネット,12361,9043,10025,6098,80,60,10,100,250,20,500,150,0,0,300,300,800,{ petskillattack2 "NPC_TELEKINESISATTACK",666,1,10,5; },{ bonus bSPrecovRate,3; }
+1148,MEDUSA,メデューサ,12368,9050,10032,6108,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "MG_STONECURSE",5,10,5; },{ bonus bVit,1; bonus2 bResEff,Eff_Stone,500; }
+1179,WHISPER,ウィスパー,12363,9045,10027,6100,80,60,20,100,250,20,500,150,0,0,300,300,800,{ petskillbonus bMdef,10,30,30; },{ bonus bFlee,7; bonus bDef,-3; }
+1299,GOBLIN_LEADER,ゴブリンリーダー,12364,9046,10028,6104,80,60,10,100,250,20,50,150,0,0,300,300,800,{ petskillbonus bAgiDexStr,6,20,40; },{ bonus2 bAddRace,RC_DemiHuman,3; }
+1370,SUCCUBUS,サキュバス,12373,9055,10037,6110,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "NPC_BLINDATTACK",5,10,5; },{ bonus2 bHpDrainRate,50,5; }
+1374,INCUBUS,インキュバス,12370,9052,10034,6110,80,60,10,100,250,20,50,150,0,0,300,300,800,{ petskillbonus bInt,3,20,40; },{ bonus bMaxSPRate,3; }
+1379,NIGHTMARE_TERROR,ナイトメアテラー,12372,9054,10036,6112,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "NPC_DARKSTRIKE",3,10,5; },{ bonus2 bResEff,Eff_Sleep,10000; }
+1401,SHINOBI,カブキ忍者,12362,9044,10026,6099,80,60,20,100,250,20,500,150,0,0,300,300,800,{ petskillbonus bCritical,5,20,40; },{ bonus bAgi,2; }
+1404,MIYABI_NINGYO,雅人形,12366,9048,10030,6106,80,60,15,100,250,20,200,150,0,0,300,300,800,{ petrecovery SC_CURSE,1; },{ bonus bInt,1; bonus bCastrate,-3; }
+1416,WICKED_NYMPH,天仙娘々,12365,9047,10029,6105,80,60,15,100,250,20,500,150,0,0,300,300,800,{ petskillattack "SA_DISPELL",5,10,5; },{ bonus bMaxSP,30; bonus bSPrecovRate,5; }
+1495,STONE_SHOOTER,フレイムシューター,12369,9051,10033,6109,80,60,20,100,250,20,500,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,10,5; },{ bonus2 bSubEle,Ele_Fire,3; }
+1504,DULLAHAN,デュラハン,12367,9049,10031,6107,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "NPC_CRITICALSLASH",1,10,5; },{ bonus bCritAtkRate,5; }
+1505,LOLI_RURI,ロリルリ,12360,9042,10024,6097,80,60,15,100,250,20,200,150,0,0,300,300,800,{ petrecovery SC_SILENCE,1; },{ bonus bMaxHPRate,3; bonus3 bAutoSpellWhenHit,"AL_HEAL",1,10; }
+1513,CIVIL_SERVANT,ミョグェ,12358,9040,10022,6095,80,60,10,100,250,20,500,150,0,0,300,300,800,{ petskillsupport "AM_POTIONPITCHER",4,60,50,100; },{ bonus bMaxSP,10; }
+1586,LEAF_CAT,リーフキャット,12359,9041,10023,6096,80,60,20,100,250,20,200,150,0,0,300,300,800,{ petloot 20; },{ bonus2 bSubRace,RC_Brute,3; }
+1630,BACSOJIN_,ペクソジン,0,9039,0,504,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "PR_SANCTUARY",5,60,50,100; },{ bonus bMaxHP,50; bonus bHPrecovRate,10; }
+1837,IMP,インプ,0,9056,10038,537,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "WZ_SIGHTRASHER",5,10,5; },{ bonus2 bSubEle,Ele_Fire,2; bonus2 bAddEle,Ele_Fire,2; }

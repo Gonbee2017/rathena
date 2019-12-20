@@ -4202,8 +4202,8 @@ REPLACE INTO `item_db` VALUES (10033, 'Apro_Hair', 'もさもさアフロ', 8, 20, NULL
 REPLACE INTO `item_db` VALUES (10034, 'Ball_Mask', '舞踏会用仮面', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db` VALUES (10035, 'Windup_Spring', 'ゼンマイ', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db` VALUES (10036, 'Hell_Horn', '地獄の角', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
-REPLACE INTO `item_db` VALUES (10037, 'Black_Butterfly_Mask', 'Black Butterfly Mask', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
-REPLACE INTO `item_db` VALUES (10038, 'Horn_Protector', 'Horn Barrier', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db` VALUES (10037, 'Black_Butterfly_Mask', 'マスカレード', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db` VALUES (10038, 'Horn_Protector', 'ホーンガード', 8, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db` VALUES (11000, 'Prontera_Book_01', 'プロンテラの歴史書', 3, 8000, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db` VALUES (11001, 'Adventure_Story01', '-', 3, 8000, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db` VALUES (11002, 'Great_Chef_Orleans01', '料理王オルレアン1巻', 3, 8000, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
