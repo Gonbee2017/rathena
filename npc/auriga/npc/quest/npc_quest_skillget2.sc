@@ -195,13 +195,18 @@ prt_in,85,99,2	script	騎士団員	734,{
 		mes "^FF0000チャージアタック^000000だ。";
 		mes "あまり格好良い名前ではないが、";
 		mes "攻撃のイメージが浮べば良いだろう。";
-		set SKILL_CHARGEATK,0;
+		//set SKILL_CHARGEATK,0;
+		set SKILL_CHARGEATK,9;
 		skill 1001,1,0;
 		next;
 		mes "[エソペ]";
 		mes "では頑張ってみなさい。";
 		mes "私も諦めず騎士団の名誉を高めるのに";
 		mes "全力を尽くそう。";
+		close;
+	case 9:
+		mes "-チャージアタックを習得した-";
+		skill 1001,1,0;
 		close;
 	}
 }
@@ -966,7 +971,8 @@ gef_fild13,297,242,3	script	兵士	751,{
 		mes "人々を守って欲しい。";
 		mes "では、この先の旅にも気をつけて";
 		mes "くれよな。じゃ、またな。";
-		set SKILL_SHRINK,0;
+		//set SKILL_SHRINK,0;
+		set SKILL_SHRINK,9;
 		skill 1002,1,0;
 		close;
 	case 8:
@@ -975,6 +981,10 @@ gef_fild13,297,242,3	script	兵士	751,{
 		mes "薬の効果が薄れてしまったようだ。";
 		mes "またアーサー司祭の所へ行って";
 		mes "貰って来なければならない-";
+		close;
+	case 9:
+		mes "-シュリンクを習得した-";
+		skill 1002,1,0;
 		close;
 	default:
 		mes "[スラッティ]";
@@ -1518,7 +1528,8 @@ in_moc_16,23,27,5	script	アサシン	885,{
 		mes "[イスミル]";
 		mes "素晴らしいですわ！";
 		mes "それで良いのです！";
-		set SKILL_SONICACCEL,0;
+		//set SKILL_SONICACCEL,0;
+		set SKILL_SONICACCEL,5;
 		skill 1003,1,0;
 		next;
 		mes "[イスミル]";
@@ -1534,6 +1545,10 @@ in_moc_16,23,27,5	script	アサシン	885,{
 		mes "フフ……私は次のアサシンの為の";
 		mes "準備をしなければいけないので、";
 		mes "これで失礼するわ。";
+		close;
+	case 5:
+		mes "-ソニックアクセラレーションを習得した-";
+		skill 1003,1,0;
 		close;
 	}
 }
@@ -2168,9 +2183,14 @@ in_rogue,355,179,0	script	ハイジャラ・グレグ	46,{
 		}
 		next;
 		mes "-クローズコンファインを習得した-";
-		set SKILL_CLOSECONFINE,0;
+		//set SKILL_CLOSECONFINE,0;
+		set SKILL_CLOSECONFINE,12;
 		skill 1005,1,0;
 		misceffect 348,"";
+		close;
+	case 12:
+		mes "-クローズコンファインを習得した-";
+		skill 1005,1,0;
 		close;
 	}
 }
@@ -3033,7 +3053,8 @@ gef_tower,115,36,4	script	ニャオ	876,{
 		delitem 993,10;
 		delitem 990,10;
 		delitem 992,10;
-		set SKILL_SIGHTBLASTER,0;
+		//set SKILL_SIGHTBLASTER,0;
+		set SKILL_SIGHTBLASTER,4;
 		skill 1006,1,0;
 		next;
 		mes "[ニャオ]";
@@ -3053,6 +3074,10 @@ gef_tower,115,36,4	script	ニャオ	876,{
 		mes "一週間もずっと力を使ってたから";
 		mes "疲れてしょうがないわ。";
 		mes "私はもう寝るわよ！";
+		close;
+	case 4:
+		mes "-サイトブラスターを習得した-";
+		skill 1006,1,0;
 		close;
 	}
 }
@@ -3191,6 +3216,13 @@ yuno_in03,176,24,3	script	ミシュナ	755,{
 		mes "[ミシュナ]";
 		mes "本当に失礼しました。";
 		mes "それでは良い一日を！";
+		close;
+	}
+	if (SKILL_ELEMENT >= 2 &&
+		!getskilllv(1007)
+	) {
+		mes "-クリエイトコンバーターを習得した-";
+		skill 1007,1,0;
 		close;
 	}
 	switch(SKILL_ELEMENT) {
@@ -3446,6 +3478,29 @@ yuno_in03,176,24,3	script	ミシュナ	755,{
 		set .@itemid,991;
 		break;
 	}
+	if (SKILL_ELEMENT >= 7) {
+		switch (SKILL_ELEMENT - 4) {
+		case 3:
+			set .@skillname$,"ファイアーエレメンタルチェンジ";
+			set .@skillid,1018;
+			break;
+		case 4:
+			set .@skillname$,"アースエレメンタルチェンジ";
+			set .@skillid,1017;
+			break;
+		case 5:
+			set .@skillname$,"ウィンドエレメンタルチェンジ";
+			set .@skillid,1019;
+			break;
+		case 6:
+			set .@skillname$,"ウォーターエレメンタルチェンジ";
+			set .@skillid,1008;
+			break;
+		}
+		mes "-" + .@skillname$ + "を習得した-";
+		skill .@skillid,1,0;
+		close;
+	}
 	//スキル習得
 	if(countitem(.@itemid) < 20 || countitem(1089) < 1 || countitem(1088) < 1) {
 		mes "[ミシュナ]";
@@ -3506,7 +3561,8 @@ yuno_in03,176,24,3	script	ミシュナ	755,{
 	delitem .@itemid,20;
 	delitem 1089,1;
 	delitem 1088,1;
-	set SKILL_ELEMENT,0;
+	//set SKILL_ELEMENT,0;
+	set SKILL_ELEMENT,SKILL_ELEMENT+4;
 	skill .@skillid,1,0;
 	next;
 	mes "[ミシュナ]";
@@ -3839,7 +3895,12 @@ pay_arche,109,169,3	script	アルペスト	712,{
 		delitem 724,5;
 		delitem 7115,5;
 		delitem 537,30;
-		set SKILL_PHANTASMIC,0;
+		//set SKILL_PHANTASMIC,0;
+		set SKILL_PHANTASMIC,2;
+		skill 1009,1,0;
+		close;
+	case 2:
+		mes "-ファンタズミックアローを習得した-";
 		skill 1009,1,0;
 		close;
 	}
@@ -4339,6 +4400,10 @@ morocc_in,169,72,7	script	陰気なバード#bard	741,3,3,{
 		next;
 		mes "[ライオト]";
 		break;
+	case 9:
+		mes "-パンボイスを習得した-";
+		skill 1010,1,0;
+		close;
 	}
 	//スキル習得続き
 	mes "この技術は、";
@@ -4363,7 +4428,8 @@ morocc_in,169,72,7	script	陰気なバード#bard	741,3,3,{
 	misceffect 295,"";
 	if(SKILL_PANGVOICE == 7) delitem 574,5;
 	else delitem 7277,1;
-	set SKILL_PANGVOICE,0;
+	//set SKILL_PANGVOICE,0;
+	set SKILL_PANGVOICE,9;
 	skill 1010,1,0;
 	next;
 	mes "[ライオト]";
@@ -4884,7 +4950,12 @@ comodo,204,172,5	script	サネル	724,{
 		next;
 		misceffect 253,"";
 		mes "^4D4DFF-魅惑のウィンクスキルを覚えた！-^000000";
-		set SKILL_WINKCHARM,0;
+		//set SKILL_WINKCHARM,0;
+		set SKILL_WINKCHARM,9;
+		skill 1011,1,0;
+		close;
+	case 9:
+		mes "-魅惑のウィンクを習得した-";
 		skill 1011,1,0;
 		close;
 	}
@@ -5590,7 +5661,12 @@ geffen,178,72,3	script	アキ	726,{
 		mes "ずっとここにいる予定ですから。";
 		mes "それではお気をつけて冒険の続きを！";
 		mes "それじゃあ、またね！";
-		set SKILL_UNFAIRLYTRICK,0;
+		//set SKILL_UNFAIRLYTRICK,0;
+		set SKILL_UNFAIRLYTRICK,7;
+		skill 1012,1,0;
+		close;
+	case 7:
+		mes "-フェイクゼニーを習得した-";
 		skill 1012,1,0;
 		close;
 	}
@@ -5768,7 +5844,12 @@ geffen,172,52,1	script	グッドデー	826,{
 		next;
 		mes "[グッドマン]";
 		mes "さあ、それじゃあ教えようか！";
-		set SKILL_GREED,0;
+		//set SKILL_GREED,0;
+		set SKILL_GREED,2;
+		skill 1013,1,0;
+		close;
+	case 2:
+		mes "-グリードを習得した-";
 		skill 1013,1,0;
 		close;
 	}
@@ -6065,7 +6146,8 @@ prt_church,111,112,2	script	ライナース修道女	79,{
 		misceffect 14,"";
 		delitem 523,30;
 		delitem 717,20;
-		set SKILL_REDEMPTIO,0;
+		//set SKILL_REDEMPTIO,0;
+		set SKILL_REDEMPTIO,3;
 		skill 1014,1,0;
 		mes "[ライナース修道女]";
 		mes "おめでとうございます！";
@@ -6074,6 +6156,10 @@ prt_church,111,112,2	script	ライナース修道女	79,{
 		mes "最後のスキルです。";
 		mes "気をつけて使ってください。";
 		mes "真に危険な時にだけ使うのですよ。";
+		close;
+	case 3:
+		mes "-レディムプティオを習得した-";
+		skill 1014,1,0;
 		close;
 	}
 }
@@ -6353,7 +6439,12 @@ monk_test,316,69,5	script	修行僧	823,{
 		mes "もし旅の最中にでもその馬鹿を";
 		mes "説得する良い方法を思いついたら";
 		mes "教えてくれ。";
-		set SKILL_BALKYOUNG,0;
+		//set SKILL_BALKYOUNG,0;
+		set SKILL_BALKYOUNG,6;
+		skill 1016,1,0;
+		close;
+	case 6:
+		mes "-気功転移を習得した-";
 		skill 1016,1,0;
 		close;
 	}
@@ -6538,6 +6629,10 @@ prt_monk,270,198,3	script	修行中のモンク	753,{
 		mes "殺傷の為の道具ではないという事を";
 		mes "絶対に忘れないように！";
 		close;
+	case 3:
+		mes "-寸勁を習得した-";
+		skill 1015,1,0;
+		close;
 	}
 }
 
@@ -6559,6 +6654,13 @@ lhz_in01,224,140,2	script	ケルラソス	57,{
 		mes "神の領域に挑戦する者のことを、";
 		mes "^FF0000錬金術師^000000と呼ぶ。";
 		mes "解るかな？　若者よ。";
+		close;
+	}
+	if (SKILL_BIOETHICS == 13 &&
+		!getskilllv(238)
+	) {
+		mes "-生命倫理を習得した-";
+		skill 238,1,0;
 		close;
 	}
 	if(SKILL_BIOETHICS == 13 || getskilllv(238)) {
