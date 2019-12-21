@@ -2932,7 +2932,6 @@ extern const skill_id_set LAYABLE_ON_LP_SKILLS;
 extern const std::array<std::string,IT_MAX> ITEM_TYPE_NAME_TABLE;
 extern const int ITEM_TYPE_OFFSET;
 extern const std::unordered_map<meta_mobs,std::string> META_MONSTER_NAMES;
-extern const std::array<std::string,CLASS_MAX> MOB_CLASS_NAME_TABLE;
 extern const skill_id_set MOB_SHORT_SKILLS;
 extern const std::array<std::string,NAPV_MAX> NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE;
 extern const int PAGE_LINES;

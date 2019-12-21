@@ -1291,9 +1291,9 @@ print_mobdb(
 	std::vector<std::string> toks;
 	toks.push_back(mdb->jname);
 	std::vector<std::string> tag_toks;
-	tag_toks.push_back(MOB_CLASS_NAME_TABLE[mdb->status.class_]);
 	if (cau) tag_toks.push_back(CAUTION_TAG);
-	toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
+	if (!tag_toks.empty())
+		toks.push_back(print("<", concatinate_strings(ALL_RANGE(tag_toks), "|"), ">"));
 	return concatinate_strings(ALL_RANGE(toks), " ");
 }
 

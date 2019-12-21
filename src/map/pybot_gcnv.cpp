@@ -3706,18 +3706,6 @@ const std::unordered_map<
 	{MM_HP_DECLINE1 , "HP低下1"   },
 };
 
-// モンスタークラス名のテーブル。
-const std::array<
-	std::string, // モンスタークラス名。
-	CLASS_MAX    // モンスタークラス数。
-> MOB_CLASS_NAME_TABLE = {
-	"通常"        ,
-	"ボス"        ,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-	UNKNOWN_SYMBOL,
-};
-
 // モンスターが使用すると近接になるスキルのセット。
 const skill_id_set MOB_SHORT_SKILLS = {
 	AC_SHOWER,

@@ -126,17 +126,11 @@ find_mobdb(
 	auto tag_blos = command_collect_blocks<ele_lis_lis>(ALL_RANGE(*eles), "<", ">", true);
 	if (tag_blos->size() > 1) return 0;
 
-	int mob_cla = INT_MIN;
 	bool cau = false;
 	if (!tag_blos->empty()) {
 		auto tag_toks = command_collect_tokens<ele_lis_lis>(ALL_RANGE(*tag_blos->front()), "|", true);
 		auto tag_strs = command_print_all<str_lis>(ALL_RANGE(*tag_toks));
 		for (const std::string& tag_str : *tag_strs) {
-			int mob_cla_ind = find_name(MOB_CLASS_NAME_TABLE, tag_str);
-			if (mob_cla_ind != INT_MIN) {
-				mob_cla = mob_cla_ind;
-				continue;
-			}
 			if (tag_str == CAUTION_TAG) {
 				cau = true;
 				continue;
@@ -171,10 +165,7 @@ find_mobdb(
 		for (int i = 0; i < cou; i++) {
 			struct mob_db* mdb = mob_db(mids[i]);
 			if (mdb &&
-				lowercase(mdb->jname) == pay_str_lc &&
-				(mob_cla == INT_MIN ||
-					mdb->status.class_ == mob_cla
-				)
+				lowercase(mdb->jname) == pay_str_lc
 			) {
 				mid = mids[i];
 				break;
