@@ -1931,6 +1931,10 @@
 29657,Magic_Wind_5_29657,風魔法 + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_LIGHTNINGBOLT",5; bonus2 bSkillAtk,"MG_THUNDERSTORM",5; bonus2 bSkillAtk,"WZ_JUPITEL",5; bonus2 bSkillAtk,"WZ_VERMILION",5; },{},{}
 29658,Magic_Ghost_10_29658,念魔法 + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",10; bonus2 bSkillAtk,"MG_SOULSTRIKE",10; bonus2 bSkillAtk,"HW_NAPALMVULCAN",10; },{},{}
 29659,Magic_Sma_5_29659,エスマ + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"SL_SMA",5; },{},{}
+29660,Ninpou_Water_15_29660,水忍法 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HYOUSENSOU",15; bonus2 bSkillAtk,"NJ_HYOUSYOURAKU",15; },{},{}
+29661,Ninpou_Fire_15_29661,火忍法 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_KOUENKA",15; bonus2 bSkillAtk,"NJ_KAENSIN",15; bonus2 bSkillAtk,"NJ_BAKUENRYU",15; },{},{}
+29662,Ninpou_Wind_15_29662,風忍法 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HUUJIN",15; bonus2 bSkillAtk,"NJ_RAIGEKISAI",15; bonus2 bSkillAtk,"NJ_KAMAITACHI",15; },{},{}
+29663,Heal_5_29663,ヒール + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,5; },{},{}
 29900,Atk_25_29900,Atk + 50,6,20,,10,,,,,,,,2,,,,,{ bonus bBaseAtk,50; },{},{}
 29901,Perfect_Hit_50_29901,必中 + 50%,6,20,,10,,,,,,,,2,,,,,{ bonus bPerfectHitAddRate,50; },{},{}
 29902,Ignore_Def_50_29902,Def50%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}
@@ -1946,3 +1950,7 @@
 29912,Magic_Ghost_20_29912,念魔法 + 20%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; },{},{}
 29913,Magic_Sma_10_29913,エスマ + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"SL_SMA",10; },{},{}
 29914,Magic_Crasher_29914,マジッククラッシャー,6,20,,10,,,,,,,,136,,,,,{ skill "HW_MAGICCRASHER",1; },{},{}
+29915,Ninpou_Water_30_29915,水忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HYOUSENSOU",30; bonus2 bSkillAtk,"NJ_HYOUSYOURAKU",30; },{},{}
+29916,Ninpou_Fire_30_29916,火忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_KOUENKA",30; bonus2 bSkillAtk,"NJ_KAENSIN",30; bonus2 bSkillAtk,"NJ_BAKUENRYU",30; },{},{}
+29917,Ninpou_Wind_30_29917,風忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HUUJIN",30; bonus2 bSkillAtk,"NJ_RAIGEKISAI",30; bonus2 bSkillAtk,"NJ_KAMAITACHI",30; },{},{}
+29918,Heal_5_29918,ヒール + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,10; },{},{}

@@ -7860,11 +7860,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					sp += sp * bonus / 100;
 				}
 
-				// [GonBee]
-				// 消化促進ポーションを考慮する。
-				//if( (j = pc_skillheal_bonus(sd, skill_id)) ) {
-				if( (j = pc_skillheal_bonus(sd, skill_id, skill_lv)) ) {
-
+				if( (j = pc_skillheal_bonus(sd, skill_id)) ) {
 					hp += hp * j / 100;
 					sp += sp * j / 100;
 				}
@@ -7881,7 +7877,12 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				if( dstsd )
 					hp = hp * (100 + pc_checkskill(dstsd,SM_RECOVERY)*10) / 100;
 			}
-			if( dstsd && (j = pc_skillheal2_bonus(dstsd, skill_id)) ) {
+
+			// [GonBee]
+			// 消化促進ポーションを考慮する。
+			//if( dstsd && (j = pc_skillheal2_bonus(dstsd, skill_id)) ) {
+			if( dstsd && (j = pc_skillheal2_bonus(dstsd, skill_id, skill_lv)) ) {
+
 				hp += hp * j / 100;
 				sp += sp * j / 100;
 			}
@@ -8777,9 +8778,19 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			sp = sp * (100 + (tstatus->int_<<1))/100;
 			if (dstsd) {
 				if (hp)
-					hp = hp * (100 + pc_checkskill(dstsd,SM_RECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id))/100;
+
+					// [GonBee]
+					// 消化促進ポーションを考慮する。
+					//hp = hp * (100 + pc_checkskill(dstsd,SM_RECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id))/100;
+					hp = hp * (100 + pc_checkskill(dstsd,SM_RECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id, skill_lv))/100;
+
 				if (sp)
-					sp = sp * (100 + pc_checkskill(dstsd,MG_SRECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id))/100;
+
+					// [GonBee]
+					// 消化促進ポーションを考慮する。
+					//sp = sp * (100 + pc_checkskill(dstsd,MG_SRECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id))/100;
+					sp = sp * (100 + pc_checkskill(dstsd,MG_SRECOVERY)*10 + pc_skillheal2_bonus(dstsd, skill_id, skill_lv))/100;
+
 			}
 			if (tsc && tsc->count) {
 				uint8 penalty = 0;

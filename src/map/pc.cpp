@@ -7823,24 +7823,12 @@ int pc_sub_skillatk_bonus(struct map_session_data *sd, uint16 skill_id)
 	return bonus;
 }
 
-// [GonBee]
-//int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id) {
-int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv) {
-
+int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id) {
 	int bonus = sd->bonus.add_heal_rate;
 
 	nullpo_ret(sd);
 
 	skill_id = skill_dummy2skill_id(skill_id);
-
-	// [GonBee]
-	// 消化促進ポーションの効果を追加。
-	if (sd->sc.data[SC_DIGESTPOTION]) {
-		if (skill_id == AM_POTIONPITCHER) {
-			if (skill_lv == 5) bonus += sd->sc.data[SC_DIGESTPOTION]->val2;
-			else bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
-		} else if (skill_id == CR_SLIMPITCHER) bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
-	}
 
 	if( bonus ) {
 		switch( skill_id ) {
@@ -7862,10 +7850,22 @@ int pc_skillheal_bonus(struct map_session_data *sd, uint16 skill_id, uint16 skil
 	return bonus;
 }
 
-int pc_skillheal2_bonus(struct map_session_data *sd, uint16 skill_id) {
+// [GonBee]
+//int pc_skillheal2_bonus(struct map_session_data *sd, uint16 skill_id) {
+int pc_skillheal2_bonus(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv) {
+
 	int bonus = sd->bonus.add_heal2_rate;
 
 	skill_id = skill_dummy2skill_id(skill_id);
+
+	// [GonBee]
+	// 消化促進ポーションの効果を追加。
+	if (sd->sc.data[SC_DIGESTPOTION]) {
+		if (skill_id == AM_POTIONPITCHER) {
+			if (skill_lv == 5) bonus += sd->sc.data[SC_DIGESTPOTION]->val2;
+			else bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
+		} else if (skill_id == CR_SLIMPITCHER) bonus += sd->sc.data[SC_DIGESTPOTION]->val1;
+	}
 
 	for (auto &it : sd->skillheal2) {
 		if (it.id == skill_id) {

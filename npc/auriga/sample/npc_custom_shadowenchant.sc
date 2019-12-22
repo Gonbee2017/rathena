@@ -840,5 +840,41 @@ OnInit:
 		4366,2, // カトリーヌ=ケイロンカード
 		4368,2; // セシル=ディモン
 	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
+	setarray .effs[getarraysize(.effs)], 29660,1000000; // 水忍法 + 15%
+	setarray .ores[getarraysize(.ores)], 6240,1; // 改良型濃縮オリデオコン
+	setarray .eff_cars[getarraysize(.eff_cars)],
+		4208,2, // 雅人形カード
+		4323,2, // ハティーベベカード
+		4354,2, // ジェミニ-S58カード
+		4416,2, // シロマカード
+		4418,2; // ゲイズティカード
+	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
+	setarray .effs[getarraysize(.effs)], 29661,1000000; // 火忍法 + 15%
+	setarray .ores[getarraysize(.ores)], 6240,1; // 改良型濃縮オリデオコン
+	setarray .eff_cars[getarraysize(.eff_cars)],
+		4320,2, // ブラッディナイトカード
+		4327,2, // パピヨンカード
+		4346,2, // イグニゼム=セニアカード
+		4429,2, // サラマンダーカード
+		4433,2; // インプカード
+	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
+	setarray .effs[getarraysize(.effs)], 29662,1000000; // 風忍法 + 15%
+	setarray .ores[getarraysize(.ores)], 6240,1; // 改良型濃縮オリデオコン
+	setarray .eff_cars[getarraysize(.eff_cars)],
+		4237,2, // オウルデュークカード
+		4238,2, // オウルバロンカード
+		4264,2, // ウィンドゴーストカード
+		4345,2, // ヒルウィンドカード
+		4351,2; // カヴァク=イカルス
+	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
+	setarray .effs[getarraysize(.effs)], 29663,5000000; // ヒール + 5%
+	setarray .ores[getarraysize(.ores)], 6240,5; // 改良型濃縮オリデオコン
+	setarray .eff_cars[getarraysize(.eff_cars)],
+		4191,2, // ロリルリ
+		4217,2, // 人面桃樹
+		4420,2, // マスキプラー
+		4460,2, // リンコ
+		4512,2; // パルス
+	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
 	set .ini_fee, 1000000;
 }

@@ -176,6 +176,10 @@ OnInit:
 	set .ext_cars[getarraysize(.ext_cars)], 29912; // 念魔法 + 20%
 	set .ext_cars[getarraysize(.ext_cars)], 29913; // エスマ + 10%
 	set .ext_cars[getarraysize(.ext_cars)], 29914; // マジッククラッシャー
+	set .ext_cars[getarraysize(.ext_cars)], 29915; // 水忍法 + 30%
+	set .ext_cars[getarraysize(.ext_cars)], 29916; // 火忍法 + 30%
+	set .ext_cars[getarraysize(.ext_cars)], 29917; // 風忍法 + 30%
+	set .ext_cars[getarraysize(.ext_cars)], 29918; // ヒール + 10%
 	set .nor_car_fir, 4000;
 	set .nor_car_las, 4700;
 	set .rar_cars[getarraysize(.rar_cars)], 4054; // エンジェリングカード

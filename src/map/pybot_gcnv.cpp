@@ -1138,12 +1138,13 @@ const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_POST_USE_PROCS = {
 	AI_SKILL_USE_PROC       (MG_FIREBALL                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (TF_STEAL                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 	AI_SKILL_USE_PROC       (TF_POISON                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+	AI_SKILL_USE_PROC       (KN_PIERCE                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+	AI_SKILL_USE_PROC       (SM_BASH                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 	AI_SKILL_USE_PROC       (MG_FIREBOLT                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC_D     (MG_COLDBOLT, MG_FIREBOLT                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC_T     (MG_FIREBOLT, compromise                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC_DT    (MG_COLDBOLT, MG_FIREBOLT, compromise     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-	AI_SKILL_USE_PROC       (KN_PIERCE                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
-	AI_SKILL_USE_PROC       (SM_BASH                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
+	AI_SKILL_USE_PROC_D     (HW_MAGICCRASHER, MG_NAPALMBEAT           ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (TF_PICKSTONE                             ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC_HEAL  (4                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 4)
 };
