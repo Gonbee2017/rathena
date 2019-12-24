@@ -138,11 +138,18 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (2                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  2,  2, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  3,  3, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AM_CANNIBALIZE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_D     (AM_DEMONSTRATION, WZ_FIREPILLAR                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MC_LOUD                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -277,15 +284,27 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_CP    (ARMOR, ARMOR, ARMOR, armor                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_CP    (HELM, HEAD_TOP, HELM, helm                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (AM_POTIONPITCHER, sp                           ,  5,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_SPP   (1                                              , 10,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_SPP   (2                                              , 10,  0, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (2                                              ,  4,  4, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_SPP   (3                                              ,  1,  5, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_SPP   (3                                              ,  6,  9, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  2,  2, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
-		AI_SKILL_USE_PROC_PP_HP (3                                              ,  3,  3, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (1                                              , 10,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (1                                              ,  6,  9, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (1                                              ,  1,  5, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (1                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (2                                              , 10,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (2                                              ,  6,  9, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (2                                              ,  1,  5, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (2                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (3                                              , 10,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (3                                              ,  6,  9, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_SPP   (3                                              ,  1,  5, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  4,  4, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  3,  3, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  2,  2, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
+		AI_SKILL_USE_PROC_PP_HP (3                                              ,  1,  1, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (AM_CANNIBALIZE                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_D     (AM_DEMONSTRATION, WZ_FIREPILLAR                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (MC_LOUD                                        ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -1417,10 +1436,14 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot cartput クリエ ブルージェムストーン]\n"
 		"カートにアイテムの特定個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン 5]\n"
-	), SUBCMD_DESC(Bot, DistanceMax                , dm  ,
-		"------ DistanceMax (dm) サブコマンド ------\n"
+	), SUBCMD_DESC(Bot, DistancemaX                , dx  ,
+		"------ DistancemaX (dx) サブコマンド ------\n"
 		"モンスターとの最大距離を設定する。\n"
 		"入力例 [@bot distancemax ドナ 5]\n"
+	), SUBCMD_DESC(Bot, DistancemiN                , dn  ,
+		"------ DistancemiN (dn) サブコマンド ------\n"
+		"モンスターとの最小距離を設定する。\n"
+		"入力例 [@bot distancemin ハイプリ 7]\n"
 	), SUBCMD_DESC(Bot, Equip                      , e   ,
 		"------ Equip (e) サブコマンド ------\n"
 		"武具を装備する。\n"
@@ -1823,6 +1846,14 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skilllimit ハイプリ エンジェラス 0]\n"
 		"スキルのレベル制限を解除する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス]\n"
+	), SUBCMD_DESC(Bot, sKillmaXCastTime           , kxct,
+		"------ sKillmaXCastTime (kxct) サブコマンド ------\n"
+		"使用を許可する最大の詠唱時間を設定する。\n"
+		"入力例 [@bot skillmaxcasttime ハイウィズ 500]\n"
+	), SUBCMD_DESC(Bot, sKillmemBers               , kb  ,
+		"------ sKillmemBers (kb) サブコマンド ------\n"
+		"範囲スキルの発動条件となるメンバー数を設定する。\n"
+		"入力例 [@bot skillmembers クリエ 2]\n"
 	), SUBCMD_DESC(Bot, sKillMonsters              , km  ,
 		"------ sKillMonsters (km) サブコマンド ------\n"
 		"範囲スキルの発動条件となるモンスター数を設定する。\n"
@@ -2025,7 +2056,8 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt),
 	SUBCMD_PROC(Bot, CartGet                    , cg  ),
 	SUBCMD_PROC(Bot, CartPut                    , cp  ),
-	SUBCMD_PROC(Bot, DistanceMax                , dm  ),
+	SUBCMD_PROC(Bot, DistancemaX                , dx  ),
+	SUBCMD_PROC(Bot, DistancemiN                , dn  ),
 	SUBCMD_PROC(Bot, Equip                      , e   ),
 	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia ),
 	SUBCMD_PROC(Bot, EquipRepairAll             , era ),
@@ -2103,6 +2135,8 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, sKillIgnoreMonsterClear    ,     ),
 	SUBCMD_PROC(Bot, sKillIgnoreMonsterTransport, kimt),
 	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
+	SUBCMD_PROC(Bot, sKillmaXCastTime           , kxct),
+	SUBCMD_PROC(Bot, sKillmemBers               , kb  ),
 	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
 	SUBCMD_PROC(Bot, sKillPlay                  , kp  ),
 	SUBCMD_PROC(Bot, sKillPlayClear             ,     ),
@@ -2266,8 +2300,11 @@ const std::unordered_map<
 // デフォルトの低ダメージ倍率。
 const int DEFAULT_SKILL_LOW_RATE = 100;
 
+// デフォルトの範囲スキルの発動条件となるメンバー数。
+const int DEFAULT_SKILL_MEMBERS = 3;
+
 // デフォルトの範囲スキルの発動条件となるモンスター数。
-const int DEFAULT_SKILL_MONSTERS = 3;
+const int DEFAULT_SKILL_MOBS = 3;
 
 // デフォルトのHPの供給を許可するHP率。
 const int DEFAULT_SUPPLY_HP_RATE = 100;

@@ -1201,7 +1201,10 @@ void ai_t::battler_use_skill() {
 								battler->attacked_long_range_attacker() ||
 								battler->attacked_via_devotion()
 							);
-						if (BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
+						int cas_tim = skill_castfix(battler->bl(), kid, klv, 0);
+						if (battler->check_sp(sp_rat) &&
+							cas_tim <= battler->get_max_cast_time() &&
+							BATTLE_MODE_FLAG_TABLE[battler->battle_mode()] & sk_use_pro.battle_mode_flag &&
 							(battler->is_primary() ? PF_TRUE : PF_FALSE) & sk_use_pro.primary_flag &&
 							((sk_use_pro.walking_flag & WF_TRUE &&
 									battler->is_walking()
@@ -1214,11 +1217,10 @@ void ai_t::battler_use_skill() {
 									(!att ||
 										!skill_get_castcancel(kid) ||
 										battler->is_no_castcancel() ||
-										skill_castfix(battler->bl(), kid, klv) <= battler->safe_cast_time()->get()
+										cas_tim <= battler->get_safe_cast_time()
 									)
 								)
-							) && battler->check_sp(sp_rat) &&
-							battler->can_use_skill(kid, klv)
+							) && battler->can_use_skill(kid, klv)
 						) {
 							CS_ENTER_N(print("kid=", kid));
 							sk_use_pro.func(this, kid, klv);
@@ -1341,7 +1343,8 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 	block_if* tar_ene = battler->target_enemy();
 	return [this, &pos, tar_ene] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
+		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_min_value() - 1) &&
+			check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
 			battler->can_reach_xy(x, y) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
@@ -1386,7 +1389,7 @@ ai_t::find_best_assist_pos() {
 				)
 			)
 		) {
-			int max_rad = std::max(std::min(battler->attack_range() + 1, battler->distance_max_value() + 1), 4);
+			int max_rad = std::max(std::min(battler->attack_range(), battler->distance_max_value()) + 1, 4);
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
@@ -1403,8 +1406,7 @@ ai_t::find_best_away_pos() {
 	if (tar_ene->target_battler() == battler)
 		pos = pos_t(0, battler->bl()->x, battler->bl()->y);
 	else {
-		int min_rad = std::min(tar_ene->away_distance(leader) + 1, battler->distance_max_value());
-		for (int rad = min_rad; rad <= battler->distance_max_value() + 1; ++rad)
+		for (int rad = tar_ene->away_distance(leader) + 1; rad <= battle_config.pybot_around_distance + 1; ++rad)
 			iterate_edge_bl(tar_ene->bl(), rad, find_away_pos_pred(pos));
 	}
 	return pos;
@@ -1434,7 +1436,7 @@ ai_t::find_best_tanut_pos() {
 			tar_ene->has_knockback_immune() ||
 			tar_ene->target_battler() != battler
 		) {
-			int max_rad = std::min(battler->attack_range() + 1, battler->distance_max_value() +1);
+			int max_rad = std::min(battler->attack_range(), battler->distance_max_value()) + 1;
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
@@ -1459,6 +1461,8 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 		bool ned_lea = tar_ene->need_to_leave();
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
+					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_min_value() - 1) &&
+					check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
 				) || (ned_lea &&
 					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())

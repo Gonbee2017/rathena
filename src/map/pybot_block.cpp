@@ -30,6 +30,7 @@ bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERR
 distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::distance_min_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -198,6 +199,7 @@ ptr<registry_t<int,int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTE
 int& member_if::char_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_skill member_if::combo_skill_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::distance_max() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::distance_min() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,distance_policy>>& member_if::distance_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,equipset_t>>& member_if::equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::fd() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -208,6 +210,7 @@ int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERR
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::first_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int member_if::get_skill_members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick member_if::get_skill_tail(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -221,6 +224,7 @@ void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ER
 void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::max_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -240,6 +244,7 @@ ptr<regnum_t<int>>& member_if::supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::skill_ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::skill_members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::skill_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& member_if::skill_tails() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::stand() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -273,6 +278,8 @@ int skill_user_if::check_skill(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool skill_user_if::collect_coins(int cou) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool skill_user_if::collect_spirits(int cou) {RAISE_NOT_IMPLEMENTED_ERROR;}
 s_skill* skill_user_if::find_skill(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int skill_user_if::get_max_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int skill_user_if::get_safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void skill_user_if::iterate_skill(yield_skill_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,int>>& skill_user_if::limit_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int skill_user_if::skill_point() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1248,6 +1255,12 @@ homun_impl::distance_max_value() {
 	return battle_config.pybot_around_distance;
 }
 
+// ホムンクルスの最小距離の値を取得する。
+int // 取得した最小距離の値。
+homun_impl::distance_min_value() {
+	return 0;
+}
+
 // ホムンクルスが存在するかを判定する。
 bool // 結果。
 homun_impl::exists() {
@@ -1261,6 +1274,12 @@ homun_impl::get_hold_mobs() {
 	int res = INT_MAX;
 	if (distance_policy_value() == DPV_AWAY) res = 0;
 	return res;
+}
+
+// ホムンクルスが使用する最大の詠唱時間を取得する。
+int // 取得した詠唱時間。
+homun_impl::get_max_cast_time() {
+	return INT_MAX;
 }
 
 // ホムンクルスのモンスターの高Defを取得する。
@@ -1291,6 +1310,12 @@ homun_impl::get_mob_high_hit() {
 int // 取得した高Mdef。
 homun_impl::get_mob_high_mdef() {
 	return master()->get_mob_high_mdef();
+}
+
+// ホムンクルスが安全に詠唱できる時間を取得する。
+int // 取得した詠唱時間。
+homun_impl::get_safe_cast_time() {
+	return 0;
 }
 
 // ホムンクルスのHPの供給を許可するHP率を取得する。
@@ -1819,6 +1844,19 @@ member_impl::distance_max_value() {
 	return val;
 }
 
+// 最小距離の登録値。
+ptr<regnum_t<int>>& member_impl::distance_min() {
+	return distance_min_;
+}
+
+// メンバーの最小距離の値を取得する。
+int // 取得した最小距離の値。
+member_impl::distance_min_value() {
+	int val = distance_min()->get();
+	if (!val) val = 1;
+	return val;
+}
+
 // 距離ポリシーのレジストリ。
 ptr<registry_t<int,distance_policy>>& member_impl::distance_policies() {
 	return distance_policies_;
@@ -1911,6 +1949,20 @@ member_impl::get_hold_mobs() {
 	return hold_mobs()->get();
 }
 
+// メンバーが使用する最大の詠唱時間を取得する。
+int // 取得した詠唱時間。
+member_impl::get_max_cast_time() {
+	int res = max_cast_time()->get();
+	if (!res) res = INT_MAX;
+	return res;
+}
+
+// メンバーが安全に詠唱できる時間を取得する。
+int // 取得した詠唱時間。
+member_impl::get_safe_cast_time() {
+	return safe_cast_time()->get();
+}
+
 // メンバーのモンスターの高Defを取得する。
 int // 取得した高Def。
 member_impl::get_mob_high_def() {
@@ -1951,11 +2003,19 @@ member_impl::get_mob_high_mdef() {
 	return res;
 }
 
+// 範囲スキルの発動条件となるメンバー数を取得する。
+int // 取得したメンバー数。
+member_impl::get_skill_members() {
+	int cou = skill_members()->get();
+	if (!cou) cou = DEFAULT_SKILL_MEMBERS;
+	return cou;
+}
+
 // 範囲スキルの発動条件となるモンスター数を取得する。
 int // 取得したモンスター数。
 member_impl::get_skill_mobs() {
 	int cou = skill_mobs()->get();
-	if (!cou) cou = DEFAULT_SKILL_MONSTERS;
+	if (!cou) cou = DEFAULT_SKILL_MOBS;
 	return cou;
 }
 
@@ -2220,6 +2280,11 @@ member_impl::magicpower_is_active() {
 		!mag_pow_ent->val4;
 }
 
+// 使用する最大の詠唱時間の登録値。
+ptr<regnum_t<int>>& member_impl::max_cast_time() {
+	return max_cast_time_;
+}
+
 // メンバーのインデックス。
 int& member_impl::member_index() {
 	return member_index_;
@@ -2364,6 +2429,11 @@ ptr<registry_t<e_skill,skill_equipset>>& member_impl::skill_equipsets() {
 // スキル無視モンスターのレジストリ。
 ptr<registry_t<int>>& member_impl::skill_ignore_mobs() {
 	return skill_ignore_mobs_;
+}
+
+// 範囲魔法スキルの発動メンバー数の登録値。
+ptr<regnum_t<int>>& member_impl::skill_members() {
+	return skill_members_;
 }
 
 // 範囲魔法スキルの発動モンスター数の登録値。
@@ -2910,8 +2980,10 @@ member_t::member_t(
 	leader() = lea;
 	berserk_rate() = construct<regnum_t<int>>(sd(), "pybot_berserk_rate");
 	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
+	distance_min() = construct<regnum_t<int>>(sd(), "pybot_distance_min");
 	hold_mobs() = construct<regnum_t<int>>(sd(), "pybot_hold_mobs");
 	loot() = construct<regnum_t<loot_modes>>(sd(), "pybot_loot");
+	max_cast_time() = construct<regnum_t<int>>(sd(), "pybot_max_cast_time");
 	mob_high_def() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def");
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
@@ -2919,6 +2991,7 @@ member_t::member_t(
 	mob_high_mdef() = construct<regnum_t<int>>(sd(), "pybot_mob_high_mdef");
 	name_ = std::string(sd()->status.name);
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");
+	skill_members() = construct<regnum_t<int>>(sd(), "pybot_skill_members");
 	skill_mobs() = construct<regnum_t<int>>(sd(), "pybot_skill_mobs");
 	supply_hp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_hp_rate");
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");

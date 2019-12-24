@@ -1254,6 +1254,7 @@ struct battler_if {
 	virtual distance_policy_values default_distance_policy_value();
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
 	virtual int distance_max_value();
+	virtual int distance_min_value();
 	virtual distance_policy_values& distance_policy_value();
 	virtual int get_hold_mobs();
 	virtual int get_mob_high_def();
@@ -1443,6 +1444,7 @@ struct member_if {
 	virtual int& char_id();
 	virtual e_skill combo_skill_id();
 	virtual ptr<regnum_t<int>>& distance_max();
+	virtual ptr<regnum_t<int>>& distance_min();
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies();
 	virtual ptr<registry_t<int,equipset_t>>& equipsets();
 	virtual ptr<registry_t<e_skill,skill_equipset>>& skill_equipsets();
@@ -1454,6 +1456,7 @@ struct member_if {
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
 	virtual ptr<registry_t<int>>& first_mobs();
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
+	virtual int get_skill_members();
 	virtual int get_skill_mobs();
 	virtual t_tick get_skill_tail(e_skill kid);
 	virtual ptr<regnum_t<int>>& hold_mobs();
@@ -1468,6 +1471,7 @@ struct member_if {
 	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr);
 	virtual ptr<regnum_t<loot_modes>>& loot();
 	virtual bool magicpower_is_active();
+	virtual ptr<regnum_t<int>>& max_cast_time();
 	virtual ptr<regnum_t<int>>& mob_high_def();
 	virtual ptr<regnum_t<int>>& mob_high_def_vit();
 	virtual ptr<regnum_t<int>>& mob_high_flee();
@@ -1483,6 +1487,7 @@ struct member_if {
 	virtual map_session_data*& sd();
 	virtual void sit();
 	virtual ptr<registry_t<int>>& skill_ignore_mobs();
+	virtual ptr<regnum_t<int>>& skill_members();
 	virtual ptr<regnum_t<int>>& skill_mobs();
 	virtual ptr<registry_t<e_skill,int>>& skill_tails();
 	virtual e_job substancial_job();
@@ -1530,6 +1535,8 @@ struct skill_user_if {
 	virtual bool collect_coins(int cou);
 	virtual bool collect_spirits(int cou);
 	virtual s_skill* find_skill(const std::string& nam);
+	virtual int get_max_cast_time();
+	virtual int get_safe_cast_time();
 	virtual void iterate_skill(yield_skill_func yie);
 	virtual ptr<registry_t<e_skill,int>>& limit_skills();
 	virtual s_skill* skill(e_skill kid);
@@ -1751,13 +1758,16 @@ struct homun_impl : virtual block_if {
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
 	virtual int distance_max_value() override;
+	virtual int distance_min_value() override;
 	virtual bool exists() override;
 	virtual int get_hold_mobs() override;
+	virtual int get_max_cast_time() override;
 	virtual int get_mob_high_def() override;
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
 	virtual int get_mob_high_mdef() override;
+	virtual int get_safe_cast_time() override;
 	virtual int get_supply_hp_rate() override;
 	virtual int get_supply_sp_rate() override;
 	virtual homun_data* hd() override;
@@ -1855,6 +1865,7 @@ struct member_impl : virtual block_if {
 	ptr<registry_t<int,int>> cart_auto_get_items_; // カート自動補充アイテムのレジストリ。
 	int char_id_;                                  // キャラクターID。
 	ptr<regnum_t<int>> distance_max_;              // 最大距離の登録値。
+	ptr<regnum_t<int>> distance_min_;              // 最小距離の登録値。
 	ptr<registry_t<int,distance_policy>>		   
 		distance_policies_;                        // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;    // 武具一式のレジストリ。
@@ -1868,6 +1879,7 @@ struct member_impl : virtual block_if {
 	block_if* leader_;                             // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;    // 制限スキルのレジストリ。
 	ptr<regnum_t<loot_modes>> loot_;               // 拾得モードの登録値。
+	ptr<regnum_t<int>> max_cast_time_;             // 使用する最大の詠唱時間の登録値。
 	int member_index_;                             // メンバーのインデックス。
 	ptr<regnum_t<int>> mob_high_def_;              // モンスターの高Defの登録値。
 	ptr<regnum_t<int>> mob_high_def_vit_;          // モンスターの高DefVitの登録値。
@@ -1890,6 +1902,7 @@ struct member_impl : virtual block_if {
 		skill_equipsets_;                          // スキル武具一式のレジストリ。
 	ptr<registry_t<int>> skill_ignore_mobs_;       // スキル無視モンスターのレジストリ。
 	ptr<regnum_t<int>> skill_low_rate_;            // 低ダメージ倍率の登録値。
+	ptr<regnum_t<int>> skill_members_;             // 範囲スキルの発動メンバー数の登録値。
 	ptr<regnum_t<int>> skill_mobs_;                // 範囲スキルの発動モンスター数の登録値。
 	ptr<regnum_t<e_element>> skill_seven_wind_;    // 暖かい風で選択する属性の登録値。
 	ptr<registry_t<e_skill,int>> skill_tails_;     // 掛け直し時間のレジストリ。
@@ -1910,6 +1923,8 @@ struct member_impl : virtual block_if {
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
 	virtual ptr<regnum_t<int>>& distance_max() override;
 	virtual int distance_max_value() override;
+	virtual int distance_min_value() override;
+	virtual ptr<regnum_t<int>>& distance_min() override;
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies() override;
 	virtual ptr<registry_t<int,equipset_t>>& equipsets() override;
 	virtual int& fd() override;
@@ -1921,11 +1936,14 @@ struct member_impl : virtual block_if {
 	virtual ptr<registry_t<int>>& first_mobs() override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_hold_mobs() override;
+	virtual int get_max_cast_time() override;
 	virtual int get_mob_high_def() override;
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
 	virtual int get_mob_high_mdef() override;
+	virtual int get_safe_cast_time() override;
+	virtual int get_skill_members() override;
 	virtual int get_skill_mobs() override;
 	virtual t_tick get_skill_tail(e_skill kid) override;
 	virtual int get_supply_hp_rate() override;
@@ -1953,6 +1971,7 @@ struct member_impl : virtual block_if {
 	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr) override;
 	virtual ptr<regnum_t<loot_modes>>& loot() override;
 	virtual bool magicpower_is_active() override;
+	virtual ptr<regnum_t<int>>& max_cast_time() override;
 	virtual int& member_index() override;
 	virtual ptr<regnum_t<int>>& mob_high_def() override;
 	virtual ptr<regnum_t<int>>& mob_high_def_vit() override;
@@ -1977,6 +1996,7 @@ struct member_impl : virtual block_if {
 	virtual s_skill* skill(e_skill kid) override;
 	virtual ptr<registry_t<e_skill,skill_equipset>>& skill_equipsets() override;
 	virtual ptr<registry_t<int>>& skill_ignore_mobs() override;
+	virtual ptr<regnum_t<int>>& skill_members() override;
 	virtual ptr<regnum_t<int>>& skill_mobs() override;
 	virtual int skill_point() override;
 	virtual ptr<registry_t<e_skill,int>>& skill_tails() override;
@@ -2531,7 +2551,8 @@ SUBCMD_FUNC(Bot, CartAutoGetClear);
 SUBCMD_FUNC(Bot, CartAutoGetTransport);
 SUBCMD_FUNC(Bot, CartGet);
 SUBCMD_FUNC(Bot, CartPut);
-SUBCMD_FUNC(Bot, DistanceMax);
+SUBCMD_FUNC(Bot, DistancemaX);
+SUBCMD_FUNC(Bot, DistancemiN);
 SUBCMD_FUNC(Bot, Equip);
 SUBCMD_FUNC(Bot, EquipIdentifyAll);
 SUBCMD_FUNC(Bot, EquipRepairAll);
@@ -2609,6 +2630,8 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster);
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear);
 SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport);
 SUBCMD_FUNC(Bot, sKillLimit);
+SUBCMD_FUNC(Bot, sKillmaXCastTime);
+SUBCMD_FUNC(Bot, sKillmemBers);
 SUBCMD_FUNC(Bot, sKillMonsters);
 SUBCMD_FUNC(Bot, sKillPlay);
 SUBCMD_FUNC(Bot, sKillPlayClear);
@@ -2905,7 +2928,8 @@ extern const int DEFAULT_MOB_HIGH_HIT;
 extern const int DEFAULT_MOB_HIGH_MDEF;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;
-extern const int DEFAULT_SKILL_MONSTERS;
+extern const int DEFAULT_SKILL_MEMBERS;
+extern const int DEFAULT_SKILL_MOBS;
 extern const int DEFAULT_SUPPLY_HP_RATE;
 extern const int DEFAULT_SUPPLY_SP_RATE;
 extern const std::array<std::string,DPV_MAX> DISTANCE_POLICY_VALUE_NAME_TABLE;

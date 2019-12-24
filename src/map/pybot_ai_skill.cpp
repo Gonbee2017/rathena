@@ -2117,7 +2117,7 @@ AI_SKILL_USE_FUNC(PR_REDEMPTIO) {
 			return mem->is_dead() &&
 				mem->party_id() == bot->party_id();
 		});
-		if (cou >= 3) bot->use_skill_self(kid, klv);
+		if (cou >= bot->get_skill_members()) bot->use_skill_self(kid, klv);
 	}
 }
 
@@ -2135,7 +2135,8 @@ AI_SKILL_USE_FUNC(PR_SANCTUARY) {
 				!mem->is_dead() &&
 				!mem->is_invincible();
 		});
-		if (cou >= 3) bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
+		if (cou >= bot->get_skill_members())
+			bot->use_skill_xy(kid, klv, bot->bl()->x, bot->bl()->y);
 	}
 }
 
@@ -3443,17 +3444,20 @@ AI_SKILL_USE_DEF(spp)(
 	int hp_rat // HP‚ÌŽl•ª—¦B
 ) {
 	return [hp_rat] (ai_t* ai, e_skill kid, int klv) {
-		int cou = std::count_if(ALL_RANGE(ai->members),
-			sift_block_layout(ai->bot, ai->bot, kid, klv, [hp_rat, kid] (block_if* mem) -> bool {
-				return !mem->is_dead() &&
-					!mem->is_hiding() &&
-					!mem->is_invincible() &&
-					!mem->reject_skills()->find(kid) &&
-					!mem->check_hp(hp_rat) &&
-					!mem->sc()->data[SC_BERSERK];
-			})
-		);
-		if (cou >= 3) ai->bot->use_skill_xy(kid, klv, ai->bot->bl()->x, ai->bot->bl()->y);
+		for (block_if* mem : ai->members) {
+			int cou = std::count_if(ALL_RANGE(ai->members),
+				sift_block_layout(ai->bot, mem, kid, klv, [hp_rat, kid] (block_if* mem) -> bool {
+					return !mem->is_dead() &&
+						!mem->is_hiding() &&
+						!mem->is_invincible() &&
+						!mem->reject_skills()->find(kid) &&
+						!mem->check_hp(hp_rat) &&
+						!mem->sc()->data[SC_BERSERK];
+				})
+			);
+			if (cou >= ai->bot->get_skill_members())
+				ai->bot->use_skill_xy(kid, klv, mem->bl()->x, mem->bl()->y);
+		}
 	};
 }
 

@@ -487,7 +487,11 @@ int64 skill_unit_ondamaged(struct skill_unit *unit,int64 damage);
 void skill_getareachar_skillunit_visibilty(struct skill_unit *su, enum send_target target);
 void skill_getareachar_skillunit_visibilty_single(struct skill_unit *su, struct block_list *bl);
 
-int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv);
+// [GonBee]
+// ÀÛ‚É‰r¥‚·‚é‚©‚ğ’Ç‰ÁB
+//int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv);
+int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv, int cast_flag = 1);
+
 int skill_castfix_sc(struct block_list *bl, double time, uint8 flag);
 #ifdef RENEWAL_CAST
 int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 skill_lv);
@@ -498,7 +502,7 @@ void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id);
 // Skill conditions check and remove [Inkfish]
 
 // [GonBee]
-// ÀÛ‚É‰r¥‚µ‚½‚©‚ğ’Ç‰ÁB
+// ÀÛ‚É‰r¥‚·‚é‚©‚ğ’Ç‰ÁB
 //bool skill_check_condition_castbegin(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
 //bool skill_check_condition_castend(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);
 bool skill_check_condition_castbegin(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv, int cast_flag = 1);

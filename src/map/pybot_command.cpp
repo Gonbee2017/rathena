@@ -270,18 +270,34 @@ SUBCMD_FUNC(Bot, CartPut) {
 }
 
 // モンスターとの最大距離を設定する。
-SUBCMD_FUNC(Bot, DistanceMax) {
+SUBCMD_FUNC(Bot, DistancemaX) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int dis = shift_arguments_then_parse_int(
 		args, print("距離"), 1, battle_config.pybot_around_distance
 	);
 	show_client(lea->fd(), print(
-		"「", mem->name(), "」はモンスターに対して最大",
-		dis, "セル以内に位置取ります。"
+		"「", mem->name(), "」はモンスターに対して",
+		dis, "セル以下に位置取ります。"
 	));
 	if (dis == battle_config.pybot_around_distance) dis = 0;
 	mem->distance_max()->set(dis);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// モンスターとの最小距離を設定する。
+SUBCMD_FUNC(Bot, DistancemiN) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int dis = shift_arguments_then_parse_int(
+		args, print("距離"), 1, battle_config.pybot_around_distance
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はモンスターに対して",
+		dis, "セル以上に位置取ります。"
+	));
+	if (dis == 1) dis = 0;
+	mem->distance_min()->set(dis);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
@@ -2512,6 +2528,41 @@ SUBCMD_FUNC(Bot, sKillLimit) {
 	skill_user_limit_skill(lea, args, shift_arguments_then_find_member(lea, args));
 }
 
+// 使用する最大の詠唱時間を設定する。
+SUBCMD_FUNC(Bot, sKillmaXCastTime) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cas_tim = shift_arguments_then_parse_int(
+		args, print("詠唱時間"), 0, INT_MAX
+	);
+	if (cas_tim)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はスキルの実詠唱時間が", cas_tim, "ミリ秒以下なら使用します。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はスキルの実詠唱時間がどんなに長くても使用します。"
+		));
+	mem->max_cast_time()->set(cas_tim);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// 範囲スキルの発動条件となるメンバー数を設定する。
+SUBCMD_FUNC(Bot, sKillmemBers) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = shift_arguments_then_parse_int(
+		args, print("メンバー数"), 1,	INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の範囲スキルの発動条件となるメンバー数を",
+		cou, "人にしました。"
+	));
+	if (cou == DEFAULT_SKILL_MEMBERS) cou = 0;
+	mem->skill_members()->set(cou);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // 範囲スキルの発動条件となるモンスター数を設定する。
 SUBCMD_FUNC(Bot, sKillMonsters) {
 	CS_ENTER;
@@ -2523,7 +2574,7 @@ SUBCMD_FUNC(Bot, sKillMonsters) {
 		"「", mem->name(), "」の範囲スキルの発動条件となるモンスター数を",
 		cou, "匹にしました。"
 	));
-	if (cou == DEFAULT_SKILL_MONSTERS) cou = 0;
+	if (cou == DEFAULT_SKILL_MOBS) cou = 0;
 	mem->skill_mobs()->set(cou);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }

@@ -16819,7 +16819,11 @@ struct skill_condition skill_get_requirement(struct map_session_data* sd, uint16
 /*==========================================
  * Does cast-time reductions based on dex, item bonuses and config setting
  *------------------------------------------*/
-int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
+
+// [GonBee]
+//int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
+int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv, int cast_flag) {
+
 	double time = skill_get_cast(skill_id, skill_lv);
 
 	nullpo_ret(bl);
@@ -16871,7 +16875,14 @@ int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
 				if(!(flag&2))
 					time -= time * 50 / 100;
 				// Foresight counter gets reduced even if the skill is not affected by it
-				if ((--sc->data[SC_MEMORIZE]->val2) <= 0)
+
+				// [GonBee]
+				// ŽÀÛ‚É‰r¥‚·‚é‚Æ‚«‚Íƒƒ‚ƒ‰ƒCƒY‚ðŒ¸‚ç‚·B
+				//if ((--sc->data[SC_MEMORIZE]->val2) <= 0)
+				if (cast_flag &&
+					(--sc->data[SC_MEMORIZE]->val2) <= 0
+				)
+
 					status_change_end(bl, SC_MEMORIZE, INVALID_TIMER);
 			}
 		}
