@@ -1280,6 +1280,9 @@
 12151,Bullet_Case_Silver,シルバーバレットケース,2,2,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 13201,500; },{},{}
 12183,Holy_Arrow_Quiver,聖なる矢筒,2,2,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 1772,500; },{},{}
 12225,Sweet_Candy_Striper,甘いスティックキャンディ,2,20,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ pet 1; },{},{}
+12319,Strawberry_Cake,ルーンミッドガッツ産おやつ,2,0,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_ATKPOTION,600000,5; sc_start SC_MATKPOTION,600000,5; },{},{}
+12320,Pineapple_Juice,シュバルツバルド産おやつ,2,0,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_INCHIT,600000,10; sc_start SC_INCFLEE2,600000,20; },{},{}
+12321,Spicy_Sandwich,アルナベルツ産おやつ,2,0,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_INCCRI,600000,7; },{},{}
 12422,HP_Increase_PotionS,HP増加ポーション(小),2,100,,20,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start2 SC_PROMOTE_HEALTH_RESERCH,1800000,1,1; percentheal 1,0; },{},{}
 12423,HP_Increase_PotionM,HP増加ポーション(中),2,100,,40,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start2 SC_PROMOTE_HEALTH_RESERCH,1800000,1,2; percentheal 2,0; },{},{}
 12424,HP_Increase_PotionL,HP増加ポーション(大),2,100,,80,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start2 SC_PROMOTE_HEALTH_RESERCH,1800000,1,3; percentheal 5,0; },{},{}
