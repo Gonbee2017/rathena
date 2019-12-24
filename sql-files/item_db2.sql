@@ -94,7 +94,17 @@ CREATE TABLE `item_db2` (
 #REPLACE INTO `item_db2` VALUES (2338,'Wedding_Dress','Wedding Dress',4,43000,NULL,500,NULL,0,NULL,0,0xFFFFFFFE,7,0,16,NULL,0,1,0,NULL,'setoption Option_Wedding,1;','setoption Option_Wedding,0;');
 #REPLACE INTO `item_db2` VALUES (7170,'Tuxedo','Tuxedo',4,43000,NULL,10,NULL,0,NULL,0,0xFFFFFFFE,7,1,16,NULL,0,1,0,NULL,'setoption Option_Wedding,1;','setoption Option_Wedding,0;');
 
-REPLACE INTO `item_db2` VALUES (505, 'Blue_Potion', '青ポーション', 0, 5000, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal 0,rand(40,60); }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (501, 'Red_Potion', '赤ポーション', 0, 50, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(45,65),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (502, 'Orange_Potion', '紅ポーション', 0, 200, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(105,145),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (503, 'Yellow_Potion', '黄ポーション', 0, 550, NULL, 30, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(175,235),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (504, 'White_Potion', '白ポーション', 0, 1200, NULL, 30, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(325,405),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (505, 'Blue_Potion', '青ポーション', 0, 5000, NULL, 30, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal 0,rand(40,60); }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (506, 'Green_Potion', '緑ポーション', 0, 40, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (507, 'Red_Herb', '赤ハーブ', 0, 18, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(18,28),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (508, 'Yellow_Herb', '黄ハーブ', 0, 40, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(38,58),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (509, 'White_Herb', '白ハーブ', 0, 120, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(75,115),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (510, 'Blue_Herb', '青ハーブ', 0, 60, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal 0,rand(15,30); }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (511, 'Green_Herb', '緑ハーブ', 0, 10, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ sc_end SC_Poison; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (523, 'Holy_Water', '聖水', 0, 20, NULL, 30, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ sc_end SC_Curse; sc_end SC_ChangeUndead; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (591, 'Caviar_Pancake', 'キャビアパンケーキ', 0, 0, NULL, 150, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(325,405),rand(40,60); sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Curse; sc_end SC_Hallucination; sc_end SC_Bleeding; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (592, 'Jam_Pancake', 'ジャムパンケーキ', 0, 0, NULL, 150, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(325,405),rand(40,60); sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Curse; sc_end SC_Hallucination; sc_end SC_Bleeding; }', '{}', '{}');

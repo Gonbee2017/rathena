@@ -7,16 +7,16 @@ CREATE TABLE `cp_itemdesc` (
 
 
 
-REPLACE INTO `cp_itemdesc` VALUES(501, '赤ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを45ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">7</font>');
-REPLACE INTO `cp_itemdesc` VALUES(502, '赤ハーブと黄ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを105ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">10</font>');
-REPLACE INTO `cp_itemdesc` VALUES(503, '黄ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを175ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">13</font>');
-REPLACE INTO `cp_itemdesc` VALUES(504, '白ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを325ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">15</font>');
-REPLACE INTO `cp_itemdesc` VALUES(505, '青ハーブをすり下ろして作った精神力回復剤。<font color="000088">SPを60ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">5</font>');
-REPLACE INTO `cp_itemdesc` VALUES(507, '傷の治療に効き目があると言う大事な薬草。少量のHPを回復する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">3</font>');
-REPLACE INTO `cp_itemdesc` VALUES(508, '傷の治療に大きな効き目があると言う大事な薬草。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">5</font>');
-REPLACE INTO `cp_itemdesc` VALUES(509, '傷の治療にかなり高い効き目があると言う大事な薬草。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">7</font>');
-REPLACE INTO `cp_itemdesc` VALUES(510, '精神を再充電できる特異な香りを持っている、大事な薬草。<font color="000088">少量のSPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">7</font>');
-REPLACE INTO `cp_itemdesc` VALUES(511, '数々の毒を消してくれる薬草。 <font color="000088">毒</font>を治療する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">3</font>');
+REPLACE INTO `cp_itemdesc` VALUES(501, '赤ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを45ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
+REPLACE INTO `cp_itemdesc` VALUES(502, '赤ハーブと黄ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを105ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
+REPLACE INTO `cp_itemdesc` VALUES(503, '黄ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを175ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">3</font>');
+REPLACE INTO `cp_itemdesc` VALUES(504, '白ハーブをすり下ろして作った体力回復剤。<font color="000088">HPを325ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">3</font>');
+REPLACE INTO `cp_itemdesc` VALUES(505, '青ハーブをすり下ろして作った精神力回復剤。<font color="000088">SPを60ほど回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">3</font>');
+REPLACE INTO `cp_itemdesc` VALUES(507, '傷の治療に効き目があると言う大事な薬草。少量のHPを回復する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(508, '傷の治療に大きな効き目があると言う大事な薬草。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
+REPLACE INTO `cp_itemdesc` VALUES(509, '傷の治療にかなり高い効き目があると言う大事な薬草。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
+REPLACE INTO `cp_itemdesc` VALUES(510, '精神を再充電できる特異な香りを持っている、大事な薬草。<font color="000088">少量のSPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
+REPLACE INTO `cp_itemdesc` VALUES(511, '数々の毒を消してくれる薬草。 <font color="000088">毒</font>を治療する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(512, '甘くていい香りの果物。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
 REPLACE INTO `cp_itemdesc` VALUES(513, '甘くて美味しい異国の果物。<font color="000088">少量のHPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
 REPLACE INTO `cp_itemdesc` VALUES(514, 'いい香りで酸っぱい味の果物。<font color="000088">少量のSPを回復</font>する事ができる。<br/><font color="ffffff">_</font><br/>重量 : <font color="777777">2</font>');
@@ -6898,7 +6898,7 @@ REPLACE INTO `cp_itemdesc` VALUES(4709, 'Str + 10');
 REPLACE INTO `cp_itemdesc` VALUES(4717, 'Int + 8');
 REPLACE INTO `cp_itemdesc` VALUES(4718, 'Int + 9');
 REPLACE INTO `cp_itemdesc` VALUES(4719, 'Int + 10');
-REPLACE INTO `cp_itemdesc` VALUES(506, '緑ハーブを<br/>すり下ろして作った治療剤。<br/>―――――――――――――<br/><font color="000088">毒・沈黙・暗黒・<br/>混乱・幻覚を回復。</font><br/>―――――――――――――<br/>重量 : <font color="777777">7</font>');
+REPLACE INTO `cp_itemdesc` VALUES(506, '緑ハーブを<br/>すり下ろして作った治療剤。<br/>―――――――――――――<br/><font color="000088">毒・沈黙・暗黒・<br/>混乱・幻覚を回復。</font><br/>―――――――――――――<br/>重量 : <font color="777777">2</font>');
 REPLACE INTO `cp_itemdesc` VALUES(11516, 'ジュースやスムージーにして<br/>楽しめる、非常に栄養価が<br/>高い果実。<br/>健康にとても良さそうだ。<br/>―――――――――――――<br/><font color="000088">少量のHPを回復。</font><br/>―――――――――――――<br/><font color="000088">毒・沈黙・暗黒・<br/>混乱・幻覚を回復。</font><br/>―――――――――――――<br/>重量 : <font color="777777">2</font>');
 REPLACE INTO `cp_itemdesc` VALUES(15171, 'エンジェリングの加護を<br/>受けた煌びやかなスーツ。<br/>着用者以外にも<br/>幸福が訪れるとか……。<br/>―――――――――――――<br/>Mdef + 20<br/>―――――――――――――<br/>MaxHP + 1000<br/>MaxSP + 100<br/>―――――――――――――<br/>BaseLv100以上の時、<br/>BaseLvが1上がる度に追加で<br/>MaxHP + 30<br/>MaxSP + 5<br/>―――――――――――――<br/>[エンジェリングスーツ]の<br/>精錬値が7以上の時、追加で<br/>魔法攻撃で<br/>与えるダメージ + 10%<br/>[エンジェリングスーツ]の<br/>精錬値が8以上の時、追加で<br/>[ウェポンパーフェクション]<br/>Lv5使用可能<br/>[エンジェリングスーツ]の<br/>精錬値が9以上の時、追加で<br/>鎧に聖属性を付与する<br/>―――――――――――――<br/>系列 : <font color="777777">鎧</font><br/>防御 : <font color="777777">77</font><br/>重量 : <font color="777777">40</font><br/>要求レベル : <font color="777777">90</font><br/>装備 : <font color="777777">ノービス系</font>');
 REPLACE INTO `cp_itemdesc` VALUES(15172, 'ゴーストリングの加護を<br/>受けたスーツ。<br/>着用者の存在が<br/>認知できないほど<br/>影が薄くなるとか……。<br/>―――――――――――――<br/>Mdef + 20<br/>―――――――――――――<br/>MaxHP + 1000<br/>MaxSP + 100<br/>―――――――――――――<br/>BaseLv100以上の時、<br/>BaseLvが1上がる度に追加で<br/>MaxHP + 50<br/>MaxSP + 3<br/>―――――――――――――<br/>[ゴーストリングスーツ]の<br/>精錬値が7以上の時、追加で<br/>物理攻撃で<br/>与えるダメージ + 10%<br/>[ゴーストリングスーツ]の<br/>精錬値が8以上の時、追加で<br/>[アドレナリンラッシュ]Lv5<br/>使用可能<br/>[ゴーストリングスーツ]の<br/>精錬値が9以上の時、追加で<br/>鎧に念属性を付与する<br/>―――――――――――――<br/>系列 : <font color="777777">鎧</font><br/>防御 : <font color="777777">77</font><br/>重量 : <font color="777777">40</font><br/>要求レベル : <font color="777777">90</font><br/>装備 : <font color="777777">ノービス系</font>');
