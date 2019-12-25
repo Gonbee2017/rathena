@@ -1531,8 +1531,9 @@ AI_SKILL_USE_FUNC_T(MO_EXTREMITYFIST, combo) {
 	block_if* tar_ene = bot->target_enemy();
 	skill_condition req = skill_get_requirement(bot->sd(), kid, klv);
 	if (!bot->skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, tar_ene->md()->mob_id)) &&
-		(bot->sc()->data[SC_BLADESTOP] ||
-			bot->combo_skill_id() == CH_CHAINCRUSH ||
+		((bot->sc()->data[SC_BLADESTOP] &&
+				bot->sc()->data[SC_BLADESTOP]->val1 == 5
+			) || bot->combo_skill_id() == CH_CHAINCRUSH ||
 			(!bot->check_skill(CH_CHAINCRUSH) &&
 				(bot->combo_skill_id() == CH_TIGERFIST ||
 					(!bot->check_skill(CH_TIGERFIST) &&
