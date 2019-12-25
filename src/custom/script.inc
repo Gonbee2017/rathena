@@ -417,6 +417,16 @@ BUILDIN_FUNC(getpetintimate) {
 }
 
 // [GonBee]
+// ギルドマスターを変更する。
+// i      ギルドID。
+// i      新しいギルドマスターのキャラクターID。
+// 戻り値 成否。
+BUILDIN_FUNC(guildchangegm2) {
+	script_pushint(st, guild_gm_change(script_getnum(st, 2), script_getnum(st, 3)));
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // キャラクターがアクティブかを判定する。
 // i キャラクターID。
 // 戻り値 結果。
