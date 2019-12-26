@@ -57,6 +57,7 @@ void ai_t::leader_organize() {
 			)
 		) members.push_back(mem);
 	}
+	dead = false;
 	leader->resurrectionable() = false;
 	leader->sp_suppliable() = false;
 	for (block_if* mem : members) {
@@ -72,6 +73,8 @@ void ai_t::leader_organize() {
 			pets.push_back(mem->pet().get());
 			blocks[mem->pet()->bl()->id] = mem->pet().get();
 		}
+		dead = dead ||
+			mem->is_dead();
 		leader->resurrectionable() = leader->resurrectionable() ||
 			(!mem->is_dead() &&
 				mem->check_skill(ALL_RESURRECTION)
@@ -303,13 +306,14 @@ void ai_t::leader_collect() {
 // リーダーがターゲットを決める。
 void ai_t::leader_target() {
 	CS_ENTER;
-	auto rel_pol = [] (
+	auto rel_pol = [this] (
 		block_if* bat,
 		block_if* ene,
 		distance_policy_values* dis_pol_val,
 		normal_attack_policy_values* nor_att_pol_val
 	) {
 		bat->load_policy(ene->md()->mob_id, dis_pol_val, nor_att_pol_val);
+		if (dead) bat->load_policy(MM_DEAD, dis_pol_val, nor_att_pol_val);
 		if (!bat->check_hp(4)) {
 			if (!bat->check_hp(3)) {
 				if (!bat->check_hp(2)) {
@@ -613,8 +617,7 @@ void ai_t::bot_reload_equipset() {
 	if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
 		equip_pos equ = equip_pos(0);
 		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
-		if (bot->battle_mode() == BM_NONE) bot->load_equipset(MM_REST, &equ);
-		else {
+		if (bot->battle_mode() != BM_NONE) {
 			int pre_mid = 0;
 			for (block_if* ene : *enemies) {
 				if (ene->md()->mob_id == pre_mid) continue;
@@ -623,6 +626,7 @@ void ai_t::bot_reload_equipset() {
 			}
 			block_if* tar_ene = bot->target_enemy();
 			bot->load_equipset(tar_ene->md()->mob_id, &equ);
+			if (dead) bot->load_equipset(MM_DEAD, &equ);
 			if (!bot->check_hp(4)) {
 				if (!bot->check_hp(3)) {
 					if (!bot->check_hp(2)) {
@@ -660,6 +664,9 @@ void ai_t::bot_reload_equipset() {
 			bot->load_equipset(MM_SIZE + tar_ene->size_(), &equ);
 			bot->load_equipset(MM_BASE, &equ);
 			bot->load_equipset(MM_BACKUP, &equ);
+		} else {
+			if (dead) bot->load_equipset(MM_DEAD, &equ);
+			bot->load_equipset(MM_REST, &equ);
 		}
 		bot->last_reloaded_equipset_tick() = now;
 	}
@@ -907,6 +914,7 @@ void ai_t::bot_play_skill() {
 			}
 			block_if* tar_ene = bot->target_enemy();
 			bot->load_play_skill(tar_ene->md()->mob_id, &kid);
+			if (dead) bot->load_play_skill(MM_DEAD, &kid);
 			if (!bot->check_hp(4)) {
 				if (!bot->check_hp(3)) {
 					if (!bot->check_hp(2)) {
@@ -943,7 +951,10 @@ void ai_t::bot_play_skill() {
 			bot->load_play_skill(MM_ELEMENT + tar_ene->element(), &kid);
 			bot->load_play_skill(MM_SIZE + tar_ene->size_(), &kid);
 			bot->load_play_skill(MM_BASE, &kid);
-		} else bot->load_play_skill(MM_REST, &kid);
+		} else {
+			if (dead) bot->load_play_skill(MM_DEAD, &kid);
+			bot->load_play_skill(MM_REST, &kid);
+		}
 		if (kid &&
 			!bot->sc()->data[SC_DANCING]
 		) {

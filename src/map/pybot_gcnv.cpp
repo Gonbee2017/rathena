@@ -3742,6 +3742,7 @@ const std::unordered_map<
 	{MM_HP_DECLINE3 , "HP低下3"   },
 	{MM_HP_DECLINE2 , "HP低下2"   },
 	{MM_HP_DECLINE1 , "HP低下1"   },
+	{MM_DEAD        , "死亡"      },
 };
 
 // モンスターが使用すると近接になるスキルのセット。

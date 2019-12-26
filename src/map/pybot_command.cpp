@@ -2666,12 +2666,6 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 			) throw command_error{print(
 				"「", sk_des, "」は演奏スキルではありません。"
 			)};
-			if (mid == MM_REST &&
-				skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL
-			) throw command_error{print(
-				"「", META_MONSTER_NAMES.at(MM_REST),
-				"」用演奏スキルに合奏スキルは登録できません。"
-			)};
 			auto ps = construct<play_skill>(mid, e_skill(kid));
 			mem->play_skills()->register_(mid, ps);
 			show_client(lea->fd(), print(

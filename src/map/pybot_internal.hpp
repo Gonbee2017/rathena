@@ -581,6 +581,7 @@ enum meta_mobs {
 	MM_HP_DECLINE3  =   201, // HP低下3。
 	MM_HP_DECLINE2  =   202, // HP低下2。
 	MM_HP_DECLINE1  =   203, // HP低下1。
+	MM_DEAD         =   210, // 死亡。
 	MM_INDIVIDUAL   =   500, // 個別。
 	MM_CAUTION      = 10000, // 警戒。
 };
@@ -848,18 +849,19 @@ struct ai_t {
 		block_if* // ブロック。		             
 	> blocks;                                // ブロックのマップ。
 	block_if* bot;                           // Bot。
-	std::vector<block_if*> team_enemies;     // チーム全体の敵モンスターのベクタ。
-	std::vector<std::vector<block_if*>>
-		member_enemies;                      // メンバーの敵モンスターのベクタ。
+	bool dead;                               // 誰かが死亡しているか。
 	std::vector<block_if*>* enemies;         // バトラー個別の敵モンスターのベクタ。
 	std::vector<flooritem_data*> flooritems; // ドロップアイテムのベクタ。
 	bool gvg;                                // 砦マップか。
 	block_if* homun;                         // ホムンクルス。
 	std::vector<block_if*> homuns;           // ホムンクルスのベクタ。
 	block_if* leader;                        // リーダー。
+	std::vector<std::vector<block_if*>>
+		member_enemies;                      // メンバーの敵モンスターのベクタ。
 	std::vector<block_if*> members;          // メンバーのベクタ。
 	block_if* pet;                           // ペット。
 	std::vector<block_if*> pets;             // ペットのベクタ。
+	std::vector<block_if*> team_enemies;     // チーム全体の敵モンスターのベクタ。
 	std::vector<npc_data*> warp_portals;     // ワープポータルのベクタ。
 
 	static TIMER_FUNC(timer_func);
