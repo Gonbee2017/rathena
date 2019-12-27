@@ -855,7 +855,6 @@ struct ai_t {
 	block_if* homun;                         // ホムンクルス。
 	std::vector<block_if*> homuns;           // ホムンクルスのベクタ。
 	block_if* leader;                        // リーダー。
-	bool member_dead;                        // メンバーが死亡しているか。
 	std::vector<std::vector<block_if*>>
 		member_enemies;                      // メンバーの敵モンスターのベクタ。
 	std::vector<block_if*> members;          // メンバーのベクタ。
@@ -1419,6 +1418,7 @@ struct leader_if {
 	virtual ptr<registry_t<int,coords_t>>& journals();
 	virtual t_tick& last_heavy_tick();
 	virtual int& last_summoned_id();
+	virtual bool& member_dead();
 	virtual std::vector<block_if*>& members();
 	virtual t_tick next_heavy_tick();
 	virtual ptr<registry_t<int>>& not_ignore_items();
@@ -1816,6 +1816,7 @@ struct leader_impl : virtual block_if {
 	ptr<registry_t<int,coords_t>> journals_;          // ジャーナルのレジストリ。
 	t_tick last_heavy_tick_;                          // 最後に重たいコマンドを実行したチック。
 	int last_summoned_id_;                            // 最後に枝召喚したID。
+	bool member_dead_;                                // メンバーが死亡しているか。
 	std::vector<block_if*> members_;                  // メンバーのベクタ。
 	ptr<registry_t<int>> not_ignore_items_;           // 非無視アイテムのレジストリ。
 	std::stringstream output_buffer_;                 // 出力バッファ。
@@ -1842,6 +1843,7 @@ struct leader_impl : virtual block_if {
 	virtual ptr<registry_t<int,coords_t>>& journals();
 	virtual t_tick& last_heavy_tick() override;
 	virtual int& last_summoned_id() override;
+	virtual bool& member_dead() override;
 	virtual std::vector<block_if*>& members() override;
 	virtual t_tick next_heavy_tick() override;
 	virtual ptr<registry_t<int>>& not_ignore_items() override;

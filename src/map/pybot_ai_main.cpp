@@ -57,7 +57,7 @@ void ai_t::leader_organize() {
 			)
 		) members.push_back(mem);
 	}
-	member_dead = false;
+	bool mem_dea = false;
 	leader->resurrectionable() = false;
 	leader->sp_suppliable() = false;
 	for (block_if* mem : members) {
@@ -73,7 +73,7 @@ void ai_t::leader_organize() {
 			pets.push_back(mem->pet().get());
 			blocks[mem->pet()->bl()->id] = mem->pet().get();
 		}
-		member_dead = member_dead ||
+		mem_dea = mem_dea ||
 			mem->is_dead();
 		leader->resurrectionable() = leader->resurrectionable() ||
 			(!mem->is_dead() &&
@@ -85,11 +85,14 @@ void ai_t::leader_organize() {
 				mem->check_skill(PF_HPCONVERSION)
 			);
 	}
+	if (mem_dea != leader->member_dead()) {
+		for (const auto& bot : leader->bots())
+			bot->last_reloaded_equipset_tick() = 0;
+		leader->member_dead() = mem_dea;
+	}
 	bool arr_wal_exi = wall_exists(&leader->center(), battle_config.pybot_around_distance);
 	for (block_if* bat : battlers) {
 		bat->around_wall_exists() = arr_wal_exi;
-		bat->target_enemy() = nullptr;
-		bat->battle_mode() = BM_NONE;
 		bat->attacked_enemies().clear();
 		bat->attacked_short_range_attacker() = nullptr;
 		bat->attacked_short_range_attackers() = 0;
@@ -313,7 +316,7 @@ void ai_t::leader_target() {
 		normal_attack_policy_values* nor_att_pol_val
 	) {
 		bat->load_policy(ene->md()->mob_id, dis_pol_val, nor_att_pol_val);
-		if (member_dead) bat->load_policy(MM_MEMBER_DEAD, dis_pol_val, nor_att_pol_val);
+		if (leader->member_dead()) bat->load_policy(MM_MEMBER_DEAD, dis_pol_val, nor_att_pol_val);
 		if (!bat->check_hp(4)) {
 			if (!bat->check_hp(3)) {
 				if (!bat->check_hp(2)) {
@@ -373,11 +376,12 @@ void ai_t::leader_target() {
 	}
 	for (block_if* bat : battlers) {
 		enemies = &member_enemies[bat->member_index()];
+		block_if* tar_ene = nullptr;
+		battle_modes bat_mod = BM_NONE;
 		if (!enemies->empty() &&
 			!bat->is_dead() &&
 			bat->bl()->m == leader->center().m
 		) {
-			block_if* tar_ene = nullptr;
 			if (bat == leader) {
 				if (bat->is_attacking())
 					tar_ene = find_block<enemy_impl>(bat->ud()->target);
@@ -396,7 +400,7 @@ void ai_t::leader_target() {
 						ene->attacked_battlers().empty()
 					) {
 						tar_ene = ene;
-						bat->battle_mode() = BM_TAUNT;
+						bat_mod = BM_TAUNT;
 						bat->distance_policy_value() = dis_pol_val;
 						bat->normal_attack_policy_value() = nor_att_pol_val;
 						break;
@@ -413,8 +417,8 @@ void ai_t::leader_target() {
 							!tar_ene->is_berserk()
 						)
 					)
-				) bat->battle_mode() = BM_TAUNT;
-				else bat->battle_mode() = BM_ASSIST;
+				) bat_mod = BM_TAUNT;
+				else bat_mod = BM_ASSIST;
 				distance_policy_values dis_pol_val = DPV_PENDING;
 				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
 				rel_pol(bat, tar_ene, &dis_pol_val, &nor_att_pol_val);
@@ -424,8 +428,12 @@ void ai_t::leader_target() {
 			if (bat->distance_policy_value() == DPV_CLOSE ||
 				bat->normal_attack_policy_value() == NAPV_CONTINUOUS
 			) tar_ene->attacked_battlers().push_back(bat);
-			bat->target_enemy() = tar_ene;
 		}
+		bat->target_enemy() = tar_ene;
+		if (bat_mod != bat->battle_mode() &&
+			dynamic_cast<bot_impl*>(bat)
+		) bat->last_reloaded_equipset_tick() = 0;
+		bat->battle_mode() = bat_mod;
 	}
 }
 
@@ -614,10 +622,10 @@ void ai_t::bot_cart_auto_get() {
 // Bot‚ª•‹ïˆêŽ®‚ðƒŠƒ[ƒh‚·‚éB
 void ai_t::bot_reload_equipset() {
 	CS_ENTER;
-	if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
-		equip_pos equ = equip_pos(0);
-		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
-		if (bot->battle_mode() != BM_NONE) {
+	equip_pos equ = equip_pos(0);
+	if (bot->battle_mode() != BM_NONE) {
+		if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
+			for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
 			int pre_mid = 0;
 			for (block_if* ene : *enemies) {
 				if (ene->md()->mob_id == pre_mid) continue;
@@ -626,7 +634,7 @@ void ai_t::bot_reload_equipset() {
 			}
 			block_if* tar_ene = bot->target_enemy();
 			bot->load_equipset(tar_ene->md()->mob_id, &equ);
-			if (member_dead) bot->load_equipset(MM_MEMBER_DEAD, &equ);
+			if (leader->member_dead()) bot->load_equipset(MM_MEMBER_DEAD, &equ);
 			if (!bot->check_hp(4)) {
 				if (!bot->check_hp(3)) {
 					if (!bot->check_hp(2)) {
@@ -664,10 +672,12 @@ void ai_t::bot_reload_equipset() {
 			bot->load_equipset(MM_SIZE + tar_ene->size_(), &equ);
 			bot->load_equipset(MM_BASE, &equ);
 			bot->load_equipset(MM_BACKUP, &equ);
-		} else {
-			if (member_dead) bot->load_equipset(MM_MEMBER_DEAD, &equ);
-			bot->load_equipset(MM_REST, &equ);
+			bot->last_reloaded_equipset_tick() = now;
 		}
+	} else if (!bot->last_reloaded_equipset_tick()) {
+		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
+		if (leader->member_dead()) bot->load_equipset(MM_MEMBER_DEAD, &equ);
+		bot->load_equipset(MM_REST, &equ);
 		bot->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -914,7 +924,7 @@ void ai_t::bot_play_skill() {
 			}
 			block_if* tar_ene = bot->target_enemy();
 			bot->load_play_skill(tar_ene->md()->mob_id, &kid);
-			if (member_dead) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
+			if (leader->member_dead()) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
 			if (!bot->check_hp(4)) {
 				if (!bot->check_hp(3)) {
 					if (!bot->check_hp(2)) {
@@ -952,7 +962,7 @@ void ai_t::bot_play_skill() {
 			bot->load_play_skill(MM_SIZE + tar_ene->size_(), &kid);
 			bot->load_play_skill(MM_BASE, &kid);
 		} else {
-			if (member_dead) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
+			if (leader->member_dead()) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
 			bot->load_play_skill(MM_REST, &kid);
 		}
 		if (kid &&
@@ -1243,7 +1253,8 @@ void ai_t::battler_use_skill() {
 						auto usi = battler->using_skills().find(kid);
 						if (usi != battler->using_skills().end()) {
 							battler->using_skills().erase(usi);
-							battler->last_reloaded_equipset_tick() = 0;
+							if (battler->skill_equipsets()->find(kid))
+								battler->last_reloaded_equipset_tick() = 0;
 						}
 					}
 				}

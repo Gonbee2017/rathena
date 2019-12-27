@@ -175,6 +175,7 @@ ptr<registry_t<int>>& leader_if::ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,coords_t>>& leader_if::journals() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& leader_if::last_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& leader_if::last_summoned_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool& leader_if::member_dead() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::vector<block_if*>& leader_if::members() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick leader_if::next_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1640,6 +1641,11 @@ t_tick& leader_impl::last_heavy_tick() {
 // 最後に枝召喚したID。
 int& leader_impl::last_summoned_id() {
 	return last_summoned_id_;
+}
+
+// メンバーが死亡しているか。
+bool& leader_impl::member_dead() {
+	return member_dead_;
 }
 
 // メンバーのベクタ。
@@ -3159,6 +3165,7 @@ leader_t::leader_t(
 	attack_target() = 0;
 	last_heavy_tick() = 0;
 	last_summoned_id() = 0;
+	member_dead() = false;
 	passive() = false;
 	stay() = false;
 	rush() = construct<regnum_t<rush_modes>>(sd(), "pybot_rush");

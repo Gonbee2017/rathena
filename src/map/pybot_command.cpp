@@ -318,6 +318,7 @@ SUBCMD_FUNC(Bot, Equip) {
 				"「", mem->name(), "」は", cou, "個の武具の装備を解除しました。"
 			));
 			clif_emotion(mem->bl(), ET_SCRATCH);
+			mem->last_reloaded_equipset_tick() = now;
 		}
 	} else {
 		std::string itm_nam = shift_arguments(args);
@@ -339,6 +340,7 @@ SUBCMD_FUNC(Bot, Equip) {
 					"「", mem->name(), "」は「", itm_str, "」の装備を解除しました。"
 				));
 				clif_emotion(mem->bl(), ET_SCRATCH);
+				mem->last_reloaded_equipset_tick() = now;
 			}
 		} else {
 			int equ = idb->equip;
