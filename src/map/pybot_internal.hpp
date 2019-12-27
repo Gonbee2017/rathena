@@ -581,7 +581,7 @@ enum meta_mobs {
 	MM_HP_DECLINE3  =   201, // HP低下3。
 	MM_HP_DECLINE2  =   202, // HP低下2。
 	MM_HP_DECLINE1  =   203, // HP低下1。
-	MM_DEAD         =   210, // 死亡。
+	MM_MEMBER_DEAD  =   210, // メンバー死亡。
 	MM_INDIVIDUAL   =   500, // 個別。
 	MM_CAUTION      = 10000, // 警戒。
 };
@@ -849,13 +849,13 @@ struct ai_t {
 		block_if* // ブロック。		             
 	> blocks;                                // ブロックのマップ。
 	block_if* bot;                           // Bot。
-	bool dead;                               // 誰かが死亡しているか。
 	std::vector<block_if*>* enemies;         // バトラー個別の敵モンスターのベクタ。
 	std::vector<flooritem_data*> flooritems; // ドロップアイテムのベクタ。
 	bool gvg;                                // 砦マップか。
 	block_if* homun;                         // ホムンクルス。
 	std::vector<block_if*> homuns;           // ホムンクルスのベクタ。
 	block_if* leader;                        // リーダー。
+	bool member_dead;                        // メンバーが死亡しているか。
 	std::vector<std::vector<block_if*>>
 		member_enemies;                      // メンバーの敵モンスターのベクタ。
 	std::vector<block_if*> members;          // メンバーのベクタ。
