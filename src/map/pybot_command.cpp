@@ -357,6 +357,7 @@ SUBCMD_FUNC(Bot, Equip) {
 					"「", mem->name(), "」は「", itm_str, "」を装備しました。"
 				));
 				clif_emotion(mem->bl(), ET_HNG);
+				mem->last_reloaded_equipset_tick() = now;
 			}
 		}
 	}
