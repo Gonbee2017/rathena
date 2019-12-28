@@ -3376,7 +3376,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 			if (mem->char_id == lea->char_id()) lea->members().push_back(lea);
 			else
 				query_login_data(mem->char_id,
-					[lea, mem] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
+					[lea, mem, lim] (int bot_aid, int bot_sex, int bot_gid, int unb_tim, int sta, const std::string& nam) {
 						if (!bot_can_enter_server(bot_aid))
 							show_client(lea->fd(), print("「", nam, "」は現在ログインできません。"));
 						else if (unb_tim ||
@@ -3389,7 +3389,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 									"「", nam, "」はBot中に死亡しました。\n"
 									"再びログインできるようになるまであと", print_tick(bot_res_tic + 1000), "です。\n"
 								));
-							else {
+							else if (lea->bots().size() < lim) {
 								map_session_data* bot_sd = bot_login(lea, bot_aid, mem->char_id, bot_sex, bot_gid);
 								ptr<block_if> bot = construct<bot_t>(bot_sd, lea);
 								lea->bots().push_back(bot);
@@ -3398,7 +3398,6 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 						}
 					}
 				);
-			if (lea->members().size() >= 1 + lim) break;
 		}
 	} else lea->members().push_back(lea);
 	lea->update_bot_indices();
@@ -3709,13 +3708,13 @@ bot_limit(
 			sd->status.class_ == JOB_NINJA
 		) && pc_is_maxjoblv(sd)
 	) ++lim;
-	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str()) >= 4) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str()) >= 4) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str()) >= 4) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()) >= 4)
+	if (pc_readreg2(sd, (CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str()) >= 4 &&
+		pc_readreg2(sd, (CAS_TRI_PRO + "_" + GEF_FILD13).c_str()) >= 4 &&
+		pc_readreg2(sd, (CAS_TRI_PRO + "_" + PAY_GLD   ).c_str()) >= 4 &&
+		pc_readreg2(sd, (CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()) >= 4
 	) lim += 5 - job_lim;
-	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + SCH_GLD   ).c_str()) >= 4) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()) >= 4)
+	if (pc_readreg2(sd, (CAS_TRI_PRO + "_" + SCH_GLD   ).c_str()) >= 4 &&
+		pc_readreg2(sd, (CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()) >= 4
 	) ++lim;
 	return lim;
 }
