@@ -3370,6 +3370,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	if (!args.empty()) num = shift_arguments_then_parse_int(args, "ƒ`[ƒ€‚Ì”Ô†", 0, TEAM_MAX - 1);
 	team_t* tea = lea->teams()->find(num);
 	lea->members().clear();
+	int lim = bot_limit(lea->sd());
 	if (tea) {
 		for (auto mem : tea->members) {
 			if (mem->char_id == lea->char_id()) lea->members().push_back(lea);
@@ -3397,6 +3398,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 						}
 					}
 				);
+			if (lea->members().size() >= lim) break;
 		}
 	} else lea->members().push_back(lea);
 	lea->update_bot_indices();
