@@ -1482,7 +1482,10 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			battler->check_skill(RG_BACKSTAP) &&
 			tan &&
 			tan->battle_index() < battler->battle_index();
-		bool ned_lea = tar_ene->need_to_leave();
+		bool ned_lea = tar_ene->need_to_leave() &&
+			(leader->is_dead() ||
+				!tar_ene->check_range_blxy(tar_ene->bl(), leader->bl()->x, leader->bl()->y, tar_ene->attack_range())
+			);
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
 					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_min_value() - 1) &&

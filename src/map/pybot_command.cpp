@@ -3707,13 +3707,13 @@ bot_limit(
 			sd->status.class_ == JOB_NINJA
 		) && pc_is_maxjoblv(sd)
 	) ++lim;
-	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str())) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str())) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str())) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()))
+	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ALDE_GLD  ).c_str()) >= 4) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + GEF_FILD13).c_str()) >= 4) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PAY_GLD   ).c_str()) >= 4) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()) >= 4)
 	) lim += 5 - job_lim;
-	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + SCH_GLD   ).c_str())) &&
-		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()))
+	if (pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + SCH_GLD   ).c_str()) >= 4) &&
+		pc_readglobalreg(sd, add_str((CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()) >= 4)
 	) ++lim;
 	return lim;
 }

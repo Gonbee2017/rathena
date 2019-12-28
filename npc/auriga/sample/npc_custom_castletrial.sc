@@ -1487,9 +1487,11 @@ OnInit:
 		}
 		if (dupvar(CASTLE_TRIAL_PROG) == 0) callsub Require;
 		if (dupvar(CASTLE_TRIAL_PROG) == 1) callsub Pass;
-		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Capture;
+		if (dupvar(CASTLE_TRIAL_PROG) >= 2 &&
+			dupvar(CASTLE_TRIAL_PROG) < 4
+		) callsub Capture;
 		if (dupvar(CASTLE_TRIAL_PROG) == 2) callsub Trial;
-		if (dupvar(CASTLE_TRIAL_PROG) == 3) callsub TrialGuildDungeon;
+		if (dupvar(CASTLE_TRIAL_PROG) >= 3) callsub TrialGuildDungeon;
 	} else callsub Abort;
 	callsub Bye;
 OnInit:
@@ -1654,18 +1656,13 @@ Capture:
 	set .@cas_maps_siz, getarraysize(dupvar(.cas_maps$));
 	for (set .@i, 0; .@i < .@cas_maps_siz; ++.@i) {
 		set .@cas_map$, dupele(.cas_maps$, .@i);
-		if (getd("CAPTURED_" + .@cas_map$)) {
-			set .@cap, 1;
-			break;
-		}
+		if (getd("CAPTURED_" + .@cas_map$)) ++.@cap;
 	}
-	if (.@cap) {
+	if (dupvar(CASTLE_TRIAL_PROG) == 2 &&
+		.@cap
+	) {
 		mes "[" + dupvar(.pri_nam$) + "]";
 		mes "‚¨‚¨ccÔ‚ðU—ª‚µ‚½‚Ì‚Å‚·‚ËB";
-		mes "‚ ‚È‚½‚Ì‚æ‚¤‚È–`Œ¯ŽÒ‚ªŒ»‚ê‚é‚Ì‚ð";
-		mes "‚Ç‚ê‚Ù‚Ç‘Ò‚¿–]‚ñ‚¾‚±‚Æ‚©cc";
-		next;
-		mes "[" + dupvar(.pri_nam$) + "]";
 		mes "¡‚±‚»‚ ‚È‚½‚ª^4040FFƒMƒ‹ƒhƒ_ƒ“ƒWƒ‡ƒ“^000000‚É";
 		mes "‘«‚ð“¥‚Ý“ü‚ê‚é‚±‚Æ‚ð‹–‚µ‚Ü‚µ‚å‚¤B";
 		next;
@@ -1680,6 +1677,20 @@ Capture:
 		mes "";
 		next;
 		set dupvar(CASTLE_TRIAL_PROG), 3;
+	}
+	if (.@cap == 5) {
+		mes "[" + dupvar(.pri_nam$) + "]";
+		mes "‚Ü‚³‚©‚·‚×‚Ä‚ÌÔ‚ðU—ª‚µ‚½‚Æcc";
+		mes "‚ ‚È‚½‚Ì‚æ‚¤‚È–`Œ¯ŽÒ‚ªŒ»‚ê‚é‚Ì‚ð";
+		mes "‚Ç‚ê‚Ù‚Ç‘Ò‚¿–]‚ñ‚¾‚±‚Æ‚©cc";
+		next;
+		set dupvar(CASTLE_TRIAL_PROG), 4;
+		specialeffect2 EF_ITEM_LIGHT;
+		mes "[" + dupvar(.pri_nam$) + "]";
+		mes "‰ä‚ªŽå^4040FF" + dupvar(.god_nam$) + "^000000‚æB";
+		mes "‚±‚ÌŽÒ‚Í^‚Ì—E‹C‚ðŽ‚Á‚Ä‚¢‚Ü‚·B";
+		mes "‚Ç‚¤‚©j•Ÿ‚ð‚¨Žö‚¯‚­‚¾‚³‚¢B";
+		next;
 	}
 	return;
 TrialGuildDungeon:
