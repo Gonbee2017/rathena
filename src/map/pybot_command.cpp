@@ -3398,7 +3398,7 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 						}
 					}
 				);
-			if (lea->members().size() >= lim) break;
+			if (lea->members().size() >= 1 + lim) break;
 		}
 	} else lea->members().push_back(lea);
 	lea->update_bot_indices();
