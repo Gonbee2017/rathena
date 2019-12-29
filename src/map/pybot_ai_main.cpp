@@ -225,7 +225,7 @@ void ai_t::leader_collect() {
 		block_if* tar_bat = find_block<battler_impl>(ene->md()->target_id);
 		ene->target_battler() = tar_bat;
 		if (tar_bat &&
-			!tar_bat->mob_is_ignore(ene->md()->mob_id)
+			!tar_bat->mob_is_ignore(ene)
 		) {
 			tar_bat->attacked_enemies().push_back(ene);
 			if (ene->is_short_range_attacker()) {
@@ -309,67 +309,19 @@ void ai_t::leader_collect() {
 // リーダーがターゲットを決める。
 void ai_t::leader_target() {
 	CS_ENTER;
-	auto rel_pol = [this] (
-		block_if* bat,
-		block_if* ene,
-		distance_policy_values* dis_pol_val,
-		normal_attack_policy_values* nor_att_pol_val
-	) {
-		bat->load_policy(ene->md()->mob_id, dis_pol_val, nor_att_pol_val);
-		if (leader->member_dead()) bat->load_policy(MM_MEMBER_DEAD, dis_pol_val, nor_att_pol_val);
-		if (!bat->check_hp(4)) {
-			if (!bat->check_hp(3)) {
-				if (!bat->check_hp(2)) {
-					if (!bat->check_hp(1)) {
-						bat->load_policy(MM_HP_DECLINE1, dis_pol_val, nor_att_pol_val);
-					}
-					bat->load_policy(MM_HP_DECLINE2, dis_pol_val, nor_att_pol_val);
-				}
-				bat->load_policy(MM_HP_DECLINE3, dis_pol_val, nor_att_pol_val);
-			}
-			bat->load_policy(MM_HP_DECLINE4, dis_pol_val, nor_att_pol_val);
-		}
-		if (!bat->check_sp(4)) {
-			if (!bat->check_sp(3)) {
-				if (!bat->check_sp(2)) {
-					if (!bat->check_sp(1)) {
-						bat->load_policy(MM_SP_DECLINE1, dis_pol_val, nor_att_pol_val);
-					}
-					bat->load_policy(MM_SP_DECLINE2, dis_pol_val, nor_att_pol_val);
-				}
-				bat->load_policy(MM_SP_DECLINE3, dis_pol_val, nor_att_pol_val);
-			}
-			bat->load_policy(MM_SP_DECLINE4, dis_pol_val, nor_att_pol_val);
-		}
-		if (ene->hit() >= bat->get_mob_high_hit()) bat->load_policy(MM_HIGH_HIT, dis_pol_val, nor_att_pol_val);
-		if (ene->flee() >= bat->get_mob_high_flee()) bat->load_policy(MM_HIGH_FLEE, dis_pol_val, nor_att_pol_val);
-		if (ene->def() + ene->vit() >= bat->get_mob_high_def_vit()) bat->load_policy(MM_HIGH_DEF_VIT, dis_pol_val, nor_att_pol_val);
-		if (ene->def() >= bat->get_mob_high_def()) bat->load_policy(MM_HIGH_DEF, dis_pol_val, nor_att_pol_val);
-		if (ene->mdef() >= bat->get_mob_high_mdef()) bat->load_policy(MM_HIGH_MDEF, dis_pol_val, nor_att_pol_val);
-		if (ene->is_flora()) bat->load_policy(MM_FLORA, dis_pol_val, nor_att_pol_val);
-		if (ene->is_great(bat->leader())) bat->load_policy(MM_GREAT, dis_pol_val, nor_att_pol_val);
-		if (ene->is_boss()) bat->load_policy(MM_BOSS, dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_RACE + ene->race(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_ELEMENT + ene->element(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_SIZE + ene->size_(), dis_pol_val, nor_att_pol_val);
-		bat->load_policy(MM_BASE, dis_pol_val, nor_att_pol_val);
-		if (*dis_pol_val == DPV_PENDING) *dis_pol_val = bat->default_distance_policy_value();
-		if (*nor_att_pol_val == NAPV_PENDING) *nor_att_pol_val = bat->default_normal_attack_policy_value();
-	};
-
 	member_enemies.clear();
 	member_enemies.resize(leader->members().size());
 	for (block_if* mem : members) {
 		enemies = &member_enemies[mem->member_index()];
 		for (block_if* ene : team_enemies) {
-			if (!mem->mob_is_ignore(ene->md()->mob_id))
+			if (!mem->mob_is_ignore(ene))
 				enemies->push_back(ene);
 		}
 		std::stable_sort(
 			ALL_RANGE(*enemies),
 			[mem] (block_if* len, block_if* ren) -> bool {
-				bool lfi = mem->mob_is_first(len->md()->mob_id);
-				bool rfi = mem->mob_is_first(ren->md()->mob_id);
+				bool lfi = mem->mob_is_first(len);
+				bool rfi = mem->mob_is_first(ren);
 				return lfi > rfi;
 			}
 		);
@@ -389,7 +341,12 @@ void ai_t::leader_target() {
 				for (block_if* ene : *enemies) {
 					distance_policy_values dis_pol_val = DPV_PENDING;
 					normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-					rel_pol(bat, ene, &dis_pol_val, &nor_att_pol_val);
+					bat->iterate_meta_mobs(
+						nullptr,
+						ene,
+						[bat, &dis_pol_val, &nor_att_pol_val] (int mid)
+						{bat->load_policy(mid, &dis_pol_val, &nor_att_pol_val);}
+					);
 					if ((dis_pol_val == DPV_CLOSE ||
 							nor_att_pol_val == NAPV_CONTINUOUS
 						) && !ene->is_flora() &&
@@ -410,7 +367,7 @@ void ai_t::leader_target() {
 			if (!tar_ene) {
 				tar_ene = enemies->front();
 				if (leader->rush()->get() != RM_NONE ||
-					bat->mob_is_first(tar_ene->md()->mob_id) ||
+					bat->mob_is_first(tar_ene) ||
 					((battlers.front()->distance_policy_value() == DPV_AWAY ||
 							bat->is_primary()
 						) && (tar_ene->target_battler() ||
@@ -421,7 +378,12 @@ void ai_t::leader_target() {
 				else bat_mod = BM_ASSIST;
 				distance_policy_values dis_pol_val = DPV_PENDING;
 				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-				rel_pol(bat, tar_ene, &dis_pol_val, &nor_att_pol_val);
+				bat->iterate_meta_mobs(
+					nullptr,
+					tar_ene,
+					[bat, &dis_pol_val, &nor_att_pol_val] (int mid)
+					{bat->load_policy(mid, &dis_pol_val, &nor_att_pol_val);}
+				);
 				bat->distance_policy_value() = dis_pol_val;
 				bat->normal_attack_policy_value() = nor_att_pol_val;
 			}
@@ -626,58 +588,20 @@ void ai_t::bot_reload_equipset() {
 	if (bot->battle_mode() != BM_NONE) {
 		if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
 			for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
-			int pre_mid = 0;
-			for (block_if* ene : *enemies) {
-				if (ene->md()->mob_id == pre_mid) continue;
-				bot->load_equipset(MM_CAUTION + ene->md()->mob_id, &equ);
-				pre_mid = ene->md()->mob_id;
-			}
-			block_if* tar_ene = bot->target_enemy();
-			bot->load_equipset(tar_ene->md()->mob_id, &equ);
-			if (leader->member_dead()) bot->load_equipset(MM_MEMBER_DEAD, &equ);
-			if (!bot->check_hp(4)) {
-				if (!bot->check_hp(3)) {
-					if (!bot->check_hp(2)) {
-						if (!bot->check_hp(1)) {
-							bot->load_equipset(MM_HP_DECLINE1, &equ);
-						}
-						bot->load_equipset(MM_HP_DECLINE2, &equ);
-					}
-					bot->load_equipset(MM_HP_DECLINE3, &equ);
-				}
-				bot->load_equipset(MM_HP_DECLINE4, &equ);
-			}
-			if (!bot->check_sp(4)) {
-				if (!bot->check_sp(3)) {
-					if (!bot->check_sp(2)) {
-						if (!bot->check_sp(1)) {
-							bot->load_equipset(MM_SP_DECLINE1, &equ);
-						}
-						bot->load_equipset(MM_SP_DECLINE2, &equ);
-					}
-					bot->load_equipset(MM_SP_DECLINE3, &equ);
-				}
-				bot->load_equipset(MM_SP_DECLINE4, &equ);
-			}
-			if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_equipset(MM_HIGH_HIT, &equ);
-			if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_equipset(MM_HIGH_FLEE, &equ);
-			if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_equipset(MM_HIGH_DEF_VIT, &equ);
-			if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_equipset(MM_HIGH_DEF, &equ);
-			if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_equipset(MM_HIGH_MDEF, &equ);
-			if (tar_ene->is_flora()) bot->load_equipset(MM_FLORA, &equ);
-			if (tar_ene->is_great(leader)) bot->load_equipset(MM_GREAT, &equ);
-			if (tar_ene->is_boss()) bot->load_equipset(MM_BOSS, &equ);
-			bot->load_equipset(MM_RACE + tar_ene->race(), &equ);
-			bot->load_equipset(MM_ELEMENT + tar_ene->element(), &equ);
-			bot->load_equipset(MM_SIZE + tar_ene->size_(), &equ);
-			bot->load_equipset(MM_BASE, &equ);
-			bot->load_equipset(MM_BACKUP, &equ);
+			bot->iterate_meta_mobs(
+				enemies,
+				bot->target_enemy(),
+				[this, &equ] (int mid) {bot->load_equipset(mid, &equ);}
+			);
 			bot->last_reloaded_equipset_tick() = now;
 		}
 	} else if (!bot->last_reloaded_equipset_tick()) {
 		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
-		if (leader->member_dead()) bot->load_equipset(MM_MEMBER_DEAD, &equ);
-		bot->load_equipset(MM_REST, &equ);
+		bot->iterate_meta_mobs(
+			nullptr,
+			nullptr,
+			[this, &equ] (int mid) {bot->load_equipset(mid, &equ);}
+		);
 		bot->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -715,15 +639,14 @@ void ai_t::bot_use_item() {
 	}
 }
 
-// Botがドロップアイテムを収集する。
+// Botがドロップアイテムを拾得する。
 void ai_t::bot_loot() {
 	CS_ENTER;
 	if ((bot->loot()->get() == LM_YES_ALWAYS ||
 			(bot->loot()->get() == LM_YES_REST &&
 				bot->battle_mode() == BM_NONE
 			)
-		) && !bot->sc()->data[SC_WEIGHT90] &&
-		pc_inventoryblank(bot->sd())
+		) && pc_inventoryblank(bot->sd())
 	) {
 		if (bot->check_skill(BS_GREED) &&
 			bot->check_sp(2) &&
@@ -743,16 +666,14 @@ void ai_t::bot_greed() {
 		auto coods_to_ind = [this, ran, edg_len] (int x, int y) -> int {
 			return (ran + y - leader->center().y) * edg_len + (ran + x - leader->center().x);
 		};
-		int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 		for (flooritem_data* fit : flooritems) {
 			const TimerData* td = get_timer(fit->cleartimer);
 			if (td &&
 				td->func
 			) {
-				int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
 				if (pc_can_takeitem(bot->sd(), fit) &&
 					bot->can_reach_bl(&fit->bl) &&
-					wei <= wei_rem
+					!bot->over_loot(itemdb_weight(fit->item.nameid) * fit->item.amount)
 				) {
 					for (int rel_y = -2; rel_y <= 2; ++rel_y) {
 						for (int rel_x = -2; rel_x <= 2; ++rel_x) {
@@ -812,19 +733,17 @@ void ai_t::bot_pickup() {
 	CS_ENTER;
 	flooritem_data* nea_fit = nullptr;
 	int nea_dis;
-	int wei_rem = bot->sd()->max_weight - bot->sd()->weight;
 	for (flooritem_data* fit : flooritems) {
 		const TimerData* td = get_timer(fit->cleartimer);
 		if (td &&
 			td->func
 		) {
 			int dis = distance_client_bl(&fit->bl, bot->bl());
-			int wei = itemdb_weight(fit->item.nameid) * fit->item.amount;
 			if ((!nea_fit ||
 					dis < nea_dis
 				) && pc_can_takeitem(bot->sd(), fit) &&
 				bot->can_reach_bl(&fit->bl) &&
-				wei <= wei_rem
+				!bot->over_loot(itemdb_weight(fit->item.nameid) * fit->item.amount)
 			) {
 				nea_fit = fit;
 				nea_dis = dis;
@@ -915,56 +834,11 @@ void ai_t::bot_play_skill() {
 		!bot->is_paralysis()
 	) {
 		e_skill kid = e_skill(0);
-		if (bot->battle_mode() != BM_NONE) {
-			int pre_mid = 0;
-			for (block_if* ene : *enemies) {
-				if (ene->md()->mob_id == pre_mid) continue;
-				bot->load_play_skill(MM_CAUTION + ene->md()->mob_id, &kid);
-				pre_mid = ene->md()->mob_id;
-			}
-			block_if* tar_ene = bot->target_enemy();
-			bot->load_play_skill(tar_ene->md()->mob_id, &kid);
-			if (leader->member_dead()) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
-			if (!bot->check_hp(4)) {
-				if (!bot->check_hp(3)) {
-					if (!bot->check_hp(2)) {
-						if (!bot->check_hp(1)) {
-							bot->load_play_skill(MM_HP_DECLINE1, &kid);
-						}
-						bot->load_play_skill(MM_HP_DECLINE2, &kid);
-					}
-					bot->load_play_skill(MM_HP_DECLINE3, &kid);
-				}
-				bot->load_play_skill(MM_HP_DECLINE4, &kid);
-			}
-			if (!bot->check_sp(4)) {
-				if (!bot->check_sp(3)) {
-					if (!bot->check_sp(2)) {
-						if (!bot->check_sp(1)) {
-							bot->load_play_skill(MM_SP_DECLINE1, &kid);
-						}
-						bot->load_play_skill(MM_SP_DECLINE2, &kid);
-					}
-					bot->load_play_skill(MM_SP_DECLINE3, &kid);
-				}
-				bot->load_play_skill(MM_SP_DECLINE4, &kid);
-			}
-			if (tar_ene->hit() >= bot->get_mob_high_hit()) bot->load_play_skill(MM_HIGH_HIT, &kid);
-			if (tar_ene->flee() >= bot->get_mob_high_flee()) bot->load_play_skill(MM_HIGH_FLEE, &kid);
-			if (tar_ene->def() + tar_ene->vit() >= bot->get_mob_high_def_vit()) bot->load_play_skill(MM_HIGH_DEF_VIT, &kid);
-			if (tar_ene->def() >= bot->get_mob_high_def()) bot->load_play_skill(MM_HIGH_DEF, &kid);
-			if (tar_ene->mdef() >= bot->get_mob_high_mdef()) bot->load_play_skill(MM_HIGH_MDEF, &kid);
-			if (tar_ene->is_flora()) bot->load_play_skill(MM_FLORA, &kid);
-			if (tar_ene->is_great(leader)) bot->load_play_skill(MM_GREAT, &kid);
-			if (tar_ene->is_boss()) bot->load_play_skill(MM_BOSS, &kid);
-			bot->load_play_skill(MM_RACE + tar_ene->race(), &kid);
-			bot->load_play_skill(MM_ELEMENT + tar_ene->element(), &kid);
-			bot->load_play_skill(MM_SIZE + tar_ene->size_(), &kid);
-			bot->load_play_skill(MM_BASE, &kid);
-		} else {
-			if (leader->member_dead()) bot->load_play_skill(MM_MEMBER_DEAD, &kid);
-			bot->load_play_skill(MM_REST, &kid);
-		}
+		bot->iterate_meta_mobs(
+			enemies,
+			bot->target_enemy(),
+			[this, &kid] (int mid) {bot->load_play_skill(mid, &kid);}
+		);
 		if (kid &&
 			!bot->sc()->data[SC_DANCING]
 		) {
@@ -1203,8 +1077,14 @@ void ai_t::battler_use_skill() {
 			e_skill kid = sk_use_pro.skill_id;
 			if (kid == PB_FIRST) {
 				if (battler->battle_mode() != BM_NONE) {
-					e_skill* fir_kid = battler->first_skills()->find(battler->target_enemy()->md()->mob_id);
-					if (fir_kid) kid = *fir_kid;
+					e_skill* fir_kid = nullptr;
+					bot->iterate_meta_mobs(
+						nullptr,
+						bot->target_enemy(),
+						[this, &fir_kid] (int mid) {
+							if (!fir_kid) fir_kid = battler->first_skills()->find(mid);
+						}
+					);
 				}
 			}
 			if (kid != PB_FIRST) {
@@ -1367,8 +1247,8 @@ yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 	block_if* tar_ene = battler->target_enemy();
 	return [this, &pos, tar_ene] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_min_value() - 1) &&
-			check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
+		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->min_distance_value() - 1) &&
+			check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 			battler->can_reach_xy(x, y) &&
 			tar_ene->check_line_xy(x, y) &&
 			!check_stuck(x, y) &&
@@ -1413,7 +1293,7 @@ ai_t::find_best_assist_pos() {
 				)
 			)
 		) {
-			int max_rad = std::max(std::min(battler->attack_range(), battler->distance_max_value()) + 1, 4);
+			int max_rad = std::max(std::min(battler->attack_range(), battler->max_distance_value()) + 1, 4);
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
@@ -1460,7 +1340,7 @@ ai_t::find_best_tanut_pos() {
 			tar_ene->has_knockback_immune() ||
 			tar_ene->target_battler() != battler
 		) {
-			int max_rad = std::min(battler->attack_range(), battler->distance_max_value()) + 1;
+			int max_rad = std::min(battler->attack_range(), battler->max_distance_value()) + 1;
 			pos_t wai_pos = tar_ene->waiting_position();
 			for (int rad = 1; rad <= max_rad; ++rad)
 				iterate_edge_xy(tar_ene->bl()->m, wai_pos.x, wai_pos.y, rad, find_close_pos_pred(pos));
@@ -1488,8 +1368,8 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			);
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
-					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_min_value() - 1) &&
-					check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->distance_max_value()) &&
+					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->min_distance_value() - 1) &&
+					check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
 				) || (ned_lea &&
 					!tar_ene->check_range_blxy(tar_ene->bl(), x, y, tar_ene->attack_range())

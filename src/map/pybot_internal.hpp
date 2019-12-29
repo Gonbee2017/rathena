@@ -770,6 +770,13 @@ using yield_bl_func = std::function<
 	)
 >;
 
+// メタモンスター獲得ハンドラ。
+using yield_meta_mob_func = std::function<
+	void(
+		int // メタモンスターID。
+	)
+>;
+
 // スキルユニット獲得ハンドラ。
 using yield_skill_unit_func = std::function<
 	int( // 獲得したスキルユニット数。
@@ -1254,8 +1261,8 @@ struct battler_if {
 	virtual bool check_use_taunt_skill(block_if* ene);
 	virtual distance_policy_values default_distance_policy_value();
 	virtual normal_attack_policy_values default_normal_attack_policy_value();
-	virtual int distance_max_value();
-	virtual int distance_min_value();
+	virtual int max_distance_value();
+	virtual int min_distance_value();
 	virtual distance_policy_values& distance_policy_value();
 	virtual int get_hold_mobs();
 	virtual int get_mob_high_def();
@@ -1273,11 +1280,12 @@ struct battler_if {
 	virtual bool is_no_gemstone();
 	virtual bool is_primary();
 	virtual bool is_wall_side();
+	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie);
 	virtual block_if*& leader();
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val);
 	virtual int& member_index();
-	virtual bool mob_is_first(int mid);
-	virtual bool mob_is_ignore(int mid);
+	virtual bool mob_is_first(block_if* ene);
+	virtual bool mob_is_ignore(block_if* ene);
 	virtual bool no_knockback();
 	virtual normal_attack_policy_values& normal_attack_policy_value();
 	virtual int party_id();
@@ -1445,8 +1453,6 @@ struct member_if {
 	virtual ptr<registry_t<int,int>>& cart_auto_get_items();
 	virtual int& char_id();
 	virtual e_skill combo_skill_id();
-	virtual ptr<regnum_t<int>>& distance_max();
-	virtual ptr<regnum_t<int>>& distance_min();
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies();
 	virtual ptr<registry_t<int,equipset_t>>& equipsets();
 	virtual ptr<registry_t<e_skill,skill_equipset>>& skill_equipsets();
@@ -1456,6 +1462,7 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual bool find_skill_ignore_mobs(e_skill kid, block_if* ene);
 	virtual ptr<registry_t<int>>& first_mobs();
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
 	virtual int get_skill_members();
@@ -1472,14 +1479,19 @@ struct member_if {
 	virtual void load_play_skill(int mid, e_skill* kid);
 	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr);
 	virtual ptr<regnum_t<loot_modes>>& loot();
+	virtual ptr<regnum_t<int>>& loot_limit();
+	virtual int loot_limit_value();
 	virtual bool magicpower_is_active();
 	virtual ptr<regnum_t<int>>& max_cast_time();
+	virtual ptr<regnum_t<int>>& max_distance();
+	virtual ptr<regnum_t<int>>& min_distance();
 	virtual ptr<regnum_t<int>>& mob_high_def();
 	virtual ptr<regnum_t<int>>& mob_high_def_vit();
 	virtual ptr<regnum_t<int>>& mob_high_flee();
 	virtual ptr<regnum_t<int>>& mob_high_hit();
 	virtual ptr<regnum_t<int>>& mob_high_mdef();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
+	virtual bool over_loot(int wei_inc);
 	virtual ptr<block_if>& pet();
 	virtual ptr<registry_t<int,play_skill>>& play_skills();
 	virtual ptr<registry_t<int,int>>& recover_hp_items();
@@ -1618,6 +1630,7 @@ struct battler_impl : virtual block_if {
 	virtual distance_policy_values& distance_policy_value() override;
 	virtual bool& is_best_pos() override;
 	virtual bool is_primary() override;
+	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie) override;
 	virtual normal_attack_policy_values& normal_attack_policy_value() override;
 	virtual int skill_ratio(e_skill kid, int klv, block_if* tar) override;
 	void start_walking();
@@ -1702,6 +1715,7 @@ struct enemy_impl : virtual block_if {
 struct general_impl : virtual block_if {
 	virtual void act_end() override;
 	virtual int attack_element_ratio(block_if* tar, e_element ele) override;
+	virtual int attack_range() override;
 	virtual bool can_act() override;
 	virtual bool can_move() override;
 	virtual bool can_reach_bl(block_list* bl_, bool eas = true) override;
@@ -1739,7 +1753,6 @@ struct general_impl : virtual block_if {
 	virtual bool on_water() override;
 	virtual e_race race() override;
 	virtual e_race2 race2() override;
-	virtual int attack_range() override;
 	virtual status_change* sc() override;
 	virtual t_tick sc_rest(sc_type typ) override;
 	virtual size size_() override;
@@ -1759,8 +1772,8 @@ struct homun_impl : virtual block_if {
 	virtual int check_skill(e_skill kid) override;
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
-	virtual int distance_max_value() override;
-	virtual int distance_min_value() override;
+	virtual int max_distance_value() override;
+	virtual int min_distance_value() override;
 	virtual bool exists() override;
 	virtual int get_hold_mobs() override;
 	virtual int get_max_cast_time() override;
@@ -1784,8 +1797,8 @@ struct homun_impl : virtual block_if {
 	virtual void iterate_skill(yield_skill_func yie) override;
 	virtual ptr<registry_t<e_skill,int>>& limit_skills() override;
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
-	virtual bool mob_is_first(int mid) override;
-	virtual bool mob_is_ignore(int mid) override;
+	virtual bool mob_is_first(block_if* ene) override;
+	virtual bool mob_is_ignore(block_if* ene) override;
 	virtual std::string name() override;
 	virtual bool no_knockback() override;
 	virtual ptr<registry_t<e_skill>>& reject_skills() override;
@@ -1868,8 +1881,6 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> berserk_rate_;              // バーサーク発動率の登録値。
 	ptr<registry_t<int,int>> cart_auto_get_items_; // カート自動補充アイテムのレジストリ。
 	int char_id_;                                  // キャラクターID。
-	ptr<regnum_t<int>> distance_max_;              // 最大距離の登録値。
-	ptr<regnum_t<int>> distance_min_;              // 最小距離の登録値。
 	ptr<registry_t<int,distance_policy>>		   
 		distance_policies_;                        // 距離ポリシーのレジストリ。
 	ptr<registry_t<int,equipset_t>> equipsets_;    // 武具一式のレジストリ。
@@ -1883,8 +1894,11 @@ struct member_impl : virtual block_if {
 	block_if* leader_;                             // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;    // 制限スキルのレジストリ。
 	ptr<regnum_t<loot_modes>> loot_;               // 拾得モードの登録値。
+	ptr<regnum_t<int>> loot_limit_;                // 拾得制限の登録値。
 	ptr<regnum_t<int>> max_cast_time_;             // 使用する最大の詠唱時間の登録値。
+	ptr<regnum_t<int>> max_distance_;              // 最大距離の登録値。
 	int member_index_;                             // メンバーのインデックス。
+	ptr<regnum_t<int>> min_distance_;              // 最小距離の登録値。
 	ptr<regnum_t<int>> mob_high_def_;              // モンスターの高Defの登録値。
 	ptr<regnum_t<int>> mob_high_def_vit_;          // モンスターの高DefVitの登録値。
 	ptr<regnum_t<int>> mob_high_flee_;             // モンスターの高Fleeの登録値。
@@ -1925,10 +1939,6 @@ struct member_impl : virtual block_if {
 	virtual e_skill combo_skill_id() override;
 	virtual distance_policy_values default_distance_policy_value() override;
 	virtual normal_attack_policy_values default_normal_attack_policy_value() override;
-	virtual ptr<regnum_t<int>>& distance_max() override;
-	virtual int distance_max_value() override;
-	virtual int distance_min_value() override;
-	virtual ptr<regnum_t<int>>& distance_min() override;
 	virtual ptr<registry_t<int,distance_policy>>& distance_policies() override;
 	virtual ptr<registry_t<int,equipset_t>>& equipsets() override;
 	virtual int& fd() override;
@@ -1937,6 +1947,7 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual bool find_skill_ignore_mobs(e_skill kid, block_if* ene) override;
 	virtual ptr<registry_t<int>>& first_mobs() override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
 	virtual int get_hold_mobs() override;
@@ -1974,19 +1985,26 @@ struct member_impl : virtual block_if {
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) override;
 	virtual void load_skill_equipset(e_skill kid, equip_pos* equ = nullptr) override;
 	virtual ptr<regnum_t<loot_modes>>& loot() override;
+	virtual ptr<regnum_t<int>>& loot_limit() override;
+	virtual int loot_limit_value() override;
 	virtual bool magicpower_is_active() override;
 	virtual ptr<regnum_t<int>>& max_cast_time() override;
+	virtual ptr<regnum_t<int>>& max_distance() override;
+	virtual int max_distance_value() override;
 	virtual int& member_index() override;
+	virtual int min_distance_value() override;
+	virtual ptr<regnum_t<int>>& min_distance() override;
 	virtual ptr<regnum_t<int>>& mob_high_def() override;
 	virtual ptr<regnum_t<int>>& mob_high_def_vit() override;
 	virtual ptr<regnum_t<int>>& mob_high_flee() override;
 	virtual ptr<regnum_t<int>>& mob_high_hit() override;
 	virtual ptr<regnum_t<int>>& mob_high_mdef() override;
-	virtual bool mob_is_first(int mid) override;
-	virtual bool mob_is_ignore(int mid) override;
+	virtual bool mob_is_first(block_if* ene) override;
+	virtual bool mob_is_ignore(block_if* ene) override;
 	virtual std::string name() override;
 	virtual bool no_knockback() override;
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies() override;
+	virtual bool over_loot(int wei_inc) override;
 	virtual int party_id() override;
 	virtual ptr<block_if>& pet() override;
 	virtual ptr<registry_t<int,play_skill>>& play_skills() override;
@@ -2593,6 +2611,7 @@ SUBCMD_FUNC(Bot, JournalImport);
 SUBCMD_FUNC(Bot, LogIn);
 SUBCMD_FUNC(Bot, LogOut);
 SUBCMD_FUNC(Bot, Loot);
+SUBCMD_FUNC(Bot, LootLimit);
 SUBCMD_FUNC(Bot, Memo);
 SUBCMD_FUNC(Bot, MonsterFirst);
 SUBCMD_FUNC(Bot, MonsterFirstClear);
@@ -2925,6 +2944,7 @@ extern const std::string CASTLE_TRIAL_NPC_NAME;
 extern const std::string CAUTION_TAG;
 extern const std::string COSTUME_PREFIX;
 extern const std::unordered_map<e_job,distance_policy_values> DEFAULT_DISTANCE_POLICY_VALUES;
+extern const int DEFAULT_LOOT_LIMIT;
 extern const int DEFAULT_MOB_HIGH_DEF;
 extern const int DEFAULT_MOB_HIGH_DEF_VIT;
 extern const int DEFAULT_MOB_HIGH_FLEE;

@@ -6978,13 +6978,13 @@ void pc_gainexp(struct map_session_data *sd, struct block_list *src, unsigned in
 
 		// [GonBee]
 		// 余剰経験値をショップ経験値として貯められるようにする。
-		int cas_exp = pc_readglobalreg(sd, add_str(pybot::CASH_EXP.c_str()));
+		int cas_exp = pc_readreg2(sd, pybot::CASH_EXP.c_str());
 		cas_exp += base_exp;
 		if (cas_exp >= MAX_LEVEL_BASE_EXP) {
 			pc_getcash(sd, 10, 0, LOG_TYPE_PICKDROP_MONSTER);
 			cas_exp -= MAX_LEVEL_BASE_EXP;
 		}
-		pc_setglobalreg(sd, add_str(pybot::CASH_EXP.c_str()), cas_exp);
+		pc_setreg2(sd, pybot::CASH_EXP.c_str(), cas_exp);
 
 		if( sd->status.base_exp >= MAX_LEVEL_BASE_EXP )
 			base_exp = 0;

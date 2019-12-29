@@ -281,7 +281,7 @@ SUBCMD_FUNC(Bot, DistancemaX) {
 		dis, "セル以下に位置取ります。"
 	));
 	if (dis == battle_config.pybot_around_distance) dis = 0;
-	mem->distance_max()->set(dis);
+	mem->max_distance()->set(dis);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
@@ -297,7 +297,7 @@ SUBCMD_FUNC(Bot, DistancemiN) {
 		dis, "セル以上に位置取ります。"
 	));
 	if (dis == 1) dis = 0;
-	mem->distance_min()->set(dis);
+	mem->min_distance()->set(dis);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
@@ -1429,6 +1429,22 @@ SUBCMD_FUNC(Bot, Loot) {
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
+// 拾得制限を設定する。
+SUBCMD_FUNC(Bot, LootLimit) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int lim = shift_arguments_then_parse_int(
+		args, print("重量率"), 1, 100
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」は所持アイテムの重量が",
+		lim, "%になるまで拾います。"
+	));
+	if (lim == DEFAULT_LOOT_LIMIT) lim = 0;
+	mem->loot_limit()->set(lim);
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
 // メンバーが現在位置をメモする。
 SUBCMD_FUNC(Bot, Memo) {
 	CS_ENTER;
@@ -1470,7 +1486,7 @@ SUBCMD_FUNC(Bot, MonsterFirst) {
 				"「", mob_nam, "」というモンスターは見つかりませんでした。"
 			)};
 		std::string mob_str = print_mobdb(mid);
-		if (mid < MM_INDIVIDUAL ||
+		if (mid < MM_BASE ||
 			mid >= MM_CAUTION
 		) throw command_error{print("「", mob_str, "」は指定できません。")};
 		if (mem->first_mobs()->find(mid)) {
@@ -1689,7 +1705,7 @@ SUBCMD_FUNC(Bot, MonsterIgnore) {
 				"「", mob_nam, "」というモンスターは見つかりませんでした。"
 			)};
 		std::string mob_str = print_mobdb(mid);
-		if (mid < MM_INDIVIDUAL ||
+		if (mid < MM_BASE ||
 			mid >= MM_CAUTION
 		) throw command_error{print("「", mob_str, "」は指定できません。")};
 		if (mem->ignore_mobs()->find(mid)) {
@@ -1864,10 +1880,7 @@ SUBCMD_FUNC(Bot, PolicyDistance) {
 		} else {
 			if (mid < MM_BASE ||
 				mid >= MM_CAUTION
-			) throw command_error{print(
-				"「", META_MONSTER_NAMES.at(meta_mobs(mid)),
-				"」用距離ポリシーは登録できません。"
-			)};
+			) throw command_error{print("「", mob_str, "」は指定できません。")};
 			std::string pol_val_nams = concatinate_strings(
 				DISTANCE_POLICY_VALUE_NAME_TABLE.begin() + 1,
 				DISTANCE_POLICY_VALUE_NAME_TABLE.end(),
@@ -1987,10 +2000,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack) {
 		} else {
 			if (mid < MM_BASE ||
 				mid >= MM_CAUTION
-			) throw command_error{print(
-				"「", META_MONSTER_NAMES.at(meta_mobs(mid)),
-				"」用通常攻撃ポリシーは登録できません。"
-			)};
+			) throw command_error{print("「", mob_str, "」は指定できません。")};
 			std::string pol_val_nams = concatinate_strings(
 				NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE.begin() + 1,
 				NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE.end(),
@@ -2382,7 +2392,7 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 				"」用優先スキルの登録を抹消しました。"
 			));
 		} else {
-			if (mid < MM_INDIVIDUAL ||
+			if (mid < MM_BASE ||
 				mid >= MM_CAUTION
 			) throw command_error{print("「", mob_str, "」は指定できません。")};
 			std::string sk_nam = shift_arguments(args);
@@ -2476,7 +2486,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
 				"「", mob_nam, "」というモンスターは見つかりませんでした。"
 			)};
 		std::string mob_str = print_mobdb(mid);
-		if (mid < MM_INDIVIDUAL ||
+		if (mid < MM_BASE ||
 			mid >= MM_CAUTION
 		) throw command_error{print("「", mob_str, "」は指定できません。")};
 		int kim = SKILL_IGNORE_MOB(kid, mid);

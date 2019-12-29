@@ -29,8 +29,6 @@ bool battler_if::check_use_skill(e_skill kid, int klv, block_if* ene) {RAISE_NOT
 bool battler_if::check_use_taunt_skill(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values battler_if::default_distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values battler_if::default_normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::distance_max_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
-int battler_if::distance_min_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 distance_policy_values& battler_if::distance_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_hold_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -48,11 +46,14 @@ bool battler_if::is_no_castcancel() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_no_gemstone() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_primary() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_wall_side() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void battler_if::iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::leader() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::max_distance_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& battler_if::member_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
-bool battler_if::mob_is_first(int mid) {RAISE_NOT_IMPLEMENTED_ERROR;}
-bool battler_if::mob_is_ignore(int mid) {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::min_distance_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::mob_is_first(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool battler_if::mob_is_ignore(block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::no_knockback() {RAISE_NOT_IMPLEMENTED_ERROR;}
 normal_attack_policy_values& battler_if::normal_attack_policy_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::party_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -199,8 +200,6 @@ bool member_if::can_ka(block_if* tar_mem) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::cart_auto_get_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::char_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_skill member_if::combo_skill_id() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::distance_max() {RAISE_NOT_IMPLEMENTED_ERROR;}
-ptr<regnum_t<int>>& member_if::distance_min() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,distance_policy>>& member_if::distance_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,equipset_t>>& member_if::equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int& member_if::fd() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -209,6 +208,7 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool member_if::find_skill_ignore_mobs(e_skill kid, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::first_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::get_skill_members() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -224,14 +224,19 @@ void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ER
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::loot_limit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int member_if::loot_limit_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::magicpower_is_active() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::max_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::max_distance() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::min_distance() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool member_if::over_loot(int wei_inc) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<block_if>& member_if::pet() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,play_skill>>& member_if::play_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,int>>& member_if::recover_hp_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -480,6 +485,67 @@ bool& battler_impl::is_best_pos() {
 bool // 結果。
 battler_impl::is_primary() {
 	return !battle_index();
+}
+
+// メタモンスターを反復する。
+void battler_impl::iterate_meta_mobs(
+	const std::vector<block_if*>* enes, // 敵モンスターのベクタ。
+	block_if* tar_ene,                  // ターゲットしている敵モンスター。
+	yield_meta_mob_func yie             // メタモンスター獲得ハンドラ。
+) {
+	if (battle_mode() != BM_NONE) {
+		int pre_mid = 0;
+		if (enes) {
+			for (block_if* ene : *enes) {
+				if (ene->md()->mob_id == pre_mid) continue;
+				yie(MM_CAUTION + ene->md()->mob_id);
+				pre_mid = ene->md()->mob_id;
+			}
+		}
+		yie(tar_ene->md()->mob_id);
+	}
+	if (leader()->member_dead()) yie(MM_MEMBER_DEAD);
+	if (battle_mode() != BM_NONE) {
+		if (!check_hp(4)) {
+			if (!check_hp(3)) {
+				if (!check_hp(2)) {
+					if (!check_hp(1)) {
+						yie(MM_HP_DECLINE1);
+					}
+					yie(MM_HP_DECLINE2);
+				}
+				yie(MM_HP_DECLINE3);
+			}
+			yie(MM_HP_DECLINE4);
+		}
+		if (!check_sp(4)) {
+			if (!check_sp(3)) {
+				if (!check_sp(2)) {
+					if (!check_sp(1)) {
+						yie(MM_SP_DECLINE1);
+					}
+					yie(MM_SP_DECLINE2);
+				}
+				yie(MM_SP_DECLINE3);
+			}
+			yie(MM_SP_DECLINE4);
+		}
+		if (tar_ene) {
+			if (tar_ene->hit() >= get_mob_high_hit()) yie(MM_HIGH_HIT);
+			if (tar_ene->flee() >= get_mob_high_flee()) yie(MM_HIGH_FLEE);
+			if (tar_ene->def() + tar_ene->vit() >= get_mob_high_def_vit()) yie(MM_HIGH_DEF_VIT);
+			if (tar_ene->def() >= get_mob_high_def()) yie(MM_HIGH_DEF);
+			if (tar_ene->mdef() >= get_mob_high_mdef()) yie(MM_HIGH_MDEF);
+			if (tar_ene->is_flora()) yie(MM_FLORA);
+			if (tar_ene->is_great(leader())) yie(MM_GREAT);
+			if (tar_ene->is_boss()) yie(MM_BOSS);
+			yie(MM_RACE + tar_ene->race());
+			yie(MM_ELEMENT + tar_ene->element());
+			yie(MM_SIZE + tar_ene->size_());
+		}
+		yie(MM_BASE);
+		yie(MM_BACKUP);
+	} else 	yie(MM_REST);
 }
 
 // 通常攻撃ポリシー値。
@@ -1250,18 +1316,6 @@ homun_impl::default_normal_attack_policy_value() {
 	return nor_att_pol_val;
 }
 
-// ホムンクルスの最大距離の値を取得する。
-int // 取得した最大距離の値。
-homun_impl::distance_max_value() {
-	return battle_config.pybot_around_distance;
-}
-
-// ホムンクルスの最小距離の値を取得する。
-int // 取得した最小距離の値。
-homun_impl::distance_min_value() {
-	return 0;
-}
-
 // ホムンクルスが存在するかを判定する。
 bool // 結果。
 homun_impl::exists() {
@@ -1415,20 +1469,32 @@ void homun_impl::load_policy(
 	normal_attack_policy_values* nor_att_pol_val // 攻撃ポリシー値。
 ) {}
 
+// ホムンクルスの最大距離の値を取得する。
+int // 取得した最大距離の値。
+homun_impl::max_distance_value() {
+	return battle_config.pybot_around_distance;
+}
+
+// ホムンクルスの最小距離の値を取得する。
+int // 取得した最小距離の値。
+homun_impl::min_distance_value() {
+	return 0;
+}
+
 // 優先モンスターかを判定する。
 bool // 結果。
 homun_impl::mob_is_first(
-	int mid // モンスターID。
+	block_if* ene // 敵モンスター。
 ) {
-	return master()->mob_is_first(mid);
+	return master()->mob_is_first(ene);
 }
 
 // 無視モンスターかを判定する。
 bool // 結果。
 homun_impl::mob_is_ignore(
-	int mid // モンスターID。
+	block_if* ene // 敵モンスター。
 ) {
-	return master()->mob_is_ignore(mid);
+	return master()->mob_is_ignore(ene);
 }
 
 // ホムンクルスの名前を取得する。
@@ -1837,32 +1903,6 @@ member_impl::default_normal_attack_policy_value() {
 	return find_map_data(DEFAULT_NORMAL_ATTACK_POLICY_VALUES, substancial_job());
 }
 
-// 最大距離の登録値。
-ptr<regnum_t<int>>& member_impl::distance_max() {
-	return distance_max_;
-}
-
-// メンバーの最大距離の値を取得する。
-int // 取得した最大距離の値。
-member_impl::distance_max_value() {
-	int val = distance_max()->get();
-	if (!val) val = battle_config.pybot_around_distance;
-	return val;
-}
-
-// 最小距離の登録値。
-ptr<regnum_t<int>>& member_impl::distance_min() {
-	return distance_min_;
-}
-
-// メンバーの最小距離の値を取得する。
-int // 取得した最小距離の値。
-member_impl::distance_min_value() {
-	int val = distance_min()->get();
-	if (!val) val = 1;
-	return val;
-}
-
 // 距離ポリシーのレジストリ。
 ptr<registry_t<int,distance_policy>>& member_impl::distance_policies() {
 	return distance_policies_;
@@ -1937,6 +1977,22 @@ member_impl::find_inventory(
 	int equ              // 装備部位。INT_MINならチェックなし。
 ) {
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
+}
+
+// スキル無視モンスターを探す。
+bool // 結果。
+member_impl::find_skill_ignore_mobs(
+	e_skill kid,  // スキルID。
+	block_if* ene // 敵モンスター。
+) {
+	bool res = false;
+	iterate_meta_mobs(
+		nullptr,
+		ene,
+		[this, kid, &res] (int mid)
+		{res = res || skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, mid));}
+	);
+	return res;
 }
 
 // 優先モンスターのレジストリ。
@@ -2278,6 +2334,19 @@ ptr<regnum_t<loot_modes>>& member_impl::loot() {
 	return loot_;
 }
 
+// 拾得制限の登録値。
+ptr<regnum_t<int>>& member_impl::loot_limit() {
+	return loot_limit_;
+}
+
+// 拾得制限の値を取得する。
+int // 取得した拾得制限。
+member_impl::loot_limit_value() {
+	int val = loot_limit()->get();
+	if (!val) val = DEFAULT_LOOT_LIMIT;
+	return val;
+}
+
 // 魔法力増幅状態かを判定する。
 bool // 結果。
 member_impl::magicpower_is_active() {
@@ -2291,9 +2360,35 @@ ptr<regnum_t<int>>& member_impl::max_cast_time() {
 	return max_cast_time_;
 }
 
+// 最大距離の登録値。
+ptr<regnum_t<int>>& member_impl::max_distance() {
+	return max_distance_;
+}
+
+// メンバーの最大距離の値を取得する。
+int // 取得した最大距離の値。
+member_impl::max_distance_value() {
+	int val = max_distance()->get();
+	if (!val) val = battle_config.pybot_around_distance;
+	return val;
+}
+
 // メンバーのインデックス。
 int& member_impl::member_index() {
 	return member_index_;
+}
+
+// 最小距離の登録値。
+ptr<regnum_t<int>>& member_impl::min_distance() {
+	return min_distance_;
+}
+
+// メンバーの最小距離の値を取得する。
+int // 取得した最小距離の値。
+member_impl::min_distance_value() {
+	int val = min_distance()->get();
+	if (!val) val = 1;
+	return val;
 }
 
 // モンスターの高Defの登録値。
@@ -2324,17 +2419,31 @@ ptr<regnum_t<int>>& member_impl::mob_high_mdef() {
 // 優先モンスターかを判定する。
 bool // 結果。
 member_impl::mob_is_first(
-	int mid // モンスターID。
+	block_if* ene // 敵モンスター。
 ) {
-	return first_mobs()->find(mid);
+	bool res = false;
+	iterate_meta_mobs(
+		nullptr,
+		ene,
+		[this, &res] (int mid)
+		{res = res || first_mobs()->find(mid);}
+	);
+	return res;
 }
 
 // 無視モンスターかを判定する。
 bool // 結果。
 member_impl::mob_is_ignore(
-	int mid // モンスターID。
+	block_if* ene // 敵モンスター。
 ) {
-	return ignore_mobs()->find(mid);
+	bool res = false;
+	iterate_meta_mobs(
+		nullptr,
+		ene,
+		[this, &res] (int mid)
+		{res = res || ignore_mobs()->find(mid);}
+	);
+	return res;
 }
 
 // メンバーの名前を取得する。
@@ -2352,6 +2461,18 @@ member_impl::no_knockback() {
 // 通常攻撃ポリシーのレジストリ。
 ptr<registry_t<int,normal_attack_policy>>& member_impl::normal_attack_policies() {
 	return normal_attack_policies_;
+}
+
+// 最大拾得率をオーバーするかを判定する。
+bool // 結果。
+member_impl::over_loot(
+	int wei_inc // 重量の増分。
+) {
+	int lim = loot_limit_value();
+	int lhs = (sd()->weight + wei_inc) * 100;
+	int rhs = sd()->max_weight * lim;
+	if (lim == 100) return lhs > rhs;
+	else return lhs >= rhs;
 }
 
 // メンバーのパーティーIDを取得する。
@@ -2985,11 +3106,12 @@ member_t::member_t(
 	char_id() = sd()->status.char_id;
 	leader() = lea;
 	berserk_rate() = construct<regnum_t<int>>(sd(), "pybot_berserk_rate");
-	distance_max() = construct<regnum_t<int>>(sd(), "pybot_distance_max");
-	distance_min() = construct<regnum_t<int>>(sd(), "pybot_distance_min");
 	hold_mobs() = construct<regnum_t<int>>(sd(), "pybot_hold_mobs");
 	loot() = construct<regnum_t<loot_modes>>(sd(), "pybot_loot");
+	loot_limit() = construct<regnum_t<int>>(sd(), "pybot_loot_limit");
 	max_cast_time() = construct<regnum_t<int>>(sd(), "pybot_max_cast_time");
+	max_distance() = construct<regnum_t<int>>(sd(), "pybot_max_distance");
+	min_distance() = construct<regnum_t<int>>(sd(), "pybot_min_distance");
 	mob_high_def() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def");
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");

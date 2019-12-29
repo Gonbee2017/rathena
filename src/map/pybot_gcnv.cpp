@@ -1630,6 +1630,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot loot クリエ]\n"
 		"ドロップアイテムを拾わないようにする。\n"
 		"入力例 [@bot loot クリエ]\n"
+	), SUBCMD_DESC(Bot, LootLimit                  , ll  ,
+		"------ LootLimit (ll) サブコマンド ------\n"
+		"ドロップアイテムを拾える重量を制限する。\n"
+		"入力例 [@bot lootlimit スミス 70]\n"
 	), SUBCMD_DESC(Bot, Memo                       , m   ,
 		"------ Memo (m) サブコマンド ------\n"
 		"現在の位置をメモする。\n"
@@ -2094,6 +2098,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, LogIn                      , li  ),
 	SUBCMD_PROC(Bot, LogOut                     , lo  ),
 	SUBCMD_PROC(Bot, Loot                       , l   ),
+	SUBCMD_PROC(Bot, LootLimit                  , ll  ),
 	SUBCMD_PROC(Bot, Memo                       , m   ),
 	SUBCMD_PROC(Bot, MonsterFirst               , mf  ),
 	SUBCMD_PROC(Bot, MonsterFirstClear          ,     ),
@@ -2235,6 +2240,9 @@ const std::unordered_map<
 	{JOB_STAR_GLADIATOR, DPV_CLOSE},
 	{JOB_SOUL_LINKER   , DPV_AWAY },
 };
+
+// デフォルトの拾得制限。
+const int DEFAULT_LOOT_LIMIT = 100;
 
 // デフォルトのモンスターの高Def。
 const int DEFAULT_MOB_HIGH_DEF = 40;

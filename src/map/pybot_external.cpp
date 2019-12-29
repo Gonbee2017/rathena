@@ -336,6 +336,18 @@ mob_is_normal_mvp(
 		eve.substr(0, CASTLE_TRIAL_NPC_NAME.length()) != CASTLE_TRIAL_NPC_NAME;
 }
 
+// Botの最大拾得率をオーバーするかを判定する。
+bool // 結果。
+over_loot(
+	int cid,    // キャラクターID。
+	int wei_inc // 重量の増分。
+) {
+	bool res = false;
+	block_if* bot = find_map_data(all_bots, cid);
+	if (bot) res = bot->over_loot(wei_inc);
+	return res;
+}
+
 // PCがドロップアイテムを拾えるかを判定する。
 bool // 結果。
 pc_can_takeitem(

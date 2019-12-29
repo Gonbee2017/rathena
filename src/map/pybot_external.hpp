@@ -89,6 +89,7 @@ std::shared_ptr<std::vector<std::shared_ptr<member_info>>> get_member_list(map_s
 bool letter_is_jlead(uint8_t let);
 double map_rate(int m);
 bool mob_is_normal_mvp(mob_data* md);
+bool over_loot(int cid, int wei_inc);
 void pc_acquired_mvp(map_session_data* sd, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);
