@@ -1077,12 +1077,14 @@ void ai_t::battler_use_skill() {
 			e_skill kid = sk_use_pro.skill_id;
 			if (kid == PB_FIRST) {
 				if (battler->battle_mode() != BM_NONE) {
-					e_skill* fir_kid = nullptr;
 					bot->iterate_meta_mobs(
 						nullptr,
 						bot->target_enemy(),
-						[this, &fir_kid] (int mid) {
-							if (!fir_kid) fir_kid = battler->first_skills()->find(mid);
+						[this, &kid] (int mid) {
+							if (kid == PB_FIRST) {
+								e_skill* fou = battler->first_skills()->find(mid);
+								if (fou) kid = *fou;
+							}
 						}
 					);
 				}
