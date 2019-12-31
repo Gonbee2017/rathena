@@ -2835,11 +2835,21 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 				sd->bonus.long_attack_def_rate += val;
 			break;
 		case SP_DOUBLE_RATE:
-			if(sd->state.lr_flag == 0 && sd->bonus.double_rate < val)
+
+			// [GonBee]
+			//if(sd->state.lr_flag == 0 && sd->bonus.double_rate < val)
+			if(sd->state.lr_flag != 2 &&
+				sd->bonus.double_rate < val
+			)
+
 				sd->bonus.double_rate = val;
 			break;
 		case SP_DOUBLE_ADD_RATE:
-			if(sd->state.lr_flag == 0)
+
+			// [GonBee]
+			//if(sd->state.lr_flag == 0)
+			if(sd->state.lr_flag != 2)
+
 				sd->bonus.double_add_rate += val;
 			break;
 		case SP_MATK_RATE:
