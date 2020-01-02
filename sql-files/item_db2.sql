@@ -1210,6 +1210,13 @@ REPLACE INTO `item_db2` VALUES (9501, 'Gold_Acidus_Egg', 'ゴールドオシドスの卵',
 REPLACE INTO `item_db2` VALUES (9502, 'Red_Ferus_Egg', 'レッドペロスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (9503, 'Blue_Acidus_Egg', 'ブルーオシドスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (9504, 'Green_Ferus_Egg', 'グリーンペロスの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9505, 'Mysteltainn_Egg', 'ミステルテインの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9506, 'Tirfing_Egg', 'オーガトゥースの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9507, 'Executioner_Egg', 'エクスキューショナーの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9508, 'Skeggiold_Brawn_Egg', 'スケゴルトブラウンの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9509, 'Skeggiold_Black_Egg', 'スケゴルトブラックの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9510, 'Banshee_Egg', 'バンシーの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (9511, 'Bnashee_Master_Egg', 'バンシーマスターの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10500, 'Costume_Box_10500', '衣装の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getrandgroupitem(IG_CostumeBox),1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10501, 'Empty_Bottle_Box_10501', '空きビンの箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 713,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10502, 'Holy_Water_Box_10502', '聖水の箱', 2, 20, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 523,100; }', '{}', '{}');
