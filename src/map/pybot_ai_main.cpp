@@ -101,11 +101,13 @@ void ai_t::leader_organize() {
 		bat->attacked_by_detector() = false;
 		bat->attacked_via_devotion() = false;
 		blocks[bat->bl()->id] = bat;
-		distance_policy_values dis_pol_val = DPV_PENDING;
-		normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-		bat->load_policy(MM_BASE, &dis_pol_val, &nor_att_pol_val);
-		if (dis_pol_val == DPV_PENDING) dis_pol_val = bat->default_distance_policy_value();
-		bat->distance_policy_value() = dis_pol_val;
+		bat->distance_policy_value() = DPV_PENDING;
+		bat->normal_attack_policy_value() = NAPV_PENDING;
+		bat->load_policy(MM_BASE, &bat->distance_policy_value(), &bat->normal_attack_policy_value());
+		if (bat->distance_policy_value() == DPV_PENDING)
+			bat->distance_policy_value() = bat->default_distance_policy_value();
+		if (bat->normal_attack_policy_value() == NAPV_PENDING)
+			bat->normal_attack_policy_value() = bat->default_normal_attack_policy_value();
 	}
 	std::sort(
 		ALL_RANGE(battlers),
@@ -339,28 +341,29 @@ void ai_t::leader_target() {
 					tar_ene = find_block<enemy_impl>(bat->ud()->target);
 			} else if (!bat->is_primary()) {
 				for (block_if* ene : *enemies) {
-					distance_policy_values dis_pol_val = DPV_PENDING;
-					normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
-					bat->iterate_meta_mobs(
-						nullptr,
-						ene,
-						[bat, &dis_pol_val, &nor_att_pol_val] (int mid)
-						{bat->load_policy(mid, &dis_pol_val, &nor_att_pol_val);}
-					);
-					if ((dis_pol_val == DPV_CLOSE ||
-							nor_att_pol_val == NAPV_CONTINUOUS
-						) && !ene->is_flora() &&
+					if (!ene->is_flora() &&
 						ene->is_short_range_attacker() &&
 						!ene->need_to_leave() &&
 						ene->target_battler() &&
 						ene->target_battler()->battle_index() > bat->battle_index() &&
 						ene->attacked_battlers().empty()
 					) {
-						tar_ene = ene;
-						bat_mod = BM_TAUNT;
-						bat->distance_policy_value() = dis_pol_val;
-						bat->normal_attack_policy_value() = nor_att_pol_val;
-						break;
+						bat->distance_policy_value() = DPV_PENDING;
+						bat->normal_attack_policy_value() = NAPV_PENDING;
+						bat->iterate_meta_mobs(
+							nullptr,
+							ene,
+							[bat] (int mid)	{
+								bat->load_policy(mid, &bat->distance_policy_value(), &bat->normal_attack_policy_value());
+							}
+						);
+						if (bat->distance_policy_value() == DPV_CLOSE ||
+							bat->normal_attack_policy_value() == NAPV_CONTINUOUS
+						) {
+							tar_ene = ene;
+							bat_mod = BM_TAUNT;
+							break;
+						}
 					}
 				}
 			}
@@ -368,31 +371,34 @@ void ai_t::leader_target() {
 				tar_ene = enemies->front();
 				if (leader->rush()->get() != RM_NONE ||
 					bat->mob_is_first(tar_ene) ||
-					((battlers.front()->distance_policy_value() == DPV_AWAY ||
-							bat->is_primary()
+					((bat->is_primary() ||
+							battlers.front()->distance_policy_value() == DPV_AWAY
 						) && (tar_ene->target_battler() ||
 							!tar_ene->is_berserk()
 						)
 					)
 				) bat_mod = BM_TAUNT;
 				else bat_mod = BM_ASSIST;
-				distance_policy_values dis_pol_val = DPV_PENDING;
-				normal_attack_policy_values nor_att_pol_val = NAPV_PENDING;
+				bat->distance_policy_value() = DPV_PENDING;
+				bat->normal_attack_policy_value() = NAPV_PENDING;
 				bat->iterate_meta_mobs(
 					nullptr,
 					tar_ene,
-					[bat, &dis_pol_val, &nor_att_pol_val] (int mid)
-					{bat->load_policy(mid, &dis_pol_val, &nor_att_pol_val);}
+					[bat] (int mid)	{
+						bat->load_policy(mid, &bat->distance_policy_value(), &bat->normal_attack_policy_value());
+					}
 				);
-				bat->distance_policy_value() = dis_pol_val;
-				bat->normal_attack_policy_value() = nor_att_pol_val;
 			}
+			if (bat->distance_policy_value() == DPV_PENDING)
+				bat->distance_policy_value() = bat->default_distance_policy_value();
+			if (bat->normal_attack_policy_value() == NAPV_PENDING)
+				bat->normal_attack_policy_value() = bat->default_normal_attack_policy_value();
 			if (bat->distance_policy_value() == DPV_CLOSE ||
 				bat->normal_attack_policy_value() == NAPV_CONTINUOUS
 			) tar_ene->attacked_battlers().push_back(bat);
 		}
 		bat->target_enemy() = tar_ene;
-		if (bat_mod != bat->battle_mode() &&
+		if ((bat_mod == BM_NONE) != (bat->battle_mode() == BM_NONE) &&
 			dynamic_cast<bot_impl*>(bat)
 		) bat->last_reloaded_equipset_tick() = 0;
 		bat->battle_mode() = bat_mod;

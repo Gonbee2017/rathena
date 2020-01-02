@@ -92,10 +92,10 @@
 1716,ACIDUS_,ブルーオシドス,0,9503,0,505,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_THUNDERSTORM",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Wind,2; }
 1717,FERUS_,グリーンペロス,0,9504,0,6096,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Earth,2; }
 
-1203,MYSTELTAINN,ミステルテイン,0,9505,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",5,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_SMALL,1; }
-1204,TIRFING,オーガトゥース,0,9506,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",5,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_MEDIUM,1; }
-1205,EXECUTIONER,エクスキューショナー,0,9507,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",5,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_BIG,1; }
-1754,SKEGGIOLD,スケゴルトブラウン,0,9508,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MER_DECAGI",10,10,10; },{ bonus2 bSubRace,RC_Angel,2; bonus2 bAddEle,Ele_Holy,2; }
+1203,MYSTELTAINN,ミステルテイン,0,9505,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_SMALL,1; }
+1204,TIRFING,オーガトゥース,0,9506,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_MEDIUM,1; }
+1205,EXECUTIONER,エクスキューショナー,0,9507,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_BIG,1; }
+1754,SKEGGIOLD,スケゴルトブラウン,0,9508,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "AL_DECAGI",10,10,10; },{ bonus2 bSubRace,RC_Angel,2; bonus2 bAddEle,Ele_Holy,2; }
 1755,SKEGGIOLD_,スケゴルトブラック,0,9509,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "MG_SAFETYWALL",5,60,100,100; },{ bonus3 bAddMonsterDropItem,7510,RC_Angel,10; }
 1867,BANSHEE,バンシー,0,9510,0,6106,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKSTRIKE",3,10,5; },{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; }
 1974,BANSHEE_MASTER,バンシーマスター,0,9511,0,6098,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_WIDECURSE",1,0,5; },{ bonus bInt,1; bonus bMatk,10; }
