@@ -1196,8 +1196,8 @@ yuno_fild10,39,183,0	warp	hugelwarp5020	1,1,yuno_fild09,371,184
 //アインブロックフィールド01⇔アインブロックフィールド02
 ein_fild01,106,34,0		warp	hugelwarp5021	1,1,ein_fild02,109,358
 ein_fild02,108,364,0	warp	hugelwarp5022	1,1,ein_fild01,106,40
-ein_fild01,234,34,0		warp	hugelwarp5023	1,1,ein_fild02,258,343
-ein_fild02,257,350,0	warp	hugelwarp5024	1,1,ein_fild01,231,40
+//ein_fild01,234,34,0		warp	hugelwarp5023	1,1,ein_fild02,258,343
+//ein_fild02,257,350,0	warp	hugelwarp5024	1,1,ein_fild01,231,40
 //アインブロックフィールド02⇔アインブロックフィールド05
 ein_fild02,170,29,0		warp	hugelwarp5025	1,1,ein_fild05,172,366
 ein_fild05,172,371,0	warp	hugelwarp5026	1,1,ein_fild02,170,37
