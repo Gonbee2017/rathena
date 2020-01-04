@@ -644,9 +644,19 @@
 	export_constant2("bIgnoreDefRaceRate",SP_IGNORE_DEF_RACE_RATE);
 
 	// [GonBee]
+	export_constant2("bDanceRate", SP_DANCE_RATE);
+	export_constant2("bImmuneDemonstration", SP_IMMUNE_DEMONSTRATION);
+	export_constant2("bImmuneEvilland", SP_IMMUNE_EVILLAND);
+	export_constant2("bImmuneQuagmire", SP_IMMUNE_QUAGMIRE);
+	export_constant2("bImmuneVenomdust", SP_IMMUNE_VENOMDUST);
+	export_constant2("bMental", SP_MENTAL);
 	export_constant2("bNearBaseAtk",SP_NEAR_BASE_ATK);
-	export_constant2("bNearPerfectHitAddRate",SP_NEAR_PERFECT_HIT_ADD_RATE);
+	export_constant2("bNearIgnoreAssumptio", SP_NEAR_IGNORE_ASSUMPTIO);
+	export_constant2("bNearIgnoreAutocounter", SP_NEAR_IGNORE_AUTOCOUNTER);
+	export_constant2("bNearIgnoreAutoguard", SP_NEAR_IGNORE_AUTOGUARD);
 	export_constant2("bNearIgnoreDefClassRate",SP_NEAR_IGNORE_DEF_CLASS_RATE);
+	export_constant2("bNearIgnoreStoneskin", SP_NEAR_IGNORE_STONESKIN);
+	export_constant2("bNearPerfectHitAddRate",SP_NEAR_PERFECT_HIT_ADD_RATE);
 
 	export_constant2("bSkillHeal2",SP_SKILL_HEAL2);
 	export_constant2("bAddEffOnSkill",SP_ADDEFF_ONSKILL);
@@ -1545,6 +1555,8 @@
 	// íËêîÇí«â¡ÅB
 	export_constant(SC_BRAGIPOTION);
 	export_constant(SC_DIGESTPOTION);
+	export_constant(SC_LULLABY);
+	export_constant(SC_COUNTERATTACK);
 
 	/* status icons */
 	export_deprecated_constant2("SI_BLANK",-1);

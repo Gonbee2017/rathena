@@ -1204,6 +1204,9 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 	if (skill_id == PA_PRESSURE || skill_id == HW_GRAVITATION)
 		return damage; //These skills bypass everything else.
 
+	// [GonBee]
+	map_session_data* ssd = BL_CAST(BL_PC, src);
+
 	if( sc && sc->count ) { // SC_* that reduce damage to 0.
 		if( sc->data[SC_BASILICA] && !status_bl_has_mode(src,MD_STATUS_IMMUNE) ) {
 			d->dmg_lv = ATK_BLOCK;
@@ -1245,7 +1248,18 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 			return 0;
 		}
 
-		if( (sce = sc->data[SC_AUTOGUARD]) && flag&BF_WEAPON && !(skill_get_inf3(skill_id)&INF3_NO_EFF_AUTOGUARD) && rnd()%100 < sce->val2) {
+		// [GonBee]
+		// 近接オートガード無視を追加。
+		//if( (sce = sc->data[SC_AUTOGUARD]) && flag&BF_WEAPON && !(skill_get_inf3(skill_id)&INF3_NO_EFF_AUTOGUARD) && rnd()%100 < sce->val2) {
+		if ((sce = sc->data[SC_AUTOGUARD]) &&
+			(!ssd ||
+				!ssd->special_state.near_ignore_autoguard ||
+				(flag & (BF_WEAPON | BF_SHORT)) != (BF_WEAPON | BF_SHORT)
+			) && flag&BF_WEAPON &&
+			!(skill_get_inf3(skill_id)&INF3_NO_EFF_AUTOGUARD) &&
+			rnd()%100 < sce->val2
+		) {
+
 			int delay;
 			struct status_change_entry *sce_d = sc->data[SC_DEVOTION];
 			struct block_list *d_bl = NULL;
@@ -1431,7 +1445,17 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 		// Damage reductions
 		// Assumptio doubles the def & mdef on RE mode, otherwise gives a reduction on the final damage. [Igniz]
 #ifndef RENEWAL
-		if( sc->data[SC_ASSUMPTIO] ) {
+
+		// [GonBee]
+		// 近接アスムプティオ無視を追加。
+		//if( sc->data[SC_ASSUMPTIO] ) {
+		if (sc->data[SC_ASSUMPTIO] &&
+			(!ssd ||
+				!ssd->special_state.near_ignore_assumptio ||
+				(flag & (BF_WEAPON | BF_SHORT)) != (BF_WEAPON | BF_SHORT)
+			)
+		) {
+
 			if( map_flag_vs(bl->m) )
 				damage = (int64)damage*2/3; //Receive 66% damage
 			else
@@ -1458,7 +1482,16 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 				damage >>= 2; //75% reduction
 		}
 
-		if(sc->data[SC_ARMORCHANGE]) {
+		// [GonBee]
+		// 近接ストーンスキン無視を追加。
+		//if(sc->data[SC_ARMORCHANGE]) {
+		if (sc->data[SC_ARMORCHANGE] &&
+			(!ssd ||
+				!ssd->special_state.near_ignore_stoneskin ||
+				(flag & (BF_WEAPON | BF_SHORT)) != (BF_WEAPON | BF_SHORT)
+			)
+		) {
+
 			//On official servers, SC_ARMORCHANGE does not change DEF/MDEF but rather increases/decreases the damage
 			if(flag&BF_WEAPON)
 				damage -= damage * sc->data[SC_ARMORCHANGE]->val2 / 100;
@@ -7080,6 +7113,21 @@ struct Damage battle_calc_attack(int attack_type,struct block_list *bl,struct bl
 	}
 	else // Some skills like Weaponry Research will cause damage even if attack is dodged
 		d.dmg_lv = ATK_DEF;
+
+	// [GonBee]
+	// スキル被弾時オートボーナスを追加。
+	map_session_data* tsd = BL_CAST(BL_PC, target);
+	if (d.damage + d.damage2 > 0 &&
+		tsd
+	) {
+		for (auto& it : tsd->autobonus4) {
+			if (rnd() % 1000 >= it.rate ||
+				it.atk_type != skill_id
+			) continue;
+			pc_exeautobonus(tsd, &tsd->autobonus4, &it);
+		}
+	}
+
 	return d;
 }
 
@@ -7450,7 +7498,17 @@ enum damage_lv battle_weapon_attack(struct block_list* src, struct block_list* t
 		else if (sc->data[SC_CLOAKINGEXCEED] && !(sc->data[SC_CLOAKINGEXCEED]->val4 & 2))
 			status_change_end(src, SC_CLOAKINGEXCEED, INVALID_TIMER);
 	}
-	if (tsc && tsc->data[SC_AUTOCOUNTER] && status_check_skilluse(target, src, KN_AUTOCOUNTER, 1)) {
+
+	// [GonBee]
+	// 近接オートカウンター無効を追加。
+	//if (tsc && tsc->data[SC_AUTOCOUNTER] && status_check_skilluse(target, src, KN_AUTOCOUNTER, 1)) {
+	if (tsc &&
+		tsc->data[SC_AUTOCOUNTER] &&
+		(!sd ||
+			!sd->special_state.near_ignore_autocounter
+		) && status_check_skilluse(target, src, KN_AUTOCOUNTER, 1)
+	) {
+
 		uint8 dir = map_calc_dir(target,src->x,src->y);
 		int t_dir = unit_getdir(target);
 		int dist = distance_bl(src, target);

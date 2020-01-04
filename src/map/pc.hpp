@@ -310,6 +310,16 @@ struct map_session_data {
 		unsigned int no_knockback : 1;
 		unsigned int bonus_coma : 1;
 		unsigned int no_mado_fuel : 1; // Disable Magic_Gear_Fuel consumption [Secret]
+
+		unsigned int immune_demonstration : 1;    // デモンストレーション無効。
+		unsigned int immune_evilland : 1;         // イービルランド無効。
+		unsigned int immune_quagmire : 1;         // クァグマイア無効。
+		unsigned int immune_venomdust : 1;        // ベナムダスト無効。
+		unsigned int near_ignore_assumptio : 1;   // 近接アスムプティオ無視。
+		unsigned int near_ignore_autocounter : 1; // 近接オートカウンター無視。
+		unsigned int near_ignore_autoguard : 1;   // 近接オートガード無視。
+		unsigned int near_ignore_stoneskin : 1;   // 近接ストーンスキン無視。
+
 	} special_state;
 	uint32 login_id1, login_id2;
 	unsigned short class_;	//This is the internal job ID used by the map server to simplify comparisons/queries/etc. [Skotlex]
@@ -442,6 +452,9 @@ struct map_session_data {
 	std::vector<s_addele2> subele2;
 	std::vector<s_autobonus> autobonus, autobonus2, autobonus3; //Auto script on attack, when attacked, on skill usage
 
+	// [GonBee]
+	std::vector<s_autobonus> autobonus4; // スキル被弾時オートボーナス。
+
 	// zeroed structures start here
 	struct s_regen {
 		short value;
@@ -503,8 +516,10 @@ struct map_session_data {
 		short weapon_atk_rate, weapon_matk_rate;
 
 		// [GonBee]
-		unsigned short near_batk;            // 近接物理攻撃時のベースAtk上昇。
-		unsigned short near_perfect_hit_add; // 近接物理攻撃時の必中率上昇。
+		int dance_rate;           // ダンス効果上昇。
+		int mental;               // メンタル強化。
+		int near_batk;            // 近接物理攻撃時のベースAtk上昇。
+		int near_perfect_hit_add; // 近接物理攻撃時の必中率上昇。
 
 	} bonus;
 	// zeroed vars end here.

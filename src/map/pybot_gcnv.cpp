@@ -193,8 +193,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (AS_POISONREACT                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (AS_ENCHANTPOISON                               ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC_D     (ASC_METEORASSAULT, SM_MAGNUM                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+		AI_SKILL_USE_PROC_D     (ASC_METEORASSAULT, SM_MAGNUM                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (TF_POISON                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (TF_SPRINKLESAND                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC_D     (AS_GRIMTOOTH, SM_BASH                          ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 1),
@@ -772,6 +772,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (NJ_KAENSIN                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+		AI_SKILL_USE_PROC       (RG_STEALCOIN                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (CR_GRANDCROSS                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_D     (KN_BOWLINGBASH, MC_CARTREVOLUTION              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -789,8 +791,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (WZ_STORMGUST, freeze                           ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (WZ_JUPITEL, crush                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (PR_TURNUNDEAD                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (RG_STEALCOIN                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (RG_STRIPWEAPON                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 3),
 		AI_SKILL_USE_PROC       (RG_STRIPSHIELD                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 3),
 		AI_SKILL_USE_PROC       (TF_POISON                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
@@ -937,6 +937,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (NJ_KAENSIN                                     ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
+		AI_SKILL_USE_PROC       (RG_STEALCOIN                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (CR_GRANDCROSS                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC_D     (KN_BOWLINGBASH, MC_CARTREVOLUTION              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
@@ -954,8 +956,6 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (WZ_STORMGUST, freeze                           ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (WZ_JUPITEL, crush                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (PR_TURNUNDEAD                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (RG_STEALCOIN                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (ST_FULLSTRIP                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (RG_STRIPWEAPON                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 3),
 		AI_SKILL_USE_PROC       (RG_STRIPSHIELD                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 3),
@@ -1038,12 +1038,12 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_T     (SM_MAGNUM, enchant                             ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (AL_DECAGI                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (PB_FIRST                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (SM_MAGNUM                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_FIREBALL                                    ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (MG_THUNDERSTORM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_T     (AL_BLESSING, curse                             ,  1,  1, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (AL_CRUCIS                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
-		AI_SKILL_USE_PROC       (TF_STEAL                                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (TF_POISON                                      ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 		AI_SKILL_USE_PROC       (MC_MAMMONITE                                   ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 		AI_SKILL_USE_PROC       (SM_BASH                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
@@ -1152,10 +1152,10 @@ const std::unordered_map<
 
 // AIにおけるBot一時スキル使用手続きのベクタ(後処理)。
 const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_POST_USE_PROCS = {
+	AI_SKILL_USE_PROC       (TF_STEAL                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 	AI_SKILL_USE_PROC       (SM_MAGNUM                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
 	AI_SKILL_USE_PROC       (WZ_METEOR                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 	AI_SKILL_USE_PROC       (MG_FIREBALL                              ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 1),
-	AI_SKILL_USE_PROC       (TF_STEAL                                 ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 	AI_SKILL_USE_PROC       (TF_POISON                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 3),
 	AI_SKILL_USE_PROC       (KN_PIERCE                                ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
 	AI_SKILL_USE_PROC       (SM_BASH                                  ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 5),
@@ -1223,7 +1223,6 @@ const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY = {
 // 味方スキルアドバンテージのマップ(近接)。
 const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE = {
 	{MG_SAFETYWALL     ,  100},
-	{WZ_QUAGMIRE       ,  -20},
 };
 
 // 矢/弾タイプ名のテーブル。
@@ -2398,10 +2397,6 @@ const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_AWAY = {
 // 敵スキルアドバンテージのマップ。
 const std::unordered_map<e_skill,int> ENEMY_SKILL_ADVANTAGES_CLOSE = {
 	{MG_SAFETYWALL   ,   100},
-	{WZ_QUAGMIRE     ,   -20},
-	{AM_DEMONSTRATION, -1000},
-	{AS_VENOMDUST    ,    -1},
-	{NPC_EVILLAND    ,  -100},
 };
 
 // 装備部位の順序を装備部位のインデックスに変換するテーブル。

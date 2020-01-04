@@ -762,6 +762,47 @@ BUILDIN_FUNC(setcardlist) {
 	return SCRIPT_CMD_SUCCESS;
 }
 
+BUILDIN_FUNC(autobonus4)
+{
+	unsigned int dur, pos;
+	short rate,atk_type;
+	TBL_PC* sd;
+	const char *bonus_script, *other_script = NULL;
+	struct script_data *data;
+
+	if( !script_rid2sd(sd) )
+		return SCRIPT_CMD_SUCCESS; // no player attached
+
+	if (current_equip_combo_pos)
+		pos = current_equip_combo_pos;
+	else
+		pos = sd->inventory.u.items_inventory[current_equip_item_index].equip;
+
+	if((sd->state.autobonus&pos) == pos)
+		return SCRIPT_CMD_SUCCESS;
+
+	rate = script_getnum(st,3);
+	dur = script_getnum(st,4);
+	data = script_getdata(st, 5);
+	get_val(st, data); // Convert into value in case of a variable
+	atk_type = ( data_isstring(data) ? skill_name2id(script_getstr(st,5)) : script_getnum(st,5) );
+	bonus_script = script_getstr(st,2);
+	if( !rate || !dur || !pos || !atk_type || !bonus_script )
+		return SCRIPT_CMD_SUCCESS;
+
+	if( script_hasdata(st,6) )
+		other_script = script_getstr(st,6);
+
+	if( pc_addautobonus(sd->autobonus4, bonus_script, rate, dur, atk_type, other_script, pos, true) )
+	{
+		script_add_autobonus(bonus_script);
+		if( other_script )
+			script_add_autobonus(other_script);
+	}
+
+	return SCRIPT_CMD_SUCCESS;
+}
+
 // [GonBee]
 // フィーバーに関する情報を更新する。
 BUILDIN_FUNC(updatefever) {

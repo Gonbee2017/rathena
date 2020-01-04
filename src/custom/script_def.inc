@@ -35,6 +35,7 @@ BUILDIN_DEF(queryjournalinfos, "iirrrrr"),
 BUILDIN_DEF(querymvpranking, "rirrrr"),
 BUILDIN_DEF(querymvpstats, "rr"),
 BUILDIN_DEF(setcardlist, "r"),
+BUILDIN_DEF(autobonus4, "siiv?"),
 BUILDIN_DEF(updatefever, ""),
 
 // [GonBee]

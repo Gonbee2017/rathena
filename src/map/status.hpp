@@ -866,8 +866,8 @@ enum sc_type : int16 {
 #endif
 
 	// [GonBee]
-	// 子守歌状態を追加。
-	SC_LULLABY,
+	SC_LULLABY,       // 子守歌状態。
+	SC_COUNTERATTACK, // 反撃状態。
 
 	SC_MAX, //Automatically updated max, used in for's to check we are within bounds.
 };

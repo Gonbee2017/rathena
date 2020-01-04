@@ -180,6 +180,17 @@ OnInit:
 	set .ext_cars[getarraysize(.ext_cars)], 29916; // 火忍法 + 30%
 	set .ext_cars[getarraysize(.ext_cars)], 29917; // 風忍法 + 30%
 	set .ext_cars[getarraysize(.ext_cars)], 29918; // ヒール + 10%
+	set .ext_cars[getarraysize(.ext_cars)], 29919; // 近接アスムプティオ無視
+	set .ext_cars[getarraysize(.ext_cars)], 29920; // 近接オートカウンター無視
+	set .ext_cars[getarraysize(.ext_cars)], 29921; // 近接オートガード無視
+	set .ext_cars[getarraysize(.ext_cars)], 29922; // 近接ストーンスキン無視
+	set .ext_cars[getarraysize(.ext_cars)], 29923; // デモンストレーション無効
+	set .ext_cars[getarraysize(.ext_cars)], 29924; // イービルランド無効
+	set .ext_cars[getarraysize(.ext_cars)], 29925; // クァグマイア無効
+	set .ext_cars[getarraysize(.ext_cars)], 29926; // ベナムダスト無効
+	set .ext_cars[getarraysize(.ext_cars)], 29927; // ブランディッシュスピア反撃
+	set .ext_cars[getarraysize(.ext_cars)], 29928; // マグナムブレイク反撃
+	set .ext_cars[getarraysize(.ext_cars)], 29929; // パルスストライク反撃
 	set .nor_car_fir, 4000;
 	set .nor_car_las, 4700;
 	set .rar_cars[getarraysize(.rar_cars)], 4054; // エンジェリングカード

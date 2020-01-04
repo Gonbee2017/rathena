@@ -1384,6 +1384,9 @@ void initChangeTables(void)
 	StatusChangeFlagTable[SC_DORAM_BUF_01] |= SCB_REGEN;
 	StatusChangeFlagTable[SC_DORAM_BUF_02] |= SCB_REGEN;
 
+	// [GonBee]
+	StatusChangeFlagTable[SC_COUNTERATTACK] |= SCB_BATK;
+
 #ifdef RENEWAL
 	// renewal EDP increases your weapon atk
 	StatusChangeFlagTable[SC_EDP] |= SCB_WATK;
@@ -3642,6 +3645,9 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 	pc_delautobonus(sd, sd->autobonus, true);
 	pc_delautobonus(sd, sd->autobonus2, true);
 	pc_delautobonus(sd, sd->autobonus3, true);
+
+	// [GonBee]
+	pc_delautobonus(sd, sd->autobonus4, true);
 
 	running_npc_stat_calc_event = true;
 	npc_script_event(sd, NPCE_STATCALC);
@@ -6189,6 +6195,11 @@ static unsigned short status_calc_batk(struct block_list *bl, struct status_chan
 		batk += sc->data[SC_QUEST_BUFF3]->val1;
 	if (sc->data[SC_SHRIMP])
 		batk += batk * sc->data[SC_SHRIMP]->val2 / 100;
+
+	// [GonBee]
+	// 反撃状態を追加。
+	if (sc->data[SC_COUNTERATTACK])
+		batk += sc->data[SC_COUNTERATTACK]->val1;
 
 	return (unsigned short)cap_value(batk,0,USHRT_MAX);
 }
@@ -8791,6 +8802,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 	sd = BL_CAST(BL_PC, bl);
 	vd = status_get_viewdata(bl);
 
+	// [GonBee]
+	map_session_data* ssd = BL_CAST(BL_PC, src);
+
 	undead_flag = battle_check_undead(status->race,status->def_ele);
 	// Check for immunities / sc fails
 	switch (type) {
@@ -10450,18 +10464,12 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		case SC_MINDBREAKER:
 
 			// [GonBee]
-			// メンタルスティックによる補正。
+			// メンタル強化。
 			//val2 = 20*val1; // matk increase.
 			{
-				int ms_ref = 0;
-				if (sd) {
-					int wep_ind = sd->equip_index[EQI_HAND_R];
-					if (wep_ind >= 0) {
-						item* wep = &sd->inventory.u.items_inventory[wep_ind];
-						if (wep->nameid == 1654) ms_ref = wep->refine;
-					}
-				}
-				val2 = 20 * val1 - 2 * ms_ref * val1; // matk increase.
+				int men = 0;
+				if (ssd) men = ssd->bonus.mental;
+				val2 = (20 - men) * val1; // matk increase.
 			}
 
 			val3 = 12*val1; // mdef2 reduction.
@@ -12088,7 +12096,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 
 	// [GonBee]
 	// 合奏スキルは前提となる独奏スキルの効果を併せ持つ。
-	map_session_data* ssd = BL_CAST(BL_PC, src);
 	if (ssd) {
 		auto pla = [src, bl, ssd, tick] (e_skill dan_kid, int dan_klv) {
 			if (battle_check_target(src, bl, skill_get_unit_target(dan_kid)) > 0 &&

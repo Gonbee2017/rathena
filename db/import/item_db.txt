@@ -272,7 +272,7 @@
 1647,Croce_Staff,クローチェスタッフ,5,50000,,500,30,,1,1,0x00008110,2,2,2,3,50,1,10,{ bonus bAtkEle,Ele_Holy; bonus bMatkRate,15; bonus bInt,4; bonus4 bAutoSpellOnSkill,"AL_HEAL","AL_BLESSING",max(getskilllv("AL_BLESSING"),1),20; },{},{}
 1648,Staff_Of_Bordeaux,スタッフオブオルド,5,50000,,500,30,,1,0,0x00010204,2,2,2,4,50,1,10,{ bonus bMatkRate,15; bonus bInt,2; bonus bDex,1; if(getskilllv("SA_DRAGONOLOGY")==5) { bonus bUseSPrate,-15; bonus bInt,3; } },{},{}
 1649,Rafini_Staff,ラフィネスタッフ,5,99000,,500,30,,1,0,0x00818315,63,2,2,3,99,1,10,{ bonus bMatkRate,20; bonus bCastrate,-getrefine(); },{},{}
-1654,Mental_Stick,メンタルスティック,5,99000,,500,40,,1,1,0x00010000,6,2,2,3,99,1,10,{ bonus bMatkRate,20; },{},{ itemheal 0,-100; }
+1654,Mental_Stick,メンタルスティック,5,99000,,500,40,,1,1,0x00010000,6,2,2,3,99,1,10,{ bonus bMatkRate,20; bonus bMental,2*getrefine(); },{},{ itemheal 0,-100; }
 1657,Wand_Of_Affection,慈愛の杖,5,99000,,500,30,,1,2,0x00000100,6,2,2,3,99,1,10,{ bonus bMatkRate,15; bonus bInt,2; bonus bAtkEle,Ele_Holy; bonus bHealPower,10; },{},{}
 1662,Bone_Wand_,骸骨の杖,5,24000,,700,40,,1,2,0x00818314,7,2,2,3,24,1,10,{ bonus bInt,4; bonus bAtkEle,Ele_Undead; bonus bMatkRate,15; },{},{}
 1663,Staff_Of_Bordeaux_,スタッフオブオルド,5,50000,,500,30,,1,2,0x00010204,2,2,2,4,50,1,10,{ bonus bMatkRate,15; bonus bInt,2; bonus bDex,1; if(getskilllv("SA_DRAGONOLOGY")==5) { bonus bUseSPrate,-15; bonus bInt,3; } },{},{}
@@ -477,7 +477,7 @@
 2446,Krieger_Shoes3,グロリアス普及用シューズ,4,10000,,0,,0,,0,0xFFFFFFFE,7,2,64,,0,1,0,{ bonus bMaxHPRate,5; },{},{}
 2450,Vital_Tree_Shoes,セフィロトシューズ,4,60000,,500,,4,,0,0xFFFFFFFE,63,2,64,,60,1,0,{ bonus bVit,2; bonus bMdef,3; bonus bMaxHPrate,10; bonus bHPrecovRate,5; bonus2 bHPRegenRate,30,10000; bonus bHealpower2,5; bonus bAddItemHealRate,5; },{},{}
 2463,Feral_Boots,野生のブーツ,4,75000,,0,,1,,0,0xFFFFFFFF,63,2,64,,75,0,0,{},{},{}
-2465,Dance_Shoes,ダンスシューズ,4,99000,,300,,3,,1,0x00080000,6,0,64,,99,1,0,{ bonus bAgi,1; bonus bAspdRate,2; },{},{}
+2465,Dance_Shoes,ダンスシューズ,4,99000,,300,,3,,1,0x00080000,6,0,64,,99,1,0,{ bonus bAgi,1; bonus bAspdRate,2; bonus bDanceRate,2*getrefine(); },{},{}
 2467,Golden_Rod_Shoes,ゴールデンロッドシューズ,4,99000,,500,,1,,0,0x00000200,6,2,64,,99,1,0,{ bonus bMdef,2; bonus bMaxHP,500; bonus2 bSubEle,Ele_Wind,15; },{},{}
 2468,Aqua_Shoes,アクアシューズ,4,99000,,500,,2,,0,0x00000200,6,1,64,,99,1,0,{ bonus bMdef,2; bonus bMaxHP,500; bonus2 bSubEle,Ele_Water,15; },{},{}
 2469,Crimson_Shoes,クリムゾンシューズ,4,99000,,500,,1,,0,0x00000200,6,2,64,,99,1,0,{ bonus bMdef,2; bonus bMaxHP,500; bonus2 bSubEle,Ele_Fire,15; },{},{}
@@ -1087,7 +1087,7 @@
 5370,Orchid_Hairband,蘭のヘアバンド（RJC）,4,10000,,200,,1,,0,0xFFFFFFFF,7,2,256,,0,1,376,{ bonus bInt,1; },{},{}
 5371,Hat_Of_Judge,裁判官の帽子（RJC）,4,10000,,300,,2,,0,0xFFFFFFFF,7,2,768,,0,1,377,{ bonus bLuk,1; bonus bMaxSP,30; },{},{}
 5373,Darkness_Helm,ダークネスヘルム（RJC）,4,10000,,300,,2,,1,0xFFFFFFFF,7,2,768,,0,1,379,{ bonus bDex,3; bonus bMdef,1; },{},{}
-5374,L_Magestic_Goat,大型マジェスティックゴート,4,10000,,800,,5,,0,0xFFFFFFFF,7,2,256,,0,1,380,{ bonus2 bAddRace,RC_DemiHuman,12; bonus2 bAddRace,RC_Player,12; bonus bBaseAtk,JobLevel/2; },{},{}
+5374,L_Magestic_Goat,大型マジェスティックゴート,4,10000,,800,,5,,0,0xFFFFFFFF,7,2,256,,0,1,380,{ bonus2 bAddRace,RC_DemiHuman,40; bonus2 bAddRace,RC_Player,40; bonus bBaseAtk,JobLevel; },{},{}
 5375,L_Orc_Hero_Helm,大型オークヒーローの兜,4,10000,,900,,5,,0,0xFFFFFFFF,7,2,768,,0,1,381,{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; },{},{}
 5378,Rabbit_Ear_Hat,兎耳帽子,4,10000,,300,,0,,0,0xFFFFFFFF,7,2,256,,0,1,384,{ bonus bAgi,3; bonus3 bAutoSpellWhenHit,"AL_INCAGI",5,10; },{},{}
 5379,Balloon_Hat,バルーンハット,4,0,,800,,3,,1,0xFFFFFFFF,7,2,256,,50,1,385,{ bonus bCastrate,-getrefine(); },{},{}
@@ -1420,7 +1420,7 @@
 18594,Magni_Cap_,マグニキャップ,4,30000,,1000,,5,,1,0xFFFFFFFE,7,2,256,,65,1,250,{ bonus bStr,2; },{},{}
 18667,Cat_Lace_Hairband,子猫のヘッドドレス,4,60000,,500,,0,,1,0xFFFFFFFE,63,2,256,,60,1,816,{ bonus bDelayRate,-5-5*(getrefine()>=7)-3*(getrefine()>=9); },{},{}
 18720,Magical_Booster,マジカルブースター,4,30000,,300,,0,,0,0xFFFFFFFF,63,2,512,,30,0,873,{ bonus bMatkRate,3; },{},{}
-18724,L_Magestic_Goat_,大型マジェスティックゴート,4,10000,,800,,5,,1,0xFFFFFFFF,7,2,256,,0,1,380,{ bonus2 bAddRace,RC_DemiHuman,12; bonus2 bAddRace,RC_Player,12; bonus bBaseAtk,JobLevel/2; },{},{}
+18724,L_Magestic_Goat_,大型マジェスティックゴート,4,10000,,800,,5,,1,0xFFFFFFFF,7,2,256,,0,1,380,{ bonus2 bAddRace,RC_DemiHuman,40; bonus2 bAddRace,RC_Player,40; bonus bBaseAtk,JobLevel; },{},{}
 18751,Lucky_Clover,ラッキークローバー,4,50000,,100,,0,,0,0xFFFFFFFF,63,2,1,,50,0,571,{ bonus bFlee2,2; },{},{}
 18866,Owlduke_Silk_Hat,オウルデュークのシルクハット,4,10000,,500,,5,,1,0xFFFFFFFF,7,2,256,,0,1,982,{ bonus bAgi,1; bonus bInt,1; bonus5 bAutoSpellWhenHit,"HW_MAGICPOWER",2,50,BF_MAGIC,1; if(getrefine()>=6) { bonus5 bAutoSpellWhenHit,"HW_MAGICPOWER",2,10*(getrefine()-5),BF_MAGIC,1; } },{},{}
 18937,Memories_Of_Lovers,メモリーオブラバーズ,4,0,,100,,,,0,0xFFFFFFFF,63,2,512,,1,0,229,{ bonus bMdef,7; bonus bMaxHPrate,2; },{},{}
@@ -1976,4 +1976,15 @@
 29915,Ninpou_Water_30_29915,水忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HYOUSENSOU",30; bonus2 bSkillAtk,"NJ_HYOUSYOURAKU",30; },{},{}
 29916,Ninpou_Fire_30_29916,火忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_KOUENKA",30; bonus2 bSkillAtk,"NJ_KAENSIN",30; bonus2 bSkillAtk,"NJ_BAKUENRYU",30; },{},{}
 29917,Ninpou_Wind_30_29917,風忍法 + 30%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HUUJIN",30; bonus2 bSkillAtk,"NJ_RAIGEKISAI",30; bonus2 bSkillAtk,"NJ_KAMAITACHI",30; },{},{}
-29918,Heal_5_29918,ヒール + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,10; },{},{}
+29918,Heal_10_29918,ヒール + 10%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,10; },{},{}
+29919,Near_Ignore_Assumptio_29919,近接アスムプティオ無視,6,20,,10,,,,,,,,2,,,,,{ bonus bNearIgnoreAssumptio; },{},{}
+29920,Near_Ignore_Autocounter_29920,近接オートカウンター無視,6,20,,10,,,,,,,,2,,,,,{ bonus bNearIgnoreAutocounter; },{},{}
+29921,Near_Ignore_Autoguard_29921,近接オートガード無視,6,20,,10,,,,,,,,2,,,,,{ bonus bNearIgnoreAutoguard; },{},{}
+29922,Near_Ignore_Stoneskin_29922,近接ストーンスキン無視,6,20,,10,,,,,,,,2,,,,,{ bonus bNearIgnoreStoneskin; },{},{}
+29923,Immune_Demonstration_29923,デモンストレーション無効,6,20,,10,,,,,,,,64,,,,,{ bonus bImmuneDemonstration; },{},{}
+29924,Immune_Evilland_29924,イービルランド無効,6,20,,10,,,,,,,,64,,,,,{ bonus bImmuneEvilland; },{},{}
+29925,Immune_Quagmire_29925,クァグマイア無効,6,20,,10,,,,,,,,64,,,,,{ bonus bImmuneQuagmire; },{},{}
+29926,Immune_Venomdust_29926,ベナムダスト無効,6,20,,10,,,,,,,,64,,,,,{ bonus bImmuneVenomdust; },{},{}
+29927,Counterattack_Brandishspear_29927,ブランディッシュスピア反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"KN_BRANDISHSPEAR","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
+29928,Counterattack_Magnum_29928,マグナムブレイク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"SM_MAGNUM","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
+29929,Counterattack_Pulsstrike_29929,パルスストライク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"NPC_PULSESTRIKE","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}

@@ -1348,6 +1348,15 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 
 	case AM_DEMONSTRATION:
+
+		// [GonBee]
+		// デモンストレーション無効を追加。
+		{
+			if (dstsd &&
+				dstsd->special_state.immune_demonstration
+			) break;
+		}
+
 		skill_break_equip(src,bl, EQP_WEAPON, 100*skill_lv, BCT_ENEMY);
 		break;
 
@@ -1401,18 +1410,8 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 			rate += 5+skill;
 
 		// [GonBee]
-		// ダンスシューズの効果。
-		{
-			int ds_ref = 0;
-			if (sd) {
-				int sho_ind = sd->equip_index[EQI_SHOES];
-				if (sho_ind >= 0) {
-					item* sho = &sd->inventory.u.items_inventory[sho_ind];
-					if (sho->nameid == 2465) ds_ref = sho->refine;
-				}
-			}
-			rate += rate * 2 * ds_ref / 100;
-		}
+		// ダンス効果上昇。
+		rate += rate * sd->bonus.dance_rate / 100;
 
 		status_zap(bl, 0, rate);
 		break;
@@ -1571,6 +1570,13 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		clif_skill_nodamage(src,bl,skill_id,skill_lv,1);
 		break;
 	case NPC_EVILLAND:
+
+		// [GonBee]
+		// イービルランド無効を追加。
+		if (dstsd &&
+			dstsd->special_state.immune_evilland
+		) break;
+
 		sc_start(src,bl,SC_BLIND,5*skill_lv,skill_lv,skill_get_time2(skill_id,skill_lv));
 		break;
 	case NPC_HELLJUDGEMENT:
@@ -8723,16 +8729,14 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			}
 
 			// [GonBee]
-			// メンタルスティックの効果。
-			if (sd) {
-				int wep_ind = sd->equip_index[EQI_HAND_R];
-				if (wep_ind >= 0) {
-					item* wep = &sd->inventory.u.items_inventory[wep_ind];
-					if (wep->nameid == 1654) break;
-				}
-			}
+			// メンタル強化による刺激の抑制。
+			//if (dstmd)
+			if (dstmd &&
+				(!sd ||
+					!sd->bonus.mental
+				)
+			)
 
-			if (dstmd)
 				mob_target(dstmd, src, skill_get_range2(src, skill_id, skill_lv, true));
 		}
 		break;
@@ -13096,18 +13100,8 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 			val1 += pc_checkskill(sd, DC_DANCINGLESSON);
 
 		// [GonBee]
-		// ダンスシューズの効果。
-		{
-			int ds_ref = 0;
-			if (sd) {
-				int sho_ind = sd->equip_index[EQI_SHOES];
-				if (sho_ind >= 0) {
-					item* sho = &sd->inventory.u.items_inventory[sho_ind];
-					if (sho->nameid == 2465) ds_ref = sho->refine;
-				}
-			}
-			val1 += val1 * 2 * ds_ref / 100;
-		}
+		// ダンス効果上昇。
+		val1 += val1 * sd->bonus.dance_rate / 100;
 
 		break;
 	case BA_POEMBRAGI:
@@ -13137,19 +13131,9 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		}
 
 		// [GonBee]
-		// ダンスシューズの効果。
-		{
-			int ds_ref = 0;
-			if (sd) {
-				int sho_ind = sd->equip_index[EQI_SHOES];
-				if (sho_ind >= 0) {
-					item* sho = &sd->inventory.u.items_inventory[sho_ind];
-					if (sho->nameid == 2465) ds_ref = sho->refine;
-				}
-			}
-			val1 += val1 * 2 * ds_ref / 100;
-			val2 += val2 * 2 * ds_ref / 100;
-		}
+		// ダンス効果上昇。
+		val1 += val1 * sd->bonus.dance_rate / 100;
+		val2 += val2 * sd->bonus.dance_rate / 100;
 
 		val1 *= 10; //Because 10 is actually 1% aspd
 		break;
@@ -13162,19 +13146,9 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		}
 
 		// [GonBee]
-		// ダンスシューズの効果。
-		{
-			int ds_ref = 0;
-			if (sd) {
-				int sho_ind = sd->equip_index[EQI_SHOES];
-				if (sho_ind >= 0) {
-					item* sho = &sd->inventory.u.items_inventory[sho_ind];
-					if (sho->nameid == 2465) ds_ref = sho->refine;
-				}
-			}
-			val1 += val1 * 2 * ds_ref / 100;
-			val2 += val2 * 2 * ds_ref / 100;
-		}
+		// ダンス効果上昇。
+		val1 += val1 * sd->bonus.dance_rate / 100;
+		val2 += val2 * sd->bonus.dance_rate / 100;
 
 		break;
 	case BA_ASSASSINCROSS:
@@ -13194,18 +13168,8 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 			val1 += 5 * pc_checkskill(sd, DC_DANCINGLESSON);
 
 		// [GonBee]
-		// ダンスシューズの効果。
-		{
-			int ds_ref = 0;
-			if (sd) {
-				int sho_ind = sd->equip_index[EQI_SHOES];
-				if (sho_ind >= 0) {
-					item* sho = &sd->inventory.u.items_inventory[sho_ind];
-					if (sho->nameid == 2465) ds_ref = sho->refine;
-				}
-			}
-			val1 += val1 * 2 * ds_ref / 100;
-		}
+		// ダンス効果上昇。
+		val1 += val1 * sd->bonus.dance_rate / 100;
 
 		break;
 	case BD_DRUMBATTLEFIELD:
@@ -13610,6 +13574,10 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 	type = status_skill2sc(sg->skill_id);
 	sce = (sc && type != SC_NONE) ? sc->data[type] : NULL;
 	skill_id = sg->skill_id; //In case the group is deleted, we need to return the correct skill id, still.
+
+	// [GonBee]
+	map_session_data* tsd = BL_CAST(BL_PC, bl);
+
 	switch (sg->unit_id) {
 		case UNT_SPIDERWEB:
 			if (sc) {
@@ -13714,7 +13682,17 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 			break;
 
 		case UNT_QUAGMIRE:
-			if( !sce && battle_check_target(&unit->bl,bl,sg->target_flag) > 0 )
+
+			// [GonBee]
+			// クァグマイア無効を追加。
+			//if( !sce && battle_check_target(&unit->bl,bl,sg->target_flag) > 0 )
+			if (!sce &&
+				battle_check_target(&unit->bl,bl,sg->target_flag) > 0 &&
+				(!tsd ||
+					!tsd->special_state.immune_quagmire
+				)
+			)
+
 				sc_start4(ss, bl,type,100,sg->skill_lv,sg->group_id,0,0,sg->limit);
 			break;
 
@@ -14086,7 +14064,16 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 			//Will heal demon and undead element monsters, but not players.
 			if ((bl->type == BL_PC) || (!battle_check_undead(tstatus->race, tstatus->def_ele) && tstatus->race!=RC_DEMON))
 			{	//Damage enemies
-				if(battle_check_target(&unit->bl,bl,BCT_ENEMY)>0)
+
+				// [GonBee]
+				// イービルランド無効を追加。
+				//if(battle_check_target(&unit->bl,bl,BCT_ENEMY)>0)
+				if (battle_check_target(&unit->bl,bl,BCT_ENEMY) > 0 &&
+					(!tsd ||
+						!tsd->special_state.immune_evilland
+					)
+				)
+
 					skill_attack(BF_MISC, ss, &unit->bl, bl, sg->skill_id, sg->skill_lv, tick, 0);
 			} else {
 				int heal = skill_calc_heal(ss,bl,sg->skill_id,sg->skill_lv,true);
@@ -14169,7 +14156,17 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 			break;
 
 		case UNT_VENOMDUST:
-			if(tsc && !tsc->data[type])
+
+			// [GonBee]
+			// ベナムダスト無効を追加。
+			//if(tsc && !tsc->data[type])
+			if (tsc &&
+				!tsc->data[type] &&
+				(!tsd ||
+					!tsd->special_state.immune_venomdust
+				)
+			)
+
 				status_change_start(ss,bl,type,10000,sg->skill_lv,sg->src_id,0,0,skill_get_time2(sg->skill_id,sg->skill_lv),SCSTART_NONE);
 			break;
 
@@ -14286,7 +14283,15 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 
 		case UNT_TATAMIGAESHI:
 		case UNT_DEMONSTRATION:
-			skill_attack(BF_WEAPON,ss,&unit->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
+
+			// [GonBee]
+			// デモンストレーション無効を追加。
+			//skill_attack(BF_WEAPON,ss,&unit->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
+			if (sg->unit_id != UNT_DEMONSTRATION ||
+				!tsd ||
+				!tsd->special_state.immune_demonstration
+			) skill_attack(BF_WEAPON,ss,&unit->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
+
 			break;
 
 		case UNT_GOSPEL:

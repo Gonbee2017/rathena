@@ -2649,13 +2649,6 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 #endif
 			}
 			break;
-
-		// [GonBee]
-		// 近接物理攻撃時のベースAtk上昇。
-		case SP_NEAR_BASE_ATK:
-			sd->bonus.near_batk += val;
-			break;
-
 		case SP_DEF1:
 			if(sd->state.lr_flag != 2) {
 				bonus = status->def + val;
@@ -2907,13 +2900,6 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			if(sd->state.lr_flag != 2)
 				sd->bonus.perfect_hit_add += val;
 			break;
-
-		// [GonBee]
-		// 近接物理攻撃時の必中率上昇。
-		case SP_NEAR_PERFECT_HIT_ADD_RATE:
-			sd->bonus.near_perfect_hit_add += val;
-			break;
-
 		case SP_CRITICAL_RATE:
 			if(sd->state.lr_flag != 2)
 				sd->critical_rate+=val;
@@ -3247,6 +3233,57 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			if (sd->state.lr_flag != 2)
 				sd->special_state.no_mado_fuel = 1;
 			break;
+
+		// [GonBee]
+		// ダンス効果上昇。
+		case SP_DANCE_RATE:
+			sd->bonus.dance_rate += val;
+			break;
+		// メンタル強化。
+		case SP_MENTAL:
+			sd->bonus.mental += val;
+			break;
+		// 近接物理攻撃時のベースAtk上昇。
+		case SP_NEAR_BASE_ATK:
+			sd->bonus.near_batk += val;
+			break;
+		// 近接物理攻撃時の必中率上昇。
+		case SP_NEAR_PERFECT_HIT_ADD_RATE:
+			sd->bonus.near_perfect_hit_add += val;
+			break;
+		// 近接アスムプティオ無視を追加。
+		case SP_NEAR_IGNORE_ASSUMPTIO:
+			sd->special_state.near_ignore_assumptio = 1;
+			break;
+		// 近接オートカウンター無視を追加。
+		case SP_NEAR_IGNORE_AUTOCOUNTER:
+			sd->special_state.near_ignore_autocounter = 1;
+			break;
+		// 近接オートガード無視を追加。
+		case SP_NEAR_IGNORE_AUTOGUARD:
+			sd->special_state.near_ignore_autoguard = 1;
+			break;
+		// 近接ストーンスキン無視を追加。
+		case SP_NEAR_IGNORE_STONESKIN:
+			sd->special_state.near_ignore_stoneskin = 1;
+			break;
+		// デモンストレーション無効を追加。
+		case SP_IMMUNE_DEMONSTRATION:
+			sd->special_state.immune_demonstration = 1;
+			break;
+		// イービルランド無効を追加。
+		case SP_IMMUNE_EVILLAND:
+			sd->special_state.immune_evilland = 1;
+			break;
+		// クァグマイア無効を追加。
+		case SP_IMMUNE_QUAGMIRE:
+			sd->special_state.immune_quagmire = 1;
+			break;
+		// ベナムダスト無効を追加。
+		case SP_IMMUNE_VENOMDUST:
+			sd->special_state.immune_venomdust = 1;
+			break;
+
 		default:
 			if (running_npc_stat_calc_event) {
 				ShowWarning("pc_bonus: unknown bonus type %d %d in OnPCStatCalcEvent!\n", type, val);
@@ -3286,17 +3323,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		else if(sd->state.lr_flag == 2)
 			sd->arrow_addele[type2]+=val;
 		break;
-
-	// [GonBee]
-	// 近接物理攻撃時の属性追加ダメージ。
-	case SP_NEAR_ADDELE: // bonus2 bNearAddEle,e,x;
-		PC_BONUS_CHK_ELEMENT(type2,SP_NEAR_ADDELE);
-		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
-			sd->right_weapon.near_addele[type2]+=val;
-		else if(sd->state.lr_flag == 1)
-			sd->left_weapon.near_addele[type2]+=val;
-		break;
-
 	case SP_ADDRACE: // bonus2 bAddRace,r,x;
 		PC_BONUS_CHK_RACE(type2,SP_ADDRACE);
 		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
@@ -3306,17 +3332,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		else if(sd->state.lr_flag == 2)
 			sd->arrow_addrace[type2]+=val;
 		break;
-
-	// [GonBee]
-	// 近接物理攻撃時の種族追加ダメージ。
-	case SP_NEAR_ADDRACE: // bonus2 bNearAddRace,r,x;
-		PC_BONUS_CHK_RACE(type2,SP_NEAR_ADDRACE);
-		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
-			sd->right_weapon.near_addrace[type2]+=val;
-		else if(sd->state.lr_flag == 1)
-			sd->left_weapon.near_addrace[type2]+=val;
-		break;
-
 	case SP_ADDCLASS: // bonus2 bAddClass,c,x;
 		PC_BONUS_CHK_CLASS(type2,SP_ADDCLASS);
 		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
@@ -3326,17 +3341,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		else if(sd->state.lr_flag == 2)
 			sd->arrow_addclass[type2]+=val;
 		break;
-
-	// [GonBee]
-	// 近接物理攻撃時の分類追加ダメージ。
-	case SP_NEAR_ADDCLASS: // bonus2 bNearAddClass,c,x;
-		PC_BONUS_CHK_CLASS(type2,SP_NEAR_ADDCLASS);
-		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
-			sd->right_weapon.near_addclass[type2]+=val;
-		else if(sd->state.lr_flag == 1)
-			sd->left_weapon.near_addclass[type2]+=val;
-		break;
-
 	case SP_ADDSIZE: // bonus2 bAddSize,s,x;
 		PC_BONUS_CHK_SIZE(type2,SP_ADDSIZE);
 		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
@@ -3346,17 +3350,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		else if(sd->state.lr_flag == 2)
 			sd->arrow_addsize[type2]+=val;
 		break;
-
-	// [GonBee]
-	// 近接物理攻撃時のサイズ追加ダメージ。
-	case SP_NEAR_ADDSIZE: // bonus2 bNearAddSize,s,x;
-		PC_BONUS_CHK_SIZE(type2,SP_NEAR_ADDSIZE);
-		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
-			sd->right_weapon.near_addsize[type2]+=val;
-		else if(sd->state.lr_flag == 1)
-			sd->left_weapon.near_addsize[type2]+=val;
-		break;
-
 	case SP_SUBELE: // bonus2 bSubEle,e,x;
 		PC_BONUS_CHK_ELEMENT(type2,SP_SUBELE);
 		if(sd->state.lr_flag != 2)
@@ -3740,15 +3733,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		if (sd->state.lr_flag != 2)
 			sd->ignore_def_by_class[type2] += val;
 		break;
-
-	// [GonBee]
-	// 近接物理攻撃時の分類Def無視を追加。
-	case SP_NEAR_IGNORE_DEF_CLASS_RATE: // bonus2 bNearIgnoreDefClassRate,r,n;
-		PC_BONUS_CHK_RACE(type2, SP_NEAR_IGNORE_DEF_CLASS_RATE);
-		if(sd->state.lr_flag != 2)
-			sd->near_ignore_def_by_class[type2] += val;
-		break;
-
 	case SP_SKILL_USE_SP_RATE: // bonus2 bSkillUseSPrate,sk,n;
 		if(sd->state.lr_flag == 2)
 			break;
@@ -3891,6 +3875,47 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 		if (sd->state.lr_flag != 2)
 			sd->dropaddclass[type2] += val;
 		break;
+
+	// [GonBee]
+	// 近接物理攻撃時の属性追加ダメージ。
+	case SP_NEAR_ADDELE: // bonus2 bNearAddEle,e,x;
+		PC_BONUS_CHK_ELEMENT(type2,SP_NEAR_ADDELE);
+		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
+			sd->right_weapon.near_addele[type2]+=val;
+		else if(sd->state.lr_flag == 1)
+			sd->left_weapon.near_addele[type2]+=val;
+		break;
+	// 近接物理攻撃時の種族追加ダメージ。
+	case SP_NEAR_ADDRACE: // bonus2 bNearAddRace,r,x;
+		PC_BONUS_CHK_RACE(type2,SP_NEAR_ADDRACE);
+		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
+			sd->right_weapon.near_addrace[type2]+=val;
+		else if(sd->state.lr_flag == 1)
+			sd->left_weapon.near_addrace[type2]+=val;
+		break;
+	// 近接物理攻撃時の分類追加ダメージ。
+	case SP_NEAR_ADDCLASS: // bonus2 bNearAddClass,c,x;
+		PC_BONUS_CHK_CLASS(type2,SP_NEAR_ADDCLASS);
+		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
+			sd->right_weapon.near_addclass[type2]+=val;
+		else if(sd->state.lr_flag == 1)
+			sd->left_weapon.near_addclass[type2]+=val;
+		break;
+	// 近接物理攻撃時のサイズ追加ダメージ。
+	case SP_NEAR_ADDSIZE: // bonus2 bNearAddSize,s,x;
+		PC_BONUS_CHK_SIZE(type2,SP_NEAR_ADDSIZE);
+		if(!sd->state.lr_flag || sd->state.lr_flag == 3)
+			sd->right_weapon.near_addsize[type2]+=val;
+		else if(sd->state.lr_flag == 1)
+			sd->left_weapon.near_addsize[type2]+=val;
+		break;
+	// 近接物理攻撃時の分類Def無視を追加。
+	case SP_NEAR_IGNORE_DEF_CLASS_RATE: // bonus2 bNearIgnoreDefClassRate,r,n;
+		PC_BONUS_CHK_RACE(type2, SP_NEAR_IGNORE_DEF_CLASS_RATE);
+		if(sd->state.lr_flag != 2)
+			sd->near_ignore_def_by_class[type2] += val;
+		break;
+
 	default:
 		if (running_npc_stat_calc_event) {
 			ShowWarning("pc_bonus2: unknown bonus type %d %d %d in OnPCStatCalcEvent!\n", type, type2, val);
@@ -8499,6 +8524,13 @@ int pc_readparam(struct map_session_data* sd,int type)
 #else
 			val = sd->castrate; break;
 #endif
+
+		// [GonBee]
+		case SP_DANCE_RATE: val = sd->bonus.dance_rate; break;
+		case SP_MENTAL: val = sd->bonus.mental; break;
+		case SP_NEAR_BASE_ATK: val = sd->bonus.near_batk; break;
+		case SP_NEAR_PERFECT_HIT_ADD_RATE: val = sd->bonus.near_perfect_hit_add; break;
+
 		default:
 			ShowError("pc_readparam: Attempt to read unknown parameter '%d'.\n", type);
 			return -1;
@@ -13411,4 +13443,5 @@ void pc_delete_session_data(map_session_data* sd) {
 	del(sd->autobonus);
 	del(sd->autobonus2);
 	del(sd->autobonus3);
+	del(sd->autobonus4);
 }
