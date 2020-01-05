@@ -3729,6 +3729,7 @@ const std::unordered_map<
 	{MM_REST        , "休息"        },
 	{MM_BACKUP      , "予備"        },
 	{MM_BASE        , "基本"        },
+	{MM_COMMON      , "一般"        },
 	{MM_BOSS        , "ボス"        },
 	{MM_GREAT       , "グレート"    },
 	{MM_FLORA       , "フローラ型"  },

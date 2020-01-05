@@ -565,6 +565,7 @@ enum meta_mobs {
 	MM_SIZE         =   120, // サイズ。
 	MM_ELEMENT      =   140, // 属性。
 	MM_RACE         =   160, // 種族。
+	MM_COMMON       =   179, // 一般。
 	MM_BOSS         =   180, // ボス。
 	MM_GREAT        =   181, // グレート。
 	MM_FLORA        =   182, // フローラ型。
