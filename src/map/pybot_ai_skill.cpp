@@ -59,9 +59,14 @@ AI_SKILL_USE_FUNC(AC_SHOWER) {
 
 // エンジェラスを使う。
 AI_SKILL_USE_FUNC(AL_ANGELUS) {
-	if (bot->sc_rest(SC_ANGELUS) <= bot->get_skill_tail(kid) &&
-		!bot->is_magic_immune()
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->is_magic_immune() &&
+			!mem->reject_skills()->find(kid) &&
+			mem->sc_rest(SC_ANGELUS) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // ブレッシングを使う。
@@ -469,7 +474,13 @@ AI_SKILL_USE_FUNC(BS_REPAIRWEAPON) {
 
 // ウェポンパーフェクションを使う。
 AI_SKILL_USE_FUNC(BS_WEAPONPERFECT) {
-	if (bot->sc_rest(SC_WEAPONPERFECTION) <= bot->get_skill_tail(kid)) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->reject_skills()->find(kid) &&
+			mem->sc_rest(SC_WEAPONPERFECTION) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // 私を縛らないでを使う。
@@ -2021,9 +2032,14 @@ AI_SKILL_USE_FUNC(PR_BENEDICTIO) {
 
 // グロリアを使う。
 AI_SKILL_USE_FUNC(PR_GLORIA) {
-	if (!bot->is_magic_immune() &&
-		bot->sc_rest(SC_GLORIA) <= bot->get_skill_tail(kid)
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->is_magic_immune() &&
+			!mem->reject_skills()->find(kid) &&
+			mem->sc_rest(SC_GLORIA) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // イムポシティオマヌスを使う。
@@ -2085,9 +2101,14 @@ AI_SKILL_USE_FUNC(PR_LEXDIVINA) {
 
 // マグニフィカートを使う。
 AI_SKILL_USE_FUNC(PR_MAGNIFICAT) {
-	if (!bot->is_magic_immune() &&
-		bot->sc_rest(SC_MAGNIFICAT) <= bot->get_skill_tail(kid)
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->is_magic_immune() &&
+			!mem->reject_skills()->find(kid) &&
+			mem->sc_rest(SC_MAGNIFICAT) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // マグヌスエクソシズムを使う。
@@ -2771,11 +2792,16 @@ AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
 
 // ウインドウォークを使う。
 AI_SKILL_USE_FUNC(SN_WINDWALK) {
-	if (!bot->is_magic_immune() &&
-		!bot->sc()->data[SC_DECREASEAGI] &&
-		!bot->sc()->data[SC_QUAGMIRE] &&
-		bot->sc_rest(SC_WINDWALK) <= bot->get_skill_tail(kid)
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->is_magic_immune() &&
+			!mem->reject_skills()->find(kid) &&
+			!mem->sc()->data[SC_DECREASEAGI] &&
+			!mem->sc()->data[SC_QUAGMIRE] &&
+			mem->sc_rest(SC_WINDWALK) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // フルストリップを使う。
