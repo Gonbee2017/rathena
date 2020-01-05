@@ -122,8 +122,7 @@ int unit_walktoxy_sub(struct block_list *bl)
 	//		ud->to_y -= diry[dir];
 	//	}
 	//}
-	if (ud->target_to &&
-		ud->chaserange >= 1 &&
+	if (ud->chaserange >= 1 &&
 		ud->walkpath.path_len > 1
 	) {
 		// PCのためのチェック用の距離を計算する。
