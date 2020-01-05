@@ -2292,6 +2292,11 @@ SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	std::string sk_nam = shift_arguments(args);
 	s_skill* sk = mem->find_skill(sk_nam);
+	if (!sk)
+		throw command_error{print(
+			"「", mem->name(), "」のスキル一覧に「",
+			sk_nam, "」がありません。"
+		)};
 	std::string sk_des = skill_get_desc(sk->id);
 	skill_equipset* es = mem->skill_equipsets()->find(e_skill(sk->id));
 	if (!es)
