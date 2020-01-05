@@ -896,12 +896,12 @@ struct ai_t {
 	void bot_greed();
 	void bot_pickup();
 	void bot_positioning();
-	void bot_follow();
 	void bot_remove_enchant();
 	void bot_explosion();
 	void bot_attack();
 	void bot_play_skill();
 	void bot_use_skill();
+	void bot_follow();
 	void bot_rest();
 
 	void homun_main(block_if* hom);

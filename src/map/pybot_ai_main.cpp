@@ -449,12 +449,12 @@ void ai_t::bot_main(
 	bot_use_item();
 	bot_loot();
 	bot_positioning();
-	bot_follow();
 	bot_remove_enchant();
 	bot_explosion();
 	bot_attack();
 	bot_play_skill();
 	bot_use_skill();
+	bot_follow();
 	bot_rest();
 }
 
@@ -775,20 +775,6 @@ void ai_t::bot_positioning() {
 	battler_positioning();
 }
 
-// Botが中心についていく。
-void ai_t::bot_follow() {
-	CS_ENTER;
-	int ran = int(bot->member_index() < leader->member_index()) + bot->member_index();
-	if (bot->battle_mode() == BM_NONE &&
-		!bot->is_walking() &&
-		!bot->check_range_bl(bot->bl(), &leader->center(), ran)
-	) {
-		if (bot->is_sit()) bot->stand();
-		else if (bot->can_move()) bot->walk_bl(&leader->center(), ran);
-		throw turn_end_exception();
-	}
-}
-
 // Botが武器に付与された属性を解除する。
 void ai_t::bot_remove_enchant() {
 	CS_ENTER;
@@ -876,6 +862,25 @@ void ai_t::bot_play_skill() {
 void ai_t::bot_use_skill() {
 	CS_ENTER;
 	battler_use_skill();
+}
+
+// Botが中心についていく。
+void ai_t::bot_follow() {
+	CS_ENTER;
+	int ran = int(bot->member_index() < leader->member_index()) + bot->member_index();
+	if (bot->battle_mode() == BM_NONE &&
+		!bot->is_walking() &&
+		bot->can_act() &&
+		!bot->check_range_bl(bot->bl(), &leader->center(), ran)
+	) {
+		if (bot->is_sit()) {
+			bot->stand();
+			throw turn_end_exception();
+		}
+		if (!bot->can_move() ||
+			!bot->walk_xy(leader->center().x, leader->center().y, ran)
+		) throw turn_end_exception();
+	}
 }
 
 // Botが休息する。
