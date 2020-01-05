@@ -2,7 +2,7 @@
 rem サーバージョブ by GonBee
 
 rem クラッシュしたことを警告するコマンド。
-set warn_crushed_cmd=start /min powershell -Command "Add-Type -Assembly System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('%1-serverがクラッシュしました。', '警告')"
+set warn_crashed_cmd=start /min powershell -Command "Add-Type -Assembly System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('%1-serverがクラッシュしました。', '警告')"
 
 cd /d %~dp0
 
@@ -14,7 +14,7 @@ if exist %1-server.stop (
 	goto end
 )
 if errorlevel 3 (
-	%warn_crushed_cmd%
+	%warn_crashed_cmd%
 	goto execute
 )
 if errorlevel 2 (
@@ -22,7 +22,7 @@ if errorlevel 2 (
 	goto end
 )
 if errorlevel 1 (
-	%warn_crushed_cmd%
+	%warn_crashed_cmd%
 	goto execute
 )
 :end
