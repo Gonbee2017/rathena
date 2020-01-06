@@ -4982,10 +4982,12 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 		return false; // You cannot use this item while sitting.
 	}
 
-	if (sd->state.storage_flag && item->type != IT_CASH) {
-		clif_messagecolor(&sd->bl, color_table[COLOR_RED], msg_txt(sd,388), false, SELF);
-		return false; // You cannot use this item while storage is open.
-	}
+	// [GonBee]
+	// 倉庫を開いているときでもアイテムを使用できるようにする。
+	//if (sd->state.storage_flag && item->type != IT_CASH) {
+	//	clif_messagecolor(&sd->bl, color_table[COLOR_RED], msg_txt(sd,388), false, SELF);
+	//	return false; // You cannot use this item while storage is open.
+	//}
 
 	if (item->flag.dead_branch && (mapdata->flag[MF_NOBRANCH] || mapdata_flag_gvg2(mapdata)))
 		return false;

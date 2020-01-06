@@ -7997,6 +7997,15 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			if(status_isimmune(bl))
 				break;
 
+			// [GonBee]
+			// PyBot用ダミーNPCには効かない。
+			if (dstmd &&
+				std::string(dstmd->npc_event).substr(0, pybot::PYBOT_DUMMY_NPC_NAME.length()) == pybot::PYBOT_DUMMY_NPC_NAME
+			) {
+				clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
+				break;
+			}
+
 			//Remove bonus_script by Dispell
 			if (dstsd)
 				pc_bonus_script_clear(dstsd,BSF_REM_ON_DISPELL);
