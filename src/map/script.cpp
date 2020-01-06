@@ -14747,6 +14747,11 @@ int atcommand_sub(struct script_state* st,int type) {
 		sd->permissions |= PC_PERM_ALLPERMISSION;
 	}
 
+	// [GonBee]
+	// Botは@コマンドを実行できない。
+	if (pybot::char_is_bot(sd->status.char_id))
+		return SCRIPT_CMD_SUCCESS;
+
 	if (!is_atcommand(fd, sd, cmd, type)) {
 		ShowWarning("buildin_atcommand: failed to execute command '%s'\n", cmd);
 		script_reportsrc(st);

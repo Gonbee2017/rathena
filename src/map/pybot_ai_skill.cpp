@@ -430,9 +430,14 @@ AI_SKILL_USE_FUNC_T(BS_MAXIMIZE, deactivate) {
 
 // オーバートラストを使う。
 AI_SKILL_USE_FUNC(BS_OVERTHRUST) {
-	if (!bot->sc()->data[SC_MAXOVERTHRUST] &&
-		bot->sc_rest(SC_OVERTHRUST) <= bot->get_skill_tail(kid)
-	) bot->use_skill_self(kid, klv);
+	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
+		return !mem->is_dead() &&
+			!mem->is_hiding() &&
+			!mem->reject_skills()->find(kid) &&
+			!mem->sc()->data[SC_MAXOVERTHRUST] &&
+			mem->sc_rest(SC_OVERTHRUST) <= bot->get_skill_tail(kid);
+	});
+	if (mem) bot->use_skill_self(kid, klv);
 }
 
 // 武器修理を使う。

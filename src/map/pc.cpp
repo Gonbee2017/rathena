@@ -5127,6 +5127,12 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 	if (!pc_isItemClass(sd,item))
 		return false;
 
+	// [GonBee]
+	// Botはコマンドアイテムを使用できない。
+	if (itemdb_group_item_exists(IG_COMMAND, nameid) &&
+		pybot::char_is_bot(sd->status.char_id)
+	) return false;
+
 	//Dead Branch items
 	if( item->flag.dead_branch )
 		log_branch(sd);

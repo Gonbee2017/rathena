@@ -23,3 +23,18 @@ IG_Taming,12225,1	// 甘いスティックキャンディ
 IG_CoinHolder,6080,1	// マヌクコイン
 IG_CoinHolder,6081,1	// スプレンディッドコイン
 IG_CoinHolder,6380,1	// モーラコイン
+
+// コマンド
+IG_Command,10906,1	// @Bot Attack
+IG_Command,10907,1	// @Bot EquipIdentifyAll
+IG_Command,10908,1	// @Bot EquipRepairAll
+IG_Command,10909,1	// @Bot ItemSellAll
+IG_Command,10910,1	// @Bot StorageGetAll
+IG_Command,10911,1	// @Bot StoragePutAll
+IG_Command,10912,1	// @Bot sUmmon
+IG_Command,10913,1	// @Bot Team
+IG_Command,10914,1	// @Bot TeamLogIn
+IG_Command,10915,1	// @Bot TeamLogOut
+IG_Command,10916,1	// @Bot TeamPassive
+IG_Command,10917,1	// @Bot TeamRush
+IG_Command,10918,1	// @Bot TeamStay
