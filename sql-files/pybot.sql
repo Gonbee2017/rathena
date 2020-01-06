@@ -64,6 +64,22 @@ CREATE TABLE `pybot_ignore_mob` (
   PRIMARY KEY (`char_id`, `mob_id`)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS `pybot_item_not_save_mob`;
+CREATE TABLE `pybot_item_not_save_mob` (
+  `char_id` int(11) unsigned NOT NULL,
+  `nameid` smallint(5) unsigned NOT NULL,
+  `mob_id` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `nameid`, `mob_id`)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `pybot_item_save_mob`;
+CREATE TABLE `pybot_item_save_mob` (
+  `char_id` int(11) unsigned NOT NULL,
+  `nameid` smallint(5) unsigned NOT NULL,
+  `mob_id` mediumint(9) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `nameid`, `mob_id`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_journal`;
 CREATE TABLE `pybot_memo` (
   `char_id` int(11) unsigned NOT NULL,

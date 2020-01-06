@@ -208,6 +208,8 @@ int member_if::find_cart(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_cart(const item_key& key) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const std::string& nam) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int member_if::find_inventory(const item_key&, int equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool member_if::find_item_not_save_mobs(int nid) {RAISE_NOT_IMPLEMENTED_ERROR;}
+bool member_if::find_item_save_mobs(int nid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::find_skill_ignore_mobs(e_skill kid, block_if* ene) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::first_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_skill>>& member_if::first_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -220,6 +222,8 @@ void member_if::identify_equip(item* itm, storage_context* inv_con, storage_cont
 ptr<registry_t<int>>& member_if::ignore_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& member_if::item_not_save_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int>>& member_if::item_save_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1573,9 +1577,13 @@ void item_user_impl::use_item(
 ) {
 	item* itm = &sd()->inventory.u.items_inventory[ind];
 	if (itm->nameid &&
-		!pc_useitem(sd(), ind)
-	) item_used_ticks()[itm->nameid] = now;
-	if (exc) throw item_used_exception();
+		(!find_item_save_mobs(itm->nameid) ||
+			find_item_not_save_mobs(itm->nameid)
+		) && !pc_useitem(sd(), ind)
+	) {
+		item_used_ticks()[itm->nameid] = now;
+		if (exc) throw item_used_exception();
+	}
 }
 
 // 味方モンスターのマップ。
@@ -1980,6 +1988,36 @@ member_impl::find_inventory(
 	return find_item(&sd()->inventory, MAX_INVENTORY, key, sd()->inventory_data, equ);
 }
 
+// アイテム非節約モンスターを探す。
+bool // 結果。
+member_impl::find_item_not_save_mobs(
+	int nid // アイテムID。
+) {
+	bool res = false;
+	iterate_meta_mobs(
+		nullptr,
+		target_enemy(),
+		[this, nid, &res] (int mid)
+		{res = res || item_not_save_mobs()->find(ITEM_SAVE_MOB(nid, mid));}
+	);
+	return res;
+}
+
+// アイテム節約モンスターを探す。
+bool // 結果。
+member_impl::find_item_save_mobs(
+	int nid // アイテムID。
+) {
+	bool res = false;
+	iterate_meta_mobs(
+		nullptr,
+		target_enemy(),
+		[this, nid, &res] (int mid)
+		{res = res || item_save_mobs()->find(ITEM_SAVE_MOB(nid, mid));}
+	);
+	return res;
+}
+
 // スキル無視モンスターを探す。
 bool // 結果。
 member_impl::find_skill_ignore_mobs(
@@ -2213,6 +2251,16 @@ member_impl::is_wall_side() {
 	return this == leader() ||
 		no_knockback() ||
 		check_wall_side(bl()->m, bl()->x, bl()->y);
+}
+
+// アイテム非節約モンスターのレジストリ。
+ptr<registry_t<int>>& member_impl::item_not_save_mobs() {
+	return item_not_save_mobs_;
+}
+
+// アイテム節約モンスターのレジストリ。
+ptr<registry_t<int>>& member_impl::item_save_mobs() {
+	return item_save_mobs_;
 }
 
 // メンバーのスキルを反復する。
@@ -3165,6 +3213,18 @@ member_t::member_t(
 		insert_ignore_mob_func(char_id()),
 		delete_ignore_mob_func(char_id()),
 		clear_ignore_mob_func(char_id())
+	);
+	item_not_save_mobs() = construct<registry_t<int>>(
+		load_item_not_save_mob_func(char_id()),
+		insert_item_not_save_mob_func(char_id()),
+		delete_item_not_save_mob_func(char_id()),
+		clear_item_not_save_mob_func(char_id())
+	);
+	item_save_mobs() = construct<registry_t<int>>(
+		load_item_save_mob_func(char_id()),
+		insert_item_save_mob_func(char_id()),
+		delete_item_save_mob_func(char_id()),
+		clear_item_save_mob_func(char_id())
 	);
 	kew_elements() = construct<registry_t<int,e_element>>(
 		load_kew_element_func(char_id()),

@@ -1399,17 +1399,17 @@ const std::array<
 
 // @Botのサブコマンド説明のベクタ。
 const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
-	SUBCMD_DESC   (Bot, Attack                     , a   ,
+	SUBCMD_DESC   (Bot, Attack                     , a    ,
 		"------ Attack (a) サブコマンド ------\n"
 		"モンスターを攻撃する。\n"
 		"入力例 [@bot attack]\n"
 		"特定のモンスターを攻撃する。\n"
 		"入力例 [@bot attack プパ]\n"
-	), SUBCMD_DESC(Bot, Cart                       , c   ,
+	), SUBCMD_DESC(Bot, Cart                       , c    ,
 		"------ Cart (c) サブコマンド ------\n"
 		"カートのアイテムを一覧表示する。\n"
 		"入力例 [@bot cart クリエ]\n"
-	), SUBCMD_DESC(Bot, CartAutoGet                , cag ,
+	), SUBCMD_DESC(Bot, CartAutoGet                , cag  ,
 		"------ CartAutoGet (cag) サブコマンド ------\n"
 		"カート自動補充アイテムを一覧表示する。\n"
 		"入力例 [@bot cartautoget クリエ]\n"
@@ -1417,35 +1417,35 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot cartautoget クリエ ファイアーボトル 1]\n"
 		"カート自動補充アイテムの登録を抹消する。\n"
 		"入力例 [@bot cartautoget クリエ アシッドボトル]\n"
-	), SUBCMD_DESC(Bot, CartAutoGetClear           ,     ,
+	), SUBCMD_DESC(Bot, CartAutoGetClear           ,      ,
 		"------ CartAutoGetClear サブコマンド ------\n"
 		"カート自動補充アイテムをクリアする。\n"
 		"入力例 [@bot cartautogetclear クリエ]\n"
-	), SUBCMD_DESC(Bot, CartAutoGetTransport       , cagt,
+	), SUBCMD_DESC(Bot, CartAutoGetTransport       , cagt ,
 		"------ CartAutoGetTransport (cagt) サブコマンド ------\n"
 		"カート自動補充アイテムを転送する。\n"
 		"入力例 [@bot cartautogettransport クリエ スミス]\n"
-	), SUBCMD_DESC(Bot, CartGet                    , cg  ,
+	), SUBCMD_DESC(Bot, CartGet                    , cg   ,
 		"------ CartGet (cg) サブコマンド ------\n"
 		"カートからアイテムの全個数を取り出す。\n"
 		"入力例 [@bot cartget クリエ ブルージェムストーン]\n"
 		"カートからアイテムの特定個数を取り出す。\n"
 		"入力例 [@bot cartget クリエ ブルージェムストーン 5]\n"
-	), SUBCMD_DESC(Bot, CartPut                    , cp  ,
+	), SUBCMD_DESC(Bot, CartPut                    , cp   ,
 		"------ CartPut (cp) サブコマンド ------\n"
 		"カートにアイテムの全個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン]\n"
 		"カートにアイテムの特定個数を入れる。\n"
 		"入力例 [@bot cartput クリエ ブルージェムストーン 5]\n"
-	), SUBCMD_DESC(Bot, DistancemaX                , dx  ,
+	), SUBCMD_DESC(Bot, DistancemaX                , dx   ,
 		"------ DistancemaX (dx) サブコマンド ------\n"
 		"モンスターとの最大距離を設定する。\n"
 		"入力例 [@bot distancemax ドナ 5]\n"
-	), SUBCMD_DESC(Bot, DistancemiN                , dn  ,
+	), SUBCMD_DESC(Bot, DistancemiN                , dn   ,
 		"------ DistancemiN (dn) サブコマンド ------\n"
 		"モンスターとの最小距離を設定する。\n"
 		"入力例 [@bot distancemin ハイプリ 7]\n"
-	), SUBCMD_DESC(Bot, Equip                      , e   ,
+	), SUBCMD_DESC(Bot, Equip                      , e    ,
 		"------ Equip (e) サブコマンド ------\n"
 		"武具を装備する。\n"
 		"入力例 [@bot equip アサクロ \"スティレット [|] <+6>\"]\n"
@@ -1453,15 +1453,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot equip アサクロ ブリーフ]\n"
 		"すべての武具の装備を解除する。\n"
 		"入力例 [@bot equip アサクロ]\n"
-	), SUBCMD_DESC(Bot, EquipIdentifyAll           , eia ,
+	), SUBCMD_DESC(Bot, EquipIdentifyAll           , eia  ,
 		"------ EquipIdentifyAll (eia) サブコマンド ------\n"
 		"未鑑定の武具を鑑定する。\n"
 		"入力例 [@bot equipidentifyall]\n"
-	), SUBCMD_DESC(Bot, EquipRepairAll             , era ,
+	), SUBCMD_DESC(Bot, EquipRepairAll             , era  ,
 		"------ EquipRepairAll (era) サブコマンド ------\n"
 		"破損した武具を修理する。\n"
 		"入力例 [@bot equiprepairall]\n"
-	), SUBCMD_DESC(Bot, EquipSet                   , es  ,
+	), SUBCMD_DESC(Bot, EquipSet                   , es   ,
 		"------ EquipSet (es) サブコマンド ------\n"
 		"武具一式を一覧表示する。\n"
 		"入力例 [@bot equipset アサクロ]\n"
@@ -1469,27 +1469,27 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot equipset アサクロ 基本]\n"
 		"武具一式の登録を抹消する。\n"
 		"入力例 [@bot equipset アサクロ 不死属性]\n"
-	), SUBCMD_DESC(Bot, EquipSetClear              ,     ,
+	), SUBCMD_DESC(Bot, EquipSetClear              ,      ,
 		"------ EquipSetClear サブコマンド ------\n"
 		"武具一式をクリアする。\n"
 		"入力例 [@bot equipsetclear アサクロ]\n"
-	), SUBCMD_DESC(Bot, EquipSetLoad               , esl ,
+	), SUBCMD_DESC(Bot, EquipSetLoad               , esl  ,
 		"------ EquipSetLoad (esl) サブコマンド ------\n"
 		"武具一式をロードする。\n"
 		"入力例 [@bot equipsetload アサクロ 地属性]\n"
-	), SUBCMD_DESC(Bot, EquipSetTransport          , est ,
+	), SUBCMD_DESC(Bot, EquipSetTransport          , est  ,
 		"------ EquipSetTransport (est) サブコマンド ------\n"
 		"武具一式を転送する。\n"
 		"入力例 [@bot equipsettransport アサクロ チェイス]\n"
-	), SUBCMD_DESC(Bot, Help                       , h   ,
+	), SUBCMD_DESC(Bot, Help                       , h    ,
 		"------ Help (h) サブコマンド ------\n"
 		"サブコマンドの説明を表示する。\n"
 		"入力例 [@bot help login]\n"
-	), SUBCMD_DESC(Bot, HoldMonsters               , hm  ,
+	), SUBCMD_DESC(Bot, HoldMonsters               , hm   ,
 		"------ HoldMonsters (hm) サブコマンド ------\n"
 		"抱えることのできるモンスター数を設定する。\n"
 		"入力例 [@bot holdmonsters クラウン 1]\n"
-	), SUBCMD_DESC(Bot, HomunsKill                 , hk  ,
+	), SUBCMD_DESC(Bot, HomunsKill                 , hk   ,
 		"------ HomunsKill (hk) サブコマンド ------\n"
 		"ホムンクルスのスキルを一覧表示する。\n"
 		"入力例 [@bot homunskill クリエ]\n"
@@ -1497,39 +1497,39 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot homunskill クリエ 治癒の手]\n"
 		"ホムンクルスがスキルを特定レベルで使用する。\n"
 		"入力例 [@bot homunskill クリエ カオティックベネディクション 3]\n"
-	), SUBCMD_DESC(Bot, HomunsKillLimit            , hkl ,
+	), SUBCMD_DESC(Bot, HomunsKillLimit            , hkl  ,
 		"------ HomunsKillLimit (hkl) サブコマンド ------\n"
 		"ホムンクルスがスキルのレベルを制限する。\n"
 		"入力例 [@bot homunskilllimit クリエ メンタルチェンジ 0]\n"
 		"ホムンクルスがスキルのレベル制限を解除する。\n"
 		"入力例 [@bot homunskilllimit クリエ メンタルチェンジ]\n"
-	), SUBCMD_DESC(Bot, HomunsKillUp               , hku ,
+	), SUBCMD_DESC(Bot, HomunsKillUp               , hku  ,
 		"------ HomunsKillUp (hku) サブコマンド ------\n"
 		"ホムンクルスがスキルのレベルを上げる。\n"
 		"入力例 [@bot homunskillup クリエ メンタルチェンジ]\n"
-	), SUBCMD_DESC(Bot, HomunStatus                , hs  ,
+	), SUBCMD_DESC(Bot, HomunStatus                , hs   ,
 		"------ HomunStatus (hs) サブコマンド ------\n"
 		"ホムンクルスのステータスを表示する。\n"
 		"入力例 [@bot homunstatus クリエ]\n"
-	), SUBCMD_DESC(Bot, Item                       , i   ,
+	), SUBCMD_DESC(Bot, Item                       , i    ,
 		"------ Item (i) サブコマンド ------\n"
 		"所持アイテムを一覧表示する。\n"
 		"入力例 [@bot item ハイプリ]\n"
 		"アイテムを使用する。\n"
 		"入力例 [@bot item ハイプリ 青ポーション]\n"
-	), SUBCMD_DESC(Bot, ItemCount                  , ic  ,
+	), SUBCMD_DESC(Bot, ItemCount                  , ic   ,
 		"------ ItemCount (ic) サブコマンド ------\n"
 		"すべてのアイテムの集計を一覧表示する。\n"
 		"入力例 [@bot itemcount]\n"
 		"任意のアイテムの集計を一覧表示する。\n"
 		"入力例 [@bot itemcount ゼロピー リンゴ 綿毛]\n"
-	), SUBCMD_DESC(Bot, ItemDrop                   , id  ,
+	), SUBCMD_DESC(Bot, ItemDrop                   , id   ,
 		"------ ItemDrop (id) サブコマンド ------\n"
 		"アイテムの全個数をドロップする。\n"
 		"入力例 [@bot itemdrop ハイプリ イグドラシルの葉]\n"
 		"アイテムの特定個数をドロップする。\n"
 		"入力例 [@bot itemdrop ハイプリ イグドラシルの葉 2]\n"
-	), SUBCMD_DESC(Bot, ItemIgnore                 , ii  ,
+	), SUBCMD_DESC(Bot, ItemIgnore                 , ii   ,
 		"------ ItemIgnore (ii) サブコマンド ------\n"
 		"無視アイテムを一覧表示する。\n"
 		"入力例 [@bot itemignore]\n"
@@ -1537,15 +1537,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemignore \"レザージャケット [1]\"]\n"
 		"無視アイテムの登録を抹消する。\n"
 		"入力例 [@bot itemignore ブリーフ]\n"
-	), SUBCMD_DESC(Bot, ItemIgnoreClear            ,     ,
+	), SUBCMD_DESC(Bot, ItemIgnoreClear            ,      ,
 		"------ ItemIgnoreClear サブコマンド ------\n"
 		"無視アイテムをクリアする。\n"
 		"入力例 [@bot itemignoreclear]\n"
-	), SUBCMD_DESC(Bot, ItemIgnoreImport           , iii ,
+	), SUBCMD_DESC(Bot, ItemIgnoreImport           , iii  ,
 		"------ ItemIgnoreImport (iii) サブコマンド ------\n"
 		"無視アイテムを取り込む。\n"
 		"入力例 [@bot itemignoreimport チャンプ]\n"
-	), SUBCMD_DESC(Bot, ItemNotIgnore              , ini ,
+	), SUBCMD_DESC(Bot, ItemNotIgnore              , ini  ,
 		"------ ItemNotIgnore (ini) サブコマンド ------\n"
 		"非無視アイテムを一覧表示する。\n"
 		"入力例 [@bot itemnotignore]\n"
@@ -1553,15 +1553,31 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemnotignore エルニウム]\n"
 		"非無視アイテムの登録を抹消する。\n"
 		"入力例 [@bot itemnotignore \"シルバーローブ [1]\"]\n"
-	), SUBCMD_DESC(Bot, ItemNotIgnoreClear         ,     ,
+	), SUBCMD_DESC(Bot, ItemNotIgnoreClear         ,      ,
 		"------ ItemNotIgnoreClear サブコマンド ------\n"
 		"非無視アイテムをクリアする。\n"
 		"入力例 [@bot itemnotignoreclear]\n"
-	), SUBCMD_DESC(Bot, ItemNotIgnoreImport        , inii,
+	), SUBCMD_DESC(Bot, ItemNotIgnoreImport        , inii ,
 		"------ ItemNotIgnoreImport (inii) サブコマンド ------\n"
 		"非無視アイテムを取り込む。\n"
 		"入力例 [@bot itemnotignoreimport チェイス]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverHp              , irh ,
+	), SUBCMD_DESC(Bot, ItemNotsaVeMonster         , invm ,
+		"------ ItemNotsaVeMonster (invm) サブコマンド ------\n"
+		"アイテム非節約モンスターを一覧表示する。\n"
+		"入力例 [@bot itemnotsavemonster アサクロ]\n"
+		"アイテム非節約モンスターを登録する。\n"
+		"入力例 [@bot itemnotsavemonster アサクロ レジストファイアーポーション カーサ]\n"
+		"アイテム非節約モンスターの登録を抹消する。\n"
+		"入力例 [@bot itemnotsavemonster アサクロ 白ポーション ドロメデス]\n"
+	), SUBCMD_DESC(Bot, ItemNotsaVeMonsterClear    ,      ,
+		"------ ItemNotsaVeMonsterClear サブコマンド ------\n"
+		"アイテム非節約モンスターをクリアする。\n"
+		"入力例 [@bot itemnotsavemonsterclear アサクロ]\n"
+	), SUBCMD_DESC(Bot, ItemNotsaVeMonsterTransport, invmt,
+		"------ ItemNotsaVeMonsterTransport (invmt) サブコマンド ------\n"
+		"アイテム非節約モンスターを転送する。\n"
+		"入力例 [@bot itemnotsavemonstertransport アサクロ チェイス]\n"
+	), SUBCMD_DESC(Bot, ItemRecoverHp              , irh  ,
 		"------ ItemRecoverHp (irh) サブコマンド ------\n"
 		"HP回復アイテムを一覧表示する。\n"
 		"入力例 [@bot itemrecoverhp アサクロ]\n"
@@ -1569,15 +1585,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemrecoverhp アサクロ 赤ポーション 50]\n"
 		"HP回復アイテムの登録を抹消する。\n"
 		"入力例 [@bot itemrecoverhp アサクロ 白ポーション]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverHpClear         ,     ,
+	), SUBCMD_DESC(Bot, ItemRecoverHpClear         ,      ,
 		"------ ItemRecoverHpClear サブコマンド ------\n"
 		"HP回復アイテムをクリアする。\n"
 		"入力例 [@bot itemrecoverhpclear アサクロ]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverHpTransport     , irht,
+	), SUBCMD_DESC(Bot, ItemRecoverHpTransport     , irht ,
 		"------ ItemRecoverHpTransport (iht) サブコマンド ------\n"
 		"HP回復アイテムを転送する。\n"
 		"入力例 [@bot itemrecoverhptransport アサクロ チェイス]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverSp              , irs ,
+	), SUBCMD_DESC(Bot, ItemRecoverSp              , irs  ,
 		"------ ItemRecoverSp (is) サブコマンド ------\n"
 		"SP回復アイテムを一覧表示する。\n"
 		"入力例 [@bot itemrecoversp ハイプリ]\n"
@@ -1585,15 +1601,31 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemrecoversp ハイプリ 青ポーション 25]\n"
 		"SP回復アイテムの登録を抹消する。\n"
 		"入力例 [@bot itemrecoversp ハイプリ イチゴ]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverSpClear         ,     ,
+	), SUBCMD_DESC(Bot, ItemRecoverSpClear         ,      ,
 		"------ ItemRecoverSpClear サブコマンド ------\n"
 		"SP回復アイテムをクリアする。\n"
 		"入力例 [@bot itemrecoverspclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, ItemRecoverSpTransport     , irst,
+	), SUBCMD_DESC(Bot, ItemRecoverSpTransport     , irst ,
 		"------ ItemRecoverSpTransport (ist) サブコマンド ------\n"
 		"SP回復アイテムを転送する。\n"
 		"入力例 [@bot itemrecoversptransport ハイプリ チャンプ]\n"
-	), SUBCMD_DESC(Bot, ItemSell                   , is  ,
+	), SUBCMD_DESC(Bot, ItemsaVeMonster            , ivm  ,
+		"------ ItemsaVeMonster (ivm) サブコマンド ------\n"
+		"アイテム節約モンスターを一覧表示する。\n"
+		"入力例 [@bot itemsavemonster アサクロ]\n"
+		"アイテム節約モンスターを登録する。\n"
+		"入力例 [@bot itemsavemonster アサクロ レジストファイアーポーション 非グレート]\n"
+		"アイテム節約モンスターの登録を抹消する。\n"
+		"入力例 [@bot itemsavemonster アサクロ 白ポーション 一般]\n"
+	), SUBCMD_DESC(Bot, ItemsaVeMonsterClear       ,      ,
+		"------ ItemsaVeMonsterClear サブコマンド ------\n"
+		"アイテム節約モンスターをクリアする。\n"
+		"入力例 [@bot itemsavemonsterclear アサクロ]\n"
+	), SUBCMD_DESC(Bot, ItemsaVeMonsterTransport   , ivmt ,
+		"------ ItemsaVeMonsterTransport (ivmt) サブコマンド ------\n"
+		"アイテム節約モンスターを転送する。\n"
+		"入力例 [@bot itemsavemonstertransport アサクロ チェイス]\n"
+	), SUBCMD_DESC(Bot, ItemSell                   , is   ,
 		"------ ItemSell (is) サブコマンド ------\n"
 		"売却アイテムを一覧表示する。\n"
 		"入力例 [@bot itemsell]\n"
@@ -1601,45 +1633,45 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemsell \"ボウ [3]\"]\n"
 		"売却アイテムの登録を抹消する。\n"
 		"入力例 [@bot itemsell \"ハット [1]\"]\n"
-	), SUBCMD_DESC(Bot, ItemSellAll                , isa ,
+	), SUBCMD_DESC(Bot, ItemSellAll                , isa  ,
 		"------ ItemSellAll (isa) サブコマンド ------\n"
 		"アイテムを売却する。\n"
 		"入力例 [@bot itemsellall]\n"
-	), SUBCMD_DESC(Bot, ItemSellClear              ,     ,
+	), SUBCMD_DESC(Bot, ItemSellClear              ,      ,
 		"------ ItemSellClear サブコマンド ------\n"
 		"売却アイテムをクリアする。\n"
 		"入力例 [@bot itemsellclear]\n"
-	), SUBCMD_DESC(Bot, ItemSellImport             , isi ,
+	), SUBCMD_DESC(Bot, ItemSellImport             , isi  ,
 		"------ ItemSellImport (isi) サブコマンド ------\n"
 		"売却アイテムを取り込む。\n"
 		"入力例 [@bot itemsellimport スミス]\n"
-	), SUBCMD_DESC(Bot, JournalImport              , ji  ,
+	), SUBCMD_DESC(Bot, JournalImport              , ji   ,
 		"------ JournalImport (ji) サブコマンド ------\n"
 		"ジャーナルを取り込む。\n"
 		"入力例 [@bot journalimport アサクロ]\n"
-	), SUBCMD_DESC(Bot, LogIn                      , li  ,
+	), SUBCMD_DESC(Bot, LogIn                      , li   ,
 		"------ LogIn (li) サブコマンド ------\n"
 		"Botをログインさせる。\n"
 		"入力例 [@bot login acuser acpass アサクロ]\n"
-	), SUBCMD_DESC(Bot, LogOut                     , lo  ,
+	), SUBCMD_DESC(Bot, LogOut                     , lo   ,
 		"------ LogOut (lo) サブコマンド ------\n"
 		"Botをログアウトさせる。\n"
 		"入力例 [@bot logout アサクロ]\n"
-	), SUBCMD_DESC(Bot, Loot                       , l   ,
+	), SUBCMD_DESC(Bot, Loot                       , l    ,
 		"------ Loot (l) サブコマンド ------\n"
 		"ドロップアイテムを拾うようにする。\n"
 		"入力例 [@bot loot クリエ]\n"
 		"ドロップアイテムを拾わないようにする。\n"
 		"入力例 [@bot loot クリエ]\n"
-	), SUBCMD_DESC(Bot, LootLimit                  , ll  ,
+	), SUBCMD_DESC(Bot, LootLimit                  , ll   ,
 		"------ LootLimit (ll) サブコマンド ------\n"
 		"ドロップアイテムを拾える重量を制限する。\n"
 		"入力例 [@bot lootlimit スミス 70]\n"
-	), SUBCMD_DESC(Bot, Memo                       , m   ,
+	), SUBCMD_DESC(Bot, Memo                       , m    ,
 		"------ Memo (m) サブコマンド ------\n"
 		"現在の位置をメモする。\n"
 		"入力例 [@bot memo ハイプリ]\n"
-	), SUBCMD_DESC(Bot, MonsterFirst               , mf  ,
+	), SUBCMD_DESC(Bot, MonsterFirst               , mf   ,
 		"------ MonsterFirst (mf) サブコマンド ------\n"
 		"優先モンスターを一覧表示する。\n"
 		"入力例 [@bot monsterfirst クリエ]\n"
@@ -1647,15 +1679,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot monsterfirst クリエ タナトスの憎悪]\n"
 		"優先モンスターの登録を抹消する。\n"
 		"入力例 [@bot monsterfirst クリエ タナトスの絶望]\n"
-	), SUBCMD_DESC(Bot, MonsterFirstClear          ,     ,
+	), SUBCMD_DESC(Bot, MonsterFirstClear          ,      ,
 		"------ MonsterFirstClear サブコマンド ------\n"
 		"優先モンスターをクリアする。\n"
 		"入力例 [@bot monsterfirstclear クリエ]\n"
-	), SUBCMD_DESC(Bot, MonsterFirstTransport      , mft ,
+	), SUBCMD_DESC(Bot, MonsterFirstTransport      , mft  ,
 		"------ MonsterFirstTransport (mft) サブコマンド ------\n"
 		"優先モンスターを転送する。\n"
 		"入力例 [@bot monsterfirsttransport クリエ スミス]\n"
-	), SUBCMD_DESC(Bot, MonsterGreat               , mg  ,
+	), SUBCMD_DESC(Bot, MonsterGreat               , mg   ,
 		"------ MonsterGreat (mg) サブコマンド ------\n"
 		"グレートモンスターを一覧表示する。\n"
 		"入力例 [@bot monstergreat]\n"
@@ -1663,35 +1695,35 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot monstergreat ナハトズィーガー]\n"
 		"グレートモンスターの登録を抹消する。\n"
 		"入力例 [@bot monstergreat モロクの現身（天使型）]\n"
-	), SUBCMD_DESC(Bot, MonsterGreatClear          ,     ,
+	), SUBCMD_DESC(Bot, MonsterGreatClear          ,      ,
 		"------ MonsterGreatClear サブコマンド ------\n"
 		"グレートモンスターをクリアする。\n"
 		"入力例 [@bot monstergreatclear]\n"
-	), SUBCMD_DESC(Bot, MonsterGreatImport         , mgi ,
+	), SUBCMD_DESC(Bot, MonsterGreatImport         , mgi  ,
 		"------ MonsterGreatImport (mgi) サブコマンド ------\n"
 		"グレートモンスターを取り込む。\n"
 		"入力例 [@bot monstergreatimport チェイス]\n"
-	), SUBCMD_DESC(Bot, MonsterHighDef             , mhd ,
+	), SUBCMD_DESC(Bot, MonsterHighDef             , mhd  ,
 		"------ MonsterHighDef (mhd) サブコマンド ------\n"
 		"モンスターの高Defを設定する。\n"
 		"入力例 [@bot monsterhighdef アサクロ 40]\n"
-	), SUBCMD_DESC(Bot, MonsterHighDefVit          , mhdv,
+	), SUBCMD_DESC(Bot, MonsterHighDefVit          , mhdv ,
 		"------ MonsterHighDefVit (mhdv) サブコマンド ------\n"
 		"モンスターの高DefVitを設定する。\n"
 		"入力例 [@bot monsterhighdefvit アサクロ 100]\n"
-	), SUBCMD_DESC(Bot, MonsterHighFlee            , mhf ,
+	), SUBCMD_DESC(Bot, MonsterHighFlee            , mhf  ,
 		"------ MonsterHighFlee (mhf) サブコマンド ------\n"
 		"モンスターの高Fleeを設定する。\n"
 		"入力例 [@bot monsterhighflee アサクロ 150]\n"
-	), SUBCMD_DESC(Bot, MonsterHighHit             , mhh ,
+	), SUBCMD_DESC(Bot, MonsterHighHit             , mhh  ,
 		"------ MonsterHighHit (mhh) サブコマンド ------\n"
 		"モンスターの高Hitを設定する。\n"
 		"入力例 [@bot monsterhighhit アサクロ 175]\n"
-	), SUBCMD_DESC(Bot, MonsterHighMdef            , mhmd,
+	), SUBCMD_DESC(Bot, MonsterHighMdef            , mhmd ,
 		"------ MonsterHighMdef (mhmd) サブコマンド ------\n"
 		"モンスターの高Mdefを設定する。\n"
 		"入力例 [@bot monsterhighmdef アサクロ 40]\n"
-	), SUBCMD_DESC(Bot, MonsterIgnore              , mi  ,
+	), SUBCMD_DESC(Bot, MonsterIgnore              , mi   ,
 		"------ MonsterIgnore (mi) サブコマンド ------\n"
 		"無視モンスターを一覧表示する。\n"
 		"入力例 [@bot monsterignore クリエ]\n"
@@ -1699,29 +1731,29 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot monsterignore クリエ モロクの現身（物質型）]\n"
 		"無視モンスターの登録を抹消する。\n"
 		"入力例 [@bot monsterignore クリエ モロクの現身（精霊型）]\n"
-	), SUBCMD_DESC(Bot, MonsterIgnoreClear         ,     ,
+	), SUBCMD_DESC(Bot, MonsterIgnoreClear         ,      ,
 		"------ MonsterIgnoreClear サブコマンド ------\n"
 		"無視モンスターをクリアする。\n"
 		"入力例 [@bot monsterignoreclear クリエ]\n"
-	), SUBCMD_DESC(Bot, MonsterIgnoreTransport     , mit ,
+	), SUBCMD_DESC(Bot, MonsterIgnoreTransport     , mit  ,
 		"------ MonsterIgnoreTransport (mit) サブコマンド ------\n"
 		"無視モンスターを転送する。\n"
 		"入力例 [@bot monsterignoretransport クリエ スミス]\n"
-	), SUBCMD_DESC(Bot, Next                       , n   ,
+	), SUBCMD_DESC(Bot, Next                       , n    ,
 		"------ Next (n) サブコマンド ------\n"
 		"次のページを表示する。\n"
 		"入力例 [@bot next]\n"
-	), SUBCMD_DESC(Bot, PetEquip                   , pe  ,
+	), SUBCMD_DESC(Bot, PetEquip                   , pe   ,
 		"------ PetEquip (pe) サブコマンド ------\n"
 		"ペットがアクセサリーを装備する。\n"
 		"入力例 [@bot petequip クリエ]\n"
 		"ペットがアクセサリーの装備を解除する。\n"
 		"入力例 [@bot petequip クリエ]\n"
-	), SUBCMD_DESC(Bot, PetStatus                  , ps  ,
+	), SUBCMD_DESC(Bot, PetStatus                  , ps   ,
 		"------ PetStatus (ps) サブコマンド ------\n"
 		"ペットのステータスを表示する。\n"
 		"入力例 [@bot petstatus クリエ]\n"
-	), SUBCMD_DESC(Bot, PolicyDistance             , pd  ,
+	), SUBCMD_DESC(Bot, PolicyDistance             , pd   ,
 		"------ PolicyDistance (pd) サブコマンド ------\n"
 		"距離ポリシーを一覧表示する。\n"
 		"入力例 [@bot policydistance ハイプリ]\n"
@@ -1729,15 +1761,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot policydistance ハイプリ 基本 近接]\n"
 		"距離ポリシーの登録を抹消する。\n"
 		"入力例 [@bot policydistance ハイプリ グレート]\n"
-	), SUBCMD_DESC(Bot, PolicyDistanceClear        ,     ,
+	), SUBCMD_DESC(Bot, PolicyDistanceClear        ,      ,
 		"------ PolicyDistanceClear サブコマンド ------\n"
 		"距離ポリシーをクリアする。\n"
 		"入力例 [@bot policydistanceclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, PolicyDistanceTransport    , pdt ,
+	), SUBCMD_DESC(Bot, PolicyDistanceTransport    , pdt  ,
 		"------ PolicyDistanceTransport (pdt) サブコマンド ------\n"
 		"距離ポリシーを転送する。\n"
 		"入力例 [@bot policydistancetransport ハイプリ チャンプ]\n"
-	), SUBCMD_DESC(Bot, PolicyNormalAttack         , pn  ,
+	), SUBCMD_DESC(Bot, PolicyNormalAttack         , pn   ,
 		"------ PolicyNormalAttack (pn) サブコマンド ------\n"
 		"通常攻撃ポリシーを一覧表示する。\n"
 		"入力例 [@bot policynormalattack ハイプリ]\n"
@@ -1745,15 +1777,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot policynormalattack ハイプリ 基本 連続]\n"
 		"通常攻撃ポリシーの登録を抹消する。\n"
 		"入力例 [@bot policynormalattack ハイプリ グレート]\n"
-	), SUBCMD_DESC(Bot, PolicyNormalAttackClear    ,     ,
+	), SUBCMD_DESC(Bot, PolicyNormalAttackClear    ,      ,
 		"------ PolicyNormalAttackClear サブコマンド ------\n"
 		"通常攻撃ポリシーをクリアする。\n"
 		"入力例 [@bot policynormalattackclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, PolicyNormalAttackTransport, pdt ,
+	), SUBCMD_DESC(Bot, PolicyNormalAttackTransport, pdt  ,
 		"------ PolicyNormalAttackTransport (pdt) サブコマンド ------\n"
 		"通常攻撃ポリシーを転送する。\n"
 		"入力例 [@bot policynormalattacktransport ハイプリ チャンプ]\n"
-	), SUBCMD_DESC(Bot, ShopPointCollect           , spc ,
+	), SUBCMD_DESC(Bot, ShopPointCollect           , spc  ,
 		"------ ShopPointCollect (spc) サブコマンド ------\n"
 		"すべてのBotから全ショップポイントを回収する。\n"
 		"入力例 [@bot shoppointcollect]\n"
@@ -1761,7 +1793,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot shoppointcollect ハイプリ]\n"
 		"特定のBotから特定ショップポイントを回収する。\n"
 		"入力例 [@bot shoppointcollect ハイプリ 100]\n"
-	), SUBCMD_DESC(Bot, sKill                      , k   ,
+	), SUBCMD_DESC(Bot, sKill                      , k    ,
 		"------ sKill (k) サブコマンド ------\n"
 		"スキルを一覧表示する。\n"
 		"入力例 [@bot skill ハイプリ]\n"
@@ -1773,11 +1805,11 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ アスムプティオ アサクロ]\n"
 		"ターゲットスキルを特定レベルで使用する。\n"
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
-	), SUBCMD_DESC(Bot, sKillBerserkRate           , kbr ,
+	), SUBCMD_DESC(Bot, sKillBerserkRate           , kbr  ,
 		"------ sKillBerserkRate (kbr) サブコマンド ------\n"
 		"バーサークの発動HP率を設定する。\n"
 		"入力例 [@bot skillberserkrate ドナ 25]\n"
-	), SUBCMD_DESC(Bot, sKillEnchantWeapon         , kew ,
+	), SUBCMD_DESC(Bot, sKillEnchantWeapon         , kew  ,
 		"------ sKillEnchantWeapon (kew) サブコマンド ------\n"
 		"武器属性付与を一覧表示する。\n"
 		"入力例 [@bot skillenchantweapon アサクロ]\n"
@@ -1785,15 +1817,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillenchantweapon アサクロ iz_dun00 風属性]\n"
 		"武器属性付与の登録を抹消する。\n"
 		"入力例 [@bot skillenchantweapon アサクロ iz_dun00]\n"
-	), SUBCMD_DESC(Bot, sKillEnchantWeaponClear    ,     ,
+	), SUBCMD_DESC(Bot, sKillEnchantWeaponClear    ,      ,
 		"------ sKillEnchantWeaponClear サブコマンド ------\n"
 		"武器属性付与をクリアする。\n"
 		"入力例 [@bot skillenchantweaponclear アサクロ]\n"
-	), SUBCMD_DESC(Bot, sKillEnchantWeaponTransport, kewt,
+	), SUBCMD_DESC(Bot, sKillEnchantWeaponTransport, kewt ,
 		"------ sKillEnchantWeaponTransport (kewt) サブコマンド ------\n"
 		"武器属性付与を転送する。\n"
 		"入力例 [@bot skillenchantweapontransport アサクロ チェイス]\n"
-	), SUBCMD_DESC(Bot, sKillEquipSet              , kes ,
+	), SUBCMD_DESC(Bot, sKillEquipSet              , kes  ,
 		"------ sKillEquipSet (kes) サブコマンド ------\n"
 		"スキル武具一式を一覧表示する。\n"
 		"入力例 [@bot skillequipset ドナ]\n"
@@ -1801,19 +1833,19 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillequipset ドナ ボウリングバッシュ]\n"
 		"スキル武具一式の登録を抹消する。\n"
 		"入力例 [@bot skillequipset ドナ スパイラルピアース]\n"
-	), SUBCMD_DESC(Bot, sKillEquipSetClear         ,     ,
+	), SUBCMD_DESC(Bot, sKillEquipSetClear         ,      ,
 		"------ sKillEquipSetClear サブコマンド ------\n"
 		"スキル武具一式をクリアする。\n"
 		"入力例 [@bot skillequipsetclear ドナ]\n"
-	), SUBCMD_DESC(Bot, sKillEquipSetLoad          , kesl,
+	), SUBCMD_DESC(Bot, sKillEquipSetLoad          , kesl ,
 		"------ sKillEquipSetLoad (kesl) サブコマンド ------\n"
 		"スキル武具一式をロードする。\n"
 		"入力例 [@bot skillequipsetload ドナ ボウリングバッシュ\n"
-	), SUBCMD_DESC(Bot, sKillEquipSetTransport     , kest,
+	), SUBCMD_DESC(Bot, sKillEquipSetTransport     , kest ,
 		"------ sKillEquipSetTransport (kest) サブコマンド ------\n"
 		"スキル武具一式を転送する。\n"
 		"入力例 [@bot skillequipsettransport ドナ ドナ2]\n"
-	), SUBCMD_DESC(Bot, sKillFirst                  , kf  ,
+	), SUBCMD_DESC(Bot, sKillFirst                  , kf   ,
 		"------ sKillFirst (kf) サブコマンド ------\n"
 		"優先スキルを一覧表示する。\n"
 		"入力例 [@bot skillfirst ハイウィズ]\n"
@@ -1821,15 +1853,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillfirst ハイウィズ 堕ちた大神官ヒバム ストームガスト]\n"
 		"優先スキルの登録を抹消する。\n"
 		"入力例 [@bot skillfirst ハイウィズ 堕ちた大神官ヒバム]\n"
-	), SUBCMD_DESC(Bot, sKillFirstClear            ,     ,
+	), SUBCMD_DESC(Bot, sKillFirstClear            ,      ,
 		"------ sKillRejectClear サブコマンド ------\n"
 		"優先スキルをクリアする。\n"
 		"入力例 [@bot skillfirstclear ハイウィズ]\n"
-	), SUBCMD_DESC(Bot, sKillFirstTransport        , kft ,
+	), SUBCMD_DESC(Bot, sKillFirstTransport        , kft  ,
 		"------ sKillFirstTransport (kft) サブコマンド ------\n"
 		"優先スキルを転送する。\n"
 		"入力例 [@bot skillfirsttransport ハイウィズ ハイウィズ2]\n"
-	), SUBCMD_DESC(Bot, sKillIgnoreMonster         , kim ,
+	), SUBCMD_DESC(Bot, sKillIgnoreMonster         , kim  ,
 		"------ sKillIgnoreMonster (kim) サブコマンド ------\n"
 		"スキル無視モンスターを一覧表示する。\n"
 		"入力例 [@bot skillignoremonster クリエ]\n"
@@ -1837,33 +1869,33 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillignoremonster クリエ アシッドデモンストレーション 堕ちた大神官ヒバム]\n"
 		"スキル無視モンスターの登録を抹消する。\n"
 		"入力例 [@bot skillignoremonster クリエ アシッドデモンストレーション 堕ちた大神官ヒバム]\n"
-	), SUBCMD_DESC(Bot, sKillIgnoreMonsterClear    ,     ,
+	), SUBCMD_DESC(Bot, sKillIgnoreMonsterClear    ,      ,
 		"------ sKillIgnoreMonsterClear サブコマンド ------\n"
 		"スキル無視モンスターをクリアする。\n"
 		"入力例 [@bot skillignoremonsterclear クリエ]\n"
-	), SUBCMD_DESC(Bot, sKillIgnoreMonsterTransport, kimt,
+	), SUBCMD_DESC(Bot, sKillIgnoreMonsterTransport, kimt ,
 		"------ sKillIgnoreMonsterTransport (kimt) サブコマンド ------\n"
 		"スキル無視モンスターを転送する。\n"
 		"入力例 [@bot skillignoremonstertransport クリエ クリエ2]\n"
-	), SUBCMD_DESC(Bot, sKillLimit                 , kl  ,
+	), SUBCMD_DESC(Bot, sKillLimit                 , kl   ,
 		"------ sKillLimit (kl) サブコマンド ------\n"
 		"スキルのレベルを制限する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス 0]\n"
 		"スキルのレベル制限を解除する。\n"
 		"入力例 [@bot skilllimit ハイプリ エンジェラス]\n"
-	), SUBCMD_DESC(Bot, sKillmaXCastTime           , kxct,
+	), SUBCMD_DESC(Bot, sKillmaXCastTime           , kxct ,
 		"------ sKillmaXCastTime (kxct) サブコマンド ------\n"
 		"使用を許可する最大の詠唱時間を設定する。\n"
 		"入力例 [@bot skillmaxcasttime ハイウィズ 500]\n"
-	), SUBCMD_DESC(Bot, sKillmemBers               , kb  ,
+	), SUBCMD_DESC(Bot, sKillmemBers               , kb   ,
 		"------ sKillmemBers (kb) サブコマンド ------\n"
 		"範囲スキルの発動条件となるメンバー数を設定する。\n"
 		"入力例 [@bot skillmembers クリエ 2]\n"
-	), SUBCMD_DESC(Bot, sKillMonsters              , km  ,
+	), SUBCMD_DESC(Bot, sKillMonsters              , km   ,
 		"------ sKillMonsters (km) サブコマンド ------\n"
 		"範囲スキルの発動条件となるモンスター数を設定する。\n"
 		"入力例 [@bot skillmonsters ハイプリ 1]\n"
-	), SUBCMD_DESC(Bot, sKillPlay                  , kp  ,
+	), SUBCMD_DESC(Bot, sKillPlay                  , kp   ,
 		"------ sKillPlay (kp) サブコマンド ------\n"
 		"演奏スキルを一覧表示する。\n"
 		"入力例 [@bot skillplay クラウン]\n"
@@ -1871,15 +1903,15 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillplay クラウン 基本 夕陽のアサシンクロス]\n"
 		"演奏スキルの登録を抹消する。\n"
 		"入力例 [@bot skillplay クラウン 休息]\n"
-	), SUBCMD_DESC(Bot, sKillPlayClear             ,     ,
+	), SUBCMD_DESC(Bot, sKillPlayClear             ,      ,
 		"------ sKillPlayClear サブコマンド ------\n"
 		"演奏スキルをクリアする。\n"
 		"入力例 [@bot skillplayclear クラウン]\n"
-	), SUBCMD_DESC(Bot, sKillPlayTransport         , kpt ,
+	), SUBCMD_DESC(Bot, sKillPlayTransport         , kpt  ,
 		"------ sKillPlayTransport (kpt) サブコマンド ------\n"
 		"演奏スキルを転送する。\n"
 		"入力例 [@bot skillplaytransport クラウン ジプシー]\n"
-	), SUBCMD_DESC(Bot, sKillReject                , kr  ,
+	), SUBCMD_DESC(Bot, sKillReject                , kr   ,
 		"------ sKillReject (kr) サブコマンド ------\n"
 		"拒否スキルを一覧表示する。\n"
 		"入力例 [@bot skillreject]\n"
@@ -1887,27 +1919,27 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skillreject クラウン アスペルシオ]\n"
 		"拒否スキルの登録を抹消する。\n"
 		"入力例 [@bot skillreject クラウン イムポシティオマヌス]\n"
-	), SUBCMD_DESC(Bot, sKillRejectClear           ,     ,
+	), SUBCMD_DESC(Bot, sKillRejectClear           ,      ,
 		"------ sKillRejectClear サブコマンド ------\n"
 		"拒否スキルをクリアする。\n"
 		"入力例 [@bot skillrejectclear クラウン]\n"
-	), SUBCMD_DESC(Bot, sKillRejectTransport       , krt ,
+	), SUBCMD_DESC(Bot, sKillRejectTransport       , krt  ,
 		"------ sKillRejectTransport (krt) サブコマンド ------\n"
 		"拒否スキルを転送する。\n"
 		"入力例 [@bot skillrejecttransport クラウン ジプシー]\n"
-	), SUBCMD_DESC(Bot, sKillSafeCastTime          , ksct,
+	), SUBCMD_DESC(Bot, sKillSafeCastTime          , ksct ,
 		"------ sKillSafeCastTime (ksct) サブコマンド ------\n"
 		"安全に詠唱できる時間を設定する。\n"
 		"入力例 [@bot skillsafecasttime ハイウィズ 500]\n"
-	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kshr,
+	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kshr ,
 		"------ sKillSupplyHpRate (kshr) サブコマンド ------\n"
 		"HPの供給を許可するHP率を設定する。\n"
 		"入力例 [@bot skillsupplyhprate アサクロ 90]\n"
-	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kssr,
+	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kssr ,
 		"------ sKillSupplySpRate (kssr) サブコマンド ------\n"
 		"SPの供給を許可するSP率を設定する。\n"
 		"入力例 [@bot skillsupplysprate アサクロ 10]\n"
-	), SUBCMD_DESC(Bot, sKillTail                  , kt  ,
+	), SUBCMD_DESC(Bot, sKillTail                  , kt   ,
 		"------ sKillTail (kt) サブコマンド ------\n"
 		"掛け直し時間を一覧表示する。\n"
 		"入力例 [@bot skilltail ハイプリ]\n"
@@ -1915,29 +1947,29 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skilltail ハイプリ アスムプティオ 5000]\n"
 		"掛け直し時間の登録を抹消する。\n"
 		"入力例 [@bot skilltail ハイプリ アスムプティオ]\n"
-	), SUBCMD_DESC(Bot, sKillTailClear             ,     ,
+	), SUBCMD_DESC(Bot, sKillTailClear             ,      ,
 		"------ sKillTailClear サブコマンド ------\n"
 		"掛け直し時間をクリアする。\n"
 		"入力例 [@bot skilltailclear ハイプリ]\n"
-	), SUBCMD_DESC(Bot, sKillTailTransport         , ktt ,
+	), SUBCMD_DESC(Bot, sKillTailTransport         , ktt  ,
 		"------ sKillTailTransport (ktt) サブコマンド ------\n"
 		"掛け直し時間を転送する。\n"
 		"入力例 [@bot skilltailtransport ハイプリ ハイプリ2]\n"
-	), SUBCMD_DESC(Bot, sKillUp                    , ku  ,
+	), SUBCMD_DESC(Bot, sKillUp                    , ku   ,
 		"------ sKillUp (ku) サブコマンド ------\n"
 		"スキルのレベルを上げる。\n"
 		"入力例 [@bot skillup ハイプリ メイス修練]\n"
-	), SUBCMD_DESC(Bot, Status                     , s   ,
+	), SUBCMD_DESC(Bot, Status                     , s    ,
 		"------ Status (s) サブコマンド ------\n"
 		"ステータスを表示する。\n"
 		"入力例 [@bot status アサクロ]\n"
-	), SUBCMD_DESC(Bot, StatusUp                   , su  ,
+	), SUBCMD_DESC(Bot, StatusUp                   , su   ,
 		"------ StatusUp (su) サブコマンド ------\n"
 		"ステータスに1ポイントを割り振る。\n"
 		"入力例 [@bot statusup アサクロ str]\n"
 		"ステータスに特定ポイントを割り振る。\n"
 		"入力例 [@bot statusup アサクロ agi 5]\n"
-	), SUBCMD_DESC(Bot, StorageGet                 , sg  ,
+	), SUBCMD_DESC(Bot, StorageGet                 , sg   ,
 		"------ StorageGet (sg) サブコマンド ------\n"
 		"倉庫補充アイテムを一覧表示する。\n"
 		"入力例 [@bot storageget クリエ]\n"
@@ -1945,19 +1977,19 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageget クリエ 白ポーション 100]\n"
 		"倉庫補充アイテムの登録を抹消する。\n"
 		"入力例 [@bot storageget クリエ 白ポーション]\n"
-	), SUBCMD_DESC(Bot, StorageGetAll              , sga ,
+	), SUBCMD_DESC(Bot, StorageGetAll              , sga  ,
 		"------ StorageGetAll (sga) サブコマンド ------\n"
 		"倉庫からアイテムを取り出す。\n"
 		"入力例 [@bot storagegetall]\n"
-	), SUBCMD_DESC(Bot, StorageGetClear            ,     ,
+	), SUBCMD_DESC(Bot, StorageGetClear            ,      ,
 		"------ StorageGetClear サブコマンド ------\n"
 		"倉庫補充アイテムをクリアする。\n"
 		"入力例 [@bot storagegetclear クリエ]\n"
-	), SUBCMD_DESC(Bot, StorageGetTransport        , sgt ,
+	), SUBCMD_DESC(Bot, StorageGetTransport        , sgt  ,
 		"------ StorageGetTransport (sgt) サブコマンド ------\n"
 		"倉庫補充アイテムを転送する。\n"
 		"入力例 [@bot storagegettransport クリエ スミス]\n"
-	), SUBCMD_DESC(Bot, StoragePut                 , sp  ,
+	), SUBCMD_DESC(Bot, StoragePut                 , sp   ,
 		"------ StoragePut (sp) サブコマンド ------\n"
 		"倉庫格納アイテムを一覧表示する。\n"
 		"入力例 [@bot storageput]\n"
@@ -1965,39 +1997,39 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageput 白ハーブ]\n"
 		"倉庫格納アイテムの登録を抹消する。\n"
 		"入力例 [@bot storageput 蝶の羽]\n"
-	), SUBCMD_DESC(Bot, StoragePutAll              , spa ,
+	), SUBCMD_DESC(Bot, StoragePutAll              , spa  ,
 		"------ StoragePutAll (spa) サブコマンド ------\n"
 		"倉庫にアイテムを入れる。\n"
 		"入力例 [@bot storageputall]\n"
-	), SUBCMD_DESC(Bot, StoragePutClear            ,     ,
+	), SUBCMD_DESC(Bot, StoragePutClear            ,      ,
 		"------ StoragePutClear サブコマンド ------\n"
 		"倉庫格納アイテムをクリアする。\n"
 		"入力例 [@bot storageputclear]\n"
-	), SUBCMD_DESC(Bot, StoragePutImport           , spi ,
+	), SUBCMD_DESC(Bot, StoragePutImport           , spi  ,
 		"------ StoragePutImport (spi) サブコマンド ------\n"
 		"倉庫格納アイテムを取り込む。\n"
 		"入力例 [@bot storageputimport チェイス]\n"
-	), SUBCMD_DESC(Bot, sUmmon                     , u   ,
+	), SUBCMD_DESC(Bot, sUmmon                     , u    ,
 		"------ sUmmon (u) サブコマンド ------\n"
 		"すべてのBotを引き寄せる。\n"
 		"入力例 [@bot summon]\n"
 		"任意のBotを引き寄せる。\n"
 		"入力例 [@bot summon クラウン プロフェ ハイプリ]\n"
-	), SUBCMD_DESC(Bot, Team                       , t   ,
+	), SUBCMD_DESC(Bot, Team                       , t    ,
 		"------ Team (t) サブコマンド ------\n"
 		"メンバーを一覧表示する。\n"
 		"入力例 [@bot team]\n"
-	), SUBCMD_DESC(Bot, TeamLogIn                  , tli ,
+	), SUBCMD_DESC(Bot, TeamLogIn                  , tli  ,
 		"------ TeamLogIn (tli) サブコマンド ------\n"
 		"0番のチームをログインさせる。\n"
 		"入力例 [@bot teamlogin]\n"
 		"特定の番号のチームをログインさせる。\n"
 		"入力例 [@bot teamlogin 3]\n"
-	), SUBCMD_DESC(Bot, TeamLogOut                 , tlo ,
+	), SUBCMD_DESC(Bot, TeamLogOut                 , tlo  ,
 		"------ TeamLogOut (tlo) サブコマンド ------\n"
 		"チームをログアウトさせる。\n"
 		"入力例 [@bot teamlogout]\n"
-	), SUBCMD_DESC(Bot, TeamNumber                 , tn  ,
+	), SUBCMD_DESC(Bot, TeamNumber                 , tn   ,
 		"------ TeamNumber (tn) サブコマンド ------\n"
 		"チームの一覧を表示する。\n"
 		"入力例 [@bot teamnumber]\n"
@@ -2005,17 +2037,17 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot teamnumber 3]\n"
 		"チームを抹消する。\n"
 		"入力例 [@bot teamnumber 3]\n"
-	), SUBCMD_DESC(Bot, TeamOrder                  , to  ,
+	), SUBCMD_DESC(Bot, TeamOrder                  , to   ,
 		"------ TeamOrder (to) サブコマンド ------\n"
 		"メンバーの順番を変更する。\n"
 		"入力例 [@bot teamorder クリエ アサクロ ハイプリ]\n"
-	), SUBCMD_DESC(Bot, TeamPassive                , tp  ,
+	), SUBCMD_DESC(Bot, TeamPassive                , tp   ,
 		"------ TeamPassive (tp) サブコマンド ------\n"
 		"モンスターに反応しないようにする。\n"
 		"入力例 [@bot teampassive]\n"
 		"Botがモンスターに反応するようにする。\n"
 		"入力例 [@bot teampassive]\n"
-	), SUBCMD_DESC(Bot, TeamRush                   , tr  ,
+	), SUBCMD_DESC(Bot, TeamRush                   , tr   ,
 		"------ TeamRush (tr) サブコマンド ------\n"
 		"モンスターをすぐに攻撃する。\n"
 		"入力例 [@bot teamrush]\n"
@@ -2023,25 +2055,25 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot teamrush]\n"
 		"ラッシュモードを解除する。\n"
 		"入力例 [@bot teamrush]\n"
-	), SUBCMD_DESC(Bot, TeamStay                   , ts  ,
+	), SUBCMD_DESC(Bot, TeamStay                   , ts   ,
 		"------ TeamStay (ts) サブコマンド ------\n"
 		"その場で待機するようにする。\n"
 		"入力例 [@bot teamstay]\n"
 		"リーダーを追いかけるようにする。\n"
 		"入力例 [@bot teamstay]\n"
-	), SUBCMD_DESC(Bot, TradeItem                  , ti  ,
+	), SUBCMD_DESC(Bot, TradeItem                  , ti   ,
 		"------ TradeItem (ti) サブコマンド ------\n"
 		"アイテムの全個数を取引に追加する。\n"
 		"入力例 [@bot tradeitem ブルージェムストーン]\n"
 		"アイテムの特定個数を取引に追加する。\n"
 		"入力例 [@bot tradeitem ブルージェムストーン 3]\n"
-	), SUBCMD_DESC(Bot, TradeZeny                  , tz  ,
+	), SUBCMD_DESC(Bot, TradeZeny                  , tz   ,
 		"------ TradeZeny (tz) サブコマンド ------\n"
 		"所持金の全額を取引に追加する。\n"
 		"入力例 [@bot tradezeny]\n"
 		"所持金の特定額を取引に追加する。\n"
 		"入力例 [@bot tradezeny 5000]\n"
-	), SUBCMD_DESC(Bot, Warp                       , w   ,
+	), SUBCMD_DESC(Bot, Warp                       , w    ,
 		"------ Warp (w) サブコマンド ------\n"
 		"ワープ位置を一覧表示する。\n"
 		"入力例 [@bot warp ハイプリ]\n"
@@ -2054,131 +2086,137 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 
 // @Botのサブコマンド手続きのベクタ。
 const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
-	SUBCMD_PROC(Bot, Attack                     , a   ),
-	SUBCMD_PROC(Bot, Cart                       , c   ),
-	SUBCMD_PROC(Bot, CartAutoGet                , cag ),
-	SUBCMD_PROC(Bot, CartAutoGetClear           ,     ),
-	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt),
-	SUBCMD_PROC(Bot, CartGet                    , cg  ),
-	SUBCMD_PROC(Bot, CartPut                    , cp  ),
-	SUBCMD_PROC(Bot, DistancemaX                , dx  ),
-	SUBCMD_PROC(Bot, DistancemiN                , dn  ),
-	SUBCMD_PROC(Bot, Equip                      , e   ),
-	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia ),
-	SUBCMD_PROC(Bot, EquipRepairAll             , era ),
-	SUBCMD_PROC(Bot, EquipSet                   , es  ),
-	SUBCMD_PROC(Bot, EquipSetClear              ,     ),
-	SUBCMD_PROC(Bot, EquipSetLoad               , esl ),
-	SUBCMD_PROC(Bot, EquipSetTransport          , est ),
-	SUBCMD_PROC(Bot, Help                       , h   ),
-	SUBCMD_PROC(Bot, HoldMonsters               , hm  ),
-	SUBCMD_PROC(Bot, HomunsKill                 , hk  ),
-	SUBCMD_PROC(Bot, HomunsKillLimit            , hkl ),
-	SUBCMD_PROC(Bot, HomunsKillUp               , hku ),
-	SUBCMD_PROC(Bot, HomunStatus                , hs  ),
-	SUBCMD_PROC(Bot, Item                       , i   ),
-	SUBCMD_PROC(Bot, ItemCount                  , ic  ),
-	SUBCMD_PROC(Bot, ItemDrop                   , id  ),
-	SUBCMD_PROC(Bot, ItemIgnore                 , ii  ),
-	SUBCMD_PROC(Bot, ItemIgnoreClear            ,     ),
-	SUBCMD_PROC(Bot, ItemIgnoreImport           , iii ),
-	SUBCMD_PROC(Bot, ItemNotIgnore              , ini ),
-	SUBCMD_PROC(Bot, ItemNotIgnoreClear         ,     ),
-	SUBCMD_PROC(Bot, ItemNotIgnoreImport        , inii),
-	SUBCMD_PROC(Bot, ItemRecoverHp              , irh ),
-	SUBCMD_PROC(Bot, ItemRecoverHpClear         ,     ),
-	SUBCMD_PROC(Bot, ItemRecoverHpTransport     , irht),
-	SUBCMD_PROC(Bot, ItemRecoverSp              , irs ),
-	SUBCMD_PROC(Bot, ItemRecoverSpClear         ,     ),
-	SUBCMD_PROC(Bot, ItemRecoverSpTransport     , irst),
-	SUBCMD_PROC(Bot, ItemSell                   , is  ),
-	SUBCMD_PROC(Bot, ItemSellAll                , isa ),
-	SUBCMD_PROC(Bot, ItemSellClear              ,     ),
-	SUBCMD_PROC(Bot, ItemSellImport             , isi ),
-	SUBCMD_PROC(Bot, JournalImport              , ji  ),
-	SUBCMD_PROC(Bot, LogIn                      , li  ),
-	SUBCMD_PROC(Bot, LogOut                     , lo  ),
-	SUBCMD_PROC(Bot, Loot                       , l   ),
-	SUBCMD_PROC(Bot, LootLimit                  , ll  ),
-	SUBCMD_PROC(Bot, Memo                       , m   ),
-	SUBCMD_PROC(Bot, MonsterFirst               , mf  ),
-	SUBCMD_PROC(Bot, MonsterFirstClear          ,     ),
-	SUBCMD_PROC(Bot, MonsterFirstTransport      , mft ),
-	SUBCMD_PROC(Bot, MonsterGreat               , mg  ),
-	SUBCMD_PROC(Bot, MonsterGreatClear          ,     ),
-	SUBCMD_PROC(Bot, MonsterGreatImport         , mgi ),
-	SUBCMD_PROC(Bot, MonsterHighDef             , mhd ),
-	SUBCMD_PROC(Bot, MonsterHighDefVit          , mhdv),
-	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf ),
-	SUBCMD_PROC(Bot, MonsterHighHit             , mhh ),
-	SUBCMD_PROC(Bot, MonsterHighMdef            , mhmd),
-	SUBCMD_PROC(Bot, MonsterIgnore              , mi  ),
-	SUBCMD_PROC(Bot, MonsterIgnoreClear         ,     ),
-	SUBCMD_PROC(Bot, MonsterIgnoreTransport     , mit ),
-	SUBCMD_PROC(Bot, Next                       , n   ),
-	SUBCMD_PROC(Bot, PetEquip                   , pe  ),
-	SUBCMD_PROC(Bot, PetStatus                  , ps  ),
-	SUBCMD_PROC(Bot, PolicyDistance             , pd  ),
-	SUBCMD_PROC(Bot, PolicyDistanceClear        ,     ),
-	SUBCMD_PROC(Bot, PolicyDistanceTransport    , pdt ),
-	SUBCMD_PROC(Bot, PolicyNormalAttack         , pna ),
-	SUBCMD_PROC(Bot, PolicyNormalAttackClear    ,     ),
-	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat),
-	SUBCMD_PROC(Bot, ShopPointCollect           , spc ),
-	SUBCMD_PROC(Bot, sKill                      , k   ),
-	SUBCMD_PROC(Bot, sKillBerserkRate           , kbr ),
-	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew ),
-	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,     ),
-	SUBCMD_PROC(Bot, sKillEnchantWeaponTransport, kewt),
-	SUBCMD_PROC(Bot, sKillEquipSet              , kes ),
-	SUBCMD_PROC(Bot, sKillEquipSetClear         ,     ),
-	SUBCMD_PROC(Bot, sKillEquipSetLoad          , kesl),
-	SUBCMD_PROC(Bot, sKillEquipSetTransport     , kest),
-	SUBCMD_PROC(Bot, sKillFirst                 , kf  ),
-	SUBCMD_PROC(Bot, sKillFirstClear            ,     ),
-	SUBCMD_PROC(Bot, sKillFirstTransport        , kft ),
-	SUBCMD_PROC(Bot, sKillIgnoreMonster         , kim ),
-	SUBCMD_PROC(Bot, sKillIgnoreMonsterClear    ,     ),
-	SUBCMD_PROC(Bot, sKillIgnoreMonsterTransport, kimt),
-	SUBCMD_PROC(Bot, sKillLimit                 , kl  ),
-	SUBCMD_PROC(Bot, sKillmaXCastTime           , kxct),
-	SUBCMD_PROC(Bot, sKillmemBers               , kb  ),
-	SUBCMD_PROC(Bot, sKillMonsters              , km  ),
-	SUBCMD_PROC(Bot, sKillPlay                  , kp  ),
-	SUBCMD_PROC(Bot, sKillPlayClear             ,     ),
-	SUBCMD_PROC(Bot, sKillPlayTransport         , kpt ),
-	SUBCMD_PROC(Bot, sKillReject                , kr  ),
-	SUBCMD_PROC(Bot, sKillRejectClear           ,     ),
-	SUBCMD_PROC(Bot, sKillRejectTransport       , krt ),
-	SUBCMD_PROC(Bot, sKillSafeCastTime          , ksct),
-	SUBCMD_PROC(Bot, sKillSupplyHpRate          , kshr),
-	SUBCMD_PROC(Bot, sKillSupplySpRate          , kssr),
-	SUBCMD_PROC(Bot, sKillTail                  , kt  ),
-	SUBCMD_PROC(Bot, sKillTailClear             ,     ),
-	SUBCMD_PROC(Bot, sKillTailTransport         , ktt ),
-	SUBCMD_PROC(Bot, sKillUp                    , ku  ),
-	SUBCMD_PROC(Bot, Status                     , s   ),
-	SUBCMD_PROC(Bot, StatusUp                   , su  ),
-	SUBCMD_PROC(Bot, StorageGet                 , sg  ),
-	SUBCMD_PROC(Bot, StorageGetAll              , sga ),
-	SUBCMD_PROC(Bot, StorageGetClear            ,     ),
-	SUBCMD_PROC(Bot, StorageGetTransport        , sgt ),
-	SUBCMD_PROC(Bot, StoragePut                 , sp  ),
-	SUBCMD_PROC(Bot, StoragePutAll              , spa ),
-	SUBCMD_PROC(Bot, StoragePutClear            ,     ),
-	SUBCMD_PROC(Bot, StoragePutImport           , spi ),
-	SUBCMD_PROC(Bot, sUmmon                     , u   ),
-	SUBCMD_PROC(Bot, Team                       , t   ),
-	SUBCMD_PROC(Bot, TeamLogIn                  , tli ),
-	SUBCMD_PROC(Bot, TeamLogOut                 , tlo ),
-	SUBCMD_PROC(Bot, TeamNumber                 , tn  ),
-	SUBCMD_PROC(Bot, TeamOrder                  , to  ),
-	SUBCMD_PROC(Bot, TeamPassive                , tp  ),
-	SUBCMD_PROC(Bot, TeamRush                   , tr  ),
-	SUBCMD_PROC(Bot, TeamStay                   , ts  ),
-	SUBCMD_PROC(Bot, TradeItem                  , ti  ),
-	SUBCMD_PROC(Bot, TradeZeny                  , tz  ),
-	SUBCMD_PROC(Bot, Warp                       , w   ),
+	SUBCMD_PROC(Bot, Attack                     , a    ),
+	SUBCMD_PROC(Bot, Cart                       , c    ),
+	SUBCMD_PROC(Bot, CartAutoGet                , cag  ),
+	SUBCMD_PROC(Bot, CartAutoGetClear           ,      ),
+	SUBCMD_PROC(Bot, CartAutoGetTransport       , cagt ),
+	SUBCMD_PROC(Bot, CartGet                    , cg   ),
+	SUBCMD_PROC(Bot, CartPut                    , cp   ),
+	SUBCMD_PROC(Bot, DistancemaX                , dx   ),
+	SUBCMD_PROC(Bot, DistancemiN                , dn   ),
+	SUBCMD_PROC(Bot, Equip                      , e    ),
+	SUBCMD_PROC(Bot, EquipIdentifyAll           , eia  ),
+	SUBCMD_PROC(Bot, EquipRepairAll             , era  ),
+	SUBCMD_PROC(Bot, EquipSet                   , es   ),
+	SUBCMD_PROC(Bot, EquipSetClear              ,      ),
+	SUBCMD_PROC(Bot, EquipSetLoad               , esl  ),
+	SUBCMD_PROC(Bot, EquipSetTransport          , est  ),
+	SUBCMD_PROC(Bot, Help                       , h    ),
+	SUBCMD_PROC(Bot, HoldMonsters               , hm   ),
+	SUBCMD_PROC(Bot, HomunsKill                 , hk   ),
+	SUBCMD_PROC(Bot, HomunsKillLimit            , hkl  ),
+	SUBCMD_PROC(Bot, HomunsKillUp               , hku  ),
+	SUBCMD_PROC(Bot, HomunStatus                , hs   ),
+	SUBCMD_PROC(Bot, Item                       , i    ),
+	SUBCMD_PROC(Bot, ItemCount                  , ic   ),
+	SUBCMD_PROC(Bot, ItemDrop                   , id   ),
+	SUBCMD_PROC(Bot, ItemIgnore                 , ii   ),
+	SUBCMD_PROC(Bot, ItemIgnoreClear            ,      ),
+	SUBCMD_PROC(Bot, ItemIgnoreImport           , iii  ),
+	SUBCMD_PROC(Bot, ItemNotIgnore              , ini  ),
+	SUBCMD_PROC(Bot, ItemNotIgnoreClear         ,      ),
+	SUBCMD_PROC(Bot, ItemNotIgnoreImport        , inii ),
+	SUBCMD_PROC(Bot, ItemNotsaVeMonster         , invm ),
+	SUBCMD_PROC(Bot, ItemNotsaVeMonsterClear    ,      ),
+	SUBCMD_PROC(Bot, ItemNotsaVeMonsterTransport, invmt),
+	SUBCMD_PROC(Bot, ItemRecoverHp              , irh  ),
+	SUBCMD_PROC(Bot, ItemRecoverHpClear         ,      ),
+	SUBCMD_PROC(Bot, ItemRecoverHpTransport     , irht ),
+	SUBCMD_PROC(Bot, ItemRecoverSp              , irs  ),
+	SUBCMD_PROC(Bot, ItemRecoverSpClear         ,      ),
+	SUBCMD_PROC(Bot, ItemRecoverSpTransport     , irst ),
+	SUBCMD_PROC(Bot, ItemsaVeMonster            , ivm  ),
+	SUBCMD_PROC(Bot, ItemsaVeMonsterClear       ,      ),
+	SUBCMD_PROC(Bot, ItemsaVeMonsterTransport   , ivmt ),
+	SUBCMD_PROC(Bot, ItemSell                   , is   ),
+	SUBCMD_PROC(Bot, ItemSellAll                , isa  ),
+	SUBCMD_PROC(Bot, ItemSellClear              ,      ),
+	SUBCMD_PROC(Bot, ItemSellImport             , isi  ),
+	SUBCMD_PROC(Bot, JournalImport              , ji   ),
+	SUBCMD_PROC(Bot, LogIn                      , li   ),
+	SUBCMD_PROC(Bot, LogOut                     , lo   ),
+	SUBCMD_PROC(Bot, Loot                       , l    ),
+	SUBCMD_PROC(Bot, LootLimit                  , ll   ),
+	SUBCMD_PROC(Bot, Memo                       , m    ),
+	SUBCMD_PROC(Bot, MonsterFirst               , mf   ),
+	SUBCMD_PROC(Bot, MonsterFirstClear          ,      ),
+	SUBCMD_PROC(Bot, MonsterFirstTransport      , mft  ),
+	SUBCMD_PROC(Bot, MonsterGreat               , mg   ),
+	SUBCMD_PROC(Bot, MonsterGreatClear          ,      ),
+	SUBCMD_PROC(Bot, MonsterGreatImport         , mgi  ),
+	SUBCMD_PROC(Bot, MonsterHighDef             , mhd  ),
+	SUBCMD_PROC(Bot, MonsterHighDefVit          , mhdv ),
+	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf  ),
+	SUBCMD_PROC(Bot, MonsterHighHit             , mhh  ),
+	SUBCMD_PROC(Bot, MonsterHighMdef            , mhmd ),
+	SUBCMD_PROC(Bot, MonsterIgnore              , mi   ),
+	SUBCMD_PROC(Bot, MonsterIgnoreClear         ,      ),
+	SUBCMD_PROC(Bot, MonsterIgnoreTransport     , mit  ),
+	SUBCMD_PROC(Bot, Next                       , n    ),
+	SUBCMD_PROC(Bot, PetEquip                   , pe   ),
+	SUBCMD_PROC(Bot, PetStatus                  , ps   ),
+	SUBCMD_PROC(Bot, PolicyDistance             , pd   ),
+	SUBCMD_PROC(Bot, PolicyDistanceClear        ,      ),
+	SUBCMD_PROC(Bot, PolicyDistanceTransport    , pdt  ),
+	SUBCMD_PROC(Bot, PolicyNormalAttack         , pna  ),
+	SUBCMD_PROC(Bot, PolicyNormalAttackClear    ,      ),
+	SUBCMD_PROC(Bot, PolicyNormalAttackTransport, pnat ),
+	SUBCMD_PROC(Bot, ShopPointCollect           , spc  ),
+	SUBCMD_PROC(Bot, sKill                      , k    ),
+	SUBCMD_PROC(Bot, sKillBerserkRate           , kbr  ),
+	SUBCMD_PROC(Bot, sKillEnchantWeapon         , kew  ),
+	SUBCMD_PROC(Bot, sKillEnchantWeaponClear    ,      ),
+	SUBCMD_PROC(Bot, sKillEnchantWeaponTransport, kewt ),
+	SUBCMD_PROC(Bot, sKillEquipSet              , kes  ),
+	SUBCMD_PROC(Bot, sKillEquipSetClear         ,      ),
+	SUBCMD_PROC(Bot, sKillEquipSetLoad          , kesl ),
+	SUBCMD_PROC(Bot, sKillEquipSetTransport     , kest ),
+	SUBCMD_PROC(Bot, sKillFirst                 , kf   ),
+	SUBCMD_PROC(Bot, sKillFirstClear            ,      ),
+	SUBCMD_PROC(Bot, sKillFirstTransport        , kft  ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonster         , kim  ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonsterClear    ,      ),
+	SUBCMD_PROC(Bot, sKillIgnoreMonsterTransport, kimt ),
+	SUBCMD_PROC(Bot, sKillLimit                 , kl   ),
+	SUBCMD_PROC(Bot, sKillmaXCastTime           , kxct ),
+	SUBCMD_PROC(Bot, sKillmemBers               , kb   ),
+	SUBCMD_PROC(Bot, sKillMonsters              , km   ),
+	SUBCMD_PROC(Bot, sKillPlay                  , kp   ),
+	SUBCMD_PROC(Bot, sKillPlayClear             ,      ),
+	SUBCMD_PROC(Bot, sKillPlayTransport         , kpt  ),
+	SUBCMD_PROC(Bot, sKillReject                , kr   ),
+	SUBCMD_PROC(Bot, sKillRejectClear           ,      ),
+	SUBCMD_PROC(Bot, sKillRejectTransport       , krt  ),
+	SUBCMD_PROC(Bot, sKillSafeCastTime          , ksct ),
+	SUBCMD_PROC(Bot, sKillSupplyHpRate          , kshr ),
+	SUBCMD_PROC(Bot, sKillSupplySpRate          , kssr ),
+	SUBCMD_PROC(Bot, sKillTail                  , kt   ),
+	SUBCMD_PROC(Bot, sKillTailClear             ,      ),
+	SUBCMD_PROC(Bot, sKillTailTransport         , ktt  ),
+	SUBCMD_PROC(Bot, sKillUp                    , ku   ),
+	SUBCMD_PROC(Bot, Status                     , s    ),
+	SUBCMD_PROC(Bot, StatusUp                   , su   ),
+	SUBCMD_PROC(Bot, StorageGet                 , sg   ),
+	SUBCMD_PROC(Bot, StorageGetAll              , sga  ),
+	SUBCMD_PROC(Bot, StorageGetClear            ,      ),
+	SUBCMD_PROC(Bot, StorageGetTransport        , sgt  ),
+	SUBCMD_PROC(Bot, StoragePut                 , sp   ),
+	SUBCMD_PROC(Bot, StoragePutAll              , spa  ),
+	SUBCMD_PROC(Bot, StoragePutClear            ,      ),
+	SUBCMD_PROC(Bot, StoragePutImport           , spi  ),
+	SUBCMD_PROC(Bot, sUmmon                     , u    ),
+	SUBCMD_PROC(Bot, Team                       , t    ),
+	SUBCMD_PROC(Bot, TeamLogIn                  , tli  ),
+	SUBCMD_PROC(Bot, TeamLogOut                 , tlo  ),
+	SUBCMD_PROC(Bot, TeamNumber                 , tn   ),
+	SUBCMD_PROC(Bot, TeamOrder                  , to   ),
+	SUBCMD_PROC(Bot, TeamPassive                , tp   ),
+	SUBCMD_PROC(Bot, TeamRush                   , tr   ),
+	SUBCMD_PROC(Bot, TeamStay                   , ts   ),
+	SUBCMD_PROC(Bot, TradeItem                  , ti   ),
+	SUBCMD_PROC(Bot, TradeZeny                  , tz   ),
+	SUBCMD_PROC(Bot, Warp                       , w    ),
 };
 
 // 装備の破損を示すタグ。
@@ -3733,6 +3771,7 @@ const std::unordered_map<
 	{MM_BASE        , "基本"        },
 	{MM_COMMON      , "一般"        },
 	{MM_BOSS        , "ボス"        },
+	{MM_NOT_GREAT   , "非グレート"  },
 	{MM_GREAT       , "グレート"    },
 	{MM_FLORA       , "フローラ型"  },
 	{MM_HIGH_MDEF   , "高Mdef"      },

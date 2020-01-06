@@ -112,6 +112,32 @@ clear_ignore_mob_func(
 	};
 }
 
+// DBからアイテム非節約モンスターをクリアする関数を作る。
+registry_t<int>::clear_func // 作った関数。
+clear_item_not_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_item_not_save_mob` "
+			"WHERE `char_id` = "  , construct<sql_param>(cid)
+		);
+	};
+}
+
+// DBからアイテム節約モンスターをクリアする関数を作る。
+registry_t<int>::clear_func // 作った関数。
+clear_item_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_item_save_mob` "
+			"WHERE `char_id` = "  , construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBからジャーナルをクリアする関数を作る。
 registry_t<int,coords_t>::clear_func // 作った関数。
 clear_journal_func(
@@ -436,6 +462,36 @@ delete_ignore_mob_func(
 			"WHERE"
 			" `char_id` = ", construct<sql_param>(cid), " AND"
 			" `mob_id` =  " , construct<sql_param>(mid)
+		);
+	};
+}
+
+// DBからアイテム非節約モンスターを削除する関数を作る。
+registry_t<int>::save_func // 作った関数。
+delete_item_not_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int ism) {
+		ses->execute(
+			"DELETE FROM `pybot_item_not_save_mob` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid               ), " AND"
+			" `nameid` = " , construct<sql_param>(ITEM_FROM_ISM(ism))
+		);
+	};
+}
+
+// DBからアイテム節約モンスターを削除する関数を作る。
+registry_t<int>::save_func // 作った関数。
+delete_item_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int ism) {
+		ses->execute(
+			"DELETE FROM `pybot_item_save_mob` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid               ), " AND"
+			" `nameid` = " , construct<sql_param>(ITEM_FROM_ISM(ism))
 		);
 	};
 }
@@ -814,6 +870,38 @@ insert_ignore_mob_func(
 			"VALUES"
 			"(", construct<sql_param>(cid), ","
 			" ", construct<sql_param>(mid), ")"
+		);
+	};
+}
+
+// DBにアイテム非節約モンスターを挿入する関数を作る。
+registry_t<int>::save_func // 作った関数。
+insert_item_not_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int ism) {
+		ses->execute(
+			"INSERT INTO `pybot_item_not_save_mob` "
+			"VALUES"
+			"(", construct<sql_param>(cid               ), ","
+			" ", construct<sql_param>(ITEM_FROM_ISM(ism)), ","
+			" ", construct<sql_param>(MOB_FROM_ISM(ism) ), ")"
+		);
+	};
+}
+
+// DBにアイテム節約モンスターを挿入する関数を作る。
+registry_t<int>::save_func // 作った関数。
+insert_item_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int ism) {
+		ses->execute(
+			"INSERT INTO `pybot_item_save_mob` "
+			"VALUES"
+			"(", construct<sql_param>(cid               ), ","
+			" ", construct<sql_param>(ITEM_FROM_ISM(ism)), ","
+			" ", construct<sql_param>(MOB_FROM_ISM(ism) ), ")"
 		);
 	};
 }
@@ -1257,6 +1345,46 @@ load_ignore_mob_func(
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) reg->register_(mid);
+	};
+}
+
+// DBからアイテム非節約モンスターをロードする関数を作る。
+registry_t<int>::load_func // 作った関数。
+load_item_not_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int>* reg) {
+		int nid;
+		int mid;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("nameid", nid), "`,"
+			" `", construct<sql_column>("mob_id", mid), "` "
+			"FROM `pybot_item_not_save_mob` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row())
+			reg->register_(ITEM_SAVE_MOB(nid, mid));
+	};
+}
+
+// DBからアイテム節約モンスターをロードする関数を作る。
+registry_t<int>::load_func // 作った関数。
+load_item_save_mob_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int>* reg) {
+		int nid;
+		int mid;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("nameid", nid), "`,"
+			" `", construct<sql_column>("mob_id", mid), "` "
+			"FROM `pybot_item_save_mob` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+		while (ses->next_row())
+			reg->register_(ITEM_SAVE_MOB(nid, mid));
 	};
 }
 

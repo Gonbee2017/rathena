@@ -1009,6 +1009,88 @@ SUBCMD_FUNC(Bot, ItemNotIgnoreImport) {
 	lea->last_heavy_tick() = now;
 }
 
+// メンバーのアイテム非節約モンスターを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, ItemNotsaVeMonster) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<int> isms;
+		mem->item_not_save_mobs()->copy(pybot::back_inserter(isms));
+		std::sort(ALL_RANGE(isms));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のアイテム非節約モンスター ------\n";
+		for (int ism : isms) {
+			int nid = ITEM_FROM_ISM(ism);
+			int mid = MOB_FROM_ISM(ism);
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+				print_itemdb(nid) << " ; " <<
+				ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << "\n";
+		}
+		lea->output_buffer() << isms.size() << "件のアイテム非節約モンスターが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string idb_nam = shift_arguments(args);
+		int nid = find_itemdb(idb_nam);
+		if (!nid)
+			throw command_error{print(
+				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
+			)};
+		std::string idb_str = print_itemdb(nid);
+		std::string mob_nam = shift_arguments(args, "モンスターを指定してください。");
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		int ism = ITEM_SAVE_MOB(nid, mid);
+		if (mem->item_not_save_mobs()->find(ism)) {
+			mem->item_not_save_mobs()->unregister(ism);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に必ず使うとは限りません。"
+			));
+		} else {
+			mem->item_not_save_mobs()->register_(ism);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に必ず使います。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのアイテム非節約モンスターをクリアする。
+SUBCMD_FUNC(Bot, ItemNotsaVeMonsterClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->item_not_save_mobs()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件のアイテム非節約モンスターの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのアイテム非節約モンスターを転送する。
+SUBCMD_FUNC(Bot, ItemNotsaVeMonsterTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->item_not_save_mobs()->import_(mem1->item_not_save_mobs().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のアイテム非節約モンスターを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // メンバーのHP回復アイテムを一覧表示、または登録、または抹消する。
 SUBCMD_FUNC(Bot, ItemRecoverHp) {
 	CS_ENTER;
@@ -1208,6 +1290,88 @@ SUBCMD_FUNC(Bot, ItemSell) {
 			show_client(lea->fd(), print("「", idb_str, "」を売ります。"));
 		}
 	}
+}
+
+// メンバーのアイテム節約モンスターを一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, ItemsaVeMonster) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<int> isms;
+		mem->item_save_mobs()->copy(pybot::back_inserter(isms));
+		std::sort(ALL_RANGE(isms));
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のアイテム節約モンスター ------\n";
+		for (int ism : isms) {
+			int nid = ITEM_FROM_ISM(ism);
+			int mid = MOB_FROM_ISM(ism);
+			lea->output_buffer() << ID_PREFIX << print(std::setw(5), std::setfill('0'), nid) << " - " <<
+				print_itemdb(nid) << " ; " <<
+				ID_PREFIX << print(std::setw(5), std::setfill('0'), mid) << " - " <<
+				print_mobdb(mid) << "\n";
+		}
+		lea->output_buffer() << isms.size() << "件のアイテム節約モンスターが見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string idb_nam = shift_arguments(args);
+		int nid = find_itemdb(idb_nam);
+		if (!nid)
+			throw command_error{print(
+				"「", idb_nam, "」というアイテムはありません。"
+			)};
+		if (nid >= ITEM_TYPE_OFFSET &&
+			nid < ITEM_TYPE_OFFSET + IT_MAX
+		) throw command_error{print(
+				"種類を指定することはできません。"
+			)};
+		std::string idb_str = print_itemdb(nid);
+		std::string mob_nam = shift_arguments(args, "モンスターを指定してください。");
+		int mid = find_mobdb(mob_nam);
+		if (!mid)
+			throw command_error{print(
+				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		std::string mob_str = print_mobdb(mid);
+		int ism = ITEM_SAVE_MOB(nid, mid);
+		if (mem->item_save_mobs()->find(ism)) {
+			mem->item_save_mobs()->unregister(ism);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に使います。"
+			));
+		} else {
+			mem->item_save_mobs()->register_(ism);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に使いません。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのアイテム節約モンスターをクリアする。
+SUBCMD_FUNC(Bot, ItemsaVeMonsterClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->item_save_mobs()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou,
+		"件のアイテム節約モンスターの登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのアイテム節約モンスターを転送する。
+SUBCMD_FUNC(Bot, ItemsaVeMonsterTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->item_save_mobs()->import_(mem1->item_save_mobs().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のアイテム節約モンスターを転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
 // すべての売却アイテムを売却する。

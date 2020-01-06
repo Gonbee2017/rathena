@@ -325,6 +325,22 @@
 	sim /* スキル無視モンスター。 */\
 ) ((sim) & 0xffff)
 
+// アイテム節約モンスターを作る。
+#define ITEM_SAVE_MOB(\
+	nid, /* アイテムID。 */\
+	mid  /* モンスターID。 */\
+) (((nid) << 16) | (mid))
+
+// アイテム節約モンスターからアイテムIDを取得する。
+#define ITEM_FROM_ISM(\
+	is /* アイテム節約モンスター。 */\
+) ((is) >> 16)
+
+// アイテム節約モンスターからモンスターIDを取得する。
+#define MOB_FROM_ISM(\
+	is /* アイテム節約モンスター。 */\
+) ((is) & 0xffff)
+
 // 不明を示すシンボル。
 #define UNKNOWN_SYMBOL std::string("？")
 
@@ -565,8 +581,9 @@ enum meta_mobs {
 	MM_SIZE         =   120, // サイズ。
 	MM_ELEMENT      =   140, // 属性。
 	MM_RACE         =   160, // 種族。
-	MM_COMMON       =   179, // 一般。
-	MM_BOSS         =   180, // ボス。
+	MM_COMMON       =   175, // 一般。
+	MM_BOSS         =   176, // ボス。
+	MM_NOT_GREAT    =   180, // 非グレート。
 	MM_GREAT        =   181, // グレート。
 	MM_FLORA        =   182, // フローラ型。
 	MM_HIGH_MDEF    =   184, // 高Mdef。
@@ -1463,6 +1480,8 @@ struct member_if {
 	virtual int find_cart(const item_key& key);
 	virtual int find_inventory(const std::string& nam);
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN);
+	virtual bool find_item_not_save_mobs(int nid);
+	virtual bool find_item_save_mobs(int nid);
 	virtual bool find_skill_ignore_mobs(e_skill kid, block_if* ene);
 	virtual ptr<registry_t<int>>& first_mobs();
 	virtual ptr<registry_t<int,e_skill>>& first_skills();
@@ -1475,6 +1494,8 @@ struct member_if {
 	virtual ptr<registry_t<int>>& ignore_mobs();
 	virtual bool is_carton();
 	virtual bool is_sit();
+	virtual ptr<registry_t<int>>& item_not_save_mobs();
+	virtual ptr<registry_t<int>>& item_save_mobs();
 	virtual ptr<registry_t<int,e_element>>& kew_elements();
 	virtual void load_equipset(int mid, equip_pos* equ = nullptr);
 	virtual void load_play_skill(int mid, e_skill* kid);
@@ -1891,6 +1912,8 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> hold_mobs_;                 // 抱えることのできるモンスター数の登録値。
 	ptr<block_if> homun_;                          // ホムンクルス。
 	ptr<registry_t<int>> ignore_mobs_;             // 無視モンスターのレジストリ。
+	ptr<registry_t<int>> item_not_save_mobs_;      // スキル非節約モンスターのレジストリ。
+	ptr<registry_t<int>> item_save_mobs_;          // スキル節約モンスターのレジストリ。
 	ptr<registry_t<int,e_element>> kew_elements_;  // 武器属性付与のレジストリ。
 	block_if* leader_;                             // リーダー。
 	ptr<registry_t<e_skill,int>> limit_skills_;    // 制限スキルのレジストリ。
@@ -1948,6 +1971,8 @@ struct member_impl : virtual block_if {
 	virtual int find_cart(const item_key& key) override;
 	virtual int find_inventory(const std::string& nam) override;
 	virtual int find_inventory(const item_key& key, int equ = INT_MIN) override;
+	virtual bool find_item_not_save_mobs(int nid) override;
+	virtual bool find_item_save_mobs(int nid) override;
 	virtual bool find_skill_ignore_mobs(e_skill kid, block_if* ene) override;
 	virtual ptr<registry_t<int>>& first_mobs() override;
 	virtual ptr<registry_t<int,e_skill>>& first_skills() override;
@@ -1977,6 +2002,8 @@ struct member_impl : virtual block_if {
 	virtual bool is_no_gemstone() override;
 	virtual bool is_sit() override;
 	virtual bool is_wall_side() override;
+	virtual ptr<registry_t<int>>& item_not_save_mobs() override;
+	virtual ptr<registry_t<int>>& item_save_mobs() override;
 	virtual void iterate_skill(yield_skill_func yie) override;
 	virtual ptr<registry_t<int,e_element>>& kew_elements() override;
 	virtual block_if*& leader() override;
@@ -2598,12 +2625,18 @@ SUBCMD_FUNC(Bot, ItemIgnoreImport);
 SUBCMD_FUNC(Bot, ItemNotIgnore);
 SUBCMD_FUNC(Bot, ItemNotIgnoreClear);
 SUBCMD_FUNC(Bot, ItemNotIgnoreImport);
+SUBCMD_FUNC(Bot, ItemNotsaVeMonster);
+SUBCMD_FUNC(Bot, ItemNotsaVeMonsterClear);
+SUBCMD_FUNC(Bot, ItemNotsaVeMonsterTransport);
 SUBCMD_FUNC(Bot, ItemRecoverHp);
 SUBCMD_FUNC(Bot, ItemRecoverHpClear);
 SUBCMD_FUNC(Bot, ItemRecoverHpTransport);
 SUBCMD_FUNC(Bot, ItemRecoverSp);
 SUBCMD_FUNC(Bot, ItemRecoverSpClear);
 SUBCMD_FUNC(Bot, ItemRecoverSpTransport);
+SUBCMD_FUNC(Bot, ItemsaVeMonster);
+SUBCMD_FUNC(Bot, ItemsaVeMonsterClear);
+SUBCMD_FUNC(Bot, ItemsaVeMonsterTransport);
 SUBCMD_FUNC(Bot, ItemSell);
 SUBCMD_FUNC(Bot, ItemSellAll);
 SUBCMD_FUNC(Bot, ItemSellClear);
@@ -2721,6 +2754,8 @@ registry_t<int,e_skill>::clear_func clear_first_skill_func(int cid);
 registry_t<int>::clear_func clear_great_mob_func(int cid);
 registry_t<int>::clear_func clear_ignore_item_func(int cid);
 registry_t<int>::clear_func clear_ignore_mob_func(int cid);
+registry_t<int>::clear_func clear_item_not_save_mob_func(int cid);
+registry_t<int>::clear_func clear_item_save_mob_func(int cid);
 registry_t<int,coords_t>::clear_func clear_journal_func(int cid);
 registry_t<int,e_element>::clear_func clear_kew_element_func(int cid);
 registry_t<e_skill,int>::clear_func clear_limit_skill_func(int cid);
@@ -2745,6 +2780,8 @@ registry_t<int,e_skill>::save_func delete_first_skill_func(int cid);
 registry_t<int>::save_func delete_great_mob_func(int cid);
 registry_t<int>::save_func delete_ignore_item_func(int cid);
 registry_t<int>::save_func delete_ignore_mob_func(int cid);
+registry_t<int>::save_func delete_item_not_save_mob_func(int cid);
+registry_t<int>::save_func delete_item_save_mob_func(int cid);
 registry_t<int,coords_t>::save_func delete_journal_func(int cid);
 registry_t<int,e_element>::save_func delete_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func delete_limit_skill_func(int cid);
@@ -2769,6 +2806,8 @@ registry_t<int,e_skill>::save_func insert_first_skill_func(int cid);
 registry_t<int>::save_func insert_great_mob_func(int cid);
 registry_t<int>::save_func insert_ignore_item_func(int cid);
 registry_t<int>::save_func insert_ignore_mob_func(int cid);
+registry_t<int>::save_func insert_item_not_save_mob_func(int cid);
+registry_t<int>::save_func insert_item_save_mob_func(int cid);
 registry_t<int,coords_t>::save_func insert_journal_func(int cid);
 registry_t<int,e_element>::save_func insert_kew_element_func(int cid);
 registry_t<e_skill,int>::save_func insert_limit_skill_func(int cid);
@@ -2798,6 +2837,8 @@ registry_t<int,e_element>::load_func load_kew_element_func(int cid);
 registry_t<e_skill,int>::load_func load_limit_skill_func(int cid);
 registry_t<int,normal_attack_policy>::load_func load_normal_attack_policy_func(int cid);
 registry_t<int>::load_func load_not_ignore_item_func(int cid);
+registry_t<int>::load_func load_item_not_save_mob_func(int cid);
+registry_t<int>::load_func load_item_save_mob_func(int cid);
 registry_t<int,play_skill>::load_func load_play_skill_func(int cid);
 registry_t<int,int>::load_func load_recover_hp_item_func(int cid);
 registry_t<int,int>::load_func load_recover_sp_item_func(int cid);
