@@ -60,7 +60,11 @@ AI_SKILL_USE_FUNC(AC_SHOWER) {
 // エンジェラスを使う。
 AI_SKILL_USE_FUNC(AL_ANGELUS) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -431,7 +435,11 @@ AI_SKILL_USE_FUNC_T(BS_MAXIMIZE, deactivate) {
 // オーバートラストを使う。
 AI_SKILL_USE_FUNC(BS_OVERTHRUST) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_MAXOVERTHRUST] &&
@@ -480,7 +488,11 @@ AI_SKILL_USE_FUNC(BS_REPAIRWEAPON) {
 // ウェポンパーフェクションを使う。
 AI_SKILL_USE_FUNC(BS_WEAPONPERFECT) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			mem->sc_rest(SC_WEAPONPERFECTION) <= bot->get_skill_tail(kid);
@@ -2038,7 +2050,11 @@ AI_SKILL_USE_FUNC(PR_BENEDICTIO) {
 // グロリアを使う。
 AI_SKILL_USE_FUNC(PR_GLORIA) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2107,7 +2123,11 @@ AI_SKILL_USE_FUNC(PR_LEXDIVINA) {
 // マグニフィカートを使う。
 AI_SKILL_USE_FUNC(PR_MAGNIFICAT) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2798,7 +2818,11 @@ AI_SKILL_USE_FUNC(SN_SHARPSHOOTING) {
 // ウインドウォークを使う。
 AI_SKILL_USE_FUNC(SN_WINDWALK) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [this, kid] (block_if* mem) -> bool {
-		return !mem->is_dead() &&
+		return (mem == bot ||
+				(bot->party_id() &&
+					mem->party_id() == bot->party_id()
+				)
+			) && !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&

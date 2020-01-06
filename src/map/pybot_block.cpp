@@ -3345,6 +3345,7 @@ leader_t::leader_t(
 	map_session_data* sd_ // セッションデータ。
 ) : member_t(sd_, this) {
 	center() = sd_->bl;
+	center().id = -1;
 	attack_target() = 0;
 	last_heavy_tick() = 0;
 	last_summoned_id() = 0;

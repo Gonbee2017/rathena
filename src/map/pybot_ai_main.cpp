@@ -47,7 +47,10 @@ void ai_t::leader_main(
 void ai_t::leader_organize() {
 	CS_ENTER;
 	if (leader->bl()->m != leader->center().m) leader->stay() = false;
-	if (!leader->stay()) leader->center() = *leader->bl();
+	if (!leader->stay()) {
+		leader->center() = *leader->bl();
+		leader->center().id = -1;
+	}
 	gvg = map_flag_gvg2(leader->center().m);
 	for (block_if* mem : leader->members()) {
 		if (mem != leader ||
@@ -878,7 +881,7 @@ void ai_t::bot_follow() {
 			throw turn_end_exception();
 		}
 		if (!bot->can_move() ||
-			!bot->walk_xy(leader->center().x, leader->center().y, ran)
+			!bot->walk_bl(&leader->center(), ran)
 		) throw turn_end_exception();
 	}
 }
