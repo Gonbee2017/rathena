@@ -873,7 +873,6 @@ void ai_t::bot_follow() {
 	int ran = int(bot->member_index() < leader->member_index()) + bot->member_index();
 	if (bot->battle_mode() == BM_NONE &&
 		!bot->is_walking() &&
-		bot->can_act() &&
 		!bot->check_range_bl(bot->bl(), &leader->center(), ran)
 	) {
 		if (bot->is_sit()) {
