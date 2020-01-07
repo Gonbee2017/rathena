@@ -1579,7 +1579,7 @@ void item_user_impl::use_item(
 	if (itm->nameid &&
 		(!find_item_save_mobs(itm->nameid) ||
 			find_item_not_save_mobs(itm->nameid)
-		) && !pc_useitem(sd(), ind)
+		) && pc_useitem(sd(), ind)
 	) {
 		item_used_ticks()[itm->nameid] = now;
 		if (exc) throw item_used_exception();
