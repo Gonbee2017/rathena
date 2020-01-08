@@ -234,8 +234,7 @@ AI_SKILL_USE_FUNC(AM_ACIDTERROR) {
 // バーサークピッチャーを使う。
 AI_SKILL_USE_FUNC(AM_BERSERKPITCHER) {
 	block_if* mem = pybot::find_if(ALL_RANGE(members), [kid] (block_if* mem) -> bool {
-		return mem->normal_attack_policy_value() == NAPV_CONTINUOUS &&
-			!mem->is_dead() &&
+		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_ASPDPOTION0] &&
