@@ -754,6 +754,7 @@ AI_SKILL_USE_FUNC(GS_CRACKER) {
 			bot->skill_ratio(kid, klv, ene) > 0 &&
 			!ene->has_status_immune() &&
 			ene->is_casting() &&
+			skill_get_castcancel(ene->ud()->skill_id) &&
 			!ene->is_long_weapon_immune();
 	});
 	if (ene &&
@@ -1471,7 +1472,8 @@ AI_SKILL_USE_FUNC(MO_BALKYOUNG) {
 				return ene != tar_ene &&
 					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->has_status_immune() &&
-					ene->is_casting();
+					ene->is_casting() &&
+					skill_get_castcancel(ene->ud()->skill_id);
 			})
 		);
 		if (ene) bot->use_skill_block(kid, klv, tar_ene);
@@ -2524,7 +2526,8 @@ AI_SKILL_USE_FUNC(SA_SEISMICWEAPON) {
 AI_SKILL_USE_FUNC(SA_SPELLBREAKER) {
 	block_if* ene = pybot::find_if(ALL_RANGE(*enemies), [this, kid] (block_if* ene) -> bool {
 		return !bot->find_skill_ignore_mobs(kid, ene) &&
-			ene->is_casting();
+			ene->is_casting() &&
+			skill_get_castcancel(ene->ud()->skill_id);
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }
@@ -2718,7 +2721,8 @@ AI_SKILL_USE_FUNC_T(SM_BASH, disturb) {
 				bot->check_skill_range_block(kid, klv, ene) &&
 				bot->skill_ratio(kid, klv, ene) > 0 &&
 				!ene->has_status_immune() &&
-				ene->is_casting();
+				ene->is_casting() &&
+				skill_get_castcancel(ene->ud()->skill_id);
 		});
 		if (ene) bot->use_skill_block(kid, klv, ene);
 	}
