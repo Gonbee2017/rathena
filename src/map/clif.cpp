@@ -9940,12 +9940,34 @@ void clif_viewequip_ack(struct map_session_data* sd, struct map_session_data* ts
 	WBUFW(buf,40) = tsd->vd.cloth_color;
 	WBUFB(buf,42) = tsd->vd.sex;
 
+	// [GonBee]
+	bool amm = false;
+	char amm_buf[1024];
+
 	for(i=0,n=0; i < MAX_INVENTORY; i++)
 	{
 		if (tsd->inventory.u.items_inventory[i].nameid <= 0 || tsd->inventory_data[i] == NULL)	// Item doesn't exist
 			continue;
 		if (!itemdb_isequip2(tsd->inventory_data[i])) // Is not equippable
 			continue;
+
+		// [GonBee]
+		// 装備していないものについては送信しない。
+		if (!tsd->inventory.u.items_inventory[i].equip)
+			continue;
+		// 矢/弾についてはチャットに表示する。
+		if (tsd->inventory_data[i]->equip == EQP_AMMO) {
+			std::sprintf(
+				amm_buf,
+				"「%s」は矢/弾に「%s (%d)」を装備しています。\n",
+				tsd->status.name,
+				tsd->inventory_data[i]->jname,
+				tsd->inventory.u.items_inventory[i].amount
+			);
+			amm = true;
+			continue;
+		}
+
 		// Add item info : refine, identify flag, element, etc.
 		clif_item_sub(WBUFP(buf,0), n*s+43,i + 2, &tsd->inventory.u.items_inventory[i], tsd->inventory_data[i], pc_equippoint(tsd, i));
 		n++;
@@ -9953,6 +9975,10 @@ void clif_viewequip_ack(struct map_session_data* sd, struct map_session_data* ts
 
 	WFIFOW(fd, 2) = 43+offset+n*s;	// Set length
 	WFIFOSET(fd, WFIFOW(fd, 2));
+
+	// [GonBee]
+	if (amm) clif_displaymessage(sd->fd, amm_buf);
+
 }
 
 
