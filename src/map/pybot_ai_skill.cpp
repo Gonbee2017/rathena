@@ -65,6 +65,7 @@ AI_SKILL_USE_FUNC(AL_ANGELUS) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -373,6 +374,7 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE) {
 				)
 			) && pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
 			!mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			mem->sc_rest(SC_ADRENALINE) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_ADRENALINE2] &&
@@ -391,6 +393,7 @@ AI_SKILL_USE_FUNC(BS_ADRENALINE2) {
 				)
 			) && pc_check_weapontype(mem->sd(), skill_get_weapontype(kid)) &&
 			!mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			mem->sc_rest(SC_ADRENALINE2) <= bot->get_skill_tail(kid) &&
 			!mem->sc()->data[SC_DECREASEAGI] &&
@@ -440,6 +443,7 @@ AI_SKILL_USE_FUNC(BS_OVERTHRUST) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			!mem->sc()->data[SC_MAXOVERTHRUST] &&
@@ -493,6 +497,7 @@ AI_SKILL_USE_FUNC(BS_WEAPONPERFECT) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
 			mem->sc_rest(SC_WEAPONPERFECTION) <= bot->get_skill_tail(kid);
@@ -2055,6 +2060,7 @@ AI_SKILL_USE_FUNC(PR_GLORIA) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2128,6 +2134,7 @@ AI_SKILL_USE_FUNC(PR_MAGNIFICAT) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&
@@ -2401,6 +2408,7 @@ AI_SKILL_USE_FUNC_T(SA_DISPELL, cure) {
 					!mem->check_hp(2)
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid);
@@ -2823,6 +2831,7 @@ AI_SKILL_USE_FUNC(SN_WINDWALK) {
 					mem->party_id() == bot->party_id()
 				)
 			) && !mem->is_dead() &&
+			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->is_magic_immune() &&
 			!mem->reject_skills()->find(kid) &&

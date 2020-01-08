@@ -713,6 +713,7 @@ bot_impl::teleport(
 		pc_setpos(sd(), map_id2index(bl_->m), bl_->x, bl_->y, CLR_TELEPORT, true);
 		sd()->state.rewarp = 0;
 		clif_parse_LoadEndAck(fd(), sd());
+		pc_delinvincibletimer(sd());
 		done = true;
 	}
 	return done;
