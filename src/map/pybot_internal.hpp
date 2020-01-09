@@ -578,11 +578,11 @@ enum meta_mobs {
 	MM_REST         =   100, // 休息。
 	MM_BACKUP       =   101, // 予備。
 	MM_BASE         =   102, // 基本。
+	MM_COMMON       =   110, // 一般。
+	MM_BOSS         =   111, // ボス。
 	MM_SIZE         =   120, // サイズ。
 	MM_ELEMENT      =   140, // 属性。
 	MM_RACE         =   160, // 種族。
-	MM_COMMON       =   175, // 一般。
-	MM_BOSS         =   176, // ボス。
 	MM_NOT_GREAT    =   180, // 非グレート。
 	MM_GREAT        =   181, // グレート。
 	MM_FLORA        =   182, // フローラ型。

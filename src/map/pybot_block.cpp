@@ -542,11 +542,12 @@ void battler_impl::iterate_meta_mobs(
 			if (tar_ene->mdef() >= get_mob_high_mdef()) yie(MM_HIGH_MDEF);
 			if (tar_ene->is_flora()) yie(MM_FLORA);
 			if (tar_ene->is_great(leader())) yie(MM_GREAT);
-			if (tar_ene->is_boss()) yie(MM_BOSS);
-			else yie(MM_COMMON);
+			else yie(MM_NOT_GREAT);
 			yie(MM_RACE + tar_ene->race());
 			yie(MM_ELEMENT + tar_ene->element());
 			yie(MM_SIZE + tar_ene->size_());
+			if (tar_ene->is_boss()) yie(MM_BOSS);
+			else yie(MM_COMMON);
 		}
 		yie(MM_BASE);
 		yie(MM_BACKUP);
