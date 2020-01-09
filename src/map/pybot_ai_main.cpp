@@ -1260,9 +1260,14 @@ ai_t::check_stuck(
 // バトラーが遠隔に位置取る述語を作る。
 yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 	block_if* tar_ene = battler->target_enemy();
-	return [this, &pos, tar_ene] (int x, int y) -> bool {
+	int min_dis = battler->min_distance_value();
+	if (min_dis) --min_dis;
+	else min_dis = tar_ene->away_distance(leader);
+	if (min_dis >= battler->max_distance_value())
+		min_dis = battler->max_distance_value() - 1;
+	return [this, &pos, tar_ene, min_dis] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->min_distance_value() - 1) &&
+		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis) &&
 			check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 			battler->can_reach_xy(x, y) &&
 			tar_ene->check_line_xy(x, y) &&
@@ -1325,7 +1330,7 @@ ai_t::find_best_away_pos() {
 	if (tar_ene->target_battler() == battler)
 		pos = pos_t(0, battler->bl()->x, battler->bl()->y);
 	else {
-		for (int rad = tar_ene->away_distance(leader) + 1; rad <= battle_config.pybot_around_distance + 1; ++rad)
+		for (int rad = 1; rad <= battle_config.pybot_around_distance + 1; ++rad)
 			iterate_edge_bl(tar_ene->bl(), rad, find_away_pos_pred(pos));
 	}
 	return pos;
@@ -1368,7 +1373,11 @@ ai_t::find_best_tanut_pos() {
 // バトラーが近接に位置取る述語を作る。
 yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 	coords_t bac_bas = leader->back_base();
-	return [this, &pos, bac_bas] (int x, int y) -> bool {
+	int min_dis = battler->min_distance_value();
+	if (min_dis) --min_dis;
+	if (min_dis >= battler->max_distance_value())
+		min_dis = battler->max_distance_value() - 1;
+	return [this, &pos, bac_bas, min_dis] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
 		block_if* tan = tar_ene->target_battler();
 		bool wai = !battler->check_attack_range(tar_ene) &&
@@ -1383,7 +1392,7 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			);
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
-					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->min_distance_value() - 1) &&
+					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis) &&
 					check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
 				) || (ned_lea &&

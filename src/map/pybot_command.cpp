@@ -290,13 +290,18 @@ SUBCMD_FUNC(Bot, DistancemiN) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
 	int dis = shift_arguments_then_parse_int(
-		args, print("距離"), 1, battle_config.pybot_around_distance
+		args, print("距離"), 0, battle_config.pybot_around_distance
 	);
-	show_client(lea->fd(), print(
-		"「", mem->name(), "」はモンスターに対して",
-		dis, "セル以上に位置取ります。"
-	));
-	if (dis == 1) dis = 0;
+	if (dis)
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はモンスターに対して",
+			dis, "セル以上に位置取ります。"
+		));
+	else
+		show_client(lea->fd(), print(
+			"「", mem->name(), "」はモンスターに対して",
+			"距離ポリシーに応じて離れます。"
+		));
 	mem->min_distance()->set(dis);
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }

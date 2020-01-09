@@ -2437,9 +2437,7 @@ ptr<regnum_t<int>>& member_impl::min_distance() {
 // メンバーの最小距離の値を取得する。
 int // 取得した最小距離の値。
 member_impl::min_distance_value() {
-	int val = min_distance()->get();
-	if (!val) val = 1;
-	return val;
+	return min_distance()->get();
 }
 
 // モンスターの高Defの登録値。
