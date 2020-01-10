@@ -4,8 +4,8 @@
 // pybot
 
 pybot_around_distance: 9              // 周辺距離。
-pybot_away_distance: 3                // 敵モンスターから離れていると言える最短距離。
-pybot_away_distance_great: 6          // グレートモンスターから離れていると言える最短距離。
+pybot_away_distance: 4                // 敵モンスターから離れていると言える最短距離。
+pybot_away_distance_great: 7          // グレートモンスターから離れていると言える最短距離。
 pybot_heavy_cool_time: 5000           // Botが重たいコマンドを実行できるようになるまでのクールタイム。
 pybot_reload_equipset_cool_time: 2500 // 武具一式をリロードするまでのクールタイム。
 pybot_restart_cool_time: 60000        // Botが死亡してからリスタートまでのクールタイム。

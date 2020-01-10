@@ -93,7 +93,7 @@ void ai_t::leader_organize() {
 			bot->last_reloaded_equipset_tick() = 0;
 		leader->member_dead() = mem_dea;
 	}
-	bool arr_wal_exi = wall_exists(&leader->center(), battle_config.pybot_around_distance);
+	bool arr_wal_exi = wall_exists(&leader->center(), battle_config.pybot_around_distance + 1);
 	for (block_if* bat : battlers) {
 		bat->around_wall_exists() = arr_wal_exi;
 		bat->attacked_enemies().clear();
@@ -1261,13 +1261,12 @@ ai_t::check_stuck(
 yield_xy_func ai_t::find_away_pos_pred(pos_t& pos) {
 	block_if* tar_ene = battler->target_enemy();
 	int min_dis = battler->min_distance_value();
-	if (min_dis) --min_dis;
-	else min_dis = tar_ene->away_distance(leader);
-	if (min_dis >= battler->max_distance_value())
-		min_dis = battler->max_distance_value() - 1;
+	if (!min_dis) min_dis = tar_ene->away_distance(leader);
+	if (min_dis > battler->max_distance_value())
+		min_dis = battler->max_distance_value();
 	return [this, &pos, tar_ene, min_dis] (int x, int y) -> bool {
 		pos_t wai_pos = tar_ene->waiting_position();
-		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis) &&
+		if (!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis - 1) &&
 			check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 			battler->can_reach_xy(x, y) &&
 			tar_ene->check_line_xy(x, y) &&
@@ -1353,7 +1352,7 @@ ai_t::find_best_tanut_pos() {
 			battler->attacked_by_blower() &&
 			battler->around_wall_exists()
 		) {
-			for (int rad = 0; rad <= battle_config.pybot_around_distance; ++rad)
+			for (int rad = 0; rad <= battle_config.pybot_around_distance + 1; ++rad)
 				iterate_edge_bl(leader->bl(), rad, find_wall_side_pos_pred(pos));
 		} else if (gvg ||
 			!battler->sc()->data[SC_WARM] ||
@@ -1374,9 +1373,9 @@ ai_t::find_best_tanut_pos() {
 yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 	coords_t bac_bas = leader->back_base();
 	int min_dis = battler->min_distance_value();
-	if (min_dis) --min_dis;
-	if (min_dis >= battler->max_distance_value())
-		min_dis = battler->max_distance_value() - 1;
+	if (!min_dis) min_dis = 1;
+	if (min_dis > battler->max_distance_value())
+		min_dis = battler->max_distance_value();
 	return [this, &pos, bac_bas, min_dis] (int x, int y) -> bool {
 		block_if* tar_ene = battler->target_enemy();
 		block_if* tan = tar_ene->target_battler();
@@ -1392,7 +1391,7 @@ yield_xy_func ai_t::find_close_pos_pred(pos_t& pos) {
 			);
 		pos_t wai_pos = tar_ene->waiting_position();
 		if (((!ned_lea &&
-					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis) &&
+					!check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, min_dis - 1) &&
 					check_distance_client_xy(x, y, wai_pos.x, wai_pos.y, battler->max_distance_value()) &&
 					battler->check_range_xy(x, y, wai_pos.x, wai_pos.y, battler->attack_range())
 				) || (ned_lea &&
