@@ -3896,7 +3896,7 @@ bot_limit(
 		pc_readreg2(sd, (CAS_TRI_PRO + "_" + GEF_FILD13).c_str()) >= 4 &&
 		pc_readreg2(sd, (CAS_TRI_PRO + "_" + PAY_GLD   ).c_str()) >= 4 &&
 		pc_readreg2(sd, (CAS_TRI_PRO + "_" + PRT_GLD   ).c_str()) >= 4
-	) lim += 5 - job_lim;
+	) lim = 6;
 	if (pc_readreg2(sd, (CAS_TRI_PRO + "_" + SCH_GLD   ).c_str()) >= 4 &&
 		pc_readreg2(sd, (CAS_TRI_PRO + "_" + ARU_GLD   ).c_str()) >= 4
 	) ++lim;
