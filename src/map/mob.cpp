@@ -1130,7 +1130,7 @@ int mob_setdelayspawn(struct mob_data *md)
 
 	// [GonBee]
 	// MVPモンスターの湧き時間を変更する。
-	if (status_has_mode(&db->status, MD_MVP)) {
+	if (md->spawn->state.boss) {
 		if (battle_config.mvp_spawn_delay != 100)
 			spawntime = spawntime / 100 * battle_config.mvp_spawn_delay;
 	} else

@@ -2261,6 +2261,7 @@ int skill_onskillusage(struct map_session_data *sd, struct block_list *bl, uint1
 
 		if( skill >= 0 && bl == NULL )
 			continue; // No target
+
 		if( rnd()%1000 >= it.rate )
 			continue;
 

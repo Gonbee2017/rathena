@@ -2494,7 +2494,7 @@ OnInit:
 	hideonnpc;
 	end;
 //OnTimer21600000:
-OnTimer5400000:
+OnTimer2160000:
 	hideonnpc;
 	hideoffnpc "ˆÅ‚ÌŒ‹»‘Ì#morocc";
 	stopnpctimer;
