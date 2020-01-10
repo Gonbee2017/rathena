@@ -2216,7 +2216,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		for(auto &it : sd->autobonus) {
 
 			// [GonBee]
-			// オートスペルの発動率にマップ倍率をかける。
+			// オートボーナスの発動率にマップ倍率をかける。
 			//if (rnd()%1000 >= it.rate)
 			if (rnd()%1000 >= int(it.rate * pybot::map_rate(sd->bl.m)))
 
@@ -2328,7 +2328,7 @@ int skill_onskillusage(struct map_session_data *sd, struct block_list *bl, uint1
 		for (auto &it : sd->autobonus3) {
 
 			// [GonBee]
-			// オートスペルの発動率にマップ倍率をかける。
+			// オートボーナスの発動率にマップ倍率をかける。
 			//if (rnd()%1000 >= it.rate)
 			if (rnd()%1000 >= int(it.rate * pybot::map_rate(sd->bl.m)))
 
@@ -2565,7 +2565,7 @@ int skill_counter_additional_effect (struct block_list* src, struct block_list *
 		for (auto &it : dstsd->autobonus2) {
 
 			// [GonBee]
-			// オートスペルの発動率にマップ倍率をかける。
+			// オートボーナスの発動率にマップ倍率をかける。
 			//if (rnd()%1000 >= it.rate)
 			if (rnd()%1000 >= int(it.rate * pybot::map_rate(dstsd->bl.m)))
 
