@@ -2973,6 +2973,7 @@ extern const ai_t::skill_use_proc_vector AI_BOT_TEMPORARY_SKILL_PRE_USE_PROCS;
 extern const std::unordered_map<homun_mapid,ptr<ai_t::skill_use_proc_vector>> AI_HOMUN_SKILL_USE_PROCS;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_AWAY;
 extern const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE;
+extern const int AMMO_REQUEST_THRESHOLD;
 extern const std::array<std::string,MAX_AMMO_TYPE> AMMO_TYPE_NAME_TABLE;
 extern const std::array<std::string,EPO_MAX> ARMOR_TYPE_NAME_TABLE;
 extern const std::vector<std::string> BA_FROSTJOKER_MESSAGES;

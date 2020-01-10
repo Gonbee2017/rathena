@@ -1227,6 +1227,9 @@ const std::unordered_map<e_skill,int> ALLY_SKILL_ADVANTAGES_CLOSE = {
 	{MG_SAFETYWALL     ,  100},
 };
 
+// 矢/弾を要求する閾値。
+const int AMMO_REQUEST_THRESHOLD = 10;
+
 // 矢/弾タイプ名のテーブル。
 const std::array<
 	std::string,  // 矢/弾タイプ名。

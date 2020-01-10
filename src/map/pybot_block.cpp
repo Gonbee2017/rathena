@@ -2323,6 +2323,10 @@ void member_impl::load_equipset(
 					}
 					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
 				}
+				if (es_itm->equip == EQP_AMMO &&
+					sd()->inventory.u.items_inventory[inv_ind].amount < AMMO_REQUEST_THRESHOLD &&
+					dynamic_cast<bot_impl*>(this)
+				) request_items().insert(es_itm->key->nameid);
 				*equ = equip_pos(*equ | es_itm->equip);
 			}
 		}
@@ -2374,6 +2378,10 @@ void member_impl::load_skill_equipset(
 					}
 					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
 				}
+				if (es_itm->equip == EQP_AMMO &&
+					sd()->inventory.u.items_inventory[inv_ind].amount < AMMO_REQUEST_THRESHOLD &&
+					dynamic_cast<bot_impl*>(this)
+				) request_items().insert(es_itm->key->nameid);
 				*equ = equip_pos(*equ | es_itm->equip);
 			}
 		}
