@@ -94,6 +94,7 @@ void pc_acquired_mvp(map_session_data* sd, mob_data* md);
 bool pc_can_takeitem(map_session_data* sd, flooritem_data* fitm);
 bool pc_has_acquired_mvp(int cid, int mid);
 std::string print_tick(t_tick tic);
+std::string print_zeny(int zen);
 std::shared_ptr<std::vector<std::shared_ptr<journal_info>>> query_journal_infos(map_session_data* sd, nation_types nat_typ, map_types map_typ);
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> query_mvp_ranking(const std::vector<e_job>& jobs, int lim);
 std::shared_ptr<mvp_stats> query_mvp_stats(int cid);

@@ -19,6 +19,22 @@
 //}
 
 // [GonBee]
+// ショップポイントを増やす。
+// i ショップポイント。
+// ? キャラクターID。
+BUILDIN_FUNC(addcash) {
+	map_session_data* sd;
+	if (script_charid2sd(3, sd)) {
+		int amo = script_getnum(st, 2);
+		pc_getcash(sd, amo, 0, LOG_TYPE_COMMAND);
+		char buf[1024];
+		std::sprintf(buf, "%sショップポイントを獲得しました。\n", pybot::print_zeny(amo).c_str());
+		clif_displaymessage(sd->fd, buf);
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // スキルポイントを増やす。
 // i ポイント数。
 // ? キャラクターID。

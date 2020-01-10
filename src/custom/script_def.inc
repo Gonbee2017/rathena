@@ -11,6 +11,7 @@
 //BUILDIN_DEF(example,""),
 
 // [GonBee]
+BUILDIN_DEF(addcash, "i?"),
 BUILDIN_DEF(addskillpoint, "i?"),
 BUILDIN_DEF(addstatuspoint, "i?"),
 BUILDIN_DEF(advancemvpround, ""),

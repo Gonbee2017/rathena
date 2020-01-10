@@ -432,6 +432,26 @@ print_tick(
 	return out.str();
 }
 
+// Zenyを書く。
+std::string // 
+print_zeny(
+	int zen // Zeny。
+) {
+	std::vector<int> fies;
+	do {
+		div_t qr = std::div(zen, 1000);
+		zen = qr.quot;
+		fies.push_back(qr.rem);
+	} while (zen);
+	std::stringstream out;
+	for (int i = 0; i < fies.size(); ++i) {
+		if (i) out << "," << std::setw(3) << std::setfill('0');
+		else out << std::setw(0);
+		out << fies[fies.size() - i - 1];
+	}
+	return out.str();
+}
+
 // ジャーナル情報を照会する。
 std::shared_ptr<std::vector<std::shared_ptr<journal_info>>> // 照会したジャーナル情報のベクタ。
 query_journal_infos(

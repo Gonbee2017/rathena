@@ -1327,26 +1327,6 @@ print_sc(
 	return out.str();
 }
 
-// Zenyを書く。
-std::string // 
-print_zeny(
-	int zen // Zeny。
-) {
-	std::vector<int> fies;
-	do {
-		div_t qr = std::div(zen, 1000);
-		zen = qr.quot;
-		fies.push_back(qr.rem);
-	} while (zen);
-	std::stringstream out;
-	for (int i = 0; i < fies.size(); ++i) {
-		if (i) out << "," << std::setw(3) << std::setfill('0');
-		else out << std::setw(0);
-		out << fies[fies.size() - i - 1];
-	}
-	return out.str();
-}
-
 // DBにキャラクターIDを照会する。
 int // 照会したキャラクターID。見つからなかったら0。
 query_char_id(

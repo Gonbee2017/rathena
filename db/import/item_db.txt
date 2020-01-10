@@ -1266,19 +1266,22 @@
 10903,Bragi_Potion,ブラギポーション,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start2 SC_BRAGIPOTION,1800000,50,90; },{},{}
 10904,Digest_Potion,消化促進ポーション,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start2 SC_DIGESTPOTION,1800000,100,900; },{},{}
 10905,Coating_Potion,コーティングポーション,2,2,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_CP_WEAPON,600000,0; sc_start SC_CP_SHIELD,600000,0; sc_start SC_CP_ARMOR,600000,0; sc_start SC_CP_HELM,600000,0; specialeffect2 EF_CHEMICALPROTECTION; },{},{}
-10906,Bot_Attack,@Bot Attack,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot Attack"; },{},{}
-10907,Bot_EquipIdentifyAll,@Bot EquipIdentifyAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot EquipIdentifyAll"; },{},{}
-10908,Bot_EquipRepairAll,@Bot EquipRepairAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot EquipRepairAll"; },{},{}
-10909,Bot_ItemSellAll,@Bot ItemSellAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot ItemSellAll"; },{},{}
-10910,Bot_StorageGetAll,@Bot StorageGetAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot StorageGetAll"; },{},{}
-10911,Bot_StoragePutAll,@Bot StoragePutAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot StoragePutAll"; },{},{}
-10912,Bot_sUmmon,@Bot sUmmon,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot sUmmon"; },{},{}
-10913,Bot_Team,@Bot Team,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot Team"; },{},{}
-10914,Bot_TeamLogIn,@Bot TeamLogIn,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamLogIn"; },{},{}
-10915,Bot_TeamLogOut,@Bot TeamLogOut,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamLogOut"; },{},{}
-10916,Bot_TeamPassive,@Bot TeamPassive,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamPassive"; },{},{}
-10917,Bot_TeamRush,@Bot TeamRush,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamRush"; },{},{}
-10918,Bot_TeamStay,@Bot TeamStay,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamStay"; },{},{}
+10906,At_Bot_Attack,@Bot Attack,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot Attack"; },{},{}
+10907,At_Bot_EquipIdentifyAll,@Bot EquipIdentifyAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot EquipIdentifyAll"; },{},{}
+10908,At_Bot_EquipRepairAll,@Bot EquipRepairAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot EquipRepairAll"; },{},{}
+10909,At_Bot_ItemSellAll,@Bot ItemSellAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot ItemSellAll"; },{},{}
+10910,At_Bot_StorageGetAll,@Bot StorageGetAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot StorageGetAll"; },{},{}
+10911,At_Bot_StoragePutAll,@Bot StoragePutAll,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot StoragePutAll"; },{},{}
+10912,At_Bot_sUmmon,@Bot sUmmon,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot sUmmon"; },{},{}
+10913,At_Bot_Team,@Bot Team,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot Team"; },{},{}
+10914,At_Bot_TeamLogIn,@Bot TeamLogIn,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamLogIn"; },{},{}
+10915,At_Bot_TeamLogOut,@Bot TeamLogOut,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamLogOut"; },{},{}
+10916,At_Bot_TeamPassive,@Bot TeamPassive,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamPassive"; },{},{}
+10917,At_Bot_TeamRush,@Bot TeamRush,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamRush"; },{},{}
+10918,At_Bot_TeamStay,@Bot TeamStay,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot TeamStay"; },{},{}
+10919,Cash_100,100ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 100; },{},{}
+10920,Cash_1000,1000ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 1000; },{},{}
+10921,Cash_10000,10000ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 10000; },{},{}
 11516,Asai_Fruit,アサイーの実,0,15,,20,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(16,22),0; sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; },{},{}
 12004,Arrow_Container,矢筒,2,2,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 1750,500; },{},{}
 12005,Iron_Arrow_Container,鉄の矢筒,2,2,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 1770,500; },{},{}

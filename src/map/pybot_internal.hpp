@@ -2933,7 +2933,6 @@ std::string print_sc(status_change* sc);
 template <class O, class L, class ...T> void print_to_with(O& out, const std::string& sep, L lea, T&& ...tras);
 template <class O, class A> void print_to_with(O& out, const std::string& sep, A arg);
 template <class ...A> std::string print_with(const std::string& sep, A&& ...args);
-std::string print_zeny(int zen);
 int query_char_id(const std::string& uid, const std::string& upas, const std::string& cnam);
 void query_login_data(int cid, std::function<void(int,int,int,int,int,std::string)> yie);
 std::string replace(const std::string& str, const std::string& sub1, const std::string& sub2);

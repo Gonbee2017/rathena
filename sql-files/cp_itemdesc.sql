@@ -8294,6 +8294,9 @@ REPLACE INTO `cp_itemdesc` VALUES(10915, '使うたびにコマンド<br/>[@Bot TeamLogOu
 REPLACE INTO `cp_itemdesc` VALUES(10916, '使うたびにコマンド<br/>[@Bot TeamPassive]<br/>を実行する。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10917, '使うたびにコマンド<br/>[@Bot TeamRush]<br/>を実行する。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(10918, '使うたびにコマンド<br/>[@Bot TeamStay]<br/>を実行する。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(10919, '使うとショップポイントを<br/><font color="FF0000">100 POINT</font>獲得できる。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(10920, '使うとショップポイントを<br/><font color="FF0000">1,000 POINT</font>獲得できる。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(10921, '使うとショップポイントを<br/><font color="FF0000">10,000 POINT</font>獲得できる。<br/>―――――――――――――<br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29600, 'Atk + 25。');
 REPLACE INTO `cp_itemdesc` VALUES(29601, '必中攻撃 + 25%。');
 REPLACE INTO `cp_itemdesc` VALUES(29602, '防御力の25%を無視。');
