@@ -1127,6 +1127,14 @@ int mob_setdelayspawn(struct mob_data *md)
 
 	//Apply the spawn delay fix [Skotlex]
 	db = mob_db(md->spawn->id);
+
+	// [GonBee]
+	// MVPモンスターの湧き時間を変更する。
+	if (status_has_mode(&db->status, MD_MVP)) {
+		if (battle_config.mvp_spawn_delay != 100)
+			spawntime = spawntime / 100 * battle_config.mvp_spawn_delay;
+	} else
+
 	if (status_has_mode(&db->status,MD_STATUS_IMMUNE)) { // Status Immune
 		if (battle_config.boss_spawn_delay != 100) {
 			// Divide by 100 first to prevent overflows

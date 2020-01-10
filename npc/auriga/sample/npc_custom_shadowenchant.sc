@@ -87,7 +87,7 @@ prt_in,94,65,3	script	さすらいの刀師::ShadowEnchant	514,{
 		mes "材料として使用したカードを";
 		mes "復元することができます。";
 		mes "ただし付与済みの効果1個につき";
-		mes "^FF4040" + .ini_fee + "Zeny^000000が必要です。";
+		mes "^FF4040" + printzeny(.ini_fee) + "Zeny^000000が必要です。";
 		next;
 	} else if (.@men) {
 		set .@wep, getequipid2(4);
@@ -143,7 +143,7 @@ prt_in,94,65,3	script	さすらいの刀師::ShadowEnchant	514,{
 				mes "[ミーメ]";
 				mes "^4040FF" + .@eff_nam$ + "^000000ですね。";
 				mes "この効果をエンチャントするには";
-				mes "手数料として^FF4040" + .@fee + "Zeny^000000と";
+				mes "手数料として^FF4040" + printzeny(.@fee) + "Zeny^000000と";
 				mes "^4040FF" + .@ore_nam$ + "^000000 ^FF4040" + .@ore_amo + "個^000000に加え";
 				mes "以下のカードが必要になります。";
 				next;
@@ -229,7 +229,7 @@ prt_in,94,65,3	script	さすらいの刀師::ShadowEnchant	514,{
 			if (.@res) {
 				set .@fee, .ini_fee * getarraysize(.@res_slos);
 				mes "初期化と同時にカードを復元します。";
-				mes "手数料は^FF4040" + .@fee + "Zeny^000000になります。";
+				mes "手数料は^FF4040" + printzeny(.@fee) + "Zeny^000000になります。";
 			} else {
 				mes "初期化と同時にカードはすべて";
 				mes "^FF4040消滅^000000しますのでご注意ください。";

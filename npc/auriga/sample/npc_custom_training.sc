@@ -26,7 +26,7 @@ prontera,64,55,4	script	変なタヌキ::PyBotDummyRaccoon	543,{
 		set .@fee, 100 * .@mob_lv;
 		mes "[ポン太]";
 		mes "^4040FF" + .@mob_nam$ + "^000000だな？";
-		mes "お代は^FF4040" + .@fee + "Zeny^000000だぞ？";
+		mes "お代は^FF4040" + printzeny(.@fee) + "Zeny^000000だぞ？";
 		next;
 		if (select("払う", "やめる") == 1) {
 			if (Zeny < .@fee) {

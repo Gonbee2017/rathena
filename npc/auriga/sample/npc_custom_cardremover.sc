@@ -50,7 +50,7 @@ prt_in,28,73,4	script	賢い老女	78,{
 			if (!.@failtype) {
 				mes "[賢い老女]";
 				mes "壊さないように外す魔法もあるには";
-				mes "あるけど……^4040FF" + .@fee + "Zeny^000000かかるよ？";
+				mes "あるけど……^4040FF" + printzeny(.@fee) + "Zeny^000000かかるよ？";
 				next;
 				if (select("それならやめます","支払います") == 2) set .@failtype, 3;
 			}

@@ -13,6 +13,10 @@
  **/
 
 // [GonBee]
+int max_flee2;                       // Š®‘S‰ñ”ğ‚ÌãŒÀB
+int max_mdef;                        // œZMdef‚ÌãŒÀB
+int max_steal_rate;                  // ƒXƒeƒB[ƒ‹¬Œ÷—¦‚ÌãŒÀB
+int mvp_spawn_delay;                 // MVPƒ‚ƒ“ƒXƒ^[‚Ì—N‚«ŠÔ—¦B
 int pybot_around_distance;           // ü•Ó‹——£B
 int pybot_away_distance;             // “Gƒ‚ƒ“ƒXƒ^[‚©‚ç—£‚ê‚Ä‚¢‚é‚ÆŒ¾‚¦‚éÅ’Z‹——£B
 int pybot_away_distance_great;       // ƒOƒŒ[ƒgƒ‚ƒ“ƒXƒ^[‚©‚ç—£‚ê‚Ä‚¢‚é‚ÆŒ¾‚¦‚éÅ’Z‹——£B
@@ -20,6 +24,3 @@ int pybot_heavy_cool_time;           // Bot‚ªd‚½‚¢ƒRƒ}ƒ“ƒh‚ğÀs‚Å‚«‚é‚æ‚¤‚É‚È‚
 int pybot_reload_equipset_cool_time; // •‹ïˆê®‚ğƒŠƒ[ƒh‚·‚é‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€B
 int pybot_restart_cool_time;         // BOT‚ª€–S‚µ‚Ä‚©‚çƒŠƒXƒ^[ƒg‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€B
 int pybot_think_time;                // AI‚ğÀs‚·‚éŠÔŠuŠÔB
-int max_flee2;                       // Š®‘S‰ñ”ğ‚ÌãŒÀB
-int max_mdef;                        // œZMdef‚ÌãŒÀB
-int max_steal_rate;                  // ƒXƒeƒB[ƒ‹¬Œ÷—¦‚ÌãŒÀB

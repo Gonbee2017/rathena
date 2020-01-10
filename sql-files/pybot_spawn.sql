@@ -3185,12 +3185,12 @@ INSERT INTO `pybot_spawn` VALUES ('gef_fild14', 1087, 1, 3600000, 1800000);
 INSERT INTO `pybot_spawn` VALUES ('gef_fild14', 1023, 10, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('gef_fild14', 1189, 30, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('gef_fild14', 1213, 70, 0, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1646, 1, 28800000, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1647, 1, 28800000, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1648, 1, 28800000, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1649, 1, 28800000, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1650, 1, 28800000, 0);
-INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1651, 1, 28800000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1646, 1, 36000000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1647, 1, 36000000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1648, 1, 36000000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1649, 1, 36000000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1650, 1, 36000000, 0);
+INSERT INTO `pybot_spawn` VALUES ('lhz_dun03', 1651, 1, 36000000, 0);
 
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas01', 1213, 30, 0, 1);
 INSERT INTO `pybot_spawn` VALUES ('aldeg_cas01', 1686, 30, 0, 1);

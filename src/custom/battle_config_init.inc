@@ -15,6 +15,7 @@
   	{"max_flee2", &battle_config.max_flee2, 950, 0, 1000},
 	{"max_mdef", &battle_config.max_mdef, 100, 0, 100},
  	{"max_steal_rate", &battle_config.max_steal_rate, 10000, 0, 10000},
+ 	{"mvp_spawn_delay", &battle_config.mvp_spawn_delay, 10, 0, INT_MAX},
 	{"pybot_around_distance", &battle_config.pybot_around_distance, 9, 1, 14},
  	{"pybot_away_distance", &battle_config.pybot_away_distance, 4, 4, 14},
  	{"pybot_away_distance_great", &battle_config.pybot_away_distance_great, 7, 3, 14},

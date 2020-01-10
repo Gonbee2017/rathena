@@ -475,6 +475,15 @@ BUILDIN_FUNC(printseconds) {
 }
 
 // [GonBee]
+// Zenyを書く。
+// i Zeny。
+// 戻り値 書いたZeny。
+BUILDIN_FUNC(printzeny) {
+	script_pushstrcopy(st, pybot::print_zeny(script_getnum(st, 2)).c_str());
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // ジャーナル情報を照会する。
 // i      国の種類。
 // i      マップの種類。

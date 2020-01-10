@@ -73,7 +73,7 @@ Pay:
 	mes "^4040FF" + .@jnam$ + " (" + .@enam$ + ")^000000";
 	mes "でよろしいですねー？";
 	mes "かしこまりましたー。";
-	mes "お会計^4040FF" + .fee + "Zeny^000000になりまーす。";
+	mes "お会計^4040FF" + printzeny(.fee) + "Zeny^000000になりまーす。";
 	next;
 	if (select("払いまーす", "やめまーす") == 1) {
 		if (Zeny < .fee) {
@@ -134,7 +134,7 @@ prontera,161,193,4	script	遺跡荒らし	448,{
 		set .@fee, .xy_fees[.@map_ind * 3 + 2];
 		mes "[レイ]";
 		mes "^4040FF" + getmapnamejapanese(.maps$[.@map_ind]) + "^000000か……";
-		mes "そこなら^4040FF" + .@fee + "^000000Zenyは";
+		mes "そこなら^4040FF" + printzeny(.@fee) + "^000000Zenyは";
 		mes "もらわないと割に合わねーな。";
 		next;
 		if (select("頼む", "やめる") == 1) {
