@@ -2141,7 +2141,10 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 
 			rate = (!sd->state.arrow_atk) ? it.rate : it.rate / 2;
 
-			if (rnd()%1000 >= rate)
+			// [GonBee]
+			// オートスペルの発動率にマップ倍率をかける。
+			//if (rnd()%1000 >= rate)
+			if (rnd()%1000 >= int(rate * pybot::map_rate(sd->bl.m)))
 				continue;
 
 			tbl = (it.id < 0) ? src : bl;
@@ -2211,7 +2214,12 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	if( sd && !sd->autobonus.empty() )
 	{
 		for(auto &it : sd->autobonus) {
-			if (rnd()%1000 >= it.rate)
+
+			// [GonBee]
+			// オートスペルの発動率にマップ倍率をかける。
+			//if (rnd()%1000 >= it.rate)
+			if (rnd()%1000 >= int(it.rate * pybot::map_rate(sd->bl.m)))
+
 				continue;
 			if (!(((it.atk_type)&attack_type)&BF_WEAPONMASK &&
 				  ((it.atk_type)&attack_type)&BF_RANGEMASK &&
@@ -2262,7 +2270,11 @@ int skill_onskillusage(struct map_session_data *sd, struct block_list *bl, uint1
 		if( skill >= 0 && bl == NULL )
 			continue; // No target
 
-		if( rnd()%1000 >= it.rate )
+		// [GonBee]
+		// オートスペルの発動率にマップ倍率をかける。
+		//if( rnd()%1000 >= it.rate )
+		if (rnd()%1000 >= int(it.rate * pybot::map_rate(sd->bl.m)))
+
 			continue;
 
 		skill_lv = it.lv ? it.lv : 1;
@@ -2314,7 +2326,12 @@ int skill_onskillusage(struct map_session_data *sd, struct block_list *bl, uint1
 
 	if( sd && !sd->autobonus3.empty() ) {
 		for (auto &it : sd->autobonus3) {
-			if (rnd()%1000 >= it.rate)
+
+			// [GonBee]
+			// オートスペルの発動率にマップ倍率をかける。
+			//if (rnd()%1000 >= it.rate)
+			if (rnd()%1000 >= int(it.rate * pybot::map_rate(sd->bl.m)))
+
 				continue;
 			if (it.atk_type != skill_id)
 				continue;
@@ -2480,7 +2497,10 @@ int skill_counter_additional_effect (struct block_list* src, struct block_list *
 			}
 			dstsd->state.autocast = 0;
 
-			if (rnd()%1000 >= autospl_rate)
+			// [GonBee]
+			// オートスペルの発動率にマップ倍率をかける。
+			//if (rnd()%1000 >= autospl_rate)
+			if (rnd()%1000 >= int(autospl_rate * pybot::map_rate(dstsd->bl.m)))
 				continue;
 
 			tbl = (it.id < 0) ? bl : src;
@@ -2543,7 +2563,12 @@ int skill_counter_additional_effect (struct block_list* src, struct block_list *
 	//Autobonus when attacked
 	if( dstsd && !status_isdead(bl) && !dstsd->autobonus2.empty() && !(skill_id && skill_get_nk(skill_id)&NK_NO_DAMAGE) ) {
 		for (auto &it : dstsd->autobonus2) {
-			if (rnd()%1000 >= it.rate)
+
+			// [GonBee]
+			// オートスペルの発動率にマップ倍率をかける。
+			//if (rnd()%1000 >= it.rate)
+			if (rnd()%1000 >= int(it.rate * pybot::map_rate(dstsd->bl.m)))
+
 				continue;
 			if (!(((it.atk_type)&attack_type)&BF_WEAPONMASK &&
 				  ((it.atk_type)&attack_type)&BF_RANGEMASK &&

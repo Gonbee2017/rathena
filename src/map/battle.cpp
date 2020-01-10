@@ -33,6 +33,9 @@
 #include "pc_groups.hpp"
 #include "pet.hpp"
 
+// [GonBee]
+#include "pybot_external.hpp"
+
 int attr_fix_table[MAX_ELE_LEVEL][ELE_MAX][ELE_MAX];
 
 struct Battle_Config battle_config;
@@ -7121,7 +7124,7 @@ struct Damage battle_calc_attack(int attack_type,struct block_list *bl,struct bl
 		tsd
 	) {
 		for (auto& it : tsd->autobonus4) {
-			if (rnd() % 1000 >= it.rate ||
+			if (rnd() % 1000 >= int(it.rate * pybot::map_rate(tsd->bl.m)) ||
 				it.atk_type != skill_id
 			) continue;
 			pc_exeautobonus(tsd, &tsd->autobonus4, &it);
