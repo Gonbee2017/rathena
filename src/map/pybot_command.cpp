@@ -1053,6 +1053,11 @@ SUBCMD_FUNC(Bot, ItemNotsaVeMonster) {
 			throw command_error{print(
 				"「", mob_nam, "」というモンスターは見つかりませんでした。"
 			)};
+		if (mid == MM_BACKUP)
+			throw command_error{print(
+				"「", META_MONSTER_NAMES.at(MM_BACKUP),
+				"」用アイテム非節約モンスターは登録できません。"
+			)};
 		std::string mob_str = print_mobdb(mid);
 		int ism = ITEM_SAVE_MOB(nid, mid);
 		if (mem->item_not_save_mobs()->find(ism)) {
@@ -1335,6 +1340,11 @@ SUBCMD_FUNC(Bot, ItemsaVeMonster) {
 		if (!mid)
 			throw command_error{print(
 				"「", mob_nam, "」というモンスターは見つかりませんでした。"
+			)};
+		if (mid == MM_BACKUP)
+			throw command_error{print(
+				"「", META_MONSTER_NAMES.at(MM_BACKUP),
+				"」用アイテム節約モンスターは登録できません。"
 			)};
 		std::string mob_str = print_mobdb(mid);
 		int ism = ITEM_SAVE_MOB(nid, mid);
