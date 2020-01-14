@@ -2913,12 +2913,12 @@ skill_user_impl::collect_spirits(
 	if (!res) {
 		int cs_lv = check_skill(MO_CALLSPIRITS);
 		int sc_lv = check_skill(CH_SOULCOLLECT);
-		if ((!cs_lv ||
-				sd()->spiritball <= 3
-			) && sc_lv
+		if (sc_lv &&
+			(sd()->spiritball < cou - 1 ||
+				cs_lv <= sd()->spiritball
+			)
 		) use_skill_self(CH_SOULCOLLECT, sc_lv);
-		if (cs_lv >= sd()->spiritball + cou)
-			use_skill_self(MO_CALLSPIRITS, cs_lv);
+		if (cs_lv > sd()->spiritball) use_skill_self(MO_CALLSPIRITS, cs_lv);
 	}
 	return res;
 }
