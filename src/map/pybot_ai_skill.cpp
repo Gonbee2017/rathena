@@ -1510,18 +1510,6 @@ AI_SKILL_USE_FUNC(MO_CALLSPIRITS) {
 		bot->use_skill_self(kid, klv);
 }
 
-// コンボに備えて気功を使う。
-AI_SKILL_USE_FUNC_T(MO_CALLSPIRITS, ready) {
-	int ned = 0;
-	if (bot->check_skill(MO_COMBOFINISH))
-		ned += skill_get_spiritball(MO_COMBOFINISH, bot->check_skill(MO_COMBOFINISH));
-	if (bot->check_skill(CH_TIGERFIST))
-		ned += skill_get_spiritball(CH_TIGERFIST, bot->check_skill(CH_TIGERFIST));
-	if (bot->check_skill(CH_CHAINCRUSH))
-		ned += skill_get_spiritball(CH_CHAINCRUSH, bot->check_skill(CH_CHAINCRUSH));
-	if (ned > bot->sd()->spiritball) bot->use_skill_self(kid, klv);
-}
-
 // 連打掌を使う。
 AI_SKILL_USE_FUNC(MO_CHAINCOMBO) {
 	block_if* tar_ene = bot->target_enemy();
@@ -1589,7 +1577,7 @@ AI_SKILL_USE_FUNC(MO_FINGEROFFENSIVE) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		bot->collect_spirits(bot->check_skill(MO_CALLSPIRITS))
+		bot->collect_spirits(pc_checkskill(bot->sd(), MO_CALLSPIRITS))
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
