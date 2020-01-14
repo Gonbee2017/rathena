@@ -2914,7 +2914,7 @@ skill_user_impl::collect_spirits(
 		int cs_lv = check_skill(MO_CALLSPIRITS);
 		int sc_lv = check_skill(CH_SOULCOLLECT);
 		if (sc_lv &&
-			(sd()->spiritball < cou - 1 ||
+			(sd()->spiritball < 4 ||
 				cs_lv <= sd()->spiritball
 			)
 		) use_skill_self(CH_SOULCOLLECT, sc_lv);

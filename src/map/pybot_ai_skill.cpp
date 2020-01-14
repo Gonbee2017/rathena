@@ -1576,7 +1576,7 @@ AI_SKILL_USE_FUNC(MO_FINGEROFFENSIVE) {
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
 		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
-		bot->collect_spirits(pc_checkskill(bot->sd(), MO_CALLSPIRITS))
+		bot->collect_spirits(klv)
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
