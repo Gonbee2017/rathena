@@ -8361,6 +8361,8 @@ REPLACE INTO `cp_itemdesc` VALUES(29660, '[氷閃槍]、[氷柱落し]で与えるダメージ +
 REPLACE INTO `cp_itemdesc` VALUES(29661, '[紅炎華]、[火炎陣]、[龍炎陣]で与えるダメージ + 15%。');
 REPLACE INTO `cp_itemdesc` VALUES(29662, '[風刃]、[雷撃砕]、[朔風]で与えるダメージ + 15%。');
 REPLACE INTO `cp_itemdesc` VALUES(29663, 'ヒール系スキル使用時、HP回復量 + 5%。');
+REPLACE INTO `cp_itemdesc` VALUES(29664, 'Aspd + 1。');
+REPLACE INTO `cp_itemdesc` VALUES(29665, '近接武器装備時、Aspd + 2。');
 REPLACE INTO `cp_itemdesc` VALUES(29900, 'Atk + 50。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29901, '必中攻撃 + 50%。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29902, '防御力の50%を無視。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');

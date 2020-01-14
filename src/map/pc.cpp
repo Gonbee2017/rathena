@@ -3243,6 +3243,11 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		case SP_MENTAL:
 			sd->bonus.mental += val;
 			break;
+		// 近接ASPD増加。
+		case SP_NEAR_ASPD:
+			if(sd->state.lr_flag != 2)
+				sd->bonus.near_aspd_add -= 10 * val;
+			break;
 		// 近接物理攻撃時のベースAtk上昇。
 		case SP_NEAR_BASE_ATK:
 			sd->bonus.near_batk += val;

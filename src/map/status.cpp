@@ -2487,6 +2487,18 @@ int status_base_amotion_pc(struct map_session_data* sd, struct status_data* stat
 
 	// Raw delay adjustment from bAspd bonus
 	amotion += sd->bonus.aspd_add;
+
+	// [GonBee]
+	// ‹ßÚASPD‘‰Á‚ð’Ç‰ÁB
+	int rh_ind = sd->equip_index[EQI_HAND_R];
+	item_data* rh_wep = nullptr;
+	if (rh_ind >= 0) rh_wep = sd->inventory_data[rh_ind];
+	if (rh_ind < 0 ||
+		(rh_wep &&
+			rh_wep->range <= 3
+		)
+	) amotion += sd->bonus.near_aspd_add;
+
 #endif
 
  	return amotion;

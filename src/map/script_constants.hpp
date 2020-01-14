@@ -553,6 +553,9 @@
 	export_constant2("bFame",SP_FAME);
 	export_constant2("bUnbreakable",SP_UNBREAKABLE);
 
+	// [GonBee]
+	export_constant2("bNearAspd",SP_NEAR_ASPD);
+
 	export_constant2("bAtkRange",SP_ATTACKRANGE);
 	export_constant2("bAtkEle",SP_ATKELE);
 	export_constant2("bDefEle",SP_DEFELE);

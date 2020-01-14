@@ -1975,6 +1975,8 @@
 29661,Ninpou_Fire_15_29661,âŒîEñ@ + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_KOUENKA",15; bonus2 bSkillAtk,"NJ_KAENSIN",15; bonus2 bSkillAtk,"NJ_BAKUENRYU",15; },{},{}
 29662,Ninpou_Wind_15_29662,ïóîEñ@ + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HUUJIN",15; bonus2 bSkillAtk,"NJ_RAIGEKISAI",15; bonus2 bSkillAtk,"NJ_KAMAITACHI",15; },{},{}
 29663,Heal_5_29663,ÉqÅ[Éã + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,5; },{},{}
+29664,Aspd_1_29664,Aspd + 1,6,20,,10,,,,,,,,2,,,,,{ bonus bAspd,1; },{},{}
+29665,Near_Aspd_2_29665,ãﬂê⁄Aspd + 2,6,20,,10,,,,,,,,2,,,,,{ bonus bNearAspd,2; },{},{}
 29900,Atk_25_29900,Atk + 50,6,20,,10,,,,,,,,2,,,,,{ bonus bBaseAtk,50; },{},{}
 29901,Perfect_Hit_50_29901,ïKíÜ + 50%,6,20,,10,,,,,,,,2,,,,,{ bonus bPerfectHitAddRate,50; },{},{}
 29902,Ignore_Def_50_29902,Def50%ñ≥éã,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}

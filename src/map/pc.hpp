@@ -518,6 +518,7 @@ struct map_session_data {
 		// [GonBee]
 		int dance_rate;           // ダンス効果上昇。
 		int mental;               // メンタル強化。
+		int near_aspd_add;        // 近接Aspd増加。
 		int near_batk;            // 近接物理攻撃時のベースAtk上昇。
 		int near_perfect_hit_add; // 近接物理攻撃時の必中率上昇。
 
