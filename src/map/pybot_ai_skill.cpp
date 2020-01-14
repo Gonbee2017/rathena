@@ -237,8 +237,6 @@ AI_SKILL_USE_FUNC(AM_BERSERKPITCHER) {
 		return !mem->is_dead() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&
-			!mem->sc()->data[SC_ASPDPOTION0] &&
-			!mem->sc()->data[SC_ASPDPOTION1] &&
 			!mem->sc()->data[SC_ASPDPOTION2] &&
 			!mem->sc()->data[SC_ASPDPOTION3];
 	});
