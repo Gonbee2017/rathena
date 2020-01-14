@@ -731,8 +731,12 @@ prontera,164,157,2	script	シニアスタイリスト	878,{
 				set .@hairstr4$,(Sex)? "レノヴァティオカット": "オラティオカット";
 				set .@hairstr5$,(Sex)? "シュバリエスペシャル": "ボリュームマジックスペシャル";
 				set .@hairstr6$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
+				set .@hairstr7$,(Sex)? "サイレントブリーズ": "ゼノスラッシャー";
+				set .@hairstr8$,(Sex)? "ハミングボイス": "ワイルドストーム";
+				set .@hairstr9$,(Sex)? "瞑想カット": "瞑想カット";
+				set .@hairstr10$,(Sex)? "": "プレイヤーリクエスト";
 			next;
-			switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,"やめておく")) {
+			switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,.@hairstr7$,.@hairstr8$,.@hairstr9$,.@hairstr10$,"やめておく")) {
 			case 1:
 				cutin "hair_" +.@sex$+ "_24",4;
 				mes "[ジェレミー]";
@@ -776,6 +780,34 @@ prontera,164,157,2	script	シニアスタイリスト	878,{
 				mes "さて、どうする？";
 				continue;
 			case 7:
+				cutin "hair_" +.@sex$+ "_30",4;
+				mes "[ジェレミー]";
+				mes .@hairstr7$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 8:
+				cutin "hair_" +.@sex$+ "_31",4;
+				mes "[ジェレミー]";
+				mes .@hairstr8$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 9:
+				cutin "hair_" +.@sex$+ "_32",4;
+				mes "[ジェレミー]";
+				mes .@hairstr9$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 10:
+				cutin "hair_" +.@sex$+ "_33",4;
+				mes "[ジェレミー]";
+				mes .@hairstr10$+ "は";
+				mes "こんな感じになるな。";
+				mes "さて、どうする？";
+				continue;
+			case 11:
 				cutin "hair_" +.@sex$+ "_01",255;
 				mes "[ジェレミー]";
 				mes "そうかい？";
@@ -944,8 +976,12 @@ prontera,164,157,2	script	シニアスタイリスト	878,{
 				set .@hairstr4$,(Sex)? "レノヴァティオカット": "オラティオカット";
 				set .@hairstr5$,(Sex)? "シュバリエスペシャル": "ボリュームマジックスペシャル";
 				set .@hairstr6$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
+				set .@hairstr7$,(Sex)? "サイレントブリーズ": "ゼノスラッシャー";
+				set .@hairstr8$,(Sex)? "ハミングボイス": "ワイルドストーム";
+				set .@hairstr9$,(Sex)? "瞑想カット": "瞑想カット";
+				set .@hairstr10$,(Sex)? "": "プレイヤーリクエスト";
 				//next;
-				switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,"やめておく")) {
+				switch(select(.@hairstr1$,.@hairstr2$,.@hairstr3$,.@hairstr4$,.@hairstr5$,.@hairstr6$,.@hairstr7$,.@hairstr8$,.@hairstr9$,.@hairstr10$,"やめておく")) {
 				case 1:
 					set .@hair,24;
 					set .@hair$,"24";
@@ -977,6 +1013,26 @@ prontera,164,157,2	script	シニアスタイリスト	878,{
 					set .@hairstr$,(Sex)? "トルネードバルカンスタイル": "ドライシーズンフォー";
 					break;
 				case 7:
+					set .@hair,30;
+					set .@hair$,"30";
+					set .@hairstr$,(Sex)? "サイレントブリーズ": "ゼノスラッシャー";
+					break;
+				case 8:
+					set .@hair,31;
+					set .@hair$,"31";
+					set .@hairstr$,(Sex)? "ハミングボイス": "ワイルドストーム";
+					break;
+				case 9:
+					set .@hair,32;
+					set .@hair$,"32";
+					set .@hairstr$,(Sex)? "瞑想カット": "瞑想カット";
+					break;
+				case 10:
+					set .@hair,33;
+					set .@hair$,"33";
+					set .@hairstr$,(Sex)? "": "プレイヤーリクエスト";
+					break;
+				case 11:
 					cutin "hair_" +.@sex$+ "_01",255;
 					mes "[ジェレミー]";
 					mes "そうかい？";
@@ -1135,8 +1191,50 @@ prontera,164,157,2	script	シニアスタイリスト	878,{
 			mes "どの色がいいかな？";
 			next;
 			//set .@color,select("黄色","紫色","紅色","緑色","青色","白色","黒色","赤色","やめる");
-			set .@color,select("黄色","紫色","茶色","緑色","青色","白色","黒色","赤色","やめる");
-			if(.@color == 9) {
+			//set .@color,select("黄色","紫色","茶色","緑色","青色","白色","黒色","赤色","やめる");
+			set .@cols$[getarraysize(.@cols$)], "1(黄色)^CF855C●^000000";
+			set .@cols$[getarraysize(.@cols$)], "2(紫色)^886F82●^000000";
+			set .@cols$[getarraysize(.@cols$)], "3(茶色)^A6705D●^000000";
+			set .@cols$[getarraysize(.@cols$)], "4(緑色)^668674●^000000";
+			set .@cols$[getarraysize(.@cols$)], "5(青色)^817A91●^000000";
+			set .@cols$[getarraysize(.@cols$)], "6(白色)^B8A39B●^000000";
+			set .@cols$[getarraysize(.@cols$)], "7(黒色)^835E5F●^000000";
+			set .@cols$[getarraysize(.@cols$)], "8(赤色)^CB6266●^000000";
+			set .@cols$[getarraysize(.@cols$)], "9^AE7662●^000000";
+			set .@cols$[getarraysize(.@cols$)], "10^7E9466●^000000";
+			set .@cols$[getarraysize(.@cols$)], "11^7A6F8C●^000000";
+			set .@cols$[getarraysize(.@cols$)], "12^AD928F●^000000";
+			set .@cols$[getarraysize(.@cols$)], "13^CB6266●^000000";
+			set .@cols$[getarraysize(.@cols$)], "14^ED6447●^000000";
+			set .@cols$[getarraysize(.@cols$)], "15^C88579●^000000";
+			set .@cols$[getarraysize(.@cols$)], "16^8E8E8E●^000000";
+			set .@cols$[getarraysize(.@cols$)], "17^7E7EAE●^000000";
+			set .@cols$[getarraysize(.@cols$)], "18^809F7B●^000000";
+			set .@cols$[getarraysize(.@cols$)], "19^7E9696●^000000";
+			set .@cols$[getarraysize(.@cols$)], "10^7080A9●^000000";
+			set .@cols$[getarraysize(.@cols$)], "21^7DAB80●^000000";
+			set .@cols$[getarraysize(.@cols$)], "22^956565●^000000";
+			set .@cols$[getarraysize(.@cols$)], "23^6E9E9E●^000000";
+			set .@cols$[getarraysize(.@cols$)], "24^B8747C●^000000";
+			set .@cols$[getarraysize(.@cols$)], "25^AD6888●^000000";
+			set .@cols$[getarraysize(.@cols$)], "26^768ED9●^000000";
+			set .@cols$[getarraysize(.@cols$)], "27^A88D75●^000000";
+			set .@cols$[getarraysize(.@cols$)], "28^835E5F●^000000";
+			set .@cols$[getarraysize(.@cols$)], "29^9E8376●^000000";
+			set .@cols$[getarraysize(.@cols$)], "30^98957D●^000000";
+			set .@cols$[getarraysize(.@cols$)], "31^8F8282●^000000";
+			set .@cols$[getarraysize(.@cols$)], "32^D55455●^000000";
+			set .@cols$[getarraysize(.@cols$)], "33^C25C8C●^000000";
+			set .@cols$[getarraysize(.@cols$)], "34^B57EC1●^000000";
+			set .@cols$[getarraysize(.@cols$)], "35^BA9983●^000000";
+			set .@cols$[getarraysize(.@cols$)], "36^9674A6●^000000";
+			set .@cols$[getarraysize(.@cols$)], "37^B5598A●^000000";
+			set .@cols$[getarraysize(.@cols$)], "38^DFAB72●^000000";
+			set .@cols$[getarraysize(.@cols$)], "39^C2BEBE●^000000";
+			set .@cols$[getarraysize(.@cols$)], "40^4F4F4F●^000000";
+			set .@cols$[getarraysize(.@cols$)], "やめる";
+			set .@color, select(printarray(.@cols$));
+			if(.@color == getarraysize(.@cols$)) {
 				cutin "hair_" +.@sex$+ "_01",255;
 				mes "[ジェレミー]";
 				mes "そうかい？";
