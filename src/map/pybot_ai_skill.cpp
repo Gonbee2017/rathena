@@ -533,7 +533,12 @@ AI_SKILL_USE_FUNC(CH_PALMSTRIKE) {
 
 // 練気功を使う。
 AI_SKILL_USE_FUNC(CH_SOULCOLLECT) {
-	if (bot->sd()->spiritball < 4) bot->use_skill_self(kid, klv);
+	int max_spi = pc_checkskill(bot->sd(), MO_CALLSPIRITS);
+	if (bot->sd()->spiritball < max_spi &&
+		(bot->sd()->spiritball < max_spi - 1 ||
+			!bot->check_skill(MO_CALLSPIRITS)
+		)
+	) bot->use_skill_self(kid, klv);
 }
 
 // 伏虎拳を使う。
