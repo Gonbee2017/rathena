@@ -536,7 +536,7 @@ AI_SKILL_USE_FUNC(CH_SOULCOLLECT) {
 	int max_spi = pc_checkskill(bot->sd(), MO_CALLSPIRITS);
 	if (bot->sd()->spiritball < max_spi &&
 		(bot->sd()->spiritball < max_spi - 1 ||
-			!bot->check_skill(MO_CALLSPIRITS)
+			bot->sd()->spiritball >= bot->check_skill(MO_CALLSPIRITS)
 		)
 	) bot->use_skill_self(kid, klv);
 }
