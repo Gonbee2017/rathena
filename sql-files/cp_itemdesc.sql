@@ -807,7 +807,7 @@ REPLACE INTO `cp_itemdesc` VALUES(4052, 'INT + 2<br/>系列 : <font color="777777"
 REPLACE INTO `cp_itemdesc` VALUES(4053, '[ヒール]Lv 1使用可能<br/>スキル使用時、SP消費量が25%増加。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">アクセサリー</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4055, '敵を攻撃する時 5% の確率で氷化状態にする。<br/>ATK + 5<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4057, '敵を攻撃する時 5% の確率で沈黙状態にする。<br/>ATK + 5<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
-REPLACE INTO `cp_itemdesc` VALUES(4059, '植物形モンスターからのダメージ35%減少。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">盾</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(4059, '植物形モンスターからのダメージ35%減少。<br/>Def - 1<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">盾</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4060, '動物形のモンスターに30%の追加ダメージ。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4061, 'Def + 1<br/>―――――――――――――<br/>鎧が絶対に壊れない<br/>―――――――――――――<br/>[楯無の鎧]と<br/>共に装備時、追加で<br/>Vit + 15<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">鎧</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(4062, '毒属性のモンスターに30%の追加ダメージ。<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');

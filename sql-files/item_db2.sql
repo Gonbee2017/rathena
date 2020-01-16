@@ -654,7 +654,7 @@ REPLACE INTO `item_db2` VALUES (4007, 'Pecopeco_Egg_Card', 'ペコペコの卵カード',
 REPLACE INTO `item_db2` VALUES (4030, 'Mandragora_Card', 'マンドラゴラカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Wind,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4035, 'Hydra_Card', 'ヒドラカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_DemiHuman,30; bonus2 bAddRace,RC_Player,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4049, 'Vadon_Card', 'バドンカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Fire,30; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,35; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,35; bonus bDef,-1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4060, 'Goblin_Card', 'ゴブリンカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_Brute,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4062, 'Anacondaq_Card', 'アナコンダクカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Poison,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4065, 'Kaho_Card', 'カホカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Earth,30; }', '{}', '{}');
