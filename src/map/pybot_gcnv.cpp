@@ -75,6 +75,7 @@ const std::vector<
 	AI_ITEM_USE_PROC_D   (MUSHROOM_PANCAKE       , CAVIAR_PANCAKE     ),
 	AI_ITEM_USE_PROC     (COATING_POTION                              ),
 	AI_ITEM_USE_PROC     (BRAGI_POTION                                ),
+	AI_ITEM_USE_PROC_D   (SATAY                  , LEAF_OF_YGGDRASIL  ),
 	AI_ITEM_USE_PROC     (LEAF_OF_YGGDRASIL                           ),
 	AI_ITEM_USE_PROC     (HP_INCREASE_POTIONL                         ),
 	AI_ITEM_USE_PROC_D   (HP_INCREASE_POTIONM    , HP_INCREASE_POTIONL),

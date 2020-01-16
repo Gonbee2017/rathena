@@ -13,8 +13,8 @@ dewata,145,267,6	shop	果物商人	535,512,513,515,516,535
 //============================================================
 // アルベルタ⇔デワタ転送NPC
 //------------------------------------------------------------
-//alberta,240,47,4	script	デワタ行船員	536,{
-alberta,212,202,4	script	デワタ行船員	536,{
+alberta,240,47,4	script	デワタ行船員	536,{
+//alberta,212,202,4	script	デワタ行船員	536,{
 	mes "[デワタ行船員]";
 	mes "きらめく波が心を潤してくれる";
 	mes "^0000FFデワタ^000000に行きませんか？";
@@ -34,11 +34,11 @@ alberta,212,202,4	script	デワタ行船員	536,{
 		set .@zeny,0;
 	}
 	else {
-		next;
+//		next;
 		set .@word$,"10,000Zeny";
 		set .@zeny,10000;
 	}
-	next;
+//	next;
 	if(select("デワタへ行く -> " +.@word$,"デワタに行かない") == 2) {
 		mes "[デワタ行船員]";
 		mes "デワタに行きたい時は";
@@ -82,8 +82,8 @@ dewata,229,49,6	script	アルベルタ行船員	536,{
 	mes "それでは、アルベルタまで";
 	mes "お送りしましょう。";
 	close2;
-	//warp "alberta",235,44;
-	warp "alberta",192,215;
+	warp "alberta",235,44;
+	//warp "alberta",192,215;
 	end;
 }
 
@@ -3975,7 +3975,8 @@ dewata,234,64,4	script	ガティ	813,{
 			}
 			delitem 13067,1;
 			set Zeny,Zeny-100000;
-			switch(rand(50)) {
+//			switch(rand(50)) {
+			switch(rand(47)) {
 				case 0: set .@card1,4700; break;	// Str + 1
 				case 1: set .@card1,4701; break;	// Str + 2
 				case 2: set .@card1,4702; break;	// Str + 3
@@ -4015,9 +4016,9 @@ dewata,234,64,4	script	ガティ	813,{
 				case 36: set .@card1,4787; break;	// Mdef + 4
 				case 37: set .@card1,4788; break;	// Mdef + 6
 				case 38: set .@card1,4789; break;	// Mdef + 8
-				case 39: set .@card1,4791; break;	// Def + 3
-				case 40: set .@card1,4792; break;	// Def + 6
-				case 41: set .@card1,4793; break;	// Def + 9
+//				case 39: set .@card1,4791; break;	// Def + 3
+//				case 40: set .@card1,4792; break;	// Def + 6
+//				case 41: set .@card1,4793; break;	// Def + 9
 				case 42: set .@card1,4795; break;	// HP + 100
 				case 43: set .@card1,4796; break;	// HP + 200
 				case 44: set .@card1,4797; break;	// HP + 300
@@ -4025,7 +4026,8 @@ dewata,234,64,4	script	ガティ	813,{
 				case 46: set .@card1,4801; break;	// SP + 100
 				default: set .@card1,0; break;		// 付与なし
 			}
-			switch(rand(50)) {
+//			switch(rand(50)) {
+			switch(rand(48)) {
 				case 0: set .@card2,4700; break;	// Str + 1
 				case 1: set .@card2,4701; break;	// Str + 2
 				case 2: set .@card2,4702; break;	// Str + 3
@@ -4065,9 +4067,9 @@ dewata,234,64,4	script	ガティ	813,{
 				case 36: set .@card2,4787; break;	// Mdef + 4
 				case 37: set .@card2,4788; break;	// Mdef + 6
 				case 38: set .@card2,4789; break;	// Mdef + 8
-				case 39: set .@card2,4791; break;	// Def + 3
-				case 40: set .@card2,4792; break;	// Def + 6
-				case 41: set .@card2,4793; break;	// Def + 9
+//				case 39: set .@card2,4791; break;	// Def + 3
+//				case 40: set .@card2,4792; break;	// Def + 6
+//				case 41: set .@card2,4793; break;	// Def + 9
 				case 42: set .@card2,4795; break;	// HP + 100
 				case 43: set .@card2,4796; break;	// HP + 200
 				case 44: set .@card2,4797; break;	// HP + 300
@@ -5483,7 +5485,8 @@ dewata,114,243,6	script	怠ける青年	536,{
 	mes "そこら辺で拾ったものなんだけどさ、";
 	mes "へへへっ！";
 	delitem 11534,1;
-	getitem RAND_GIFT_BOX,1;
+//	getitem RAND_GIFT_BOX,1;
+	getrandgroupitem(IG_GiftBox),1;
 	close;
 }
 

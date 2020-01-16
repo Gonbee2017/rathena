@@ -654,7 +654,7 @@ REPLACE INTO `item_db2` VALUES (4007, 'Pecopeco_Egg_Card', 'ペコペコの卵カード',
 REPLACE INTO `item_db2` VALUES (4030, 'Mandragora_Card', 'マンドラゴラカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Wind,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4035, 'Hydra_Card', 'ヒドラカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_DemiHuman,30; bonus2 bAddRace,RC_Player,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4049, 'Vadon_Card', 'バドンカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Fire,30; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4059, 'Soldier_Andre_Card', '兵隊アンドレカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,35; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4060, 'Goblin_Card', 'ゴブリンカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_Brute,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4062, 'Anacondaq_Card', 'アナコンダクカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Poison,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4065, 'Kaho_Card', 'カホカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddEle,Ele_Earth,30; }', '{}', '{}');
@@ -714,6 +714,12 @@ REPLACE INTO `item_db2` VALUES (4511, 'Little_Fatum_Card', 'リトルファートゥムカ
 REPLACE INTO `item_db2` VALUES (4512, 'Parus_Card', 'パルスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bHealPower,3; if(BaseClass==Job_Acolyte){ bonus bHealPower,getrefine()/2; } }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4513, 'Angra_Mantis_Card', 'アングラマンティスカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bCritAtkRate,2; if(BaseClass==Job_Thief){ bonus bCritAtkRate,getrefine()/2; } }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4514, 'Pom_Spider_Card', 'ポムスパイダーカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_Undead,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4515, 'Alnoldi_Card', 'アーノルディカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, NULL, NULL, NULL, NULL, '{ bonus2 bSubRace,RC_Plant,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4516, 'Comodo_Card', 'デワタドラゴンカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 16, NULL, NULL, NULL, NULL, '{ bonus bDef,5; bonus bFlee,-10; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4517, 'Cendrawasih_Card', '極楽鳥カード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 769, NULL, NULL, NULL, NULL, '{ bonus bInt,2; if(BaseClass==Job_Mage){ bonus bInt,getrefine()/3; } }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4518, 'Banaspaty_Card', 'バナスパティカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus3 bAddEff,Eff_Burning,500,ATF_TARGET; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4519, 'Butoijo_Card', 'ブトイジョカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, '{ bonus2 bAddRace,RC_Angel,30; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4520, 'Leak_Card', 'レヤックカード', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, '{ bonus bStr,3; bonus2 bAddEff,Eff_Confusion,5000; bonus3 bAddEff,Eff_Confusion,5000,ATF_TARGET; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4768, 'Str1_J', 'Str + 1_', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4769, 'Str2_J', 'Str + 2_', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4770, 'Str3_J', 'Str + 3_', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
@@ -737,10 +743,10 @@ REPLACE INTO `item_db2` VALUES (4787, 'Mdef4', 'Mdef + 4', 6, 20, NULL, 10, NULL
 REPLACE INTO `item_db2` VALUES (4788, 'Mdef6', 'Mdef + 6', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,6; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4789, 'Mdef8', 'Mdef + 8', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,8; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4790, 'Mdef10', 'Mdef + 10', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,10; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4791, 'Def1', 'Def + 3', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,1; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4792, 'Def2', 'Def + 6', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,2; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4793, 'Def3', 'Def + 9', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,3; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4794, 'Def4', 'Def + 12', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,4; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4791, 'Def1', 'Def + 1', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,1; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4792, 'Def2', 'Def + 2', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,2; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4793, 'Def3', 'Def + 3', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,3; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4794, 'Def4', 'Def + 4', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,4; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4795, 'HP100', 'HP + 100', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMaxHP,100; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4796, 'HP200', 'HP + 200', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMaxHP,200; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4797, 'HP300', 'HP + 300', 6, 20, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMaxHP,300; }', '{}', '{}');
@@ -838,7 +844,7 @@ REPLACE INTO `item_db2` VALUES (4889, 'Conjure5', 'Spell 5', 6, 10, NULL, 0, NUL
 REPLACE INTO `item_db2` VALUES (4890, 'Mdef1', 'Mdef + 1', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,1; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4891, 'Mdef3', 'Mdef + 3', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,3; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4892, 'Mdef5', 'Mdef + 5', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMdef,5; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4893, 'Def5', 'Def + 15', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,5; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4893, 'Def5', 'Def + 5', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4894, 'Atk4p', 'Atk + 4%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus2 bAddClass,Class_All,4; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4895, 'Atk5p', 'Atk + 5%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus2 bAddClass,Class_All,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4896, 'Matk2p', 'Matk + 2%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMatkRate,2; }', '{}', '{}');
@@ -846,8 +852,8 @@ REPLACE INTO `item_db2` VALUES (4897, 'Matk3p', 'Matk + 3%', 6, 10, NULL, 0, NUL
 REPLACE INTO `item_db2` VALUES (4898, 'Matk4p', 'Matk + 4%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMatkRate,4; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4899, 'Matk5p', 'Matk + 5%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMatkRate,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4900, 'MHP5', 'MaxHP5', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMaxHPrate,5; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4902, 'Def6', 'Def + 18', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,6; }', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (4903, 'Def7', 'Def + 21', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,7; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4902, 'Def6', 'Def + 6', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,6; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (4903, 'Def7', 'Def + 7', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bDef,7; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4904, 'Atk6p', 'ATK + 6%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus2 bAddClass,Class_All,6; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4905, 'Atk7p', 'ATK + 7%', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus2 bAddClass,Class_All,7; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (4906, 'Matk6p', 'MATK + 6', 6, 10, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{ bonus bMatkRate,6; }', '{}', '{}');
@@ -1203,6 +1209,12 @@ REPLACE INTO `item_db2` VALUES (5888, 'Wedding_Veil_', 'ヴェール', 4, 23000, NUL
 REPLACE INTO `item_db2` VALUES (5889, 'L_Orc_Hero_Helm_', '大型オークヒーローの兜', 4, 10000, NULL, 900, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 768, NULL, 0, 1, 381, '{ bonus bStr,2; bonus bVit,1; bonus bNoSizeFix; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5917, 'Yellow_Scarf', '黄色いスカーフ', 4, 90000, NULL, 100, NULL, 0, NULL, 0, 0xFFFFFFFF, 63, 2, 1, NULL, 90, 0, 369, '{ bonus bLongAtkDef,3; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (5943, 'Owlviscount_Silk_Hat', 'オウルヴァイカウントのシルクハット', 4, 99000, NULL, 500, NULL, 5, NULL, 1, 0xFFFFFFFF, 7, 2, 256, NULL, 99, 1, 982, '{ bonus bInt,2; bonus bAspdRate,10; set .@r,getrefine(); bonus bMatk,7*.@r; autobonus "{ set .@r,getrefine(); bonus bAspdRate,.@r>=9?40:(.@r>=7?10:(.@r>=5?5:0)); }",.@r*20,30000,BF_MAGIC,"{ specialeffect2 EF_SPELLBREAKER; }"; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6401, 'Palm_O', 'ヤシの樹液', 3, 0, NULL, 500, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6402, 'Oil_Palm_F', 'ヤシの実', 3, 0, NULL, 50, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6403, 'Comodo_L', 'デワタドラゴンの皮', 3, 5, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6404, 'Caress_H', 'クリスヒルト', 3, 0, NULL, 100, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6405, 'Cendrawasih_F', '極楽鳥の羽', 3, 3, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (6406, 'Cendrawasih_SF', '輝く極楽鳥の羽', 3, 10, NULL, 100, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (6437, 'Scaraba_Perfume', 'スカラバの香水', 3, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (6707, 'Jeremy_Beauty_Coupon', 'ジェレミーの美容クーポン', 3, 10, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (9500, 'Cat_O_Nine_Tail_Egg', 'キャットナインテイルの卵', 7, 20, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{}', '{}', '{}');
@@ -1311,6 +1323,9 @@ REPLACE INTO `item_db2` VALUES (10919, 'Cash_100', '100ショップポイント', 2, 1, 
 REPLACE INTO `item_db2` VALUES (10920, 'Cash_1000', '1000ショップポイント', 2, 1, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ addcash 1000; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (10921, 'Cash_10000', '10000ショップポイント', 2, 1, NULL, 10, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ addcash 10000; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (11516, 'Asai_Fruit', 'アサイーの実', 0, 15, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(16,22),0; sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (11532, 'Nasi_Goreng', 'ナシゴレン', 0, 15, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(133,168),0; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (11533, 'Satay', 'サテ', 11, 15, NULL, 20, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ itemskill "ALL_RESURRECTION",2; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (11534, 'Coco_Juice', 'ココナッツジュース', 0, 20, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 63, 2, NULL, NULL, NULL, NULL, NULL, '{ itemheal rand(150,300),rand(20,30); }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12004, 'Arrow_Container', '矢筒', 2, 2, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 1750,500; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12005, 'Iron_Arrow_Container', '鉄の矢筒', 2, 2, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 1770,500; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (12006, 'Steel_Arrow_Container', '鋼鉄の矢筒', 2, 2, NULL, 50, NULL, NULL, NULL, NULL, 0xFFFFFFFF, 7, 2, NULL, NULL, NULL, NULL, NULL, '{ getitem 1753,500; }', '{}', '{}');
@@ -1389,6 +1404,7 @@ REPLACE INTO `item_db2` VALUES (13046, 'Krieg', 'クリーク', 5, 50000, NULL, 500,
 REPLACE INTO `item_db2` VALUES (13047, 'Weihna', 'ヴァイナ', 5, 50000, NULL, 500, 135, NULL, 1, 2, 0x00021040, 2, 2, 2, 3, 50, 1, 1, '{ bonus3 bAddEffOnSkill,"RG_RAID",Eff_Poison,1000; autobonus "{ bonus2 bAddClass,Class_All,10; }",5,5000,BF_WEAPON|BF_SHORT,"{ specialeffect2 EF_POTION_BERSERK; }"; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (13061, 'Black_Wing', 'ブラックウィング', 5, 99000, NULL, 600, 142, NULL, 1, 1, 0x00020000, 2, 2, 2, 3, 99, 1, 1, '{ set .@r,getrefine(); bonus2 bSkillAtk,"RG_RAID",30+(.@r*2); bonus bMatkRate,(.@r*3); }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (13062, 'Ancient_Dagger', 'エンシェントダガー', 5, 99000, NULL, 600, 107, NULL, 0, 0, 0x028F5EEE, 6, 2, 2, 4, 99, 1, 1, '{ bonus bMatkRate,15; bonus bMaxSP,100; bonus bSPrecovRate,5; bonus2 bAddEff2,Eff_Curse,20; bonus3 bAddEff,Eff_Curse,20,ATF_SELF; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (13067, 'Caress', 'クリス', 5, 20, NULL, 700, 107, NULL, 1, 1, 0x3E9F7EEF, 18, 2, 2, 3, 30, 1, 1, '{ bonus bMatkRate,10; bonus2 bHPDrainRate,10,10; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (13073, 'Counter_Dagger_', 'カウンターダガー', 5, 120000, NULL, 550, 140, NULL, 1, 1, 0x00810204, 7, 2, 2, 4, 55, 1, 1, '{ bonus bCritical,50; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (13082, 'Ivory_Knife_', 'アイボリーナイフ', 5, 50000, NULL, 700, 130, NULL, 1, 3, 0x028F5EEE, 2, 2, 2, 3, 50, 1, 1, '{ bonus bAgi,2; bonus bAspdRate,3; bonus2 bAddEff,Eff_Bleeding,300; bonus3 bAutoSpell,"NPC_CRITICALWOUND",1,30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (13107, 'Wasteland_Outlaw', '荒野の用心棒', 5, 70000, NULL, 580, 68, NULL, 7, 2, 0x41000000, 7, 2, 34, 3, 70, 1, 17, '{ bonus bHit,readparam(bAgi)/10; bonus bAspdRate,readparam(bAgi)/14; }', '{}', '{}');
@@ -1439,6 +1455,7 @@ REPLACE INTO `item_db2` VALUES (15027, 'Crimson_Robe', 'クリムゾンローブ', 4, 99
 REPLACE INTO `item_db2` VALUES (15028, 'Forest_Robe', 'フォレストローブ', 4, 99000, NULL, 500, NULL, 5, NULL, 0, 0x00000200, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bDefEle,Ele_Earth; bonus bMdef,10; bonus bInt,1; bonus2 bSkillVariableCast,"WZ_HEAVENDRIVE",-3000; if(readparam(bInt)>=120){ bonus bInt,1; } }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (15029, 'Robe_Of_Affection', '慈愛のローブ', 4, 99000, NULL, 300, NULL, 5, NULL, 0, 0x00000100, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bDefEle,Ele_Holy; bonus bMdef,10; bonus bInt,1; bonus2 bSkillUseSP,"AL_HEAL",30; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (15030, 'Robe_Of_Judgement', '審判のローブ', 4, 99000, NULL, 300, NULL, 5, NULL, 0, 0x00000100, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bDefEle,Ele_Dark; bonus bMdef,10; bonus bStr,2; bonus bInt,1; bonus2 bSubRace,RC_All,-10; bonus2 bSubRace,RC_Undead,20; bonus2 bSubRace,RC_Demon,20; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (15032, 'Tidung', 'ティドゥン', 4, 10, NULL, 500, NULL, 0, NULL, 1, 0xFFFFFFFE, 63, 2, 16, NULL, 0, 1, 0, '{ bonus bMdef,10; bonus2 bResEff,Eff_Stun,1500; bonus2 bResEff,Eff_Freeze,1500; bonus2 bSubClass,Class_All,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (15036, 'Ur_Plate', 'ウルズプレート', 4, 99000, NULL, 3000, NULL, 10, NULL, 0, 0x00000080, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bMdef,10; bonus bMaxHPrate,getrefine(); bonus2 bSubRace,RC_DemiHuman,5; bonus2 bSubRace,RC_Player,5; bonus2 bSubEle,Ele_Neutral,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (15037, 'Peuz_Plate', 'ペオースプレート', 4, 99000, NULL, 3000, NULL, 10, NULL, 0, 0x00000080, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bMdef,10; bonus bBaseAtk,20; bonus bFlee,17; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (15038, 'Sabah_Cloth', 'サバフのクロース', 4, 99000, NULL, 100, NULL, 6, NULL, 1, 0x00001000, 6, 2, 16, NULL, 99, 1, 0, '{ bonus bLuk,3; bonus3 bAutoSpell,"ASC_METEORASSAULT",max(getskilllv("ASC_METEORASSAULT"),1),20; }', '{}', '{}');
@@ -1461,6 +1478,7 @@ REPLACE INTO `item_db2` VALUES (17336, 'Jeremy_Beauty_Coupon_Box_17336', 'ジェレ
 REPLACE INTO `item_db2` VALUES (18103, 'Mystic_Bow', 'ミスティックボウ', 5, 0, NULL, 1700, 75, NULL, 5, 0, 0x00080800, 2, 2, 34, 3, 99, 1, 11, '{ bonus bMatk,100; bonus bInt,4; bonus2 bSkillUseSP,"CG_ARROWVULCAN",10; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (18115, 'Orc_Archer_Bow_', 'オークアーチャーの弓', 5, 65000, NULL, 1600, 120, NULL, 5, 1, 0x000A0808, 7, 2, 34, 3, 65, 1, 11, '{ bonus2 bAddMonsterDropItem,1753,200; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (18129, 'Ixion_Wing_', 'イクシオンの羽', 5, 70000, NULL, 300, 135, NULL, 5, 3, 0x00000800, 2, 2, 34, 4, 70, 1, 11, '{ autobonus "{ bonus bAspdRate,7; }",10+(getrefine()*2),7000,BF_WEAPON,"{ specialeffect2 EF_HASTEUP; }"; }', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (18520, 'Jaty_C', 'ジャティ族の聖冠', 4, 20, NULL, 100, NULL, 1, NULL, 0, 0xFFFFFFFF, 63, 2, 256, NULL, 1, 1, 686, '{ bonus2 bSubRace,RC_Plant,5; bonus2 bSubRace,RC_Brute,5; bonus2 bAddRace,RC_Plant,5; bonus2 bAddRace,RC_Brute,5; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (18594, 'Magni_Cap_', 'マグニキャップ', 4, 30000, NULL, 1000, NULL, 5, NULL, 1, 0xFFFFFFFE, 7, 2, 256, NULL, 65, 1, 250, '{ bonus bStr,2; }', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (18620, 'Heart_Eyepatch', 'ハートの眼帯', 4, 5, NULL, 200, NULL, 2, NULL, 0, 0xFFFFFFFF, 7, 2, 512, NULL, 20, 0, 779, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (18667, 'Cat_Lace_Hairband', '子猫のヘッドドレス', 4, 60000, NULL, 500, NULL, 0, NULL, 1, 0xFFFFFFFE, 63, 2, 256, NULL, 60, 1, 816, '{ bonus bDelayRate,-5-5*(getrefine()>=7)-3*(getrefine()>=9); }', '{}', '{}');
