@@ -606,6 +606,7 @@
 2860,Aqua_Orb,アクアオーブ,4,99000,,200,,0,,0,0x00000200,63,2,136,,99,0,0,{ bonus bMdef,2; bonus bInt,1; bonus2 bSubEle,Ele_Water,15; bonus3 bAutoSpellWhenHit,"WZ_FROSTNOVA",3,30; },{},{}
 2861,Crimson_Orb,クリムゾンオーブ,4,99000,,200,,0,,0,0x00000200,63,2,136,,99,0,0,{ bonus bMdef,2; bonus bInt,1; bonus2 bSubEle,Ele_Fire,15; bonus3 bAutoSpellWhenHit,"WZ_SIGHTRASHER",3,30; },{},{}
 2862,Forest_Orb,フォレストオーブ,4,99000,,200,,0,,0,0x00000200,63,2,136,,99,0,0,{ bonus bMdef,2; bonus bInt,1; bonus2 bSubEle,Ele_Earth,15; bonus3 bAutoSpellWhenHit,"WZ_QUAGMIRE",3,30; },{},{}
+2873,Cat_Hand_Glove,猫の手グローブ,4,20,,100,,0,,1,0xFFFFFFFF,63,2,136,,1,0,0,{ bonus bAgi,1; bonus bVit,1; bonus bDex,1; bonus bLuk,1; },{},{}
 2874,Buffalo_Horn,水牛の角,4,10000,,100,,0,,1,0xFFFFFFFF,63,2,136,,10,0,0,{ bonus bAspd,1; },{},{}
 2881,Orleans_Necklace,オルレアンネックレス,4,10000,,100,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bDex,2; bonus bMatk,20; },{},{}
 2883,Ur_Seal,ウルズブローチ,4,99000,,200,,3,,1,0x00000080,6,2,136,,99,0,0,{ bonus bMaxHPrate,2; bonus2 bSkillUseSP,"LK_SPIRALPIERCE",5; bonus2 bSkillUseSP,"KN_BRANDISHSPEAR",5; },{},{}
@@ -692,6 +693,11 @@
 4518,Banaspaty_Card,バナスパティカード,6,20,,10,,,,,,,,2,,,,,{ bonus3 bAddEff,Eff_Burning,500,ATF_TARGET; },{},{}
 4519,Butoijo_Card,ブトイジョカード,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Angel,30; },{},{}
 4520,Leak_Card,レヤックカード,6,20,,10,,,,,,,,4,,,,,{ bonus bStr,3; bonus2 bAddEff,Eff_Confusion,5000; bonus3 bAddEff,Eff_Confusion,5000,ATF_TARGET; },{},{}
+4530,Siorava_Card,シオラバカード,6,20,,10,,,,,,,,769,,,,,{ bonus bLuk,2; if(BaseClass==Job_Merchant){ bonus bLuk,2+(getrefine()/3); } },{},{}
+4531,Red_Eruma_Card,レッドエルマカード,6,20,,10,,,,,,,,2,,,,,{ bonus3 bAddEff,Eff_Curse,100,ATF_MAGIC; },{},{}
+4532,Wild_Rider_Card,ワイルドライダーカード,6,20,,10,,,,,,,,64,,,,,{ bonus bAgi,1; bonus3 bAutoSpell,"AL_INCAGI",1,50; },{},{}
+4533,Mini_Octopus_Card,子分タコカード,6,20,,10,,,,,,,,2,,,,,{ bonus3 bAddEff,Eff_Blind,100,ATF_MAGIC; },{},{}
+4534,Giant_Octopus_Card,頭領タコカード,6,20,,10,,,,,,,,16,,,,,{ bonus bMaxHPrate,12; skill "WZ_WATERBALL",5; },{},{}
 4768,Str1_J,Str + 1_,6,20,,10,,,,,,,,,,,,,{},{},{}
 4769,Str2_J,Str + 2_,6,20,,10,,,,,,,,,,,,,{},{},{}
 4770,Str3_J,Str + 3_,6,20,,10,,,,,,,,,,,,,{},{},{}
