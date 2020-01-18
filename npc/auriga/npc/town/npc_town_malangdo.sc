@@ -386,37 +386,63 @@ malangdo,184,139,4	script	倉庫番ねこ	560,{
 	mes "大荷物にゃ？";
 	mes "倉庫開くにゃあ。";
 	next;
-	mes "[倉庫番ねこ]";
-	mes "^0000FFマラン島特産缶詰^000000かZeny";
-	mes "二つの決済方法があるにゃあ！";
-	mes "猫の手信用ポイントが";
-	mes "1000ポイント以上の場合は";
-	mes "代金はサービスするにゃあ！";
-	next;
-	switch(select("缶詰決済----- 1個","Zeny決済------- 100z","倉庫を開かない")) {
-	case 1:
-		if(!countitem(12636)) {
-			mes "[倉庫番ねこ]";
-			mes "にゃにゃにゃ？";
-			mes "マラン島特産缶詰、足らないにゃ。";
-			mes "アタシのめしになるにゃあ。";
-			mes "支払ってくれなきゃ困るにゃ。";
+	set .@typ, select("倉庫を開く", "ギルド倉庫を開く", "倉庫を開かない");
+	if (.@typ < 3) {
+		if (.@typ == 1) set .@fee, 100;
+		else set .@fee, 1000;
+		mes "[倉庫番ねこ]";
+		mes "^0000FFマラン島特産缶詰^000000かZeny";
+		mes "二つの決済方法があるにゃあ！";
+		mes "猫の手信用ポイントが";
+		mes "1000ポイント以上の場合は";
+		mes "代金はサービスするにゃあ！";
+		next;
+		set .@pay, select("缶詰決済----- 1個","Zeny決済------- " + .@fee + "z","倉庫を開かない");
+		if (.@pay < 3) {
+			if (.@pay == 1) {
+				if(!countitem(12636)) {
+					mes "[倉庫番ねこ]";
+					mes "にゃにゃにゃ？";
+					mes "マラン島特産缶詰、足らないにゃ。";
+					mes "アタシのめしになるにゃあ。";
+					mes "支払ってくれなきゃ困るにゃ。";
+					close;
+				}
+			} else if(Zeny < .@fee) {
+				mes "[倉庫番ねこ]";
+				mes "にゃにゃにゃ？";
+				mes "お金足らないにゃ。";
+				mes "支払ってくれなきゃ困るにゃ。";
+				close;
+			}
+			if (.@typ == 1) {
+				if (.@pay == 1) delitem 12636,1;
+				else set Zeny,Zeny - .@fee;
+				openstorage;
+			} else {
+				set .@ret, guildopenstorage();
+				switch(.@ret) {
+				case 0:
+					if (.@pay == 1) delitem 12636,1;
+					else set Zeny,Zeny - .@fee;
+					break;
+				case 1:
+					mes "[倉庫番ねこ]";
+					mes "他のギルドメンバーが倉庫を";
+					mes "使ってるにゃ。";
+					break;
+				case 2:
+					mes "[倉庫番ねこ]";
+					mes "倉庫を開く準備をしてるにゃ。";
+					break;
+				case 3:
+					mes "[カプラ職員]";
+					mes "ギルドに所属してないにゃ。";
+					break;
+				}
+			}
 			close;
 		}
-		delitem 12636,1;
-		openstorage;
-		close;
-	case 2:
-		if(Zeny < 100) {
-			mes "[倉庫番ねこ]";
-			mes "にゃにゃにゃ？";
-			mes "お金足らないにゃ。";
-			mes "支払ってくれなきゃ困るにゃ。";
-			close;
-		}
-		set Zeny,Zeny -100;
-		openstorage;
-		close;
 	}
 	mes "[倉庫番ねこ]";
 	mes "それじゃあ、倉庫を使いたくなったら";
@@ -643,7 +669,7 @@ malangdo,173,145,4	script	商人#glove	496,{
 			next;
 			mes "[商人]";
 			mes "こちらの商品は、^dc143cアクセサリー^000000でして～";
-			mes "防御力は5。";
+			mes "防御力は0。";
 			mes "Vit+1、Agi+1、Dex+1、Luk+1の";
 			mes "ステータス補正がつきますにゃ。";
 			mes "さらに詳細はこちらを読んで！";

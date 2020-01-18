@@ -2514,7 +2514,6 @@ splendide,275,390,0		warp	bifrostwarp0501	1,1,bif_fild01,316,50
 
 
 
-/*
 //---マラン島追加マップ
 
 
@@ -2573,6 +2572,7 @@ mal_in01,67,12,0	warp	malangdowarp1036	1,1,mal_in01,20,13
 
 
 
+/*
 //---ポートマラヤ追加マップ
 
 

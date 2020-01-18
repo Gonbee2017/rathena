@@ -160,6 +160,9 @@ spl_in01	mapflag	nowarpto
 dic_in01	mapflag	nowarpto
 1@mist	mapflag	nowarpto
 dew_in01	mapflag	nowarpto
+mal_in01	mapflag	nowarpto
+mal_in02	mapflag	nowarpto
+1@cash	mapflag	nowarpto
 
 // Bossnia (custom) ==============
 bossnia_01	mapflag	nowarpto

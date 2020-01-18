@@ -1253,7 +1253,6 @@ dew_dun02,305,30,0		warp	dewatawarp0501	1,1,dew_fild01,50,65
 
 
 
-/*
 //---マラン島追加マップ
 
 
@@ -1268,6 +1267,7 @@ mal_dun01,30,230,0		warp	malangdowarp0101	1,1,malangdo,75,236
 
 
 
+/*
 //---ポートマラヤ追加マップ
 
 

@@ -693,6 +693,9 @@ spl_in02	mapflag	nomemo
 dic_in01	mapflag	nomemo
 1@mist	mapflag	nomemo
 dew_in01	mapflag	nomemo
+mal_in01	mapflag	nomemo
+mal_in02	mapflag	nomemo
+1@cash	mapflag	nomemo
 
 //evt_zombie	mapflag	nomemo
 

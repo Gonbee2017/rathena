@@ -4,3 +4,5 @@
 // ID,Name,LimitTime,IdleTimeOut,EnterMap,EnterX,EnterY,Map2,Map3,...,Map255
 //
 // EnterMap is considered as Map1
+
+7,Octopus Cave,3600,300,1@cash,199,99
