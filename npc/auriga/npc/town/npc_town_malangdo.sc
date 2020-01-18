@@ -397,7 +397,8 @@ malangdo,184,139,4	script	倉庫番ねこ	560,{
 		mes "1000ポイント以上の場合は";
 		mes "代金はサービスするにゃあ！";
 		next;
-		set .@pay, select("缶詰決済----- 1個","Zeny決済------- " + .@fee + "z","倉庫を開かない");
+		if (CATHAND_POINT < 1000)
+			set .@pay, select("缶詰決済----- 1個","Zeny決済------- " + .@fee + "z","倉庫を開かない");
 		if (.@pay < 3) {
 			if (.@pay == 1) {
 				if(!countitem(12636)) {
@@ -408,7 +409,9 @@ malangdo,184,139,4	script	倉庫番ねこ	560,{
 					mes "支払ってくれなきゃ困るにゃ。";
 					close;
 				}
-			} else if(Zeny < .@fee) {
+			} else if (.@pay == 2 &&
+				Zeny < .@fee
+			) {
 				mes "[倉庫番ねこ]";
 				mes "にゃにゃにゃ？";
 				mes "お金足らないにゃ。";
@@ -416,15 +419,15 @@ malangdo,184,139,4	script	倉庫番ねこ	560,{
 				close;
 			}
 			if (.@typ == 1) {
-				if (.@pay == 1) delitem 12636,1;
-				else set Zeny,Zeny - .@fee;
 				openstorage;
+				if (.@pay == 1) delitem 12636,1;
+				else if (.@pay == 2) set Zeny,Zeny - .@fee;
 			} else {
 				set .@ret, guildopenstorage();
 				switch(.@ret) {
 				case 0:
 					if (.@pay == 1) delitem 12636,1;
-					else set Zeny,Zeny - .@fee;
+					else if (.@pay == 2) set Zeny,Zeny - .@fee;
 					break;
 				case 1:
 					mes "[倉庫番ねこ]";
