@@ -5,4 +5,5 @@
 //
 // EnterMap is considered as Map1
 
+6,Pump,3600,300,1@pump,63,98,2@pump
 7,Octopus Cave,3600,300,1@cash,199,99

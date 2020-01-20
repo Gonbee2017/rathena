@@ -2234,19 +2234,22 @@ mal_in02,179,57,1	script	地質学者マルリ#mal	559,{
 			mes "是非お手伝いお願いします。";
 			close;
 		}
-		switch(checkquest2(11243)^0x4) {
-		case 1:
+		//switch(checkquest2(11243)^0x4) {
+		if(!(checkquest2(11243)&2)) {
+		//case 1:
 			mes "[地質学者マルリ]";
 			mes "おかげさまで";
-			mes "今日のところは";
-			mes "人員を確保できました。";
+			//mes "今日のところは";
+			//mes "人員を確保できました。";
+			mes "今回は人員を確保できました。";
 			mes "ですが、常々人手は不足しています。";
 			mes "是非また手伝ってください。";
 			close;
-		case 3:
-			delquest 11243;
-			break;
+		//case 3:
+		//	delquest 11243;
+		//	break;
 		}
+		delquest 11243;
 		if(checkquest2(11242)) {
 			mes "[地質学者マルリ]";
 			mes "熱心に亀裂補修を";
@@ -3019,8 +3022,9 @@ mal_in01,114,169,5	script	リカン#mal	547,{
 			mes "落ち着いたらまた手伝ってくれ。";
 			close;
 		}
-		switch(checkquest2(11239)^0x4) {
-		case 1:
+		//switch(checkquest2(11239)^0x4) {
+		//case 1:
+		if (!(checkquest2(11239)&2)) {
 			mes "[リカン]";
 			mes "手伝ってくれるのは";
 			mes "うれしいんだが、";
@@ -3028,10 +3032,11 @@ mal_in01,114,169,5	script	リカン#mal	547,{
 			mes "なくなってしまうよ。";
 			mes "少し、休んでおいで。";
 			close;
-		case 3:
-			delquest 11239;
-			break;
+		//case 3:
+		//	delquest 11239;
+		//	break;
 		}
+		delquest 11239;
 		if(checkquest2(11238) == 0) {
 			mes "[リカン]";
 			mes "また手伝ってくれるのか？";
@@ -3636,18 +3641,20 @@ mal_dun01,136,122,3	script	ガンパン#mal	551,{
 		mes "手伝ってくれ。";
 		close;
 	case 36:
-		switch(checkquest2(11245)^0x4) {
-		case 1:
+		//switch(checkquest2(11245)^0x4) {
+		//case 1:
+		if (!(checkquest2(11245) & 2)) {
 			mes "[ガンパン]";
 			mes "今は大丈夫だ。";
 			mes "必要になったら";
 			mes "スターキャンディ様に";
 			mes "おいしいゼリーを頼むぞ。";
 			close;
-		case 3:
-			delquest 11245;
-			break;
+		//case 3:
+		//	delquest 11245;
+		//	break;
 		}
+		delquest 11245;
 		if(!checkquest2(11244)) {
 			mes "[ガンパン]";
 			mes "お食事の時間だ。";
@@ -4480,7 +4487,10 @@ malangdo,175,206,3	script	ゴーボン#mal	561,{
 		close;
 	case 11:
 	case 12:
-		if(checkquest2(1152)^0x4 == 0x1) {
+		//if(checkquest2(1152)^0x4 == 0x1) {
+		if(!(checkquest2(1152) & 2) &&
+			!checkquest2(1155)
+		) {
 			mes "[ゴーボン]";
 			mes "うむむ……";
 			mes "やはり情報が不足している。";
