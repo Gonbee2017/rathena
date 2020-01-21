@@ -1370,6 +1370,18 @@ AI_SKILL_USE_FUNC(MG_FROSTDIVER) {
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }
 
+// ライトニングボルトを使って氷を割る。
+AI_SKILL_USE_FUNC_T(MG_LIGHTNINGBOLT, crush) {
+	block_if* ene = pybot::find_if(ALL_RANGE(*enemies), [this, kid, klv] (block_if* ene) -> bool {
+		return !bot->find_skill_ignore_mobs(kid, ene) &&
+			bot->check_skill_range_block(kid, klv, ene) &&
+			ene->attacked_battlers().empty() &&
+			!ene->is_summoned() &&
+			ene->sc()->data[SC_FREEZE];
+	});
+	if (ene) bot->use_skill_block(kid, klv, ene);
+}
+
 // ナパームビートを使う。
 AI_SKILL_USE_FUNC(MG_NAPALMBEAT) {
 	block_if* tar_ene = bot->target_enemy();
@@ -3174,23 +3186,6 @@ AI_SKILL_USE_FUNC_T(WZ_JUPITEL, compromise) {
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
-// ユピテルサンダーを使って氷を割る。
-AI_SKILL_USE_FUNC_T(WZ_JUPITEL, crush) {
-	if (!gvg) {
-		block_if* ene = pybot::find_if(ALL_RANGE(*enemies),
-			sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return !bot->find_skill_ignore_mobs(kid, ene) &&
-					bot->check_skill_range_block(kid, klv, ene) &&
-					ene->attacked_battlers().empty() &&
-					!ene->is_summoned() &&
-					ene->sc()->data[SC_FREEZE] &&
-					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(WZ_STORMGUST, BL_PC, 2)});
-			})
-		);
-		if (ene) bot->use_skill_block(kid, klv, ene);
-	}
-}
-
 // メテオストームを使う。
 AI_SKILL_USE_FUNC(WZ_METEOR) {
 	block_if* tar_ene = bot->target_enemy();
@@ -3245,7 +3240,10 @@ AI_SKILL_USE_FUNC(WZ_STORMGUST) {
 				return bot->check_use_skill(kid, klv, ene) &&
 					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->is_summoned() &&
-					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
+					!skill_unit_exists_block(ene, skill_unit_key_map{
+						SKILL_UNIT_KEY(WZ_STORMGUST),
+						SKILL_UNIT_KEY(SA_LANDPROTECTOR)
+					});
 			})
 		);
 		if (cou >= bot->get_skill_mobs() &&
@@ -3266,10 +3264,36 @@ AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 					!ene->is_summoned() &&
 					ene->is_freezable() &&
 					!ene->is_paralysis() &&
-					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(SA_LANDPROTECTOR)});
+					!skill_unit_exists_block(ene, skill_unit_key_map{
+						SKILL_UNIT_KEY(WZ_STORMGUST),
+						SKILL_UNIT_KEY(SA_LANDPROTECTOR)
+					});
 			})
 		);
 		if (cou >= bot->get_skill_mobs()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
+	}
+}
+
+// ロードオブヴァーミリオンを使う。
+AI_SKILL_USE_FUNC(WZ_VERMILION) {
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->find_skill_ignore_mobs(kid, tar_ene) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
+		int cou = std::count_if(ALL_RANGE(*enemies),
+			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
+				return bot->check_use_skill(kid, klv, ene) &&
+					bot->skill_ratio(kid, klv, ene) > 100 &&
+					!ene->is_summoned() &&
+					!skill_unit_exists_block(ene, skill_unit_key_map{
+						SKILL_UNIT_KEY(WZ_VERMILION),
+						SKILL_UNIT_KEY(SA_LANDPROTECTOR)
+					});
+			})
+		);
+		if (cou >= bot->get_skill_mobs() &&
+			bot->use_magicpower()
+		) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 	}
 }
 

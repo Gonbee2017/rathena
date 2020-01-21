@@ -142,6 +142,8 @@ void ai_t::leader_collect() {
 				(!leader->passive() &&
 					md->target_id &&
 					find_block<battler_impl>(md->target_id)
+				) || (md->sc.opt1 &&
+					md->sc.opt1 != OPT1_BURNING
 				) || (md->sc.data[SC_BLADESTOP] &&
 					find_block<battler_impl>(md->sc.data[SC_BLADESTOP]->val4)
 				) || bl->id == leader->attack_target()
