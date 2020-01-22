@@ -61,7 +61,7 @@
 28704:13035,{ bonus bMaxSP,20; bonus bMaxHPRate,5; bonus bHit,10; bonus2 bAddSize,Size_Large,30; autobonus "{ bonus bAspdRate,100; }",1,7000,BF_WEAPON,"{ specialeffect2 EF_POTION_BERSERK; }"; }
 2702:2874,{ bonus bAspd,1; }
 2123:2881,{ bonus bMatkRate,getequiprefinerycnt(EQI_HAND_L)*2; }
-2365:2881,{ bonus bDelayRate,-15; }
+2365:2881,{ bonus bCastrate,-15; }
 2701:2881,{ bonus bMatkRate,20; }
 18720:1626,{ bonus bMatk,15*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bCastRate,-10; } }
 18720:1665,{ bonus bMatk,15*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bCastRate,-10; } }

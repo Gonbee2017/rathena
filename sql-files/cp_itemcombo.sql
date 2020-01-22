@@ -228,7 +228,7 @@ REPLACE INTO `cp_itemcombo` VALUES(28351,  5360, NULL,  NULL, NULL, NULL, '{ bon
 REPLACE INTO `cp_itemcombo` VALUES(28704, 13035, NULL,  NULL, NULL, NULL, '{ bonus bMaxSP,20; bonus bMaxHPRate,5; bonus bHit,10; bonus2 bAddSize,Size_Large,30; autobonus "{ bonus bAspdRate,100; }",1,7000,BF_WEAPON,"{ specialeffect2 EF_POTION_BERSERK; }"; }');
 REPLACE INTO `cp_itemcombo` VALUES( 2702,  2874, NULL,  NULL, NULL, NULL, '{ bonus bAspd,1; }');
 REPLACE INTO `cp_itemcombo` VALUES( 2123,  2881, NULL,  NULL, NULL, NULL, '{ bonus bMatkRate,getequiprefinerycnt(EQI_HAND_L)*2; }');
-REPLACE INTO `cp_itemcombo` VALUES( 2365,  2881, NULL,  NULL, NULL, NULL, '{ bonus bDelayRate,-15; }');
+REPLACE INTO `cp_itemcombo` VALUES( 2365,  2881, NULL,  NULL, NULL, NULL, '{ bonus bCastrate,-15; }');
 REPLACE INTO `cp_itemcombo` VALUES( 2701,  2881, NULL,  NULL, NULL, NULL, '{ bonus bMatkRate,20; }');
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1626, NULL,  NULL, NULL, NULL, '{ bonus bMatk,15*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bCastRate,-10; } }');
 REPLACE INTO `cp_itemcombo` VALUES(18720,  1665, NULL,  NULL, NULL, NULL, '{ bonus bMatk,15*getequiprefinerycnt(EQI_HAND_R); if(getequiprefinerycnt(EQI_HAND_R)==10) { bonus bMatk,50; bonus bCastRate,-10; } }');
