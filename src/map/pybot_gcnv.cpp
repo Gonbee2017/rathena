@@ -914,6 +914,7 @@ const std::unordered_map<
 	)}, {JOB_STALKER, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_D     (RG_RAID, SM_MAGNUM                             ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (NJ_KIRIKAGE                                    ,  1,  0, BMF_COMBAT, PF_FALSE, WF_FALSE, AF_ALL  , 0),
+		AI_SKILL_USE_PROC_T     (ST_CHASEWALK, deactivate                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (TF_HIDING, deactivate                          ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC       (ST_PRESERVE                                    ,  1,  0, BMF_ALL   , PF_ALL  , WF_ALL  , AF_ALL  , 0),
 		AI_SKILL_USE_PROC_T     (WZ_HEAVENDRIVE, exposure                       ,  1,  1, BMF_COMBAT, PF_ALL  , WF_ALL  , AF_ALL  , 0),
@@ -996,7 +997,8 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC_DT    (WZ_EARTHSPIKE, MG_FIREBOLT, compromise         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (MG_COLDBOLT, MG_FIREBOLT, compromise           ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC_DT    (NJ_HYOUSENSOU, NJ_KOUENKA, compromise          ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
-		AI_SKILL_USE_PROC       (TF_PICKSTONE                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1)
+		AI_SKILL_USE_PROC       (TF_PICKSTONE                                   ,  1,  0, BMF_NONE  , PF_ALL  , WF_FALSE, AF_ALL  , 1),
+		AI_SKILL_USE_PROC_T     (ST_CHASEWALK, activate                         ,  1,  0, BMF_NONE  , PF_ALL  , WF_ALL  , AF_ALL  , 1)
 	)}, {JOB_STAR_GLADIATOR, initialize<ai_t::skill_use_proc_vector>(					 	 
 		AI_SKILL_USE_PROC_D     (TK_STORMKICK, TK_COUNTER                       ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),
 		AI_SKILL_USE_PROC_D     (TK_TURNKICK, TK_COUNTER                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_ALL  , 0),

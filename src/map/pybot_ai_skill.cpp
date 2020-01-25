@@ -1106,9 +1106,9 @@ AI_SKILL_USE_FUNC(KN_CHARGEATK) {
 		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
-		!tar_ene->need_to_leave() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		tar_ene->has_knockback_immune()
+		tar_ene->has_knockback_immune() &&
+		!tar_ene->need_to_leave()
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
@@ -1508,11 +1508,11 @@ AI_SKILL_USE_FUNC(MO_BODYRELOCATION) {
 	block_if* tar_ene = bot->target_enemy();
 	if (!bot->find_skill_ignore_mobs(kid, tar_ene) &&
 		bot->distance_policy_value() == DPV_CLOSE &&
+		bot->sc()->data[SC_EXPLOSIONSPIRITS] &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
-		!tar_ene->need_to_leave() &&
 		bot->check_attack(tar_ene) &&
-		bot->sc()->data[SC_EXPLOSIONSPIRITS]
+		!tar_ene->need_to_leave()
 	) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);
 }
 
@@ -2842,6 +2842,27 @@ AI_SKILL_USE_FUNC(SN_WINDWALK) {
 	if (mem) bot->use_skill_self(kid, klv);
 }
 
+// チェイスウォーク状態になる。
+AI_SKILL_USE_FUNC_T(ST_CHASEWALK, activate) {
+	if (!bot->sc()->data[SC_CHASEWALK] &&
+		!bot->sc()->data[SC_CHASEWALK2]
+	) bot->use_skill_self(kid, klv);
+}
+
+// チェイスウォーク状態を解除する。
+AI_SKILL_USE_FUNC_T(ST_CHASEWALK, deactivate) {
+	block_if* tar_ene = bot->target_enemy();
+	if (bot->sc()->data[SC_CHASEWALK] &&
+		(bot->sc()->data[SC_CHASEWALK2] ||
+			(bot->battle_mode() != BM_NONE &&
+				(bot->distance_policy_value() != DPV_CLOSE ||
+					bot->check_attack_range(tar_ene)
+				)
+			)
+		)
+	) bot->use_skill_self(kid, klv);
+}
+
 // フルストリップを使う。
 AI_SKILL_USE_FUNC(ST_FULLSTRIP) {
 	block_if* ene = pybot::find_if(ALL_RANGE(*enemies), [this, kid, klv] (block_if* ene) -> bool {
@@ -2994,9 +3015,8 @@ AI_SKILL_USE_FUNC(TK_JUMPKICK) {
 		bot->distance_policy_value() == DPV_CLOSE &&
 		!bot->check_attack_range(tar_ene) &&
 		bot->check_skill_range_block(kid, klv, tar_ene) &&
-		!tar_ene->need_to_leave() &&
 		bot->check_use_skill(kid, klv, tar_ene) &&
-		bot->sc()->data[SC_SPURT]
+		!tar_ene->need_to_leave()
 	) bot->use_skill_block(kid, klv, tar_ene);
 }
 
