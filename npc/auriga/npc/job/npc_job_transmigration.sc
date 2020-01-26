@@ -164,7 +164,10 @@ yuno_in02,93,207,0	script	ƒ†ƒ~ƒ‹‚Ì‘	111,{
 
 //==============================================================
 yuno_in05,49,43,0	script	ƒ†ƒ~ƒ‹‚ÌS‘Ÿ	111,{
-	if(TRANSMIGRATE == 2)
+	//if(TRANSMIGRATE == 2)
+	if(TRANSMIGRATE == 2 ||
+		Upper == UPPER_HIGH
+	)
 		warp "valkyrie",48,8;
 	end;
 }
