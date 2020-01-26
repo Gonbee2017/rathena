@@ -1773,7 +1773,7 @@ REPLACE INTO `item_db2` VALUES (19885, 'C_Blinker_19885', '[衣装] 目隠し', 4, 0,
 REPLACE INTO `item_db2` VALUES (19886, 'C_Luxury_Sunglasses_19886', '[衣装] 高級サングラス', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 2048, 0, 1, 0, 26, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19887, 'C_One_Eyed_Glass_19887', '[衣装] 片目眼鏡', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 2048, 0, 1, 0, 23, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19888, 'C_Glasses_19888', '[衣装] グラス', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 2048, 0, 1, 0, 3, '{}', '{}', '{}');
-REPLACE INTO `item_db2` VALUES (19889, 'C_Pair_Of_Red_Ribbon_19889', '[衣装] ツインリボン', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 169, '{}', '{}', '{}');
+REPLACE INTO `item_db2` VALUES (19889, 'C_Pair_Of_Red_Ribbon_19889', '[衣装] ツインリボン', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 2048, 0, 1, 0, 169, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19902, 'C_Cigar_19902', '[衣装] タバコ', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 4096, 0, 1, 0, 54, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19903, 'C_Witchs_Hat_19903', '[衣装] 魔女の帽子', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 717, '{}', '{}', '{}');
 REPLACE INTO `item_db2` VALUES (19913, 'C_Poo_Poo_Hat_19913', '[衣装] あれ', 4, 0, 0, 0, 0, 0, 0, 0, 0xFFFFFFFF, 63, 2, 1024, 0, 1, 0, 76, '{}', '{}', '{}');
