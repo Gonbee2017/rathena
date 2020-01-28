@@ -3989,6 +3989,9 @@ const skill_id_set SUMMON_SKILLS = {
 // 最大チーム数。
 const int TEAM_MAX = 100;
 
+// 現在のマップを意味する名前。
+const std::string THIS_MAP_NAME = "this";
+
 // 鎧解除スキルのセット。
 const skill_id_set UNEQUIP_ARMOR_SKILLS = {
 	AM_ACIDTERROR,
