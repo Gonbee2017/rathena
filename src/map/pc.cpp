@@ -10583,8 +10583,8 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 	pc_unequipitem_sub(sd, n, flag);
 
 	// [GonBee]
-	// Botは戦闘中に装備が外れると武具一式をリロードする。
-	pybot::reload_equipset_in_battle(sd->status.char_id);
+	// Botは装備が外れると武具一式をリロードする。
+	pybot::reload_equipset(sd->status.char_id);
 
 	return true;
 }

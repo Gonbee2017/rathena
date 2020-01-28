@@ -12141,6 +12141,10 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		}
 	}
 
+	// [GonBee]
+	// Botはステータスが変化すると武具一式をリロードする。
+	if (sd) pybot::reload_equipset(sd->status.char_id);
+
 	return 1;
 }
 
@@ -13159,6 +13163,10 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 		for (e_skill dan_kid : dans_ite->second)
 			status_change_end(bl, status_skill2sc(dan_kid), INVALID_TIMER);
 	}
+
+	// [GonBee]
+	// Botはステータスが変化すると武具一式をリロードする。
+	if (sd) pybot::reload_equipset(sd->status.char_id);
 
 	ers_free(sc_data_ers, sce);
 	return 1;

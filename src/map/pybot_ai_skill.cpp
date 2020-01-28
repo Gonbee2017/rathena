@@ -439,7 +439,8 @@ AI_SKILL_USE_FUNC(BS_OVERTHRUST) {
 				(bot->party_id() &&
 					mem->party_id() == bot->party_id()
 				)
-			) && !mem->is_dead() &&
+			) && mem->sd()->status.weapon != W_FIST &&
+			!mem->is_dead() &&
 			!mem->is_invincible() &&
 			!mem->is_hiding() &&
 			!mem->reject_skills()->find(kid) &&

@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS `pybot_buffer_equipset`;
+CREATE TABLE `pybot_buffer_equipset` (
+  `char_id` int(11) unsigned NOT NULL,
+  `type` smallint(11) unsigned NOT NULL,
+  `order` smallint(5) unsigned NOT NULL,
+  `equip` int(11) unsigned NOT NULL,
+  `nameid` smallint(5) unsigned NOT NULL,
+  `card0` smallint(5) unsigned NOT NULL,
+  `card1` smallint(5) unsigned NOT NULL,
+  `card2` smallint(5) unsigned NOT NULL,
+  `card3` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `type`, `order`)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS `pybot_cart_auto_get_item`;
 CREATE TABLE `pybot_cart_auto_get_item` (
   `char_id` int(11) unsigned NOT NULL,
@@ -103,6 +117,20 @@ CREATE TABLE IF NOT EXISTS `pybot_limit_skill` (
   `skill_id` int(11) unsigned NOT NULL,
   `skill_lv` tinyint(4) unsigned NOT NULL,
   PRIMARY KEY (`char_id`, `skill_id`)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `pybot_map_equipset`;
+CREATE TABLE `pybot_map_equipset` (
+  `char_id` int(11) unsigned NOT NULL,
+  `map` varchar(11) NOT NULL,
+  `order` smallint(5) unsigned NOT NULL,
+  `equip` int(11) unsigned NOT NULL,
+  `nameid` smallint(5) unsigned NOT NULL,
+  `card0` smallint(5) unsigned NOT NULL,
+  `card1` smallint(5) unsigned NOT NULL,
+  `card2` smallint(5) unsigned NOT NULL,
+  `card3` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`char_id`, `map`, `order`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pybot_mvp`;

@@ -592,25 +592,29 @@ void ai_t::bot_cart_auto_get() {
 	}
 }
 
-// Botが武具一式をリロードする。
+// Botが各種武具一式をリロードする。
 void ai_t::bot_reload_equipset() {
 	CS_ENTER;
-	equip_pos equ = equip_pos(0);
+	bool rel = false;
+	const std::vector<block_if*>* enes = nullptr;
+	block_if* tar_ene = nullptr;
 	if (bot->battle_mode() != BM_NONE) {
 		if (DIFF_TICK(now, bot->last_reloaded_equipset_tick()) >= battle_config.pybot_reload_equipset_cool_time) {
-			for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
-			bot->iterate_meta_mobs(
-				enemies,
-				bot->target_enemy(),
-				[this, &equ] (int mid) {bot->load_equipset(mid, &equ);}
-			);
-			bot->last_reloaded_equipset_tick() = now;
+			rel = true;
+			enes = enemies;
+			tar_ene = bot->target_enemy();
 		}
-	} else if (!bot->last_reloaded_equipset_tick()) {
-		for (e_skill kid : bot->using_skills()) bot->load_skill_equipset(kid, &equ);
+	} else if (!bot->last_reloaded_equipset_tick()) rel = true;
+	equip_pos equ = equip_pos(0);
+	if (rel) {
+		for (e_skill kid : bot->using_skills())
+			bot->load_skill_equipset(kid, &equ);
+		if (bot->battle_mode() != BM_NONE)
+			bot->reload_buffer_equipset(&equ);
+		bot->load_map_equipset(bot->bl()->m, &equ);
 		bot->iterate_meta_mobs(
-			nullptr,
-			nullptr,
+			enes,
+			tar_ene,
 			[this, &equ] (int mid) {bot->load_equipset(mid, &equ);}
 		);
 		bot->last_reloaded_equipset_tick() = now;

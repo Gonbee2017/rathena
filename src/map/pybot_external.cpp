@@ -84,6 +84,7 @@ void do_final() {
 // パーティーBOT機能を初期化する。
 void do_init() {
 	CS_ENTER;
+	initialize_sc_types();
 	load_maps();
 	update_fever();
 	skill_mobs::instance = construct<skill_mobs>();
@@ -585,8 +586,8 @@ query_mvp_stats(
 	return res;
 }
 
-// Botが戦闘中に武具一式をリロードする。
-void reload_equipset_in_battle(
+// Botが武具一式をリロードする。
+void reload_equipset(
 	int cid // キャラクターID。
 ) {
 	CS_ENTER;

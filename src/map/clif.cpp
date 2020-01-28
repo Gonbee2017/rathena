@@ -10428,7 +10428,9 @@ CS_ENTER;
 
 	// [GonBee]
 	// 現在のマップの初期位置を保存する。
+	// またBotはマップを移動すると武具一式をリロードする。
 	pybot::set_map_initial_position(sd);
+	pybot::reload_equipset(sd->status.char_id);
 
 	// Party
 	// (needs to go after clif_spawn() to show hp bars correctly)

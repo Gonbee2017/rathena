@@ -98,7 +98,7 @@ std::string print_zeny(int zen);
 std::shared_ptr<std::vector<std::shared_ptr<journal_info>>> query_journal_infos(map_session_data* sd, nation_types nat_typ, map_types map_typ);
 std::shared_ptr<std::vector<std::shared_ptr<mvp_stats>>> query_mvp_ranking(const std::vector<e_job>& jobs, int lim);
 std::shared_ptr<mvp_stats> query_mvp_stats(int cid);
-void reload_equipset_in_battle(int cid);
+void reload_equipset(int cid);
 void set_last_summoned_id(map_session_data* sd, int bid);
 void set_map_initial_position(map_session_data* sd);
 bool skill_is_layable_on_lp(e_skill kid);

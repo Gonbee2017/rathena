@@ -82,6 +82,165 @@ SUBCMD_FUNC(Bot, Attack) {
 	else throw command_error{"周辺にモンスターが見つかりませんでした。"};
 }
 
+// メンバーのバッファ武具一式を一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, BufferEquipSet) {
+	CS_ENTER;
+	using es_val_t = std::pair<sc_type,buffer_equipset*>;
+	auto pri_equ_poss = [] (std::vector<ptr<equipset_item>>* itms) -> std::string {
+		std::vector<std::string> toks;
+		for (auto itm : *itms) toks.push_back(print_equip_pos(itm->equip));
+		return concatinate_strings(ALL_RANGE(toks), "+");
+	};
+
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<es_val_t> es_vals;
+		mem->buffer_equipsets()->copy(pybot::back_inserter(es_vals));
+		std::sort(ALL_RANGE(es_vals), [lea] (es_val_t lval, es_val_t rval) -> bool {
+			return lval.first > rval.first;
+		});
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のバッファ武具一式 ------\n";
+		for (es_val_t es_val : es_vals) {
+			sc_type sc_typ = es_val.first;
+			buffer_equipset* es = es_val.second;
+			efst_types ico = efst_types(StatusIconChangeTable[sc_typ]);
+			std::string ico_nam = UNKNOWN_SYMBOL;
+			if (ico != EFST_BLANK) ico_nam = ICON_NAME_TABLE[ico];
+			lea->output_buffer() << ico_nam << " " <<
+				es->items.size() << "個"
+				"@" << pri_equ_poss(&es->items) << "\n";
+		}
+		lea->output_buffer() << es_vals.size() << "件のバッファ武具一式が見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string ico_nam = shift_arguments(args);
+		auto sc_typ_ite = sc_types.find(ico_nam);
+		if (sc_typ_ite == sc_types.end()) 
+			throw command_error{print(
+				"「", ico_nam, "」というステータス変化はありません。"
+			)};
+		int equ = 0;
+		auto es = initialize<buffer_equipset>(sc_typ_ite->second);
+		for (int i = 0; i < EPO_MAX; ++i) {
+			if (i >= EPO_COSTUME_HEAD_TOP &&
+				i <= EPO_COSTUME_GARMENT
+			) continue;
+			int equ_ind = mem->sd()->equip_index[EPO2EQI_TABLE[i]];
+			if (equ_ind < 0) continue;
+			item* itm = &mem->sd()->inventory.u.items_inventory[equ_ind];
+			if (itm->equip & equ) continue;
+			auto esi = initialize<equipset_item>();
+			esi->order = equip_pos_orders(i);
+			esi->equip = equip_pos(itm->equip);
+			esi->key = construct<item_key>(itm->nameid, itm->card);
+			esi->key->identify = 1;
+			es->items.push_back(esi);
+			equ |= esi->equip;
+		}
+		if (es->items.empty()) {
+			buffer_equipset* old_es = mem->buffer_equipsets()->find(sc_typ_ite->second);
+			if (!old_es)
+				throw command_error{print(
+					"「", mem->name(), "」の「", sc_typ_ite->first, "」用バッファ武具一式はありません。"
+				)};
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sc_typ_ite->first, "」用バッファ武具一式の登録を抹消しました。"
+			));
+			mem->buffer_equipsets()->unregister(sc_typ_ite->second);
+		} else {
+			mem->buffer_equipsets()->register_(sc_typ_ite->second, es);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", sc_typ_ite->first, "」用バッファ武具一式として「",
+				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのバッファ武具一式をクリアする。
+SUBCMD_FUNC(Bot, BufferEquipSetClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->buffer_equipsets()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou, "件のバッファ武具一式の登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのバッファ武具一式をロードする。
+SUBCMD_FUNC(Bot, BufferEquipSetLoad) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	std::string ico_nam = shift_arguments(
+		args, "ステータス変化を指定してください。"
+	);
+	auto sc_typ_ite = sc_types.find(ico_nam);
+	if (sc_typ_ite == sc_types.end()) 
+		throw command_error{print(
+			"「", ico_nam, "」というステータス変化はありません。"
+		)};
+	buffer_equipset* es = mem->buffer_equipsets()->find(sc_typ_ite->second);
+	if (!es)
+		throw command_error{print(
+			"「", mem->name(), "」の「", sc_typ_ite->first, "」用バッファ武具一式はありません。"
+		)};
+	mem->load_buffer_equipset(sc_typ_ite->second);
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" <<	mem->name() << "」がロードした「" <<
+		sc_typ_ite->first << "」用バッファ武具一式 ------\n";
+	int cou = 0;
+	unsigned int equ = 0;
+	for (int i = 0; i < EPO2EQI_TABLE.size(); ++i) {
+		equip_index equ_ind = EPO2EQI_TABLE[i];
+		ptr<equipset_item> esi;
+		for (auto esi2 : es->items) {
+			if (esi2->equip & equip_bitmask[equ_ind]) {
+				esi = esi2;
+				break;
+			}
+		}
+		if (esi &&
+			!(esi->equip & equ)
+		) {
+			equ |= (unsigned int)(esi->equip);
+			int inv_ind = mem->find_inventory(*esi->key, esi->equip);
+			lea->output_buffer() << ID_PREFIX << esi->key->idb->nameid << " - " <<
+				print_item_key(*esi->key) << " "
+				"(" << print_equip_type(esi->key->idb);
+			if (inv_ind != INT_MIN) {
+				lea->output_buffer() << "@" << print_equip_pos(esi->equip);
+				++cou;
+			}
+			lea->output_buffer() << ")";
+			if (inv_ind == INT_MIN) lea->output_buffer() << " ※装備失敗";
+			lea->output_buffer() << "\n";
+		}
+	}
+	lea->output_buffer() << cou << "個の武具を装備しました。";
+	lea->show_next();
+	if (mem != lea) {
+		clif_emotion(mem->bl(), ET_HNG);
+		mem->last_reloaded_equipset_tick() = now;
+	}
+}
+
+// メンバーのバッファ武具一式を転送する。
+SUBCMD_FUNC(Bot, BufferEquipSetTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->buffer_equipsets()->import_(mem1->buffer_equipsets().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のバッファ武具一式を転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // メンバーのカート内アイテムを一覧表示する。
 SUBCMD_FUNC(Bot, Cart) {
 	CS_ENTER;
@@ -652,7 +811,10 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 	}
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
-	if (mem != lea) clif_emotion(mem->bl(), ET_HNG);
+	if (mem != lea) {
+		clif_emotion(mem->bl(), ET_HNG);
+		mem->last_reloaded_equipset_tick() = now;
+	}
 }
 
 // メンバーの武具一式を転送する。
@@ -1624,6 +1786,175 @@ SUBCMD_FUNC(Bot, LootLimit) {
 	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
 }
 
+// メンバーのマップ武具一式を一覧表示、または登録、または抹消する。
+SUBCMD_FUNC(Bot, MapEquipSet) {
+	CS_ENTER;
+	using es_val_t = std::pair<int,map_equipset*>;
+	auto pri_equ_poss = [] (std::vector<ptr<equipset_item>>* itms) -> std::string {
+		std::vector<std::string> toks;
+		for (auto itm : *itms) toks.push_back(print_equip_pos(itm->equip));
+		return concatinate_strings(ALL_RANGE(toks), "+");
+	};
+
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	if (args.empty()) {
+		std::vector<es_val_t> es_vals;
+		mem->map_equipsets()->copy(pybot::back_inserter(es_vals));
+		std::sort(ALL_RANGE(es_vals), [lea] (es_val_t lval, es_val_t rval) -> bool {
+			return lval.first > rval.first;
+		});
+		lea->output_buffer() = std::stringstream();
+		lea->output_buffer() << "------ 「" <<	mem->name() << "」のマップ武具一式 ------\n";
+		for (es_val_t es_val : es_vals) {
+			int m = es_val.first;
+			map_equipset* es = es_val.second;
+			auto map = id_maps.at(m);
+			std::string jnam = UNKNOWN_SYMBOL;
+			std::string enam = UNKNOWN_SYMBOL;
+			if (map) {
+				jnam = map->name_japanese;
+				enam = map->name_english;
+			}
+			lea->output_buffer() << jnam << " (" << enam << ") " <<
+				es->items.size() << "個"
+				"@" << pri_equ_poss(&es->items) << "\n";
+		}
+		lea->output_buffer() << es_vals.size() << "件のマップ武具一式が見つかりました。\n";
+		lea->show_next();
+	} else {
+		std::string map_str = shift_arguments(args);
+		std::string map_str_lc = lowercase(map_str);
+		int m;
+		if (map_str_lc == THIS_MAP_NAME) m = lea->bl()->m;
+		else m = map_mapname2mapid(map_str_lc.c_str());
+		if (m < 0) 
+			throw command_error{print(
+				"「", map_str, "」というマップIDは見つかりませんでした。"
+			)};
+		auto map = id_maps.at(m);
+		int equ = 0;
+		auto es = initialize<map_equipset>(m);
+		for (int i = 0; i < EPO_MAX; ++i) {
+			if (i >= EPO_COSTUME_HEAD_TOP &&
+				i <= EPO_COSTUME_GARMENT
+			) continue;
+			int equ_ind = mem->sd()->equip_index[EPO2EQI_TABLE[i]];
+			if (equ_ind < 0) continue;
+			item* itm = &mem->sd()->inventory.u.items_inventory[equ_ind];
+			if (itm->equip & equ) continue;
+			auto esi = initialize<equipset_item>();
+			esi->order = equip_pos_orders(i);
+			esi->equip = equip_pos(itm->equip);
+			esi->key = construct<item_key>(itm->nameid, itm->card);
+			esi->key->identify = 1;
+			es->items.push_back(esi);
+			equ |= esi->equip;
+		}
+		if (es->items.empty()) {
+			map_equipset* old_es = mem->map_equipsets()->find(m);
+			if (!old_es)
+				throw command_error{print(
+					"「", mem->name(), "」の「", map->name_japanese, "(", map->name_english, ")」用マップ武具一式はありません。"
+				)};
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", map->name_japanese, "(", map->name_english, ")」用マップ武具一式の登録を抹消しました。"
+			));
+			mem->map_equipsets()->unregister(m);
+		} else {
+			mem->map_equipsets()->register_(m, es);
+			show_client(lea->fd(), print(
+				"「", mem->name(), "」は「", map->name_japanese, "(", map->name_english, ")」用マップ武具一式として「",
+				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
+			));
+		}
+		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	}
+}
+
+// メンバーのマップ武具一式をクリアする。
+SUBCMD_FUNC(Bot, MapEquipSetClear) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int cou = mem->map_equipsets()->clear();
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」の", cou, "件のマップ武具一式の登録を抹消しました。"
+	));
+	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+}
+
+// メンバーのマップ武具一式をロードする。
+SUBCMD_FUNC(Bot, MapEquipSetLoad) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	std::string map_str = shift_arguments(args);
+	std::string map_str_lc = lowercase(map_str);
+	int m;
+	if (map_str_lc == THIS_MAP_NAME) m = lea->bl()->m;
+	else m = map_mapname2mapid(map_str_lc.c_str());
+	if (m < 0) 
+		throw command_error{print(
+			"「", map_str, "」というマップIDは見つかりませんでした。"
+		)};
+	auto map = id_maps.at(m);
+	map_equipset* es = mem->map_equipsets()->find(m);
+	if (!es)
+		throw command_error{print(
+			"「", mem->name(), "」の「", map->name_japanese, "(", map->name_english, ")」用マップ武具一式はありません。"
+		)};
+	mem->load_map_equipset(m);
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 「" <<	mem->name() << "」がロードした「" <<
+		map->name_japanese, "(", map->name_english, ")」用マップ武具一式 ------\n";
+	int cou = 0;
+	unsigned int equ = 0;
+	for (int i = 0; i < EPO2EQI_TABLE.size(); ++i) {
+		equip_index equ_ind = EPO2EQI_TABLE[i];
+		ptr<equipset_item> esi;
+		for (auto esi2 : es->items) {
+			if (esi2->equip & equip_bitmask[equ_ind]) {
+				esi = esi2;
+				break;
+			}
+		}
+		if (esi &&
+			!(esi->equip & equ)
+		) {
+			equ |= (unsigned int)(esi->equip);
+			int inv_ind = mem->find_inventory(*esi->key, esi->equip);
+			lea->output_buffer() << ID_PREFIX << esi->key->idb->nameid << " - " <<
+				print_item_key(*esi->key) << " "
+				"(" << print_equip_type(esi->key->idb);
+			if (inv_ind != INT_MIN) {
+				lea->output_buffer() << "@" << print_equip_pos(esi->equip);
+				++cou;
+			}
+			lea->output_buffer() << ")";
+			if (inv_ind == INT_MIN) lea->output_buffer() << " ※装備失敗";
+			lea->output_buffer() << "\n";
+		}
+	}
+	lea->output_buffer() << cou << "個の武具を装備しました。";
+	lea->show_next();
+	if (mem != lea) {
+		clif_emotion(mem->bl(), ET_HNG);
+		mem->last_reloaded_equipset_tick() = now;
+	}
+}
+
+// メンバーのマップ武具一式を転送する。
+SUBCMD_FUNC(Bot, MapEquipSetTransport) {
+	CS_ENTER;
+	block_if* mem1 = shift_arguments_then_find_member(lea, args);
+	block_if* mem2 = shift_arguments_then_find_member(lea, args);
+	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
+	int cou = mem2->map_equipsets()->import_(mem1->map_equipsets().get());
+	show_client(lea->fd(), print(
+		"「", mem1->name(), "」から「", mem2->name(), "」に",
+		cou, "件のマップ武具一式を転送しました。"
+	));
+	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+}
+
 // メンバーが現在位置をメモする。
 SUBCMD_FUNC(Bot, Memo) {
 	CS_ENTER;
@@ -2306,7 +2637,13 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 			int m = kew_val.first;
 			e_element* ele = kew_val.second;
 			auto map = id_maps.at(m);
-			lea->output_buffer() << map->name_japanese << " (" << map->name_english << ") " <<
+			std::string jnam = UNKNOWN_SYMBOL;
+			std::string enam = UNKNOWN_SYMBOL;
+			if (map) {
+				jnam = map->name_japanese;
+				enam = map->name_english;
+			}
+			lea->output_buffer() << jnam << " (" << enam << ") " <<
 				ELEMENT_NAME_TABLE[*ele] << "\n";
 		}
 		lea->output_buffer() << kew_vals.size() << "件の武器属性付与が見つかりました。\n";
@@ -2472,7 +2809,9 @@ SUBCMD_FUNC(Bot, sKillEquipSetClear) {
 SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	std::string sk_nam = shift_arguments(args);
+	std::string sk_nam = shift_arguments(
+		args, "スキルを指定してください。"
+	);
 	s_skill* sk = mem->find_skill(sk_nam);
 	if (!sk)
 		throw command_error{print(
@@ -2519,7 +2858,10 @@ SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
 	}
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
-	if (mem != lea) clif_emotion(mem->bl(), ET_HNG);
+	if (mem != lea) {
+		clif_emotion(mem->bl(), ET_HNG);
+		mem->last_reloaded_equipset_tick() = now;
+	}
 }
 
 // メンバーのスキル武具一式を転送する。

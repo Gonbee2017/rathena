@@ -1421,6 +1421,26 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot attack]\n"
 		"特定のモンスターを攻撃する。\n"
 		"入力例 [@bot attack プパ]\n"
+	), SUBCMD_DESC(Bot, BufferEquipSet             , bes  ,
+		"------ BufferEquipSet (bes) サブコマンド ------\n"
+		"バッファ武具一式を一覧表示する。\n"
+		"入力例 [@bot bufferequipset アサクロ]\n"
+		"バッファ武具一式を登録する。\n"
+		"入力例 [@bot bufferequipset アサクロ 集中力向上]\n"
+		"バッファ武具一式の登録を抹消する。\n"
+		"入力例 [@bot bufferequipset アサクロ 武器属性付与(火)]\n"
+	), SUBCMD_DESC(Bot, BufferEquipSetClear        ,      ,
+		"------ BufferEquipSetClear サブコマンド ------\n"
+		"バッファ武具一式をクリアする。\n"
+		"入力例 [@bot bufferequipsetclear アサクロ]\n"
+	), SUBCMD_DESC(Bot, BufferEquipSetLoad         , besl ,
+		"------ BufferEquipSetLoad (besl) サブコマンド ------\n"
+		"バッファ武具一式をロードする。\n"
+		"入力例 [@bot bufferequipsetload アサクロ 集中力向上\n"
+	), SUBCMD_DESC(Bot, BufferEquipSetTransport    , best ,
+		"------ BufferEquipSetTransport (best) サブコマンド ------\n"
+		"バッファ武具一式を転送する。\n"
+		"入力例 [@bot bufferequipsettransport アサクロ チェイス]\n"
 	), SUBCMD_DESC(Bot, Cart                       , c    ,
 		"------ Cart (c) サブコマンド ------\n"
 		"カートのアイテムを一覧表示する。\n"
@@ -1683,6 +1703,26 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ LootLimit (ll) サブコマンド ------\n"
 		"ドロップアイテムを拾える重量を制限する。\n"
 		"入力例 [@bot lootlimit スミス 70]\n"
+	), SUBCMD_DESC(Bot, MapEquipSet                , mes  ,
+		"------ MapEquipSet (mes) サブコマンド ------\n"
+		"マップ武具一式を一覧表示する。\n"
+		"入力例 [@bot mapequipset アサクロ]\n"
+		"マップ武具一式を登録する。\n"
+		"入力例 [@bot mapequipset アサクロ pay_dun00]\n"
+		"マップ武具一式の登録を抹消する。\n"
+		"入力例 [@bot mapequipset アサクロ pay_dun01]\n"
+	), SUBCMD_DESC(Bot, MapEquipSetClear           ,      ,
+		"------ MapEquipSetClear サブコマンド ------\n"
+		"マップ武具一式をクリアする。\n"
+		"入力例 [@bot mapequipsetclear アサクロ]\n"
+	), SUBCMD_DESC(Bot, MapEquipSetLoad            , mesl ,
+		"------ MapEquipSetLoad (mesl) サブコマンド ------\n"
+		"マップ武具一式をロードする。\n"
+		"入力例 [@bot mapequipsetload アサクロ pay_dun00\n"
+	), SUBCMD_DESC(Bot, MapEquipSetTransport       , mest ,
+		"------ MapEquipSetTransport (mest) サブコマンド ------\n"
+		"マップ武具一式を転送する。\n"
+		"入力例 [@bot mapequipsettransport アサクロ チェイス]\n"
 	), SUBCMD_DESC(Bot, Memo                       , m    ,
 		"------ Memo (m) サブコマンド ------\n"
 		"現在の位置をメモする。\n"
@@ -1861,7 +1901,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillEquipSetTransport (kest) サブコマンド ------\n"
 		"スキル武具一式を転送する。\n"
 		"入力例 [@bot skillequipsettransport ドナ ドナ2]\n"
-	), SUBCMD_DESC(Bot, sKillFirst                  , kf   ,
+	), SUBCMD_DESC(Bot, sKillFirst                 , kf   ,
 		"------ sKillFirst (kf) サブコマンド ------\n"
 		"優先スキルを一覧表示する。\n"
 		"入力例 [@bot skillfirst ハイウィズ]\n"
@@ -2103,6 +2143,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 // @Botのサブコマンド手続きのベクタ。
 const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, Attack                     , a    ),
+	SUBCMD_PROC(Bot, BufferEquipSet             , bes  ),
+	SUBCMD_PROC(Bot, BufferEquipSetClear        ,      ),
+	SUBCMD_PROC(Bot, BufferEquipSetLoad         , besl ),
+	SUBCMD_PROC(Bot, BufferEquipSetTransport    , best ),
 	SUBCMD_PROC(Bot, Cart                       , c    ),
 	SUBCMD_PROC(Bot, CartAutoGet                , cag  ),
 	SUBCMD_PROC(Bot, CartAutoGetClear           ,      ),
@@ -2154,6 +2198,10 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, LogOut                     , lo   ),
 	SUBCMD_PROC(Bot, Loot                       , l    ),
 	SUBCMD_PROC(Bot, LootLimit                  , ll   ),
+	SUBCMD_PROC(Bot, MapEquipSet                , mes  ),
+	SUBCMD_PROC(Bot, MapEquipSetClear           ,      ),
+	SUBCMD_PROC(Bot, MapEquipSetLoad            , mesl ),
+	SUBCMD_PROC(Bot, MapEquipSetTransport       , mest ),
 	SUBCMD_PROC(Bot, Memo                       , m    ),
 	SUBCMD_PROC(Bot, MonsterFirst               , mf   ),
 	SUBCMD_PROC(Bot, MonsterFirstClear          ,      ),
@@ -3288,9 +3336,9 @@ const std::array<
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	"ダーククロー",
-	"No_Text",
-	"No_Text",
-	"No_Text",
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	"永久霜",
@@ -3298,16 +3346,16 @@ const std::array<
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
-	"No_Text",
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
+	UNKNOWN_SYMBOL,
 	"ボザのコップ",
 	"バインド状態",
 	"エターナルチェーン",
@@ -3341,7 +3389,7 @@ const std::array<
 	UNKNOWN_SYMBOL,
 	UNKNOWN_SYMBOL,
 	"スペアリブ",
-	"No_Text",
+	UNKNOWN_SYMBOL,
 	"月の加護",
 	"火の加護",
 	"水の加護",
@@ -3932,6 +3980,8 @@ const std::unordered_map<
 	{std::type_index(typeid(const equip_pos_orders))  , SQLDT_INT      },
 	{std::type_index(typeid(quest_state))             , SQLDT_INT      },
 	{std::type_index(typeid(const quest_state))       , SQLDT_INT      },
+	{std::type_index(typeid(sc_type))                 , SQLDT_INT      },
+	{std::type_index(typeid(const sc_type))           , SQLDT_INT      },
 	{std::type_index(typeid(time_t))                  , SQLDT_UINT32   },
 	{std::type_index(typeid(const time_t))            , SQLDT_UINT32   },
 };
@@ -4198,6 +4248,12 @@ std::unordered_map<
 
 // 現在チック。
 t_tick now;
+
+// アイコン名をキーとするステータス変化のマップ。
+std::unordered_map<
+	std::string, // ステータス名。
+	sc_type      // ステータス変化。
+> sc_types;
 
 // 種類をキーとするマップのベクタのマップ。
 std::unordered_map<

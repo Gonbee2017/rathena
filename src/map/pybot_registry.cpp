@@ -8,6 +8,19 @@ namespace pybot {
 // -----------------------------------------------------------------------------
 // レジストリ用関数の定義
 
+// DBからバッファ武具一式をクリアする関数を作る。
+registry_t<sc_type,buffer_equipset>::clear_func // 作った関数。
+clear_buffer_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_buffer_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBからカート自動補充アイテムをクリアする関数を作る。
 registry_t<int,int>::clear_func // 作った関数。
 clear_cart_auto_get_item_func(
@@ -177,6 +190,19 @@ clear_limit_skill_func(
 	};
 }
 
+// DBからマップ武具一式をクリアする関数を作る。
+registry_t<int,map_equipset>::clear_func // 作った関数。
+clear_map_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses) {
+		ses->execute(
+			"DELETE FROM `pybot_map_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
 // DBから通常攻撃ポリシーをクリアする関数を作る。
 registry_t<int,normal_attack_policy>::clear_func // 作った関数。
 clear_normal_attack_policy_func(
@@ -269,7 +295,7 @@ clear_sell_item_func(
 }
 
 // DBからスキル武具一式をクリアする関数を作る。
-registry_t<e_skill,equipset_t>::clear_func // 作った関数。
+registry_t<e_skill,skill_equipset>::clear_func // 作った関数。
 clear_skill_equipset_func(
 	int cid // キャラクターID。              
 ) {
@@ -342,6 +368,21 @@ clear_team_func(
 		ses->execute(
 			"DELETE FROM `pybot_team` "
 			"WHERE `leader_char_id` = ", construct<sql_param>(cid)
+		);
+	};
+}
+
+// DBからバッファ武具一式を削除する関数を作る。
+registry_t<sc_type,buffer_equipset>::save_func // 作った関数。
+delete_buffer_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, sc_type sc_typ, buffer_equipset* equ_set) {
+		ses->execute(
+			"DELETE FROM `pybot_buffer_equipset` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid   ), " AND"
+			" `type` = "   , construct<sql_param>(sc_typ)
 		);
 	};
 }
@@ -547,6 +588,24 @@ delete_limit_skill_func(
 	};
 }
 
+// DBからマップ武具一式を削除する関数を作る。
+registry_t<int,map_equipset>::save_func // 作った関数。
+delete_map_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int m, map_equipset* equ_set) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			ses->execute(
+				"DELETE FROM `pybot_map_equipset` "
+				"WHERE"
+				" `char_id` = ", construct<sql_param>(cid                      ), " AND"
+				" `map` = "    , construct<sql_param>(map->name_english.c_str())
+			);
+		}
+	};
+}
+
 // DBから通常攻撃ポリシーを削除する関数を作る。
 registry_t<int,normal_attack_policy>::save_func // 作った関数。
 delete_normal_attack_policy_func(
@@ -739,6 +798,30 @@ delete_team_func(
 			" `leader_char_id` = ", construct<sql_param>(cid    ), " AND"
 			" `team_number` = "   , construct<sql_param>(tea_num)
 		);
+	};
+}
+
+// DBにバッファ武具一式を挿入する関数を作る。
+registry_t<sc_type,buffer_equipset>::save_func // 作った関数。
+insert_buffer_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, sc_type sc_typ, buffer_equipset* equ_set) {
+		for (auto esi : equ_set->items) {
+			ses->execute(
+				"INSERT INTO `pybot_buffer_equipset` "
+				"VALUES"
+				"(", construct<sql_param>(cid              ), ","
+				" ", construct<sql_param>(sc_typ           ), ","
+				" ", construct<sql_param>(esi->order       ), ","
+				" ", construct<sql_param>(esi->equip       ), ","
+				" ", construct<sql_param>(esi->key->nameid ), ","
+				" ", construct<sql_param>(esi->key->card[0]), ","
+				" ", construct<sql_param>(esi->key->card[1]), ","
+				" ", construct<sql_param>(esi->key->card[2]), ","
+				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
 	};
 }
 
@@ -961,6 +1044,33 @@ insert_limit_skill_func(
 	};
 }
 
+// DBにマップ武具一式を挿入する関数を作る。
+registry_t<int,map_equipset>::save_func // 作った関数。
+insert_map_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int m, map_equipset* equ_set) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			for (auto esi : equ_set->items) {
+				ses->execute(
+					"INSERT INTO `pybot_map_equipset` "
+					"VALUES"
+					"(", construct<sql_param>(cid                      ), ","
+					" ", construct<sql_param>(map->name_english.c_str()), ","
+					" ", construct<sql_param>(esi->order               ), ","
+					" ", construct<sql_param>(esi->equip               ), ","
+					" ", construct<sql_param>(esi->key->nameid         ), ","
+					" ", construct<sql_param>(esi->key->card[0]        ), ","
+					" ", construct<sql_param>(esi->key->card[1]        ), ","
+					" ", construct<sql_param>(esi->key->card[2]        ), ","
+					" ", construct<sql_param>(esi->key->card[3]        ), ")"
+				);
+			}
+		}
+	};
+}
+
 // DBに通常攻撃ポリシーを挿入する関数を作る。
 registry_t<int,normal_attack_policy>::save_func // 作った関数。
 insert_normal_attack_policy_func(
@@ -1174,6 +1284,53 @@ insert_team_func(
 				" ", construct<sql_param>(mem->char_id), ")"
 			);
 		}
+	};
+}
+
+// DBからバッファ武具一式をロードする関数を作る。
+registry_t<sc_type,buffer_equipset>::load_func // 作った関数。
+load_buffer_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<sc_type,buffer_equipset>* reg) {
+		sc_type sc_typ;
+		int ord;
+		int equ;
+		uint16_t nid;
+		uint16_t car[MAX_SLOTS];
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("type"  , sc_typ), "`,"
+			" `", construct<sql_column>("order" , ord   ), "`,"
+			" `", construct<sql_column>("equip" , equ   ), "`,"
+			" `", construct<sql_column>("nameid", nid   ), "`,"
+			" `", construct<sql_column>("card0" , car[0]), "`,"
+			" `", construct<sql_column>("card1" , car[1]), "`,"
+			" `", construct<sql_column>("card2" , car[2]), "`,"
+			" `", construct<sql_column>("card3" , car[3]), "` "
+			"FROM `pybot_buffer_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid), " "
+			"ORDER BY"
+			" `type`,"
+			" `order`"
+		);
+		ptr<buffer_equipset> equ_set;
+		auto flu = [reg, &equ_set] () {
+			if (equ_set) reg->register_(equ_set->type, equ_set);
+		};
+		while (ses->next_row()) {
+			if (!equ_set ||
+				sc_typ != equ_set->type
+			) {
+				flu();
+				equ_set = initialize<buffer_equipset>(sc_typ);
+			}
+			auto ik = construct<item_key>(nid, car);
+			ik->identify = 1;
+			auto ei = initialize<equipset_item>(equip_pos_orders(ord), equip_pos(equ), ik);
+			equ_set->items.push_back(ei);
+		}
+		flu();
 	};
 }
 
@@ -1406,8 +1563,8 @@ load_journal_func(
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) {
-			int ind = mapindex_name2id(map);
-			if (ind) reg->register_(map_mapindex2mapid(ind), initialize<coords_t>(x, y));
+			int m = map_mapindex2mapid(mapindex_name2id(map));
+			if (m >= 0) reg->register_(m, initialize<coords_t>(x, y));
 		}
 	};
 }
@@ -1428,8 +1585,8 @@ load_kew_element_func(
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) {
-			int ind = mapindex_name2id(map);
-			if (ind) reg->register_(map_mapindex2mapid(ind), initialize<e_element>(ele));
+			int m = map_mapindex2mapid(mapindex_name2id(map));
+			if (m >= 0) reg->register_(m, initialize<e_element>(ele));
 		}
 	};
 }
@@ -1450,6 +1607,57 @@ load_limit_skill_func(
 			"WHERE `char_id` = ", construct<sql_param>(cid)
 		);
 		while (ses->next_row()) reg->register_(kid, initialize<int>(klv));
+	};
+}
+
+// DBからマップ武具一式をロードする関数を作る。
+registry_t<int,map_equipset>::load_func // 作った関数。
+load_map_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, registry_t<int,map_equipset>* reg) {
+		char map[12];
+		int ord;
+		int equ;
+		uint16_t nid;
+		uint16_t car[MAX_SLOTS];
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("map"   , map   ), "`,"
+			" `", construct<sql_column>("order" , ord   ), "`,"
+			" `", construct<sql_column>("equip" , equ   ), "`,"
+			" `", construct<sql_column>("nameid", nid   ), "`,"
+			" `", construct<sql_column>("card0" , car[0]), "`,"
+			" `", construct<sql_column>("card1" , car[1]), "`,"
+			" `", construct<sql_column>("card2" , car[2]), "`,"
+			" `", construct<sql_column>("card3" , car[3]), "` "
+			"FROM `pybot_map_equipset` "
+			"WHERE `char_id` = ", construct<sql_param>(cid), " "
+			"ORDER BY"
+			" `map`,"
+			" `order`"
+		);
+		ptr<map_equipset> equ_set;
+		auto flu = [reg, &equ_set] () {
+			if (equ_set) reg->register_(equ_set->map_id, equ_set);
+		};
+		int m;
+		while (ses->next_row()) {
+			m = map_mapindex2mapid(mapindex_name2id(map));
+			if (m >= 0) {
+				if (!equ_set ||
+					m != equ_set->map_id
+				) {
+					flu();
+					equ_set = initialize<map_equipset>(m);
+				}
+				auto ik = construct<item_key>(nid, car);
+				ik->identify = 1;
+				auto ei = initialize<equipset_item>(equip_pos_orders(ord), equip_pos(equ), ik);
+				equ_set->items.push_back(ei);
+			}
+		}
+		flu();
 	};
 }
 
@@ -1740,6 +1948,36 @@ load_team_func(
 	};
 }
 
+// DBのバッファ武具一式を更新する関数を作る。
+registry_t<sc_type,buffer_equipset>::save_func // 作った関数。
+update_buffer_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, sc_type sc_typ, buffer_equipset* equ_set) {
+		ses->execute(
+			"DELETE FROM `pybot_buffer_equipset` "
+			"WHERE"
+			" `char_id` = ", construct<sql_param>(cid   ), " AND"
+			" `type` = "   , construct<sql_param>(sc_typ)
+		);
+		for (auto esi : equ_set->items) {
+			ses->execute(
+				"INSERT INTO `pybot_buffer_equipset` "
+				"VALUES"
+				"(", construct<sql_param>(cid              ), ","
+				" ", construct<sql_param>(sc_typ           ), ","
+				" ", construct<sql_param>(esi->order       ), ","
+				" ", construct<sql_param>(esi->equip       ), ","
+				" ", construct<sql_param>(esi->key->nameid ), ","
+				" ", construct<sql_param>(esi->key->card[0]), ","
+				" ", construct<sql_param>(esi->key->card[1]), ","
+				" ", construct<sql_param>(esi->key->card[2]), ","
+				" ", construct<sql_param>(esi->key->card[3]), ")"
+			);
+		}
+	};
+}
+
 // DBのカート自動補充アイテムを更新する関数を作る。
 registry_t<int,int>::save_func // 作った関数。
 update_cart_auto_get_item_func(
@@ -1871,6 +2109,39 @@ update_limit_skill_func(
 			" `char_id` = " , construct<sql_param>(cid), " AND"
 			" `skill_id` = ", construct<sql_param>(kid)
 		);
+	};
+}
+
+// DBのマップ武具一式を更新する関数を作る。
+registry_t<int,map_equipset>::save_func // 作った関数。
+update_map_equipset_func(
+	int cid // キャラクターID。              
+) {
+	return [cid] (sql_session* ses, int m, map_equipset* equ_set) {
+		auto map = find_map_data(id_maps, m);
+		if (map) {
+			ses->execute(
+				"DELETE FROM `pybot_map_equipset` "
+				"WHERE"
+				" `char_id` = ", construct<sql_param>(cid                      ), " AND"
+				" `map` = "    , construct<sql_param>(map->name_english.c_str())
+			);
+			for (auto esi : equ_set->items) {
+				ses->execute(
+					"INSERT INTO `pybot_map_equipset` "
+					"VALUES"
+					"(", construct<sql_param>(cid                      ), ","
+					" ", construct<sql_param>(map->name_english.c_str()), ","
+					" ", construct<sql_param>(esi->order               ), ","
+					" ", construct<sql_param>(esi->equip               ), ","
+					" ", construct<sql_param>(esi->key->nameid         ), ","
+					" ", construct<sql_param>(esi->key->card[0]        ), ","
+					" ", construct<sql_param>(esi->key->card[1]        ), ","
+					" ", construct<sql_param>(esi->key->card[2]        ), ","
+					" ", construct<sql_param>(esi->key->card[3]        ), ")"
+				);
+			}
+		}
 	};
 }
 

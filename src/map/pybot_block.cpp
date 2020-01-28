@@ -72,6 +72,7 @@ int battler_if::weapon_attack_element_ratio(block_if* tar) {RAISE_NOT_IMPLEMENTE
 int& bot_if::bot_index() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_emotion_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 t_tick& bot_if::last_reloaded_equipset_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void bot_if::reload_buffer_equipset(equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::reload_skill_equipset(e_skill kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void bot_if::respawn() {RAISE_NOT_IMPLEMENTED_ERROR;}
 skill_id_set& bot_if::using_skills() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -224,7 +225,10 @@ bool member_if::is_carton() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::is_sit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::item_not_save_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& member_if::item_save_mobs() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::load_buffer_equipset(sc_type sc_typ, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_equipset(int mid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::load_equipset(const std::vector<ptr<equipset_item>>& es_itms, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
+void member_if::load_map_equipset(int m, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_play_skill(int mid, e_skill* kid) {RAISE_NOT_IMPLEMENTED_ERROR;}
 void member_if::load_skill_equipset(e_skill kid, equip_pos* equ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<loot_modes>>& member_if::loot() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -249,6 +253,8 @@ std::unordered_set<int>& member_if::request_items() {RAISE_NOT_IMPLEMENTED_ERROR
 ptr<regnum_t<int>>& member_if::safe_cast_time() {RAISE_NOT_IMPLEMENTED_ERROR;}
 map_session_data*& member_if::sd() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<e_skill,skill_equipset>>& member_if::skill_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<sc_type,buffer_equipset>>& member_if::buffer_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<registry_t<int,map_equipset>>& member_if::map_equipsets() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::supply_hp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,e_element>>& member_if::kew_elements() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -680,6 +686,18 @@ t_tick& bot_impl::last_emotion_tick() {
 // 最後に武具一式をリロードしたチック。
 t_tick& bot_impl::last_reloaded_equipset_tick() {
 	return last_reloaded_equipset_tick_;
+}
+
+// バッファ武具一式をリロードする。
+void bot_impl::reload_buffer_equipset(
+	equip_pos* equ // 装備済み部位。
+) {
+	buffer_equipsets()->iterate(
+		[this, equ] (sc_type sc_typ, buffer_equipset* equ_set) -> bool {
+			if (!sc()->data[sc_typ]) load_buffer_equipset(sc_typ, equ);
+			return true;
+		}
+	);
 }
 
 // スキル武具一式をリロードする。
@@ -1837,6 +1855,11 @@ member_impl::bl() {
 	return &sd()->bl;
 }
 
+// バッファ武具一式のレジストリ。
+ptr<registry_t<sc_type,buffer_equipset>>& member_impl::buffer_equipsets() {
+	return buffer_equipsets_;
+}
+
 // メンバーがスキルを使えるかを判定する。
 bool // 結果。
 member_impl::can_use_skill(
@@ -2302,35 +2325,59 @@ ptr<registry_t<e_skill,int>>& member_impl::limit_skills() {
 	return limit_skills_;
 }
 
+// メンバーがバッファ武具一式をロードする。
+void member_impl::load_buffer_equipset(
+	sc_type sc_typ, // ステータス変化。
+	equip_pos* equ  // 装備済み部位。
+) {
+	buffer_equipset* es = buffer_equipsets()->find(sc_typ);
+	if (es) load_equipset(es->items, equ);
+}
+
 // メンバーが武具一式をロードする。
 void member_impl::load_equipset(
 	int mid,       // モンスターID。
-	equip_pos* equ // 装備済み部位
+	equip_pos* equ // 装備済み部位。
+) {
+	equipset_t* es = equipsets()->find(mid);
+	if (es) load_equipset(es->items, equ);
+}
+
+// メンバーが武具一式をロードする。
+void member_impl::load_equipset(
+	const std::vector<ptr<equipset_item>>& es_itms, // アイテムのベクタ。
+	equip_pos* equ                                  // 装備済み部位。
 ) {
 	equip_pos dum_equ = equip_pos(0);
 	if (!equ) equ = &dum_equ;
-	equipset_t* es = equipsets()->find(mid);
-	if (es) {
-		for (auto es_itm : es->items) {
-			if (!(es_itm->equip & *equ)) {
-				int inv_ind = find_inventory(*es_itm->key, es_itm->equip);
+	for (auto es_itm : es_itms) {
+		if (!(es_itm->equip & *equ)) {
+			int inv_ind = find_inventory(*es_itm->key, es_itm->equip);
+			if (inv_ind == INT_MIN) {
+				inv_ind = find_inventory(*es_itm->key, 0);
 				if (inv_ind == INT_MIN) {
-					inv_ind = find_inventory(*es_itm->key, 0);
-					if (inv_ind == INT_MIN) {
-						if (dynamic_cast<bot_impl*>(this))
-							request_items().insert(es_itm->key->nameid);
-						continue;
-					}
-					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
+					if (dynamic_cast<bot_impl*>(this))
+						request_items().insert(es_itm->key->nameid);
+					continue;
 				}
-				if (es_itm->equip == EQP_AMMO &&
-					sd()->inventory.u.items_inventory[inv_ind].amount < AMMO_REQUEST_THRESHOLD &&
-					dynamic_cast<bot_impl*>(this)
-				) request_items().insert(es_itm->key->nameid);
-				*equ = equip_pos(*equ | es_itm->equip);
+				if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
 			}
+			if (es_itm->equip == EQP_AMMO &&
+				sd()->inventory.u.items_inventory[inv_ind].amount < AMMO_REQUEST_THRESHOLD &&
+				dynamic_cast<bot_impl*>(this)
+			) request_items().insert(es_itm->key->nameid);
+			*equ = equip_pos(*equ | es_itm->equip);
 		}
 	}
+}
+
+// メンバーがマップ武具一式をロードする。
+void member_impl::load_map_equipset(
+	int m,          // マップID。
+	equip_pos* equ  // 装備済み部位。
+) {
+	map_equipset* es = map_equipsets()->find(m);
+	if (es) load_equipset(es->items, equ);
 }
 
 // メンバーが演奏スキルをロードする。
@@ -2360,32 +2407,10 @@ void member_impl::load_policy(
 // メンバーがスキル武具一式をロードする。
 void member_impl::load_skill_equipset(
 	e_skill kid,   // スキルID。
-	equip_pos* equ // 装備済み部位
+	equip_pos* equ // 装備済み部位。
 ) {
-	equip_pos dum_equ = equip_pos(0);
-	if (!equ) equ = &dum_equ;
 	skill_equipset* es = skill_equipsets()->find(kid);
-	if (es) {
-		for (auto es_itm : es->items) {
-			if (!(es_itm->equip & *equ)) {
-				int inv_ind = find_inventory(*es_itm->key, es_itm->equip);
-				if (inv_ind == INT_MIN) {
-					inv_ind = find_inventory(*es_itm->key, 0);
-					if (inv_ind == INT_MIN) {
-						if (dynamic_cast<bot_impl*>(this))
-							request_items().insert(es_itm->key->nameid);
-						continue;
-					}
-					if (!pc_equipitem(sd(), inv_ind, es_itm->equip)) continue;
-				}
-				if (es_itm->equip == EQP_AMMO &&
-					sd()->inventory.u.items_inventory[inv_ind].amount < AMMO_REQUEST_THRESHOLD &&
-					dynamic_cast<bot_impl*>(this)
-				) request_items().insert(es_itm->key->nameid);
-				*equ = equip_pos(*equ | es_itm->equip);
-			}
-		}
-	}
+	if (es) load_equipset(es->items, equ);
 }
 
 // ドロップアイテムを拾うかの登録値。
@@ -2412,6 +2437,11 @@ member_impl::magicpower_is_active() {
 	status_change_entry* mag_pow_ent = sc()->data[SC_MAGICPOWER];
 	return mag_pow_ent &&
 		!mag_pow_ent->val4;
+}
+
+// マップ武具一式のレジストリ。
+ptr<registry_t<int,map_equipset>>& member_impl::map_equipsets() {
+	return map_equipsets_;
 }
 
 // 使用する最大の詠唱時間の登録値。
@@ -3182,6 +3212,13 @@ member_t::member_t(
 	supply_sp_rate() = construct<regnum_t<int>>(sd(), "pybot_supply_sp_rate");
 	homun() = construct<homun_t>(this);
 	pet() = construct<pet_t>(this);
+	buffer_equipsets() = construct<registry_t<sc_type,buffer_equipset>>(
+		load_buffer_equipset_func(char_id()),
+		insert_buffer_equipset_func(char_id()),
+		update_buffer_equipset_func(char_id()),
+		delete_buffer_equipset_func(char_id()),
+		clear_buffer_equipset_func(char_id())
+	);
 	cart_auto_get_items() = construct<registry_t<int,int>>(
 		load_cart_auto_get_item_func(char_id()),
 		insert_cart_auto_get_item_func(char_id()),
@@ -3247,6 +3284,13 @@ member_t::member_t(
 		update_limit_skill_func(char_id()),
 		delete_limit_skill_func(char_id()),
 		clear_limit_skill_func(char_id())
+	);
+	map_equipsets() = construct<registry_t<int,map_equipset>>(
+		load_map_equipset_func(char_id()),
+		insert_map_equipset_func(char_id()),
+		update_map_equipset_func(char_id()),
+		delete_map_equipset_func(char_id()),
+		clear_map_equipset_func(char_id())
 	);
 	normal_attack_policies() = construct<registry_t<int,normal_attack_policy>>(
 		load_normal_attack_policy_func(char_id()),

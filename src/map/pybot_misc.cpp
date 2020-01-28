@@ -896,6 +896,24 @@ get_source_mapid(
 	return res;
 }
 
+// アイコン名をキーとするステータス変化のマップを初期化する。
+void initialize_sc_types() {
+	for (int sc_typ = 0; sc_typ < SC_MAX; ++sc_typ) {
+		efst_types ico = efst_types(StatusIconChangeTable[sc_typ]);
+		if (ico != EFST_BLANK &&
+			ico < ICON_NAME_TABLE.size()
+		) {
+			std::string ico_nam = ICON_NAME_TABLE[ico];
+			if (!ico_nam.empty() &&
+				ico_nam != UNKNOWN_SYMBOL
+			) {
+				auto ite = sc_types.find(ico_nam);
+				if (ite == sc_types.end()) sc_types[ico_nam] = sc_type(sc_typ);
+			}
+		}
+	}
+}
+
 // 正方形の隅の座標を反復する。
 void iterate_corner_bl(
 	block_list* cen,  // 中心。
