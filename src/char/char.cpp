@@ -1732,7 +1732,8 @@ enum e_char_del_response char_delete(struct char_session_data* sd, uint32 char_i
 
 	// [GonBee]
 	// パーティーBot機能に関係するレコードをすべて削除する。
-	if( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_cart_auto_get_item` WHERE `char_id`='%d'", char_id) ||
+	if( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_buffer_equipset` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_cart_auto_get_item` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_distance_policy` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_equipset` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_first_mob` WHERE `char_id`='%d'", char_id) ||
@@ -1745,6 +1746,7 @@ enum e_char_del_response char_delete(struct char_session_data* sd, uint32 char_i
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_journal` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_kew_element` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_limit_skill` WHERE `char_id`='%d'", char_id) ||
+		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_map_equipset` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_mvp_stats` WHERE `char_id`='%d'", char_id) ||
 		SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `pybot_normal_attack_policy` WHERE `char_id`='%d'", char_id) ||
