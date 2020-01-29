@@ -454,7 +454,7 @@ void ai_t::bot_main(
 	bot_use_item();
 	bot_loot();
 	bot_positioning();
-	bot_remove_enchant();
+	//bot_remove_enchant();
 	bot_explosion();
 	bot_attack();
 	bot_play_skill();
