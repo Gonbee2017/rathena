@@ -248,4 +248,6 @@ OnInit:
 	set .rar_cars[getarraysize(.rar_cars)], 4463; // テンドリルリオンカード
 	set .rar_cars[getarraysize(.rar_cars)], 4507; // 女王スカラバカード
 	set .rar_cars[getarraysize(.rar_cars)], 4509; // 女帝スカラバカード
+	set .rar_cars[getarraysize(.rar_cars)], 4520; // レヤックカード
+	set .rar_cars[getarraysize(.rar_cars)], 4534; // 頭領タコカード
 }
