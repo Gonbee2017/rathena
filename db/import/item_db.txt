@@ -2071,3 +2071,4 @@
 29927,Counterattack_Brandishspear_29927,ブランディッシュスピア反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"KN_BRANDISHSPEAR","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
 29928,Counterattack_Magnum_29928,マグナムブレイク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"SM_MAGNUM","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
 29929,Counterattack_Pulsstrike_29929,パルスストライク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"NPC_PULSESTRIKE","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
+29930,Zero_Flee_29930,回避ゼロ,6,20,,10,,,,,,,,769,,,,,{ bonus bZeroFlee; bonus bZeroFlee2; },{},{}

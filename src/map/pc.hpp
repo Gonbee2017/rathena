@@ -311,6 +311,7 @@ struct map_session_data {
 		unsigned int bonus_coma : 1;
 		unsigned int no_mado_fuel : 1; // Disable Magic_Gear_Fuel consumption [Secret]
 
+		// [GonBee]
 		unsigned int immune_demonstration : 1;    // デモンストレーション無効。
 		unsigned int immune_evilland : 1;         // イービルランド無効。
 		unsigned int immune_quagmire : 1;         // クァグマイア無効。
@@ -319,6 +320,8 @@ struct map_session_data {
 		unsigned int near_ignore_autocounter : 1; // 近接オートカウンター無視。
 		unsigned int near_ignore_autoguard : 1;   // 近接オートガード無視。
 		unsigned int near_ignore_stoneskin : 1;   // 近接ストーンスキン無視。
+		unsigned int zero_flee : 1;               // Fleeゼロ。
+		unsigned int zero_flee2 : 1;              // 完全回避ゼロ。
 
 	} special_state;
 	uint32 login_id1, login_id2;

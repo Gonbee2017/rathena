@@ -8393,6 +8393,7 @@ REPLACE INTO `cp_itemdesc` VALUES(29926, 'ƒxƒiƒ€ƒ_ƒXƒg‚ªŒø‚©‚È‚­‚È‚éB<br/>\\
 REPLACE INTO `cp_itemdesc` VALUES(29927, 'ƒuƒ‰ƒ“ƒfƒBƒbƒVƒ…ƒXƒsƒA‚Åƒ_ƒ[ƒW‚ðŽó‚¯‚½ŽžA10•bŠÔAAtk + 200B<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">Š•</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29928, 'ƒ}ƒOƒiƒ€ƒuƒŒƒCƒN‚Åƒ_ƒ[ƒW‚ðŽó‚¯‚½ŽžA10•bŠÔAAtk + 200B<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">Š•</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29929, 'ƒpƒ‹ƒXƒXƒgƒ‰ƒCƒN‚Åƒ_ƒ[ƒW‚ðŽó‚¯‚½ŽžA10•bŠÔAAtk + 200B<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">Š•</font><br/>d—Ê : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(29930, 'Flee‚ÆŠ®‘S‰ñ”ð‚ªƒ[ƒ‚É‚È‚éB<br/>\\\\\\\\\\\\\<br/>Œn—ñ : <font color="777777">ƒJ[ƒh</font><br/>‘•”õ : <font color="777777">Š•</font><br/>d—Ê : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9039, 'ƒLƒ…[ƒyƒbƒg<br/>[ƒyƒNƒ\ƒWƒ“]‚ª<br/>–°‚Á‚Ä‚¢‚é—‘B<br/>[Œg‘Ñ—‘›z‰»‹@]‚Å–°‚Á‚Ä‚¢‚é<br/>ƒ‚ƒ“ƒXƒ^[‚ð–ÚŠo‚ß‚³‚¹‚éB<br/>\\\\\\\\\\\\\<br/>Ží—Þ : <font color="777777">ƒ‚ƒ“ƒXƒ^[‚Ì—‘</font><br/>d—Ê : <font color="777777">0</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9500, 'ƒLƒ…[ƒyƒbƒg<br/>[ƒLƒƒƒbƒgƒiƒCƒ“ƒeƒCƒ‹]‚ª<br/>–°‚Á‚Ä‚¢‚é—‘B<br/>[Œg‘Ñ—‘›z‰»‹@]‚Å–°‚Á‚Ä‚¢‚é<br/>ƒ‚ƒ“ƒXƒ^[‚ð–ÚŠo‚ß‚³‚¹‚éB<br/>\\\\\\\\\\\\\<br/>Ží—Þ : <font color="777777">ƒ‚ƒ“ƒXƒ^[‚Ì—‘</font><br/>d—Ê : <font color="777777">0</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9501, 'ƒLƒ…[ƒyƒbƒg<br/>[ƒS[ƒ‹ƒhƒIƒVƒhƒX]‚ª<br/>–°‚Á‚Ä‚¢‚é—‘B<br/>[Œg‘Ñ—‘›z‰»‹@]‚Å–°‚Á‚Ä‚¢‚é<br/>ƒ‚ƒ“ƒXƒ^[‚ð–ÚŠo‚ß‚³‚¹‚éB<br/>\\\\\\\\\\\\\<br/>Ží—Þ : <font color="777777">ƒ‚ƒ“ƒXƒ^[‚Ì—‘</font><br/>d—Ê : <font color="777777">0</font>');

@@ -3288,6 +3288,14 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		case SP_IMMUNE_VENOMDUST:
 			sd->special_state.immune_venomdust = 1;
 			break;
+		// Fleeƒ[ƒ‚ð’Ç‰ÁB
+		case SP_ZERO_FLEE:
+			sd->special_state.zero_flee = 1;
+			break;
+		// Š®‘S‰ñ”ðƒ[ƒ‚ð’Ç‰ÁB
+		case SP_ZERO_FLEE2:
+			sd->special_state.zero_flee2 = 1;
+			break;
 
 		default:
 			if (running_npc_stat_calc_event) {
@@ -8540,9 +8548,20 @@ int pc_readparam(struct map_session_data* sd,int type)
 
 		// [GonBee]
 		case SP_DANCE_RATE: val = sd->bonus.dance_rate; break;
+		case SP_IMMUNE_DEMONSTRATION: val = sd->special_state.immune_demonstration; break;
+		case SP_IMMUNE_EVILLAND: val = sd->special_state.immune_evilland; break;
+		case SP_IMMUNE_QUAGMIRE: val = sd->special_state.immune_quagmire; break;
+		case SP_IMMUNE_VENOMDUST: val = sd->special_state.immune_venomdust; break;
 		case SP_MENTAL: val = sd->bonus.mental; break;
+		case SP_NEAR_ASPD: val = sd->bonus.near_aspd_add; break;
 		case SP_NEAR_BASE_ATK: val = sd->bonus.near_batk; break;
+		case SP_NEAR_IGNORE_ASSUMPTIO: val = sd->special_state.near_ignore_assumptio; break;
+		case SP_NEAR_IGNORE_AUTOCOUNTER: val = sd->special_state.near_ignore_autocounter; break;
+		case SP_NEAR_IGNORE_AUTOGUARD: val = sd->special_state.near_ignore_autoguard; break;
+		case SP_NEAR_IGNORE_STONESKIN: val = sd->special_state.near_ignore_stoneskin; break;
 		case SP_NEAR_PERFECT_HIT_ADD_RATE: val = sd->bonus.near_perfect_hit_add; break;
+		case SP_ZERO_FLEE: val = sd->special_state.zero_flee; break;
+		case SP_ZERO_FLEE2: val = sd->special_state.zero_flee2; break;
 
 		default:
 			ShowError("pc_readparam: Attempt to read unknown parameter '%d'.\n", type);

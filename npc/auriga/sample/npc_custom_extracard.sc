@@ -191,6 +191,7 @@ OnInit:
 	set .ext_cars[getarraysize(.ext_cars)], 29927; // ブランディッシュスピア反撃
 	set .ext_cars[getarraysize(.ext_cars)], 29928; // マグナムブレイク反撃
 	set .ext_cars[getarraysize(.ext_cars)], 29929; // パルスストライク反撃
+	set .ext_cars[getarraysize(.ext_cars)], 29930; // 回避ゼロ
 	set .nor_car_fir, 4000;
 	set .nor_car_las, 4700;
 	set .rar_cars[getarraysize(.rar_cars)], 4054; // エンジェリングカード
@@ -240,6 +241,7 @@ OnInit:
 	set .rar_cars[getarraysize(.rar_cars)], 4425; // アトロスカード
 	set .rar_cars[getarraysize(.rar_cars)], 4430; // イフリートカード
 	set .rar_cars[getarraysize(.rar_cars)], 4441; // 堕ちた大神官ヒバムカード
+	set .rar_cars[getarraysize(.rar_cars)], 4451; // エントヴァイエンカード
 	set .rar_cars[getarraysize(.rar_cars)], 4456; // ニーズヘッグの影カード
 	set .rar_cars[getarraysize(.rar_cars)], 4457; // ナハトズィーガーカード
 	set .rar_cars[getarraysize(.rar_cars)], 4462; // ハードロックマンモスカード
