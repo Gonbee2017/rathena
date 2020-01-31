@@ -32,10 +32,9 @@ prontera,164,153,2	script	服装染色師	97,{
 	mes "またの機会をお待ちしております。";
 	close;
 OnInit:
-	//set .col_lis$[getarraysize(.col_lis$)], "0^ECCAC6●^000000";
-	set .col_lis$[getarraysize(.col_lis$)], "1^C39B8F●^000000";
-	set .col_lis$[getarraysize(.col_lis$)], "2^ECCAC6●^000000";
-	set .col_lis$[getarraysize(.col_lis$)], "3^ECCAC6●^000000";
+	set .col_lis$[getarraysize(.col_lis$)], "1(デフォルト)";
+	set .col_lis$[getarraysize(.col_lis$)], "2(エクストラ1)";
+	set .col_lis$[getarraysize(.col_lis$)], "3(エクストラ2)";
 	set .col_lis$[getarraysize(.col_lis$)], "4^E3E3E3●^000000";
 	set .col_lis$[getarraysize(.col_lis$)], "5^CECCE0●^000000";
 	set .col_lis$[getarraysize(.col_lis$)], "6^D0D6F2●^000000";
