@@ -207,6 +207,9 @@ gld_dun02	mapflag	nosave	SavePoint
 gld_dun03	mapflag	nosave	SavePoint
 gld_dun04	mapflag	nosave	SavePoint
 
+arug_dun01	mapflag	nosave	SavePoint
+schg_dun01	mapflag	nosave	SavePoint
+
 //Normal Maps =================================
 yggdrasil01	mapflag	nosave	SavePoint
 thana_boss	mapflag	nosave	SavePoint

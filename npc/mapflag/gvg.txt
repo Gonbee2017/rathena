@@ -144,8 +144,8 @@ nguild_prt	mapflag	gvg_castle
 //nguild_prt	mapflag	monster_noteleport
 
 // Guild Dungeons =========
-arug_dun01	mapflag	gvg_dungeon
-schg_dun01	mapflag	gvg_dungeon
+//arug_dun01	mapflag	gvg_dungeon
+//schg_dun01	mapflag	gvg_dungeon
 
 // RWC Maps ===============
 2009rwc_01	mapflag	gvg

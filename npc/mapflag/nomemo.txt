@@ -296,6 +296,10 @@ gld_dun01	mapflag	nomemo
 gld_dun02	mapflag	nomemo
 gld_dun03	mapflag	nomemo
 gld_dun04	mapflag	nomemo
+
+arug_dun01	mapflag	nomemo
+schg_dun01	mapflag	nomemo
+
 // Bayalan Island ------------
 //iz_dun00	mapflag	nomemo
 //iz_dun01	mapflag	nomemo
