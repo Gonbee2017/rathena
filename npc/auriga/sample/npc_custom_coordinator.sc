@@ -8,7 +8,7 @@ prontera,164,153,2	script	服装染色師	97,{
 	if (select("染色する", "やめる") == 1) {
 		mes "[服装染色師]";
 		mes "どの番号を希望されますか？";
-		mes "以下のイメージカラーの中から";
+		mes "こちらのイメージカラーの中から";
 		mes "お好みの色をお選びください。";
 		next;
 		set .@col, select(printarray(.col_lis$));
