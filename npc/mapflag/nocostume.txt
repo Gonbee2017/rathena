@@ -10,19 +10,19 @@
 //============================================================
 
 // WOE:TE Castles =========
-te_prtcas01	mapflag	nocostume
-te_prtcas02	mapflag	nocostume
-te_prtcas03	mapflag	nocostume
-te_prtcas04	mapflag	nocostume
-te_prtcas05	mapflag	nocostume
-te_aldecas1	mapflag	nocostume
-te_aldecas2	mapflag	nocostume
-te_aldecas3	mapflag	nocostume
-te_aldecas4	mapflag	nocostume
-te_aldecas5	mapflag	nocostume
+//te_prtcas01	mapflag	nocostume
+//te_prtcas02	mapflag	nocostume
+//te_prtcas03	mapflag	nocostume
+//te_prtcas04	mapflag	nocostume
+//te_prtcas05	mapflag	nocostume
+//te_aldecas1	mapflag	nocostume
+//te_aldecas2	mapflag	nocostume
+//te_aldecas3	mapflag	nocostume
+//te_aldecas4	mapflag	nocostume
+//te_aldecas5	mapflag	nocostume
 
 // Guild Dungeons =========
-teg_dun01	mapflag	nocostume
-teg_dun02	mapflag	nocostume
-arug_dun01	mapflag	nocostume
-schg_dun01	mapflag	nocostume
+//teg_dun01	mapflag	nocostume
+//teg_dun02	mapflag	nocostume
+//arug_dun01	mapflag	nocostume
+//schg_dun01	mapflag	nocostume

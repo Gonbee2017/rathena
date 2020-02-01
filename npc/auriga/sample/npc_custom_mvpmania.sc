@@ -126,22 +126,29 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 				next;
 				set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
 				for (set .@i, 0; .@i < .@mem_siz; ++.@i)
-					set .@mem_lis$[.@i], "^4040FF" + .@mem_nams$[.@i] + "^000000";
-				set .@mem_lis$[.@i], "やめる";
+					set .@mem_lis$[getarraysize(.@mem_lis$)], "^4040FF" + .@mem_nams$[.@i] + "^000000";
+				set .@mem_lis$[getarraysize(.@mem_lis$)], "誰も強化しない";
+				set .@mem_lis$[getarraysize(.@mem_lis$)], "少し考えさせてほしい";
+				set .@men$, printarray(.@mem_lis$);
 				while (1) {
 					mes "[コレット]";
 					mes "^4040FF強化^000000はとても大事なことだから";
 					mes "よく考えて慎重に選んでね。";
 					mes "どのメンバーを^4040FF強化^000000するの？";
 					next;
-					set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
-					if (.@mem_ind >= .@mem_siz) {
+					set .@mem_ind, select(.@men$) - 1;
+					if (.@mem_ind > .@mem_siz) {
 						mes "[コレット]";
 						mes "じっくり考えたほうがいいよ。";
 						mes "決まったらまた声をかけてね。";
 						close;
 					}
-					if (attachrid(.@mem_rids[.@mem_ind])) {
+					if (.@mem_ind == .@mem_siz) {
+						mes "[コレット]";
+						mes "本当に誰も強化しなくていいの？";
+						next;
+						if (select("はい", "いいえ") == 1) break;
+					} else if (attachrid(.@mem_rids[.@mem_ind])) {
 						set .@mem_enh, MVP_MANIA_ENHANCE;
 						attachrid .@pla_rid;
 						set .@mem_cla, .@mem_clas[.@mem_ind];
@@ -178,16 +185,18 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 				mes "少し倉庫に預けてきてね。";
 				close;
 			}
-			if (!MVP_MANIA_ALMOST &&
-				attachrid(.@mem_rids[.@mem_ind])
-			) {
-				if (!MVP_MANIA_ENHANCE) {
-					set MVP_MANIA_ENHANCE, 1;
-					addstatuspoint 200;
-					addskillpoint 10;
-					specialeffect2 EF_ENHANCE;
+			if (!MVP_MANIA_ALMOST) {
+				if (.@mem_ind < .@mem_siz &&
+					attachrid(.@mem_rids[.@mem_ind])
+				) {
+					if (!MVP_MANIA_ENHANCE) {
+						set MVP_MANIA_ENHANCE, 1;
+						addstatuspoint 200;
+						addskillpoint 10;
+						specialeffect2 EF_ENHANCE;
+					}
+					attachrid .@pla_rid;
 				}
-				attachrid .@pla_rid;
 				set MVP_MANIA_ALMOST, 1;
 			}
 			if (.@j == .@mids_siz) {
