@@ -3520,11 +3520,15 @@ AI_SKILL_USE_DEF(spirit)(
 ) {
 	return [mid] (ai_t* ai, e_skill kid, int klv) {
 		block_if* mem = pybot::find_if(ALL_RRANGE(ai->members), [mid, ai, kid] (block_if* mem) -> bool {
-			return !mem->is_dead() &&
+			return (mem->sd()->class_ & MAPID_UPPERMASK) == mid &&
+				!mem->is_dead() &&
 				!mem->is_hiding() &&
 				!mem->reject_skills()->find(kid) &&
-				mem->sc_rest(SC_SPIRIT) <= ai->bot->get_skill_tail(kid) &&
-				(mem->sd()->class_ & MAPID_UPPERMASK) == mid;
+				(mem->sc_rest(SC_SPIRIT) <= ai->bot->get_skill_tail(kid) ||
+					(kid == SL_SUPERNOVICE &&
+						mem->sd()->die_counter
+					)
+				);
 		});
 		if (mem) ai->bot->use_skill_block(kid, klv, mem);
 	};
