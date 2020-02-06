@@ -903,7 +903,7 @@ const std::unordered_map<
 		AI_SKILL_USE_PROC       (SL_KAITE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_KAIZEL                                      ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_KAUPE                                       ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),
-		AI_SKILL_USE_PROC       (SL_SKE                                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
+		AI_SKILL_USE_PROC       (SL_SKE                                         ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_SKA                                         ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (SL_SWOO                                        ,  1,  0, BMF_COMBAT, PF_ALL  , WF_FALSE, AF_FALSE, 1),
 		AI_SKILL_USE_PROC       (TK_SEVENWIND                                   ,  1,  0, BMF_ALL   , PF_ALL  , WF_FALSE, AF_ALL  , 1),

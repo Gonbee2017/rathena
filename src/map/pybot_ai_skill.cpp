@@ -2637,11 +2637,17 @@ AI_SKILL_USE_FUNC(SL_SKA) {
 
 // エスクを使う。
 AI_SKILL_USE_FUNC(SL_SKE) {
-	block_if* mob = pybot::find_if(ALL_RANGE(ally_mobs), [this, kid] (block_if* mob) -> bool {
-		return !bot->find_skill_ignore_mobs(kid, mob) &&
+	block_if* tar = pybot::find_if(ALL_RANGE(ally_mobs), [this, kid] (block_if* mob) -> bool {
+		return battle_check_target(bot->bl(), mob->bl(), BCT_ENEMY) > 0 &&
 			!mob->sc()->data[SC_SKE];
 	});
-	if (mob) bot->use_skill_block(kid, klv, mob);
+	if (!tar) {
+		tar = pybot::find_if(ALL_RANGE(*enemies), [this, kid] (block_if* ene) -> bool {
+			return !bot->find_skill_ignore_mobs(kid, ene) &&
+				!ene->sc()->data[SC_SKE];
+		});
+	}
+	if (tar) bot->use_skill_block(kid, klv, tar);
 }
 
 // エスマを使う。

@@ -9593,6 +9593,19 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		//These status changes always overwrite themselves even when a lower level is cast
 		status_change_end(bl, type, INVALID_TIMER);
 		break;
+
+	// [GonBee]
+	// 速度増加ポーション状態になると、既存の速度増加ポーション状態を解除する。
+	case SC_ASPDPOTION0:
+	case SC_ASPDPOTION1:
+	case SC_ASPDPOTION2:
+	case SC_ASPDPOTION3:
+		status_change_end(bl, SC_ASPDPOTION0, INVALID_TIMER);
+		status_change_end(bl, SC_ASPDPOTION1, INVALID_TIMER);
+		status_change_end(bl, SC_ASPDPOTION2, INVALID_TIMER);
+		status_change_end(bl, SC_ASPDPOTION3, INVALID_TIMER);
+		break;
+
 	}
 
 	// Check for overlapping fails
