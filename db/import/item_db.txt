@@ -1121,7 +1121,7 @@
 5393,Valentine_Hat,バレンタイン帽,4,10000,,200,,2,,0,0xFFFFFFFF,7,2,256,,0,0,397,{ bonus bMaxSPrate, 7; bonus bMaxHPrate, 7; },{},{}
 5395,Tiraya_Bonnet,ティラヤボネット,4,50000,,500,,2,,1,0xFFFFFFFF,7,2,256,,50,1,398,{ bonus bMaxHP,100+(getrefine()*20); bonus bLuk,3; },{},{}
 5397,Scuba_Mask,スキューバーマスク,4,10000,,100,,0,,0,0xFFFFFFFF,7,2,512,,0,0,400,{ bonus2 bAddRace,RC_Fish,2; bonus2 bMagicAddRace,RC_Fish,2; bonus2 bSubEle,Ele_Water,3; },{},{}
-5398,Bone_Head,ボーンヘッド,4,85000,,1200,,5,,1,0x000444A2,2,2,256,,85,1,401,{ bonus bStr,2; bonus bMdef,5; bonus2 bResEff,Eff_Stun,500; bonus2 bResEff,Eff_Bleeding,500; },{},{}
+5398,Bone_Head,ボーンヘッド,4,85000,,1200,,5,,1,0x000444A2,2,2,256,,85,1,401,{ bonus bStr,2; bonus bMdef,5; bonus2 bResEff,Eff_Stun,500; bonus2 bResEff,Eff_Bleeding,500; bonus bUnbreakableHelm; },{},{}
 5399,Mandragora_Cap,マンドラゴラキャップ,4,85000,,300,,1,,1,0x00CFFF80,2,2,256,,85,0,402,{ bonus bVit,3; bonus3 bAutoSpellWhenHit,"DC_SCREAM",5,30; },{},{}
 5401,Black_Glasses,黒縁メガネ,4,70000,,200,,1,,0,0xFFFFFFFF,7,2,512,,70,0,404,{ bonus bInt,1; bonus bMdef,2; bonus bUnbreakableHelm, 0; },{},{}
 5404,Blue_Ribbon,ブルーリボン,4,10,,100,,1,,1,0xFFFFFFFF,7,2,256,,45,1,407,{ bonus5 bAutoSpell,"AC_CONCENTRATION",2,30,BF_WEAPON|BF_SHORT,0; },{},{}

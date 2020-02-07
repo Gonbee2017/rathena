@@ -310,6 +310,24 @@ BUILDIN_FUNC(findmobdb) {
 }
 
 // [GonBee]
+// リーダーのアカウントIDを取得する。
+// ? キャラクターID。
+// 戻り値 リーダーのアカウントID。
+BUILDIN_FUNC(getleaderrid) {
+	int lea_rid = 0;
+	int cid = 0;
+	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
+	else {
+		map_session_data* sd;
+		if (script_rid2sd(sd)) cid = sd->status.char_id;
+	}
+	map_session_data* lea_sd = pybot::get_leader(cid);
+	if (lea_sd) lea_rid = lea_sd->status.account_id;
+	script_pushint(st, lea_rid);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // 日本語のマップ名を取得する。。
 // s 英語のマップ名。
 // 戻り値 日本語のマップ名。
@@ -448,6 +466,21 @@ BUILDIN_FUNC(guildchangegm2) {
 // 戻り値 結果。
 BUILDIN_FUNC(isactive) {
 	script_pushint(st, bool(map_charid2sd(script_getnum(st, 2))));
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// キャラクターがBotかを判定する。
+// ? キャラクターID。
+// 戻り値 結果。
+BUILDIN_FUNC(isbot) {
+	int cid = 0;
+	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
+	else {
+		map_session_data* sd;
+		if (script_rid2sd(sd)) cid = sd->status.char_id;
+	}
+	script_pushint(st, pybot::char_is_bot(cid));
 	return SCRIPT_CMD_SUCCESS;
 }
 
