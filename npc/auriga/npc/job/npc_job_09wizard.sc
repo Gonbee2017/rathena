@@ -1572,7 +1572,7 @@ OnKilled:
 	if(.count <= 0) {
 		stopnpctimer;
 		killmonster "job_wiz","WZ_Fire2::OnKilled";
-		if (isbot()) attachrid getleaderrid();
+		if (isbot()) attachrid getteamleaderrid();
 		set CHANGE_WZ,12;
 		announce "‰Î‚Ì•”‰®: ‚¨‚ß‚Å‚Æ‚¤‚²‚´‚¢‚Ü‚·I " +$@wz_tester$+ "—l‚ªŽŽŒ±‚É‡Ši‚µ‚Ü‚µ‚½B",9;
 		areawarp "job_wiz",95,75,135,120,"job_wiz",46,99;

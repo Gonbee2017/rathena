@@ -310,24 +310,6 @@ BUILDIN_FUNC(findmobdb) {
 }
 
 // [GonBee]
-// リーダーのアカウントIDを取得する。
-// ? キャラクターID。
-// 戻り値 リーダーのアカウントID。
-BUILDIN_FUNC(getleaderrid) {
-	int lea_rid = 0;
-	int cid = 0;
-	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
-	else {
-		map_session_data* sd;
-		if (script_rid2sd(sd)) cid = sd->status.char_id;
-	}
-	map_session_data* lea_sd = pybot::get_leader(cid);
-	if (lea_sd) lea_rid = lea_sd->status.account_id;
-	script_pushint(st, lea_rid);
-	return SCRIPT_CMD_SUCCESS;
-}
-
-// [GonBee]
 // 日本語のマップ名を取得する。。
 // s 英語のマップ名。
 // 戻り値 日本語のマップ名。
@@ -447,6 +429,24 @@ BUILDIN_FUNC(getpetintimate) {
 		sd->pd
 	) int_ = sd->pd->pet.intimate;
 	script_pushint(st, int_);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// チームリーダーのアカウントIDを取得する。
+// ? キャラクターID。
+// 戻り値 チームリーダーのアカウントID。
+BUILDIN_FUNC(getteamleaderrid) {
+	int lea_rid = 0;
+	int cid = 0;
+	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
+	else {
+		map_session_data* sd;
+		if (script_rid2sd(sd)) cid = sd->status.char_id;
+	}
+	map_session_data* lea_sd = pybot::get_leader(cid);
+	if (lea_sd) lea_rid = lea_sd->status.account_id;
+	script_pushint(st, lea_rid);
 	return SCRIPT_CMD_SUCCESS;
 }
 
