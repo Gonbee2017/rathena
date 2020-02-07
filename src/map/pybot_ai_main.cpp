@@ -138,15 +138,17 @@ void ai_t::leader_collect() {
 			if (md->master_id &&
 				find_block<member_impl>(md->master_id)
 			) aly_mds.push_back(md);
-			else if (KEY_EXISTS(leader->enemies(), bl->id) ||
+			else if (bl->id == leader->attack_target() ||
+				(!leader->passive() &&
+					md->sc.opt1 &&
+					md->sc.opt1 != OPT1_BURNING
+				) || KEY_EXISTS(leader->enemies(), bl->id) ||
 				(!leader->passive() &&
 					md->target_id &&
 					find_block<battler_impl>(md->target_id)
-				) || (md->sc.opt1 &&
-					md->sc.opt1 != OPT1_BURNING
 				) || (md->sc.data[SC_BLADESTOP] &&
 					find_block<battler_impl>(md->sc.data[SC_BLADESTOP]->val4)
-				) || bl->id == leader->attack_target()
+				)
 			) {
 				ene_mds.push_back(md);
 				res = 1;
