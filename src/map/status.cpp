@@ -4203,7 +4203,7 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 #ifndef RENEWAL
 
 	// [GonBee]
-	// Defの制限はstatus_calc_defで行う。
+	// Defの制限はstatus_calc_bl_mainで行う。
 	//if (!battle_config.weapon_defense_type && base_status->def > battle_config.max_def) {
 	//	base_status->def2 += battle_config.over_def_bonus*(base_status->def -battle_config.max_def);
 	//	base_status->def = (unsigned char)battle_config.max_def;
@@ -4224,7 +4224,7 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 #ifndef RENEWAL
 
 	// [GonBee]
-	// Mdefの制限はstatus_calc_mdefで行う。
+	// Mdefの制限はstatus_calc_bl_mainで行う。
 	//if (!battle_config.magic_defense_type && base_status->mdef > battle_config.max_def) {
 	//	base_status->mdef2 += battle_config.over_def_bonus*(base_status->mdef -battle_config.max_def);
 	//	base_status->mdef = (signed char)battle_config.max_def;
@@ -5187,6 +5187,14 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		);
 	}
 
+	// Defを制限する。
+	if (!battle_config.weapon_defense_type &&
+		status->def > battle_config.max_def
+	) {
+		status->def2 += battle_config.over_def_bonus * (status->def - battle_config.max_def);
+		status->def = battle_config.max_def;
+	}
+
 	if(flag&SCB_MDEF) {
 		status->mdef = status_calc_mdef(bl, sc, b_status->mdef);
 
@@ -5209,6 +5217,15 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 			+ ((status->vit - b_status->vit)>>1)
 #endif
 			);
+	}
+
+	// [GonBee]
+	// Mdefを制限する。
+	if (!battle_config.magic_defense_type &&
+		status->mdef > battle_config.max_mdef
+	) {
+		status->mdef2 += battle_config.over_def_bonus * (status->mdef - battle_config.max_def);
+		status->mdef = battle_config.max_mdef;
 	}
 
 	if(flag&SCB_SPEED) {
@@ -6776,12 +6793,6 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 		def -= def * sc->data[SC_OVERED_BOOST]->val4 / 100;
 	if(sc->data[SC_GLASTHEIM_ITEMDEF])
 		def += sc->data[SC_GLASTHEIM_ITEMDEF]->val1;
-
-	// Defを制限する。
-	if (!battle_config.weapon_defense_type &&
-		def > battle_config.max_def
-	) def = battle_config.max_def;
-
 	return (defType)cap_value(def,DEFTYPE_MIN,DEFTYPE_MAX);
 }
 
@@ -6922,13 +6933,6 @@ static defType status_calc_mdef(struct block_list *bl, struct status_change *sc,
 		mdef -= 20 * sc->data[SC_ODINS_POWER]->val1;
 	if(sc->data[SC_GLASTHEIM_ITEMDEF])
 		mdef += sc->data[SC_GLASTHEIM_ITEMDEF]->val2;
-
-	// [GonBee]
-	// Mdefを制限する。
-	if (!battle_config.magic_defense_type &&
-		mdef > battle_config.max_mdef
-	) mdef = battle_config.max_mdef;
-
 	return (defType)cap_value(mdef,DEFTYPE_MIN,DEFTYPE_MAX);
 }
 
