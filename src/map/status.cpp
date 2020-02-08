@@ -5188,7 +5188,8 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 	}
 
 	// Def‚ð§ŒÀ‚·‚éB
-	if (!battle_config.weapon_defense_type &&
+	if (bl->type & BL_PC &&
+		!battle_config.weapon_defense_type &&
 		status->def > battle_config.max_def
 	) {
 		status->def2 += battle_config.over_def_bonus * (status->def - battle_config.max_def);
@@ -5221,7 +5222,8 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 
 	// [GonBee]
 	// Mdef‚ð§ŒÀ‚·‚éB
-	if (!battle_config.magic_defense_type &&
+	if (bl->type & BL_PC &&
+		!battle_config.magic_defense_type &&
 		status->mdef > battle_config.max_mdef
 	) {
 		status->mdef2 += battle_config.over_def_bonus * (status->mdef - battle_config.max_def);
