@@ -65,7 +65,7 @@ call :start_server map
 exit /b
 
 :start_server
-start "%1-server" cmd /c job_server.bat %1
+start /min "%1-server" cmd /c job_server.bat %1
 call :wait_start_server %1
 exit /b
 
