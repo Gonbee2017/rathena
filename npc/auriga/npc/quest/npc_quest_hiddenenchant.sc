@@ -628,23 +628,31 @@ prontera,83,108,6	script	×HElEt”Í	814,{
 	if((6 + 12 + 18) >= .@succsess) {
 		//¬Œ÷
 		switch(rand(6)) {
-		case 0:	set .@cardid,4768;	break;
-		case 1:	set .@cardid,4771;	break;
-		case 2:	set .@cardid,4774;	break;
-		case 3:	set .@cardid,4777;	break;
-		case 4:	set .@cardid,4780;	break;
-		case 5:	set .@cardid,4783;	break;
+		//case 0:	set .@cardid,4768;	break;
+		//case 1:	set .@cardid,4771;	break;
+		//case 2:	set .@cardid,4774;	break;
+		//case 3:	set .@cardid,4777;	break;
+		//case 4:	set .@cardid,4780;	break;
+		//case 5:	set .@cardid,4783;	break;
+		case 0:	set .@cardid,4700;	break;
+		case 1:	set .@cardid,4710;	break;
+		case 2:	set .@cardid,4720;	break;
+		case 3:	set .@cardid,4730;	break;
+		case 4:	set .@cardid,4740;	break;
+		case 5:	set .@cardid,4750;	break;
 		}
 		if(.@succsess <= 6)
 			set .@cardid, .@cardid+2;
 		else if(.@succsess <= 18)
 			set .@cardid, .@cardid+1;
 		getitem2 .@enchantid,1,1,0,0,0,0,0,.@cardid;
+		misceffect 305;
 		mes "[×HElEt”Í]";
 		mes "cc‚Ó‚¤A¬Œ÷‚¾I";
 		mes "‘åØ‚Ég‚Á‚Ä—~‚µ‚¢B";
 		close;
 	}
+	misceffect 306;
 	mes "[×HElEt”Í]";
 	mes "‚¤‚Ácc!!";
 	mes "ƒGƒ“ƒ`ƒƒƒ“ƒg‚É¸”s‚µ‚½‚©cc";
