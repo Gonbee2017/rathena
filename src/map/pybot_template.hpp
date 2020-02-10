@@ -945,22 +945,25 @@ print_main_status(
 		"Luk " << status_get_base_luk(dat)              << "+" <<
 		(status_get_luk(bl) - status_get_base_luk(dat)) << "\n";
 	out <<
-		"Atk "      << pc_leftside_atk (dat)      << "+" <<
-		pc_rightside_atk (dat)                    << " "
-		"Matk "     << pc_leftside_matk(dat)      << "+" <<
-		pc_rightside_matk(dat)                    << " "
-		"Hit "      << status_get_hit(bl)         << " "
+		"Atk "      << pc_leftside_atk(dat)      << "+" <<
+		pc_rightside_atk (dat)                   << " "
+		"Matk "     << pc_leftside_matk(dat)     << "+" <<
+		pc_rightside_matk(dat)                   << " "
+		"Hit "      << status_get_hit(bl)        << " "
 		"Critical " << print(
 			std::fixed,
 			std::setprecision(1),
 			status_get_critical(bl) / 10.
 		) << " "
-		"Def "      << int(pc_leftside_def (dat)) << "+" <<
+		"Def "      << int(pc_leftside_def(dat))  << "+" <<
 		pc_rightside_def (dat)                    << " "
 		"Mdef "     << int(pc_leftside_mdef(dat)) << "+" <<
 		pc_rightside_mdef(dat)                    << " "
-		"Flee "     << status_get_flee(bl)        << "+" <<
-		status_get_flee2 (bl)                     << " "
+		"Flee "     << status_get_flee(bl)        << "+" << print(
+			std::fixed,
+			std::setprecision(1),
+			status_get_flee2(bl) / 10.
+		) << " " <<
 		"Aspd "     << print(
 			std::fixed,
 			std::setprecision(1),
