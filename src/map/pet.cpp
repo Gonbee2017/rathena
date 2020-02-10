@@ -697,9 +697,11 @@ int pet_catch_process2(struct map_session_data* sd, int target_id)
 		//catch_target_class == PET_CATCH_UNIVERSAL is used for universal lures (except bosses for now). [Skotlex]
 
 		// [GonBee]
-		// ボスでもテイミングできるようにする。
+		// MVPモンスター以外はテイミングできるようにする。
 		//if (sd->catch_target_class == PET_CATCH_UNIVERSAL && !status_has_mode(&md->status,MD_STATUS_IMMUNE)){
-		if (sd->catch_target_class == PET_CATCH_UNIVERSAL) {
+		if (sd->catch_target_class == PET_CATCH_UNIVERSAL &&
+			!status_has_mode(&md->status, MD_MVP)
+		) {
 
 			sd->catch_target_class = md->mob_id;
 		//catch_target_class == PET_CATCH_UNIVERSAL_ITEM is used for catching any monster required the lure item used

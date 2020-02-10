@@ -51,34 +51,21 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 	if (select("見る", "見ない") == 1) {
 		setarray .@cols$, "^FF4040", "^4040FF";
 		setarray .@vals$, "未獲得", "獲得済み";
-		setarray .@mids, 
-			1038, 1039, 1046, 1059, 1086,
-			1087, 1112, 1115, 1147, 1150,
-			1157, 1159, 1190, 1251, 1252,
-			1272, 1312, 1373, 1389, 1418,
-			1492, 1511, 1583, 1623, 1630,
-			1646, 1647, 1648, 1649, 1650,
-			1651, 1658, 1685, 1688, 1708,
-			1719, 1734, 1751, 1768, 1779,
-			1785, 1832, 1871, 1874, 1885,
-			1917, 2022, 2068, 2087, 2165,
-			2131, 2156;
-		set .@mids_siz, getarraysize(.@mids);
-		for (set .@i, 0; .@i < .@mids_siz; ++.@i) {
+		for (set .@i, 0; .@i < .mids_siz; ++.@i) {
 			if (!.@ind) mes "------ MVPリスト (" + (.@i / 5 + 1) + ") ------"; 
-			set .@acq, pchasacquiredmvp(.@mids[.@i]);
+			set .@acq, pchasacquiredmvp(.mids[.@i]);
 			if (.@acq) ++.@j;
-			mes .@cols$[.@acq] + strmobinfo(2, .@mids[.@i]) + " " + .@vals$[.@acq] + "^000000";
+			mes .@cols$[.@acq] + strmobinfo(2, .mids[.@i]) + " " + .@vals$[.@acq] + "^000000";
 			set .@ind, .@ind + 1;
 			if (.@ind >= 5 ||
-				.@i + 1 == .@mids_siz
+				.@i + 1 == .mids_siz
 			) {
 				next;
 				set .@ind, 0;
 			}
 		}
 		if (.@j >= 40) {
-			if (.@j == .@mids_siz) {
+			if (.@j == .mids_siz) {
 				if (.@rou) {
 					mes "[コレット]";
 					mes "えっ、また全部倒したの？！";
@@ -174,7 +161,7 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 			}
 			
 			// アトミック
-			if(.@j == .@mids_siz &&
+			if(.@j == .mids_siz &&
 				(checkitemblank() < 6 ||
 					(MaxWeight - Weight) < .rews_wei
 				)
@@ -199,12 +186,17 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 				}
 				set MVP_MANIA_ALMOST, 1;
 			}
-			if (.@j == .@mids_siz) {
+			if (.@j == .mids_siz) {
 				advancemvpround;
 				set MVP_MANIA_ALMOST, 0;
 				++.@rou;
-				for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
-					getitem .rews[.@i], 1;
+				//for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
+				//	getitem .rews[.@i], 1;
+				if (MVP_MANIA_EGG_IND < .eggs_siz) {
+					set .@egg_ind, MVP_MANIA_EGG_IND;
+					++MVP_MANIA_EGG_IND;
+				} else set .@egg_ind, rand(1, .eggs_siz) - 1;
+				getitem .eggs[.@egg_ind], 1;
 				
 				specialeffect2 EF_POK_JAP;
 				emotion ET_CONGRATULATION;
@@ -240,15 +232,26 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 				mes "とりあえず次の周回に向けて";
 				mes "リストはクリアしておくね。";
 				next;
+				//mes "[コレット]";
+				//mes "あと私から今回のお祝いに";
+				//mes "アイテムを^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
+				//next;
+				//emotion ET_SMILE;
+				//mes "[コレット]";
+				//mes "なんでも冒険者なら誰もがよだれを";
+				//mes "垂らして欲しがる神装備なんだって。";
+				//mes "よかったら使ってね。";
+				//next;
 				mes "[コレット]";
 				mes "あと私から今回のお祝いに";
-				mes "アイテムを^FF4040" + getarraysize(.rews) + "個^000000プレゼントするよ。";
+				mes "^FF4040" + getitemname(.eggs[.@egg_ind]) + "^000000を";
+				mes "プレゼントするよ。";
 				next;
 				emotion ET_SMILE;
 				mes "[コレット]";
-				mes "なんでも冒険者なら誰もがよだれを";
-				mes "垂らして欲しがる神装備なんだって。";
-				mes "よかったら使ってね。";
+				mes "そのコを捕まえるのはホント";
+				mes "すっごい大変だったんだから。";
+				mes "大切に育ててね。";
 				next;
 			}
 		}
@@ -260,12 +263,36 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 	mes "バイバーイ！";
 	close;
 OnInit:
-	setarray .rews,
-		 2881, // オルレアンネックレス
-		 5389, // 女神の仮面
-		18539, // スカルキャップ
-		18720, // マジカルブースター
-		18937; // メモリーオブラバーズ
-	for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
-		set .rews_wei, .rews_wei + getiteminfo(.rews[.@i], 6);
+	setarray .mids, 
+		1038, 1039, 1046, 1059, 1086,
+		1087, 1112, 1115, 1147, 1150,
+		1157, 1159, 1190, 1251, 1252,
+		1272, 1312, 1373, 1389, 1418,
+		1492, 1511, 1583, 1623, 1630,
+		1646, 1647, 1648, 1649, 1650,
+		1651, 1658, 1685, 1688, 1708,
+		1719, 1734, 1751, 1768, 1779,
+		1785, 1832, 1871, 1874, 1885,
+		1917, 2022, 2068, 2087, 2131,
+		2156, 2165;
+	set .mids_siz, getarraysize(.mids);
+	setarray .eggs, 
+		9512, 9513, 9514, 9515, 9516,
+		9517, 9518, 9519, 9520, 9521,
+		9522, 9523, 9524, 9525, 9526,
+		9527, 9528, 9529, 9530, 9531,
+		9532, 9533, 9534, 9535, 9039,
+		9536, 9537, 9538, 9539, 9540,
+		9541, 9542, 9543, 9544, 9545,
+		9546, 9547, 9548, 9549, 9550,
+		9551, 9552, 9553, 9554, 9555;
+	set .eggs_siz, getarraysize(.eggs);
+	//setarray .rews,
+	//	 2881, // オルレアンネックレス
+	//	 5389, // 女神の仮面
+	//	18539, // スカルキャップ
+	//	18720, // マジカルブースター
+	//	18937; // メモリーオブラバーズ
+	//for (set .@i, 0; .@i < getarraysize(.rews); ++.@i)
+	//	set .rews_wei, .rews_wei + getiteminfo(.rews[.@i], 6);
 }
