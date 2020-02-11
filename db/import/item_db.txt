@@ -1344,6 +1344,8 @@
 10568,Bullet_Case_Box_10568,バレットケースの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 12149,50; },{},{}
 10569,Bullet_Case_Blood_Box_10569,ブラッドバレットケースの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 12150,50; },{},{}
 10570,Bullet_Case_Silver_Box_10570,シルバーバレットケースの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 12151,50; },{},{}
+10571,Pet_Food2_Box_10571,高級ペットフードの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 10922,10; },{},{}
+10572,Pet_Food3_Box_10572,超高級ペットフードの箱,2,20,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 10923,10; },{},{}
 10900,Seed_Of_Status,ステータスの種,2,5000,,300,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashAddExtraStatusPoint"; },{},{}
 10901,Seed_Of_Skill,スキルの種,2,5000,,300,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashAddExtraSkillPoint"; },{},{}
 10902,Berry_Of_Weight,アイテム重量の実,2,5000,,300,,,,,0xFFFFFFFF,7,2,,,,,,{ callfunc "F_CashAddExtraWeight"; },{},{}
@@ -1366,6 +1368,8 @@
 10919,Cash_100,100ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 100; },{},{}
 10920,Cash_1000,1000ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 1000; },{},{}
 10921,Cash_10000,10000ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 10000; },{},{}
+10922,Pet_Food2,高級ペットフード,0,200000,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(50,90),0; },{},{}
+10923,Pet_Food3,超高級ペットフード,0,1000000,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(50,90),0; },{},{}
 11516,Asai_Fruit,アサイーの実,0,15,,20,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(16,22),0; sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; },{},{}
 11532,Nasi_Goreng,ナシゴレン,0,15,,20,,,,,0xFFFFFFFF,63,2,,,,,,{ itemheal rand(133,168),0; },{},{}
 11533,Satay,サテ,11,15,,20,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "ALL_RESURRECTION",2; },{},{}
