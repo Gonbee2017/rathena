@@ -12515,7 +12515,6 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 
 	if ( StatusChangeStateTable[type] )
 		status_calc_state(bl,sc,( enum scs_flag ) StatusChangeStateTable[type],false);
-
 	sc->data[type] = NULL;
 
 	if (StatusDisplayType[type]&bl->type)

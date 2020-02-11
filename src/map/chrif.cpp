@@ -1334,6 +1334,11 @@ int chrif_save_scdata(struct map_session_data *sd) { //parses the sc_data of the
 	for (i = 0; i < SC_MAX; i++) {
 		if (!sc->data[i])
 			continue;
+
+		// [GonBee]
+		// ‹Ræó‘Ô‚ð•Û‘¶‚µ‚È‚¢B
+		if (i == SC_ALL_RIDING) continue;
+
 		if (sc->data[i]->timer != INVALID_TIMER) {
 			timer = get_timer(sc->data[i]->timer);
 			if (timer == NULL || timer->func != status_change_timer)
