@@ -4806,9 +4806,17 @@ char pc_delitem(struct map_session_data *sd,int n,int amount,int type, short rea
 	if( sd->inventory.u.items_inventory[n].amount <= 0 ){
 		if(sd->inventory.u.items_inventory[n].equip)
 			pc_unequipitem(sd,n,2|(!(type&4) ? 1 : 0));
+
+		// [GonBee]
+		// ‹Ræ—pŽèj‚ðíœ‚·‚é‚Æ‚«‚Í‹Ræó‘Ô‚ð‰ðœ‚·‚éB
+		if (sd->inventory.u.items_inventory[n].nameid == ITEMID_REINS_OF_MOUNT &&
+			sd->sc.data[SC_ALL_RIDING]
+		) status_change_end(&sd->bl, SC_ALL_RIDING, INVALID_TIMER);
+
 		memset(&sd->inventory.u.items_inventory[n],0,sizeof(sd->inventory.u.items_inventory[0]));
 		sd->inventory_data[n] = NULL;
 	}
+
 	if(!(type&1))
 		clif_delitem(sd,n,amount,reason);
 	if(!(type&2))
