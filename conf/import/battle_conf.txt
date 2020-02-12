@@ -14,7 +14,7 @@ pybot_think_time: 250                 // AIを実行する間隔時間。
 clear_skills_on_death: 2              // 死亡するとスキルユニットを除去するブロックのタイプ。
 max_flee2: 950                        // 完全回避の上限。
 max_steal_rate: 5000                  // スティール成功率の上限。
-mvp_spawn_delay: 10                   // MVPモンスターの湧き時間率。
+mvp_spawn_delay: 5                    // MVPモンスターの湧き時間率。
 retaliate_to_master: 0                // モンスターは主人をターゲットしない。
 skillrange_from_weapon: 1             // スキルの射程に通常攻撃の射程を使用するブロックのタイプ。
 
