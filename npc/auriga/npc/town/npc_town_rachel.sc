@@ -8614,7 +8614,7 @@ OnTimer60000:
 	disablenpc "ice_warp4";
 	end;
 //OnTimer7200000:
-OnTimer720000:
+OnTimer360000:
 	stopnpctimer;
 	set .count,0;
 	hideoffnpc "‰Š#ra1";

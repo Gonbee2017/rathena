@@ -1484,7 +1484,7 @@ OnTimer60000:
 	set $@THA_2SEAL,0;
 	end;
 //OnTimer7200000:
-OnTimer720000:
+OnTimer360000:
 	areawarp "thana_boss",0,0,280,280,"tha_t12",130,48;
 	killmonsterall "thana_boss";
 	set $@THA_1SEAL,0;

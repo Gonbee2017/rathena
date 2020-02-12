@@ -13,7 +13,7 @@ OnInit:
 	initnpctimer;
 	end;
 //OnTimer7980000:
-OnTimer798000:
+OnTimer399000:
 	switch(rand(7)) {
 	case 0:
 		monster "niflheim",327,193,"ロードオブデス",1373,1,"#NifMVP::OnKilled1";
