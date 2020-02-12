@@ -360,6 +360,7 @@ void ai_t::leader_target() {
 						bat->iterate_meta_mobs(
 							nullptr,
 							ene,
+							BM_TAUNT,
 							[bat] (int mid)	{
 								bat->load_policy(mid, &bat->distance_policy_value(), &bat->normal_attack_policy_value());
 							}
@@ -391,6 +392,7 @@ void ai_t::leader_target() {
 				bat->iterate_meta_mobs(
 					nullptr,
 					tar_ene,
+					bat_mod,
 					[bat] (int mid)	{
 						bat->load_policy(mid, &bat->distance_policy_value(), &bat->normal_attack_policy_value());
 					}
@@ -617,6 +619,7 @@ void ai_t::bot_reload_equipset() {
 		bot->iterate_meta_mobs(
 			enes,
 			tar_ene,
+			bot->battle_mode(),
 			[this, &equ] (int mid) {bot->load_equipset(mid, &equ);}
 		);
 		bot->last_reloaded_equipset_tick() = now;
@@ -840,6 +843,7 @@ void ai_t::bot_play_skill() {
 		bot->iterate_meta_mobs(
 			enemies,
 			bot->target_enemy(),
+			bot->battle_mode(),
 			[this, &kid] (int mid) {bot->load_play_skill(mid, &kid);}
 		);
 		if (kid &&
@@ -1041,8 +1045,11 @@ void ai_t::battler_positioning() {
 					fol_bl = homun->master()->bl();
 				if (battler->teleport(fol_bl))
 					throw turn_end_exception();
-			} else if (battler->can_move())
-				battler->is_best_pos() = !battler->walk_xy(bat_pos.x, bat_pos.y);
+			} else if (battler->bl()->x == bat_pos.x &&
+				battler->bl()->y == bat_pos.y
+			) battler->is_best_pos() = true;
+			else if (battler->can_move())
+				battler->walk_xy(bat_pos.x, bat_pos.y);
 		}
 	}
 }
@@ -1101,6 +1108,7 @@ void ai_t::battler_use_skill() {
 					bot->iterate_meta_mobs(
 						nullptr,
 						bot->target_enemy(),
+						bot->battle_mode(),
 						[this, &kid] (int mid) {
 							if (kid == PB_FIRST) {
 								e_skill* fou = battler->first_skills()->find(mid);

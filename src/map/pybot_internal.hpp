@@ -1010,6 +1010,7 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(AM_RESURRECTHOMUN);
 	AI_SKILL_USE_FUNC(ALL_RESURRECTION);
 	AI_SKILL_USE_FUNC(AS_ENCHANTPOISON);
+	AI_SKILL_USE_FUNC(AS_GRIMTOOTH);
 	AI_SKILL_USE_FUNC(AS_POISONREACT);
 	AI_SKILL_USE_FUNC(ASC_BREAKER);
 	AI_SKILL_USE_FUNC(ASC_EDP);
@@ -1303,7 +1304,7 @@ struct battler_if {
 	virtual bool is_no_gemstone();
 	virtual bool is_primary();
 	virtual bool is_wall_side();
-	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie);
+	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, battle_modes bat_mod, yield_meta_mob_func yie);
 	virtual block_if*& leader();
 	virtual void load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val);
 	virtual int& member_index();
@@ -1663,7 +1664,7 @@ struct battler_impl : virtual block_if {
 	virtual distance_policy_values& distance_policy_value() override;
 	virtual bool& is_best_pos() override;
 	virtual bool is_primary() override;
-	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie) override;
+	virtual void iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, battle_modes bat_mod, yield_meta_mob_func yie) override;
 	virtual normal_attack_policy_values& normal_attack_policy_value() override;
 	virtual int skill_ratio(e_skill kid, int klv, block_if* tar) override;
 	void start_walking();

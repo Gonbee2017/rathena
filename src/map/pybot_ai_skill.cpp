@@ -306,6 +306,21 @@ AI_SKILL_USE_FUNC(AS_ENCHANTPOISON) {
 	if (mem) bot->use_skill_block(kid, klv, mem);
 }
 
+// グリムトゥースを使う。
+AI_SKILL_USE_FUNC(AS_GRIMTOOTH) {
+	block_if* tar_ene = bot->target_enemy();
+	if (!bot->find_skill_ignore_mobs(kid, tar_ene) &&
+		bot->check_skill_range_block(kid, klv, tar_ene) &&
+		bot->check_use_skill(kid, klv, tar_ene) &&
+		bot->skill_ratio(kid, klv, tar_ene) > 0 &&
+		bot->is_best_pos()
+	) {
+		if (!bot->sc()->data[SC_HIDING])
+			bot->use_skill_self(TF_HIDING, pc_checkskill(bot->sd(), TF_HIDING));
+		bot->use_skill_block(kid, klv, tar_ene);
+	}
+}
+
 // ポイズンリアクトを使う。
 AI_SKILL_USE_FUNC(AS_POISONREACT) {
 	block_if* tar_ene = bot->target_enemy();
@@ -327,8 +342,7 @@ AI_SKILL_USE_FUNC(ASC_BREAKER) {
 // エンチャントデッドリーポイズンを使う。
 AI_SKILL_USE_FUNC(ASC_EDP) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->distance_policy_value() == DPV_CLOSE &&
-		bot->sc_rest(SC_EDP) <= bot->get_skill_tail(kid) &&
+	if (bot->sc_rest(SC_EDP) <= bot->get_skill_tail(kid) &&
 		!bot->find_skill_ignore_mobs(kid, tar_ene) &&
 		tar_ene->fullpower(leader)
 	) bot->use_skill_self(kid, klv);

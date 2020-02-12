@@ -46,7 +46,7 @@ bool battler_if::is_no_castcancel() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_no_gemstone() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_primary() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool battler_if::is_wall_side() {RAISE_NOT_IMPLEMENTED_ERROR;}
-void battler_if::iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, yield_meta_mob_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
+void battler_if::iterate_meta_mobs(const std::vector<block_if*>* enes, block_if* tar_ene, battle_modes bat_mod, yield_meta_mob_func yie) {RAISE_NOT_IMPLEMENTED_ERROR;}
 block_if*& battler_if::leader() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void battler_if::load_policy(int mid, distance_policy_values* dis_pol_val, normal_attack_policy_values* nor_att_pol_val) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::max_distance_value() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -501,9 +501,10 @@ battler_impl::is_primary() {
 void battler_impl::iterate_meta_mobs(
 	const std::vector<block_if*>* enes, // 敵モンスターのベクタ。
 	block_if* tar_ene,                  // ターゲットしている敵モンスター。
+	battle_modes bat_mod,               // 戦闘モード。
 	yield_meta_mob_func yie             // メタモンスター獲得ハンドラ。
 ) {
-	if (battle_mode() != BM_NONE) {
+	if (bat_mod != BM_NONE) {
 		int pre_mid = 0;
 		if (enes) {
 			for (block_if* ene : *enes) {
@@ -512,10 +513,10 @@ void battler_impl::iterate_meta_mobs(
 				pre_mid = ene->md()->mob_id;
 			}
 		}
-		yie(tar_ene->md()->mob_id);
+		if (tar_ene) yie(tar_ene->md()->mob_id);
 	}
 	if (leader()->member_dead()) yie(MM_MEMBER_DEAD);
-	if (battle_mode() != BM_NONE) {
+	if (bat_mod != BM_NONE) {
 		if (!check_hp(4)) {
 			if (!check_hp(3)) {
 				if (!check_hp(2)) {
@@ -1871,8 +1872,9 @@ member_impl::can_use_skill(
 	sd()->spiritball = req.spiritball;
 	bool res = !(sc()->option & OPTION_INVISIBLE) &&
 		!skill_isNotOk(kid, sd()) &&
-		skill_check_condition_castbegin(sd(), kid, klv, 0) &&
-		skill_check_condition_castend(sd(), kid, klv, 0);
+		(kid == AS_GRIMTOOTH ||
+			skill_check_condition_castbegin(sd(), kid, klv, 0)
+		) && skill_check_condition_castend(sd(), kid, klv, 0);
 	sd()->spiritball = old_spi;
 	return res;
 }
@@ -2022,6 +2024,7 @@ member_impl::find_item_not_save_mobs(
 	iterate_meta_mobs(
 		nullptr,
 		target_enemy(),
+		battle_mode(),
 		[this, nid, &res] (int mid)
 		{res = res || item_not_save_mobs()->find(ITEM_SAVE_MOB(nid, mid));}
 	);
@@ -2037,6 +2040,7 @@ member_impl::find_item_save_mobs(
 	iterate_meta_mobs(
 		nullptr,
 		target_enemy(),
+		battle_mode(),
 		[this, nid, &res] (int mid)
 		{res = res || item_save_mobs()->find(ITEM_SAVE_MOB(nid, mid));}
 	);
@@ -2053,6 +2057,7 @@ member_impl::find_skill_ignore_mobs(
 	iterate_meta_mobs(
 		nullptr,
 		ene,
+		battle_mode(),
 		[this, kid, &res] (int mid)
 		{res = res || skill_ignore_mobs()->find(SKILL_IGNORE_MOB(kid, mid));}
 	);
@@ -2396,7 +2401,7 @@ void member_impl::load_policy(
 ) {
 	if (*dis_pol_val == DPV_PENDING) {
 		auto dis_pol = distance_policies()->find(mid);
-		if (dis_pol) *dis_pol_val = dis_pol->value;
+		if (dis_pol)*dis_pol_val = dis_pol->value;
 	}
 	if (*nor_att_pol_val == NAPV_PENDING) {
 		auto nor_att_pol = normal_attack_policies()->find(mid);
@@ -2512,6 +2517,7 @@ member_impl::mob_is_first(
 	iterate_meta_mobs(
 		nullptr,
 		ene,
+		battle_mode(),
 		[this, &res] (int mid)
 		{res = res || first_mobs()->find(mid);}
 	);
@@ -2527,6 +2533,7 @@ member_impl::mob_is_ignore(
 	iterate_meta_mobs(
 		nullptr,
 		ene,
+		battle_mode(),
 		[this, &res] (int mid)
 		{res = res || ignore_mobs()->find(mid);}
 	);
@@ -3067,7 +3074,9 @@ void skill_user_impl::use_skill_block(
 				pc_delinvincibletimer(sd());
 			cast_end_func() = cas_end_fun;
 			blo->skill_used_ticks()[kid] = now;
-			if (kid == NJ_KASUMIKIRI) blo->skill_used_ticks()[TF_HIDING] = now;
+			if (kid == AS_GRIMTOOTH ||
+				kid == NJ_KASUMIKIRI
+			) skill_used_ticks()[TF_HIDING] = now;
 		}
 	};
 	if (dynamic_cast<bot_impl*>(this)) {
