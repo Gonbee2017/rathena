@@ -66,11 +66,12 @@
 #define MAX_GUILD_STORAGE 1000 ///Max number of storage slots a guild
 
 // [GonBee]
-// パーティーの最大人数を16人にする。
+// パーティーの定員は20人、ギルドの定員は100人にする。
 //#define MAX_PARTY 12 ///Max party member
-#define MAX_PARTY 16 ///Max party member
+//#define MAX_GUILD 16+10*6	///Increased max guild members +6 per 1 extension levels [Lupus]
+#define MAX_PARTY 20 ///Max party member
+#define MAX_GUILD 20+8*10	///Increased max guild members +12 per 1 extension levels [GonBee]
 
-#define MAX_GUILD 16+10*6	///Increased max guild members +6 per 1 extension levels [Lupus]
 #define MAX_GUILDPOSITION 20	///Increased max guild positions to accomodate for all members [Valaris] (removed) [PoW]
 #define MAX_GUILDEXPULSION 32 ///Max Guild expulsion
 #define MAX_GUILDALLIANCE 16 ///Max Guild alliance
