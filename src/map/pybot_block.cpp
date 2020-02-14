@@ -3384,6 +3384,8 @@ bot_t::bot_t(
 // Bot‚ğ”jŠü‚·‚éB
 bot_t::~bot_t() {
 	CS_ENTER;
+	if (leader()->sd()->target_storage == &sd()->storage)
+		storage_storageclose(leader()->sd());
 	if (session[fd()] &&
 		session[fd()]->session_data == sd()
 	) {

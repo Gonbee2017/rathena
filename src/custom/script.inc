@@ -485,6 +485,27 @@ BUILDIN_FUNC(isbot) {
 }
 
 // [GonBee]
+// メンバーの個人倉庫を開く。
+// i メンバーのアカウントID。
+// 戻り値 結果。
+BUILDIN_FUNC(openstorage_member) {
+	map_session_data* sd;
+	if (script_rid2sd(sd)) {
+		int tar_rid = script_getnum(st, 2);
+		map_session_data* tar_sd = map_id2sd(tar_rid);
+		if (tar_sd &&
+			(tar_sd == sd ||
+				pybot::get_leader(tar_sd->status.char_id) == sd
+			)
+		) {
+			sd->target_storage = &tar_sd->storage;
+			storage_storageopen(sd);
+		}
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // PCがMVPを獲得したことがあるかを判定する。
 // i モンスターID。
 // 戻り値 結果。

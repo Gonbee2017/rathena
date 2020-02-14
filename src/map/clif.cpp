@@ -9431,9 +9431,15 @@ void clif_messagecolor_target(struct block_list *bl, unsigned long color, const 
 void clif_refresh_storagewindow(struct map_session_data *sd) {
 	// Notify the client that the storage is open
 	if( sd->state.storage_flag == 1 ) {
-		storage_sortitem(sd->storage.u.items_storage, ARRAYLENGTH(sd->storage.u.items_storage));
-		clif_storagelist(sd, sd->storage.u.items_storage, ARRAYLENGTH(sd->storage.u.items_storage), storage_getName(0));
-		clif_updatestorageamount(sd, sd->storage.amount, MAX_STORAGE);
+
+		// [GonBee]
+		//storage_sortitem(sd->storage.u.items_storage, ARRAYLENGTH(sd->storage.u.items_storage));
+		//clif_storagelist(sd, sd->storage.u.items_storage, ARRAYLENGTH(sd->storage.u.items_storage), storage_getName(0));
+		//clif_updatestorageamount(sd, sd->storage.amount, MAX_STORAGE);
+		storage_sortitem(sd->target_storage->u.items_storage, ARRAYLENGTH(sd->target_storage->u.items_storage));
+		clif_storagelist(sd, sd->target_storage->u.items_storage, ARRAYLENGTH(sd->target_storage->u.items_storage), storage_getName(0));
+		clif_updatestorageamount(sd, sd->target_storage->amount, MAX_STORAGE);
+
 	}
 	// Notify the client that the gstorage is open otherwise it will
 	// remain locked forever and nobody will be able to access it
@@ -12874,7 +12880,11 @@ void clif_parse_MoveToKafra(int fd, struct map_session_data *sd)
 	}
 
 	if (sd->state.storage_flag == 1)
-		storage_storageadd(sd, &sd->storage, item_index, item_amount);
+
+		// [GonBee]
+		//storage_storageadd(sd, &sd->storage, item_index, item_amount);
+		storage_storageadd(sd, sd->target_storage, item_index, item_amount);
+
 	else
 	if (sd->state.storage_flag == 2)
 		storage_guild_storageadd(sd, item_index, item_amount);
@@ -12896,7 +12906,11 @@ void clif_parse_MoveFromKafra(int fd,struct map_session_data *sd)
 	item_amount = RFIFOL(fd,info->pos[1]);
 
 	if (sd->state.storage_flag == 1)
-		storage_storageget(sd, &sd->storage, item_index, item_amount);
+
+		// [GonBee]
+		//storage_storageget(sd, &sd->storage, item_index, item_amount);
+		storage_storageget(sd, sd->target_storage, item_index, item_amount);
+
 	else if(sd->state.storage_flag == 2)
 		storage_guild_storageget(sd, item_index, item_amount);
 	else if(sd->state.storage_flag == 3)
@@ -12925,7 +12939,11 @@ void clif_parse_MoveToKafraFromCart(int fd, struct map_session_data *sd){
 	}
 
 	if (sd->state.storage_flag == 1)
-		storage_storageaddfromcart(sd, &sd->storage, idx, amount);
+
+		// [GonBee]
+		//storage_storageaddfromcart(sd, &sd->storage, idx, amount);
+		storage_storageaddfromcart(sd, sd->target_storage, idx, amount);
+
 	else if (sd->state.storage_flag == 2)
 		storage_guild_storageaddfromcart(sd, idx, amount);
 	else if (sd->state.storage_flag == 3)
@@ -12946,7 +12964,11 @@ void clif_parse_MoveFromKafraToCart(int fd, struct map_session_data *sd){
 		return;
 
 	if (sd->state.storage_flag == 1)
-		storage_storagegettocart(sd, &sd->storage, idx, amount);
+
+		// [GonBee]
+		//storage_storagegettocart(sd, &sd->storage, idx, amount);
+		storage_storagegettocart(sd, sd->target_storage, idx, amount);
+
 	else
 	if (sd->state.storage_flag == 2)
 		storage_guild_storagegettocart(sd, idx, amount);

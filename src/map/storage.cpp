@@ -159,9 +159,14 @@ int storage_storageopen(struct map_session_data *sd)
 	}
 
 	sd->state.storage_flag = 1;
-	storage_sortitem(sd->storage.u.items_storage, sd->storage.max_amount);
-	clif_storagelist(sd, sd->storage.u.items_storage, sd->storage.max_amount, storage_getName(0));
-	clif_updatestorageamount(sd, sd->storage.amount, sd->storage.max_amount);
+
+	// [GonBee]
+	//storage_sortitem(sd->storage.u.items_storage, sd->storage.max_amount);
+	//clif_storagelist(sd, sd->storage.u.items_storage, sd->storage.max_amount, storage_getName(0));
+	//clif_updatestorageamount(sd, sd->storage.amount, sd->storage.max_amount);
+	storage_sortitem(sd->target_storage->u.items_storage, sd->target_storage->max_amount);
+	clif_storagelist(sd, sd->target_storage->u.items_storage, sd->target_storage->max_amount, storage_getName(0));
+	clif_updatestorageamount(sd, sd->target_storage->amount, sd->target_storage->max_amount);
 
 	return 0;
 }
@@ -469,7 +474,9 @@ void storage_storagesave(struct map_session_data *sd)
 {
 	nullpo_retv(sd);
 
-	intif_storage_save(sd, &sd->storage);
+	// [GonBee]
+	//intif_storage_save(sd, &sd->storage);
+	intif_storage_save(sd, sd->target_storage);
 }
 
 /**
@@ -481,7 +488,9 @@ void storage_storagesaved(struct map_session_data *sd)
 	if (!sd)
 		return;
 
-	sd->storage.dirty = false;
+	// [GonBee]
+	//sd->storage.dirty = false;
+	sd->target_storage->dirty = false;
 
 	if (sd->state.storage_flag == 1) {
 		sd->state.storage_flag = 0;
@@ -498,7 +507,10 @@ void storage_storageclose(struct map_session_data *sd)
 {
 	nullpo_retv(sd);
 
-	if (sd->storage.dirty) {
+	// [GonBee]
+	//if (sd->storage.dirty) {
+	if (sd->target_storage->dirty) {
+
 		if (save_settings&CHARSAVE_STORAGE)
 			chrif_save(sd, CSAVE_INVENTORY|CSAVE_CART);
 		else
@@ -509,6 +521,10 @@ void storage_storageclose(struct map_session_data *sd)
 		}
 	} else
 		storage_storagesaved(sd);
+
+	// [GonBee]
+	sd->target_storage = &sd->storage;
+
 }
 
 /**

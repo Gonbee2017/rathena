@@ -4569,11 +4569,56 @@ bot_login(
 			map_deliddb(&sd->bl);
 		}};
 
+		item itm{};
+		sd->storage.id = sd->status.account_id;
+		sd->storage.type = TABLE_STORAGE;
+		sd->storage.stor_id = 0;
+		sd->storage.max_amount = MAX_STORAGE;
+		sd->storage.state.get = sd->storage.state.put = 1;
+		ses->execute(
+			"SELECT"
+			" `", construct<sql_column>("id"          , itm.id             ), "`,"
+			" `", construct<sql_column>("nameid"      , itm.nameid         ), "`,"
+			" `", construct<sql_column>("amount"      , itm.amount         ), "`,"
+			" `", construct<sql_column>("equip"       , itm.equip          ), "`,"
+			" `", construct<sql_column>("identify"    , itm.identify       ), "`,"
+			" `", construct<sql_column>("refine"      , itm.refine         ), "`,"
+			" `", construct<sql_column>("attribute"   , itm.attribute      ), "`,"
+			" `", construct<sql_column>("expire_time" , itm.expire_time    ), "`,"
+			" `", construct<sql_column>("bound"       , itm.bound          ), "`,"
+			" `", construct<sql_column>("unique_id"   , itm.unique_id      ), "`,"
+			" `", construct<sql_column>("card0"       , itm.card[0]        ), "`,"
+			" `", construct<sql_column>("card1"       , itm.card[1]        ), "`,"
+			" `", construct<sql_column>("card2"       , itm.card[2]        ), "`,"
+			" `", construct<sql_column>("card3"       , itm.card[3]        ), "`,"
+			" `", construct<sql_column>("option_id0"  , itm.option[0].id   ), "`,"
+			" `", construct<sql_column>("option_val0" , itm.option[0].value), "`,"
+			" `", construct<sql_column>("option_parm0", itm.option[0].param), "`,"
+			" `", construct<sql_column>("option_id1"  , itm.option[1].id   ), "`,"
+			" `", construct<sql_column>("option_val1" , itm.option[1].value), "`,"
+			" `", construct<sql_column>("option_parm1", itm.option[1].param), "`,"
+			" `", construct<sql_column>("option_id2"  , itm.option[2].id   ), "`,"
+			" `", construct<sql_column>("option_val2" , itm.option[2].value), "`,"
+			" `", construct<sql_column>("option_parm2", itm.option[2].param), "`,"
+			" `", construct<sql_column>("option_id3"  , itm.option[3].id   ), "`,"
+			" `", construct<sql_column>("option_val3" , itm.option[3].value), "`,"
+			" `", construct<sql_column>("option_parm3", itm.option[3].param), "`,"
+			" `", construct<sql_column>("option_id4"  , itm.option[4].id   ), "`,"
+			" `", construct<sql_column>("option_val4" , itm.option[4].value), "`,"
+			" `", construct<sql_column>("option_parm4", itm.option[4].param), "` "
+			"FROM `storage` "
+			"WHERE `account_id` = ", construct<sql_param>(sd->status.account_id), " "
+			"ORDER BY `nameid`"
+		);
+		for (sd->storage.amount = 0; ses->next_row(); ++sd->storage.amount)
+			sd->storage.u.items_storage[sd->storage.amount] = itm;
+		sd->target_storage = &sd->storage;
+		pc_check_available_item(sd, ITMCHK_STORAGE);
+
 		sd->inventory.id = sd->status.char_id;
 		sd->inventory.type = TABLE_INVENTORY;
 		sd->inventory.stor_id = 0;
 		sd->inventory.max_amount = MAX_INVENTORY;
-		item itm{};
 		ses->execute(
 			"SELECT"
 			" `", construct<sql_column>("id"          , itm.id             ), "`,"
@@ -4612,6 +4657,23 @@ bot_login(
 		);
 		for (sd->inventory.amount = 0; ses->next_row(); ++sd->inventory.amount)
 			sd->inventory.u.items_inventory[sd->inventory.amount] = itm;
+		pc_setinventorydata(sd);
+		pc_setequipindex(sd);
+		pc_check_expiration(sd);
+		pc_check_available_item(sd, ITMCHK_INVENTORY);
+		pc_itemcd_do(sd, true);
+#ifdef BOUND_ITEMS
+		if (!sd->status.party_id) {
+			int idxlist[MAX_INVENTORY];
+			int j = pc_bound_chk(sd, BOUND_PARTY, idxlist);
+			for (int i = 0; i < j; i++)
+				pc_delitem(sd, idxlist[i], sd->inventory.u.items_inventory[idxlist[i]].amount, 4, 1, LOG_TYPE_OTHER);
+		}
+#endif
+		status_set_viewdata(&sd->bl, sd->status.class_);
+		pc_load_combo(sd);
+		status_calc_pc(sd, e_status_calc_opt(SCO_FIRST | SCO_FORCE));
+		status_calc_weight(sd, e_status_calc_weight_opt(CALCWT_ITEM | CALCWT_MAXBONUS));
 
 		sd->cart.id = sd->status.char_id;
 		sd->cart.type = TABLE_CART;
@@ -4654,24 +4716,6 @@ bot_login(
 		);
 		for (sd->cart.amount = 0; ses->next_row(); ++sd->cart.amount)
 			sd->cart.u.items_cart[sd->cart.amount] = itm;
-
-		pc_setinventorydata(sd);
-		pc_setequipindex(sd);
-		pc_check_expiration(sd);
-		pc_check_available_item(sd, ITMCHK_INVENTORY);
-		pc_itemcd_do(sd, true);
-#ifdef BOUND_ITEMS
-		if (!sd->status.party_id) {
-			int idxlist[MAX_INVENTORY];
-			int j = pc_bound_chk(sd, BOUND_PARTY, idxlist);
-			for (int i = 0; i < j; i++)
-				pc_delitem(sd, idxlist[i], sd->inventory.u.items_inventory[idxlist[i]].amount, 4, 1, LOG_TYPE_OTHER);
-		}
-#endif
-		status_set_viewdata(&sd->bl, sd->status.class_);
-		pc_load_combo(sd);
-		status_calc_pc(sd, e_status_calc_opt(SCO_FIRST | SCO_FORCE));
-		status_calc_weight(sd, e_status_calc_weight_opt(CALCWT_ITEM | CALCWT_MAXBONUS));
 		pc_check_available_item(sd, ITMCHK_CART);
 
 		status_change_data sc_dat{};

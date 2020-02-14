@@ -58,11 +58,12 @@
 #define DEFAULT_WALK_SPEED 150 ///Default walk speed
 #define MIN_WALK_SPEED 20 ///Min walk speed
 #define MAX_WALK_SPEED 1000 ///Max walk speed
-#define MAX_STORAGE 600 ///Max number of storage slots a player can have
 
 // [GonBee]
-// ギルド倉庫の容量を1000に増やす。
+// 個人倉庫とギルド倉庫の容量を1000に増やす。
+//#define MAX_STORAGE 600 ///Max number of storage slots a player can have
 //#define MAX_GUILD_STORAGE 600 ///Max number of storage slots a guild
+#define MAX_STORAGE 1000 ///Max number of storage slots a player can have
 #define MAX_GUILD_STORAGE 1000 ///Max number of storage slots a guild
 
 // [GonBee]

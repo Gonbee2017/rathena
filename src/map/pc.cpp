@@ -1508,6 +1508,9 @@ CS_ENTER;
 	intif_storage_request(sd,TABLE_CART, 0, STOR_MODE_ALL); // Request cart data
 	intif_storage_request(sd,TABLE_INVENTORY, 0, STOR_MODE_ALL); // Request inventory data
 
+	// [GonBee]
+	sd->target_storage = &sd->storage;
+
 	if (sd->status.party_id)
 		party_member_joined(sd);
 	if (sd->status.guild_id)

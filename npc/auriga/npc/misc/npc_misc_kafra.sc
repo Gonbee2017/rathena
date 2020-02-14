@@ -297,21 +297,41 @@ function	script	KafraStorage	{
 		mes "倉庫は基本スキルレベル6を";
 		mes "習得してから利用可能となります。";
 	}
-	else if(countitem(7059) < 1 && 
-		Zeny<getarg(0)
-	) {
-		mes "[カプラ職員]";
-		mes "お客様、お金が足りません。";
-		mes "倉庫利用料金は"+getarg(0)+"Zenyです。";
-	}
 	else {
-		if (countitem(7059) < 1) {
-			set Zeny,Zeny-getarg(0);
-			set KAFRA_PIT,KAFRA_PIT+(getarg(0)/10);
-		} else delitem 7059, 1;
-		openstorage;
-		cutin "kafra_01",255;
-		close;
+		set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
+		if (.@mem_siz == 1) set .@tar_rid, getcharid(3);
+		else {
+			mes "[カプラ職員]";
+			mes "どなたの倉庫を開きますか？";
+			next;
+			for (set .@i, 0; .@i < .@mem_siz; ++.@i)
+				set .@mem_lis$[getarraysize(.@mem_lis$)], "^4040FF" + .@mem_nams$[.@i] + "^000000";
+			set .@mem_lis$[getarraysize(.@mem_lis$)], "やめる";
+			set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
+			if (.@mem_ind < .@mem_siz) set .@tar_rid, .@mem_rids[.@mem_ind];
+		}
+		
+		if (.@tar_rid) {
+			if (countitem(7059) < 1 && 
+				Zeny<getarg(0)
+			) {
+				mes "[カプラ職員]";
+				mes "お客様、お金が足りません。";
+				mes "倉庫利用料金は"+getarg(0)+"Zenyです。";
+			}
+			else {
+				if (countitem(7059) < 1) {
+					set Zeny,Zeny-getarg(0);
+					set KAFRA_PIT,KAFRA_PIT+(getarg(0)/10);
+				} else delitem 7059, 1;
+				
+				//openstorage;
+				openstorage_member .@tar_rid;
+				
+				cutin "kafra_01",255;
+				close;
+			}
+		}
 	}
 	close2;
 	cutin "kafra_01",255;

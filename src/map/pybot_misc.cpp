@@ -501,7 +501,7 @@ void cart_context::delete_(
 // 個人倉庫の文脈を構築する。
 private_storage_context::private_storage_context(
 	map_session_data* sd_
-) : storage_context(MAX_STORAGE, sd_, &sd_->storage) {}
+) : storage_context(MAX_STORAGE, sd_, sd_->target_storage) {}
 
 // 個人倉庫に追加する。
 bool // 成功か。

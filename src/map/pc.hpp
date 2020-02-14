@@ -338,6 +338,10 @@ struct map_session_data {
 	struct s_storage inventory;
 	struct s_storage cart;
 
+	// [GonBee]
+	// ‘€ì‚Ì‘ÎÛ‚Æ‚È‚éŒÂl‘qŒÉB
+	s_storage* target_storage;
+
 	struct item_data* inventory_data[MAX_INVENTORY]; // direct pointers to itemdb entries (faster than doing item_id lookups)
 	short equip_index[EQI_MAX];
 	short equip_switch_index[EQI_MAX];
