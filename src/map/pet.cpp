@@ -1369,7 +1369,7 @@ static int pet_ai_sub_hard_lootsearch(struct block_list *bl,va_list ap)
 	//if(sd_charid && sd_charid != pd->master->status.char_id)
 	//	return 0;
 	if (!pybot::pc_can_takeitem(pd->master, fitem)) return 0;
-	map_session_data* lea_sd = pybot::get_leader(pd->master->status.char_id);
+	map_session_data* lea_sd = pybot::get_team_leader(pd->master->status.char_id);
 	if (lea_sd) {
 		if (pybot::flooritem_to_be_ignored(lea_sd, fitem) ||
 			!pc_inventoryblank(pd->master) ||

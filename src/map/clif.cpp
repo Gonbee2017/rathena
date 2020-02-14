@@ -16741,11 +16741,11 @@ void clif_parse_ViewPlayerEquip(int fd, struct map_session_data* sd)
 		return;
 
 	// [GonBee]
-	// Botはリーダーに装備閲覧を許す。
+	// Botはチームリーダーに装備閲覧を許す。
 	//if( tsd->status.show_equip || pc_has_permission(sd, PC_PERM_VIEW_EQUIPMENT) )
 	if (tsd->status.show_equip ||
 		pc_has_permission(sd, PC_PERM_VIEW_EQUIPMENT) ||
-		pybot::get_leader(tsd->status.char_id) == sd
+		pybot::get_team_leader(tsd->status.char_id) == sd
 	)
 
 		clif_viewequip_ack(sd, tsd);

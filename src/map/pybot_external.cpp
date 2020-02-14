@@ -204,19 +204,6 @@ get_last_summoned_id(
 	return ensure_leader(sd)->last_summoned_id();
 }
 
-// Botのリーダーを取得する。
-map_session_data* // 取得したリーダー。
-                  // Botではないか、リーダーがログアウトしているならnullptr。
-get_leader(
-	int cid // キャラクターID。
-) {
-	CS_ENTER;
-	block_if* bot = find_map_data(all_bots, cid);
-	map_session_data* lea = nullptr;
-	if (bot) lea = map_id2sd(bot->leader()->account_id());
-	return lea;
-}
-
 // 現在のマップの初期位置を取得する。
 block_list* // 取得した位置。
 get_map_initial_position(
@@ -249,10 +236,23 @@ get_map_name_japanese(
 	return get_map_name_japanese(map_mapindex2mapid(mapindex_name2id(nam_eng.c_str())));
 }
 
-// メンバーリストを取得する。
-std::shared_ptr<std::vector<std::shared_ptr<member_info>>> // 取得したメンバーリスト。
-get_member_list(
-	map_session_data* sd // リーダーのセッションデータ。
+// Botのチームリーダーを取得する。
+map_session_data* // 取得したリーダー。
+                  // Botではないか、リーダーがログアウトしているならnullptr。
+get_team_leader(
+	int cid // キャラクターID。
+) {
+	CS_ENTER;
+	block_if* bot = find_map_data(all_bots, cid);
+	map_session_data* lea = nullptr;
+	if (bot) lea = map_id2sd(bot->leader()->account_id());
+	return lea;
+}
+
+// チームメンバーのリストを取得する。
+std::shared_ptr<std::vector<std::shared_ptr<member_info>>> // 取得したリスト。
+get_team_member_list(
+	map_session_data* sd // チームリーダーのセッションデータ。
 ) {
 	CS_ENTER;
 	block_if* lea = ensure_leader(sd);

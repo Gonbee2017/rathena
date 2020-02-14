@@ -3034,7 +3034,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 
 		// [GonBee]
 		// PC‚ªMVP‚ðŠl“¾‚µ‚½‚±‚Æ‚ð‹L˜^‚·‚éB
-		act_mvp_sd = pybot::get_leader(mvp_sd->status.char_id);
+		act_mvp_sd = pybot::get_team_leader(mvp_sd->status.char_id);
 		if (!act_mvp_sd) act_mvp_sd = mvp_sd;
 		pybot::pc_acquired_mvp(act_mvp_sd, md);
 

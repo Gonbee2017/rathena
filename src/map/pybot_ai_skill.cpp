@@ -1077,14 +1077,14 @@ AI_SKILL_USE_FUNC(HW_GANBANTEIN) {
 // グラビテーションフィールドを使う。
 AI_SKILL_USE_FUNC(HW_GRAVITATION) {
 	block_if* tar_ene = bot->target_enemy();
-	if (bot->check_skill_range_block(kid, klv, tar_ene)) {
+	if (!bot->find_skill_ignore_mobs(kid, tar_ene) &&
+		bot->check_skill_range_block(kid, klv, tar_ene)
+	) {
 		int cou = std::count_if(ALL_RANGE(*enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
-				return !bot->find_skill_ignore_mobs(kid, ene) &&
-					bot->check_use_skill(kid, klv, ene) &&
-					!ene->is_paralysis() &&
+				return bot->check_use_skill(kid, klv, ene) &&
 					!ene->is_summoned() &&
-					!ene->sc()->data[SC_GRAVITATION];
+					!skill_unit_exists_block(ene, skill_unit_key_map{SKILL_UNIT_KEY(HW_GRAVITATION)});
 			})
 		);
 		if (cou >= bot->get_skill_mobs()) bot->use_skill_xy(kid, klv, tar_ene->bl()->x, tar_ene->bl()->y);

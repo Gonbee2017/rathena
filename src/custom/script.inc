@@ -319,12 +319,56 @@ BUILDIN_FUNC(getmapnamejapanese) {
 }
 
 // [GonBee]
+// ペットIDを取得する。
+// 戻り値 取得したペットID。
+BUILDIN_FUNC(getpetid) {
+	int pid = 0;
+	map_session_data* sd;
+	if (script_rid2sd(sd) &&
+		sd->pd
+	) pid = sd->pd->get_pet_db()->class_;
+	script_pushint(st, pid);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// ペットの親密度を取得する。
+// 戻り値 取得したペットの親密度。
+BUILDIN_FUNC(getpetintimate) {
+	int int_ = 0;
+	map_session_data* sd;
+	if (script_rid2sd(sd) &&
+		sd->pd
+	) int_ = sd->pd->pet.intimate;
+	script_pushint(st, int_);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
+// チームリーダーのアカウントIDを取得する。
+// ? キャラクターID。
+// 戻り値 チームリーダーのアカウントID。
+BUILDIN_FUNC(getteamleaderrid) {
+	int lea_rid = 0;
+	int cid = 0;
+	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
+	else {
+		map_session_data* sd;
+		if (script_rid2sd(sd)) cid = sd->status.char_id;
+	}
+	map_session_data* lea_sd = pybot::get_team_leader(cid);
+	if (lea_sd) lea_rid = lea_sd->status.account_id;
+	script_pushint(st, lea_rid);
+	return SCRIPT_CMD_SUCCESS;
+}
+
+// [GonBee]
 // チームメンバーのリストを取得する。
 // r アカウントIDの配列。
 // r キャラクターIDの配列。
 // r 名前の配列。
 // 戻り値 メンバーの数。
-BUILDIN_FUNC(getmemberlist) {
+BUILDIN_FUNC(getteammemberlist) {
 	script_data* rids = script_getdata(st, 2);
 	if (!data_isreference(rids)) {
 		ShowError("script:querymvpranking: not a variable\n");
@@ -361,7 +405,7 @@ BUILDIN_FUNC(getmemberlist) {
 		!is_string_variable(reference_getname(cclas)) &&
 		script_rid2sd(sd)
 	) {
-		auto mem_lis = pybot::get_member_list(sd);
+		auto mem_lis = pybot::get_team_member_list(sd);
 		uint32 rids_ind = reference_getindex(rids);
 		uint32 cids_ind = reference_getindex(cids);
 		uint32 cnams_ind = reference_getindex(cnams);
@@ -407,50 +451,6 @@ BUILDIN_FUNC(getmemberlist) {
 }
 
 // [GonBee]
-// ペットIDを取得する。
-// 戻り値 取得したペットID。
-BUILDIN_FUNC(getpetid) {
-	int pid = 0;
-	map_session_data* sd;
-	if (script_rid2sd(sd) &&
-		sd->pd
-	) pid = sd->pd->get_pet_db()->class_;
-	script_pushint(st, pid);
-	return SCRIPT_CMD_SUCCESS;
-}
-
-// [GonBee]
-// ペットの親密度を取得する。
-// 戻り値 取得したペットの親密度。
-BUILDIN_FUNC(getpetintimate) {
-	int int_ = 0;
-	map_session_data* sd;
-	if (script_rid2sd(sd) &&
-		sd->pd
-	) int_ = sd->pd->pet.intimate;
-	script_pushint(st, int_);
-	return SCRIPT_CMD_SUCCESS;
-}
-
-// [GonBee]
-// チームリーダーのアカウントIDを取得する。
-// ? キャラクターID。
-// 戻り値 チームリーダーのアカウントID。
-BUILDIN_FUNC(getteamleaderrid) {
-	int lea_rid = 0;
-	int cid = 0;
-	if (script_hasdata(st, 2)) cid = script_getnum(st, 2);
-	else {
-		map_session_data* sd;
-		if (script_rid2sd(sd)) cid = sd->status.char_id;
-	}
-	map_session_data* lea_sd = pybot::get_leader(cid);
-	if (lea_sd) lea_rid = lea_sd->status.account_id;
-	script_pushint(st, lea_rid);
-	return SCRIPT_CMD_SUCCESS;
-}
-
-// [GonBee]
 // ギルドマスターを変更する。
 // i      ギルドID。
 // i      新しいギルドマスターのキャラクターID。
@@ -485,17 +485,17 @@ BUILDIN_FUNC(isbot) {
 }
 
 // [GonBee]
-// メンバーの個人倉庫を開く。
+// チームメンバーの個人倉庫を開く。
 // i メンバーのアカウントID。
 // 戻り値 結果。
-BUILDIN_FUNC(openstorage_member) {
+BUILDIN_FUNC(openstorageteammember) {
 	map_session_data* sd;
 	if (script_rid2sd(sd)) {
 		int tar_rid = script_getnum(st, 2);
 		map_session_data* tar_sd = map_id2sd(tar_rid);
 		if (tar_sd &&
 			(tar_sd == sd ||
-				pybot::get_leader(tar_sd->status.char_id) == sd
+				pybot::get_team_leader(tar_sd->status.char_id) == sd
 			)
 		) {
 			sd->target_storage = &tar_sd->storage;

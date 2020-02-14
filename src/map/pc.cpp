@@ -4933,7 +4933,7 @@ bool pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem)
 
 	// [GonBee]
 	// Botは無視アイテムを拾わない。
-	map_session_data* lea_sd = pybot::get_leader(sd->status.char_id);
+	map_session_data* lea_sd = pybot::get_team_leader(sd->status.char_id);
 	if (lea_sd &&
 		pybot::flooritem_to_be_ignored(lea_sd, fitem)
 	) return false;

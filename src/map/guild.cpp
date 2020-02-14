@@ -618,8 +618,8 @@ int guild_invite(struct map_session_data *sd, struct map_session_data *tsd) {
 	}
 
 	// [GonBee]
-	// Botはリーダーが加入しているギルドからの加入要請を受諾する。
-	map_session_data* lea_sd = pybot::get_leader(tsd->status.char_id);
+	// Botはチームリーダーが加入しているギルドからの加入要請を受諾する。
+	map_session_data* lea_sd = pybot::get_team_leader(tsd->status.char_id);
 	if (lea_sd) {
 		if (sd->status.guild_id != lea_sd->status.guild_id) {
 			clif_guild_inviteack(sd, 0);

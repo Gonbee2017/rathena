@@ -111,7 +111,7 @@ prontera,147,165,6	script	MVPマニア::MVPMania	862,{
 				mes "これで足りなかったスキルを";
 				mes "ゲットできるかも？";
 				next;
-				set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
+				set .@mem_siz, getteammemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
 				for (set .@i, 0; .@i < .@mem_siz; ++.@i)
 					set .@mem_lis$[getarraysize(.@mem_lis$)], "^4040FF" + .@mem_nams$[.@i] + "^000000";
 				set .@mem_lis$[getarraysize(.@mem_lis$)], "誰も強化しない";

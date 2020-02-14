@@ -298,7 +298,7 @@ function	script	KafraStorage	{
 		mes "習得してから利用可能となります。";
 	}
 	else {
-		set .@mem_siz, getmemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
+		set .@mem_siz, getteammemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
 		if (.@mem_siz == 1) set .@tar_rid, getcharid(3);
 		else {
 			mes "[カプラ職員]";
@@ -326,7 +326,7 @@ function	script	KafraStorage	{
 				} else delitem 7059, 1;
 				
 				//openstorage;
-				openstorage_member .@tar_rid;
+				openstorageteammember .@tar_rid;
 				
 				cutin "kafra_01",255;
 				close;

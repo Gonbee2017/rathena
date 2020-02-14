@@ -439,8 +439,8 @@ int party_invite(struct map_session_data *sd,struct map_session_data *tsd)
 	}
 
 	// [GonBee]
-	// Botはリーダーが加入しているパーティーからの加入要請を受諾する。
-	map_session_data* lea_sd = pybot::get_leader(tsd->status.char_id);
+	// Botはチームリーダーが加入しているパーティーからの加入要請を受諾する。
+	map_session_data* lea_sd = pybot::get_team_leader(tsd->status.char_id);
 	if (lea_sd) {
 		if (sd->status.party_id != lea_sd->status.party_id) {
 			clif_party_invite_reply(sd, tsd->status.name, PARTY_REPLY_REJECTED);

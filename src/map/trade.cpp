@@ -87,8 +87,8 @@ void trade_traderequest(struct map_session_data *sd, struct map_session_data *ta
 	}
 
 	// [GonBee]
-	// Botはリーダーの取引要請を受諾する。
-	map_session_data* lea_sd = pybot::get_leader(target_sd->status.char_id);
+	// Botはチームリーダーの取引要請を受諾する。
+	map_session_data* lea_sd = pybot::get_team_leader(target_sd->status.char_id);
 	if (lea_sd) {
 		if (lea_sd != sd) {
 			clif_displaymessage(sd->fd, msg_txt(sd, 246));
@@ -555,8 +555,8 @@ void trade_tradeok(struct map_session_data *sd)
 	clif_tradedeal_lock(target_sd, 1);
 
 	// [GonBee]
-	// Botはリーダーが取引をOKすると同時にOKする。
-	if (pybot::get_leader(target_sd->status.char_id) == sd) trade_tradeok(target_sd);
+	// Botはチームリーダーが取引をOKすると同時にOKする。
+	if (pybot::get_team_leader(target_sd->status.char_id) == sd) trade_tradeok(target_sd);
 }
 
 /**
@@ -647,8 +647,8 @@ void trade_tradecommit(struct map_session_data *sd)
 	sd->state.deal_locked = 2;
 
 	// [GonBee]
-	// Botはリーダーが取引をコミットすると同時にコミットする。
-	if (pybot::get_leader(tsd->status.char_id) == sd) tsd->state.deal_locked = 2;
+	// Botはチームリーダーが取引をコミットすると同時にコミットする。
+	if (pybot::get_team_leader(tsd->status.char_id) == sd) tsd->state.deal_locked = 2;
 
 	if (tsd->state.deal_locked < 2)
 		return; //Not yet time for trading.
