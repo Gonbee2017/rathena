@@ -1905,7 +1905,7 @@ AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
 		!bot->is_gospel() &&
 		bot->check_hp(3) &&
 		bot->is_best_pos() &&
-		tar_ene->is_great(leader)
+		tar_ene->fullpower(leader)
 	) bot->use_skill_self(kid, klv);
 }
 
@@ -1913,7 +1913,7 @@ AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
 AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate) {
 	if (bot->is_gospel() &&
 		(bot->battle_mode() == BM_NONE ||
-			!bot->target_enemy()->is_great(leader)
+			!bot->fullpower(leader)
 		) 
 	) bot->use_skill_self(kid, klv);
 }

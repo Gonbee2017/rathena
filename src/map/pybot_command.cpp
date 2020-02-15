@@ -3279,11 +3279,12 @@ SUBCMD_FUNC(Bot, sKillReject) {
 			"「", sk_nam, "」というスキルはありません。"
 		)};
 		std::string sk_des = skill_get_desc(kid);
-		if (!(skill_get_inf(kid) & INF_SUPPORT_SKILL) &&
+		if (!(skill_get_inf(kid) & INF_SELF_SKILL) &&
+			!(skill_get_inf(kid) & INF_SUPPORT_SKILL) &&
 			!(skill_get_inf2(kid) & (INF2_PARTY_ONLY | INF2_GUILD_ONLY)) &&
 			kid != PR_BENEDICTIO
 		) throw command_error{print(
-			"「", sk_des, "」はターゲット支援スキルではありません。"
+			"「", sk_des, "」は自己スキル、またはターゲット支援スキルではありません。"
 		)};
 		if (mem->reject_skills()->find(e_skill(kid))) {
 			mem->reject_skills()->unregister(e_skill(kid));
