@@ -16,6 +16,11 @@
 // - Modified: 6,0,0,0,30000,0,1000:2500:3000:...
 // Gives Level 1 1000ms cool down, Level 2 2500ms, Level 3 3000ms, and so on.
 
+//-- SM_PROVOKE
+6,0,0,0,30000,0,0
+//-- SM_MAGNUM
+7,0,0,0,0,10000,0
+
 //-- SA_REVERSEORCISH
 294,0,0,0,180000,0,0
 

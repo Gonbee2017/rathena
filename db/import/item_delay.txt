@@ -6,3 +6,8 @@
 // NOTE:
 // There is a max concurrent number of entries set in src/map/itemdb.h as MAX_ITEMDELAYS.
 
+// SC_REUSE_LIMIT_F
+607,0,SC_REUSE_LIMIT_F	//Yggdrasil_Berry
+
+// SC_REUSE_LIMIT_G
+608,0,SC_REUSE_LIMIT_G	//Yggdrasil_Seed
