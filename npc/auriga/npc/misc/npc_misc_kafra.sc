@@ -328,11 +328,15 @@ function	script	KafraStorage	{
 				//openstorage;
 				openstorageteammember .@tar_rid;
 				
+				close2;
 				cutin "kafra_01",255;
-				close;
+				end;
 			}
 		}
 	}
+	mes "[カプラ職員]";
+	mes "ありがとうございました。";
+	mes "またご利用くださいませ。";
 	close2;
 	cutin "kafra_01",255;
 	return;
