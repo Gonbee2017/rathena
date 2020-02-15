@@ -4619,7 +4619,7 @@ bot_login(
 		sd->inventory.type = TABLE_INVENTORY;
 		sd->inventory.max_amount = MAX_INVENTORY;
 		sd->inventory.stor_id = 0;
-		sd->inventory.state.get = sd->storage.state.put = 1;
+		sd->inventory.state.get = sd->inventory.state.put = 1;
 		ses->execute(
 			"SELECT"
 			" `", construct<sql_column>("id"          , itm.id             ), "`,"
@@ -4680,7 +4680,7 @@ bot_login(
 		sd->cart.type = TABLE_CART;
 		sd->cart.max_amount = MAX_CART;
 		sd->cart.stor_id = 0;
-		sd->cart.state.get = sd->storage.state.put = 1;
+		sd->cart.state.get = sd->cart.state.put = 1;
 		ses->execute(
 			"SELECT"
 			" `", construct<sql_column>("id"          , itm.id             ), "`,"
