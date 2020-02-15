@@ -2744,19 +2744,18 @@ SUBCMD_FUNC(Bot, sKillEquipSet) {
 		lea->show_next();
 	} else {
 		std::string sk_nam = shift_arguments(args);
-		s_skill* sk = mem->find_skill(sk_nam);
-		if (!sk)
+		e_skill kid = e_skill(find_skilldb(sk_nam));
+		if (!kid)
 			throw command_error{print(
-				"「", mem->name(), "」のスキル一覧に「",
-				sk_nam, "」がありません。"
+				"「", sk_nam, "」というスキルはありません。"
 			)};
-		std::string sk_des = skill_get_desc(sk->id);
-		if (!skill_get_inf(sk->id))
+		std::string sk_des = skill_get_desc(kid);
+		if (!skill_get_inf(kid))
 			throw command_error{print(
 				"「", sk_des, "」はアクティブスキルではありません。"
 			)};
 		int equ = 0;
-		auto es = initialize<skill_equipset>(e_skill(sk->id));
+		auto es = initialize<skill_equipset>(kid);
 		for (int i = 0; i < EPO_MAX; ++i) {
 			if (i >= EPO_COSTUME_HEAD_TOP &&
 				i <= EPO_COSTUME_GARMENT
@@ -2774,7 +2773,7 @@ SUBCMD_FUNC(Bot, sKillEquipSet) {
 			equ |= esi->equip;
 		}
 		if (es->items.empty()) {
-			skill_equipset* old_es = mem->skill_equipsets()->find(e_skill(sk->id));
+			skill_equipset* old_es = mem->skill_equipsets()->find(kid);
 			if (!old_es)
 				throw command_error{print(
 					"「", mem->name(), "」の「", sk_des, "」用スキル武具一式はありません。"
@@ -2782,9 +2781,9 @@ SUBCMD_FUNC(Bot, sKillEquipSet) {
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", sk_des, "」用スキル武具一式の登録を抹消しました。"
 			));
-			mem->skill_equipsets()->unregister(e_skill(sk->id));
+			mem->skill_equipsets()->unregister(kid);
 		} else {
-			mem->skill_equipsets()->register_(e_skill(sk->id), es);
+			mem->skill_equipsets()->register_(kid, es);
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は「", sk_des, "」用スキル武具一式として「",
 				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
@@ -2812,19 +2811,18 @@ SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
 	std::string sk_nam = shift_arguments(
 		args, "スキルを指定してください。"
 	);
-	s_skill* sk = mem->find_skill(sk_nam);
-	if (!sk)
+	e_skill kid = e_skill(find_skilldb(sk_nam));
+	if (!kid)
 		throw command_error{print(
-			"「", mem->name(), "」のスキル一覧に「",
-			sk_nam, "」がありません。"
+			"「", sk_nam, "」というスキルはありません。"
 		)};
-	std::string sk_des = skill_get_desc(sk->id);
-	skill_equipset* es = mem->skill_equipsets()->find(e_skill(sk->id));
+	std::string sk_des = skill_get_desc(kid);
+	skill_equipset* es = mem->skill_equipsets()->find(kid);
 	if (!es)
 		throw command_error{print(
 			"「", mem->name(), "」の「", sk_des, "」用スキル武具一式はありません。"
 		)};
-	mem->load_skill_equipset(e_skill(sk->id));
+	mem->load_skill_equipset(kid);
 	lea->output_buffer() = std::stringstream();
 	lea->output_buffer() << "------ 「" <<	mem->name() << "」がロードした「" <<
 		sk_des << "」用スキル武具一式 ------\n";
@@ -3126,10 +3124,11 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 	CS_ENTER;
 	using ps_val_t = std::pair<int,play_skill*>;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
-		throw command_error{print(
-			"「", mem->name(), "」はバード・ダンサー系ではありません。"
-		)};
+	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER &&
+		mem->sd()->status.class_ != JOB_PALADIN
+	) throw command_error{print(
+		"「", mem->name(), "」はバード・ダンサー系、またはパラディンではありません。"
+	)};
 	if (args.empty()) {
 		std::vector<ps_val_t> ps_vals;
 		mem->play_skills()->copy(pybot::back_inserter(ps_vals));
@@ -3203,7 +3202,8 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 				)};
 			std::string sk_des = skill_get_desc(kid);
 			if ((!(skill_get_inf2(kid) & INF2_SONG_DANCE) &&
-					!(skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL)
+					!(skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL) &&
+					kid != PA_GOSPEL
 				) || kid == PR_BENEDICTIO
 			) throw command_error{print(
 				"「", sk_des, "」は演奏スキルではありません。"
@@ -3223,10 +3223,11 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 SUBCMD_FUNC(Bot, sKillPlayClear) {
 	CS_ENTER;
 	block_if* mem = shift_arguments_then_find_member(lea, args);
-	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
-		throw command_error{print(
-			"「", mem->name(), "」はバード・ダンサー系ではありません。"
-		)};
+	if ((mem->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER &&
+		mem->sd()->status.class_ != JOB_PALADIN
+	) throw command_error{print(
+		"「", mem->name(), "」はバード・ダンサー系、またはパラディンではありません。"
+	)};
 	int cou = mem->play_skills()->clear();
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou,
@@ -3239,15 +3240,17 @@ SUBCMD_FUNC(Bot, sKillPlayClear) {
 SUBCMD_FUNC(Bot, sKillPlayTransport) {
 	CS_ENTER;
 	block_if* mem1 = shift_arguments_then_find_member(lea, args);
-	if ((mem1->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
-		throw command_error{print(
-			"「", mem1->name(), "」はバード・ダンサー系ではありません。"
-		)};
+	if ((mem1->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER &&
+		mem1->sd()->status.class_ != JOB_PALADIN
+	) throw command_error{print(
+		"「", mem1->name(), "」はバード・ダンサー系、またはパラディンではありません。"
+	)};
 	block_if* mem2 = shift_arguments_then_find_member(lea, args);
-	if ((mem2->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER)
-		throw command_error{print(
-			"「", mem2->name(), "」はバード・ダンサー系ではありません。"
-		)};
+	if ((mem2->sd()->class_ & MAPID_UPPERMASK) != MAPID_BARDDANCER &&
+		mem2->sd()->status.class_ != JOB_PALADIN
+	) throw command_error{print(
+		"「", mem2->name(), "」はバード・ダンサー系、またはパラディンではありません。"
+	)};
 	if (mem1 == mem2) throw command_error{"同じメンバーです。"};
 	int cou = mem2->play_skills()->import_(mem1->play_skills().get());
 	show_client(lea->fd(), print(

@@ -462,6 +462,7 @@ void ai_t::bot_main(
 	bot_explosion();
 	bot_attack();
 	bot_play_skill();
+	bot_play_gospel();
 	bot_use_skill();
 	bot_follow();
 	bot_rest();
@@ -833,43 +834,90 @@ void ai_t::bot_attack() {
 // Botが演奏スキルを使う。
 void ai_t::bot_play_skill() {
 	CS_ENTER;
-	if ((bot->sd()->class_ & MAPID_UPPERMASK) == MAPID_BARDDANCER &&
-		!bot->is_walking() &&
-		!bot->sc()->cant.cast &&
-		bot->can_act() &&
-		!bot->is_paralysis()
-	) {
-		e_skill kid = e_skill(0);
-		bot->iterate_meta_mobs(
-			enemies,
-			bot->target_enemy(),
-			bot->battle_mode(),
-			[this, &kid] (int mid) {bot->load_play_skill(mid, &kid);}
-		);
-		if (kid &&
-			!bot->sc()->data[SC_DANCING]
+	if ((bot->sd()->class_ & MAPID_UPPERMASK) == MAPID_BARDDANCER) {
+		if (!bot->is_walking() &&
+			!bot->sc()->cant.cast &&
+			bot->can_act() &&
+			!bot->is_paralysis()
 		) {
-			int klv = battler->check_skill(kid);
-			e_skill dan_kid = e_skill(bot->sd()->skill_id_dance);
-			int dan_dur = 0;
-			if (dan_kid) dan_dur = skill_get_time2(dan_kid, bot->sd()->skill_lv_dance) - int(bot->get_skill_tail(dan_kid));
-			if (klv &&
-				battler->can_use_skill(kid, klv) &&
-				(bot->battle_mode() == BM_NONE ||
-					bot->check_attack(bot->target_enemy())
-				) && (skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL ||
-					!(skill_get_unit_flag(kid) & UF_NOMOB) ||
-					dan_kid != kid ||
-					(bot->check_skill_used_tick(BD_ADAPTATION, dan_dur) &&
-						bot->check_skill_used_tick(BD_ENCORE, dan_dur)
+			e_skill kid = e_skill(0);
+			bot->iterate_meta_mobs(
+				enemies,
+				bot->target_enemy(),
+				bot->battle_mode(),
+				[this, &kid] (int mid) {bot->load_play_skill(mid, &kid);}
+			);
+			if (kid) {
+				int klv = bot->check_skill(kid);
+				if (klv &&
+					(bot->battle_mode() == BM_NONE ||
+						bot->is_best_pos()
 					)
-				)
-			) {
-				bot->use_encore(kid);
-				bot->use_skill_self(kid, klv);
+				) {
+					e_skill dan_kid = e_skill(bot->sd()->skill_id_dance);
+					int dan_dur = 0;
+					if (dan_kid) dan_dur = skill_get_time2(dan_kid, bot->sd()->skill_lv_dance) - int(bot->get_skill_tail(dan_kid));
+					if (!bot->sc()->data[SC_DANCING] &&
+						bot->can_use_skill(kid, klv) &&
+						(bot->battle_mode() == BM_NONE ||
+							bot->check_attack(bot->target_enemy())
+						) && (skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL ||
+							!(skill_get_unit_flag(kid) & UF_NOMOB) ||
+							dan_kid != kid ||
+							(bot->check_skill_used_tick(BD_ADAPTATION, dan_dur) &&
+								bot->check_skill_used_tick(BD_ENCORE, dan_dur)
+							)
+						)
+					) {
+						bot->use_encore(kid);
+						bot->use_skill_self(kid, klv);
+					}
+				} else kid = e_skill(0);
 			}
+			bot->want_to_play() = kid;
 		}
-		bot->want_to_play() = kid;
+	}
+}
+
+// Botがゴスペルを使う。
+void ai_t::bot_play_gospel() {
+	CS_ENTER;
+	if (bot->sd()->status.class_ == JOB_PALADIN) {
+		if (!bot->is_walking() &&
+			!bot->sc()->cant.cast &&
+			bot->can_act() &&
+			!bot->is_paralysis()
+		) {
+			e_skill kid = e_skill(0);
+			bot->iterate_meta_mobs(
+				enemies,
+				bot->target_enemy(),
+				bot->battle_mode(),
+				[this, &kid] (int mid) {bot->load_play_skill(mid, &kid);}
+			);
+			if (kid) {
+				int klv = bot->check_skill(kid);
+				if (klv &&
+					(bot->battle_mode() == BM_NONE ||
+						(bot->is_best_pos() &&
+							(!bot->is_primary() ||
+								bot->distance_policy_value() == DPV_AWAY ||
+								bot->target_enemy()->target_battler() == bot
+							)
+						)
+					)
+				) {
+					if (!bot->is_gospel() &&
+						bot->can_use_skill(kid, klv) &&
+						bot->check_hp(3) &&
+						(bot->battle_mode() == BM_NONE ||
+							bot->check_attack(bot->target_enemy())
+						)
+					) bot->use_skill_self(kid, klv);
+				} else kid = e_skill(0);
+			}
+			bot->want_to_play() = kid;
+		}
 	}
 }
 

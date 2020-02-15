@@ -920,6 +920,7 @@ struct ai_t {
 	void bot_explosion();
 	void bot_attack();
 	void bot_play_skill();
+	void bot_play_gospel();
 	void bot_use_skill();
 	void bot_follow();
 	void bot_rest();
@@ -1130,7 +1131,6 @@ struct ai_t {
 	AI_SKILL_USE_FUNC(NV_FIRSTAID);
 	AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, activate);
 	AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, deactivate);
-	AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate);
 	AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate);
 	AI_SKILL_USE_FUNC(PA_SACRIFICE);
 	AI_SKILL_USE_FUNC(PB_FIRST);

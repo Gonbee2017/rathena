@@ -3021,33 +3021,35 @@ void skill_user_impl::use_skill_bl(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	auto use = [this, kid, klv, cas_end_fun] (block_list* bl_) {
-		if (unit_skilluse_id(bl(), bl_->id, kid, klv)) {
-			if (dynamic_cast<member_impl*>(this))
-				pc_delinvincibletimer(sd());
-			cast_end_func() = cas_end_fun;
-			skill_used_ticks()[kid] = now;
-		}
-	};
-	if (dynamic_cast<bot_impl*>(this)) {
-		if (is_sit()) stand();
-		reload_skill_equipset(kid);
-	}
-	if (walk_bl(bl_, skill_range(kid, klv))) {
-		int bid = bl_->id;
-		walk_end_func() = [this, kid, klv, use, bid] (ai_t* ai, void* fun) {
-			block_list* bl_ = map_id2bl(bid);
-			if (bl_ &&
-				can_reach_bl(bl_) &&
-				can_move()
-			) {
-				if (walk_bl(bl_, skill_range(kid, klv)))
-					walk_end_func() = *(ai_t::done_func*)(fun);
-				else use(bl_);
+	if (status_check_skilluse(bl(), bl_, kid, 0)) {
+		auto use = [this, kid, klv, cas_end_fun] (block_list* bl_) {
+			if (unit_skilluse_id(bl(), bl_->id, kid, klv)) {
+				if (dynamic_cast<member_impl*>(this))
+					pc_delinvincibletimer(sd());
+				cast_end_func() = cas_end_fun;
+				skill_used_ticks()[kid] = now;
 			}
 		};
-	} else use(bl_);
-	if (tur_end) throw turn_end_exception();
+		if (dynamic_cast<bot_impl*>(this)) {
+			if (is_sit()) stand();
+			reload_skill_equipset(kid);
+		}
+		if (walk_bl(bl_, skill_range(kid, klv))) {
+			int bid = bl_->id;
+			walk_end_func() = [this, kid, klv, use, bid] (ai_t* ai, void* fun) {
+				block_list* bl_ = map_id2bl(bid);
+				if (bl_ &&
+					can_reach_bl(bl_) &&
+					can_move()
+				) {
+					if (walk_bl(bl_, skill_range(kid, klv)))
+						walk_end_func() = *(ai_t::done_func*)(fun);
+					else use(bl_);
+				}
+			};
+		} else use(bl_);
+		if (tur_end) throw turn_end_exception();
+	}
 }
 
 // ブロックにスキルを使う。
@@ -3059,45 +3061,47 @@ void skill_user_impl::use_skill_block(
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
 	block_list* tar_bl = blo->bl();
-	int ran = skill_range(kid, klv);
-	check_distance_pred nea = nullptr;
-	if (KEY_EXISTS(EXPOSURE_SKILLS, kid)) {
-		tar_bl = bl();
-		ran = skill_get_splash(kid, klv);
-		nea = [] (block_list* bl1, block_list* bl2, int ran) -> bool {
-			return check_distance_bl(bl1, bl2, ran);
-		};
-	}
-	auto use = [this, kid, klv, cas_end_fun, tar_bl] (block_if* blo) {
-		if (unit_skilluse_id(bl(), tar_bl->id, kid, klv)) {
-			if (dynamic_cast<member_impl*>(this))
-				pc_delinvincibletimer(sd());
-			cast_end_func() = cas_end_fun;
-			blo->skill_used_ticks()[kid] = now;
-			if (kid == AS_GRIMTOOTH ||
-				kid == NJ_KASUMIKIRI
-			) skill_used_ticks()[TF_HIDING] = now;
+	if (status_check_skilluse(bl(), tar_bl, kid, 0)) {
+		int ran = skill_range(kid, klv);
+		check_distance_pred nea = nullptr;
+		if (KEY_EXISTS(EXPOSURE_SKILLS, kid)) {
+			tar_bl = bl();
+			ran = skill_get_splash(kid, klv);
+			nea = [] (block_list* bl1, block_list* bl2, int ran) -> bool {
+				return check_distance_bl(bl1, bl2, ran);
+			};
 		}
-	};
-	if (dynamic_cast<bot_impl*>(this)) {
-		if (is_sit()) stand();
-		reload_skill_equipset(kid);
-	}
-	if (walk_bl(blo->bl(), ran, nea)) {
-		int blo_bid = blo->bl()->id;
-		walk_end_func() = [this, kid, klv, use, blo_bid] (ai_t* ai, void* fun) {
-			block_if* blo = ai->find_block<skill_target_impl>(blo_bid);
-			if (blo &&
-				can_reach_block(blo) &&
-				can_move()
-			) {
-				if (walk_bl(blo->bl(), skill_range(kid, klv)))
-					walk_end_func() = *(ai_t::done_func*)(fun);
-				else use(blo);
+		auto use = [this, kid, klv, cas_end_fun, tar_bl] (block_if* blo) {
+			if (unit_skilluse_id(bl(), tar_bl->id, kid, klv)) {
+				if (dynamic_cast<member_impl*>(this))
+					pc_delinvincibletimer(sd());
+				cast_end_func() = cas_end_fun;
+				blo->skill_used_ticks()[kid] = now;
+				if (kid == AS_GRIMTOOTH ||
+					kid == NJ_KASUMIKIRI
+				) skill_used_ticks()[TF_HIDING] = now;
 			}
 		};
-	} else use(blo);
-	if (tur_end) throw turn_end_exception();
+		if (dynamic_cast<bot_impl*>(this)) {
+			if (is_sit()) stand();
+			reload_skill_equipset(kid);
+		}
+		if (walk_bl(blo->bl(), ran, nea)) {
+			int blo_bid = blo->bl()->id;
+			walk_end_func() = [this, kid, klv, use, blo_bid] (ai_t* ai, void* fun) {
+				block_if* blo = ai->find_block<skill_target_impl>(blo_bid);
+				if (blo &&
+					can_reach_block(blo) &&
+					can_move()
+				) {
+					if (walk_bl(blo->bl(), skill_range(kid, klv)))
+						walk_end_func() = *(ai_t::done_func*)(fun);
+					else use(blo);
+				}
+			};
+		} else use(blo);
+		if (tur_end) throw turn_end_exception();
+	}
 }
 
 // 自分にスキルを使う。
@@ -3107,25 +3111,27 @@ void skill_user_impl::use_skill_self(
 	bool tur_end,               // ターン終了か。
 	ai_t::done_func cas_end_fun // 詠唱完了ハンドラ。
 ) {
-	if (dynamic_cast<bot_impl*>(this)) {
-		if (is_sit()) stand();
-		reload_skill_equipset(kid);
-	}
-	if (unit_skilluse_id(bl(), bl()->id, kid, klv)) {
-		if (dynamic_cast<member_impl*>(this))
-			pc_delinvincibletimer(sd());
-		cast_end_func() = cas_end_fun;
-		skill_used_ticks()[kid] = now;
-		if (skill_get_inf2(kid) & INF2_SONG_DANCE ||
-			skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL
-		) skill_used_ticks()[BD_ENCORE] = now;
-		if (kid == BA_FROSTJOKER) {
-			std::stringstream out;
-			int mes_ind = rnd() % BA_FROSTJOKER_MESSAGES.size();
-			out << name() << " : " << BA_FROSTJOKER_MESSAGES[mes_ind];
-			clif_GlobalMessage(bl(), out.str().c_str(), AREA_CHAT_WOC);
+	if (status_check_skilluse(bl(), bl(), kid, 0)) {
+		if (dynamic_cast<bot_impl*>(this)) {
+			if (is_sit()) stand();
+			reload_skill_equipset(kid);
 		}
-		if (tur_end) throw turn_end_exception();
+		if (unit_skilluse_id(bl(), bl()->id, kid, klv)) {
+			if (dynamic_cast<member_impl*>(this))
+				pc_delinvincibletimer(sd());
+			cast_end_func() = cas_end_fun;
+			skill_used_ticks()[kid] = now;
+			if (skill_get_inf2(kid) & INF2_SONG_DANCE ||
+				skill_get_inf2(kid) & INF2_ENSEMBLE_SKILL
+			) skill_used_ticks()[BD_ENCORE] = now;
+			if (kid == BA_FROSTJOKER) {
+				std::stringstream out;
+				int mes_ind = rnd() % BA_FROSTJOKER_MESSAGES.size();
+				out << name() << " : " << BA_FROSTJOKER_MESSAGES[mes_ind];
+				clif_GlobalMessage(bl(), out.str().c_str(), AREA_CHAT_WOC);
+			}
+			if (tur_end) throw turn_end_exception();
+		}
 	}
 }
 

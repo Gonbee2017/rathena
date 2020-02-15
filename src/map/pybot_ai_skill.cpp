@@ -363,7 +363,7 @@ AI_SKILL_USE_FUNC(BA_FROSTJOKER) {
 AI_SKILL_USE_FUNC(BD_ADAPTATION) {
 	if (bot->sc()->data[SC_DANCING]) {
 		e_skill dan_kid = e_skill(bot->sc()->data[SC_DANCING]->val1 & 0xFFFF);
-		if (dan_kid != bot->want_to_play() ||
+		if (bot->want_to_play() != dan_kid ||
 			(bot->is_solo() &&
 				bot->battle_mode() != BM_NONE &&
 				(!(skill_get_unit_target(dan_kid) & BCT_ENEMY) ||
@@ -1898,23 +1898,10 @@ AI_SKILL_USE_FUNC_T(NV_TRICKDEAD, deactivate) {
 	) bot->use_skill_self(kid, klv);
 }
 
-// ゴスペル状態になる。
-AI_SKILL_USE_FUNC_T(PA_GOSPEL, activate) {
-	block_if* tar_ene = bot->target_enemy();
-	if (!bot->find_skill_ignore_mobs(kid, tar_ene) &&
-		!bot->is_gospel() &&
-		bot->check_hp(3) &&
-		bot->is_best_pos() &&
-		tar_ene->fullpower(leader)
-	) bot->use_skill_self(kid, klv);
-}
-
 // ゴスペル状態を解除する。
 AI_SKILL_USE_FUNC_T(PA_GOSPEL, deactivate) {
 	if (bot->is_gospel() &&
-		(bot->battle_mode() == BM_NONE ||
-			!bot->fullpower(leader)
-		) 
+		bot->want_to_play() != kid
 	) bot->use_skill_self(kid, klv);
 }
 
