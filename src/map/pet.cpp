@@ -1214,11 +1214,19 @@ static int pet_ai_sub_hard(struct pet_data *pd, struct map_session_data *sd, t_t
 	}
 
 	// Return speed to normal.
-	if (pd->status.speed != pd->get_pet_db()->speed) {
+
+	// [GonBee]
+	// ペットの移動速度は主人の移動速度と同じにする。
+	//if (pd->status.speed != pd->get_pet_db()->speed) {
+	if (pd->status.speed != sd->battle_status.speed) {
+
 		if (pd->ud.walktimer != INVALID_TIMER)
 			return 0; // Wait until the pet finishes walking back to master.
 
-		pd->status.speed = pd->get_pet_db()->speed;
+		// [GonBee]
+		//pd->status.speed = pd->get_pet_db()->speed;
+		pd->status.speed = sd->battle_status.speed;
+
 		pd->ud.state.change_walk_target = pd->ud.state.speed_changed = 1;
 	}
 
