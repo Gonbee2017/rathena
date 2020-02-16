@@ -2450,10 +2450,12 @@ OnTimer15000:
 OnTimer25000:
 	announce "魔王モロク : 絶望しながら、俺様に逆らったことを後悔するがいい！",0x09;
 	end;
-OnTimer5400000:
+//OnTimer5400000:
+OnTimer1070000:
 	announce "魔王モロク : 虫けら共を相手にしてもつまらんだけだな！",0x09;
 	end;
-OnTimer5410000:
+//OnTimer5410000:
+OnTimer1080000:
 	announce "魔王モロク : 俺様は非常に忙しい！　お前らのような下等生物の相手をする暇などないのだ！",0x09;
 	killmonster "moc_fild21","闇の結晶体#morocc::OnMyMobDead";
 	stopnpctimer;
