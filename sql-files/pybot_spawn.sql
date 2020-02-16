@@ -2514,6 +2514,7 @@ INSERT INTO `pybot_spawn` VALUES ('moc_fild21', 1918, 46, 30000, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild21', 1919, 46, 30000, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild21', 1920, 46, 30000, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild21', 1921, 34, 30000, 0, 0);
+INSERT INTO `pybot_spawn` VALUES ('moc_fild21', 1916, 1, 0, 1, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild22', 1918, 60, 30000, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild22', 1919, 60, 30000, 0, 0);
 INSERT INTO `pybot_spawn` VALUES ('moc_fild22', 1920, 60, 30000, 0, 0);
