@@ -3393,7 +3393,7 @@ bot_t::~bot_t() {
 	map_session_data* lea_sd = map_id2sd(leader()->account_id());
 	if (lea_sd &&
 		lea_sd->target_storage == &sd()->storage
-	) storage_storageclose(leader()->sd());
+	) storage_storageclose(lea_sd);
 	if (session[fd()] &&
 		session[fd()]->session_data == sd()
 	) {
