@@ -1646,10 +1646,12 @@ OnTimer9000:
 OnTimer10000:
 	donpcevent "nmsom_jin01#"+strnpcinfo(2)+"::OnEnable";
 	end;
-OnTimer190000:
+//OnTimer190000:
+OnTimer70000:
 	donpcevent "nmsom_jin02#"+strnpcinfo(2)+"::OnEnable";
 	end;
-OnTimer370000:
+//OnTimer370000:
+OnTimer130000:
 	donpcevent "nmsom_jin03#"+strnpcinfo(2)+"::OnEnable";
 	stopnpctimer;
 	end;
@@ -1686,16 +1688,21 @@ OnTimer5000:
 	for (set .@i, 0; .@i < getarraysize(.@xy); set .@i, .@i + 2)
 		monster "this",.@xy[.@i],.@xy[.@i+1],"‰e‚Ì”Ôl",1752,1,"nmsom_jin01#"+.@name$+"::OnKilled2";
 	end;
+//OnTimer25000:
+//OnTimer55000:
+//OnTimer85000:
+//OnTimer120000:
+OnTimer15000:
 OnTimer25000:
-OnTimer55000:
-OnTimer85000:
-OnTimer120000:
+OnTimer35000:
+OnTimer45000:
 	set .@name$,strnpcinfo(2);
 	setarray .@xy2, 226,294,227,294,228,294,229,294,230,295,231,296,231,297,231,298,231,299,230,300,229,301,228,301,227,301,226,301,225,300,224,299,224,298,224,297,224,296,225,295;
 	for (set .@i, 0; .@i < getarraysize(.@xy2); set .@i, .@i + 2)
 		monster "this",.@xy2[.@i],.@xy2[.@i+1],"‰e‚Ì”Ôl",1752,1,"nmsom_jin01#"+.@name$+"::OnKilled2";
 	end;
-OnTimer180000:
+//OnTimer180000:
+OnTimer60000:
 	stopnpctimer;
 	end;
 OnKilled1:
@@ -1743,16 +1750,21 @@ OnTimer5000:
 	for(set .@i, 0; .@i < getarraysize(.@xy); set .@i, .@i + 2)
 		monster "this",.@xy[.@i],.@xy[.@i+1],"ŒŒ‚ÌŽël",1753,1,"nmsom_jin02#"+.@name$+"::OnKilled2";
 	end;
+//OnTimer25000:
+//OnTimer55000:
+//OnTimer85000:
+//OnTimer120000:
+OnTimer15000:
 OnTimer25000:
-OnTimer55000:
-OnTimer85000:
-OnTimer120000:
+OnTimer35000:
+OnTimer45000:
 	set .@name$,strnpcinfo(2);
 	setarray .@xy2, 274,301,275,301,276,301,277,301,278,300,279,299,279,298,279,297,279,296,278,295,277,294,276,294,275,294,274,294,273,295,272,296,272,297,272,298,272,299,273,300;
 	for(set .@i, 0; .@i < getarraysize(.@xy2); set .@i, .@i + 2)
 		monster "this",.@xy2[.@i],.@xy2[.@i+1],"ŒŒ‚ÌŽël",1753,1,"nmsom_jin02#"+.@name$+"::OnKilled2";
 	end;
-OnTimer180000:
+//OnTimer180000:
+OnTimer60000:
 	stopnpctimer;
 	end;
 OnKilled1:
@@ -1800,19 +1812,22 @@ OnTimer5000:
 	for (set .@i, 0; .@i < getarraysize(.@xy); set .@i, .@i + 2)
 		monster "this",.@xy[.@i],.@xy[.@i+1],"_“a‚ÌŽçŒìŽÒ",1933,1,"nmsom_jin03#"+.@name$+"::OnKilled2";
 	end;
-OnTimer120000:
+//OnTimer120000:
+OnTimer45000:
 	set .@name$,strnpcinfo(2);
 	setarray .@xy2, 251,343,252,343,255,341,255,340,254,337,253,336,250,336,249,337,248,340,248,341;
 	for (set .@i, 0; .@i < getarraysize(.@xy2); set .@i, .@i + 2)
 		monster "this",.@xy2[.@i],.@xy2[.@i+1],"_“a‚ÌŽçŒìŽÒ",1933,1,"nmsom_jin03#"+.@name$+"::OnKilled2";
 	end;
-OnTimer240000:
+//OnTimer240000:
+OnTimer85000:
 	set .@name$,strnpcinfo(2);
 	setarray .@xy3, 250,343,252,343,254,342,255,340,255,338,253,336,250,336,248,338,248,340,249,342;
 	for (set .@i, 0; .@i < getarraysize(.@xy3); set .@i, .@i + 2)
 		monster "this",.@xy3[.@i],.@xy3[.@i+1],"_“a‚ÌŽçŒìŽÒ",1933,1,"nmsom_jin03#"+.@name$+"::OnKilled2";
 	end;
-OnTimer360000:
+//OnTimer360000:
+OnTimer125000:
 	set .@name$,strnpcinfo(2);
 	setarray .@xy4, 250,343,252,343,254,342,255,340,255,338,253,336,251,336,249,337,248,339,248,341;
 	for (set .@i, 0; .@i < getarraysize(.@xy4); set .@i, .@i + 2)
