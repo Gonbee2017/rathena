@@ -1490,11 +1490,11 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot equip アサクロ]\n"
 	), SUBCMD_DESC(Bot, EquipIdentifyAll           , eia  ,
 		"------ EquipIdentifyAll (eia) サブコマンド ------\n"
-		"未鑑定の武具を鑑定する。\n"
+		"未鑑定の武具をすべて鑑定する。\n"
 		"入力例 [@bot equipidentifyall]\n"
 	), SUBCMD_DESC(Bot, EquipRepairAll             , era  ,
 		"------ EquipRepairAll (era) サブコマンド ------\n"
-		"破損した武具を修理する。\n"
+		"破損した武具をすべて修理する。\n"
 		"入力例 [@bot equiprepairall]\n"
 	), SUBCMD_DESC(Bot, EquipSet                   , es   ,
 		"------ EquipSet (es) サブコマンド ------\n"
@@ -2038,7 +2038,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageget クリエ 白ポーション]\n"
 	), SUBCMD_DESC(Bot, StorageGetAll              , sga  ,
 		"------ StorageGetAll (sga) サブコマンド ------\n"
-		"倉庫からアイテムを取り出す。\n"
+		"登録済みのアイテムをすべて倉庫から取り出す。\n"
 		"入力例 [@bot storagegetall]\n"
 	), SUBCMD_DESC(Bot, StorageGetClear            ,      ,
 		"------ StorageGetClear サブコマンド ------\n"

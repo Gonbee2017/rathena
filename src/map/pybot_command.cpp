@@ -1551,7 +1551,7 @@ SUBCMD_FUNC(Bot, ItemsaVeMonsterTransport) {
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
-// 登録されているアイテムをすべて売却する。
+// 登録済みのアイテムをすべて売却する。
 SUBCMD_FUNC(Bot, ItemSellAll) {
 	CS_ENTER;
 	if (!npc_exists(
@@ -3790,7 +3790,7 @@ SUBCMD_FUNC(Bot, StoragePut) {
 	}
 }
 
-// 登録しているアイテムをすべて倉庫に格納する。
+// 登録済みのアイテムをすべて倉庫に格納する。
 SUBCMD_FUNC(Bot, StoragePutAll) {
 	CS_ENTER;
 	ptr<storage_context> sto_con;
