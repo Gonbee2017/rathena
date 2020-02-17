@@ -1670,12 +1670,16 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemsell \"ハット [1]\"]\n"
 	), SUBCMD_DESC(Bot, ItemSellAll                , isa  ,
 		"------ ItemSellAll (isa) サブコマンド ------\n"
-		"アイテムを売却する。\n"
+		"登録しているアイテムをすべて売却する。\n"
 		"入力例 [@bot itemsellall]\n"
 	), SUBCMD_DESC(Bot, ItemSellClear              ,      ,
 		"------ ItemSellClear サブコマンド ------\n"
 		"売却アイテムをクリアする。\n"
 		"入力例 [@bot itemsellclear]\n"
+	), SUBCMD_DESC(Bot, ItemSellHave               , ish  ,
+		"------ ItemSellHave (ish) サブコマンド ------\n"
+		"所持しているアイテムをすべて売却アイテムとして登録する。\n"
+		"入力例 [@bot itemsellhave]\n"
 	), SUBCMD_DESC(Bot, ItemSellImport             , isi  ,
 		"------ ItemSellImport (isi) サブコマンド ------\n"
 		"売却アイテムを取り込む。\n"
@@ -2054,12 +2058,16 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageput 蝶の羽]\n"
 	), SUBCMD_DESC(Bot, StoragePutAll              , spa  ,
 		"------ StoragePutAll (spa) サブコマンド ------\n"
-		"倉庫にアイテムを入れる。\n"
+		"登録しているアイテムをすべて倉庫に入れる。\n"
 		"入力例 [@bot storageputall]\n"
 	), SUBCMD_DESC(Bot, StoragePutClear            ,      ,
 		"------ StoragePutClear サブコマンド ------\n"
 		"倉庫格納アイテムをクリアする。\n"
 		"入力例 [@bot storageputclear]\n"
+	), SUBCMD_DESC(Bot, StoragePutHave             , sph  ,
+		"------ StoragePutHave (sph) サブコマンド ------\n"
+		"所持しているアイテムをすべて倉庫格納アイテムとして登録する。\n"
+		"入力例 [@bot storageputhave]\n"
 	), SUBCMD_DESC(Bot, StoragePutImport           , spi  ,
 		"------ StoragePutImport (spi) サブコマンド ------\n"
 		"倉庫格納アイテムを取り込む。\n"
@@ -2191,6 +2199,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, ItemSell                   , is   ),
 	SUBCMD_PROC(Bot, ItemSellAll                , isa  ),
 	SUBCMD_PROC(Bot, ItemSellClear              ,      ),
+	SUBCMD_PROC(Bot, ItemSellHave               , ish  ),
 	SUBCMD_PROC(Bot, ItemSellImport             , isi  ),
 	SUBCMD_PROC(Bot, JournalImport              , ji   ),
 	SUBCMD_PROC(Bot, LogIn                      , li   ),
@@ -2267,6 +2276,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, StoragePut                 , sp   ),
 	SUBCMD_PROC(Bot, StoragePutAll              , spa  ),
 	SUBCMD_PROC(Bot, StoragePutClear            ,      ),
+	SUBCMD_PROC(Bot, StoragePutHave             , sph  ),
 	SUBCMD_PROC(Bot, StoragePutImport           , spi  ),
 	SUBCMD_PROC(Bot, sUmmon                     , u    ),
 	SUBCMD_PROC(Bot, Team                       , t    ),

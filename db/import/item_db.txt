@@ -87,6 +87,9 @@
 594,Sour_Cream_Pancake,クリームパンケーキ,0,0,,150,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(325,405),rand(40,60); sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Curse; sc_end SC_Hallucination; sc_end SC_Bleeding; },{},{}
 595,Mushroom_Pancake,マッシュルームパンケーキ,0,0,,150,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(325,405),rand(40,60); sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Curse; sc_end SC_Hallucination; sc_end SC_Bleeding; },{},{}
 604,Branch_Of_Dead_Tree,古木の枝,2,50,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ summon "--ja--",-1; },{},{}
+645,Center_Potion,スピードアップポーション,2,800,,20,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_ASPDPOTION0,1800000,0; },{},{}
+656,Awakening_Potion,ハイスピードポーション,2,1500,,30,,,,,0xFFF7FEEF,7,2,,,40,,,{ sc_start SC_ASPDPOTION1,1800000,0; },{},{}
+657,Berserk_Potion,バーサークポーション,2,3000,,40,,,,,0x41E646A6,7,2,,,85,,,{ sc_start SC_ASPDPOTION2,1800000,0; },{},{}
 678,Poison_Bottle,毒薬の瓶,2,5000,,100,,,,,0xFFFFFFFF,7,2,,,,,,{ if(Class==Job_Assassin_Cross) { sc_start SC_DPoison,60000,0; sc_start SC_ASPDPOTION3,60000,0; } else percentheal -100,-100; },{},{}
 756,Oridecon_Stone,オリデオコン原石,3,550,,50,,,,,,,,,,,,,{},{},{}
 757,Elunium_Stone,エルニウム原石,3,650,,50,,,,,,,,,,,,,{},{},{}
@@ -1371,6 +1374,8 @@
 10921,Cash_10000,10000ショップポイント,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ addcash 10000; },{},{}
 10922,Pet_Food2,高級ペットフード,0,200000,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(50,90),0; },{},{}
 10923,Pet_Food3,超高級ペットフード,0,1000000,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(50,90),0; },{},{}
+10924,At_Bot_ItemSellHave,@Bot ItemSellHave,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot ItemSellHave"; },{},{}
+10925,At_Bot_StoragePutHave,@Bot StoragePutHave,2,1,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ atcommand "@Bot StoragePutHave"; },{},{}
 11516,Asai_Fruit,アサイーの実,0,15,,20,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(16,22),0; sc_end SC_Poison; sc_end SC_Silence; sc_end SC_Blind; sc_end SC_Confusion; sc_end SC_Hallucination; },{},{}
 11532,Nasi_Goreng,ナシゴレン,0,15,,20,,,,,0xFFFFFFFF,63,2,,,,,,{ itemheal rand(133,168),0; },{},{}
 11533,Satay,サテ,11,15,,20,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "ALL_RESURRECTION",2; },{},{}

@@ -268,7 +268,6 @@ AI_SKILL_USE_FUNC_T(AM_POTIONPITCHER, sp) {
 			!mem->is_hiding() &&
 			!mem->is_invincible() &&
 			!mem->reject_skills()->find(kid) &&
-			mem->sc()->data[SC_DIGESTPOTION] &&
 			!mem->sc()->data[SC_BERSERK] &&
 			mem->check_supply_sp();
 	});

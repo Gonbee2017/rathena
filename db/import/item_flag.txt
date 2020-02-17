@@ -32,4 +32,6 @@
 10916,32	// @Bot TeamPassive
 10917,32	// @Bot TeamRush
 10918,32	// @Bot TeamStay
+10924,32	// @Bot ItemSellHave
+10925,32	// @Bot StoragePutHave
 12622,32	// ‹Ræ—pèj

@@ -1551,7 +1551,7 @@ SUBCMD_FUNC(Bot, ItemsaVeMonsterTransport) {
 	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
 }
 
-// すべての売却アイテムを売却する。
+// 登録されているアイテムをすべて売却する。
 SUBCMD_FUNC(Bot, ItemSellAll) {
 	CS_ENTER;
 	if (!npc_exists(
@@ -1574,6 +1574,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 		if (itm->nameid &&
 			!itm->equip &&
 			!itm->card[0] &&
+			!itm->card[3] &&
 			!itm->refine
 		) {
 			if (!idb) idb = itemdb_exists(itm->nameid);
@@ -1635,6 +1636,62 @@ SUBCMD_FUNC(Bot, ItemSellClear) {
 	show_client(lea->fd(), print(
 		cou, "件の売却アイテムの登録を抹消しました。"
 	));
+}
+
+// 所持しているアイテムをすべて売却アイテムとして登録する。
+SUBCMD_FUNC(Bot, ItemSellHave) {
+	CS_ENTER;
+	int tot_cou = 0;
+	auto reg_itm = [lea, &tot_cou] (
+		block_if* mem,
+		storage_type sto_typ,
+		int ind,
+		int ind_wid,
+		item* itm,
+		item_data* idb = nullptr
+	) {
+		if (itm->nameid &&
+			!itm->equip &&
+			!itm->card[0] &&
+			!itm->card[3] &&
+			!itm->refine
+		) {
+			if (!idb) idb = itemdb_exists(itm->nameid);
+			if ((!idb->equip ||
+					!itm->identify
+				) && idb->jname[0] != '@' &&
+				!lea->sell_items()->find(itm->nameid)
+			) {
+				lea->sell_items()->register_(itm->nameid);
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
+					ID_PREFIX << mem->char_id() << " - " <<
+					mem->name() << " ; " <<
+					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
+					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
+					print_itemdb(itm->nameid) << "\n";
+				++tot_cou;
+			}
+		}
+	};
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 登録した売却アイテム ------\n";
+	for (block_if* mem : lea->members()) {
+		int ind_wid = print(MAX_INVENTORY - 1).length();
+		for (int i = 0; i < MAX_INVENTORY; ++i) {
+			item* itm = &mem->sd()->inventory.u.items_inventory[i];
+			item_data* idb = mem->sd()->inventory_data[i];
+			reg_itm(mem, TABLE_INVENTORY, i, ind_wid, itm, idb);
+		}
+		if (mem->is_carton()) {
+			ind_wid = print(MAX_CART - 1).length();
+			for (int i = 0; i < MAX_CART; ++i) {
+				item* itm = &mem->sd()->cart.u.items_cart[i];
+				reg_itm(mem, TABLE_CART, i, ind_wid, itm);
+			}
+		}
+	}
+	lea->output_buffer() << tot_cou << "件の売却アイテムを登録しました。\n";
+	lea->show_next();
 }
 
 // 売却アイテムを取り込む。
@@ -3733,7 +3790,7 @@ SUBCMD_FUNC(Bot, StoragePut) {
 	}
 }
 
-// 倉庫にアイテムを格納する。
+// 登録しているアイテムをすべて倉庫に格納する。
 SUBCMD_FUNC(Bot, StoragePutAll) {
 	CS_ENTER;
 	ptr<storage_context> sto_con;
@@ -3757,8 +3814,9 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 		if (itm->nameid &&
 			(!itm->equip ||
 				itemdb_isstackable2(idb)
-			) && (!itm->card[0] ||
-				itm->card[0] == CARD0_CREATE
+			) && ((!itm->card[0] &&
+					!itm->card[3]
+				) || itm->card[0] == CARD0_CREATE
 			) && !itm->refine
 		) {
 			int nid = itm->nameid;
@@ -3848,6 +3906,69 @@ SUBCMD_FUNC(Bot, StoragePutImport) {
 		"件の倉庫格納アイテムを取り込みました。"
 	));
 	lea->last_heavy_tick() = now;
+}
+
+// 所持しているアイテムをすべて倉庫格納アイテムとして登録する。
+SUBCMD_FUNC(Bot, StoragePutHave) {
+	CS_ENTER;
+	int tot_cou = 0;
+	auto reg_itm = [lea, &tot_cou] (
+		block_if* mem,
+		storage_type sto_typ,
+		int ind,
+		int ind_wid,
+		item* itm,
+		item_data* idb = nullptr
+	) {
+		if (itm->nameid &&
+			(!itm->equip ||
+				itemdb_isstackable2(idb)
+			) && ((!itm->card[0] &&
+					!itm->card[3]
+				) || itm->card[0] == CARD0_CREATE
+			) && !itm->refine
+		) {
+			int nid = itm->nameid;
+			if (itm->card[0] == CARD0_CREATE &&
+				pc_famerank(MakeDWord(itm->card[2], itm->card[3]), MAPID_ALCHEMIST)
+			) nid += FAME_OFFSET;
+			if (!idb) idb = itemdb_exists(itm->nameid);
+			if ((!idb->equip ||
+					!itm->identify
+				) && idb->jname[0] != '@' &&
+				!lea->storage_put_items()->find(nid)
+			) {
+				lea->storage_put_items()->register_(nid);
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
+					ID_PREFIX << mem->char_id() << " - " <<
+					mem->name() << " ; " <<
+					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
+					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
+					print_itemdb(nid) << "\n";
+				++tot_cou;
+			}
+		}
+	};
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 登録した倉庫格納アイテム ------\n";
+	for (block_if* mem : lea->members()) {
+		bool done = false;
+		int ind_wid = print(MAX_INVENTORY - 1).length();
+		for (int i = 0; i < MAX_INVENTORY; ++i) {
+			item* itm = &mem->sd()->inventory.u.items_inventory[i];
+			item_data* idb = mem->sd()->inventory_data[i];
+			reg_itm(mem, TABLE_INVENTORY, i, ind_wid, itm, idb);
+		}
+		if (mem->is_carton()) {
+			ind_wid = print(MAX_CART - 1).length();
+			for (int i = 0; i < MAX_CART; ++i) {
+				item* itm = &mem->sd()->cart.u.items_cart[i];
+				reg_itm(mem, TABLE_CART, i, ind_wid, itm);
+			}
+		}
+	}
+	lea->output_buffer() << tot_cou << "件の倉庫格納アイテムを登録しました。\n";
+	lea->show_next();
 }
 
 // Botを引き寄せる。

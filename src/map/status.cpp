@@ -4548,11 +4548,16 @@ int status_calc_homunculus_(struct homun_data *hd, enum e_status_calc_opt opt)
 	amotion = amotion - amotion * (status->dex + hom->dex_value) / 1000 - (status->agi + hom->agi_value) * amotion / 250;
 	status->def = status->mdef = 0;
 #else
-	skill_lv = hom->level / 10 + status->vit / 5;
-	status->def = cap_value(skill_lv, 0, 99);
 
-	skill_lv = hom->level / 10 + status->int_ / 5;
-	status->mdef = cap_value(skill_lv, 0, 99);
+	// [GonBee]
+	// ホムンクルスのDefとMdefは主人と同じ値にする。
+	//skill_lv = hom->level / 10 + status->vit / 5;
+	//status->def = cap_value(skill_lv, 0, 99);
+	//
+	//skill_lv = hom->level / 10 + status->int_ / 5;
+	//status->mdef = cap_value(skill_lv, 0, 99);
+	status->def = status_get_def(&hd->master->bl);
+	status->mdef = status_get_mdef(&hd->master->bl);
 
 	amotion = (1000 - 4 * status->agi - status->dex) * hd->homunculusDB->baseASPD / 1000;
 #endif
@@ -5188,7 +5193,7 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 	}
 
 	// Defを制限する。
-	if (bl->type & BL_PC &&
+	if (bl->type & (BL_PC | BL_HOM) &&
 		!battle_config.weapon_defense_type &&
 		status->def > battle_config.max_def
 	) {
@@ -5222,13 +5227,20 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 
 	// [GonBee]
 	// Mdefを制限する。
-	if (bl->type & BL_PC &&
+	if (bl->type & (BL_PC | BL_HOM) &&
 		!battle_config.magic_defense_type &&
 		status->mdef > battle_config.max_mdef
 	) {
 		status->mdef2 += battle_config.over_def_bonus * (status->mdef - battle_config.max_def);
 		status->mdef = battle_config.max_mdef;
 	}
+
+	// [GonBee]
+	// 主人のDefとMdefの更新時にホムンクルスのDefとMdefも更新する。
+	if (sd &&
+		sd->hd &&
+		flag & (SCB_DEF | SCB_MDEF)
+	) status_calc_homunculus(sd->hd, SCO_NONE); 
 
 	if(flag&SCB_SPEED) {
 		status->speed = status_calc_speed(bl, sc, b_status->speed);
