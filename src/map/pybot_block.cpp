@@ -3390,14 +3390,14 @@ bot_t::bot_t(
 // Bot‚ð”jŠü‚·‚éB
 bot_t::~bot_t() {
 	CS_ENTER;
-	map_session_data* lea_sd = map_id2sd(leader()->account_id());
-	if (lea_sd &&
-		lea_sd->target_storage == &sd()->storage
-	) storage_storageclose(lea_sd);
 	if (session[fd()] &&
 		session[fd()]->session_data == sd()
 	) {
 		show_info(print("Bot '" CL_WHITE , name(), CL_RESET "' logged off."));
+		map_session_data* lea_sd = map_id2sd(leader()->account_id());
+		if (lea_sd &&
+			lea_sd->target_storage == &sd()->storage
+		) storage_storageclose(lea_sd);
 		map_quit(sd());
 		do_close(fd());
 	}
