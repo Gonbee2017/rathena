@@ -1670,7 +1670,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot itemsell \"ハット [1]\"]\n"
 	), SUBCMD_DESC(Bot, ItemSellAll                , isa  ,
 		"------ ItemSellAll (isa) サブコマンド ------\n"
-		"登録しているアイテムをすべて売却する。\n"
+		"登録済みのアイテムをすべて売却する。\n"
 		"入力例 [@bot itemsellall]\n"
 	), SUBCMD_DESC(Bot, ItemSellClear              ,      ,
 		"------ ItemSellClear サブコマンド ------\n"
@@ -2058,7 +2058,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot storageput 蝶の羽]\n"
 	), SUBCMD_DESC(Bot, StoragePutAll              , spa  ,
 		"------ StoragePutAll (spa) サブコマンド ------\n"
-		"登録しているアイテムをすべて倉庫に入れる。\n"
+		"登録済みのアイテムをすべて倉庫に入れる。\n"
 		"入力例 [@bot storageputall]\n"
 	), SUBCMD_DESC(Bot, StoragePutClear            ,      ,
 		"------ StoragePutClear サブコマンド ------\n"
