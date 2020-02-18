@@ -298,19 +298,19 @@ function	script	KafraStorage	{
 		mes "習得してから利用可能となります。";
 	}
 	else {
-		set .@mem_siz, getteammemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
-		if (.@mem_siz == 1) set .@tar_rid, getcharid(3);
-		else {
-			mes "[カプラ職員]";
-			mes "どなたの倉庫を開きますか？";
-			next;
-			for (set .@i, 0; .@i < .@mem_siz; ++.@i)
-				set .@mem_lis$[getarraysize(.@mem_lis$)], "^4040FF" + .@mem_nams$[.@i] + "^000000";
-			set .@mem_lis$[getarraysize(.@mem_lis$)], "やめる";
-			set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
-			if (.@mem_ind < .@mem_siz) set .@tar_rid, .@mem_rids[.@mem_ind];
-		}
-		
+		//set .@mem_siz, getteammemberlist(.@mem_rids, .@mem_cids, .@mem_nams$, .@mem_clas);
+		//if (.@mem_siz == 1) set .@tar_rid, getcharid(3);
+		//else {
+		//	mes "[カプラ職員]";
+		//	mes "どなたの倉庫を開きますか？";
+		//	next;
+		//	for (set .@i, 0; .@i < .@mem_siz; ++.@i)
+		//		set .@mem_lis$[getarraysize(.@mem_lis$)], "^4040FF" + .@mem_nams$[.@i] + "^000000";
+		//	set .@mem_lis$[getarraysize(.@mem_lis$)], "やめる";
+		//	set .@mem_ind, select(printarray(.@mem_lis$)) - 1;
+		//	if (.@mem_ind < .@mem_siz) set .@tar_rid, .@mem_rids[.@mem_ind];
+		//}
+		set .@tar_rid, getcharid(3);
 		if (.@tar_rid) {
 			if (countitem(7059) < 1 && 
 				Zeny<getarg(0)
