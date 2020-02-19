@@ -3591,7 +3591,11 @@ bool intif_storage_save(struct map_session_data *sd, struct s_storage *stor)
 	WFIFOW(inter_fd, 0) = 0x308b;
 	WFIFOW(inter_fd, 2) = stor_size+13;
 	WFIFOB(inter_fd, 4) = stor->type;
-	WFIFOL(inter_fd, 5) = sd->status.account_id;
+
+	// [GonBee]
+	//WFIFOL(inter_fd, 5) = sd->status.account_id;
+	WFIFOL(inter_fd, 5) = stor->id;
+
 	WFIFOL(inter_fd, 9) = sd->status.char_id;
 	memcpy(WFIFOP(inter_fd, 13), stor, stor_size);
 	WFIFOSET(inter_fd, stor_size+13);

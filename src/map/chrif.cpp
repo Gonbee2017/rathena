@@ -318,7 +318,10 @@ int chrif_save(struct map_session_data *sd, int flag) {
 
 	chrif_bsdata_save(sd, ((flag&CSAVE_QUITTING) && !(flag&CSAVE_AUTOTRADE)));
 
-	if (sd->storage.dirty)
+	// [GonBee]
+	//if (sd->storage.dirty)
+	if (sd->target_storage->dirty)
+
 		storage_storagesave(sd);
 	if (flag&CSAVE_INVENTORY)
 		intif_storage_save(sd,&sd->inventory);
