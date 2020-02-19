@@ -320,7 +320,9 @@ int chrif_save(struct map_session_data *sd, int flag) {
 
 	// [GonBee]
 	//if (sd->storage.dirty)
-	if (sd->target_storage->dirty)
+	if (sd->target_storage &&
+		sd->target_storage->dirty
+	)
 
 		storage_storagesave(sd);
 	if (flag&CSAVE_INVENTORY)
