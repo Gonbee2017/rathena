@@ -13085,6 +13085,17 @@ bool pc_job_can_entermap(enum e_job jobid, int m, int group_lv) {
  * @param sd
  **/
 void pc_set_costume_view(struct map_session_data *sd) {
+
+	// [GonBee]
+	// ©“®˜I“X‚ÍŒ©‚½–Ú‚ğˆÛB
+	if (sd->state.autotrade) {
+		sd->status.head_top    = sd->vd.head_top;
+		sd->status.head_mid    = sd->vd.head_mid;
+		sd->status.head_bottom = sd->vd.head_bottom;
+		sd->status.robe 	   = sd->vd.robe;
+		return;
+	}
+
 	int i = -1, head_low = 0, head_mid = 0, head_top = 0, robe = 0;
 	struct item_data *id = NULL;
 

@@ -12,6 +12,9 @@ pybot_restart_cool_time: 60000        // Botが死亡してからリスタートまでのクール
 pybot_think_time: 250                 // AIを実行する間隔時間。
 
 clear_skills_on_death: 2              // 死亡するとスキルユニットを除去するブロックのタイプ。
+feature.autotrade_direction: -1       // 自動露店の体の向き。
+feature.autotrade_head_direction: -1  // 自動露店の頭の向き。
+feature.autotrade_sit: -1             // 自動露店の座るか。
 max_flee2: 950                        // 完全回避の上限。
 max_steal_rate: 5000                  // スティール成功率の上限。
 mvp_spawn_delay: 5                    // MVPモンスターの湧き時間率。

@@ -556,10 +556,20 @@ void do_init_vending_autotrade(void)
 {
 	if (battle_config.feature_autotrade) {
 		if (Sql_Query(mmysql_handle,
-			"SELECT `id`, `account_id`, `char_id`, `sex`, `title`, `body_direction`, `head_direction`, `sit` "
-			"FROM `%s` "
-			"WHERE `autotrade` = 1 AND (SELECT COUNT(`vending_id`) FROM `%s` WHERE `vending_id` = `id`) > 0 "
-			"ORDER BY `id`;",
+
+			// [GonBee]
+			// Œ©‚½–Ú‚ğ’Ç‰ÁB
+			//"SELECT `id`, `account_id`, `char_id`, `sex`, `title`, `body_direction`, `head_direction`, `sit` "
+			//"FROM `%s` "
+			//"WHERE `autotrade` = 1 AND (SELECT COUNT(`vending_id`) FROM `%s` WHERE `vending_id` = `id`) > 0 "
+			//"ORDER BY `id`;",
+			"SELECT v.`id`, v.`account_id`, v.`char_id`, v.`sex`, v.`title`, v.`body_direction`, v.`head_direction`, v.`sit`,"
+			" c.`hair`, c.`hair_color`, c.`clothes_color`, c.`head_top`, c.`head_mid`, c.`head_bottom`, c.`robe` "
+			"FROM `%s` v, `char` c "
+			"WHERE v.`autotrade` = 1 AND (SELECT COUNT(vi.`vending_id`) FROM `%s` vi WHERE vi.`vending_id` = v.`id`) > 0 "
+			"AND v.`char_id` = c.`char_id` "
+			"ORDER BY v.`id`;",
+
 			vendings_table, vending_items_table ) != SQL_SUCCESS )
 		{
 			Sql_ShowDebug(mmysql_handle);
@@ -600,6 +610,17 @@ void do_init_vending_autotrade(void)
 				pc_setnewpc(at->sd, at->account_id, at->char_id, 0, gettick(), at->sex, 0);
 				at->sd->state.autotrade = 1|2;
 				at->sd->state.monster_ignore = (battle_config.autotrade_monsterignore);
+
+				// [GonBee]
+				// Œ©‚½–Ú‚ğ’Ç‰ÁB
+				Sql_GetData(mmysql_handle,  8, &data, NULL); at->sd->vd.hair_style  = atoi(data);
+				Sql_GetData(mmysql_handle,  9, &data, NULL); at->sd->vd.hair_color  = atoi(data);
+				Sql_GetData(mmysql_handle, 10, &data, NULL); at->sd->vd.cloth_color = atoi(data);
+				Sql_GetData(mmysql_handle, 11, &data, NULL); at->sd->vd.head_top    = atoi(data);
+				Sql_GetData(mmysql_handle, 12, &data, NULL); at->sd->vd.head_mid    = atoi(data);
+				Sql_GetData(mmysql_handle, 13, &data, NULL); at->sd->vd.head_bottom = atoi(data);
+				Sql_GetData(mmysql_handle, 14, &data, NULL); at->sd->vd.robe        = atoi(data);
+				
 				chrif_authreq(at->sd, true);
 				uidb_put(vending_autotrader_db, at->char_id, at);
 			}
