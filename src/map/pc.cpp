@@ -3291,13 +3291,13 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		case SP_IMMUNE_VENOMDUST:
 			sd->special_state.immune_venomdust = 1;
 			break;
-		// Fleeゼロを追加。
-		case SP_ZERO_FLEE:
-			sd->special_state.zero_flee = 1;
+		// 固定回避率を追加。
+		case SP_FIX_FLEE:
+			sd->bonus.fix_flee = val + 1;
 			break;
-		// 完全回避ゼロを追加。
-		case SP_ZERO_FLEE2:
-			sd->special_state.zero_flee2 = 1;
+		// 固定完全回避を追加。
+		case SP_FIX_FLEE2:
+			sd->bonus.fix_flee2 = val + 1;
 			break;
 
 		default:
@@ -8571,8 +8571,8 @@ int pc_readparam(struct map_session_data* sd,int type)
 		case SP_NEAR_IGNORE_AUTOGUARD: val = sd->special_state.near_ignore_autoguard; break;
 		case SP_NEAR_IGNORE_STONESKIN: val = sd->special_state.near_ignore_stoneskin; break;
 		case SP_NEAR_PERFECT_HIT_ADD_RATE: val = sd->bonus.near_perfect_hit_add; break;
-		case SP_ZERO_FLEE: val = sd->special_state.zero_flee; break;
-		case SP_ZERO_FLEE2: val = sd->special_state.zero_flee2; break;
+		case SP_FIX_FLEE: val = sd->bonus.fix_flee; break;
+		case SP_FIX_FLEE2: val = sd->bonus.fix_flee2; break;
 
 		default:
 			ShowError("pc_readparam: Attempt to read unknown parameter '%d'.\n", type);

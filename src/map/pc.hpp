@@ -320,8 +320,6 @@ struct map_session_data {
 		unsigned int near_ignore_autocounter : 1; // 近接オートカウンター無視。
 		unsigned int near_ignore_autoguard : 1;   // 近接オートガード無視。
 		unsigned int near_ignore_stoneskin : 1;   // 近接ストーンスキン無視。
-		unsigned int zero_flee : 1;               // Fleeゼロ。
-		unsigned int zero_flee2 : 1;              // 完全回避ゼロ。
 
 	} special_state;
 	uint32 login_id1, login_id2;
@@ -528,6 +526,8 @@ struct map_session_data {
 		int near_aspd_add;        // 近接Aspd増加。
 		int near_batk;            // 近接物理攻撃時のベースAtk上昇。
 		int near_perfect_hit_add; // 近接物理攻撃時の必中率上昇。
+		int fix_flee;             // 固定回避率。
+		int fix_flee2;            // 固定完全回避。
 
 	} bonus;
 	// zeroed vars end here.

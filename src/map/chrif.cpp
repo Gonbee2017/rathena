@@ -299,10 +299,6 @@ int chrif_isconnected(void) {
  *  CSAVE_CART: Character changed cart data
  */
 int chrif_save(struct map_session_data *sd, int flag) {
-
-	// [GonBee]
-	CS_ENTER;
-
 	uint16 mmo_charstatus_len = 0;
 
 	nullpo_retr(-1, sd);

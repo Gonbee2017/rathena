@@ -555,8 +555,8 @@
 
 	// [GonBee]
 	export_constant2("bNearAspd",SP_NEAR_ASPD);
-	export_constant2("bZeroFlee",SP_ZERO_FLEE);
-	export_constant2("bZeroFlee2",SP_ZERO_FLEE2);
+	export_constant2("bFixFlee",SP_FIX_FLEE);
+	export_constant2("bFixFlee2",SP_FIX_FLEE2);
 
 	export_constant2("bAtkRange",SP_ATTACKRANGE);
 	export_constant2("bAtkEle",SP_ATKELE);

@@ -2051,7 +2051,6 @@ int map_quit(struct map_session_data *sd) {
 			buyingstore_close(sd);
 	}
 
-CS_ENTER;
 	if(!sd->state.active) { //Removing a player that is not active.
 		struct auth_node *node = chrif_search(sd->status.account_id);
 		if (node && node->char_id == sd->status.char_id &&
@@ -2062,40 +2061,31 @@ CS_ENTER;
 		return 0;
 	}
 
-CS_ENTER;
 	if (sd->expiration_tid != INVALID_TIMER)
 		delete_timer(sd->expiration_tid, pc_expiration_timer);
 
-CS_ENTER;
 	if (sd->npc_timer_id != INVALID_TIMER) //Cancel the event timer.
 		npc_timerevent_quit(sd);
 
-CS_ENTER;
 	if (sd->autotrade_tid != INVALID_TIMER)
 		delete_timer(sd->autotrade_tid, pc_autotrade_timer);
 
-CS_ENTER;
 	if (sd->npc_id)
 		npc_event_dequeue(sd);
 
-CS_ENTER;
 	if( sd->bg_id )
 		bg_team_leave(sd,1);
 
-CS_ENTER;
 	if( sd->status.clan_id )
 		clan_member_left(sd);
 
-CS_ENTER;
 	pc_itemcd_do(sd,false);
 
-CS_ENTER;
 	npc_script_event(sd, NPCE_LOGOUT);
 
 	//Unit_free handles clearing the player related data,
 	//map_quit handles extra specific data which is related to quitting normally
 	//(changing map-servers invokes unit_free but bypasses map_quit)
-CS_ENTER;
 	if( sd->sc.count ) {
 		//Status that are not saved...
 		status_change_end(&sd->bl, SC_BOSSMAPINFO, INVALID_TIMER);
@@ -2176,7 +2166,6 @@ CS_ENTER;
 		}
 	}
 
-CS_ENTER;
 	for (i = 0; i < EQI_MAX; i++) {
 		if (sd->equip_index[i] >= 0)
 			if (pc_isequip(sd,sd->equip_index[i]))
@@ -2184,10 +2173,8 @@ CS_ENTER;
 	}
 
 	// Return loot to owner
-CS_ENTER;
 	if( sd->pd ) pet_lootitem_drop(sd->pd, sd);
 
-CS_ENTER;
 	if (sd->ed) // Remove effects here rather than unit_remove_map_pc so we don't clear on Teleport/map change.
 		elemental_clean_effect(sd->ed);
 
@@ -2195,14 +2182,11 @@ CS_ENTER;
 
 	struct map_data *mapdata = map_getmapdata(sd->bl.m);
 
-CS_ENTER;
 	if( mapdata->instance_id )
 		instance_delusers(mapdata->instance_id);
 
-CS_ENTER;
 	unit_remove_map_pc(sd,CLR_RESPAWN);
 
-CS_ENTER;
 	if( mapdata->instance_id ) { // Avoid map conflicts and warnings on next login
 		int16 m;
 		struct point *pt;
@@ -2220,27 +2204,18 @@ CS_ENTER;
 		}
 	}
 
-CS_ENTER;
 	if (sd->state.vending)
 		idb_remove(vending_getdb(), sd->status.char_id);
 
-CS_ENTER;
 	if (sd->state.buyingstore)
 		idb_remove(buyingstore_getdb(), sd->status.char_id);
 
-CS_ENTER;
 	pc_damage_log_clear(sd,0);
-CS_ENTER;
 	party_booking_delete(sd); // Party Booking [Spiria]
-CS_ENTER;
 	pc_makesavestatus(sd);
-CS_ENTER;
 	pc_clean_skilltree(sd);
-CS_ENTER;
 	pc_crimson_marker_clear(sd);
-CS_ENTER;
 	chrif_save(sd, CSAVE_QUIT|CSAVE_INVENTORY|CSAVE_CART);
-CS_ENTER;
 	unit_free_pc(sd);
 	return 0;
 }

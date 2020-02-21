@@ -3291,6 +3291,7 @@ void unit_free_pc(struct map_session_data *sd)
  */
 int unit_free(struct block_list *bl, clr_type clrtype)
 {
+CS_ENTER;
 	struct unit_data *ud = unit_bl2ud( bl );
 
 	nullpo_ret(ud);
@@ -3302,42 +3303,61 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 
 	switch( bl->type ) {
 		case BL_PC: {
+CS_ENTER;
 			struct map_session_data *sd = (struct map_session_data*)bl;
 			int i;
 
 			if( status_isdead(bl) )
 				pc_setrestartvalue(sd,2);
 
+CS_ENTER;
 			pc_delinvincibletimer(sd);
 
+CS_ENTER;
 			pc_delautobonus(sd, sd->autobonus, false);
 			pc_delautobonus(sd, sd->autobonus2, false);
 			pc_delautobonus(sd, sd->autobonus3, false);
 
+			// [GonBee]
+			pc_delautobonus(sd, sd->autobonus4, false);
+
+CS_ENTER;
 			if( sd->followtimer != INVALID_TIMER )
 				pc_stop_following(sd);
 
+CS_ENTER;
 			if( sd->duel_invite > 0 )
 				duel_reject(sd->duel_invite, sd);
 
+CS_ENTER;
 			channel_pcquit(sd,0xF); // Leave all chan
+CS_ENTER;
 			skill_blockpc_clear(sd); // Clear all skill cooldown related
 
 			// Notify friends that this char logged out. [Skotlex]
+CS_ENTER;
 			map_foreachpc(clif_friendslist_toggle_sub, sd->status.account_id, sd->status.char_id, 0);
+CS_ENTER;
 			party_send_logout(sd);
+CS_ENTER;
 			guild_send_memberinfoshort(sd,0);
+CS_ENTER;
 			pc_cleareventtimer(sd);
+CS_ENTER;
 			pc_inventory_rental_clear(sd);
+CS_ENTER;
 			pc_delspiritball(sd, sd->spiritball, 1);
+CS_ENTER;
 			pc_delspiritcharm(sd, sd->spiritcharm, sd->spiritcharm_type);
 
+CS_ENTER;
 			if( sd->st && sd->st->state != RUN ) {// free attached scripts that are waiting
 				script_free_state(sd->st);
 				sd->st = NULL;
 				sd->npc_id = 0;
 			}
 
+CS_ENTER;
 			if( sd->combos.count ) {
 				aFree(sd->combos.bonus);
 				aFree(sd->combos.id);
@@ -3345,6 +3365,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				sd->combos.count = 0;
 			}
 
+CS_ENTER;
 			if( sd->sc_display_count ) { /* [Ind] */
 				for( i = 0; i < sd->sc_display_count; i++ )
 					ers_free(pc_sc_display_ers, sd->sc_display[i]);
@@ -3354,12 +3375,14 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				sd->sc_display = NULL;
 			}
 
+CS_ENTER;
 			if( sd->quest_log != NULL ) {
 				aFree(sd->quest_log);
 				sd->quest_log = NULL;
 				sd->num_quests = sd->avail_quests = 0;
 			}
 
+CS_ENTER;
 			if (sd->qi_display) {
 				aFree(sd->qi_display);
 				sd->qi_display = NULL;
@@ -3374,25 +3397,30 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 			}
 #endif
 
+CS_ENTER;
 			if (sd->achievement_data.achievements)
 				achievement_free(sd);
 
 			// Clearing...
+CS_ENTER;
 			if (sd->bonus_script.head)
 				pc_bonus_script_clear(sd, BSF_REM_ALL);
 			break;
 		}
 		case BL_PET: {
+CS_ENTER;
 			struct pet_data *pd = (struct pet_data*)bl;
 			struct map_session_data *sd = pd->master;
 
 			pet_hungry_timer_delete(pd);
 
+CS_ENTER;
 			if( pd->a_skill ) {
 				aFree(pd->a_skill);
 				pd->a_skill = NULL;
 			}
 
+CS_ENTER;
 			if( pd->s_skill ) {
 				if (pd->s_skill->timer != INVALID_TIMER) {
 					if (pd->s_skill->id)
@@ -3405,6 +3433,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				pd->s_skill = NULL;
 			}
 
+CS_ENTER;
 			if( pd->recovery ) {
 				if(pd->recovery->timer != INVALID_TIMER)
 					delete_timer(pd->recovery->timer, pet_recovery_timer);
@@ -3413,6 +3442,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				pd->recovery = NULL;
 			}
 
+CS_ENTER;
 			if( pd->bonus ) {
 				if (pd->bonus->timer != INVALID_TIMER)
 					delete_timer(pd->bonus->timer, pet_skill_bonus_timer);
@@ -3421,6 +3451,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				pd->bonus = NULL;
 			}
 
+CS_ENTER;
 			if( pd->loot ) {
 				pet_lootitem_drop(pd,sd);
 
@@ -3431,6 +3462,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 				pd->loot = NULL;
 			}
 
+CS_ENTER;
 			if( pd->pet.intimate > 0 )
 				intif_save_petdata(pd->pet.account_id,&pd->pet);
 			else { // Remove pet.
@@ -3507,11 +3539,14 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 		}
 		case BL_HOM:
 		{
+CS_ENTER;
 			struct homun_data *hd = (TBL_HOM*)bl;
 			struct map_session_data *sd = hd->master;
 
+CS_ENTER;
 			hom_hungry_timer_delete(hd);
 
+CS_ENTER;
 			if( hd->homunculus.intimacy > 0 )
 				hom_save(hd);
 			else {
@@ -3568,13 +3603,18 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 		}
 	}
 
+CS_ENTER;
 	skill_clear_unitgroup(bl);
+CS_ENTER;
 	status_change_clear(bl,1);
+CS_ENTER;
 	map_deliddb(bl);
 
+CS_ENTER;
 	if( bl->type != BL_PC ) // Players are handled by map_quit
 		map_freeblock(bl);
 
+CS_ENTER;
 	map_freeblock_unlock();
 
 	return 0;

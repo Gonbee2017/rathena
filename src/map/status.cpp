@@ -5163,10 +5163,10 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 	}
 
 	// [GonBee]
-	// Fleeゼロを追加。
+	// 固定回避率を追加。
 	if (sd &&
-		sd->special_state.zero_flee
-	) status->flee = 0;
+		sd->bonus.fix_flee
+	) status->flee = sd->bonus.fix_flee - 1;
 
 	if(flag&SCB_DEF) {
 		status->def = status_calc_def(bl, sc, b_status->def);
@@ -5289,14 +5289,14 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 	}
 
 	// [GonBee]
-	// 完全回避を上限値で制限する。
-	status->flee2 = cap_value(status->flee2, 0, battle_config.max_flee2);
+	// 固定完全回避を追加。
+	if (sd &&
+		sd->bonus.fix_flee2
+	) status->flee2 = sd->bonus.fix_flee2 - 1;
 
 	// [GonBee]
-	// 完全回避ゼロを追加。
-	if (sd &&
-		sd->special_state.zero_flee2
-	) status->flee2 = 0;
+	// 完全回避を上限値で制限する。
+	status->flee2 = cap_value(status->flee2, 0, battle_config.max_flee2);
 
 	if(flag&SCB_ATK_ELE) {
 		status->rhw.ele = status_calc_attack_element(bl, sc, b_status->rhw.ele);
