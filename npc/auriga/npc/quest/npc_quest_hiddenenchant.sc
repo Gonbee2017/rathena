@@ -39,11 +39,29 @@ function	script	HseSub	{
 	mes "[細工職人・" +.@name$+ "]";
 	mes "エンチャントを行いますか？";
 	next;
-	if(select("^FF0000今回はやめておく^000000","^0000FFおねがいします^000000") == 1) {
+	//if(select("^FF0000今回はやめておく^000000","^0000FFおねがいします^000000") == 1) {
+	set .@men, select("^FF0000今回はやめておく^000000","^0000FFお願いします^000000","^0000FF消えない方法は？^000000");
+	if (.@men == 1) {
 		mes "[細工職人・" +.@name$+ "]";
 		mes "わかりました。";
 		mes "またいつでもお待ちしています。";
 		close;
+	}
+	if (.@men == 3) {
+		set .@price, .@price * 2;
+		set .@zeny$, printzeny(.@price);
+		mes "[細工職人・師範]";
+		mes "鎧が消えない方法もございますが";
+		mes "とてもお金がかかります。";
+		mes "^0000FF"+.@zeny$+ "Zeny^000000いただきますが";
+		mes "どうなさいますか？";
+		next;
+		if(select("^FF0000やっぱりやめておく^000000","^0000FFお金ならあります^000000") == 1) {
+			mes "[細工職人・" +.@name$+ "]";
+			mes "わかりました。";
+			mes "またいつでもお待ちしています。";
+			close;
+		}
 	}
 	mes "[細工職人・" +.@name$+ "]";
 	mes "わかりました。";
@@ -55,7 +73,7 @@ function	script	HseSub	{
 		mes "足りなくなっていますよ。";
 		close;
 	}
-	delitem .@itemid,1;
+	//delitem .@itemid,1;
 	set Zeny,Zeny-.@price;
 	switch(getarg(4)) {
 	case 0:	set .@rate,50;	break;
@@ -77,6 +95,7 @@ function	script	HseSub	{
 			set .@cardid, .@cardid+2;
 		else if(.@succsess <= 18)
 			set .@cardid, .@cardid+1;
+		delitem .@itemid,1;
 		getitem2 .@itemid,1,1,0,0,0,0,0,.@cardid;
 		misceffect 305;
 		mes "[細工職人・" +.@name$+ "]";
@@ -84,6 +103,7 @@ function	script	HseSub	{
 		mes "是非、大切に使ってください。";
 		close;
 	}
+	if (.@men == 2) delitem .@itemid,1;
 	misceffect 306;
 	mes "[細工職人・" +.@name$+ "]";
 	mes "ああ……";
@@ -601,11 +621,29 @@ prontera,83,108,6	script	細工職人・師範	814,{
 	mes "[細工職人・師範]";
 	mes "さあ、エンチャントを行うか？";
 	next;
-	if(select("^FF0000今回はやめておく^000000","^0000FFお願いします^000000") == 1) {
+	//if(select("^FF0000今回はやめておく^000000","^0000FFお願いします^000000") == 1) {
+	set .@men, select("^FF0000今回はやめておく^000000","^0000FFお願いします^000000","^0000FF消えない方法は？^000000");
+	if (.@men == 1) {
 		mes "[細工職人・師範]";
 		mes "必要であれば、";
 		mes "いつでも来て欲しい。";
 		close;
+	}
+	if (.@men == 3) {
+		set .@price, .@price * 2;
+		set .@zeny$, printzeny(.@price);
+		mes "[細工職人・師範]";
+		mes "兜が消えない方法もあるにはあるが";
+		mes "かなり費用がかさむ。";
+		mes "^0000FF"+.@zeny$+ "Zeny^000000になるが";
+		mes "それでもよいかな？";
+		next;
+		if(select("^FF0000やっぱりやめておく^000000","^0000FFお金ならあります^000000") == 1) {
+			mes "[細工職人・師範]";
+			mes "必要であれば、";
+			mes "いつでも来て欲しい。";
+			close;
+		}
 	}
 	mes "[細工職人・師範]";
 	mes "わかった。";
@@ -617,7 +655,7 @@ prontera,83,108,6	script	細工職人・師範	814,{
 		mes "足りなくなっているようだぞ。";
 		close;
 	}
-	delitem .@enchantid,1;
+	//delitem .@enchantid,1;
 	set Zeny,Zeny-.@price;
 	switch(.@rank) {	// 確率不明なので暫定で鎧HSEと同一
 	case 0:	set .@rate,50;	break;
@@ -645,6 +683,7 @@ prontera,83,108,6	script	細工職人・師範	814,{
 			set .@cardid, .@cardid+2;
 		else if(.@succsess <= 18)
 			set .@cardid, .@cardid+1;
+		delitem .@enchantid,1;
 		getitem2 .@enchantid,1,1,0,0,0,0,0,.@cardid;
 		misceffect 305;
 		mes "[細工職人・師範]";
@@ -652,6 +691,7 @@ prontera,83,108,6	script	細工職人・師範	814,{
 		mes "大切に使って欲しい。";
 		close;
 	}
+	if (.@men == 2) delitem .@enchantid,1;
 	misceffect 306;
 	mes "[細工職人・師範]";
 	mes "うっ……!!";
