@@ -3266,9 +3266,11 @@ void unit_remove_map_pc(struct map_session_data *sd, clr_type clrtype)
  */
 void unit_free_pc(struct map_session_data *sd)
 {
+CS_ENTER;
 	if (sd->pd)
 		unit_free(&sd->pd->bl,CLR_OUTSIGHT);
 
+CS_ENTER;
 	if (sd->hd)
 		unit_free(&sd->hd->bl,CLR_OUTSIGHT);
 
@@ -3278,6 +3280,7 @@ void unit_free_pc(struct map_session_data *sd)
 	if (sd->ed)
 		unit_free(&sd->ed->bl,CLR_OUTSIGHT);
 
+CS_ENTER;
 	unit_free(&sd->bl,CLR_TELEPORT);
 }
 
@@ -3298,6 +3301,7 @@ CS_ENTER;
 
 	map_freeblock_lock();
 
+CS_ENTER;
 	if( bl->prev )	// Players are supposed to logout with a "warp" effect.
 		unit_remove_map(bl, clrtype);
 
