@@ -59,13 +59,14 @@
 //but only one of each.
 
 1014,SPORE,スポア,630,9012,10017,537,80,60,30,100,250,20,1500,150,0,0,350,500,500,{ petrecovery SC_POISON,1; },{ bonus bHit,5; bonus bAtk,-2; }
-1122,GOBLIN_1,ゴブリン長男,0,9032,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_WINDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Wind,1; }
-1123,GOBLIN_2,ゴブリン次男,0,9033,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Fire,1; }
-1125,GOBLIN_4,ゴブリン四男,0,9034,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Earth,1; }
-1208,WANDER_MAN,彷徨う者,0,9037,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_UNDEADATTACK",5,5,5; },{ bonus bAgi,3; bonus bDex,1; }
-1382,DIABOLIC,ディアボリック,0,9036,0,537,80,60,10,100,250,20,800,150,0,0,300,300,800,{ petskillattack "WZ_METEOR",2,5,5; },{ bonus bMaxSP,30; }
-1385,DELETER_,グラウンドデリーター,0,9035,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "SM_MAGNUM",5,5,5; },{ bonus bSPGainValue,5; }
-1519,CHUNG_E,チュンイー,0,9030,0,6115,80,60,50,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "CR_SHIELDCHARGE",5,5,5; },{ bonus bDef,1; bonus2 bSubRace,RC_DemiHuman,1; }
+1122,GOBLIN_1,ゴブリン長男,12225,9032,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_WINDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Wind,1; }
+1123,GOBLIN_2,ゴブリン次男,12225,9033,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Fire,1; }
+1125,GOBLIN_4,ゴブリン四男,12225,9034,0,537,80,60,50,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,5,5; },{ bonus bMaxHP,30; bonus2 bSubEle,Ele_Earth,1; }
+1208,WANDER_MAN,彷徨う者,12225,9037,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "NPC_UNDEADATTACK",5,5,5; },{ bonus bAgi,3; bonus bDex,1; }
+1382,DIABOLIC,ディアボリック,12225,9036,0,537,80,60,10,100,250,20,800,150,0,0,300,300,800,{ petskillattack "WZ_METEOR",2,5,5; },{ bonus bMaxSP,30; }
+1385,DELETER_,グラウンドデリーター,12225,9035,0,537,80,60,20,100,250,20,800,150,0,0,300,300,800,{ petskillattack "SM_MAGNUM",5,5,5; },{ bonus bSPGainValue,5; }
+1519,CHUNG_E,チュンイー,12225,9030,0,6115,80,60,50,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "CR_SHIELDCHARGE",5,5,5; },{ bonus bDef,1; bonus2 bSubRace,RC_DemiHuman,1; }
+1815,EVENT_RICECAKE,モチリン,12225,9028,0,511,80,60,50,100,250,20,2000,150,1,0,500,500,200,{ petskillsupport "CR_DEFENDER",3,240,50,100; },{ bonus2 bSubEle,Ele_Neutral,1; bonus bMaxHPrate,-1; }
 
 1040,GOLEM,ゴーレム,12371,9053,10035,6111,80,60,20,100,250,20,500,150,0,0,300,300,800,{ petskillbonus bDef,5,20,40; },{ bonus bMaxHP,100; bonus bFlee,-5; }
 1143,MARIONETTE,マリオネット,12361,9043,10025,6098,80,60,10,100,250,20,500,150,0,0,300,300,800,{ petskillattack2 "NPC_TELEKINESISATTACK",666,1,10,5; },{ bonus bSPrecovRate,3; }
@@ -83,21 +84,21 @@
 1505,LOLI_RURI,ロリルリ,12360,9042,10024,6097,80,60,15,100,250,20,200,150,0,0,300,300,800,{ petrecovery SC_SILENCE,1; },{ bonus bMaxHPRate,3; bonus3 bAutoSpellWhenHit,"AL_HEAL",1,10; }
 1513,CIVIL_SERVANT,ミョグェ,12358,9040,10022,6095,80,60,10,100,250,20,500,150,0,0,300,300,800,{ petskillsupport "AM_POTIONPITCHER",4,60,50,100; },{ bonus bMaxSP,10; }
 1586,LEAF_CAT,リーフキャット,12359,9041,10023,6096,80,60,20,100,250,20,200,150,0,0,300,300,800,{ petloot 20; },{ bonus2 bSubRace,RC_Brute,3; }
-1837,IMP,インプ,0,9056,10038,537,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "WZ_SIGHTRASHER",5,10,5; },{ bonus2 bSubEle,Ele_Fire,2; bonus2 bAddEle,Ele_Fire,2; }
+1837,IMP,インプ,12225,9056,10038,537,80,60,10,100,250,20,200,150,0,0,300,300,800,{ petskillattack "WZ_SIGHTRASHER",5,10,5; },{ bonus2 bSubEle,Ele_Fire,2; bonus2 bAddEle,Ele_Fire,2; }
 
-1307,CAT_O_NINE_TAIL,キャットナインテイル,0,9500,0,6104,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MC_MAMMONITE",5,10,5; },{ bonus bLuk,5; }
-1713,ACIDUS,ゴールドオシドス,0,9501,0,6107,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_FIREBALL",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Holy,2; }
-1714,FERUS,レッドペロス,0,9502,0,6106,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Fire,2; }
-1716,ACIDUS_,ブルーオシドス,0,9503,0,505,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_THUNDERSTORM",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Wind,2; }
-1717,FERUS_,グリーンペロス,0,9504,0,6096,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Earth,2; }
+1307,CAT_O_NINE_TAIL,キャットナインテイル,12225,9500,0,6104,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MC_MAMMONITE",5,10,5; },{ bonus bLuk,5; }
+1713,ACIDUS,ゴールドオシドス,12225,9501,0,6107,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_FIREBALL",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Holy,2; }
+1714,FERUS,レッドペロス,12225,9502,0,6106,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_FIREATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Fire,2; }
+1716,ACIDUS_,ブルーオシドス,12225,9503,0,505,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "MG_THUNDERSTORM",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Wind,2; }
+1717,FERUS_,グリーンペロス,12225,9504,0,6096,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_GROUNDATTACK",5,10,5; },{ bonus2 bSubRace,RC_Dragon,2; bonus2 bAddEle,Ele_Earth,2; }
 
-1203,MYSTELTAINN,ミステルテイン,0,9505,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_SMALL,1; }
-1204,TIRFING,オーガトゥース,0,9506,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_MEDIUM,1; }
-1205,EXECUTIONER,エクスキューショナー,0,9507,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_BIG,1; }
-1754,SKEGGIOLD,スケゴルトブラウン,0,9508,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "AL_DECAGI",10,10,10; },{ bonus2 bSubRace,RC_Angel,2; bonus2 bAddEle,Ele_Holy,2; }
-1755,SKEGGIOLD_,スケゴルトブラック,0,9509,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "MG_SAFETYWALL",5,60,100,100; },{ bonus3 bAddMonsterDropItem,7510,RC_Angel,10; }
-1867,BANSHEE,バンシー,0,9510,0,6106,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKSTRIKE",3,10,5; },{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; }
-1974,BANSHEE_MASTER,バンシーマスター,0,9511,0,6098,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_WIDECURSE",1,0,5; },{ bonus bInt,1; bonus bMatk,10; }
+1203,MYSTELTAINN,ミステルテイン,12225,9505,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_SMALL,1; }
+1204,TIRFING,オーガトゥース,12225,9506,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_MEDIUM,1; }
+1205,EXECUTIONER,エクスキューショナー,12225,9507,0,998,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKNESSATTACK",3,10,5; },{ bonus bAtk,5; bonus2 bSubSize,SZ_BIG,1; }
+1754,SKEGGIOLD,スケゴルトブラウン,12225,9508,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "AL_DECAGI",10,10,10; },{ bonus2 bSubRace,RC_Angel,2; bonus2 bAddEle,Ele_Holy,2; }
+1755,SKEGGIOLD_,スケゴルトブラック,12225,9509,0,6110,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillsupport "MG_SAFETYWALL",5,60,100,100; },{ bonus3 bAddMonsterDropItem,7510,RC_Angel,10; }
+1867,BANSHEE,バンシー,12225,9510,0,6106,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_DARKSTRIKE",3,10,5; },{ bonus2 bSkillAtk,"MG_NAPALMBEAT",20; bonus2 bSkillAtk,"MG_SOULSTRIKE",20; bonus2 bSkillAtk,"HW_NAPALMVULCAN",20; }
+1974,BANSHEE_MASTER,バンシーマスター,12225,9511,0,6098,80,60,10,100,250,20,2000,150,0,0,300,300,800,{ petskillattack "NPC_WIDECURSE",1,0,5; },{ bonus bInt,1; bonus bMatk,10; }
 
 1038,OSIRIS,オシリス,0,9512,0,10922,80,60,10,100,250,20,2000,150,0,0,300,300,800,{},{}
 1039,BAPHOMET,バフォメット,0,9513,0,10922,80,60,10,100,250,20,2000,150,0,0,300,300,800,{},{}

@@ -18,9 +18,6 @@
 #include "../common/timer.hpp"
 #include "../config/core.hpp"
 
-// [GonBee]
-#include <stack>
-
 struct npc_data;
 struct item_data;
 struct Channel;
@@ -1218,14 +1215,18 @@ void do_shutdown(void);
 
 // [GonBee]
 // サーバークラッシュ原因究明用のコールスタック。
+#include <stack>
+#include <string>
 class CallStack {
 public:
 	CallStack(const std::string& nam);
 	~CallStack();
 	static std::stack<std::string> log;
 };
-
-#define CS_ENTER CallStack _cs(__FUNCTION__)
-#define CS_ENTER_N(nam) CallStack _cs(nam)
+#define __CS_COMBINE(x, y) x ## y
+#define _CS_COMBINE(x, y) __CS_COMBINE(x, y)
+#define _CS_ENTER(pos) CallStack _CS_COMBINE(_cs_, __LINE__)(__FUNCTION__ "_" + std::to_string(__LINE__) + pos)
+#define CS_ENTER _CS_ENTER("")
+#define CS_ENTER_N(nam) _CS_ENTER("_" + nam)
 
 #endif /* MAP_HPP */
