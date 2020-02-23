@@ -2568,6 +2568,11 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 		return true;
 
 	// [GonBee]
+	// 砦の試練ではクリティカルが発生しない。
+	struct map_data* map_dat = map_getmapdata(src->m);
+	if (mapdata_flag_gvg2(map_dat)) return false;
+
+	// [GonBee]
 	// スキル攻撃でもクリティカルを有効にする。
 	//if( !(wd->type&DMG_MULTI_HIT) && sstatus->cri && (!skill_id ||
 	//	skill_id == KN_AUTOCOUNTER || skill_id == SN_SHARPSHOOTING ||
