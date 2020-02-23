@@ -14904,6 +14904,28 @@ void status_change_clear_onChangeMap(struct block_list *bl, struct status_change
 			if (status_change_isDisabledOnMap_((sc_type)i, mapIsVS, mapIsPVP, mapIsGVG, mapIsBG, mapZone, mapIsTE))
 				status_change_end(bl, (sc_type)i, INVALID_TIMER);
 		}
+
+		// [GonBee]
+		// ディボーション使用者と対象者が異なるマップになったときに解除する。
+		map_session_data* sd = BL_CAST(BL_PC, bl);
+		if (sd) {
+			status_change_entry* dev_sce = sd->sc.data[SC_DEVOTION];
+			if (dev_sce) {
+				block_list* dev_use_bl = map_id2bl(dev_sce->val1);
+				if (!dev_use_bl ||
+					dev_use_bl->m != sd->bl.m
+				) status_change_end(&sd->bl, SC_DEVOTION, INVALID_TIMER);
+			}
+			for (int i = 0; i < MAX_DEVOTION; ++i) {
+				if (sd->devotion[i] > 0) {
+					block_list* dev_tar_bl = map_id2bl(sd->devotion[i]);
+					if (dev_tar_bl &&
+						dev_tar_bl->m != sd->bl.m
+					) status_change_end(dev_tar_bl, SC_DEVOTION, INVALID_TIMER);
+				}
+			}
+		}
+
 	}
 }
 

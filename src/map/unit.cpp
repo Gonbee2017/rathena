@@ -3003,7 +3003,24 @@ int unit_remove_map_(struct block_list *bl, clr_type clrtype, const char* file, 
 		status_change_end(bl, SC_RUN, INVALID_TIMER);
 		status_change_end(bl, SC_DANCING, INVALID_TIMER);
 		status_change_end(bl, SC_WARM, INVALID_TIMER);
-		status_change_end(bl, SC_DEVOTION, INVALID_TIMER);
+
+		// [GonBee]
+		// テレポート時のディボーションの解除はstatus_change_clear_onChangeMapで行う。
+		//status_change_end(bl, SC_DEVOTION, INVALID_TIMER);
+		if (clrtype != CLR_TELEPORT) {
+			status_change_end(bl, SC_DEVOTION, INVALID_TIMER);
+			map_session_data* sd = BL_CAST(BL_PC, bl);
+			if (sd) {
+				for (int i = 0; i < MAX_DEVOTION; ++i) {
+					if (sd->devotion[i] > 0) {
+						block_list* dev_tar_bl = map_id2bl(sd->devotion[i]);
+						if (dev_tar_bl)
+							status_change_end(dev_tar_bl, SC_DEVOTION, INVALID_TIMER);
+					}
+				}
+			}
+		}
+
 		status_change_end(bl, SC_MARIONETTE, INVALID_TIMER);
 		status_change_end(bl, SC_MARIONETTE2, INVALID_TIMER);
 		status_change_end(bl, SC_CLOSECONFINE, INVALID_TIMER);
