@@ -1163,7 +1163,10 @@ uint8 pc_isequip(struct map_session_data *sd,int n)
  *------------------------------------------*/
 bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_time, int group_id, struct mmo_charstatus *st, bool changing_mapservers)
 {
-CS_ENTER;
+
+	// [GonBee]
+	CS_ENTER;
+
 	int i;
 	t_tick tick = gettick();
 	uint32 ip = session[sd->fd]->client_addr;
@@ -1426,7 +1429,10 @@ bool pc_set_hate_mob(struct map_session_data *sd, int pos, struct block_list *bl
  *------------------------------------------*/
 void pc_reg_received(struct map_session_data *sd)
 {
-CS_ENTER;
+
+	// [GonBee]
+	CS_ENTER;
+
 	uint8 i;
 
 	sd->vars_ok = true;
