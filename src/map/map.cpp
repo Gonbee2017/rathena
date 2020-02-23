@@ -2217,8 +2217,9 @@ int map_quit(struct map_session_data *sd) {
 	pc_crimson_marker_clear(sd);
 
 	// [GonBee]
-	// 保存に先立ってステータスをクリアする。
-	status_change_clear(&sd->bl, 1);
+	// 騎乗、ディボーション状態を解除する。
+	status_change_end(&sd->bl, SC_ALL_RIDING, INVALID_TIMER);
+	status_change_end(&sd->bl, SC_DEVOTION, INVALID_TIMER);
 
 	chrif_save(sd, CSAVE_QUIT|CSAVE_INVENTORY|CSAVE_CART);
 	unit_free_pc(sd);
