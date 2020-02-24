@@ -4006,10 +4006,11 @@ SUBCMD_FUNC(Bot, Team) {
 		       "HP "  << print(std::setw(3), std::setfill('0'), mem->hp_ratio()             ) << "% "
 		       "SP "  << print(std::setw(3), std::setfill('0'), mem->sp_ratio()             ) << "% " <<
 		       mem->name() << " " <<
-		       "<" << job_name(mem->sd()->status.class_) << "> "
-		       "W " << (mem->sd()->weight * 100 / mem->sd()->max_weight) << "% "
-		       "Z " << print_zeny(mem->sd()->status.zeny) << " "
-		       "Sh " << print_zeny(mem->sd()->cashPoints) << "\n";
+		       "<"    << job_name(mem->sd()->status.class_) << "> "
+		       "W "   << (mem->sd()->weight * 100 / mem->sd()->max_weight) << "% "
+		       "Z "   << print_zeny(mem->sd()->status.zeny) << " "
+		       "Sh "  << print_zeny(mem->sd()->cashPoints) << " "
+		       "("    << mem->min_distance_value() << "-" << mem->max_distance_value() << ")\n";
 		return buf.str();
 	};
 
