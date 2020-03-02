@@ -4556,8 +4556,10 @@ int status_calc_homunculus_(struct homun_data *hd, enum e_status_calc_opt opt)
 	//
 	//skill_lv = hom->level / 10 + status->int_ / 5;
 	//status->mdef = cap_value(skill_lv, 0, 99);
-	status->def = status_get_def(&hd->master->bl);
-	status->mdef = status_get_mdef(&hd->master->bl);
+	if (hd->master) {
+		status->def = status_get_def(&hd->master->bl);
+		status->mdef = status_get_mdef(&hd->master->bl);
+	}
 
 	amotion = (1000 - 4 * status->agi - status->dex) * hd->homunculusDB->baseASPD / 1000;
 #endif
@@ -5269,7 +5271,6 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 		///// After status_calc_critical so the bonus is applied despite if you have or not a sc bugreport:5240
 		//if( bl->type == BL_PC && ((TBL_PC*)bl)->status.weapon == W_KATAR )
 		//	status->cri <<= 1;
-		map_session_data* sd = BL_CAST(BL_PC, bl);
 		if (sd) {
 			int wep_ind = sd->equip_index[EQI_HAND_R];
 			if (wep_ind >= 0) {
@@ -13212,7 +13213,6 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 	// 合奏スキルは前提となる独奏スキルの効果を併せ持つ。
 	auto dans_ite = SOLO_DANCES.find(e_skill(status_sc2skill(type)));
 	if (dans_ite != SOLO_DANCES.end()) {
-		const auto& dans = dans_ite->second;
 		for (e_skill dan_kid : dans_ite->second)
 			status_change_end(bl, status_skill2sc(dan_kid), INVALID_TIMER);
 	}
