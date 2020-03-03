@@ -1576,6 +1576,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ ItemIgnoreClear サブコマンド ------\n"
 		"無視アイテムをクリアする。\n"
 		"入力例 [@bot itemignoreclear]\n"
+	), SUBCMD_DESC(Bot, ItemIgnoreHave             , iih  ,
+		"------ ItemIgnoreHave (iih) サブコマンド ------\n"
+		"所持しているアイテムをすべて無視アイテムとして登録する。\n"
+		"入力例 [@bot itemignorehave]\n"
 	), SUBCMD_DESC(Bot, ItemIgnoreImport           , iii  ,
 		"------ ItemIgnoreImport (iii) サブコマンド ------\n"
 		"無視アイテムを取り込む。\n"
@@ -1592,6 +1596,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ ItemNotIgnoreClear サブコマンド ------\n"
 		"非無視アイテムをクリアする。\n"
 		"入力例 [@bot itemnotignoreclear]\n"
+	), SUBCMD_DESC(Bot, ItemNotIgnoreHave          , inih ,
+		"------ ItemNotIgnoreHave (inih) サブコマンド ------\n"
+		"所持しているアイテムをすべて非無視アイテムとして登録する。\n"
+		"入力例 [@bot itemnotignorehave]\n"
 	), SUBCMD_DESC(Bot, ItemNotIgnoreImport        , inii ,
 		"------ ItemNotIgnoreImport (inii) サブコマンド ------\n"
 		"非無視アイテムを取り込む。\n"
@@ -2180,9 +2188,11 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, ItemDrop                   , id   ),
 	SUBCMD_PROC(Bot, ItemIgnore                 , ii   ),
 	SUBCMD_PROC(Bot, ItemIgnoreClear            ,      ),
+	SUBCMD_PROC(Bot, ItemIgnoreHave             , iih  ),
 	SUBCMD_PROC(Bot, ItemIgnoreImport           , iii  ),
 	SUBCMD_PROC(Bot, ItemNotIgnore              , ini  ),
 	SUBCMD_PROC(Bot, ItemNotIgnoreClear         ,      ),
+	SUBCMD_PROC(Bot, ItemNotIgnoreHave          , inih ),
 	SUBCMD_PROC(Bot, ItemNotIgnoreImport        , inii ),
 	SUBCMD_PROC(Bot, ItemNotsaVeMonster         , invm ),
 	SUBCMD_PROC(Bot, ItemNotsaVeMonsterClear    ,      ),

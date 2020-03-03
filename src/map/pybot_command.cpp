@@ -1086,6 +1086,62 @@ SUBCMD_FUNC(Bot, ItemIgnoreClear) {
 	));
 }
 
+// 所持しているアイテムをすべて無視アイテムとして登録する。
+SUBCMD_FUNC(Bot, ItemIgnoreHave) {
+	CS_ENTER;
+	int tot_cou = 0;
+	auto reg_itm = [lea, &tot_cou] (
+		block_if* mem,
+		storage_type sto_typ,
+		int ind,
+		int ind_wid,
+		item* itm,
+		item_data* idb = nullptr
+	) {
+		if (itm->nameid &&
+			!itm->equip &&
+			!itm->card[0] &&
+			!itm->card[3] &&
+			!itm->refine
+		) {
+			if (!idb) idb = itemdb_exists(itm->nameid);
+			if ((!idb->equip ||
+					!itm->identify
+				) && idb->jname[0] != '@' &&
+				!lea->ignore_items()->find(itm->nameid)
+			) {
+				lea->ignore_items()->register_(itm->nameid);
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
+					ID_PREFIX << mem->char_id() << " - " <<
+					mem->name() << " ; " <<
+					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
+					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
+					print_itemdb(itm->nameid) << "\n";
+				++tot_cou;
+			}
+		}
+	};
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 登録した無視アイテム ------\n";
+	for (block_if* mem : lea->members()) {
+		int ind_wid = print(MAX_INVENTORY - 1).length();
+		for (int i = 0; i < MAX_INVENTORY; ++i) {
+			item* itm = &mem->sd()->inventory.u.items_inventory[i];
+			item_data* idb = mem->sd()->inventory_data[i];
+			reg_itm(mem, TABLE_INVENTORY, i, ind_wid, itm, idb);
+		}
+		if (mem->is_carton()) {
+			ind_wid = print(MAX_CART - 1).length();
+			for (int i = 0; i < MAX_CART; ++i) {
+				item* itm = &mem->sd()->cart.u.items_cart[i];
+				reg_itm(mem, TABLE_CART, i, ind_wid, itm);
+			}
+		}
+	}
+	lea->output_buffer() << tot_cou << "件の無視アイテムを登録しました。\n";
+	lea->show_next();
+}
+
 // 無視アイテムを取り込む。
 SUBCMD_FUNC(Bot, ItemIgnoreImport) {
 	CS_ENTER;
@@ -1151,6 +1207,62 @@ SUBCMD_FUNC(Bot, ItemNotIgnoreClear) {
 	show_client(lea->fd(), print(
 		cou, "件の非無視アイテムの登録を抹消しました。"
 	));
+}
+
+// 所持しているアイテムをすべて非無視アイテムとして登録する。
+SUBCMD_FUNC(Bot, ItemNotIgnoreHave) {
+	CS_ENTER;
+	int tot_cou = 0;
+	auto reg_itm = [lea, &tot_cou] (
+		block_if* mem,
+		storage_type sto_typ,
+		int ind,
+		int ind_wid,
+		item* itm,
+		item_data* idb = nullptr
+	) {
+		if (itm->nameid &&
+			!itm->equip &&
+			!itm->card[0] &&
+			!itm->card[3] &&
+			!itm->refine
+		) {
+			if (!idb) idb = itemdb_exists(itm->nameid);
+			if ((!idb->equip ||
+					!itm->identify
+				) && idb->jname[0] != '@' &&
+				!lea->not_ignore_items()->find(itm->nameid)
+			) {
+				lea->not_ignore_items()->register_(itm->nameid);
+				lea->output_buffer() << INDEX_PREFIX << mem->member_index() << " " <<
+					ID_PREFIX << mem->char_id() << " - " <<
+					mem->name() << " ; " <<
+					STORAGE_TYPE_NAME_TABLE[sto_typ - 1] << " " <<
+					ID_PREFIX << print(std::setw(5), std::setfill('0'), itm->nameid) << " - " <<
+					print_itemdb(itm->nameid) << "\n";
+				++tot_cou;
+			}
+		}
+	};
+	lea->output_buffer() = std::stringstream();
+	lea->output_buffer() << "------ 登録した非無視アイテム ------\n";
+	for (block_if* mem : lea->members()) {
+		int ind_wid = print(MAX_INVENTORY - 1).length();
+		for (int i = 0; i < MAX_INVENTORY; ++i) {
+			item* itm = &mem->sd()->inventory.u.items_inventory[i];
+			item_data* idb = mem->sd()->inventory_data[i];
+			reg_itm(mem, TABLE_INVENTORY, i, ind_wid, itm, idb);
+		}
+		if (mem->is_carton()) {
+			ind_wid = print(MAX_CART - 1).length();
+			for (int i = 0; i < MAX_CART; ++i) {
+				item* itm = &mem->sd()->cart.u.items_cart[i];
+				reg_itm(mem, TABLE_CART, i, ind_wid, itm);
+			}
+		}
+	}
+	lea->output_buffer() << tot_cou << "件の非無視アイテムを登録しました。\n";
+	lea->show_next();
 }
 
 // 非無視アイテムを取り込む。
