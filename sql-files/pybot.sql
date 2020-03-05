@@ -95,7 +95,7 @@ CREATE TABLE `pybot_item_save_mob` (
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pybot_journal`;
-CREATE TABLE `pybot_memo` (
+CREATE TABLE `pybot_journal` (
   `char_id` int(11) unsigned NOT NULL,
   `map` varchar(11) NOT NULL,
   `x` smallint(4) unsigned NOT NULL,
