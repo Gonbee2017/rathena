@@ -2593,8 +2593,8 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 		if(sc && sc->data[SC_CAMOUFLAGE])
 			cri += 100 * min(10,sc->data[SC_CAMOUFLAGE]->val3); //max 100% (1K)
 
-		////The official equation is *2, but that only applies when sd's do critical.
-		////Therefore, we use the old value 3 on cases when an sd gets attacked by a mob
+		//The official equation is *2, but that only applies when sd's do critical.
+		//Therefore, we use the old value 3 on cases when an sd gets attacked by a mob
 		cri -= tstatus->luk * ((!sd && tsd) ? 3 : 2);
 
 		// [GonBee]
@@ -6532,15 +6532,14 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				sd->bonus.ignore_mdef_ele & ( 1 << tstatus->def_ele ) || sd->bonus.ignore_mdef_ele & ( 1 << ELE_ALL ) ||
 				sd->bonus.ignore_mdef_race & ( 1 << tstatus->race ) || sd->bonus.ignore_mdef_race & ( 1 << RC_ALL ) ||
 				sd->bonus.ignore_mdef_class & ( 1 << tstatus->class_ ) || sd->bonus.ignore_mdef_class & ( 1 << CLASS_ALL )
+
+				// [GonBee]
+				// PCは魔法スキル攻撃でもクリティカルを有効にする。
+				|| is_attack_critical(&ad, src, target, skill_id, skill_lv, true)
+
 			))
 				flag.imdef = 1;
 		}
-
-		// [GonBee]
-		// 魔法スキル攻撃でもクリティカルを有効にする。
-		if (!flag.imdef &&
-			is_attack_critical(&ad, src, target, skill_id, skill_lv, true)
-		) flag.imdef = 1;
 
 		if (tsd && (i = pc_sub_skillatk_bonus(tsd, skill_id)))
 			ad.damage -= (int64)ad.damage*i/100;
