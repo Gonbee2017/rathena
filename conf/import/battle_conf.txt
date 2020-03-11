@@ -12,7 +12,7 @@ pybot_restart_cool_time: 60000        // Botが死亡してからリスタートまでのクール
 pybot_think_time: 250                 // AIを実行する間隔時間。
 
 clear_skills_on_death: 2              // 死亡するとスキルユニットを除去するブロックのタイプ。
-dynamic_mobs: 1                       // 動的モンスター制御。
+dynamic_mobs: 1                       // プレイヤーのいないマップのモンスターを削除するか。
 feature.autotrade_direction: -1       // 自動露店の体の向き。
 feature.autotrade_head_direction: -1  // 自動露店の頭の向き。
 feature.autotrade_sit: -1             // 自動露店の座るか。
@@ -32,6 +32,9 @@ ammo_unequip: no
 // Should a suitable weapon be equipped when equipping ammo?
 // Official behavior is "yes".
 ammo_check_weapon: no
+
+// Who can have perfect flee? (Note 3)
+enable_perfect_flee: 31
 
 // -----------------------------------------------------------------------------
 // client.conf

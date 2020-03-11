@@ -1856,10 +1856,10 @@ SUBCMD_FUNC(Bot, JournalImport) {
 // Botがログインする。
 SUBCMD_FUNC(Bot, LogIn) {
 	CS_ENTER;
+	if (lea->is_dead())
+		throw command_error{"死亡した状態でBotをログインさせることはできません。"};
 	if (lea->bots().size() >= bot_limit(lea->sd()))
-		throw command_error{
-		"チームに所属しているBotの人数が制限人数に達しています。"
-	};
+		throw command_error{"チームに所属しているBotの人数が制限人数に達しています。"};
 	std::string uid = shift_arguments(
 		args, "ユーザーIDを指定してください。"
 	);
@@ -4138,6 +4138,8 @@ SUBCMD_FUNC(Bot, TeamLogIn) {
 	CS_ENTER;
 	if (!lea->bots().empty())
 		throw command_error{"あなたはすでにチームを編成しています。"};
+	if (lea->is_dead())
+		throw command_error{"死亡した状態でBotをログインさせることはできません。"};
 	t_tick hev_tic = lea->next_heavy_tick();
 	if (hev_tic)
 		throw command_error{print(

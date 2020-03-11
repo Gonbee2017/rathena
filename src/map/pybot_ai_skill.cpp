@@ -1968,12 +1968,14 @@ AI_SKILL_USE_FUNC(PF_MEMORIZE) {
 AI_SKILL_USE_FUNC(PF_MINDBREAKER) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(*enemies), [this, kid, klv] (block_if* ene) -> bool {
 		return !bot->find_skill_ignore_mobs(kid, ene) &&
-		bot->check_skill_range_block(kid, klv, ene) &&
-		bot->check_attack(ene) &&
-		ene->can_be_provoke() &&
-		ene->check_skill_used_tick(kid, 2500) &&
-		ene->mdef() >= bot->get_mob_high_mdef() &&
-		!ene->sc()->data[SC_MINDBREAKER];
+			bot->check_skill_range_block(kid, klv, ene) &&
+			(bot->sd()->bonus.mental ||
+				bot->check_attack(ene)
+			) && ene->can_be_provoke() &&
+			!ene->is_summoned() &&
+			ene->mdef() >= bot->get_mob_high_mdef() &&
+			!ene->sc()->data[SC_MINDBREAKER] &&
+			ene->check_skill_used_tick(kid, 2500);
 	});
 	if (ene) bot->use_skill_block(kid, klv, ene);
 }

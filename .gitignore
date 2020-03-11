@@ -11,7 +11,7 @@ Thumbs.db
 
 # /
 /*_fifo
-/*.exe
+#/*.exe
 /*.exe.*
 /*.ilk
 /*.iobj

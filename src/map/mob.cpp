@@ -2650,14 +2650,7 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 	) { //Experience calculation.
 		int bonus = 100; //Bonus on top of your share (common to all attackers).
 		int pnum = 0;
-
-		// [GonBee]
-		// Ô‚Ì•ó” ‚É‚Íƒjƒˆƒ‹ƒh‚Ì‰ƒ‚ğ–³Œø‚É‚·‚éB
-		//if (md->sc.data[SC_RICHMANKIM])
-		if (md->sc.data[SC_RICHMANKIM] &&
-			status_get_race2(&md->bl) != RC2_TREASURE
-		)
-
+		if (md->sc.data[SC_RICHMANKIM])
 			bonus += md->sc.data[SC_RICHMANKIM]->val2;
 		if(sd) {
 			temp = status_get_class(&md->bl);
@@ -4345,6 +4338,7 @@ static bool mob_parse_dbrow(char** str)
 	status->int_ = atoi(str[17]);
 	status->dex = atoi(str[18]);
 	status->luk = atoi(str[19]);
+
 	//All status should be min 1 to prevent divisions by zero from some skills. [Skotlex]
 	if (status->str < 1) status->str = 1;
 	if (status->agi < 1) status->agi = 1;
