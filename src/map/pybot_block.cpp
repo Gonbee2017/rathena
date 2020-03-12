@@ -35,6 +35,7 @@ int battler_if::get_mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int battler_if::get_mob_high_level() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_supply_hp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int battler_if::get_supply_sp_rate() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -122,6 +123,7 @@ bool general_if::check_skill_range_xy(e_skill kid, int klv, int x, int y) {RAISE
 defType general_if::def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::def2() {RAISE_NOT_IMPLEMENTED_ERROR;}
 e_element general_if::element() {RAISE_NOT_IMPLEMENTED_ERROR;}
+void general_if::emotion(emotion_type typ) {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -139,6 +141,7 @@ bool general_if::is_paralysis() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_short_range_attacker() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_solo() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool general_if::is_walking() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int general_if::level() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_hp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 int general_if::max_sp() {RAISE_NOT_IMPLEMENTED_ERROR;}
 defType general_if::mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -242,6 +245,7 @@ ptr<regnum_t<int>>& member_if::mob_high_def() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_def_vit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_flee() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_hit() {RAISE_NOT_IMPLEMENTED_ERROR;}
+ptr<regnum_t<int>>& member_if::mob_high_level() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<int>>& member_if::mob_high_mdef() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int,normal_attack_policy>>& member_if::normal_attack_policies() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool member_if::over_loot(int wei_inc) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -542,6 +546,7 @@ void battler_impl::iterate_meta_mobs(
 			yie(MM_SP_DECLINE4);
 		}
 		if (tar_ene) {
+			if (tar_ene->level() >= get_mob_high_level()) yie(MM_HIGH_LEVEL);
 			if (tar_ene->hit() >= get_mob_high_hit()) yie(MM_HIGH_HIT);
 			if (tar_ene->flee() >= get_mob_high_flee()) yie(MM_HIGH_FLEE);
 			if (tar_ene->def() + tar_ene->vit() >= get_mob_high_def_vit()) yie(MM_HIGH_DEF_VIT);
@@ -1060,6 +1065,13 @@ general_impl::element() {
 	return e_element(status_get_element(bl()));
 }
 
+// エモーションを表示する。
+void general_impl::emotion(
+	emotion_type typ // エモーションの種類。
+) {
+	clif_emotion(bl(), typ);
+}
+
 // Fleeを取得する。
 int // 取得したFlee。
 general_impl::flee() {
@@ -1161,6 +1173,12 @@ general_impl::is_solo() {
 bool // 結果。
 general_impl::is_walking() {
 	return unit_is_walking(bl());
+}
+
+// レベルを取得する。
+int // 取得したレベル。
+general_impl::level() {
+	return status_get_lv(bl());
 }
 
 // 最大HPを取得する。
@@ -1385,6 +1403,12 @@ homun_impl::get_mob_high_flee() {
 int // 取得した高Hit。
 homun_impl::get_mob_high_hit() {
 	return master()->get_mob_high_hit();
+}
+
+// ホムンクルスのモンスターの高レベルを取得する。
+int // 取得した高レベル。
+homun_impl::get_mob_high_level() {
+	return master()->get_mob_high_level();
 }
 
 // ホムンクルスのモンスターの高Mdefを取得する。
@@ -2126,6 +2150,14 @@ member_impl::get_mob_high_hit() {
 	return res;
 }
 
+// メンバーのモンスターの高レベルを取得する。
+int // 取得した高レベル。
+member_impl::get_mob_high_level() {
+	int res = mob_high_level()->get();
+	if (!res) res = DEFAULT_MOB_HIGH_LEVEL;
+	return res;
+}
+
 // メンバーのモンスターの高Mdefを取得する。
 int // 取得した高Mdef。
 member_impl::get_mob_high_mdef() {
@@ -2501,6 +2533,11 @@ ptr<regnum_t<int>>& member_impl::mob_high_flee() {
 // モンスターの高Hitの登録値。
 ptr<regnum_t<int>>& member_impl::mob_high_hit() {
 	return mob_high_hit_;
+}
+
+// モンスターの高レベルの登録値。
+ptr<regnum_t<int>>& member_impl::mob_high_level() {
+	return mob_high_level_;
 }
 
 // モンスターの高Mdefの登録値。
@@ -3218,6 +3255,7 @@ member_t::member_t(
 	mob_high_def_vit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_def_vit");
 	mob_high_flee() = construct<regnum_t<int>>(sd(), "pybot_mob_high_flee");
 	mob_high_hit() = construct<regnum_t<int>>(sd(), "pybot_mob_high_hit");
+	mob_high_level() = construct<regnum_t<int>>(sd(), "pybot_mob_high_level");
 	mob_high_mdef() = construct<regnum_t<int>>(sd(), "pybot_mob_high_mdef");
 	name_ = std::string(sd()->status.name);
 	safe_cast_time() = construct<regnum_t<int>>(sd(), "pybot_safe_cast_time");

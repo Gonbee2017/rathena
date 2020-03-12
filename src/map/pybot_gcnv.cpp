@@ -1786,6 +1786,10 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ MonsterHighHit (mhh) サブコマンド ------\n"
 		"モンスターの高Hitを設定する。\n"
 		"入力例 [@bot monsterhighhit アサクロ 175]\n"
+	), SUBCMD_DESC(Bot, MonsterHighLevel           , mhl  ,
+		"------ MonsterHighLevel (mhl) サブコマンド ------\n"
+		"モンスターの高レベルを設定する。\n"
+		"入力例 [@bot monsterhighlevel アサクロ 120]\n"
 	), SUBCMD_DESC(Bot, MonsterHighMdef            , mhmd ,
 		"------ MonsterHighMdef (mhmd) サブコマンド ------\n"
 		"モンスターの高Mdefを設定する。\n"
@@ -2150,7 +2154,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot warp ハイプリ]\n"
 		"ワープポータルを開く。\n"
 		"入力例 [@bot warp ハイプリ prt_fild08]\n"
-		"座標を指定して、ワープポータルを開く。\n"
+		"特定の座標へのワープポータルを開く。\n"
 		"入力例 [@bot warp ハイプリ prt_fild08 100 200]\n"
 	),
 };
@@ -2231,6 +2235,7 @@ const std::vector<ptr<subcommand_proc>> BOT_SUBCMD_PROCS = {
 	SUBCMD_PROC(Bot, MonsterHighDefVit          , mhdv ),
 	SUBCMD_PROC(Bot, MonsterHighFlee            , mhf  ),
 	SUBCMD_PROC(Bot, MonsterHighHit             , mhh  ),
+	SUBCMD_PROC(Bot, MonsterHighLevel           , mhl  ),
 	SUBCMD_PROC(Bot, MonsterHighMdef            , mhmd ),
 	SUBCMD_PROC(Bot, MonsterIgnore              , mi   ),
 	SUBCMD_PROC(Bot, MonsterIgnoreClear         ,      ),
@@ -2377,6 +2382,9 @@ const int DEFAULT_MOB_HIGH_FLEE = 150;
 
 // デフォルトのモンスターの高Hit。
 const int DEFAULT_MOB_HIGH_HIT = 175;
+
+// デフォルトのモンスターの高レベル。
+const int DEFAULT_MOB_HIGH_LEVEL = 100;
 
 // デフォルトのモンスターの高Mdef。
 const int DEFAULT_MOB_HIGH_MDEF = 40;
@@ -3862,6 +3870,7 @@ const std::unordered_map<
 	{MM_HIGH_DEF_VIT, "高DefVit"    },
 	{MM_HIGH_FLEE   , "高Flee"      },
 	{MM_HIGH_HIT    , "高Hit"       },
+	{MM_HIGH_LEVEL  , "高レベル"    },
 	{MM_SP_DECLINE4 , "SP低下4"     },
 	{MM_SP_DECLINE3 , "SP低下3"     },
 	{MM_SP_DECLINE2 , "SP低下2"     },

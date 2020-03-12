@@ -592,6 +592,7 @@ enum meta_mobs {
 	MM_HIGH_DEF_VIT =   186, // 高DefVit。
 	MM_HIGH_FLEE    =   187, // 高Flee。
 	MM_HIGH_HIT     =   188, // 高Hit。
+	MM_HIGH_LEVEL   =   189, // 高レベル。
 	MM_SP_DECLINE4  =   190, // SP低下4。
 	MM_SP_DECLINE3  =   191, // SP低下3。
 	MM_SP_DECLINE2  =   192, // SP低下2。
@@ -1293,6 +1294,7 @@ struct battler_if {
 	virtual int get_mob_high_def_vit();
 	virtual int get_mob_high_flee();
 	virtual int get_mob_high_hit();
+	virtual int get_mob_high_level();
 	virtual int get_mob_high_mdef();
 	virtual int get_supply_hp_rate();
 	virtual int get_supply_sp_rate();
@@ -1388,6 +1390,7 @@ struct general_if {
 	virtual defType mdef();
 	virtual int def2();
 	virtual e_element element();
+	virtual void emotion(emotion_type typ);
 	virtual int flee();
 	virtual int hit();
 	virtual int hp();
@@ -1405,6 +1408,7 @@ struct general_if {
 	virtual bool is_short_range_attacker();
 	virtual bool is_solo();
 	virtual bool is_walking();
+	virtual int level();
 	virtual int max_hp();
 	virtual int max_sp();
 	virtual std::string name();
@@ -1522,6 +1526,7 @@ struct member_if {
 	virtual ptr<regnum_t<int>>& mob_high_def_vit();
 	virtual ptr<regnum_t<int>>& mob_high_flee();
 	virtual ptr<regnum_t<int>>& mob_high_hit();
+	virtual ptr<regnum_t<int>>& mob_high_level();
 	virtual ptr<regnum_t<int>>& mob_high_mdef();
 	virtual ptr<registry_t<int,normal_attack_policy>>& normal_attack_policies();
 	virtual bool over_loot(int wei_inc);
@@ -1766,6 +1771,7 @@ struct general_impl : virtual block_if {
 	virtual defType def() override;
 	virtual int def2() override;
 	virtual e_element element() override;
+	virtual void emotion(emotion_type typ) override;
 	virtual int flee() override;
 	virtual int hit() override;
 	virtual int hp() override;
@@ -1782,6 +1788,7 @@ struct general_impl : virtual block_if {
 	virtual bool is_short_range_attacker() override;
 	virtual bool is_solo() override;
 	virtual bool is_walking() override;
+	virtual int level() override;
 	virtual int max_hp() override;
 	virtual int max_sp() override;
 	virtual defType mdef() override;
@@ -1816,6 +1823,7 @@ struct homun_impl : virtual block_if {
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
+	virtual int get_mob_high_level() override;
 	virtual int get_mob_high_mdef() override;
 	virtual int get_safe_cast_time() override;
 	virtual int get_supply_hp_rate() override;
@@ -1944,6 +1952,7 @@ struct member_impl : virtual block_if {
 	ptr<regnum_t<int>> mob_high_def_vit_;          // モンスターの高DefVitの登録値。
 	ptr<regnum_t<int>> mob_high_flee_;             // モンスターの高Fleeの登録値。
 	ptr<regnum_t<int>> mob_high_hit_;              // モンスターの高Hitの登録値。
+	ptr<regnum_t<int>> mob_high_level_;            // モンスターの高レベルの登録値。
 	ptr<regnum_t<int>> mob_high_mdef_;             // モンスターの高Mdefの登録値。
 	std::string name_;                             // 名前。
 	ptr<registry_t<int,normal_attack_policy>>	   
@@ -2000,6 +2009,7 @@ struct member_impl : virtual block_if {
 	virtual int get_mob_high_def_vit() override;
 	virtual int get_mob_high_flee() override;
 	virtual int get_mob_high_hit() override;
+	virtual int get_mob_high_level() override;
 	virtual int get_mob_high_mdef() override;
 	virtual int get_safe_cast_time() override;
 	virtual int get_skill_members() override;
@@ -2048,6 +2058,7 @@ struct member_impl : virtual block_if {
 	virtual ptr<regnum_t<int>>& mob_high_def_vit() override;
 	virtual ptr<regnum_t<int>>& mob_high_flee() override;
 	virtual ptr<regnum_t<int>>& mob_high_hit() override;
+	virtual ptr<regnum_t<int>>& mob_high_level() override;
 	virtual ptr<regnum_t<int>>& mob_high_mdef() override;
 	virtual bool mob_is_first(block_if* ene) override;
 	virtual bool mob_is_ignore(block_if* ene) override;
@@ -2702,6 +2713,7 @@ SUBCMD_FUNC(Bot, MonsterHighDef);
 SUBCMD_FUNC(Bot, MonsterHighDefVit);
 SUBCMD_FUNC(Bot, MonsterHighFlee);
 SUBCMD_FUNC(Bot, MonsterHighHit);
+SUBCMD_FUNC(Bot, MonsterHighLevel);
 SUBCMD_FUNC(Bot, MonsterHighMdef);
 SUBCMD_FUNC(Bot, MonsterIgnore);
 SUBCMD_FUNC(Bot, MonsterIgnoreClear);
@@ -3048,6 +3060,7 @@ extern const int DEFAULT_MOB_HIGH_DEF;
 extern const int DEFAULT_MOB_HIGH_DEF_VIT;
 extern const int DEFAULT_MOB_HIGH_FLEE;
 extern const int DEFAULT_MOB_HIGH_HIT;
+extern const int DEFAULT_MOB_HIGH_LEVEL;
 extern const int DEFAULT_MOB_HIGH_MDEF;
 extern const std::unordered_map<e_job,normal_attack_policy_values> DEFAULT_NORMAL_ATTACK_POLICY_VALUES;
 extern const int DEFAULT_SKILL_LOW_RATE;

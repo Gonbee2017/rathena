@@ -3281,10 +3281,26 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 	uint16 i;
 	int nk = battle_skill_get_damage_properties(skill_id, wd->miscflag);
 
+	// [GonBee]
+	// 対象者のほうが高レベルの場合は、Def無視系の効果はレベル差の分だけカットされる。
+	int slv = status_get_lv(src);
+	int tlv = status_get_lv(target);
+	int lv_dif = tlv - slv;
+
 	switch (skill_id) {	//Calc base damage according to skill
 		case PA_SACRIFICE:
 			wd->damage = sstatus->max_hp* 9/100;
 			wd->damage2 = 0;
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				wd->damage -= wd->damage * def / 100;
+			}
+
 #ifdef RENEWAL
 			wd->weaponAtk = wd->damage;
 			wd->weaponAtk2 = wd->damage2;
@@ -3322,6 +3338,16 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 		case NJ_ISSEN:
 			wd->damage = 40 * sstatus->str + sstatus->hp * 8 * skill_lv / 100;
 			wd->damage2 = 0;
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				wd->damage -= wd->damage * def / 100;
+			}
+
 			break;
 		case LK_SPIRALPIERCE:
 		case ML_SPIRALPIERCE:
@@ -3341,6 +3367,16 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 				wd->damage += i * i;
 
 				ATK_ADDRATE(wd->damage, wd->damage2, 50*skill_lv); //Skill modifier applies to weight only.
+
+				// [GonBee]
+				if (lv_dif > 0) {
+					int i = 100;
+					i -= lv_dif;
+					if (i < 0) i = 0;
+					int def = status_get_def(target) * (100 - i) / 100;
+					wd->damage -= wd->damage * def / 100;
+				}
+
 			} else {
 
 				// [GonBee]
@@ -3629,6 +3665,12 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 	int skillratio = 100;
 	int i;
 
+	// [GonBee]
+	// 対象者のほうが高レベルの場合は、Def無視系の効果はレベル差の分だけカットされる。
+	int slv = status_get_lv(src);
+	int tlv = status_get_lv(target);
+	int lv_dif = tlv - slv;
+
 	//Skill damage modifiers that stack linearly
 	if(sc && skill_id != PA_SACRIFICE) {
 		if(sc->data[SC_OVERTHRUST])
@@ -3846,6 +3888,16 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case MO_EXTREMITYFIST:
 			skillratio += 100 * (7 + sstatus->sp / 10);
 			skillratio = min(500000,skillratio); //We stop at roughly 50k SP for overflow protection
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				skillratio -= skillratio * def / 100;
+			}
+
 			break;
 		case MO_TRIPLEATTACK:
 			skillratio += 20 * skill_lv;
@@ -3961,6 +4013,16 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 				skillratio += 100 + 20 * skill_lv;
 #else
 			skillratio += 20 * skill_lv;
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				skillratio -= skillratio * def / 100;
+			}
+
 #endif
 			break;
 		case GS_RAPIDSHOWER:
@@ -4902,6 +4964,12 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 		def1 <<= 1; // only eDEF is doubled
 #endif
 
+	// [GonBee]
+	// 対象者のほうが高レベルの場合は、Def無視系の効果はレベル差の分だけカットされる。
+	int slv = status_get_lv(src);
+	int tlv = status_get_lv(target);
+	int lv_dif = tlv - slv;
+
 	if (sd) {
 		int i = sd->ignore_def_by_race[tstatus->race] + sd->ignore_def_by_race[RC_ALL];
 		i += sd->ignore_def_by_class[tstatus->class_] + sd->ignore_def_by_class[CLASS_ALL];
@@ -4913,6 +4981,13 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 
 		if (i) {
 			i = min(i,100); //cap it to 100 for 0 def min
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				i -= lv_dif;
+				if (i < 0) i = 0;
+			}
+
 			def1 -= def1 * i / 100;
 			def2 -= def2 * i / 100;
 		}
@@ -4974,7 +5049,16 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 #ifdef RENEWAL
 			def2 = 0; //Ignore only status defense. [FatalEror]
 #else
-			def1 = 0; //Ignores only armor defense. [Skotlex]
+
+			// [GonBee]
+			//def1 = 0; //Ignores only armor defense. [Skotlex]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				def1 -= def1 * i / 100;
+			}
+
 #endif
 		if(def2 < 1)
 			def2 = 1;
@@ -5036,14 +5120,48 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 
 #else
 		if (def1 > 100) def1 = 100;
-		ATK_RATE2(wd->damage, wd->damage2,
-			attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ?100:(is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ? (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R)*(def1+vit_def) : (100-def1)),
-			attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ?100:(is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ? (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L)*(def1+vit_def) : (100-def1))
-		);
-		ATK_ADD2(wd->damage, wd->damage2,
-			attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R) || is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ?0:-vit_def,
-			attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L) || is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ?0:-vit_def
-		);
+
+		// [GonBee]
+		// 三項演算子をif文に書き直し、Def無視効果を補正。
+		//ATK_RATE2(wd->damage, wd->damage2,
+		//	attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ?100:(is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ? (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R)*(def1+vit_def) : (100-def1)),
+		//	attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ?100:(is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ? (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L)*(def1+vit_def) : (100-def1))
+		//);
+		//ATK_ADD2(wd->damage, wd->damage2,
+		//	attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R) || is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ?0:-vit_def,
+		//	attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L) || is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ?0:-vit_def
+		//);
+		int64 a, b;
+		int ign_def1 = def1;
+		int ign_vit_def = vit_def;
+		if (lv_dif > 0) {
+			int i = 100;
+			i -= lv_dif;
+			if (i < 0) i = 0;
+			ign_def1 = ign_def1 * i / 100;
+			ign_vit_def = ign_vit_def * i / 100;
+		}
+		if (attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R))
+			a = 100 - (def1 - ign_def1);
+		else if (is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R))
+			a = (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R) * (ign_def1 + ign_vit_def);
+		else a = 100 - def1;
+		if (attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L))
+			b = 100 - (def1 - ign_def1);
+		else if (is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L))
+			b = (int64)is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L) * (ign_def1 + ign_vit_def);
+		else b = 100 - def1;
+		ATK_RATE2(wd->damage, wd->damage2, a, b);
+		if (attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_R) ||
+			is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_R)
+		) a = 0;
+		else a = -vit_def;
+		if (attack_ignores_def(wd, src, target, skill_id, skill_lv, EQI_HAND_L) ||
+			is_attack_piercing(wd, src, target, skill_id, skill_lv, EQI_HAND_L)
+		) b = 0;
+		else b = -vit_def;
+		ATK_ADD2(wd->damage, wd->damage2, a, b);
+
 #endif
 }
 
@@ -5685,8 +5803,18 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 #endif
 
 		if (wd.damage + wd.damage2) { //Check if attack ignores DEF
-			if(!attack_ignores_def(&wd, src, target, skill_id, skill_lv, EQI_HAND_L) || !attack_ignores_def(&wd, src, target, skill_id, skill_lv, EQI_HAND_R))
+
+			// [GonBee]
+			// 武器と[太陽と月と星の融合]の条件を外しておく。
+			//if(!attack_ignores_def(&wd, src, target, skill_id, skill_lv, EQI_HAND_L) || !attack_ignores_def(&wd, src, target, skill_id, skill_lv, EQI_HAND_R))
+			if (!is_attack_critical(&wd, src, target, skill_id, skill_lv, false) &&
+				!(battle_skill_get_damage_properties(skill_id, wd.miscflag) & NK_IGNORE_DEF)
+			)
+
 				battle_calc_defense_reduction(&wd, src, target, skill_id, skill_lv);
+
+			// [GonBee]
+			// 武器
 
 			battle_calc_attack_post_defense(&wd, src, target, skill_id, skill_lv);
 		}
@@ -6566,6 +6694,17 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				if (i)
 				{
 					if (i > 100) i = 100;
+
+					// [GonBee]
+					// 対象者のほうが高レベルの場合は、Mdef無視はレベル差の分だけカットされる。
+					int slv = status_get_lv(src);
+					int tlv = status_get_lv(target);
+					int lv_dif = tlv - slv;
+					if (lv_dif > 0) {
+						i -= lv_dif;
+						if (i < 0) i = 0;
+					}
+
 					mdef -= mdef * i/100;
 					//mdef2-= mdef2* i/100;
 				}
@@ -6748,6 +6887,12 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 	//Skill Range Criteria
 	md.flag |= battle_range_type(src, target, skill_id, skill_lv);
 
+	// [GonBee]
+	// 対象者のほうが高レベルの場合は、Def無視系の効果はレベル差の分だけカットされる。
+	int slv = status_get_lv(src);
+	int tlv = status_get_lv(target);
+	int lv_dif = tlv - slv;
+
 	switch (skill_id) {
 		case NC_MAGMA_ERUPTION: // 'Eruption' damage
 			md.damage = 800 + 200 * skill_lv;
@@ -6794,6 +6939,16 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 					//Falcon Assault Modifier
 					md.damage = md.damage * (150 + 70 * skill_lv) / 100;
 				}
+
+				// [GonBee]
+				if (lv_dif > 0) {
+					int i = 100;
+					i -= lv_dif;
+					if (i < 0) i = 0;
+					int def = status_get_def(target) * (100 - i) / 100;
+					md.damage -= md.damage * def / 100;
+				}
+
 			}
 			break;
 		case BA_DISSONANCE:
@@ -6837,6 +6992,16 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			}
 #else
 			md.damage = 500 + rnd()%500 + 5 * skill_lv * sstatus->int_;
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				md.damage -= md.damage * def / 100;
+			}
+
 			nk |= NK_IGNORE_FLEE|NK_NO_ELEFIX; //These two are not properties of the weapon based part.
 #endif
 			break;
@@ -6887,6 +7052,16 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			else
 				md.damage = 0;
 			if (tsd) md.damage>>=1;
+
+			// [GonBee]
+			if (lv_dif > 0) {
+				int i = 100;
+				i -= lv_dif;
+				if (i < 0) i = 0;
+				int def = status_get_def(target) * (100 - i) / 100;
+				md.damage -= md.damage * def / 100;
+			}
+
 #endif
 			break;
 		case NJ_ZENYNAGE:
@@ -6901,6 +7076,16 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 					md.damage = md.damage / (skill_id == NJ_ZENYNAGE ? 3 : 2);
 				else if (tsd && skill_id == NJ_ZENYNAGE)
 					md.damage = md.damage / 2;
+
+				// [GonBee]
+				if (lv_dif > 0) {
+					int i = 100;
+					i -= lv_dif;
+					if (i < 0) i = 0;
+					int def = status_get_def(target) * (100 - i) / 100;
+					md.damage -= md.damage * def / 100;
+				}
+
 			break;
 #ifdef RENEWAL
 		case NJ_ISSEN:

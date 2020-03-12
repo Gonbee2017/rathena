@@ -155,7 +155,7 @@ SUBCMD_FUNC(Bot, BufferEquipSet) {
 				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -167,7 +167,7 @@ SUBCMD_FUNC(Bot, BufferEquipSetClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件のバッファ武具一式の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのバッファ武具一式をロードする。
@@ -222,7 +222,7 @@ SUBCMD_FUNC(Bot, BufferEquipSetLoad) {
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
 	if (mem != lea) {
-		clif_emotion(mem->bl(), ET_HNG);
+		mem->emotion(ET_HNG);
 		mem->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -238,7 +238,7 @@ SUBCMD_FUNC(Bot, BufferEquipSetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のバッファ武具一式を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのカート内アイテムを一覧表示する。
@@ -301,7 +301,7 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 				"「", mem->name(), "」は「", idb_str, "」を"
 				"カートから自動的に取り出しません。"
 			));
-			if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+			if (mem != lea) mem->emotion(ET_OK);
 		} else {
 			int amo = shift_arguments_then_parse_int(
 				args, "アイテムの個数", 1, MAX_AMOUNT
@@ -312,7 +312,7 @@ SUBCMD_FUNC(Bot, CartAutoGet) {
 				amo, "個になるようにカートから自動的に取り出します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -329,7 +329,7 @@ SUBCMD_FUNC(Bot, CartAutoGetClear) {
 		"「", mem->name(), "」の ",
 		cou, "件のカート自動補充アイテムの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのカート自動補充アイテムを転送する。
@@ -351,7 +351,7 @@ SUBCMD_FUNC(Bot, CartAutoGetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に ",
 		cou, "件のカート自動補充アイテムを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーがアイテムをカートから取り出す。
@@ -387,7 +387,7 @@ SUBCMD_FUNC(Bot, CartGet) {
 		"「", mem->name(), "」は「", itm_str, "」を"
 		"カートから取り出しました。"
 	));
-	clif_emotion(mem->bl(), ET_OK);
+	mem->emotion(ET_OK);
 }
 
 // メンバーがアイテムをカートに入れる。
@@ -425,7 +425,7 @@ SUBCMD_FUNC(Bot, CartPut) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」は「", itm_str, "」をカートに入れました。"
 	));
-	clif_emotion(mem->bl(), ET_OK);
+	mem->emotion(ET_OK);
 }
 
 // モンスターとの最大距離を設定する。
@@ -441,7 +441,7 @@ SUBCMD_FUNC(Bot, DistancemaX) {
 	));
 	if (dis == battle_config.pybot_around_distance) dis = 0;
 	mem->max_distance()->set(dis);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // モンスターとの最小距離を設定する。
@@ -462,7 +462,7 @@ SUBCMD_FUNC(Bot, DistancemiN) {
 			"距離ポリシーに応じて離れます。"
 		));
 	mem->min_distance()->set(dis);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーが武具を装備、または装備を解除する。
@@ -481,7 +481,7 @@ SUBCMD_FUNC(Bot, Equip) {
 			show_client(lea->fd(), print(
 				"「", mem->name(), "」は", cou, "個の武具の装備を解除しました。"
 			));
-			clif_emotion(mem->bl(), ET_SCRATCH);
+			mem->emotion(ET_SCRATCH);
 			mem->last_reloaded_equipset_tick() = now;
 		}
 	} else {
@@ -503,7 +503,7 @@ SUBCMD_FUNC(Bot, Equip) {
 				show_client(lea->fd(), print(
 					"「", mem->name(), "」は「", itm_str, "」の装備を解除しました。"
 				));
-				clif_emotion(mem->bl(), ET_SCRATCH);
+				mem->emotion(ET_SCRATCH);
 				mem->last_reloaded_equipset_tick() = now;
 			}
 		} else {
@@ -520,7 +520,7 @@ SUBCMD_FUNC(Bot, Equip) {
 				show_client(lea->fd(), print(
 					"「", mem->name(), "」は「", itm_str, "」を装備しました。"
 				));
-				clif_emotion(mem->bl(), ET_HNG);
+				mem->emotion(ET_HNG);
 				mem->last_reloaded_equipset_tick() = now;
 			}
 		}
@@ -584,7 +584,7 @@ SUBCMD_FUNC(Bot, EquipIdentifyAll) {
 			}
 		}
 		if (done) {
-			clif_emotion(mem->bl(), ET_SPARK);
+			mem->emotion(ET_SPARK);
 			if (mem == lea) {
 				clif_inventorylist(lea->sd());
 				if (lea->is_carton()) {
@@ -744,7 +744,7 @@ SUBCMD_FUNC(Bot, EquipSet) {
 				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -756,7 +756,7 @@ SUBCMD_FUNC(Bot, EquipSetClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件の武具一式の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの武具一式をロードする。
@@ -812,7 +812,7 @@ SUBCMD_FUNC(Bot, EquipSetLoad) {
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
 	if (mem != lea) {
-		clif_emotion(mem->bl(), ET_HNG);
+		mem->emotion(ET_HNG);
 		mem->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -828,7 +828,7 @@ SUBCMD_FUNC(Bot, EquipSetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の武具一式を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // サブコマンドの説明を表示する。
@@ -874,7 +874,7 @@ SUBCMD_FUNC(Bot, HoldMonsters) {
 		));
 	if (cou < 0) cou = INT_MAX;
 	mem->hold_mobs()->set(cou);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // ホムンクルスのスキルを一覧表示、または使う。
@@ -1345,7 +1345,7 @@ SUBCMD_FUNC(Bot, ItemNotsaVeMonster) {
 				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に必ず使います。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -1358,7 +1358,7 @@ SUBCMD_FUNC(Bot, ItemNotsaVeMonsterClear) {
 		"「", mem->name(), "」の", cou,
 		"件のアイテム非節約モンスターの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのアイテム非節約モンスターを転送する。
@@ -1372,7 +1372,7 @@ SUBCMD_FUNC(Bot, ItemNotsaVeMonsterTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のアイテム非節約モンスターを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのHP回復アイテムを一覧表示、または登録、または抹消する。
@@ -1428,7 +1428,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHp) {
 				thr, "%未満のときに使います。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -1441,7 +1441,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHpClear) {
 		"「", mem->name(), "」の",
 		cou, "件のHP回復アイテムの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのHP回復アイテムを転送する。
@@ -1455,7 +1455,7 @@ SUBCMD_FUNC(Bot, ItemRecoverHpTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のHP回復アイテムを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのSP回復アイテムを一覧表示、または登録、または抹消する。
@@ -1512,7 +1512,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSp) {
 				thr, "%未満のときに使います。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -1524,7 +1524,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSpClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件のSP回復アイテムの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのSP回復アイテムを転送する。
@@ -1538,7 +1538,7 @@ SUBCMD_FUNC(Bot, ItemRecoverSpTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のSP回復アイテムを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // 売却アイテムを一覧表示、または登録、または抹消する。
@@ -1633,7 +1633,7 @@ SUBCMD_FUNC(Bot, ItemsaVeMonster) {
 				"「", mem->name(), "」は「", idb_str, "」を「", mob_str, "」用に使いません。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -1646,7 +1646,7 @@ SUBCMD_FUNC(Bot, ItemsaVeMonsterClear) {
 		"「", mem->name(), "」の", cou,
 		"件のアイテム節約モンスターの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのアイテム節約モンスターを転送する。
@@ -1660,7 +1660,7 @@ SUBCMD_FUNC(Bot, ItemsaVeMonsterTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のアイテム節約モンスターを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // 登録済みのアイテムをすべて売却する。
@@ -1734,7 +1734,7 @@ SUBCMD_FUNC(Bot, ItemSellAll) {
 				}
 			}
 		}
-		if (done) clif_emotion(mem->bl(), ET_MONEY);
+		if (done) mem->emotion(ET_MONEY);
 	}
 	lea->output_buffer() << "合計" << tot_cou << "件、" << tot_amo << "個のアイテムを" <<
 		print_zeny(tot_zen) << "Zenyで売りました。\n";
@@ -1936,7 +1936,7 @@ SUBCMD_FUNC(Bot, Loot) {
 	auto& loot = mem->loot();
 	loot->set(loot_modes((loot->get() + 1) % LM_MAX));
 	show_client(lea->fd(), print("「", mem->name(), "」は", MESS[loot->get()]));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // 拾得制限を設定する。
@@ -1952,7 +1952,7 @@ SUBCMD_FUNC(Bot, LootLimit) {
 	));
 	if (lim == DEFAULT_LOOT_LIMIT) lim = 0;
 	mem->loot_limit()->set(lim);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのマップ武具一式を一覧表示、または登録、または抹消する。
@@ -2036,7 +2036,7 @@ SUBCMD_FUNC(Bot, MapEquipSet) {
 				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2048,7 +2048,7 @@ SUBCMD_FUNC(Bot, MapEquipSetClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件のマップ武具一式の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのマップ武具一式をロードする。
@@ -2105,7 +2105,7 @@ SUBCMD_FUNC(Bot, MapEquipSetLoad) {
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
 	if (mem != lea) {
-		clif_emotion(mem->bl(), ET_HNG);
+		mem->emotion(ET_HNG);
 		mem->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -2121,7 +2121,7 @@ SUBCMD_FUNC(Bot, MapEquipSetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のマップ武具一式を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーが現在位置をメモする。
@@ -2138,7 +2138,7 @@ SUBCMD_FUNC(Bot, Memo) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」は現在の位置をワープ位置としてメモしました。"
 	));
-	clif_emotion(mem->bl(), ET_OK);
+	mem->emotion(ET_OK);
 }
 
 // メンバーの優先モンスターを一覧表示、または登録、または抹消する。
@@ -2181,7 +2181,7 @@ SUBCMD_FUNC(Bot, MonsterFirst) {
 				"優先的に攻撃します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2194,7 +2194,7 @@ SUBCMD_FUNC(Bot, MonsterFirstClear) {
 		"「", mem->name(), "」の", cou,
 		"件の優先モンスターの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの優先モンスターを転送する。
@@ -2208,7 +2208,7 @@ SUBCMD_FUNC(Bot, MonsterFirstTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の優先モンスターを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // グレートモンスターを一覧表示、または登録、または抹消する。
@@ -2297,7 +2297,7 @@ SUBCMD_FUNC(Bot, MonsterHighDef) {
 	));
 	if (def == DEFAULT_MOB_HIGH_DEF) def = 0;
 	mem->mob_high_def()->set(def);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // モンスターの高DefVitを設定する。
@@ -2312,7 +2312,7 @@ SUBCMD_FUNC(Bot, MonsterHighDefVit) {
 	));
 	if (dv == DEFAULT_MOB_HIGH_DEF_VIT) dv = 0;
 	mem->mob_high_def_vit()->set(dv);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // モンスターの高Fleeを設定する。
@@ -2327,7 +2327,7 @@ SUBCMD_FUNC(Bot, MonsterHighFlee) {
 	));
 	if (fle == DEFAULT_MOB_HIGH_FLEE) fle = 0;
 	mem->mob_high_flee()->set(fle);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // モンスターの高Hitを設定する。
@@ -2342,7 +2342,22 @@ SUBCMD_FUNC(Bot, MonsterHighHit) {
 	));
 	if (hit == DEFAULT_MOB_HIGH_HIT) hit = 0;
 	mem->mob_high_hit()->set(hit);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
+}
+
+// モンスターの高レベルを設定する。
+SUBCMD_FUNC(Bot, MonsterHighLevel) {
+	CS_ENTER;
+	block_if* mem = shift_arguments_then_find_member(lea, args);
+	int level = shift_arguments_then_parse_int(
+		args, print("レベル"), 1, INT_MAX
+	);
+	show_client(lea->fd(), print(
+		"「", mem->name(), "」はレベルが", level, "以上のモンスターを高レベルとみなします。"
+	));
+	if (level == DEFAULT_MOB_HIGH_LEVEL) level = 0;
+	mem->mob_high_level()->set(level);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // モンスターの高Mdefを設定する。
@@ -2357,7 +2372,7 @@ SUBCMD_FUNC(Bot, MonsterHighMdef) {
 	));
 	if (mdef == DEFAULT_MOB_HIGH_MDEF) mdef = 0;
 	mem->mob_high_mdef()->set(mdef);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの無視モンスターを一覧表示、または登録、または抹消する。
@@ -2400,7 +2415,7 @@ SUBCMD_FUNC(Bot, MonsterIgnore) {
 				"無視します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2413,7 +2428,7 @@ SUBCMD_FUNC(Bot, MonsterIgnoreClear) {
 		"「", mem->name(), "」の", cou,
 		"件の無視モンスターの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの無視モンスターを転送する。
@@ -2427,7 +2442,7 @@ SUBCMD_FUNC(Bot, MonsterIgnoreTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の無視モンスターを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // 次のページを表示する。
@@ -2581,7 +2596,7 @@ SUBCMD_FUNC(Bot, PolicyDistance) {
 				DISTANCE_POLICY_VALUE_NAME_TABLE[pol->value], "」を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2594,7 +2609,7 @@ SUBCMD_FUNC(Bot, PolicyDistanceClear) {
 		"「", mem->name(), "」の",
 		cou, "件の距離ポリシーの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの距離ポリシーを転送する。
@@ -2608,7 +2623,7 @@ SUBCMD_FUNC(Bot, PolicyDistanceTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の距離ポリシーを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーの通常攻撃ポリシーを一覧表示、または登録、または抹消する。
@@ -2701,7 +2716,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttack) {
 				NORMAL_ATTACK_POLICY_VALUE_NAME_TABLE[pol->value], "」を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2714,7 +2729,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackClear) {
 		"「", mem->name(), "」の", cou,
 		"件の通常攻撃ポリシーの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの通常攻撃ポリシーを転送する。
@@ -2728,7 +2743,7 @@ SUBCMD_FUNC(Bot, PolicyNormalAttackTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の通常攻撃ポリシーを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // ショップポイントを回収する。
@@ -2786,7 +2801,7 @@ SUBCMD_FUNC(Bot, sKillBerserkRate) {
 			"「", mem->name(), "」はHPが", rat, "%未満のときにバーサークを使用します。"
 		));
 	mem->berserk_rate()->set(rat);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの武器属性付与を一覧表示、または登録、または抹消する。
@@ -2852,7 +2867,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeapon) {
 				"」で武器に対する「",  ELEMENT_NAME_TABLE[ele], "」の付与を許可します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2865,7 +2880,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeaponClear) {
 		"「", mem->name(), "」の", cou,
 		"件の武器属性付与の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの武器属性付与を転送する。
@@ -2879,7 +2894,7 @@ SUBCMD_FUNC(Bot, sKillEnchantWeaponTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の武器属性付与を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのスキル武具一式を一覧表示、または登録、または抹消する。
@@ -2958,7 +2973,7 @@ SUBCMD_FUNC(Bot, sKillEquipSet) {
 				es->items.size(), "個@", pri_equ_poss(&es->items), "」の武具を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -2970,7 +2985,7 @@ SUBCMD_FUNC(Bot, sKillEquipSetClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件のスキル武具一式の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのスキル武具一式をロードする。
@@ -3026,7 +3041,7 @@ SUBCMD_FUNC(Bot, sKillEquipSetLoad) {
 	lea->output_buffer() << cou << "個の武具を装備しました。";
 	lea->show_next();
 	if (mem != lea) {
-		clif_emotion(mem->bl(), ET_HNG);
+		mem->emotion(ET_HNG);
 		mem->last_reloaded_equipset_tick() = now;
 	}
 }
@@ -3042,7 +3057,7 @@ SUBCMD_FUNC(Bot, sKillEquipSetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のスキル武具一式を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーの優先スキルを一覧表示、または登録、または抹消する。
@@ -3116,7 +3131,7 @@ SUBCMD_FUNC(Bot, sKillFirst) {
 				"「", sk_des, "」を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3129,7 +3144,7 @@ SUBCMD_FUNC(Bot, sKillFirstClear) {
 		"「", mem->name(), "」の", cou,
 		"件の優先スキルの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの優先スキルを転送する。
@@ -3143,7 +3158,7 @@ SUBCMD_FUNC(Bot, sKillFirstTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の優先スキルを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのスキル無視モンスターを一覧表示、または登録、または抹消する。
@@ -3201,7 +3216,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonster) {
 				"「", mem->name(), "」は「", sk_des, "」を「", mob_str, "」に使いません。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3214,7 +3229,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonsterClear) {
 		"「", mem->name(), "」の", cou,
 		"件のスキル無視モンスターの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーのスキル無視モンスターを転送する。
@@ -3228,7 +3243,7 @@ SUBCMD_FUNC(Bot, sKillIgnoreMonsterTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件のスキル無視モンスターを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのアクティブスキルを制限する。
@@ -3253,7 +3268,7 @@ SUBCMD_FUNC(Bot, sKillmaXCastTime) {
 			"「", mem->name(), "」はスキルの実詠唱時間がどんなに長くても使用します。"
 		));
 	mem->max_cast_time()->set(cas_tim);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // 範囲スキルの発動条件となるメンバー数を設定する。
@@ -3269,7 +3284,7 @@ SUBCMD_FUNC(Bot, sKillmemBers) {
 	));
 	if (cou == DEFAULT_SKILL_MEMBERS) cou = 0;
 	mem->skill_members()->set(cou);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // 範囲スキルの発動条件となるモンスター数を設定する。
@@ -3285,7 +3300,7 @@ SUBCMD_FUNC(Bot, sKillMonsters) {
 	));
 	if (cou == DEFAULT_SKILL_MOBS) cou = 0;
 	mem->skill_mobs()->set(cou);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの演奏スキルを一覧表示、または登録、または抹消する。
@@ -3384,7 +3399,7 @@ SUBCMD_FUNC(Bot, sKillPlay) {
 				"「", sk_des, "」を登録しました。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3402,7 +3417,7 @@ SUBCMD_FUNC(Bot, sKillPlayClear) {
 		"「", mem->name(), "」の", cou,
 		"件の演奏スキルの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの演奏スキルを転送する。
@@ -3426,7 +3441,7 @@ SUBCMD_FUNC(Bot, sKillPlayTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の演奏スキルを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーの拒否スキルを一覧表示、または登録、または抹消する。
@@ -3469,7 +3484,7 @@ SUBCMD_FUNC(Bot, sKillReject) {
 				"「", mem->name(), "」は「", sk_des, "」を拒否します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3481,7 +3496,7 @@ SUBCMD_FUNC(Bot, sKillRejectClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件の拒否スキルの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの拒否スキルを転送する。
@@ -3495,7 +3510,7 @@ SUBCMD_FUNC(Bot, sKillRejectTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の拒否スキルを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // 安全に詠唱できる時間を設定する。
@@ -3509,7 +3524,7 @@ SUBCMD_FUNC(Bot, sKillSafeCastTime) {
 		"「", mem->name(), "」はスキルの実詠唱時間が", cas_tim, "ミリ秒以下ならモンスターにターゲットされていても使用します。"
 	));
 	mem->safe_cast_time()->set(cas_tim);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // HPの供給を許可するHP率を設定する。
@@ -3524,7 +3539,7 @@ SUBCMD_FUNC(Bot, sKillSupplyHpRate) {
 	));
 	if (rat == DEFAULT_SUPPLY_HP_RATE) rat = 0;
 	mem->supply_hp_rate()->set(rat);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // SPの供給を許可するSP率を設定する。
@@ -3539,7 +3554,7 @@ SUBCMD_FUNC(Bot, sKillSupplySpRate) {
 	));
 	if (rat == DEFAULT_SUPPLY_SP_RATE) rat = 0;
 	mem->supply_sp_rate()->set(rat);
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの掛け直し時間を一覧表示、または登録、または抹消する。
@@ -3599,7 +3614,7 @@ SUBCMD_FUNC(Bot, sKillTail) {
 				"「", mem->name(), "」は「", sk_des, "」を効果が切れる", dur, "ミリ秒前に掛け直します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3611,7 +3626,7 @@ SUBCMD_FUNC(Bot, sKillTailClear) {
 	show_client(lea->fd(), print(
 		"「", mem->name(), "」の", cou, "件の掛け直し時間の登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの掛け直し時間を転送する。
@@ -3625,7 +3640,7 @@ SUBCMD_FUNC(Bot, sKillTailTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に",
 		cou, "件の掛け直し時間を転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーのスキルレベルを上げる。
@@ -3716,7 +3731,7 @@ SUBCMD_FUNC(Bot, StatusUp) {
 		"「", mem->name(), "」の「", typ_nam, "」は",
 		pc_getstat(mem->sd(), sp), "になりました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_BEST);
+	if (mem != lea) mem->emotion(ET_BEST);
 }
 
 // メンバーの倉庫補充アイテムを一覧表示、または登録、または抹消する。
@@ -3764,7 +3779,7 @@ SUBCMD_FUNC(Bot, StorageGet) {
 				"「", mem->name(), "」は「", idb_str,
 				"」を倉庫から取り出しません。"
 			));
-			if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+			if (mem != lea) mem->emotion(ET_OK);
 		} else {
 			int amo = shift_arguments_then_parse_int(
 				args, "アイテムの個数", 1, MAX_AMOUNT
@@ -3775,7 +3790,7 @@ SUBCMD_FUNC(Bot, StorageGet) {
 				amo, "個になるように倉庫から取り出します。"
 			));
 		}
-		if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+		if (mem != lea) mem->emotion(ET_OK);
 	}
 }
 
@@ -3830,7 +3845,7 @@ SUBCMD_FUNC(Bot, StorageGetAll) {
 				return true;
 			}
 		);
-		if (done) clif_emotion(mem->bl(), ET_GO);
+		if (done) mem->emotion(ET_GO);
 	}
 	lea->output_buffer() << "合計" << tot_cou << "件、" << tot_amo <<
 		"個のアイテムを取り出しました。\n";
@@ -3846,7 +3861,7 @@ SUBCMD_FUNC(Bot, StorageGetClear) {
 		"「", mem->name(), "」の ", cou,
 		"件の倉庫補充アイテムの登録を抹消しました。"
 	));
-	if (mem != lea) clif_emotion(mem->bl(), ET_OK);
+	if (mem != lea) mem->emotion(ET_OK);
 }
 
 // メンバーの倉庫補充アイテムを転送する。
@@ -3860,7 +3875,7 @@ SUBCMD_FUNC(Bot, StorageGetTransport) {
 		"「", mem1->name(), "」から「", mem2->name(), "」に ",
 		cou, "件の倉庫補充アイテムを転送しました。"
 	));
-	if (mem2 != lea) clif_emotion(mem2->bl(), ET_OK);
+	if (mem2 != lea) mem2->emotion(ET_OK);
 }
 
 // メンバーの倉庫格納アイテムを一覧表示、または登録、または抹消する。
@@ -3981,7 +3996,7 @@ SUBCMD_FUNC(Bot, StoragePutAll) {
 				}
 			}
 		}
-		if (done) clif_emotion(mem->bl(), ET_GOODBOY);
+		if (done) mem->emotion(ET_GOODBOY);
 	}
 	lea->output_buffer() << "合計" << tot_cou << "件、" <<
 		tot_amo << "個のアイテムを入れました。\n";
@@ -5287,7 +5302,7 @@ void skill_user_limit_skill(
 			"」をレベル", lim_lv, "に制限しました。"
 		));
 	}
-	if (sk_use != lea) clif_emotion(sk_use->bl(), ET_OK);
+	if (sk_use != lea) sk_use->emotion(ET_OK);
 }
 
 // スキル使用者のスキル一覧を表示する。
@@ -5347,7 +5362,7 @@ void skill_user_skill_up(
 		"「", sk_use->name(), "」は「", sk_des,
 		" Lv", int(sk->lv), "」を取得しました。"
 	));
-	if (sk_use != lea) clif_emotion(sk_use->bl(), ET_BEST);
+	if (sk_use != lea) sk_use->emotion(ET_BEST);
 }
 
 // スキル使用者がスキルを使う。

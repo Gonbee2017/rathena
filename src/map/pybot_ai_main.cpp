@@ -523,7 +523,7 @@ void ai_t::bot_emotion() {
 		else if (bot->sp_ratio() < 25) typ = ET_KEK;
 		else if (bot->sp_ratio() < 50) typ = ET_PROFUSELY_SWEAT;
 		if (typ != INT_MIN) {
-			clif_emotion(bot->bl(), typ);
+			bot->emotion(emotion_type(typ));
 			bot->last_emotion_tick() = now;
 		}
 	}
