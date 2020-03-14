@@ -373,7 +373,9 @@ bool trade_tradeadditem(struct map_session_data *sd, short index, short amount)
 	int trade_i, trade_weight;
 	int src_lv, dst_lv;
 
-	nullpo_retv(sd);
+	// [GonBee]
+	//nullpo_retv(sd);
+	nullpo_retr(false, sd);
 
 	if( !sd->state.trading || sd->state.deal_locked > 0 )
 

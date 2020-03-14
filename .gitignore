@@ -111,14 +111,14 @@ Thumbs.db
 /cbuild/
 
 # bat tools
-/charserv.bat
-/logserv.bat
-/mapcache.bat
-/mapserv.bat
-/runserver.bat
-/serv.bat
+charserv.bat
+logserv.bat
+mapcache.bat
+mapserv.bat
+runserver.bat
+serv.bat
 
 # dlls
-/libmysql.dll
-/pcre8.dll
-/zlib.dll
+libmysql.dll
+pcre8.dll
+zlib.dll

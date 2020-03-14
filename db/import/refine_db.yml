@@ -19,7 +19,7 @@
 # Custom Refine Database
 ###########################################################################
 Armor:
-  StatsPerLevel: 100
+  StatsPerLevel: 90
   RandomBonusStartLevel: 0
   RandomBonusValue: 0
   Costs:
