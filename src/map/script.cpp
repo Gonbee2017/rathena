@@ -8068,9 +8068,15 @@ BUILDIN_FUNC(delitem)
 		struct item_data* id = itemdb_searchname(item_name);
 		if( id == NULL )
 		{
-			ShowError("buildin_%s: unknown item \"%s\".\n", command, item_name);
-			st->state = END;
-			return SCRIPT_CMD_FAILURE;
+
+			// [GonBee]
+			// Aurigaスクリプトとの互換性のために、
+			// アイテムが存在しなくてもスクリプトの実行を継続する。
+			//ShowError("buildin_%s: unknown item \"%s\".\n", command, item_name);
+			//st->state = END;
+			//return SCRIPT_CMD_FAILURE;
+			return SCRIPT_CMD_SUCCESS;
+
 		}
 		it.nameid = id->nameid;// "<item name>"
 	}
@@ -8079,9 +8085,15 @@ BUILDIN_FUNC(delitem)
 		it.nameid = conv_num(st,data);// <item id>
 		if( !itemdb_exists( it.nameid ) )
 		{
-			ShowError("buildin_%s: unknown item \"%hu\".\n", command, it.nameid);
-			st->state = END;
-			return SCRIPT_CMD_FAILURE;
+
+			// [GonBee]
+			// Aurigaスクリプトとの互換性のために、
+			// アイテムが存在しなくてもスクリプトの実行を継続する。
+			//ShowError("buildin_%s: unknown item \"%hu\".\n", command, it.nameid);
+			//st->state = END;
+			//return SCRIPT_CMD_FAILURE;
+			return SCRIPT_CMD_SUCCESS;
+
 		}
 	}
 
