@@ -981,8 +981,8 @@ AI_SKILL_USE_FUNC(HT_DETECTING) {
 AI_SKILL_USE_FUNC(HT_FREEZINGTRAP) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(*enemies), [this, kid, klv] (block_if* ene) -> bool {
 		return !bot->find_skill_ignore_mobs(kid, ene) &&
-			ene->is_walking() &&
 			bot->check_skill_range_xy(kid, klv, ene->ud()->to_x, ene->ud()->to_y) &&
+			ene->is_walking() &&
 			ene->is_freezable() &&
 			!skill_check_unit_range(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv) &&
 			!skill_check_unit_range2(bot->bl(), ene->ud()->to_x, ene->ud()->to_y, kid, klv, false);
@@ -1684,8 +1684,9 @@ AI_SKILL_USE_FUNC(NJ_BUNSINJYUTSU) {
 // •X’Œ—Ž‚µ‚ðŽg‚¤B
 AI_SKILL_USE_FUNC(NJ_HYOUSYOURAKU) {
 	int cou = std::count_if(ALL_RANGE(*enemies),
-		sift_block_layout(bot, bot, kid, klv, [this, kid] (block_if* ene) -> bool {
+		sift_block_layout(bot, bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 			return !bot->find_skill_ignore_mobs(kid, ene) &&
+				bot->skill_ratio(kid, klv, ene) > 0 &&
 				ene->attacked_battlers().empty() &&
 				ene->is_freezable() &&
 				!ene->is_hiding() &&
