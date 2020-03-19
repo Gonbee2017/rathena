@@ -4166,3 +4166,5 @@ INSERT INTO `pybot_spawn` VALUES ('1@cash', 2175, 6, 0, 1, 0);
 INSERT INTO `pybot_spawn` VALUES ('1@cash', 2192, 168, 0, 1, 0);
 INSERT INTO `pybot_spawn` VALUES ('1@cash', 2193, 8, 0, 1, 0);
 INSERT INTO `pybot_spawn` VALUES ('1@cash', 2194, 1, 0, 1, 0);
+
+INSERT INTO `pybot_spawn` VALUES ('prt_fild01', 3917, 1, 36000000, 0, 1);

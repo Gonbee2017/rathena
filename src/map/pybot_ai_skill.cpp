@@ -1371,6 +1371,7 @@ AI_SKILL_USE_FUNC(MG_FROSTDIVER) {
 	block_if* ene = pybot::find_if(ALL_RRANGE(*enemies), [this, kid, klv] (block_if* ene) -> bool {
 		return !bot->find_skill_ignore_mobs(kid, ene) &&
 			bot->check_skill_range_block(kid, klv, ene) &&
+			bot->skill_ratio(kid, klv, ene) > 0 &&
 			ene->attacked_battlers().empty() &&
 			ene->is_freezable() &&
 			!ene->is_hiding() &&
@@ -3162,6 +3163,7 @@ AI_SKILL_USE_FUNC(WZ_FROSTNOVA) {
 	block_if* ene = pybot::find_if(ALL_RANGE(*enemies),
 		sift_block_splash(bot, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 			return !bot->find_skill_ignore_mobs(kid, ene) &&
+				bot->skill_ratio(kid, klv, ene) > 0 &&
 				ene->attacked_battlers().empty() &&
 				ene->is_freezable() &&
 				!ene->is_hiding();
@@ -3284,6 +3286,7 @@ AI_SKILL_USE_FUNC_T(WZ_STORMGUST, freeze) {
 		int cou = std::count_if(ALL_RANGE(*enemies),
 			sift_block_layout(bot, tar_ene, kid, klv, [this, kid, klv] (block_if* ene) -> bool {
 				return bot->check_use_skill(kid, klv, ene) &&
+					bot->skill_ratio(kid, klv, ene) > 0 &&
 					!ene->is_summoned() &&
 					ene->is_freezable() &&
 					!ene->is_paralysis() &&
