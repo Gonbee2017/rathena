@@ -67,6 +67,78 @@ AI_ITEM_USE_FUNC(DEX_DISH10) {
 	if (!bot->sc()->data[SC_FOOD_DEX_CASH]) bot->use_item(itm_ind);
 }
 
+// 地属性コンバーターを使う。
+AI_ITEM_USE_FUNC(ELEMENTAL_EARTH) {
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+	if (ele &&
+		*ele == ELE_EARTH
+	) {
+		status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
+		if (!ea_sce ||
+			ea_sce->val2 != ELE_EARTH
+		) {
+			try {bot->use_item(itm_ind);}
+			catch (const item_used_exception&) {
+				bot->use_skill_block(ITEM_ENCHANTARMS, 3, bot);
+			}
+		}
+	}
+}
+
+// 火属性コンバーターを使う。
+AI_ITEM_USE_FUNC(ELEMENTAL_FIRE) {
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+	if (ele &&
+		*ele == ELE_FIRE
+	) {
+		status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
+		if (!ea_sce ||
+			ea_sce->val2 != ELE_FIRE
+		) {
+			try {bot->use_item(itm_ind);}
+			catch (const item_used_exception&) {
+				bot->use_skill_block(ITEM_ENCHANTARMS, 4, bot);
+			}
+		}
+	}
+}
+
+// 水属性コンバーターを使う。
+AI_ITEM_USE_FUNC(ELEMENTAL_WATER) {
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+	if (ele &&
+		*ele == ELE_WATER
+	) {
+		status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
+		if (!ea_sce ||
+			ea_sce->val2 != ELE_WATER
+		) {
+			try {bot->use_item(itm_ind);}
+			catch (const item_used_exception&) {
+				bot->use_skill_block(ITEM_ENCHANTARMS, 2, bot);
+			}
+		}
+	}
+}
+
+// 風属性コンバーターを使う。
+AI_ITEM_USE_FUNC(ELEMENTAL_WIND) {
+	e_element* ele = bot->kew_elements()->find(get_source_mapid(bot->bl()->m));
+	if (ele &&
+		*ele == ELE_WIND
+	) {
+		status_change_entry* ea_sce = bot->sc()->data[SC_ENCHANTARMS];
+		if (!ea_sce ||
+			ea_sce->val2 != ELE_WIND
+		) {
+			try {bot->use_item(itm_ind);}
+			catch (const item_used_exception&) {
+				bot->use_skill_block(ITEM_ENCHANTARMS, 5, bot);
+			}
+		}
+	}
+}
+
 // 濃縮サラマインジュースを使う。
 AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE) {
 	if (bot->battle_mode() != BM_NONE &&

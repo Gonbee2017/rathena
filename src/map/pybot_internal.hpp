@@ -530,6 +530,10 @@ enum item_ids {
 	ITEMID_INT_DISH10              = 12080, // カクテル・竜の吐息。
 	ITEMID_DEX_DISH10              = 12095, // フベルゲルミルの酒。
 	ITEMID_LUK_DISH10              = 12100, // 九尾狐のしっぽ料理。
+	ITEMID_ELEMENTAL_FIRE          = 12114, // 火属性コンバーター。
+	ITEMID_ELEMENTAL_WATER         = 12115, // 水属性コンバーター。
+	ITEMID_ELEMENTAL_EARTH         = 12116, // 地属性コンバーター。
+	ITEMID_ELEMENTAL_WIND          = 12117, // 風属性コンバーター。
 	ITEMID_RESIST_FIRE             = 12118, // レジストファイアーポーション。
 	ITEMID_RESIST_WATER            = 12119, // レジストコールドポーション。
 	ITEMID_RESIST_EARTH            = 12120, // レジストアースポーション。
@@ -961,6 +965,10 @@ struct ai_t {
 	AI_ITEM_USE_FUNC(COATING_POTION);
 	AI_ITEM_USE_FUNC(DEX_DISH10);
 	AI_ITEM_USE_FUNC(DIGEST_POTION);
+	AI_ITEM_USE_FUNC(ELEMENTAL_EARTH);
+	AI_ITEM_USE_FUNC(ELEMENTAL_FIRE);
+	AI_ITEM_USE_FUNC(ELEMENTAL_WATER);
+	AI_ITEM_USE_FUNC(ELEMENTAL_WIND);
 	AI_ITEM_USE_FUNC(ENRICH_CELERMINE_JUICE);
 	AI_ITEM_USE_FUNC(GREEN_HERB);
 	AI_ITEM_USE_FUNC(GREEN_POTION);
