@@ -4939,9 +4939,12 @@ bool pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem)
 
 	// [GonBee]
 	// Botは無視アイテムを拾わない。
+	// また最大拾得率をオーバーする場合も拾わない。
 	map_session_data* lea_sd = pybot::get_team_leader(sd->status.char_id);
 	if (lea_sd &&
-		pybot::flooritem_to_be_ignored(lea_sd, fitem)
+		(pybot::flooritem_to_be_ignored(lea_sd, fitem) ||
+			pybot::over_loot(sd->status.char_id, itemdb_weight(fitem->item.nameid) * fitem->item.amount)
+		)
 	) return false;
 
 	// [GonBee]
