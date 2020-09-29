@@ -2010,7 +2010,7 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"------ sKillSupplyHpRate (kshr) サブコマンド ------\n"
 		"HPの供給を許可するHP率を設定する。\n"
 		"入力例 [@bot skillsupplyhprate アサクロ 90]\n"
-	), SUBCMD_DESC(Bot, sKillSupplyHpRate          , kssr ,
+	), SUBCMD_DESC(Bot, sKillSupplySpRate          , kssr ,
 		"------ sKillSupplySpRate (kssr) サブコマンド ------\n"
 		"SPの供給を許可するSP率を設定する。\n"
 		"入力例 [@bot skillsupplysprate アサクロ 10]\n"
