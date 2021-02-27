@@ -5395,9 +5395,19 @@ void skill_user_use_skill(
 			"「", sk_use->name(), "」は「",
 			sk_des, "」を使えません。"
 		)};
-	block_if* tar_mem = nullptr;
-	if (!(skill_get_inf(sk->id) & INF_SELF_SKILL))
-		tar_mem = shift_arguments_then_find_member(lea, args);
+	block_if* tar = nullptr;
+	if (!(skill_get_inf(sk->id) & INF_SELF_SKILL)) {
+		std::string tar_nam = shift_arguments(args,
+			"ターゲットを指定してください。"
+		);
+		std::string tar_nam_lc = lowercase(tar_nam);
+		if (tar_nam_lc == TARGET_ENEMY_NAME) tar = sk_use->target_enemy();
+		else tar = lea->find_member(tar_nam);
+		if (!tar)
+			throw command_error{print(
+				"「", tar_nam, "」が見つかりません。"
+			)};
+	}
 	int klv = sk->lv;
 	if (!args.empty()) klv = shift_arguments_then_parse_int(
 		args, print("「", sk_des, "」のレベル"), 1, klv
@@ -5418,14 +5428,14 @@ void skill_user_use_skill(
 			sk_use->use_skill_xy(
 				e_skill(sk->id),
 				klv,
-				tar_mem->bl()->x,
-				tar_mem->bl()->y,
+				tar->bl()->x,
+				tar->bl()->y,
 				false
 			);
-		else sk_use->use_skill_block(e_skill(sk->id), klv, tar_mem, false);
+		else sk_use->use_skill_block(e_skill(sk->id), klv, tar, false);
 		show_client(lea->fd(), print(
 			"「", sk_use->name(), "」は"
-			"「", tar_mem->name(), "」に"
+			"「", tar->name(), "」に"
 			"「", sk_des, " Lv", klv, "」の使用を試みます。"
 		));
 	}

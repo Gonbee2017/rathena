@@ -1880,6 +1880,8 @@ const std::vector<ptr<subcommand_desc>> BOT_SUBCMD_DESCS = {
 		"入力例 [@bot skill ハイプリ アスムプティオ アサクロ]\n"
 		"ターゲットスキルを特定レベルで使用する。\n"
 		"入力例 [@bot skill ハイプリ ヒール アサクロ 3]\n"
+		"ターゲットスキルをモンスターに使用する。\n"
+		"入力例 [@bot skill プロフェ ファイアーボルト monster]\n"
 	), SUBCMD_DESC(Bot, sKillBerserkRate           , kbr  ,
 		"------ sKillBerserkRate (kbr) サブコマンド ------\n"
 		"バーサークの発動HP率を設定する。\n"
@@ -4067,6 +4069,9 @@ const skill_id_set SUMMON_SKILLS = {
 	NPC_SUMMONMONSTER,
 	NPC_SUMMONSLAVE,
 };
+
+// ターゲットしている敵モンスターを意味する名前。
+const std::string TARGET_ENEMY_NAME = "monster";
 
 // 最大チーム数。
 const int TEAM_MAX = 100;

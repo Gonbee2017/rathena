@@ -3115,6 +3115,7 @@ extern const std::array<_sp,ST_MAX> ST2SP_TABLE;
 extern const std::array<std::string,ST_MAX> STATUS_TYPE_NAME_TABLE;
 extern const std::array<std::string,4> STORAGE_TYPE_NAME_TABLE;
 extern const skill_id_set SUMMON_SKILLS;
+extern const std::string TARGET_ENEMY_NAME;
 extern const int TEAM_MAX;
 extern const std::string THIS_MAP_NAME;
 extern const skill_id_set UNEQUIP_ARMOR_SKILLS;
