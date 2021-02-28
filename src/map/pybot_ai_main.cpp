@@ -46,6 +46,10 @@ void ai_t::leader_main(
 // リーダーが編成する。
 void ai_t::leader_organize() {
 	CS_ENTER;
+	int cur_bot_lim = bot_limit(leader->sd());
+	if (cur_bot_lim != leader->previous_bot_limit())
+		show_client(leader->fd(), print("チームの最大人数が", cur_bot_lim + 1,"人になりました。"));
+	leader->previous_bot_limit() = cur_bot_lim;
 	if (leader->bl()->m != leader->center().m) leader->stay() = false;
 	if (!leader->stay()) {
 		leader->center() = *leader->bl();

@@ -4142,7 +4142,8 @@ SUBCMD_FUNC(Bot, Team) {
 	};
 
 	lea->output_buffer() = std::stringstream();
-	lea->output_buffer() << "------ 現在のチーム ------\n";
+	lea->output_buffer() << "------ 現在のチーム"
+		"(" << lea->bots().size() + 1 << "/" << bot_limit(lea->sd()) + 1 << ") ------\n";
 	for (block_if* mem : lea->members()) lea->output_buffer() << pri_mem(mem);
 	lea->output_buffer() << lea->members().size() << "人のメンバーが見つかりました。\n";
 	lea->show_next();

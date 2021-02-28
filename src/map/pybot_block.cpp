@@ -186,6 +186,7 @@ t_tick leader_if::next_heavy_tick() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<registry_t<int>>& leader_if::not_ignore_items() {RAISE_NOT_IMPLEMENTED_ERROR;}
 std::stringstream& leader_if::output_buffer() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::passive() {RAISE_NOT_IMPLEMENTED_ERROR;}
+int& leader_if::previous_bot_limit() {RAISE_NOT_IMPLEMENTED_ERROR;}
 bool& leader_if::resurrectionable() {RAISE_NOT_IMPLEMENTED_ERROR;}
 ptr<regnum_t<rush_modes>>& leader_if::rush() {RAISE_NOT_IMPLEMENTED_ERROR;}
 void leader_if::save_team(int tea_num) {RAISE_NOT_IMPLEMENTED_ERROR;}
@@ -1793,6 +1794,11 @@ std::stringstream& leader_impl::output_buffer() {
 // チームがモンスターに反応しないか。
 bool& leader_impl::passive() {
 	return passive_;
+}
+
+// 前回のBotの制限人数。
+int& leader_impl::previous_bot_limit() {
+	return previous_bot_limit_;
 }
 
 // リザレクション可能か。
@@ -3460,6 +3466,7 @@ leader_t::leader_t(
 	last_summoned_id() = 0;
 	member_dead() = false;
 	passive() = false;
+	previous_bot_limit() = bot_limit(sd_);
 	stay() = false;
 	rush() = construct<regnum_t<rush_modes>>(sd(), "pybot_rush");
 	great_mobs() = construct<registry_t<int>>(
