@@ -35,16 +35,20 @@
 311,0xa3,    ,  7, 0,  -1,all,   0x200	//BD_ROKISWEIL
 312,0xa4,    ,  7, 0,  -1,party, 0x240	//BD_INTOABYSS
 313,0xa5,    ,  7, 0,  -1,party, 0x200	//BD_SIEGFRIED
+
 317,0xa6,    ,  7, 0,3000,enemy, 0x400	//BA_DISSONANCE
 319,0xa7,    ,  7, 0,  -1,all,   0x440	//BA_WHISTLE
 320,0xa8,    ,  7, 0,  -1,all,   0x440	//BA_ASSASSINCROSS
 321,0xa9,    ,  7, 0,  -1,all,   0x440	//BA_POEMBRAGI
 322,0xaa,    ,  7, 0,6000,all,   0xC40	//BA_APPLEIDUN
+
 325,0xab,    ,  7, 0,3000,enemy, 0x100	//DC_UGLYDANCE
 327,0xac,    ,  7, 0,  -1,all,   0x140	//DC_HUMMING
 328,0xad,    ,  7, 0,  -1,enemy, 0x100	//DC_DONTFORGETME
 329,0xae,    ,  7, 0,  -1,all,   0x140	//DC_FORTUNEKISS
 330,0xaf,    ,  7, 0,  -1,all,   0x140	//DC_SERVICEFORYOU
+
+484,0xb8,    ,  7, 0,1000,enemy, 0x8818	//HW_GRAVITATION
 
 10006,0xc1,   ,  7, 0,  -1,guild, 0x040	//GD_LEADERSHIP
 10007,0xc2,   ,  7, 0,  -1,guild, 0x040	//GD_GLORYWOUNDS
