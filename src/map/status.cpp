@@ -3753,7 +3753,7 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			// —¼Žè•Ší‚Ì‰ßè¸˜B‚ÍDef‚ÆMdef‚à‘‰Á‚·‚éB
 			if (sd->inventory_data[index]->equip == EQP_ARMS) {
 				int ove_ref = r - (8 - wlv);
-				if (ove_ref >= 1) refinedef += 200 * ove_ref;
+				if (ove_ref >= 1) refinedef += battle_config.pybot_two_hand_over_refine_def * ove_ref;
 			}
 
 		} else if(sd->inventory_data[index]->type == IT_ARMOR) {

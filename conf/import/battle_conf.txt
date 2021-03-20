@@ -10,6 +10,7 @@ pybot_heavy_cool_time: 5000           // Botが重たいコマンドを実行できるようにな
 pybot_reload_equipset_cool_time: 2500 // 武具一式をリロードするまでのクールタイム。
 pybot_restart_cool_time: 60000        // Botが死亡してからリスタートまでのクールタイム。
 pybot_think_time: 250                 // AIを実行する間隔時間。
+pybot_two_hand_over_refine_def: 180   // 両手武器を過剰精錬したときのDef増加値。
 
 clear_skills_on_death: 2              // 死亡するとスキルユニットを除去するブロックのタイプ。
 dynamic_mobs: 1                       // プレイヤーのいないマップのモンスターを削除するか。
