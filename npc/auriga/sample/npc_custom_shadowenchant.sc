@@ -876,7 +876,7 @@ OnInit:
 		4460,2, // リンコカード
 		4512,2; // パルスカード
 	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
-	setarray .effs[getarraysize(.effs)], 29664,5000000; // Aspd + 1
+	setarray .effs[getarraysize(.effs)], 29664,5000000; // Aspd + 0.5
 	setarray .ores[getarraysize(.ores)], 6240,5; // 改良型濃縮オリデオコン
 	setarray .eff_cars[getarraysize(.eff_cars)],
 		4172,2, // 一反木綿カード
@@ -885,7 +885,7 @@ OnInit:
 		4257,2, // ワイルドローズカード
 		4272,2; // 小龍舞カード
 	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
-	setarray .effs[getarraysize(.effs)], 29665,5000000; // 近接Aspd + 2
+	setarray .effs[getarraysize(.effs)], 29665,5000000; // 近接Aspd + 1
 	setarray .ores[getarraysize(.ores)], 6240,5; // 改良型濃縮オリデオコン
 	setarray .eff_cars[getarraysize(.eff_cars)],
 		4172,2, // 一反木綿カード
@@ -893,6 +893,11 @@ OnInit:
 		4230,2, // カブキ忍者カード
 		4257,2, // ワイルドローズカード
 		4272,2; // 小龍舞カード
+	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
+	setarray .effs[getarraysize(.effs)], 29666,5000000; // Cri + 6
+	setarray .ores[getarraysize(.ores)], 6240,5; // 改良型濃縮オリデオコン
+	setarray .eff_cars[getarraysize(.eff_cars)],
+		4086,10; // ソルジャースケルトンカード
 	set .eff_car_bous[getarraysize(.eff_car_bous)], getarraysize(.eff_cars) / 2;
 	set .ini_fee, 1000000;
 }

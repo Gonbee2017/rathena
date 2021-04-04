@@ -8367,8 +8367,9 @@ REPLACE INTO `cp_itemdesc` VALUES(29660, '[氷閃槍]、[氷柱落し]で与えるダメージ +
 REPLACE INTO `cp_itemdesc` VALUES(29661, '[紅炎華]、[火炎陣]、[龍炎陣]で与えるダメージ + 15%。');
 REPLACE INTO `cp_itemdesc` VALUES(29662, '[風刃]、[雷撃砕]、[朔風]で与えるダメージ + 15%。');
 REPLACE INTO `cp_itemdesc` VALUES(29663, 'ヒール系スキル使用時、HP回復量 + 5%。');
-REPLACE INTO `cp_itemdesc` VALUES(29664, 'Aspd + 1。');
-REPLACE INTO `cp_itemdesc` VALUES(29665, '近接武器装備時、Aspd + 2。');
+REPLACE INTO `cp_itemdesc` VALUES(29664, 'Aspd + 0.5。');
+REPLACE INTO `cp_itemdesc` VALUES(29665, '近接武器装備時、Aspd + 1。');
+REPLACE INTO `cp_itemdesc` VALUES(29666, 'クリティカル + 6。');
 REPLACE INTO `cp_itemdesc` VALUES(29900, 'Atk + 50。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29901, '必中攻撃 + 50%。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29902, '防御力の50%を無視。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
@@ -8400,6 +8401,9 @@ REPLACE INTO `cp_itemdesc` VALUES(29927, 'ブランディッシュスピアでダメージを受け
 REPLACE INTO `cp_itemdesc` VALUES(29928, 'マグナムブレイクでダメージを受けた時、10秒間、Atk + 200。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">兜</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29929, 'パルスストライクでダメージを受けた時、10秒間、Atk + 200。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">兜</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(29930, 'Fleeと完全回避がゼロになる。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">兜</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(29931, 'Aspd + 1。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(29932, '近接武器装備時、Aspd + 2。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
+REPLACE INTO `cp_itemdesc` VALUES(29933, 'クリティカル + 12。<br/>―――――――――――――<br/>系列 : <font color="777777">カード</font><br/>装備 : <font color="777777">武器</font><br/>重量 : <font color="777777">1</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9039, 'キューペット<br/>[ペクソジン]が<br/>眠っている卵。<br/>[携帯卵孵化機]で眠っている<br/>モンスターを目覚めさせる。<br/>―――――――――――――<br/>種類 : <font color="777777">モンスターの卵</font><br/>重量 : <font color="777777">0</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9500, 'キューペット<br/>[キャットナインテイル]が<br/>眠っている卵。<br/>[携帯卵孵化機]で眠っている<br/>モンスターを目覚めさせる。<br/>―――――――――――――<br/>種類 : <font color="777777">モンスターの卵</font><br/>重量 : <font color="777777">0</font>');
 REPLACE INTO `cp_itemdesc` VALUES(9501, 'キューペット<br/>[ゴールドオシドス]が<br/>眠っている卵。<br/>[携帯卵孵化機]で眠っている<br/>モンスターを目覚めさせる。<br/>―――――――――――――<br/>種類 : <font color="777777">モンスターの卵</font><br/>重量 : <font color="777777">0</font>');

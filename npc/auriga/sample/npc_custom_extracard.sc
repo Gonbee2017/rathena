@@ -192,6 +192,9 @@ OnInit:
 	set .ext_cars[getarraysize(.ext_cars)], 29928; // マグナムブレイク反撃
 	set .ext_cars[getarraysize(.ext_cars)], 29929; // パルスストライク反撃
 	set .ext_cars[getarraysize(.ext_cars)], 29930; // 回避ゼロ
+	set .ext_cars[getarraysize(.ext_cars)], 29931; // Aspd + 1
+	set .ext_cars[getarraysize(.ext_cars)], 29932; // 近接Aspd + 2
+	set .ext_cars[getarraysize(.ext_cars)], 29933; // Cri + 12
 	set .nor_car_fir, 4000;
 	set .nor_car_las, 4700;
 	set .rar_cars[getarraysize(.rar_cars)], 4054; // エンジェリングカード

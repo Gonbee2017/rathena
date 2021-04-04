@@ -2808,6 +2808,14 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			if(sd->state.lr_flag != 2)
 				sd->bonus.aspd_add -= 10*val;
 			break;
+
+		// [GonBee]
+		// 詳細なASPD増加。
+		case SP_ASPD2:
+			if(sd->state.lr_flag != 2)
+				sd->bonus.aspd_add -= val;
+			break;
+
 		case SP_ASPD_RATE:	//Stackable increase - Made it linear as per rodatazone
 			if(sd->state.lr_flag != 2)
 #ifndef RENEWAL_ASPD
@@ -3256,6 +3264,11 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		case SP_NEAR_ASPD:
 			if(sd->state.lr_flag != 2)
 				sd->bonus.near_aspd_add -= 10 * val;
+			break;
+		// 詳細な近接ASPD増加。
+		case SP_NEAR_ASPD2:
+			if(sd->state.lr_flag != 2)
+				sd->bonus.near_aspd_add -= val;
 			break;
 		// 近接物理攻撃時のベースAtk上昇。
 		case SP_NEAR_BASE_ATK:

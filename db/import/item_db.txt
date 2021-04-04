@@ -2110,8 +2110,9 @@
 29661,Ninpou_Fire_15_29661,火忍法 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_KOUENKA",15; bonus2 bSkillAtk,"NJ_KAENSIN",15; bonus2 bSkillAtk,"NJ_BAKUENRYU",15; },{},{}
 29662,Ninpou_Wind_15_29662,風忍法 + 15%,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"NJ_HUUJIN",15; bonus2 bSkillAtk,"NJ_RAIGEKISAI",15; bonus2 bSkillAtk,"NJ_KAMAITACHI",15; },{},{}
 29663,Heal_5_29663,ヒール + 5%,6,20,,10,,,,,,,,2,,,,,{ bonus bHealPower,5; },{},{}
-29664,Aspd_1_29664,Aspd + 1,6,20,,10,,,,,,,,2,,,,,{ bonus bAspd,1; },{},{}
-29665,Near_Aspd_2_29665,近接Aspd + 2,6,20,,10,,,,,,,,2,,,,,{ bonus bNearAspd,2; },{},{}
+29664,Aspd2_5_29664,Aspd + 0.5,6,20,,10,,,,,,,,2,,,,,{ bonus bAspd2,5; },{},{}
+29665,Near_Aspd2_10_29665,近接Aspd + 1,6,20,,10,,,,,,,,2,,,,,{ bonus bNearAspd2,10; },{},{}
+29666,Cri_6_29666,Cri + 6,6,20,,10,,,,,,,,2,,,,,{ bonus bCritical,6; },{},{}
 29900,Atk_25_29900,Atk + 50,6,20,,10,,,,,,,,2,,,,,{ bonus bBaseAtk,50; },{},{}
 29901,Perfect_Hit_50_29901,必中 + 50%,6,20,,10,,,,,,,,2,,,,,{ bonus bPerfectHitAddRate,50; },{},{}
 29902,Ignore_Def_50_29902,Def50%無視,6,20,,10,,,,,,,,2,,,,,{ bonus2 bIgnoreDefClassRate,Class_All,50; },{},{}
@@ -2143,3 +2144,6 @@
 29928,Counterattack_Magnum_29928,マグナムブレイク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"SM_MAGNUM","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
 29929,Counterattack_Pulsstrike_29929,パルスストライク反撃,6,20,,10,,,,,,,,769,,,,,{ autobonus4 "{ sc_start SC_COUNTERATTACK,10000,200; }",1000,1000,"NPC_PULSESTRIKE","{ specialeffect2 EF_POTION_BERSERK; }"; },{},{}
 29930,Zero_Flee_29930,回避ゼロ,6,20,,10,,,,,,,,769,,,,,{ bonus bFixFlee,0; bonus bFixFlee2,0; },{},{}
+29931,Aspd2_10_29931,Aspd + 1,6,20,,10,,,,,,,,2,,,,,{ bonus bAspd2,10; },{},{}
+29932,Near_Aspd2_20_29932,近接Aspd + 2,6,20,,10,,,,,,,,2,,,,,{ bonus bNearAspd2,20; },{},{}
+29933,Cri_12_29933,Cri + 12,6,20,,10,,,,,,,,2,,,,,{ bonus bCritical,12; },{},{}
